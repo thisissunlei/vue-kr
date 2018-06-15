@@ -1,5 +1,5 @@
  <template>         
-     <Form ref="formItem" :model="formItem"  :rules="ruleInvestment"  label-position="top">
+     <Form ref="formItem" :model="formItem" style="text-align:left"  :rules="ruleInvestment"  label-position="top">
 
             
                   <Form-item label="所在楼层" class='daily-form'> 
@@ -42,7 +42,7 @@
                             />	
                     </Form-item>
 
-                     <Form-item label="面积" class='daily-form' prop="area"  style="padding-left:10px;margin-left:-5px;"> 
+                     <Form-item label="面积" class='daily-form' prop="area"  style="padding-left:10px;margin-left:-10px;"> 
                             <i-input 
                                 v-model="formItem.area" 
                                 style="width: 200px;"
@@ -74,7 +74,7 @@
                       <Form-item label="商品定价"  prop="quotedPrice" class='daily-form'>
                             <i-input 
                                 v-model="formItem.quotedPrice" 
-                                style="width: 200px;margin-right:3px;"
+                                style="width: 200px;"
                                  placeholder="请输入定价"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -111,12 +111,12 @@ import dateUtils from 'vue-dateutils';
                  type:Array,
                  default:()=>[],
              },
-             floorValue:{
-                 type:[String,Number]
+             seacchValue:{
+                  type:Object,
+                 default:{},
              }
         },
         data (){
-
            //商品名称
             const validateName = (rule, value, callback) => {
                 if(value&&value.length>20){
@@ -215,8 +215,8 @@ import dateUtils from 'vue-dateutils';
             }
         },
         mounted(){
-        
-        console.log('eeeeeeeeeeeee',this.floorList)
+        console.log('sss',this.seacchValue)
+        // console.log('eeeeeeeeeeeee',this.floorList)
                 },
         watch:{
               

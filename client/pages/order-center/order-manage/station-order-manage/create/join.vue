@@ -192,11 +192,12 @@
         ok-text="保存"
         cancel-text="取消"
         width="90%"
-         class-name="vertical-center-modal"
+        class-name="vertical-center-modal"
      >
         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
+            <Button  @click="closeStation">取消</Button>
         </div>
     </Modal>
 
@@ -1145,6 +1146,9 @@ import ListAndMap from '../listAndMap';
                 
 
             },
+            closeStation(){
+                this.openStation = !this.openStation;
+            },
             clearSale(){
                 this.formItem.items= [];
                 this.saleAmounts = utils.smalltoBIG(0);
@@ -1402,6 +1406,5 @@ import ListAndMap from '../listAndMap';
             top: 0;
         }
     }
-   
    
 </style>

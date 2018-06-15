@@ -17,11 +17,6 @@
 <script>
 
 export default {
-    props:{
-        url:{
-            type:String
-        }
-    },
     data() {
         return{
            file: null
@@ -44,47 +39,11 @@ export default {
       downFile(){
          this.$emit('downFile');
       },
-      success(res){
-          this.$emit('success',res);
-      },
-      error(res){
-          this.$emit('error',res);
-      },
       closeUpLoad(){
           this.$emit('close');
       },
       upload(){
-         let _this = this;
-		 var form = new FormData();
-		 form.append('file',this.file);
-		 if(!this.file.name){
-             this.$Notice.error({
-                title:'请选择上传文件'
-             });
-			 return false;
-		 }
-		 var xhr = new XMLHttpRequest();
-		 xhr.onreadystatechange = function() {
-			 if (xhr.readyState === 4) {
-				 if (xhr.status === 200) {
-					 if (xhr.response && xhr.response.code > 0) {
-						 _this.success(xhr.response);
-					 } else {
-                         _this.error(xhr.response);
-                         _this.$Notice.error({
-                            title:xhr.response.message
-                         });
-					 }
-				 }else {
-                     _this.$Notice.error({
-                        title:'上传失败'
-                     });
-				 }
-			 }
-		 };
-		 xhr.open('POST',this.url, true);
-		 xhr.responseType = 'json';
-		 xhr.send(form);
+         this.$emit('upload',this.file);
       }
     }
 }

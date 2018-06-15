@@ -216,7 +216,10 @@ export default {
        identify:{
            type:String,
            default:''
-       }
+       }, 
+       floorValue:{
+                 type:[String,Number]
+             }
     },
     components:{
        SelectSaler
@@ -424,6 +427,9 @@ export default {
             _this.formItem = Object.assign({},this.formItem,this.$route.query)
         },500);
     },
+      updated(){
+            this.$emit('searchForm',this.formItem);
+        },
     methods:{
         //社区接口
         getCommunityList(id){

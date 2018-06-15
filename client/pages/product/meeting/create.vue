@@ -57,7 +57,7 @@
                                     />
                                 </FormItem>
                                 <div class="u-upload">
-                                        <div>会议室图片</div>
+                                        <div class="u-unload-label">会议室图片</div>
                                         <UploadFile 
                                             multiple
                                             :category="category"
@@ -299,10 +299,16 @@ export default {
     .u-upload{
         width:100%;
     }
+    .u-unload-label{
+        font-size: 12px;
+        line-height:30px;
+        color:#495060;
+    }
     .u-unload-tip{
         line-height:30px;
         text-indent: 12px;
         color:#495060;
+        font-size: 12px;
 
     }
 }

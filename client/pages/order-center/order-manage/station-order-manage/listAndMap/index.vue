@@ -1,9 +1,13 @@
 
 <template>
    <div class="order-map-list">
+       <div style="text-align:right;font-size:14px;margin-bottom: 10px;">
+           <span>找不到商品?</span>
+           <span style="cursor:pointer;text-decoration:underline;" @click="goSearch">去查询</span>
+       </div>
        <Tabs size="default" value="list" :animated="false">
             <TabPane label="以列表方式选择" name="list">
-               <List  :params.sync="params" :floors.sync="floors" @on-result-change="onResultChange" :originStationList.sync="originStationList"/>
+               <List  :params.sync="params" :floors.sync="floors" @on-result-change="onResultChange" :originStationList.sync="originStationList" @clear="clear"/>
             </TabPane>
             <TabPane label="以平面图方式选择" name="map">
                 <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap>
@@ -49,6 +53,12 @@ export default {
     methods:{
        onResultChange(val){
            this.$emit('on-result-change',val);
+       },
+       goSearch(){
+           window.open('/inventory/daily-inventory','_blank');
+       },
+       clear(val){
+           this.$emit('clear',val);
        }
     }
 }

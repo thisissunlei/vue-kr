@@ -90,7 +90,7 @@ export default {
                 },
                 {
                     title: '商品类型',
-                    key: 'goosTypeName',
+                    key: 'goodsTypeName',
                     align:'center' 
                 },
                 {
@@ -110,11 +110,11 @@ export default {
                 },
                 {
                     title: '可租时段',
-                    key: 'startDate',
+                    key: 'availableDetail',
                     align:'center',
                     render(tag, params){
-                      let end=params.row.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)):'不限';
-                      return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+end;
+                      let end=params.row.availableDetail.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.endDate)):'不限';
+                      return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.startDate))+'至'+end;
                     } 
                 },
             ],
@@ -136,46 +136,43 @@ export default {
                 {value:' ',label:'套间情况'},
                 {value:'SUITE',label:'有套间'},
                 {value:'UNSUITE',label:'无套间'}
-            ]
+            ],
+            endParams:{
+                deleteData:[],
+                submitData:[]
+            }
         }
      },
      mounted(){
-        this.floorList=[].concat(this.floors);
-        let len=this.floorList.length;
-        if(len&&len>1){
-            this.floorList.unshift({label:'全部楼层',value:' '});
-            this.formItem.floor=this.floorList[1].value;
-        }else if(len&&len<=1){
-            this.formItem.floor=this.floorList[0].value;
-        }
+        this.initFormat();
         let params=Object.assign({},this.params,this.formItem);
         this.getListData(params);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },
      methods:{
-       itemChangeHandler(val){
+        initFormat(){
+            this.floorList=[].concat(this.floors);
+            let len=this.floorList.length;
+            if(len&&len>1){
+                this.floorList.unshift({label:'全部楼层',value:' '});
+                this.formItem.floor=this.floorList[1].value;
+            }else if(len&&len<=1){
+                this.formItem.floor=this.floorList[0].value;
+            }
+        },
+        itemChangeHandler(val){
             if(!this.formItem.floor){
                this.formItem.floor=this.params.floor;
             }
             let params=Object.assign({},this.params,this.formItem);
+            let newStation=[];
+            this.$emit('clear',newStation);
             this.getListData(params);
-       },
-       getListData(params){
+        },
+        getListData(params){
            this.loading=true;
            this.$http.get('downOrderGoodsList',params).then((response)=>{
-                this.attractData=response.data;   
-                let len=this.originStationList.length;
-                if(len){
-                   this.originStationList.map((item)=>{
-                       this.attractData.length&&this.attractData.map((value)=>{
-                           if(item.id==value.id){
-                               value.$set(item,'checked',true);
-                           }else{
-                               value.$set(item,'checked',false);
-                           }
-                       })
-                   }) 
-                }          
+                this.attractData=response.data;     
                 this.loading=false;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -184,7 +181,16 @@ export default {
             })
        },
        tableChange(params){
-         this.$emit('on-result-change',params);
+         var param=params.map((item,index)=>{
+             var list=Object.assign({},item);
+             list.name=item.cellName;
+             list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
+             list.seatId=item.belongId;
+             list.id=item.belongId;
+             return list
+         })
+         this.endParams.submitData=[].concat(this.originStationList).concat(param);
+         this.$emit('on-result-change',this.endParams);
        }
     }
 }

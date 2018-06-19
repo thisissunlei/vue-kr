@@ -207,7 +207,7 @@
                         </FormItem>
                     </DetailStyle>
                 </div>
-                  <FormItem  style="padding-left:24px;margin-top:40px">
+                  <FormItem  style="padding-left:100px;margin-top:40px;">
                     <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
                 </FormItem> 
           </Form>

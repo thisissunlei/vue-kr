@@ -87,7 +87,7 @@
             >
             <!-- /   v-if="newmodal" -->
             <Newgoods
- 
+                    v-if="newmodal"
                    :data="newgoodsData"
                    :newgooddata="newgooddata"
                    :seacchValue="seacchValue"
@@ -168,14 +168,38 @@
             title="导入商品"
             class-name="vertical-center-modal"
             style="text-align:center;">
-            <div style="text-align:left;">
-            <span>独立办公室：</span>
-            </div>
-             <div style="text-align:left;">
-            <span>固定办公室：</span>
-            </div>
-             <div slot="footer" style="text-align:center;">
-                 <Button type="primary" @click="subsuccess" >继续</Button>
+            <Form>
+    <div>
+    <Form-item  label='移动办公室：' style="text-align:left;"    >
+            <span
+                      v-for="(item,index) in moveStationse"
+                      :key="item.id"
+                    >
+            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
+            </span>
+     </Form-item >
+
+            <Form-item  label='独立办公室：' style="text-align:left;"  >
+            <span
+                      v-for="(item,index) in spaces"
+                      :key="item.id"
+                    >
+            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
+             </span>
+            </Form-item >
+
+            <Form-item  label='固定办公室：' style="text-align:left;"  >
+            <span
+                      v-for="(item,index) in openStations"
+                      :key="item.id"
+                    >
+            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
+             </span>
+            </Form-item > 
+        </div>
+</Form> 
+  <div slot="footer" style="text-align:center;">
+                 <Button type="primary">我知道了</Button>
             </div>
     </Modal>
 
@@ -195,6 +219,59 @@
             </div>
      </Modal>
 
+    <!-- 重名 -->
+    <Modal
+            title="注意！导入后会有重名的商品"
+            v-model="carel"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span>{{errdate}},</span></h2>
+                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+            </div>
+    
+             <div slot="footer">
+                 <Button type="primary"  >确定导入</Button>
+                 <Button type="ghost" style="margin-left:20px" >取消</Button>
+            </div>
+    </Modal>
+
+
+
+
+    <Modal
+            title="导入失败！表格里有重名的商品"
+            v-model="butpush"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+             <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
+            </div>
+    
+             <div slot="footer" style="text-align:center;">
+                 <Button type="primary">我知道了</Button>
+            </div>
+     </Modal>
+
+    
+    <Modal
+            title="导入失败！表格里未填的数据"
+            v-model="butpush"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+                <p>商品名称、楼层、房间类型、工位数量必填</p>
+             <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
+            </div>
+    
+             <div slot="footer" style="text-align:center;">
+                 <Button type="primary">我知道了</Button>
+            </div>
+     </Modal>
+
 
 
     </div>
@@ -204,7 +281,6 @@
 import FlagLabel from '~/components/FlagLabel';
 import ToolTip from '~/components/ToolTip';
 import ImportFile from '~/components/ImportFile';
-
 import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
 import Loading from '~/components/Loading';
@@ -215,8 +291,13 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 export default {
+  
+
+    
+    
+
           name:'Join',
-    components:{
+       components:{
        Loading,
        SearchForm,
        Message,
@@ -232,10 +313,15 @@ export default {
         },
     data() {
         return{
-            spaces:[],//导入成功返回独立办公室列表	
-            stations:[],//导入成功返回固定办公桌列表
+            moveStationse:[],
+            openStations:[],
+            spaces:[],
+            moveStations:'',//导入成功返回移动办公室列表
+            spaces:'',//导入成功返回独立办公室列表	
+            stations:'',//导入成功返回固定办公桌列表
             importsuccess:false,//导入成功	
             butsuccess:false,
+            carel:false,
             errdate:'',
             formItem:{
                   godsStatus:'',
@@ -448,13 +534,6 @@ export default {
             newgoodsData:[],
             floorList:[], 
             floor:'',
-            serform:{
-                communityId:'',
-                goodsType:'',
-                name:'',
-                
-
-            },
             statusOldData:[]    
         }
     },
@@ -476,12 +555,7 @@ export default {
         tabForms:function(val,old){
             this.getListData(this.tabForms); 
             this.floor=this.tabForms.floor;
-            this.serform={
-                communityId:this.tabForms.communityId,
-                goodsType:this.tabForms.goodsType,
-                name:this.tabForms.name
-            }
-
+           
         },
     
     },
@@ -524,8 +598,8 @@ export default {
             //添加弹窗2
             subGoods(){
                         //新增重名     
-                     let data=Object.assign({},this.newgoodForm,{communityId:this.serform.communityId}); 
-                       console.log('66666666666666666666',this.serform);
+                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+                       console.log('66666666666666666666',this.tabForms);
                        
                      this.$http.get('getNew-Rename',data).then((response)=>{
                              this.getNew();
@@ -543,67 +617,127 @@ export default {
                             } 
                     })
       },    
-
-
        //新增接口a
-             getNew(){
-                console.log('新增',this.newgoodForm);
-            let data=Object.assign({},this.newgoodForm,{communityId:this.serform.communityId});
-            this.$http.post('getNew-lyadded',data).then((response)=>{    
-                console.log('新增接口',response.data);
-                            }).catch((error)=>{
-                                this.$Notice.error({
-                                    title:error.message
-                                });
-                            })
-         },
-
-
-
-
-
+        getNew(){
+            console.log('新增',this.newgoodForm);
+        let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId});
+        this.$http.post('getNew-lyadded',data).then((response)=>{    
+            console.log('新增接口',response.data);
+                        }).catch((error)=>{
+                            this.$Notice.error({
+                                title:error.message
+                            });
+                        })
+        },
         //导入入口
         importgoods(){
                 this.vImport=!this.vImport;
         },
-        celPush(){
-                 this.vImport=!this.vImport;
-        },
-
-    subsuccess(){
-                this.butsuccess=!this.butsuccess
-    },      
-
-    
-       close(){
-             this.vImport=!this.vImport;
-               alert('2')
-       },
-        downFile(){
-                alert('3')    
-       },
-       upload(file){
-           alert('4')
-           this.file=file;
-           this.judgeRepeat();
-       },
+        subsuccess(){
+                    this.butsuccess=!this.butsuccess
+        },      
+       
         importsu(){
                 this.importsuccess=!this.importsuccess;
         },
-       judgeRepeat(){       
-           this.importsu();
+        downFile(){
 
-                  ///导入重名借口
-                     this.$http.post('getNew-Whetherrepeat','').then((response)=>{
-                            
-                    }).catch((error)=>{
+        },
+        close(){
+
+        },
+    upload(file){//商品导入重复
+        let _this = this;
+         var form = new FormData();
+         form.append('goodsData',file);
+         form.append('communityId',this.tabForms.communityId);
+		 var xhr = new XMLHttpRequest();
+		 xhr.onreadystatechange = function() {
+			 if (xhr.readyState === 4) {
+				 if (xhr.status === 200) {
+					 if (xhr.response && xhr.response.code > 0) {
+                         _this.judgeRepeat(file);
+                        
+					 } else {
+                        //  _this.error(xhr.response);
+
+                        //  _this.$Notice.error({
+                        //     title:xhr.response.message
+                        //  });
+                         if(!error.message){
+                            this.getsubGods(error.data);
+                    } else{
                         this.openMessage=true;
                         this.MessageType="error";
                         this.warn=error.message;
-                    })
-           
-            
+                    } 
+					 }
+                 }
+                //  else {
+                //      _this.$Notice.error({
+                //         title:'上传失败'
+                //      });
+				//  }
+			 }
+		 };
+		 xhr.open('POST','/zhongyu/api/krspace-finance-web/cmt/goods/check-excel',true);
+		 xhr.responseType = 'json';
+		 xhr.send(form);
        },
+
+
+        error(response){
+                   if(!error.message){
+                            this.getsubGods(error.data);
+                    } else{
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=error.message;
+                    } 
+        },
+    
+        getsubGods(){
+                    th9s.carel=!this.carel;
+        },
+        judgeRepeat(file){  //商品导入
+            let _this = this;
+            var form = new FormData();
+            form.append('goodsData',file);
+            form.append('communityId',this.tabForms.communityId);
+        
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        if (xhr.response && xhr.response.code > 0) {
+                            _this.success(xhr.response);
+                        } else {
+                            _this.error(xhr.response);
+                            _this.$Notice.error({
+                                title:xhr.response.message
+                            });
+                        }
+                    }
+                    else {
+                        _this.$Notice.error({
+                            title:'上传失败'
+                        });
+                    }
+                }
+            };
+            xhr.open('POST','/zhongyu/api/krspace-finance-web/cmt/goods/import/excel', true);
+            xhr.responseType = 'json';
+            xhr.send(form);
+        },
+        success(response){
+            this.importsu();
+            this.importgoods();
+        },
+        error(response){
+                  this.openMessage=true;
+                  this.MessageType="error";
+                  this.warn=error.message;
+        },
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
         },
@@ -625,7 +759,6 @@ export default {
          searchstart(obj){
            this.searchForms=Object.assign({},obj);  
         },
-        
         tableCommon(){
             var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
             if(dailyTableDom){

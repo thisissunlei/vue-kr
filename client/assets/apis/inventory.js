@@ -121,23 +121,24 @@ export default  {
     },
      //新增借口
      'getNew-lyadded': {
-        url: '/zhongyu/api/krspace-op-web/cmt/goods/add',
+        url: '/zhongyu/api/krspace-finance-web/cmt/goods/add',
         method: 'post'
     },
     //新曾重名借口
     'getNew-Rename': {
-       url: '/zhongyu/api/krspace-op-web/cmt/goods/check-name',
+       url: '/zhongyu/api/krspace-finance-web/cmt/goods/check-name',
        method: 'get'
    },
+
     //下单选择商品列表
     'downOrderGoodsList': {
         url: '/song/api/krspace-op-web/cmt/floor-graph/vue/list',
         method: 'get'
     },
 
-  //导入增借口
+  //导入去重
   'getNew-Whetherrepeat': {
-    url: '/api/order/goods/check-excel',
+    url: '/zhongyu/api/krspace-finance-web/cmt/goods/check-excel',
     method: 'post'
 },
 

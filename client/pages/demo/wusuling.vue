@@ -48,7 +48,8 @@ export default {
        submitFile(){
          let _this = this;
 		 var form = new FormData();
-		 form.append('file',this.file);
+         form.append('goodsData',this.file);
+         form.append('communityId',this.file);
 		 if(!this.file.name){
              this.$Notice.error({
                 title:'请选择上传文件'

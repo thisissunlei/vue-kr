@@ -12,13 +12,7 @@
                         placeholder="请选择"
                         clearable
                     >
-                        <Option
-                            v-for="item in communityList"
-                            :value="item.value"
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
+                       <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
                  </div>
                  <div class="u-select-list">
@@ -248,9 +242,32 @@ export default {
         }
     },
     mounted:function(){
-		this.getTableData(this.tabParams)
+        this.getTableData(this.tabParams);
+        this.getCommunityList(' ');
 	},
     methods:{
+        getCommunityList(name){
+            let params = {
+                    cmtName:name
+                }
+            this.$http.get('get-community-new-list', params).then((res)=>{
+              let  list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                this.communityList = list;
+               
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            
+            
+        },
         changePage(){
             this.tabParams.page=page;
             this.page=page;

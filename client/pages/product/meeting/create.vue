@@ -1,7 +1,7 @@
 <template>
     <div class="g-create-meeting">
          <SectionTitle title="新建会议室"></SectionTitle>
-         <Form ref="formItem" :model="formItem" :rules="ruleCustom">
+         <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
                     <DetailStyle info="会议室基本信息">
                                <FormItem label="会议室名称" class="u-input"  prop="name">
@@ -311,9 +311,10 @@ export default {
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
+        this.getCommunityList('');
     },
     methods:{
-        handleSubmit(){
+        handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
                     top: 80,
@@ -323,15 +324,38 @@ export default {
             //    if(!this.formItem.iconUrl){
             //         this.isError=true;
             //    }
-                // this.$refs[name].validate((valid) => {
-                //     if (valid && this.formItem.iconUrl) {
-                //         _this.submitCreate();
-                //     } else {
-                //         _this.$Notice.error({
-                //             title:message
-                //         });
-                //     }
-                // }) 
+                this.$refs[name].validate((valid) => {
+                    if (valid && this.formItem.iconUrl) {
+                        _this.submitCreate();
+                    } else {
+                        _this.$Notice.error({
+                            title:message
+                        });
+                    }
+                }) 
+        },
+          //社区
+       getCommunityList(name){
+            let params = {
+                    cmtName:name
+                }
+            this.$http.get('get-community-new-list', params).then((res)=>{
+              let  list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                this.communityList = list;
+               
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            
+            
         },
         submitCreate(){
             this.$http.post('create-icon', this.formItem).then((res)=>{

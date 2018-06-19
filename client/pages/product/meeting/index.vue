@@ -107,6 +107,21 @@
                 </div>
             </div>
         </div>
+        <Modal
+            v-model="openCancel"
+            title="提示信息"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div class="u-cancel-title">
+                确认要删除该会议室吗？
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitDelete">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -133,6 +148,8 @@ export default {
             formItem:{
 
             },
+            roomId:'',
+            openCancel:false,
             communityList:[],
             statusList:[
                 {
@@ -265,9 +282,29 @@ export default {
             window.open(`/product/meeting/edit/${params.id}`,'_blank');
           
         },
-        openDelete(params){
-            
-        }
+        submitDelete(){
+            let params={
+                    roomId: this.roomId
+                }
+                this.$http.post('delete-krmting-room', params).then((res)=>{
+                    this.$Notice.success({
+                        title:'删除成功'
+                    });  
+                    this.openDelete();
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+                 
+        },
+         openDelete(value){
+            this.openCancel=!this.openCancel;
+            if(value){
+                this.roomId=value.roomId
+            }
+        },
     }
 }
 </script>

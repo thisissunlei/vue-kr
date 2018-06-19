@@ -95,7 +95,7 @@ function initListData(){
         },
         {
             title: '确认人员',
-            key: 'verifyUser',
+            key: 'verifyUserName',
             align:'center',
             type:'PASSED'
         },

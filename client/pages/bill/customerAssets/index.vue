@@ -66,6 +66,7 @@
                         key: 'balance',
                         align:'center',
                         render:function(h,params){
+                            
                             return h('span',{},utils.thousand((params.row.balance/100).toFixed(2)))
                          }
                     },

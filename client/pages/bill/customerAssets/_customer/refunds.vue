@@ -90,7 +90,7 @@ import utils from '~/plugins/utils';
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                              return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
   
                     }
                 },{

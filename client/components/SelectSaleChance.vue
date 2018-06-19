@@ -1,26 +1,26 @@
 <style lang="less">
-   .com-select-chance{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-   }
+.com-select-chance {
+    ::-webkit-input-placeholder {
+        color: #666;
+    }
+    ::-moz-placeholder {
+        color: #666;
+    } /* firefox 19+ */
+    :-ms-input-placeholder {
+        color: #666;
+    } /* ie */
+    input:-moz-placeholder {
+        color: #666;
+    }
+}
 </style>
 
 
 
 <template>
     <div class="com-select-chance">
-         <Select
-            :v-model="saler"
-            filterable
-            :clearable="clearable"
-            :placeholder='placeholder'          
-            :loading="loading1"
-            :disabled="disabled"
-            :value="value"
-            @on-change="changeContent">
-            <Option v-for="(option, index) in salerOptions" :value="option"  :key="index">{{option}}</Option>
+        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" @on-change="changeContent">
+            <Option v-for="option in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -29,64 +29,104 @@
 <script>
 import http from '~/plugins/http.js';
 
-    export default {
-        props:{
-            
-            disabled:{
-                type:Boolean,
-                default:false,
-            },
-            clearable:{
-                type:Boolean,
-                default:false,
-            },
-            placeholder:'请选择',
-            value:{
-                type:String,
-                default:'默认销售机会',
-            }
+export default {
+    props: {
+        disabled: {
+            type: Boolean,
+            default: false,
         },
-        data () {
-            return {
-                saler:'',
-                loading1:false,
-                salerOptions:[
-                    '北京','北京2','北京3'
-                ]
-            };
+        clearable: {
+            type: Boolean,
+            default: false,
         },
-        mounted(){
+        placeholder: '请选择',
 
-        },
-        methods: {
-            changeContent(value){
-                // this.onchange(value)
-                this.$emit('onChange',value);
-            },
-            getSalerList(name){
-                let params = {
-                    phoneOrEmail:name
+        orderitems: {
+            type: Object
+        }
+    },
+    data() {
+        return {
+            value: '1',
+            saler: '',
+            loading1: false,
+            salerOptions: [
+                {
+                    label: 'New York',
+                    value: '1'
+                },
+                {
+                    label: 'London',
+                    value: '2'
+                },
+                {
+                    label: 'Sydney',
+                    value: '3'
+                },
+                {
+                    label: 'Ottawa',
+                    value: '4'
+                },
+                {
+                    label: 'Paris',
+                    value: '5'
+                },
+                {
+                    label: 'Canberra',
+                    value: '6'
                 }
-                let list = [];
-                let _this = this;
-                http.get('get-saler', params, r => {
-                    list = r.data.slice(0,10);
-                    list.map((item)=>{
-                        let obj = item;
-                        obj.label = item.lastname;
-                        obj.value = item.id+'';
-                        return obj;
-                    });
-                    _this.loading1 = false;
-                    _this.salerOptions = list;
-                }, e => {
-
-                    console.log('error',e)
-                })
-
+            ]
+        };
+    },
+    watch: {
+        orderitems() {
+            this.getSalerChanceList();
+        }
+    },
+    created() {
+        // console.log('created')
+        // console.log(this.orderitems)
+    },
+    updated() {
+        // console.log('updated')
+        // console.log(this.orderitems);
+    },
+    mounted() {
+        // console.log('mounted')
+        // console.log(this.orderitems)
+    },
+    methods: {
+        changeContent(value) {
+            this.$emit('onChange', value);
+        },
+        //获取销售机会列表
+        getSalerChanceList() {
+            let parms = {
+                customerId: this.orderitems.customerId,
+                communityId: this.orderitems.communityId,
+                receiveId: this.orderitems.salerId
             }
-
+            if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
+            let list = [];
+            let _this = this;
+            http.get('get-salechance', parms, r => {
+                console.log(r);
+                list = r.data.slice(0, 10);
+                list.map((item) => {
+                    let obj = item;
+                    obj.label = item.lastname;
+                    obj.value = item.id + '';
+                    return obj;
+                });
+                _this.loading1 = false;
+                _this.salerOptions = list;
+            }, e => {
+                console.log('error', e)
+            })
 
         }
+
+
     }
+}
 </script>

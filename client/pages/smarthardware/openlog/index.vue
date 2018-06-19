@@ -86,7 +86,7 @@ export default {
                                         placement: 'top',
                                         content :obj.row.card
                                     },
-                                }, obj.row.memberName),
+                                }, obj.row.memberName||"/"),
                             ]);
                             
                         }
@@ -126,13 +126,19 @@ export default {
                         key: 'success',
                         align:'center',
                         render:(h,obj)=>{
-                            return h('div', [
+                            return h('div',{
+                                style:{
+                                    color:obj.row.success?"black":"red"
+                                }
+                            }, [
                                
-                                h('span', {
-                                    style:{
-                                        color:obj.row.success?"black":"red"
-                                    }
-                                },this.returnResult(obj.row.success))
+                                h('Tooltip',
+                                    {
+                                    props: {
+                                        placement: 'top-end',
+                                        content : this.returnResultExplain(obj.row)
+                                    },
+                                }, this.returnResult(obj.row.success)),
                             ]);
                             
                         }
@@ -150,6 +156,22 @@ export default {
        this.handleWindowScroll();
    },
    methods:{
+       returnResultExplain(data){
+           if(data.success){
+               return '无';
+           }
+           var msg = data.msg;
+           var returnText ='无';
+           if(msg){
+               try{
+                    returnText = JSON.parse(msg).message;
+                }catch(e){
+                    returnText = msg 
+                }
+           }
+           
+           return returnText;
+       },
        submitSearchData(data){
 
            let _this =this;
@@ -280,6 +302,9 @@ export default {
     }
     .table-box{
         padding: 0 10px 10px 10px;
+        .ivu-table-cell{
+            padding : 0;
+        }
         .all-data{
             text-align:center;
             padding:10px;

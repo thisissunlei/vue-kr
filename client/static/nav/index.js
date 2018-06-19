@@ -1144,11 +1144,11 @@
 
                     {
                         primaryText: '设备查询',
-                        menuCode: 'public',
+                        menuCode: 'device_deploy_search',
                         router: 'smarthardware/equipmentmanage/equipmentsearch',
                     },{
                         primaryText: 'IP冲突检测',
-                        menuCode: 'public',
+                        menuCode: 'device_ip_detection',
                         router: 'smarthardware/equipmentmanage/checkrepeatip',
                     }
                 ]

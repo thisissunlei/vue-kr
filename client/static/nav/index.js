@@ -703,12 +703,12 @@
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
                 menuItems: [
-                    // {
-                    //     primaryText: '社区主页',
-                    //     router: 'operation/community',
-                    //     type:'vue',
-                    //     menuCode: 'op_home',
-                    // },
+                    {
+                        primaryText: '社区主页',
+                        router: 'operation/community',
+                        type:'vue',
+                        menuCode: 'op_home',
+                    },
                     {
                         primaryText: '即将到期',
                         router: 'inventory/over-date',
@@ -720,7 +720,6 @@
                         router: 'inventory/enter-field',
                         type:'vue',
                         menuCode: 'imt_putaway_list',
-                        //menuCode: 'vueList',
                     },
                     {
                         primaryText: '已起租未付',
@@ -740,10 +739,9 @@
                         router: 'community/communityManage/visitorsToRecord'
                     },
                     {
-                        primaryText: '访客',
+                        primaryText: '预约访客',
                         menuCode: 'visitRecord',
                         router: 'community/visitor/list'
-
                     },
                     {
                         primaryText: "KM会议",

@@ -451,7 +451,7 @@ export default {
                if(this.endDates && this.endHour){
                    this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
                }
-               console.log('this.formItem',this.formItem)
+              
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();
@@ -489,8 +489,6 @@ export default {
             
         },
         submitCreate(){
-            console.log('this.formItem---',this.formItem)
-            return;
             this.$http.post('add-krmting-room', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'

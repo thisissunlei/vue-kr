@@ -136,7 +136,8 @@ export default {
                                 'BANKONLINE':'网银',
                                 'BANKTRANSFER':'银行转账',
                             }
-                            return payWay[obj.row.payWay];
+                            return h('span',{},payWay[obj.row.payWay]);
+                            // return payWay[obj.row.payWay];
                         }
                     },
                     {
@@ -146,13 +147,18 @@ export default {
                         render(h, obj){
                             switch (obj.row.payStatus){
                                 case 'WAIT':
-                                    return '待支付';
+                                    return h('span',{},'待支付');
                                 break;
                                 case 'SUCCESS':
-                                    return '支付成功';
+                                    return h('span',{},'支付成功');
+                                    
                                 break;
                                 case 'FAILED':
-                                    return <span class="u-txt-red">支付失败</span>;
+                                     return h('span',{
+                                         attrs:{
+                                             class:'u-txt-red'
+                                         }
+                                     },'支付失败');
                                 break;
                             }
                         }
@@ -163,9 +169,9 @@ export default {
                         align:'center',
                         render(h, obj){
                             if(obj.row.dealed===true){
-                                return '已处理';
+                                return h('span',{},'已处理');
                             }else if(obj.row.dealed===false){
-                                return '待处理';
+                                 return h('span',{},'待处理');
                             }
                         }
                     },
@@ -175,7 +181,7 @@ export default {
                         align:'center',
                         render(h, obj){
                             let time = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
-                            return time;
+                            return h('span',{},time);
                         }
                     },
                 ]

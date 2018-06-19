@@ -278,7 +278,7 @@
                         width: 150,
                         render(h, obj){
                             let location=obj.row.placeLocation?obj.row.placeLocation:'-';
-                            return location;
+                            return h('span',{},location);
                         }
                     },
                    
@@ -289,7 +289,7 @@
                         width: 150,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
-                            return time;
+                            return h('span',{},time);
                         }
                     },
                     {
@@ -303,7 +303,7 @@
                             }
                             let end=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
                             let start = dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
-                            return start+"至"+end;
+                            return h('span',{}, start+"至"+end);
                         }
                     },
                     {

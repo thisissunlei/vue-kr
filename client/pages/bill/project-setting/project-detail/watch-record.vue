@@ -91,7 +91,7 @@ export default {
                             return '-'
                         }
                         let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.uTime));
-                        return time;
+                        return h('span',{},time);
                     }
                 },
                 {

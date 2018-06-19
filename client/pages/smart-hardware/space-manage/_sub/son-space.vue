@@ -211,7 +211,8 @@ export default {
                   render(h, obj){
                     if(obj.row.ctime){
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
-                        return time;
+                        return h('span',{},time)
+                        
                     }
 
                   }

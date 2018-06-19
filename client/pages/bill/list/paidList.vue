@@ -166,14 +166,19 @@ import PdfDownload from './pdfDownload';
                     },
                     {
                         title: '账单日',
-                        key: 'billingDate',
+                        key: 'payStatus',
                         align:'center',
                         render(h, obj){
-                            if(!obj.row.billingDate){
-                                return '-'
-                            }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
-                            return time;
+                            // if(!obj.row.billingDate){
+                            //     return '-'
+                            // }
+                            // let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                            // // return time;
+                            return h('span', { 
+                                style: {
+                                    color:'#FF6868'
+                                }       
+                            }, '待付款');
                         }
                     },
                     {
@@ -182,7 +187,8 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-                            return time;
+                            
+                            return h('span',{},time);
                         }
                     },
                     {
@@ -323,7 +329,8 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         width:90,
                         render(h, obj){
-                          return bizType[obj.row.bizType];
+                            return h('span',{},bizType[obj.row.bizType])
+                        //   return bizType[obj.row.bizType];
                         }
                     }
                 let arr=[].concat(this.columns);

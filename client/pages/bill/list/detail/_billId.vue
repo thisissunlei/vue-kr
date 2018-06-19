@@ -193,7 +193,8 @@ export default {
 							'BANKTRANSFER':'银行转账',
 							'RELEASE':'反结算'
 						}
-						return srcType[obj.row.srcType]
+						return h('span',{},srcType[obj.row.srcType]);
+						// return srcType[obj.row.srcType]
 						
 				 	}
 				},
@@ -208,7 +209,8 @@ export default {
 				 align:'center',
 				 render(h, obj){
 					 let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.createTime));
-					 return time;
+					 return h('span',{},time);
+					//  return time;
 				 }
 				},
 				{

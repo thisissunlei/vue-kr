@@ -139,7 +139,8 @@ import utils from '~/plugins/utils';
                         width:140,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate));
-                            return time;
+                            // return time;
+                            return h('span',{},time);
                         }
                     },
                     
@@ -188,7 +189,7 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:120,
                         render(h, obj){
-                            return incomeType[obj.row.incomeType]
+                            return h('span',{},incomeType[obj.row.incomeType]);
                         }
                     };
                 if(this.columns.length<7){

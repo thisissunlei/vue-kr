@@ -50,7 +50,6 @@
     "husky": "^0.14.3",
     "iview": "2.8.0",
     "nuxt": "1.2.1",
-    "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
     "source-map-support": "^0.4.15",
     "validate-commit-msg": "^2.14.0"

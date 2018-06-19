@@ -46,7 +46,7 @@
                 v-model="params.bizTradeNo"
                 placeholder="请输入交易流水号"
                 style="width: 252px"
-            ></Input>
+            />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>
     </div>

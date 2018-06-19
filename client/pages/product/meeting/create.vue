@@ -18,8 +18,9 @@
                                         placeholder="请选择"
                                         filterable
                                         clearable
+                                        @on-change="getFloor"
                                     >
-                                        <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
+                                        <Option v-for="(option, index) in communityList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
                                     </Select>
                                  </FormItem>
                                  <FormItem label="所在楼层" class="u-input" prop="floor">
@@ -30,7 +31,7 @@
                                         filterable
                                         clearable
                                     >
-                                        <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
+                                        <Option  v-for="item in floorsList" :value="`${item.value}`"  :key="item.value" >{{ item.label }}</Option>
                                     </Select>
                                 </FormItem>
                                 <!-- <FormItem label="所属空间" class="u-input" prop="spaceId">
@@ -229,7 +230,7 @@ export default {
     },
     data(){
         return {
-            category:'',
+            category:'app/upgrade',
             formItem:{
                 name:'',
                 appBusyPrice:'',
@@ -303,17 +304,42 @@ export default {
                     { required: true, message: '请上传详情图片', trigger: 'change' }
                 ],
                 
-            },
-                
-            
+            },  
+            floorsList:[],
             communityList:[]
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
         this.getCommunityList('');
+       
     },
     methods:{
+        getFloor(){
+            if(!this.formItem.communityId){
+                this.formItem.floor="";
+                return
+            }
+             let params = {
+                    communityId:this.formItem.communityId
+                }
+            this.$http.get('get-krmting-room-floor-list', params).then((res)=>{
+             
+              let list = []
+                res.data.floors.map((item)=>{
+                    let obj ={};
+                    obj.label = item;
+                    obj.value = item;
+                    list.push(obj)
+                });
+                this.floorsList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -340,15 +366,14 @@ export default {
                     cmtName:name
                 }
             this.$http.get('get-community-new-list', params).then((res)=>{
-              let  list = res.data.cmts;
-                list.map((item)=>{
+             console.log('')
+               let list= res.data.cmts.map((item)=>{
                     let obj =item;
                     obj.label = item.cmtName;
                     obj.value = item.cmtId;
                     return obj;
                 });
                 this.communityList = list;
-               
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

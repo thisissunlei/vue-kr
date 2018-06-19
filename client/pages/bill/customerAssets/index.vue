@@ -66,7 +66,7 @@
                         key: 'balance',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.balance/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.balance/100).toFixed(2)))
                          }
                     },
                     {
@@ -74,7 +74,7 @@
                         key: 'deposit',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.deposit/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.deposit/100).toFixed(2)))
                          }
                     },
                     {
@@ -82,7 +82,7 @@
                         key: 'lockDeposit',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.lockDeposit/100).toFixed(2)))
                          }
                     },
                     {

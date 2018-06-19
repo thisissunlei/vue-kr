@@ -340,6 +340,7 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'changedAmount',
                     align:'center',
                     render:function(h,params){
+                        // return h()
                         return utils.thousand((params.row.changedAmount/100).toFixed(2)) ;
                     }
                 },{

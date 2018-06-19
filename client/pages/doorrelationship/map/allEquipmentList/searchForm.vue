@@ -48,9 +48,10 @@
                 </Select>
             </FormItem>
             <FormItem label="其他："> 
-                <SearchFormData 
+                <SearchForm 
                     :searchFilter="searchFilter"
                     :onSubmit="onSubmitSearchForm"
+                    :openSearch = true
                     @serachFormDataChanged="onSubmitSearchForm"
                 />
             </FormItem>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import SearchFormData from '~/components/SearchFormData';
+import SearchForm from '~/components/SearchForm';
 export default{
     name:'equipmentSearch',
     data (){
@@ -103,7 +104,7 @@ export default{
         "communityId","doorTypeOptions"
     ],
     components: {
-     SearchFormData
+     SearchForm
     },
     methods:{
 

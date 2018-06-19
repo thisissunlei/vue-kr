@@ -26,6 +26,7 @@
                 class="search-val" 
                 :placeholder="[placeholder?placeholder:'请输入搜索关键字']" 
                 :name="[inputName?inputName:'search']" 
+				@input="passDataToFather"
             />
         </div>
     </div>
@@ -39,13 +40,16 @@
      *  @param {String} inputName  单一搜索框的name名
      *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填
 	 *  @param {Function} onSubmit 提交函数
-	*/
+	 * @param {Boolean} openSearch 初始时是否打开search
+	 * @param {Function} serachFormDataChanged 如果有这个函数则放大镜Icon不显示 
+	*/	
 export default {
     props:{
         placeholder:String,
         inputName:String,
         searchFilter:Array,
-        onSubmit:Function
+		onSubmit:Function,
+		openSearch : Boolean
     },
     data(){
         return{
@@ -63,9 +67,27 @@ export default {
         if(this.searchFilter){
 			this.searchLabel=this.searchFilter[0].label;
 			this.filterValue=this.searchFilter[0].value;
-        }
+		}
+		if(this.openSearch){
+			if(this.searchFilter){
+				this.otherName="renderFilter";
+				this.className = "filter-show-form";
+			}else{
+				this.otherName='';
+				this.className = "show-form";
+			}
+			this.flag=true;
+		}
     },
     methods:{
+		passDataToFather(){
+			var value={};;
+			value[this.filterValue]=this.searchValue
+			value.content=this.searchValue;
+			console.log("value",value);
+			// if()
+			this.$emit("serachFormDataChanged",value)
+		},
         onSearch(){
             if(!this.flag){
                 if(this.searchFilter){

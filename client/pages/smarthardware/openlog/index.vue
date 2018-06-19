@@ -209,10 +209,10 @@ export default {
                 }else{
                     _this.openLogList = itmesList;
                 }
-
                 if(res.data.items.length<25){
                     this.allData = true;
                 }else if(res.data.items.length==25){
+                    this.allData = false;
                     document.getElementsByClassName("g-openlog")[0].scrollTop = _this.tableScrollTop-300;
                 }
 

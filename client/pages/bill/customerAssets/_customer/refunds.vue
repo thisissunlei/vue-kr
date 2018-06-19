@@ -59,7 +59,8 @@ import utils from '~/plugins/utils';
                         key: 'amount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.amount/100).toFixed(2))
+                                return h('span',{}, utils.thousand((params.row.amount/100).toFixed(2)))
+                            
                          }
                     },
                     ],
@@ -77,7 +78,8 @@ import utils from '~/plugins/utils';
                     key: 'amount',
                     align:'center',
                     render:function(h,params){
-                        return utils.thousand((params.row.amount/100).toFixed(2))
+                              return h('span',{}, utils.thousand((params.row.amount/100).toFixed(2)))
+                        
                     }
                 },{
                     title: '退至账户',
@@ -88,7 +90,8 @@ import utils from '~/plugins/utils';
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                              return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+  
                     }
                 },{
                     title: '操作人',
@@ -99,7 +102,8 @@ import utils from '~/plugins/utils';
                     key: 'ctime',
                     align:'ctime',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
+                        return h('span',{}, dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)));
+                     
                     }
                 }],
                 summaryList:[],

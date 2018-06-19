@@ -375,7 +375,7 @@ import utils from '~/plugins/utils';
                         title: '小计',
                         key: 'originalAmount',
                         render:function(h,params){
-                            return utils.thousand(params.row.originalAmount)
+                            return h('span',{},utils.thousand(params.row.originalAmount))
                          }
                     }
                 ],

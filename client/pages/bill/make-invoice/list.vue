@@ -60,7 +60,9 @@
                 width="660"
             >
             <div>
-                <span style="height:30px;display:inline-block;">回退原因:</span><Input v-model="backData.refundReason" type="textarea" :rows="4" placeholder="请输入退回原因" />
+                <span style="height:30px;display:inline-block;">回退原因:</span>
+                
+                <Input v-model="backData.refundReason" :maxlength="200" type="textarea" :rows="4" placeholder="请输入退回原因" />
             </div>
             <div slot="footer">
                 <Button type="primary" @click="goBackSubmit">确定</Button>
@@ -209,7 +211,6 @@ import utils from '~/plugins/utils';
                 let index = columnDetail.index;
                 this.invoiceData[index].fileId = params[0].fileId;
                 this.invoiceData[index].columnDetail = [].concat(params);
-                console.log(this.invoiceData,"-------")
                 this.changeData = new Date()
             },
             deleteData(index){

@@ -161,7 +161,7 @@ function initListData(){
             title: '开票时间',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all',
+            type:'alreadyMake,all',
             render(tag, params){
                 if(params.row.ticketTime){
                     let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ticketTime));
@@ -190,11 +190,24 @@ function initListData(){
             
         },
         {
+            title: '相关账单',
+            key: 'billNUms',
+            align:'center',
+            type:'alreadyMake,returnMake'
+        },
+        {
+            title: '开票状态',
+            key: 'invoiceStatusName',
+            align:'center',
+            type:'alreadyMake,all'
+        },
+        {
             title: '发票张数',
             key: 'invoiceCount',
             align:'center',
-            type:'invoiceCount'
+            type:'alreadyMake,all'
         },
+       
         {
             title: '操作',
             key: 'name',

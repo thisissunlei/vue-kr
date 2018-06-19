@@ -14,7 +14,7 @@
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
 					<div v-if="!disabled" class="img-mask">
 						<div style="line-height:60px;text-align:center;">
-							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
+							<div v-if="imgView" class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
 							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="handleRemove(index)"></div>
 						</div>
 						
@@ -203,6 +203,10 @@ export default{
 			type:Boolean,
 			default:false
 		},
+		imgView:{
+			type:Boolean,
+			default:false
+		}
 
 	},
 	data(){

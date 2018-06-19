@@ -64,7 +64,8 @@
                                             withCredentials
                                             :format="['jpg','png','gif']"
                                             :maxSize="300"
-                                            
+                                            :maxLen="1"
+                                            :onSuccess="coverImgSuccess"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -315,6 +316,9 @@ export default {
        
     },
     methods:{
+        coverImgSuccess(file){
+            this.formItem.coverImg=file.data.url;
+        },
         getFloor(){
             if(!this.formItem.communityId){
                 this.formItem.floor="";

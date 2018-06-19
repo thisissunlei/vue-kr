@@ -21,8 +21,8 @@
                     </FormItem>
                     </Col>
                     <Col class="col">
-                    <FormItem label="销售机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" :orderitems.sync='orderitems'></SelectChance>
+                    <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" :orderitems='orderitems'></SelectChance>
                     </FormItem>
                     </Col>
                 </Row>
@@ -639,7 +639,11 @@ export default {
             formItem.ssoName = this.ssoName;
             let _this = this;
             this.disabled = true;
+
+
             this.$http.post('save-join', formItem).then(r => {
+                console.log(formItem);
+                debugger;
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
                 //欢哥让删掉列表刷新
                 // window.opener.location.href=window.opener.location.href;  
@@ -1042,11 +1046,13 @@ export default {
             this.validSaleChance();
         },
         changeChance(value) {
+            console.log("changeChance" + value)
             if (!value || value === '请选择') {
                 this.formItem.saleChanceId = '';
             } else {
                 this.formItem.saleChanceId = value;
             }
+            console.log(this.formItem.saleChanceId)
         },
         validSaleChance() {
             this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;

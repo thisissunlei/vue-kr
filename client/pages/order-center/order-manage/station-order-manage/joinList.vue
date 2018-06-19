@@ -37,11 +37,11 @@
             </div>
         </Modal>
 
-        <Modal v-model="openNullify" title="提示信息" width="500">
-            <Nullify/>
+        <Modal id='nullifymodel' v-model="openNullify" title="提示信息" width="500">
+            <Nullify :id='id' @refershList='refershJoinList' />
             <div slot="footer">
                 <!-- <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
+                <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
             </div>
         </Modal>
 
@@ -305,6 +305,11 @@ export default {
     },
 
     methods: {
+        //刷新列表
+        refershJoinList(params) {
+            this.getListData(this.params);
+            this.openNullify = false;
+        },
         submitNullify() {
             let params = {
                 id: this.id
@@ -451,7 +456,7 @@ export default {
                         type = 'join';
                         break;
                 }
-                // popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
+                popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
             }).catch((error) => {
                 popup.close();
                 this.openMessage = true;
@@ -544,4 +549,7 @@ export default {
 .u-nullify {
     text-decoration: line-through;
 }
+// #nullifymodel div:last-child {
+//     display: none;
+// }
 </style>

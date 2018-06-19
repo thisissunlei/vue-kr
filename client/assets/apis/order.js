@@ -18,7 +18,7 @@ export default {
 
     //获取销售机会
     "get-salechance": {
-        url: "/api/csr/opportunity/list/type/order",
+        url: "/ben/api/order/csr/opportunity/list/type/order",
         method: "get"
     },
 
@@ -145,7 +145,8 @@ export default {
     },
     //入驻新建提交
     "save-join": {
-        url: "/api/krspace-op-web/order-seat-add",
+        // url: "/ben/api/krspace-op-web/order-seat-add",
+        url: "/ben/api/op/order-seat-add",
         method: "post"
     },
     //续驻新建提交

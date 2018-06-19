@@ -21,7 +21,7 @@
                     </FormItem>
                     </Col>
                     <Col class="col">
-                    <FormItem label="销售机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                    <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
                         <SelectChance name="formItem.saleChanceId" :onchange="changeChance" :value="saleChanceId"></SelectChance>
                         <!-- <Select
                           
@@ -460,7 +460,7 @@ export default {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
-        this.getSalerList();
+        // this.getSalerList();
     },
     watch: {
         getFloor() {
@@ -594,6 +594,7 @@ export default {
                 _this.salerName = data.salerName;
                 _this.formItem.salerId = JSON.stringify(data.salerId);
 
+                console.log(data);
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 

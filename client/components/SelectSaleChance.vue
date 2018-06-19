@@ -110,19 +110,15 @@ export default {
             let list = [];
             let _this = this;
             http.get('get-salechance', parms, r => {
-                console.log(r);
-                list = r.data.slice(0, 10);
-                list.map((item) => {
-                    let obj = item;
-                    obj.label = item.lastname;
-                    obj.value = item.id + '';
-                    return obj;
-                });
-                _this.loading1 = false;
+                list = r.data.items;
                 _this.salerOptions = list;
-            }, e => {
-                console.log('error', e)
-            })
+            }, error => {
+                this.openMessage = true;
+                this.MessageType = "error";
+                this.warn = error.message;
+            }
+            )
+
 
         }
 

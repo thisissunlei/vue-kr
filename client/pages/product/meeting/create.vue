@@ -104,7 +104,7 @@
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="startHour"
+                                            v-model="form.startHour"
                                             @on-change="startHourChange"
                                             @on-clear="startHourClear"
                                         />
@@ -120,7 +120,7 @@
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="endHour"
+                                            v-model="form.endHour"
                                             @on-change="endHourChange"
                                             @on-clear="endHourClear"
                                         />
@@ -137,28 +137,32 @@
                     <DetailStyle info="APP商品信息">
                         <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublish">
                             <RadioGroup v-model="formItem.appPublish" style="width:250px">
-                                <Radio label="1">
+                                <Radio label="true">
                                     已上架
                                 </Radio>
-                                <Radio label="0">
+                                <Radio label="false">
                                     未上架
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="appTime">
+                       <FormItem label="可预订时段" class="u-input"  style="width:350px" >
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
                                     placeholder="00:00" 
                                     style="width: 122px" 
-                                    v-model="formItem.appStartTime"
+                                    v-model="form.appStartTime"
+                                    @on-change="changeAppStartTime"
+                                    :steps="[1,30]"
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
                                     format="HH:mm" 
                                     placeholder="24:00" 
                                     style="width: 122px" 
-                                    v-model="formItem.appEndTime"
+                                    v-model="form.appEndTime"
+                                    @on-change="changeAppEndTime"
+                                    :steps="[1,30]"
                                 />
                            </div>
                         </FormItem>
@@ -179,28 +183,32 @@
                     <DetailStyle info="KrMeeting商品信息">
                         <FormItem label="上架状态" class="u-input" style="width:250px" prop="krmPublish">
                             <RadioGroup v-model="formItem.krmPublish" style="width:250px">
-                                <Radio label="1">
+                                <Radio label="true">
                                     已上架
                                 </Radio>
-                                <Radio label="0">
+                                <Radio label="false">
                                     未上架
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="krmTime">
+                       <FormItem label="可预订时段" class="u-input"  style="width:350px"   >
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
                                     placeholder="00:00" 
                                     style="width: 122px" 
-                                    v-model="formItem.krmStartTime"
+                                    v-model="form.krmStartTime"
+                                    :steps="[1,30]"
+                                    @on-change="changeKrmStartTime"
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
                                     format="HH:mm" 
                                     placeholder="24:00" 
                                     style="width: 122px"
-                                    v-model="formItem.krmEndTime" 
+                                    v-model="form.krmEndTime" 
+                                    :steps="[1,30]"
+                                    @on-change="changeKrmEndTime"
                                 />
                            </div>
                         </FormItem>
@@ -262,6 +270,15 @@ export default {
                 lockEndTime:'',
                 meetingDevices:''
             },
+            form:{
+               startHour:'', 
+               endHour:'',
+               appStartTime:'',
+               appEndTime:'',
+               krmStartTime:'',
+               krmEndTime:'',
+
+            },
             startTime:'',
             startHour:'',
             endtime:'',
@@ -288,9 +305,9 @@ export default {
                 appPublish:[
                     { required: true, message: '请选择上架状态', trigger: 'change' }
                 ],
-                appTime:[
-                    { required: true, message: '请选择可预订时段', trigger: 'change' }
-                ],
+                // appTime:[
+                //     { required: true, message: '请选择可预订时段', trigger: 'change' }
+                // ],
                 appBusyPrice:[
                     { required: true, message: '请输入忙时单价', trigger: 'change' }
                 ],
@@ -300,9 +317,9 @@ export default {
                 krmPublish:[
                     { required: true, message: '请选择上架状态', trigger: 'change' }
                 ],
-                krmTime:[
-                    { required: true, message: '请选择可预订时段', trigger: 'change' }
-                ],
+                // krmTime:[
+                //     { required: true, message: '请选择可预订时段', trigger: 'change' }
+                // ],
                 kmUnitPrice:[
                     { required: true, message: '请输入单价', trigger: 'change' }
                 ],
@@ -320,6 +337,9 @@ export default {
             floorsList:[],
             communityList:[],
             imglist:[],
+            endDates:'',
+            startDate:'',
+
         }
     },
     mounted:function(){
@@ -328,6 +348,38 @@ export default {
        
     },
     methods:{
+        changeAppStartTime(data){
+             this.formItem.appStartTime=data;
+            if(this.form.appStartTime && this.form.appEndTime){
+                this.formItem.appTime=data;
+            }else{
+                 this.formItem.appTime="";
+            }
+        },
+        changeAppEndTime(data){
+            this.formItem.appEndTime=data;
+            if(this.form.appStartTime && this.form.appEndTime){
+                this.formItem.appTime=data;
+            }else{
+                 this.formItem.appTime="";
+            }
+        },
+        changeKrmStartTime(data){
+             this.formItem.krmStartTime=data;
+            if(this.form.krmStartTime && this.form.krmEndTime){
+                this.formItem.krmTime=data;
+            }else{
+                 this.formItem.krmTime="";
+            }
+        },
+        changeKrmEndTime(data){
+             this.formItem.krmEndTime=data;
+            if(this.form.appStartTime && this.form.krmEndTime){
+                this.formItem.krmTime=data;
+            }else{
+                 this.formItem.krmTime="";
+            }
+        },
         imgSizeFormat(){
             this.$Notice.error({
                 title:'图片格式不正确'
@@ -394,14 +446,15 @@ export default {
                 });
                 let _this = this;
                
-               if(this.startTime && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startTime} ${this.startHour}:00`;
+               if(this.startDate && this.startHour){
+                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
                }
-               if(this.endtime && this.endHour){
-                   this.formItem.lockEndTime=`${this.endtime} ${this.endHour}:00`;
+               if(this.endDates && this.endHour){
+                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
                }
+               console.log('this.formItem',this.formItem)
                 this.$refs[name].validate((valid) => {
-                    if (valid && this.formItem.iconUrl) {
+                    if (valid) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -416,12 +469,16 @@ export default {
                     cmtName:name
                 }
             this.$http.get('get-community-new-list', params).then((res)=>{
-             console.log('')
-               let list= res.data.cmts.map((item)=>{
-                    let obj =item;
+           
+               let list= []
+               res.data.cmts.map((item)=>{
+                   let obj ={};
                     obj.label = item.cmtName;
                     obj.value = item.cmtId;
-                    return obj;
+                    if(item.cmtId>0){
+                        list.push(obj)
+                    }
+                    
                 });
                 this.communityList = list;
             }).catch((err)=>{
@@ -453,9 +510,11 @@ export default {
             this.startDate=date;
         },
         endChange(date){
+            console.log('date',date)
             this.endDates=date;
         },
         startHourChange(date){
+
             this.startHour=date;
         },
         endHourChange(date){

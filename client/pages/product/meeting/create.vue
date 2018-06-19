@@ -145,7 +145,7 @@
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px" >
+                       <FormItem label="可预订时段" class="u-input ivu-form-item-required"  style="width:350px"   >
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
@@ -164,6 +164,7 @@
                                     @on-change="changeAppEndTime"
                                     :steps="[1,30]"
                                 />
+                                 <div v-if="isAppError" class="u-error">请选择可预订时段</div>
                            </div>
                         </FormItem>
                          <FormItem label="忙时单价（￥/0.5h）（11：00-18：00）" class="u-input" prop="appBusyPrice">
@@ -191,7 +192,7 @@
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px"   >
+                       <FormItem label="可预订时段" class="u-input ivu-form-item-required"  style="width:350px"  >
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
@@ -210,6 +211,7 @@
                                     :steps="[1,30]"
                                     @on-change="changeKrmEndTime"
                                 />
+                                <div v-if="isKrmError" class="u-error">请选择可预订时段</div>
                            </div>
                         </FormItem>
                          <FormItem label="单价（￥/0.5h）" class="u-input" prop="kmUnitPrice">
@@ -279,6 +281,8 @@ export default {
                krmEndTime:'',
 
             },
+            isKrmError:false,
+            isAppError:false,
             startTime:'',
             startHour:'',
             endtime:'',
@@ -305,9 +309,7 @@ export default {
                 appPublish:[
                     { required: true, message: '请选择上架状态', trigger: 'change' }
                 ],
-                // appTime:[
-                //     { required: true, message: '请选择可预订时段', trigger: 'change' }
-                // ],
+                
                 appBusyPrice:[
                     { required: true, message: '请输入忙时单价', trigger: 'change' }
                 ],
@@ -317,9 +319,6 @@ export default {
                 krmPublish:[
                     { required: true, message: '请选择上架状态', trigger: 'change' }
                 ],
-                // krmTime:[
-                //     { required: true, message: '请选择可预订时段', trigger: 'change' }
-                // ],
                 kmUnitPrice:[
                     { required: true, message: '请输入单价', trigger: 'change' }
                 ],
@@ -350,34 +349,34 @@ export default {
     methods:{
         changeAppStartTime(data){
              this.formItem.appStartTime=data;
-            if(this.form.appStartTime && this.form.appEndTime){
-                this.formItem.appTime=data;
+            if(this.formItem.appStartTime && this.formItem.appEndTime){
+                this.isAppError=false;
             }else{
-                 this.formItem.appTime="";
+                this.isAppError=true;
             }
         },
         changeAppEndTime(data){
             this.formItem.appEndTime=data;
-            if(this.form.appStartTime && this.form.appEndTime){
-                this.formItem.appTime=data;
+            if(this.formItem.appStartTime && this.formItem.appEndTime){
+                this.isAppError=false;
             }else{
-                 this.formItem.appTime="";
+                this.isAppError=true;
             }
         },
         changeKrmStartTime(data){
              this.formItem.krmStartTime=data;
-            if(this.form.krmStartTime && this.form.krmEndTime){
-                this.formItem.krmTime=data;
+            if(this.formItem.krmStartTime && this.formItem.krmEndTime){
+                this.isKrmError=false;
             }else{
-                 this.formItem.krmTime="";
+                this.isKrmError=true;
             }
         },
         changeKrmEndTime(data){
              this.formItem.krmEndTime=data;
-            if(this.form.appStartTime && this.form.krmEndTime){
-                this.formItem.krmTime=data;
+            if(this.formItem.appStartTime && this.formItem.krmEndTime){
+                this.isKrmError=false;
             }else{
-                 this.formItem.krmTime="";
+                this.isKrmError=true;
             }
         },
         imgSizeFormat(){
@@ -534,6 +533,10 @@ export default {
 .g-create-meeting{
     .m-detail-content{
 	    padding:30px 24px;
+    }
+    .u-error{
+        color: #ed3f14;
+        font-size: 12px;
     }
     .u-input{
         display: inline-block;

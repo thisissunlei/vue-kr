@@ -33,7 +33,7 @@
                                         <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                                <FormItem label="所属空间" class="u-input" prop="spaceId">
+                                <!-- <FormItem label="所属空间" class="u-input" prop="spaceId">
                                     <Select
                                         v-model="formItem.spaceId"
                                         style="width:250px"
@@ -43,7 +43,7 @@
                                     >
                                         <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                                     </Select>
-                                </FormItem>
+                                </FormItem> -->
                                 <FormItem label="面积（㎡）" class="u-input" prop="area">
                                     <Input 
                                         v-model="formItem.area" 
@@ -134,7 +134,7 @@
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="enable">
+                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="appTime">
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
@@ -176,7 +176,7 @@
                                 </Radio>
                             </RadioGroup> 
                         </FormItem>
-                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="enable">
+                       <FormItem label="可预订时段" class="u-input"  style="width:350px" prop="krmTime">
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
@@ -231,9 +231,53 @@ export default {
             formItem:{
 
             },
-            ruleCustom:[
-
-            ],
+            ruleCustom:{
+                name:[
+                    { required: true, message: '请输入会议室名称', trigger: 'change' }
+                ],
+                communityId:[
+                    { required: true, message: '请选择社区', trigger: 'change' }
+                ],
+                floor:[
+                    { required: true, message: '请选择楼层', trigger: 'change' }
+                ],
+                // spaceId:[
+                //     { required: true, message: '请选择所属空间', trigger: 'change' }
+                // ],
+                area:[
+                    { required: true, message: '请输入会议室面积', trigger: 'change' }
+                ],
+                capacity:[
+                    { required: true, message: '请输入可容纳人数', trigger: 'change' }
+                ],
+                appPublish:[
+                    { required: true, message: '请选择上架状态', trigger: 'change' }
+                ],
+                appTime:[
+                    { required: true, message: '请选择可预订时段', trigger: 'change' }
+                ],
+                appBusyPrice:[
+                    { required: true, message: '请输入忙时单价', trigger: 'change' }
+                ],
+                appIdlePrice:[
+                    { required: true, message: '请输入闲时单价', trigger: 'change' }
+                ],
+                krmPublish:[
+                    { required: true, message: '请选择上架状态', trigger: 'change' }
+                ],
+                krmTime:[
+                    { required: true, message: '请选择可预订时段', trigger: 'change' }
+                ],
+                kmUnitPrice:[
+                    { required: true, message: '请输入单价', trigger: 'change' }
+                ],
+                kmPromotionUnitPrice:[
+                    { required: true, message: '请输入优惠价格', trigger: 'change' }
+                ],
+                
+            },
+                
+            
             communityList:[]
         }
     },

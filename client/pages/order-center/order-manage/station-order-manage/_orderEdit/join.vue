@@ -198,9 +198,9 @@
          <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"  @clear="clear"/>
         <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap> -->
         <div slot="footer">
-            <span v-if="selectLen">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+            <span v-if="selectLen&&openStation">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
             <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
-            <Button  @click="cancelStation">取消</Button>
+            <Button @click="cancelStation">取消</Button>
         </div>
     </Modal>
     <Modal
@@ -212,7 +212,7 @@
      >  
         <div v-if="openPrice">
             <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
-            <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+            <Input v-model="price" placeholder="工位单价" style="width:150px" />
             <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
                 
         </div>
@@ -386,7 +386,7 @@ import ListAndMap from '../listAndMap';
                     {
                         title: '小计',
                         key: 'originalAmount',
-                        render:function(h,params){
+                        render(h,params){
                             return utils.thousand(params.row.originalAmount)
                          }
                     }
@@ -631,7 +631,7 @@ import ListAndMap from '../listAndMap';
                         });
                 })
             },
-            config:function(){
+            config(){
                 this.$Notice.config({
                     top: 80,
                     duration: 3
@@ -868,7 +868,7 @@ import ListAndMap from '../listAndMap';
                     _this.dealSaleInfo(true)
                 },200)
             },
-            handleSubmit:function(name) {
+            handleSubmit(name) {
                 let message = '请填写完表单';
                 this.$Notice.config({
                     top: 80,
@@ -913,7 +913,7 @@ import ListAndMap from '../listAndMap';
                     }
                 })
             },
-            selectDiscount:function(value){
+            selectDiscount(value){
                 // checkbox的全选事件
                 let items = this.formItem.items;
                 items = items.map((item)=>{
@@ -924,7 +924,7 @@ import ListAndMap from '../listAndMap';
                 this.selectAll = value;
                 this.formItem.items = items;
             },
-            deleteDiscount:function(){
+            deleteDiscount(){
                 // 删除选中的优惠信息
                 let items = this.formItem.items;
                 let select = []
@@ -983,7 +983,7 @@ import ListAndMap from '../listAndMap';
                 return true;
             },
             
-            changeType:function(val){
+            changeType(val){
                 //优惠类型选择
                 if(!val){
                     return;
@@ -1053,7 +1053,7 @@ import ListAndMap from '../listAndMap';
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
-            changeCommunity:function(value){
+            changeCommunity(value){
                 // 选择社区
                 if(value){
                     this.formItem.communityId = value;
@@ -1065,7 +1065,7 @@ import ListAndMap from '../listAndMap';
                 this.getFloor = +new Date()
                 
             },
-            clearStation:function(){
+            clearStation(){
                 // 清除所选的工位
                 if(this.stationList.length){
                     this.stationData={
@@ -1086,7 +1086,7 @@ import ListAndMap from '../listAndMap';
 
                 }
             },
-            changeCustomer:function(value){
+            changeCustomer(value){
                 // 客户
                 if(value){
                     this.formItem.customerId = value;
@@ -1096,11 +1096,11 @@ import ListAndMap from '../listAndMap';
                 this.getFloor = +new Date()
 
             },
-            changeSaler:function(value){
+            changeSaler(value){
                 // 销售员
                 this.formItem.salerId = value;
             },
-            deleteStation:function(){
+            deleteStation(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
@@ -1115,7 +1115,7 @@ import ListAndMap from '../listAndMap';
                 this.formItem.items = []
                 // this.stationData.submitData = stationVos;
             },
-            showStation:function(){
+            showStation(){
                 // 选择工位的按钮
                 this.config()
 
@@ -1151,7 +1151,7 @@ import ListAndMap from '../listAndMap';
                 this.openStation = true;
                 this.params = params;
             },
-            selectRow:function(selection){
+            selectRow(selection){
                 // 工位表单的全选
                 let selectionList = [];
                 selectionList = selection.map((item)=>{
@@ -1177,24 +1177,27 @@ import ListAndMap from '../listAndMap';
                     show:true,
                 });
             },
-            selectDeposit:function(value){
+            selectDeposit(value){
                 // 选择保证金
                 this.depositAmount = value
                 this.errorAmount = false;
             },
-            selectPayType:function(value){
+            selectPayType(value){
                 // 选择付款方式
                 this.installmentType = value;
                 this.errorPayType = false;
             },
-            submitStation:function(){//工位弹窗的提交
-
-                this.stationList = this.stationData.submitData || [];
-                this.delStation = this.stationData.deleteData|| [];
+            submitStation(){//工位弹窗的提交
+              
+                // this.stationList = [].concat([]) || [];
+                this.stationList = [].concat(this.stationData.submitData) || [];
+                this.delStation = [].concat(this.stationData.deleteData)|| [];
                 if(this.stationList.length){
                     this.disabled = false
                 }
-                this.getStationAmount()
+                console.log("000000------")
+                // this.getStationAmount()
+              
                 this.openStation = false
                 this.clearSale()
 
@@ -1204,12 +1207,15 @@ import ListAndMap from '../listAndMap';
                 this.formItem.saleAmount = 0;
                 this.saleAmounts = utils.smalltoBIG(0)
             },
-            onResultChange:function(val){//组件互通数据的触发事件
+            onResultChange(val){//组件互通数据的触发事件
+
                 let len=this.originStationList.length;
                 this.selectLen=val.submitData.length-len;
-                this.stationData = val;    
+
+                this.stationData =Object.assign({},val);    
+                console.log(this.stationData,"oooooooo",val)
             },
-            cancelStation:function(){//工位弹窗的取消
+            cancelStation(){//工位弹窗的取消
                 this.stationData = {
                     submitData:this.stationList,
                     deleteData:[],
@@ -1219,7 +1225,7 @@ import ListAndMap from '../listAndMap';
 
             },
             
-            changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+            changeBeginTime(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
                 this.clearStation()
                  if(!val || !this.formItem.endDate){
@@ -1284,7 +1290,7 @@ import ListAndMap from '../listAndMap';
                 this.timeError = error;
               
             },
-            changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+            changeEndTime(val){//租赁结束时间的触发事件，判断时间大小
                   this.clearStation();
                 if(!val){
                     return;
@@ -1321,7 +1327,7 @@ import ListAndMap from '../listAndMap';
               
 
             },
-            contractDateRange:function(params){//获取租赁范围
+            contractDateRange(params){//获取租赁范围
                 let _this = this;
                  this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
@@ -1329,7 +1335,7 @@ import ListAndMap from '../listAndMap';
 
                 })
             },
-            getSaleTactics:function(params){//获取优惠信息
+            getSaleTactics(params){//获取优惠信息
                 let list = [];
                 let maxDiscount = {};
                 let _this = this;
@@ -1369,6 +1375,7 @@ import ListAndMap from '../listAndMap';
 
                 })
             },
+            //获取页面数据
              getStationAmount(list){
                 this.config()
                 //判断标准单价是否有值，若无值，则不提交计算总价

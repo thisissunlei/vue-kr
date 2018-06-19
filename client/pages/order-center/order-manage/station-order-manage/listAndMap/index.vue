@@ -6,11 +6,17 @@
            <span style="cursor:pointer;text-decoration:underline;" @click="goSearch">去查询</span>
        </div>
        <Tabs size="default" value="list" :animated="false">
-            <TabPane label="以列表方式选择" name="list">
-               <List  :params.sync="params" :floors.sync="floors" @on-result-change="onResultChange" :originStationList.sync="originStationList" @clear="clear"/>
+            <TabPane label="以平面图方式选择" name="list">
+                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap>     
             </TabPane>
-            <TabPane label="以平面图方式选择" name="map">
-                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap>
+            <TabPane label="以列表方式选择" name="map">
+                <List  
+                    :params.sync="params" 
+                    :floors.sync="floors" 
+                    @on-result-change="onResultChange" 
+                    :originStationList.sync="originStationList" 
+                    @clear="clear"
+                />
             </TabPane>
         </Tabs>
    </div>
@@ -52,6 +58,8 @@ export default {
     },
     methods:{
        onResultChange(val){
+        //    console.log(val,"pppp")
+        //    return ;
            this.$emit('on-result-change',val);
        },
        goSearch(){

@@ -106,7 +106,8 @@ export default {
                 {
                     title: '商品定价',
                     key: 'seatPrice',
-                    align:'center' 
+                    width:120,
+                    align:'right' 
                 },
                 {
                     title: '可租时段',
@@ -189,7 +190,8 @@ export default {
              list.id=item.belongId;
              return list
          })
-         this.endParams.submitData=[].concat(this.originStationList).concat(param);
+         console.log(param,"----ppppp")
+         this.endParams.submitData=[].concat(param);
          this.$emit('on-result-change',this.endParams);
        }
     }

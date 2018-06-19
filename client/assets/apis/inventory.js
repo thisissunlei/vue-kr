@@ -132,7 +132,7 @@ export default  {
 
     //下单选择商品列表
     'downOrderGoodsList': {
-        url: '/song/api/krspace-op-web/cmt/floor-graph/vue/list',
+        url: '/api/krspace-op-web/cmt/floor-graph/vue/list',
         method: 'get'
     },
 

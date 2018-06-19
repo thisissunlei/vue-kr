@@ -4,7 +4,7 @@
             <SectionTitle title="开门记录" />
             <SearchForm @submitSearchData="submitSearchData"/>
             <div class="table-box">
-                <Table :columns="columns1" :data="openLogList"></Table>
+                <Table :columns="columns1" :data="openLogList" size="small"></Table>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -27,12 +27,13 @@ export default {
    },
    data(){
      return{
+        tableScrollTop : 0,
         lastReq : [],
         page : '',
         allData : false,
         searchData :{
             lastId: '',
-            pageSize:15
+            pageSize:25
         },
         loading : false,
         openTypeList :[],
@@ -175,9 +176,7 @@ export default {
                 _this.lastReq = itmesList;
                 
                 
-                if(res.data.items.length<15){
-                    this.allData = true;
-                }
+                
                 
                 if(this.searchData.lastId){
 
@@ -188,7 +187,12 @@ export default {
                 }else{
                     _this.openLogList = itmesList;
                 }
-                    
+
+                if(res.data.items.length<25){
+                    this.allData = true;
+                }else if(res.data.items.length==25){
+                    document.getElementsByClassName("g-openlog")[0].scrollTop = _this.tableScrollTop-300;
+                }
 
                 if(itmesList.length>0){
                     _this.searchData.lastId = itmesList[itmesList.length-1].id;
@@ -233,8 +237,9 @@ export default {
        handleWindowScroll(){
 
            let _this =this;
-           var  openlogBoxDom = document.getElementsByClassName("g-openlog-box")[0];
+
            var  openlogDom = document.getElementsByClassName("g-openlog")[0];
+           var  openlogboxDom = document.getElementsByClassName("g-openlog-box")[0];
            
            
             openlogDom.onscroll=function(){
@@ -243,10 +248,12 @@ export default {
                 var boxOffsetHeight = openlogDom.offsetHeight;
                 var boxScrollTop = openlogDom.scrollTop;
                 var boxScrollHeight = openlogDom.scrollHeight;
-
-                if(boxScrollHeight-boxOffsetHeight  <= boxScrollTop+300){
+                
+                _this.tableScrollTop = boxScrollTop;
+                if(boxScrollHeight-boxOffsetHeight+15  <= boxScrollTop){
                     
-                    if(_this.loading ||_this.allData || _this.lastReq.length<15){
+                    
+                    if(_this.loading ||_this.allData || _this.lastReq.length<25){
                         return;
                     }
                     

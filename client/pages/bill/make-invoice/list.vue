@@ -214,9 +214,8 @@ import utils from '~/plugins/utils';
             },
             deleteData(index){
                 var invoiceData = [].concat(this.invoiceData);
-                // console.log()
+              
                 invoiceData.splice(index,1)
-                console.log(invoiceData,"ppppp")
                 this.invoiceData = [].concat(invoiceData);
                 this.changeData = new Date()
             },
@@ -264,7 +263,7 @@ import utils from '~/plugins/utils';
             goBackSubmit(){
                 let params = Object.assign({},this.backData);
                 this.$http.post('csr-invoice-refund', params).then((res)=>{
-                    // this.listData=res.data.items;
+                   
                     this.getListData();
                     this.switchGoBack();
                 }).catch((err)=>{

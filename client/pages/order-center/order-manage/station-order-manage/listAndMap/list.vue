@@ -190,7 +190,8 @@ export default {
              list.id=item.belongId;
              return list
          })
-         this.endParams.submitData=[].concat(this.originStationList).concat(param);
+         console.log(param,"----ppppp")
+         this.endParams.submitData=[].concat(param);
          this.$emit('on-result-change',this.endParams);
        }
     }

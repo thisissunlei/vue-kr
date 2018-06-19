@@ -57,7 +57,7 @@
                                     />
                                 </FormItem>
                                 <div class="u-upload">
-                                        <div class="u-unload-label">封面图片</div>
+                                     <FormItem label="封面图片" class="u-input" prop="coverImg" style="width:100%">
                                         <UploadFile 
                                             :category="category"
                                             withCredentials
@@ -67,9 +67,10 @@
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
+                                    </FormItem>
                                 </div>
                                 <div class="u-upload">
-                                        <div class="u-unload-label">会议室图片</div>
+                                    <FormItem label="会议室图片" class="u-input" prop="detailImgs" style="width:100%">
                                         <UploadFile 
                                             multiple
                                             :category="category"
@@ -80,6 +81,7 @@
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
+                                    </FormItem>
                                 </div>
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
@@ -273,6 +275,12 @@ export default {
                 ],
                 kmPromotionUnitPrice:[
                     { required: true, message: '请输入优惠价格', trigger: 'change' }
+                ],
+                coverImg:[
+                    { required: true, message: '请上传封面图', trigger: 'change' }
+                ],
+                detailImgs:[
+                    { required: true, message: '请上传详情图片', trigger: 'change' }
                 ],
                 
             },

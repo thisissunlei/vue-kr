@@ -59,7 +59,6 @@ export default{
 
     },
     mounted(){
-       console.log("routerParam",this.$route.query)
         this.formItem.deviceId = this.$route.query.deviceId || "";
         this.getCommunity();
         

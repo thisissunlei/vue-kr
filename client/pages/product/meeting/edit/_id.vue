@@ -19,6 +19,7 @@
                                         filterable
                                         clearable
                                         @on-change="getFloor"
+
                                     >
                                         <Option v-for="(option, index) in communityList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
                                     </Select>
@@ -355,8 +356,9 @@ export default {
              let form={
                 roomId: params.id
              }
-              this.$http.get('get-krmting-room-detail', from).then((res)=>{
+              this.$http.get('get-krmting-room-detail', form).then((res)=>{
                     let data = res.data;
+                    data.floors=toString(res.data.floors)
                     this.formItem=data;
                    
 

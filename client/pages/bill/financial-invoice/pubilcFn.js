@@ -77,7 +77,7 @@ function initListData(){
             align:'center',
             type:'VERIFYING',
             render(tag, params){
-                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime)):'-';
+                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.ctime)):'-';
                 return time;
             }
         },
@@ -87,7 +87,9 @@ function initListData(){
             align:'center',
             type:'PASSED',
             render(tag, params){
-                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.verifyTime)):'-';
+                
+                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.verifyTime)):'-';
+                console.log(time,"llllllll")
                 return time;
             }
         },

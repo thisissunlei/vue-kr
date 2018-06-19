@@ -17,28 +17,29 @@ module.exports = {
         url:'/api/op/sys/downFile',
         method:'get'
     },
-    'type/page':{
-        url:'/mockdata/77/pm/role/list/type/page',
+    //权限
+    'type-page':{
+        url:'/api/pm/role/list/type/page',
         method:'get'
     },
     'roledetail':{
-        url:'/mockdata/77/api/pm/role/action/detail',
+        url:'/api/pm/role/action/detail',
         method:'get'
     },
     'roleSave':{
-        url:'/mockdata/77/api/pm/role/action/add',
+        url:'/api/pm/role/action/add',
         method:'post'
     },
     'getSsoUserListAll':{
-        url:'/mockdata/77/api/pm/role-resource/pmUser',
+        url:'/api/pm/role-resource/pmUser',
         method:'get'
     },
     'existUserListAll':{
-        url:'/mockdata/77/api/pm/role-resource/exist',
+        url:'/api/pm/role-resource/exist',
         method:'get'
     },
     'addUser':{
-        url:'/mockdata/77/api/pm/role-resource/add',
+        url:'/api/pm/role-resource/add',
         method:'get'
     },
     'roleEdit':{

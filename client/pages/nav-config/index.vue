@@ -3,7 +3,7 @@
       <SectionTitle title="角色列表" />
       <div class="u-search" >
 
-            <Button type="primary" @click="goEdit">新建{{modalPerson}}</Button>
+            <Button type="primary" @click="goEdit">新建</Button>
             <div class="div-table">
 
                 <Table border :columns="columns" :data="dataTable"></Table>
@@ -40,12 +40,12 @@
             <div>
                 <Form :model="formTop" label-position="top">
                     <Row>
-                        <Col span="12">
+                        <Col span="24">
                             <FormItem label="名称">
                                 <Input v-model="formTop.name" />
                             </FormItem> 
                         </Col>
-                        <Col span="12">
+                        <Col span="24">
                             <FormItem label="编码">
                                 <Input v-bind:disabled="title=='编辑权限'" v-model="formTop.code" />
                             </FormItem>
@@ -76,15 +76,15 @@
                             <td>
                                 <table class="table">
                                     <tbody>
-                                        <tr v-for="(line,index) in  data.children" :key="line.groupId">
+                                        <tr v-for="(line,index) in  data.children" :key="index">
                                             <td >{{index ==0? line.groupName:""}}</td>
                                             <td >{{line.subGroupName}}</td>
                                             <td >
-
-                                            <input type="radio" v-model="line.subGroupRightType" value="NONE" name="roleType" /> 无
-                                            <input type="radio" v-model="line.subGroupRightType" value="READONLY" name="roleType" /> 读取
-                                            <input type="radio" v-model="line.subGroupRightType" value="READWRITE" name="roleType" /> 写入
-
+                                                <RadioGroup v-model="line.subGroupRightType" >
+                                                    <Radio label="NONE" >无</Radio>
+                                                    <Radio label="READONLY" >读取</Radio>
+                                                    <Radio label="READWRITE" >写入</Radio>
+                                                </RadioGroup>
                                             </td>
                                     </tr>
                                     </tbody>
@@ -116,6 +116,7 @@ export default {
                 name: '',
                 code: ''
             },
+            groupList:[],
             columns: getColumns.columns.call(this),
             dataTable: [],
             pageSize:10,
@@ -131,6 +132,9 @@ export default {
       this.getRoleEdit()
     },
     methods:{
+        radioGroupChange(e,item){
+            console.log(e,"0000",item);
+        },
         getUserData () {
             let userData = [];
             this.$http.get('getSsoUserListAll',).then((res)=>{
@@ -138,10 +142,10 @@ export default {
                 for(let item of res.data.items){
         
                     userData.push({
-                    key: item.uid,
-                    label: item.name,
-                    description: item.nickname,
-                    disabled: false
+                        key: item.uid,
+                        label: item.name,
+                        description: item.nickname,
+                        disabled: false
                 });
 
                 }
@@ -216,8 +220,10 @@ export default {
             let params = {
                 name:this.formTop.name,
                 code:this.formTop.code,
-                groupList:this.roleEditS
-            }
+                groupList:[].concat(this.roleEditS)
+            };
+            console.log(this.roleEditS,"ppppp")
+            // return;
             this.$http.post("roleSave",params).then((res)=>{
                 console.log(res)
             })
@@ -228,20 +234,19 @@ export default {
             this.$Message.info('Clicked cancel');
         },
         goEdit(){
-            this.title = "新建"
-            this.formTop.name=''
-            this.formTop.code=''
-            this.openEdit = true
+            this.title = "新建";
+            this.formTop.name='';
+            this.formTop.code='';
+            this.openEdit = true;
          },
          goUpdateRole(param){
-             this.title = param
-           
-            this.openEdit = true
+            this.title = param;
+            this.openEdit = true;
          },
          goUpdatePerson(param){
     
-            this.modalPerson = true
-            this.getTargetKeys()
+            this.modalPerson = true;
+            this.getTargetKeys();
 
             this.getUserData();
          },
@@ -250,8 +255,9 @@ export default {
                 page:this.page,
                 pageSize:this.pageSize
             }
-            this.$http.get('type/page',params).then((res)=>{
-                this.dataTable = res.data.items
+            this.$http.get('type-page',params).then((res)=>{
+               
+                this.dataTable = [].concat(res.data.items);
             })
 
         },
@@ -263,7 +269,8 @@ export default {
                 page:this.page,
                 pageSize:this.pageSize
             }
-            this.$http.get('roledetail',).then((res)=>{
+            this.$http.get('roledetail').then((res)=>{
+                console.log(res,"9999999")
                 this.roleEditS = res.data.groupList;
 
             })

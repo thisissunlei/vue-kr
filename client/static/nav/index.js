@@ -163,7 +163,7 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
-            console.log(item,"kkkkkkkkkk")
+          
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';

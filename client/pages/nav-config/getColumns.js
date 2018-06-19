@@ -26,8 +26,8 @@ function columns(){
                 return h('div', [
                     h('Button', {
                         props: {
-                            type: 'primary',
-                            size: 'small',
+                            type: 'text',
+                            size: 'small'
                         },
                         style: {
                             marginRight: '5px',
@@ -41,8 +41,8 @@ function columns(){
                     }, '编辑权限'),
                     h('Button', {
                         props: {
-                            type: 'error',
-                            size: 'small',
+                            type: 'text',
+                            size: 'small'
                          
                         },
                           style: {
@@ -58,8 +58,8 @@ function columns(){
                     }, '删除'),
                     h('Button', {
                         props: {
-                            type: 'error',
-                            size: 'small',
+                            type: 'text',
+                            size: 'small'
                            
                         },
                           style: {

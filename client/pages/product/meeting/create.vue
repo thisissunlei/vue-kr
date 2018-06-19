@@ -66,6 +66,7 @@
                                             :maxSize="300"
                                             :maxLen="1"
                                             :onSuccess="coverImgSuccess"
+                                            :onRemove="coverImgRemove"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -79,6 +80,8 @@
                                             withCredentials
                                             :format="['jpg','png','gif']"
                                             :maxSize="300"
+                                            :onSuccess="detailImgsSuccess"
+                                            :onRemove="detailImgsRemove"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -307,7 +310,8 @@ export default {
                 
             },  
             floorsList:[],
-            communityList:[]
+            communityList:[],
+            imglist:[],
         }
     },
     mounted:function(){
@@ -316,8 +320,28 @@ export default {
        
     },
     methods:{
+        coverImgRemove(){
+            this.formItem.coverImg="";
+        },
         coverImgSuccess(file){
             this.formItem.coverImg=file.data.url;
+        },
+        detailImgsRemove(fileList){
+            let imglist=[];
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let detailImgs=imglist.join(',');
+            this.formItem.detailImgs=detailImgs;
+        },
+        detailImgsSuccess(response, file, fileList){
+            let imglist=[].concat(this.imglist);
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let detailImgs=imglist.join(',');
+            this.formItem.detailImgs=detailImgs;
+            
         },
         getFloor(){
             if(!this.formItem.communityId){
@@ -387,7 +411,9 @@ export default {
             
         },
         submitCreate(){
-            this.$http.post('create-icon', this.formItem).then((res)=>{
+            console.log('this.formItem---',this.formItem)
+            return;
+            this.$http.post('add-krmting-room', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });

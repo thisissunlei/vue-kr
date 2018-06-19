@@ -67,6 +67,8 @@
                                             :maxLen="1"
                                             :onSuccess="coverImgSuccess"
                                             :onRemove="coverImgRemove"
+                                            :onExceededSize="imgSize"
+                                            :onFormatError="imgSizeFormat"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -82,6 +84,8 @@
                                             :maxSize="300"
                                             :onSuccess="detailImgsSuccess"
                                             :onRemove="detailImgsRemove"
+                                            :onExceededSize="imgSize"
+                                            :onFormatError="imgSizeFormat"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -91,7 +95,7 @@
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"
-                                        v-model="formItem.startTime"
+                                        v-model="startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
                                         @on-change="startChange"
@@ -100,14 +104,14 @@
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="formItem.startHour"
+                                            v-model="startHour"
                                             @on-change="startHourChange"
                                             @on-clear="startHourClear"
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
                                             type="date"
-                                            v-model="formItem.endtime"
+                                            v-model="endtime"
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
                                             @on-change="endChange"
@@ -116,7 +120,7 @@
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="formItem.endHour"
+                                            v-model="endHour"
                                             @on-change="endHourChange"
                                             @on-clear="endHourClear"
                                         />
@@ -258,6 +262,10 @@ export default {
                 lockEndTime:'',
                 meetingDevices:''
             },
+            startTime:'',
+            startHour:'',
+            endtime:'',
+            endHour:'',
             ruleCustom:{
                 name:[
                     { required: true, message: '请输入会议室名称', trigger: 'change' }
@@ -320,6 +328,16 @@ export default {
        
     },
     methods:{
+        imgSizeFormat(){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+        },
+        imgSize(){
+           this.$Notice.error({
+                title:'图片大小超出限制'
+            });
+        },
         coverImgRemove(){
             this.formItem.coverImg="";
         },
@@ -375,9 +393,13 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-            //    if(!this.formItem.iconUrl){
-            //         this.isError=true;
-            //    }
+               
+               if(this.startTime && this.startHour){
+                   this.formItem.lockBeginTime=`${this.startTime} ${this.startHour}:00`;
+               }
+               if(this.endtime && this.endHour){
+                   this.formItem.lockEndTime=`${this.endtime} ${this.endHour}:00`;
+               }
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.iconUrl) {
                         _this.submitCreate();

@@ -173,14 +173,20 @@ export default {
             this.$http.get('existUserListAll',{id:param}).then((res)=>{
     
                 for(let item of res.data.items){
+                    // console.log(item)
     
                 existUser.push(
-                    item.uid
+                    item.id
                 );
 
                 }
             })
-            this.targetKeys =  existUser
+            // console.log(existUser,'existUser')
+            setTimeout(()=>{
+                console.log(existUser,'existUser')
+                this.targetKeys =  existUser
+            },100)
+           
             
         },
         /**
@@ -204,7 +210,7 @@ export default {
         sure(){
 
             // console.log( this.targetKeys)
-            this.$http.post('addUser',{ssoldsStr:JSON.stringify(this.targetKeys),id:this.updatePersonid}).then((res=>{
+            this.$http.post('addUser',{ssoIdsStr:JSON.stringify(this.targetKeys),id:this.updatePersonid}).then((res=>{
               console.log('success')
             }))
 

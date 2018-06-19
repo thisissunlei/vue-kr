@@ -156,7 +156,7 @@ export default {
                 for(let item of res.data.items){
         
                     userData.push({
-                        key: item.uid,
+                        key: item.id,
                         label: item.name,
                         description: item.nickname,
                         disabled: false
@@ -183,7 +183,6 @@ export default {
             })
             // console.log(existUser,'existUser')
             setTimeout(()=>{
-                console.log(existUser,'existUser')
                 this.targetKeys =  existUser
             },100)
            

@@ -16,7 +16,7 @@
                         @on-change="changePage" 
                         show-total 
                         show-elevator
-                    /></Page>
+                    ></Page>
                 </div>
             </div>
         </div>

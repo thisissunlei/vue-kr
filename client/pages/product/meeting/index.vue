@@ -268,7 +268,7 @@ export default {
             
             
         },
-        changePage(){
+        changePage(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
@@ -319,7 +319,7 @@ export default {
          openDelete(value){
             this.openCancel=!this.openCancel;
             if(value){
-                this.roomId=value.roomId
+                this.roomId=value.id
             }
         },
     }

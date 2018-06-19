@@ -92,6 +92,9 @@
                                         </UploadFile>
                                     </FormItem>
                                 </div>
+                                <FormItem label="会议室配套设施"  class="u-date">
+                                    
+                                </FormItem>  
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"

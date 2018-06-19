@@ -62,7 +62,7 @@
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
-                                            maxSize="300"
+                                            :maxSize="300"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -76,7 +76,7 @@
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
-                                            maxSize="300"
+                                            :maxSize="300"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -231,7 +231,27 @@ export default {
         return {
             category:'',
             formItem:{
-
+                name:'',
+                appBusyPrice:'',
+                appIdlePrice:'',
+                appEndTime:'',
+                appPublish:'',
+                appStartTime:'',
+                area:'',
+                capacity:'',
+                communityId:'',
+                coverImg:'',
+                descr:'',
+                detailImgs:'',
+                floor:'',
+                kmPromotionUnitPrice:'',
+                kmUnitPrice:'',
+                krmEndTime:'',
+                krmPublish:'',
+                krmStartTime:'',
+                lockBeginTime:'',
+                lockEndTime:'',
+                meetingDevices:''
             },
             ruleCustom:{
                 name:[
@@ -327,7 +347,25 @@ export default {
                         title:err.message
                     });
             })
+        }, 
+        startChange(date){
+            this.startDate=date;
         },
+        endChange(date){
+            this.endDates=date;
+        },
+        startHourChange(date){
+            this.startHour=date;
+        },
+        endHourChange(date){
+            this.endHour=date;
+        },
+        startHourClear(){
+            this.startHour='00:00:00';
+        },
+        endHourClear(){
+            this.endHour='00:00:00';
+        }
     }
     
 }

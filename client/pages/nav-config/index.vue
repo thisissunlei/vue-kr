@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" show-sizer :current="page" @on-page-size-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" @on-page-size-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -41,12 +41,13 @@
             <div v-if="openEdit">
                 <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
-                        <Col span="24">
+                        <Col span="11">
                             <FormItem label="名称" prop="name"> 
                                 <Input v-model="formTop.name" :maxlength="30" />
                             </FormItem> 
                         </Col>
-                        <Col span="24">
+                        <Col span="2">&nbsp;</Col>
+                        <Col span="11">
                             <FormItem label="编码" prop="code" >
                                 <Input v-bind:disabled="title=='编辑权限'" :maxlength="30" v-model="formTop.code" />
                             </FormItem>
@@ -94,10 +95,10 @@
                                     <tbody  v-for="(line,index) in  data.children" :key="index">
                                        
                                             <tr v-for="(line2,index2) in  line.children" :key="index2">
-                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==1? line.groupName:''}}</td>
+                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==0? line.groupName:''}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line2.groupName}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
-                                                        <RadioGroup v-model="line.groupRightType" >
+                                                        <RadioGroup v-model="line2.groupRightType" >
                                                             <Radio label="NONE" >无</Radio>
                                                             <Radio label="READONLY" >读取</Radio>
                                                             <Radio label="READWRITE" >写入</Radio>
@@ -286,6 +287,12 @@ export default {
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
+                        }).catch((e)=>{
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
                         })
                     
                     } else {
@@ -294,21 +301,27 @@ export default {
                 
                 })
             }else{
-                // this.$refs['formTop'].validate((valid) => {
-                //      console.log(params,valid)
-                //         if (valid) {
+                this.$refs['formTop'].validate((valid) => {
+                     console.log(params,valid)
+                        if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
                 
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
-                         })
+                         }).catch((e)=>{
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
+                        })
                       
-                    // } else {
-                    //      console.log(params)
-                    // }
+                    } else {
+                         console.log(params)
+                    }
             
-            // })
+            })
             }
         
       
@@ -321,6 +334,7 @@ export default {
             this.title = "新建";
             this.formTop.name='';
             this.formTop.code='';
+            this.getRoleEdit()
             this.openEdit = true;
          },
          goUpdateRole(param,vlaue){

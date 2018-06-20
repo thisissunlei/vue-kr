@@ -599,9 +599,7 @@ export default {
             tabForms:function(val,old){
                 this.getListData(this.tabForms); 
                 this.floor=this.tabForms.floor;
-            
             },
-        
         },
         destroyed(){
             var dom=document.getElementById('layout-content-main');

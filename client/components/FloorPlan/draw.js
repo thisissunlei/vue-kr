@@ -1,5 +1,5 @@
 
-function draw (go,content,data,clickFn,enterFn,leaveFn) {
+function draw (go,content,data,clickFn,enterFn,leaveFn,btnFn) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -29,6 +29,11 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     function textStyle() {
         return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
     }
+
+    function linkProblemConverter(msg) {
+        if (msg) return "red";
+        return null;
+    }
     
     //背景图
     if(data.pic){
@@ -41,16 +46,13 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     }
 
     
-    function addNodeAndLink(){
-        console.log('node--');
-    }
-    
     //绘制
     myDiagram.nodeTemplate =
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
-            new go.Binding("fill","color"),{ stroke:null}),
+            new go.Binding("fill","color"),
+            new go.Binding("stroke",'status',linkProblemConverter)),
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置
@@ -66,11 +68,13 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                 new go.Binding("text", "property")),
             ),
             $("Button",
-                {
+                {  
                     alignment: go.Spot.TopRight,
-                    click: addNodeAndLink  // this function is defined below
+                    click: btnFn      
                 },
-                $(go.Picture,"/img/warning.png", { desiredSize: new go.Size(6, 6) })),
+                $(go.Picture,
+                {width:20, height: 20,cursor:'pointer'},
+                new go.Binding('source','bgsrc'))),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
                     enterFn(e,node)

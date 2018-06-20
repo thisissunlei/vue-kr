@@ -1,5 +1,6 @@
 import colorStatus from './colorStatus';
 import utils from '~/plugins/utils';
+import bgsrc from '../img/warning.png';
 function init(data,picProperty,dataUrl){
     var dataRender=[];
     var scale=1;
@@ -76,6 +77,8 @@ function init(data,picProperty,dataUrl){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
+            list.bgsrc=bgsrc;
+            list.status=true;
         })
     }
 

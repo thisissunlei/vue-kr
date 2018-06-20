@@ -68,6 +68,7 @@ let initData='';
                 this.mouseClick,
                 this.mouseEnter,
                 this.mouseLeave,
+                this.btnClick
             ) 
             
             //高度自适应图片高度
@@ -90,6 +91,9 @@ let initData='';
             // return dataURL
         },
         
+        btnClick(e,obj){
+            console.log('bjf',obj.part.data);
+        },
         /*导出图片*/
         exportClick(){
             var _this=this;

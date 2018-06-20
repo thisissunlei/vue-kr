@@ -100,6 +100,7 @@ export default {
             http.get('get-salechance', parms, r => {
                 list = r.data.items;
                 _this.salerOptions = list;
+                console.log(list)
             }, error => {
                 this.openMessage = true;
                 this.MessageType = "error";

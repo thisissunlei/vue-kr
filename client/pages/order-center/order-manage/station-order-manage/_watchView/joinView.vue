@@ -310,7 +310,6 @@ export default {
 			};
 			this.$http.get('join-bill-detail', from).then((response) => {
 				this.basicInfo = response.data;
-				console.log(this.basicInfo)
 				let pars = {
 					customerId: this.basicInfo.customerId,
 					communityId: this.basicInfo.communityId,

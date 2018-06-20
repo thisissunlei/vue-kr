@@ -21,8 +21,13 @@
       </Select>
       <p>备注：</p>
       <Input class='input' v-model="formItem.input" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="输入作废理由"></Input>
-      <Button type="primary" @click="handleSubmit('formItem')">确认</Button>
-      <Button type="ghost" style="margin-left: 8px">取消</Button>
+
+      <div class='buttonContainer'>
+
+        <Button type="primary" @click="handleSubmit('formItem')">确认</Button>
+        <Button type="ghost" style="margin-left: 8px">取消</Button>
+      </div>
+
       <FormItem>
 
       </FormItem>
@@ -121,5 +126,8 @@ p {
     padding: 5px 30px 5px 30px;
     font-size: 16px;
     text-align: left;
+}
+.buttonContainer {
+    text-align: center;
 }
 </style>  

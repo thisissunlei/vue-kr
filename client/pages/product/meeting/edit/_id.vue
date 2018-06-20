@@ -111,6 +111,7 @@
                                             v-model="form.startHour"
                                             @on-change="startHourChange"
                                             @on-clear="startHourClear"
+                                            :steps="[1,30]"
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
@@ -127,6 +128,7 @@
                                             v-model="form.endHour"
                                             @on-change="endHourChange"
                                             @on-clear="endHourClear"
+                                            :steps="[1,30]"
                                         />
                                 </FormItem>
                                  <FormItem label="补充描述" style="width:552px">
@@ -243,6 +245,7 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import UploadFile from  '~/components/UploadFile';
+import dateUtils from 'vue-dateutils';
 
 export default {
     components:{
@@ -357,8 +360,24 @@ export default {
                 roomId: params.id
              }
               this.$http.get('get-krmting-room-detail', form).then((res)=>{
-                    let data = res.data;
-                    data.floors=toString(res.data.floors)
+                    let data =Object.assign({},res.data);
+                    data.floors=String(data.floors);
+                    data.capacity=String(data.capacity);
+                    data.appPublish=String(data.appPublish);
+                    data.krmPublish=String(data.krmPublish);
+
+                    this.startTime=data.lockBeginTime;
+                    this.endtime=data.lockEndTime;
+                    this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
+                    this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
+                    this.form.appStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.appStartTime));
+                    this.form.appEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.appEndTime));
+                    this.form.krmStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.krmStartTime));
+                    this.form.krmEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.krmEndTime));
+              
+               
+           
+
                     this.formItem=data;
                    
 

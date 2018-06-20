@@ -93,7 +93,7 @@
                                     </FormItem>
                                 </div>
                                 <FormItem label="会议室配套设施"  class="u-date">
-                                    
+
                                 </FormItem>  
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
@@ -110,6 +110,7 @@
                                             v-model="form.startHour"
                                             @on-change="startHourChange"
                                             @on-clear="startHourClear"
+                                            :steps="[1,30]"
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
@@ -126,6 +127,7 @@
                                             v-model="form.endHour"
                                             @on-change="endHourChange"
                                             @on-clear="endHourClear"
+                                            :steps="[1,30]"
                                         />
                                 </FormItem>
                                  <FormItem label="补充描述" style="width:552px">

@@ -263,9 +263,9 @@ export default {
 
 
             if(params.id ==''){
-      this.$refs['formTop'].validate((valid) => {
-           console.log(params)
-                    if (valid) {
+    //   this.$refs['formTop'].validate((valid) => {
+    //        console.log(params)
+    //                 if (valid) {
                         this.$http.post("roleSave",params).then((res)=>{
                 
                         this.editRoleId =''
@@ -273,15 +273,15 @@ export default {
                         this.getRoleEdit()
                          })
                       
-                    } else {
-                        console.log(params)
-                    }
+            //         } else {
+            //             console.log(params)
+            //         }
             
-            })
+            // })
             }else{
-                this.$refs['formTop'].validate((valid) => {
-                     console.log(params,valid)
-                        if (valid) {
+                // this.$refs['formTop'].validate((valid) => {
+                //      console.log(params,valid)
+                //         if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
                 
                         this.editRoleId =''
@@ -289,11 +289,11 @@ export default {
                         this.getRoleEdit()
                          })
                       
-                    } else {
-                         console.log(params)
-                    }
+                    // } else {
+                    //      console.log(params)
+                    // }
             
-            })
+            // })
             }
         
       

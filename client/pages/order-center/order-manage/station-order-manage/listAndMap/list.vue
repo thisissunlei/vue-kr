@@ -115,7 +115,8 @@ export default {
                     align:'center',
                     render(tag, params){
                       let end=params.row.availableDetail.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.endDate)):'不限';
-                      return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.startDate))+'至'+end;
+                      let ren=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.startDate))+'至'+end;
+                      return h('span',{},ren);
                     } 
                 },
             ],
@@ -190,7 +191,6 @@ export default {
              list.id=item.belongId;
              return list
          })
-         console.log(param,"----ppppp")
          this.endParams.submitData=[].concat(param);
          this.$emit('on-result-change',this.endParams);
        }

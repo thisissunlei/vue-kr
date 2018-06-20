@@ -433,7 +433,11 @@ export default {
                      }else{
                          colorClass=''
                      }
-                    return <span class={`${colorClass}`}>{statusName}</span>
+                    return h('span',{
+                            attrs: {
+                                class:colorClass
+                            }
+                    },statusName);
                   }
                 },
                 {
@@ -505,7 +509,7 @@ export default {
                     align:'center',
                     width:60,
                     render(h,params){
-                        return <span>-</span>
+                        return h('span',{},'-')
                     }
                 },
                 {
@@ -521,11 +525,11 @@ export default {
                         }else if(statusName=='未配置'){
                          colorClass='redClass'
                         }
-
-                        return <span class={`${colorClass}`}>{statusName}</span>
-
-
-
+                        return h('span',{
+                            attrs: {
+                                class:colorClass
+                            }
+                        },statusName);
                     }
                 }
             ],

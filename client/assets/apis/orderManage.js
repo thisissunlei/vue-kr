@@ -18,7 +18,7 @@ export default {
     //入驻订单列表－详情
     "join-bill-detail": {
         // url: "/api/krspace-op-web/order-seat-add/show",
-        url: "/ben/api/op/order-seat-add/show",
+        url: "/api/op/order-seat-add/show",
         method: "get"
     },
     //减租订单列表－详情
@@ -29,7 +29,7 @@ export default {
     //入驻减租订单列表－作废
     "join-nullify": {
         // url: "/api/krspace-op-web/order-seat/orderStatus",
-        url: "/ben/api/op/order-seat/orderStatus",
+        url: "/api/op/order-seat/orderStatus",
         method: "post"
     },
     //入驻减租高级查询－下拉

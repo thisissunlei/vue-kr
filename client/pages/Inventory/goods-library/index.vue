@@ -146,7 +146,7 @@
                 <p>商品名称不能重复</p>
                 
             </div>
-            <div style="text-align:left;margin-top:20px;">
+            <div v-if="vImport"  style="text-align:left;margin-top:20px;">
              <ImportFile 
             url="//jsonplaceholder.typicode.com/posts/"
              @downFile="downFile"
@@ -582,6 +582,7 @@ export default {
                 this.floor=this.tabForms.floor;
                 this.communityId=this.tabForms.communityId;
             },
+        
         },
         destroyed(){
             var dom=document.getElementById('layout-content-main');
@@ -652,7 +653,7 @@ export default {
                         //新增重名     
                      let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
                        console.log('66666666666666666666',this.tabForms);
-                       
+                    
                      this.$http.get('getNew-Rename',data).then((response)=>{
                              this.getNew();
                              this.butNewgoods();
@@ -694,7 +695,7 @@ export default {
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-                 window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
+                 window.open('/api/order/goods/import/download-template','_blank')
         },
         close(){
             this.vImport=!this.vImport;
@@ -718,7 +719,7 @@ export default {
                         _this.importsu();
                         // _this.judgeRepeat(file)
                         
-                     
+
 					 } else {
                   if(xhr.response.code==-1){
                       

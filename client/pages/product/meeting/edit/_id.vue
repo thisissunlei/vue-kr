@@ -74,6 +74,7 @@
                                             :onRemove="coverImgRemove"
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
+                                            :defaultFileList="coverImgList"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -91,6 +92,7 @@
                                             :onRemove="detailImgsRemove"
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
+                                            :defaultFileList="detailImgList"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -349,13 +351,19 @@ export default {
             imglist:[],
             endDates:'',
             startDate:'',
+            coverImgList:[],
+            detailImgList:[],
+
 
         }
+    },
+    created(){
+        this.getDetailInfo()
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
         this.getCommunityList('');
-        this.getDetailInfo();
+       // this.getDetailInfo();
     },
     methods:{
         getDetailInfo(){
@@ -378,12 +386,20 @@ export default {
                     this.form.appEndTime=data.appEndTime.substring(0,6);
                     this.form.krmStartTime=data.krmStartTime.substring(0,6);
                     this.form.krmEndTime=data.krmEndTime.substring(0,6);
-              
-               
-           
-
+                    let coverImgList=[];
+                    coverImgList.push({'url':data.coverImg});
+                    this.coverImgList=coverImgList;
+                    let detailImgList=[];
+                    data.detailImg.map((item)=>{
+                        let obj={};
+                        obj.url=item;
+                        detailImgList.push(obj)
+                    })
+                    this.detailImgList=detailImgList;
                     this.formItem=data;
-                   
+                    this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
+                    this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
+                    this.formItem.detailImgs=data.detailImg.join(',');
 
                 }).catch((error)=>{
                     this.$Notice.error({
@@ -535,6 +551,7 @@ export default {
         submitCreate(){
             let {params}=this.$route;
             this.formItem.id=params.id;
+           
             this.$http.post('add-krmting-room', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'

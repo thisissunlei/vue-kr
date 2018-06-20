@@ -233,8 +233,16 @@ export default{
 		}
 		
 	},
+	 watch: {
+		defaultFileList: {
+			deep: true,
+			handler(nextProps) {
+				this.fileList=nextProps
+			}
+		}
+	},
 	mounted(){
-		console.log(this.disabled,"pppppppp")
+		console.log('defaultFileList',this.defaultFileList)
 		
 	},
 	methods:{

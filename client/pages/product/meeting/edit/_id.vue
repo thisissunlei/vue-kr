@@ -18,7 +18,9 @@
                                         placeholder="请选择"
                                         filterable
                                         clearable
+                                        remote
                                         @on-change="getFloor"
+                                        :label="formItem.communityName"
 
                                     >
                                         <Option v-for="(option, index) in communityList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
@@ -31,6 +33,8 @@
                                         placeholder="请选择"
                                         filterable
                                         clearable
+                                        remote
+                                        :label="formItem.floor"
                                     >
                                         <Option  v-for="item in floorsList" :value="`${item.value}`"  :key="item.value" >{{ item.label }}</Option>
                                     </Select>
@@ -361,19 +365,19 @@ export default {
              }
               this.$http.get('get-krmting-room-detail', form).then((res)=>{
                     let data =Object.assign({},res.data);
-                    data.floors=String(data.floors);
+                    data.floor=String(data.floor);
                     data.capacity=String(data.capacity);
                     data.appPublish=String(data.appPublish);
                     data.krmPublish=String(data.krmPublish);
-
+                    data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;
                     this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
                     this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
-                    this.form.appStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.appStartTime));
-                    this.form.appEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.appEndTime));
-                    this.form.krmStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.krmStartTime));
-                    this.form.krmEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.krmEndTime));
+                    this.form.appStartTime=data.appStartTime.substring(0,6);
+                    this.form.appEndTime=data.appEndTime.substring(0,6);
+                    this.form.krmStartTime=data.krmStartTime.substring(0,6);
+                    this.form.krmEndTime=data.krmEndTime.substring(0,6);
               
                
            

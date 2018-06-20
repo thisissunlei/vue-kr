@@ -187,7 +187,8 @@ export default {
                     align:'center',
                     render:(h,params)=>{
                         let status=params.row.appPublish?'已上架':'未上架'
-                        return status
+                        return h('span',{},status)
+                        
                     }
                 },
                 {
@@ -196,7 +197,7 @@ export default {
                     align:'center',
                     render:(h,params)=>{
                         let status=params.row.kmPublish?'已上架':'未上架'
-                        return status
+                        return h('span',{},status)
                     }
                 },
                 {

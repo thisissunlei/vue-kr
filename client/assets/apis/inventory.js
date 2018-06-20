@@ -121,7 +121,7 @@ export default  {
     },
      //新增借口
      'getNew-lyadded': {
-        url: '/zhongyu/api/krspace-finance-web/cmt/goods/add',
+        url: '/api/krspace-finance-web/cmt/goods/add',
         method: 'post'
     },
     //新曾重名借口

@@ -138,7 +138,7 @@ export default  {
 
   //导入去重
   'getNew-Whetherrepeat': {
-    url: '/zhongyu/api/krspace-finance-web/cmt/goods/check-excel',
+    url: '/api/krspace-finance-web/cmt/goods/check-excel',
     method: 'post'
 },
 

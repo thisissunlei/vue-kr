@@ -18,6 +18,15 @@
             :identify="identify"
             :sideBar="sideBar"
         >
+             <div slot="sort" style="display:inline-block;">
+                 <Select
+                    v-model="orderType"
+                    @on-change="sortChange"
+                    style="width:185px;margin-right:29px;text-align:left;color:#666;"
+                >
+                    <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
+                </Select>
+             </div>
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
                         <div :class="head?'view-table-list table-list-fixed':'view-table-list'">
@@ -117,7 +126,10 @@ export default {
             width:'',
             left:'',
 
-            sideBar:true
+            sideBar:true,
+            //排序下拉
+            sortList:[],
+            orderType:'DEFAULT'
         }
     },
     mounted(){
@@ -134,20 +146,17 @@ export default {
         LISTENSIDEBAROPEN(function (params) {
             _this.sideBar=params;
         })
+
+        this.params.orderType=this.orderType;
         this.commonParams('today');
+
         this.leftOver();
         this.rightOver();
-        //GLOBALSIDESWITCH("false");
-        // setTimeout(() => {
-        //       publicFn.windowResize();
-        // }, 400);
-        // window.onresize=function(){
-        //     publicFn.windowResize();
-        // }
+        this.getSelectData();
     },
     watch:{
         tabForms:function(val){
-            this.params=Object.assign({},this.paramsSwitch()); 
+            this.params=Object.assign({},this.paramsSwitch(),{orderType:this.orderType}); 
             this.endPosition='today';
             this.commonParams('today');
         },
@@ -161,6 +170,22 @@ export default {
         window.removeEventListener('resize',this.onResize);  
     },
     methods:{
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.inventory.OrderType'
+            }).then((response)=>{
+               this.sortList=response.data;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        //排序
+        sortChange(param){
+           this.params.orderType=this.orderType;
+           this.commonParams();
+        },
         //窗口
         onResize(){
             this.onScrollListener();
@@ -327,34 +352,17 @@ export default {
             }
             this.params.lineStartDate=yearRender+'-'+monthRender+'-'+1;
             this.params.lineEndDate=this.getEndDay(11,this.params.lineStartDate);
-            console.log('123',this.params.lineStartDate,this.params.lineEndDate);
             this.fixLeftRight('next');
         },
         //获取进度列表数据
         getListData(params,type){
             var url=this.identify=='daily'?'getDailyTimeLine':'getOptionalTimeLine';
-            /*if(allPage<params.page){
-                return;
-            }*/
             this.isLoading = true;
             var data = Object.assign({},params);
-            /*var startTime = data.startTime.split(" ")[0]+' 00:00:00';
-            var endTime = data.endTime.split(" ")[0]+' 00:00:00';
-            data.startTime = '';
-            data.endTime = '';*/
             this.$http.get(url,data).then((response)=>{
                 this.listData=response.data.items;
-                /*if(response.data.hasTime){
-                    this.minDay = this.getTimeToDay(response.data.firstStartTime);
-                    this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
-                    this.params.startTime = publicFn.compareTime(this.params.startTime,response.data.firstStartTime);
-                    var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.params.endTime=publicFn.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
-                }*/
                 this.totalCount=response.data.totalCount;
-                //allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
-               // this.params.page = response.data.page+1;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,

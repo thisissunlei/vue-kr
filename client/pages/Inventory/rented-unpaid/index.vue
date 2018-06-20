@@ -8,6 +8,7 @@
     />
     <div class='enter-filed-table' id="daily-inventory-table-list">
         <span class="line"></span>
+        <span style="color:#495060;font-size:12px;margin-bottom:10px;display:inline-block;">已经过了已出账单的服务开始日依然没有付的账单</span>
         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
             <div slot="loading">
                     <Loading/>
@@ -17,11 +18,11 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <!-- <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
-        </div>
+        </div> -->
     </div>
     <Message 
         :type="MessageType" 
@@ -44,7 +45,7 @@ import SlotHead from './slotHead';
 import Loading from '~/components/Loading';
 var layoutScrollHeight=0;
     export default {
-        name: 'EnterField',
+        bizType: 'EnterField',
         components:{
             SearchForm,
             SlotHead,
@@ -80,72 +81,129 @@ var layoutScrollHeight=0;
                 columns:[
                     {
                         title: '账单类型-ID',
-                        key: 'name',
+                        key: 'bizTypeName',
                         align:'center',
-                        render(h, params){
-                            var location=params.row.location?params.row.location:'-'
-                            return h('div', [
-                                        h('Tooltip', {
-                                            props: {
-                                                placement: 'top',
-                                                content: location
-                                            }
-                                        }, [
-                                        h('div', [
-                                            h('div',{
-                                            },params.row.name),
-                                            h('div',{
-                                                style:{
-                                                    textOverflow:'ellipsis',
-                                                    whiteSpace:'nowrap',
-                                                    overflow: 'hidden'
-                                                }
-                                            },params.row.location),
-                                        ])
-                                    ])
-                            ])
+                        width:120,
+                        render:(h, obj)=>{
+                            return h('div', {
+                                props: {
+                                    type: 'text',
+                                    size: 'small'
+                                },
+                                style: {
+                                    color:'#499df1',
+                                        cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showDetail(obj.row)
+                                    }
+                                }
+                            },obj.row.billId);
                         }
+
                     },
                     {
                         title: '客户名称',
-                        key: 'type',
-                        width:110,
+                        key: 'customerName',
                         align:'center',
                     },
                     {
-                        title: '服务内容',
-                        key: 'capacity',
+                        title: '账单明细',
                         align:'center',
-                    },
-                    {
-                        title: '服务费明细',
-                        align:'center',
-                        width:110,
-                        key: 'startDate',
+                        className:'bill-detail',
+                        key: 'billServiceDetail',
+                        render(h, params){
+                        var bill=params.row.billGuaDetail?params.row.billGuaDetail:'';
+                        var billTitle=bill?'保证金:':'';
+                        var moneyDetail=params.row.billServiceDetail?params.row.billServiceDetail:'';
+                        var isTitle=params.row.ifMultiperiod;
+                        var moneyDetailTitle=moneyDetail?(isTitle==1?'包含了多个时段的服务费:':params.row.serviceStartDate+'至'+params.row.serviceEndDate+'的服务费:'):'';
+                        return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:moneyDetailTitle+moneyDetail+billTitle+bill
+                                        }
+                                    }, [
+                                    h('div', [
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },moneyDetailTitle),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },moneyDetail),
+                                        h('div',{
+                                        },billTitle),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },bill),
+                                    ])
+                                ])
+                        ])
+                    }
+                       
                     },
                     {
                         title: '服务开始日',
                         align:'center',
                         width:110,
-                        key: 'endDate',
+                        key: 'serviceStartDate',
                     },
                     {
                         title: '账单金额',
-                        align:'center',
+                        align:'right',
+                        className:'statusClass',
                         width:100,
-                        key: 'rentDays',
+                        key: 'payableAmount',
+                        render(tag,params){
+                          var end='';      
+                          if(params.row.payableAmount){
+                             end=utils.thousand(params.row.payableAmountStr);
+                          }else{
+                             end='-';
+                          }
+                          return <span >{'¥'+end}</span>;
+                        }
+                       
                     },
                     {
                         title: '欠款金额',
                         align:'right',
+                        className:'statusClass',
                         width:100,
-                        key: 'price',
+                        key: 'debt',
+                         render(tag,params){ 
+                          var end='';      
+                          if(params.row.debt){
+                             end=utils.thousand(params.row.debtStr);
+                          }else{
+                             end='-';
+                          }
+                          return <span  style='color:red'>{'¥'+end}</span>;
+                        }
                     },
                     {
                         title: '逾期时长(服务开始日起)',
                         align:'center',
-                        width:150,
-                        key: 'customerName',
+                        width:200,
+                        key: 'overdueDays',
+                        render(tag,params){ 
+                          var money=params.row.overdueDays?utils.thousand(params.row.overdueDays):params.row.overdueDays;                  
+                          return <span style='color:red'>{money+'天'}</span>;
+                        }
                     },
                 ],
                 openMessage:false,
@@ -157,7 +215,6 @@ var layoutScrollHeight=0;
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -171,7 +228,6 @@ var layoutScrollHeight=0;
             LISTENSIDEBAROPEN(function (params) {
                 _this.sideBar=params;
             })
-
         },
         watch:{
             sideBar:function(val){
@@ -191,36 +247,45 @@ var layoutScrollHeight=0;
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+            showDetail(params){
+                window.open(`../../bill/list/detail/${params.billId}`,'_blank')
+            },
             getCommonParam(){
                 this.tabForms.page=1;
                 this.dailyOldData=[];
                 this.loading=true;
             },
-            //搜索
+             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.tabForms=Object.assign({},formItem);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-            },
-            //数据变化
-            dataParams(data){
-                this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
+            dataParams(data){
+                this.endParams=Object.assign({},data);
+            },
+             //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
             getData(params){
-                //getDailyInventory 
-                this.$http.get('getDueList', params).then((res)=>{
+                params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
+                params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
+                this.$http.get('unpaidList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -246,45 +311,51 @@ var layoutScrollHeight=0;
                 utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
             },
             //滚动监听
-        onScrollListener(){            
-            var dom=document.getElementById('layout-content-main');
-            var headDom=document.getElementById('slot-head-daily-inventory');
-            if(headDom){
-                headDom.style.left=this.left+'px';
-                headDom.style.width=this.width+'px';
-            }
-            if(dom.scrollTop>200){
-                this.theHead=true;
-            }else{
-                this.theHead=false;
-            }
-            if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
-                this.theEnd=true;
-            }
-            if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
-                this.theEnd=false;
-            }
+            onScrollListener(){            
+                var dom=document.getElementById('layout-content-main');
+                var headDom=document.getElementById('slot-head-daily-inventory');
+                if(headDom){
+                    headDom.style.left=this.left+'px';
+                    headDom.style.width=this.width+'px';
+                }
+                if(dom.scrollTop>250){
+                    this.theHead=true;
+                }else{
+                    this.theHead=false;
+                }
+                if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
+                    this.theEnd=true;
+                }
+                if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
+                    this.theEnd=false;
+                }
 
-            layoutScrollHeight=dom.scrollTop;
-            var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
-            if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
-                if(this.tabForms.page==totalPage){
-                    return ;
+                layoutScrollHeight=dom.scrollTop;
+                var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
+                if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
+                    if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    if(!this.dailyIndentify.length){
+                        return ;
+                    }
+                    this.spinLoading=true;
+                    this.tabForms.page=Number(this.tabForms.page)+1;
+                    this.getData(this.tabForms);
                 }
-                if(!this.dailyIndentify.length){
-                    return ;
-                }
-                this.spinLoading=true;
-                this.tabForms.page=Number(this.tabForms.page)+1;
-                this.getData(this.tabForms);
-            }
-        },
+            },
         }
     }
 </script>
 
 <style lang="less">
 .vertical-center-modal{
+     .rig{
+            padding: 0
+        }
+        .rig{
+            padding: 0;
+        }
         display: flex;
         align-items: center;
         justify-content: center;
@@ -293,6 +364,11 @@ var layoutScrollHeight=0;
         }
 }
 .enter-filed{
+    .bill-detail{
+        .ivu-table-cell{
+            padding:0 5px;
+        }
+    }
     .enter-filed-table{
         position: relative;
         padding: 0 ;
@@ -303,7 +379,7 @@ var layoutScrollHeight=0;
             display:inline-block;
             width:100%;
             border-top:1px solid #dddee1;
-            margin-bottom:20px;
+            margin-bottom:10px;
         }
         .daily-table{
             padding-bottom:77px; 
@@ -346,6 +422,8 @@ var layoutScrollHeight=0;
                 .ivu-table-cell{
                     padding:0;
                     padding-right:5px;
+                   
+                    
                 }
             }
             .statusClass{
@@ -371,7 +449,7 @@ var layoutScrollHeight=0;
      .enter-filed-table{
             padding-bottom:77px; 
             margin:0 20px;
-            margin-top: 30px;
+            //margin-top: 30px;
             position: relative;
             .ivu-tooltip{
                 width:100%

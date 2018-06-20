@@ -163,7 +163,10 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
+<<<<<<< HEAD
           
+=======
+>>>>>>> master
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
@@ -171,7 +174,8 @@
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
-                    href = setHref(child.type, child.router)
+                    href = setHref(child.type, child.router);
+                    console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -524,7 +528,7 @@
             menuItems: [
                 {
                     primaryText: '客户',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-customers',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -559,7 +563,7 @@
                 },
                 {
                     primaryText: '会员',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-members',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -607,7 +611,7 @@
             menuItems: [
                 {
                     primaryText: '产品商品',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-product-goods',
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
@@ -681,7 +685,7 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        // }, 
+                        //}, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
@@ -705,32 +709,49 @@
                 menuItems: [
                     {
                         primaryText: '社区主页',
-                        router: 'community/operation/index',
-                        // type:'vue',
-                        menuCode: 'operation_home',
+                        router: 'operation/community',
+                        type:'vue',
+                        menuCode: 'op_home',
                     },
                     {
                         primaryText: '即将到期',
                         router: 'inventory/over-date',
                         type:'vue',
-                        menuCode: 'operation_home',
+                        menuCode: 'vueList',
                     },
-                    // {
-                    //     primaryText: '即将进场',
-                    //     router: 'inventory/enter-field',
-                    //     type:'vue',
-                    //     menuCode: 'operation_home',
-                    // },
+                    {
+                        primaryText: '即将进场',
+                        router: 'inventory/enter-field',
+                        type:'vue',
+                        menuCode: 'imt_putaway_list',
+                    },
+                    {
+                        primaryText: '已起租未付',
+                        router: 'inventory/rented-unpaid',
+                        type:'vue',
+                        menuCode: 'rent_no_pay',
+                    },
+                    {
+                        primaryText: '逾期未付',
+                        router: 'inventory/over-date-unpaid',
+                        type:'vue',
+                        menuCode: 'overdate_no_pay',
+                    },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
                         router: 'community/communityManage/visitorsToRecord'
                     },
                     {
-                        primaryText: '访客',
+                        primaryText: '预约访客',
                         menuCode: 'visitRecord',
                         router: 'community/visitor/list'
-
+                    },
+                    {
+                        primaryText: "KM会议",
+                        router: 'krmeeting',
+                        type: 'vue',
+                        menuCode: 'kr_meeting'
                     },
                     {
                         primaryText: '会议室',
@@ -748,7 +769,7 @@
                         menuCode: 'tv_ad_storage',
                         type: 'vue',
                         router: 'smart-hardware/map-depot'
-                    },
+                    }
                 ]
             },
         ]
@@ -765,6 +786,12 @@
                     iconName: 'icon-app',
                     iconColor: '#79859a',
                     menuItems: [
+                        {
+                            primaryText: '产品运营主页',
+                            menuCode: 'mobile_app_operate_home',
+                            type: 'vue',
+                            router: 'app-manage/home'
+                        },
                         {
                             primaryText: '公告',
                             menuCode: 'oper_notice_base',
@@ -873,7 +900,7 @@
                 },
                 {
                     primaryText: 'OP配置',
-                    iconName: 'icon-website',
+                    iconName: 'icon-op-set',
                     iconColor: '#79859a',
                     menuItems: [
 
@@ -912,7 +939,7 @@
                 },
                 {
                     primaryText: 'OP权限',
-                    iconName: 'icon-website',
+                    iconName: 'icon-op-permission',
                     iconColor: '#79859a',
                     // router: 'activity',
                     menuItems: [
@@ -977,7 +1004,7 @@
                 },
                 {
                     primaryText: "OP合同配置",
-                    iconName: 'icon-theLog',
+                    iconName: 'icon-op-contract',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -1036,7 +1063,7 @@
             menuItems: [
                     {
                         primaryText: "门禁管理",
-                        iconName: 'icon-card',
+                        iconName: 'icon-placket-manage',
                         iconColor: '#79859a',
                         router :'',
                         menuItems: [
@@ -1047,7 +1074,8 @@
                             },{
                                 primaryText: '开门记录',
                                 menuCode: 'iot_door_open_log',
-                                router: 'smarthardware/doorManage/openlog',
+                                type: 'vue',
+                                router: 'smarthardware/openlog',
                             },
                             {
                                 primaryText: '故障报警',
@@ -1058,6 +1086,12 @@
                                 primaryText: '升级管理',
                                 menuCode: 'iot_upgrade_package',
                                 router: 'smarthardware/doorManage/upgrademanage',
+                            },
+                            {
+                                primaryText: '门禁级联关系',
+                                menuCode: 'door_relation',
+                                type: 'vue',
+                                router: 'doorrelationship/map',
                             }
                         ]
                 }, {
@@ -1088,7 +1122,7 @@
                         ]
                 },{
                     primaryText: "中央控制管理",
-                    iconName: 'icon-card',
+                    iconName: 'icon-central-control',
                     iconColor: '#79859a',
                     router :'',
                     menuItems: [
@@ -1105,25 +1139,25 @@
                     ]
             },{
                 primaryText: "设备管理",
-                iconName: 'icon-card',
+                iconName: 'icon-equipment-manage',
                 iconColor: '#79859a',
                 router :'',
                 menuItems: [
 
                     {
                         primaryText: '设备查询',
-                        menuCode: 'public',
+                        menuCode: 'device_deploy_search',
                         router: 'smarthardware/equipmentmanage/equipmentsearch',
                     },{
                         primaryText: 'IP冲突检测',
-                        menuCode: 'public',
+                        menuCode: 'device_ip_detection',
                         router: 'smarthardware/equipmentmanage/checkrepeatip',
                     }
                 ]
         },
         {
                 primaryText: "空间管理",
-                iconName: 'icon-card',
+                iconName: 'icon-space-manage',
                 iconColor: '#79859a',
                 router :'',
                 menuItems: [
@@ -1147,7 +1181,7 @@
         menuItems: [
             {
                 primaryText: '订单',
-                iconName: 'icon-donething',
+                iconName: 'icon-orders',
                 router: 'office',
                 iconColor: '#79859a',
                 menuCode: 'public',
@@ -1159,10 +1193,16 @@
                         menuCode: 'seat_order_list',
                     },
                     {
-                        primaryText: "会议室订单",
+                        primaryText: "APP会议室订单",
                         router: 'order/list',
                         type: 'vue',
                         menuCode: 'fina_meeting_order_page'
+                    },
+                    {
+                        primaryText: "KM会议室订单",
+                        router: 'krmeetingorder',
+                        type: 'vue',
+                        menuCode: 'krm_order_base'
                     },
                     {
                         primaryText: "通用订单",
@@ -1174,7 +1214,7 @@
             },
             {
                 primaryText: '合同',
-                iconName: 'icon-donething',
+                iconName: 'icon-contracts',
                 router: 'office',
                 iconColor: '#79859a',
                 menuCode: 'wf_contract_list',

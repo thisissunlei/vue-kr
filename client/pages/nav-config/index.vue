@@ -42,21 +42,17 @@
                 <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
                         <Col span="24">
-                            <FormItem label="名称">
+                            <FormItem label="名称" prop="name"> 
                                 <Input v-model="formTop.name" />
                             </FormItem> 
                         </Col>
                         <Col span="24">
-                            <FormItem label="编码">
+                            <FormItem label="编码" prop="code">
                                 <Input v-bind:disabled="title=='编辑权限'" v-model="formTop.code" />
                             </FormItem>
                         </Col>
                     </Row>
-                    <div slot="footer">
-                        <FormItem >
-                            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
-                        </FormItem>
-                    </div>
+                   
                     
                 </Form>
             </div>
@@ -116,6 +112,11 @@
             </div>
 
         </div>
+         <!-- <div slot="footer">
+            <FormItem >
+                <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+            </FormItem>
+        </div> -->
     </Modal>
 </div>
 </template>
@@ -164,7 +165,9 @@ export default {
       this.getRoleEdit()
     },
     methods:{
-       
+       handleSubmit(){
+
+       },
         radioGroupChange(e,item){
             console.log(e,"0000",item);
         },
@@ -223,6 +226,7 @@ export default {
             // console.log(moveKeys);
             this.targetKeys = newTargetKeys;
         },
+    
         /**
          * 人员分配ok
          */
@@ -269,21 +273,22 @@ export default {
 
 
             if(params.id ==''){
-      this.$refs['formTop'].validate((valid) => {
-           console.log(params)
+                // console.log( this.$refs['formTop'],"pppppp")
+                this.$refs['formTop'].validate((valid) => {
+                    // console.log(valid,"oooooooo")
                     if (valid) {
                         this.$http.post("roleSave",params).then((res)=>{
                 
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
-                         })
-                      
+                        })
+                    
                     } else {
                         console.log(params)
                     }
-            
-            })
+                
+                })
             }else{
                 this.$refs['formTop'].validate((valid) => {
                      console.log(params,valid)

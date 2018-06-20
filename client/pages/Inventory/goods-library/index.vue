@@ -282,10 +282,8 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 export default {
-  
 
-
-          name:'Join',
+        name:'Join',
        components:{
        Loading,
        SearchForm,
@@ -633,6 +631,7 @@ export default {
             },
        //新增接口a
         getNew(){
+            
             console.log('新增',this.newgoodForm);
         let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId});
         this.$http.post('getNew-lyadded',data).then((response)=>{    
@@ -643,7 +642,6 @@ export default {
                             });
                         })
         },
-
         //导入入口
         importgoods(){
                 this.vImport=!this.vImport;

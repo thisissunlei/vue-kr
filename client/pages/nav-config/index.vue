@@ -68,7 +68,7 @@
                                     <tbody>
                                         <tr>
 
-                                            <td style="height:30px;width:100px;padding-left:5px;">{{data.label}}</td>
+                                            <td style="height:30px;width:130px;padding-left:5px;">{{data.label}}</td>
                                             <td style="height:30px;width:150px;padding-left:5px;"></td>
                                             <td style="height:30px;padding-left:5px;"></td>
                                         </tr>
@@ -80,7 +80,7 @@
                                     <tbody>
                                         <tr>
 
-                                            <td style="height:30px;width:100px;padding-left:5px;">{{data.label}}</td>
+                                            <td style="height:30px;width:130px;padding-left:5px;">{{data.label}}</td>
                                             <td style="height:30px;width:150px;padding-left:5px;"></td>
                                             <td style="height:30px;padding-left:5px;"></td>
                                         </tr>
@@ -91,18 +91,21 @@
                         <tr >
                             <td>
                                 <table class="table" style="border-collapse:collapse;width:100%">
-                                    <tbody>
-                                        <tr v-for="(line,index) in  data.children" :key="index">
-                                            <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:100px">{{index ==0? line.groupName:""}}</td>
-                                            <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line.subGroupName}}</td>
-                                            <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
-                                                <RadioGroup v-model="line.subGroupRightType" >
-                                                    <Radio label="NONE" >无</Radio>
-                                                    <Radio label="READONLY" >读取</Radio>
-                                                    <Radio label="READWRITE" >写入</Radio>
-                                                </RadioGroup>
-                                            </td>
-                                    </tr>
+                                    <tbody  v-for="(line,index) in  data.children" :key="index">
+                                       
+                                            <tr v-for="(line2,index2) in  line.children" :key="index2">
+                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==1? line.groupName:''}}</td>
+                                                    <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line2.groupName}}</td>
+                                                    <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
+                                                        <RadioGroup v-model="line.groupRightType" >
+                                                            <Radio label="NONE" >无</Radio>
+                                                            <Radio label="READONLY" >读取</Radio>
+                                                            <Radio label="READWRITE" >写入</Radio>
+                                                        </RadioGroup>
+                                                    </td>
+                                            </tr>
+                                            
+                    
                                     </tbody>
                                 </table>
                             </td>

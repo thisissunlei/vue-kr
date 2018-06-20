@@ -237,7 +237,14 @@ export default{
 		defaultFileList: {
 			deep: true,
 			handler(nextProps) {
-				this.fileList=nextProps
+				this.fileList=nextProps;
+				if(this.maxLen){
+					if(this.fileList.length<this.maxLen){
+						this.upIconShow =true;
+					}else{
+						this.upIconShow =false;
+					}
+				}
 			}
 		}
 	},

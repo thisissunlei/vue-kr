@@ -210,6 +210,7 @@
                                     style="width: 122px" 
                                     v-model="form.krmStartTime"
                                     :steps="[1,30]"
+                                    :disabled-hours="[0,1,2,3,4,5,6,7,8,20,21,22,23]"
                                     @on-change="changeKrmStartTime"
                                 />
                                 <span style="padding:0 10px;">至</span>
@@ -220,6 +221,7 @@
                                     v-model="form.krmEndTime" 
                                     :steps="[1,30]"
                                     @on-change="changeKrmEndTime"
+                                    :disabled-hours="[0,1,2,3,4,5,6,7,8,20,21,22,23]"
                                 />
                                 <div v-if="isKrmError" class="u-error">请选择可预订时段</div>
                            </div>
@@ -263,9 +265,9 @@ export default {
                 name:'',
                 appBusyPrice:'',
                 appIdlePrice:'',
-                appEndTime:'',
+                appEndTime:'00:00:00',
                 appPublish:'',
-                appStartTime:'',
+                appStartTime:'00:00:00',
                 area:'',
                 capacity:'',
                 communityId:'',
@@ -275,9 +277,9 @@ export default {
                 floor:'',
                 kmPromotionUnitPrice:'',
                 kmUnitPrice:'',
-                krmEndTime:'',
+                krmEndTime:'19:00:00',
                 krmPublish:'',
-                krmStartTime:'',
+                krmStartTime:'09:00:00',
                 lockBeginTime:'',
                 lockEndTime:'',
                 meetingDevices:''
@@ -285,10 +287,10 @@ export default {
             form:{
                startHour:'', 
                endHour:'',
-               appStartTime:'',
-               appEndTime:'',
-               krmStartTime:'',
-               krmEndTime:'',
+               appStartTime:'00:00:00',
+               appEndTime:'00:00:00',
+               krmStartTime:'09:00:00',
+               krmEndTime:'19:00:00',
 
             },
             isKrmError:false,

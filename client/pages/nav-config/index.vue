@@ -41,12 +41,13 @@
             <div v-if="openEdit">
                 <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
-                        <Col span="24">
+                        <Col span="11">
                             <FormItem label="名称" prop="name"> 
                                 <Input v-model="formTop.name" :maxlength="30" />
                             </FormItem> 
                         </Col>
-                        <Col span="24">
+                        <Col span="2">&nbsp;</Col>
+                        <Col span="11">
                             <FormItem label="编码" prop="code" >
                                 <Input v-bind:disabled="title=='编辑权限'" :maxlength="30" v-model="formTop.code" />
                             </FormItem>
@@ -94,10 +95,10 @@
                                     <tbody  v-for="(line,index) in  data.children" :key="index">
                                        
                                             <tr v-for="(line2,index2) in  line.children" :key="index2">
-                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==1? line.groupName:''}}</td>
+                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==0? line.groupName:''}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line2.groupName}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
-                                                        <RadioGroup v-model="line.groupRightType" >
+                                                        <RadioGroup v-model="line2.groupRightType" >
                                                             <Radio label="NONE" >无</Radio>
                                                             <Radio label="READONLY" >读取</Radio>
                                                             <Radio label="READWRITE" >写入</Radio>

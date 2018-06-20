@@ -5,6 +5,16 @@
     padding-left:5px;
     min-width:1028px;
     overflow: auto;
+       .header-left{
+          .ivu-tooltip-popper{
+            max-width:150px;
+            word-break:break-all;
+            word-wrap: break-word; 
+            .ivu-tooltip-inner{
+              white-space:normal;
+            }
+          }
+     }
   }
   .community{
     background-color: #fff;
@@ -77,11 +87,18 @@
     width: 100%;
     display: flex;
     border-radius: 0 4px 4px 4px;
-    border-bottom:1px solid #fff;
+    //border-bottom:1px solid #fff;
   }
-  .card-one,.card-two{
+  .card-one{
     &:hover{
       cursor: pointer;
+      background: #F9F9F9;
+      box-shadow: 6px 5px  20px rgba(224, 222, 229, .5)
+    }
+  }
+  .card-two{
+    &:hover{
+      background: #F9F9F9;
       box-shadow: 6px 5px  20px rgba(224, 222, 229, .5)
     }
   }
@@ -106,9 +123,8 @@
     cursor: pointer;
     color: #666666;
     letter-spacing: 0;
-    background-image: url(~/assets/images/normal.png);
-    -webkit-background-size: cover;
-    background-size: cover;
+    background: url(~/assets/images/normal.png) no-repeat center;
+    background-size: 100% 100%;
   }
   .card-three .tabs .active{
     font-size: 14px;
@@ -133,7 +149,7 @@
     margin-right: 21px;
     background-color: #fff;
     border-radius: 4px;
-    overflow: hidden;
+    //overflow: hidden;
     &:hover{
       box-shadow: 6px 5px  20px rgba(224, 222, 229, .5)
     }
@@ -159,6 +175,10 @@
         padding-left:18px;
         &:hover{
           cursor: pointer;
+          color:#499df1;
+          .header-left-all{
+            color:#499df1;
+          }
         }
         &:before{
           content:'';
@@ -170,7 +190,9 @@
           width:2px;
           left: 0;
         }
-
+        .header-left-all{
+           color:#666;
+        }
       }
   }
   .ivu-tooltip{
@@ -207,7 +229,7 @@
             }
           }
           .customer{
-            flex:4;
+            flex:3;
           }
           
         }

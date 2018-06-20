@@ -8,16 +8,17 @@
     />
     <div class='enter-filed-table' id="daily-inventory-table-list">
         <span class="line"></span>
+        <span style="color:#495060;font-size:12px;margin-bottom:10px;display:inline-block;">包括新客户即将入驻的房间（工位）、在租客户即将增租或换租的房间（工位）</span>
         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
             <div slot="loading">
                     <Loading/>
             </div> 
         </Table>
-        <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
+        <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily" />
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}" v-if="dailyOldData.length>0">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
@@ -115,54 +116,100 @@ var layoutScrollHeight=0;
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:80,
+                        width:70,
                         align:'center',
                     },
                     {
                         title: '距进场日',
                         align:'center',
                         width:80,
-                        key: 'startDate',
+                        key: 'toPutawayDays',
+                        render(h, params){
+                            if(params.row.toPutawayDays<30){
+                                return h('div', [
+                                        h('div', [
+                                            h('span', { 
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            }, params.row.toPutawayDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }else{ 
+                               return h('div', [
+                                        h('div', {slot:'zu'},[
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, params.row.toPutawayDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }
+
+                            
+                                        
+                        }
                     },
                     {
                         title: '进场日',
                         align:'center',
-                        width:80,
+                        width:110,
                         key: 'startDate',
                     },
                     {
                         title: '即将进场客户',
                         align:'center',
-                        key: 'rentDays'
+                        key: 'customerName'
                     },
                     {
-                        title: '客户是否新入住',
-                        width:100,
-                        key: 'price',
+                        title: '客户是否新入驻',
+                        width:90,
+                        key: 'ifNewCustomer',
                     },
                     {
                         title: '联系人',
                         align:'center',
                         width:100,
-                        key: 'customerName',
+                        key: 'contactName',
                     },
                     {
                         title: '联系方式',
                         align:'center',
-                        width:80,
-                        key: 'customerStatoons',
+                        width:130,
+                        key: 'contactTel',
+                        render(h,params){
+                            if(params.row.contactTel){
+                                return params.row.contactTel
+                            }else{
+                                return '-'
+                            }
+                        }
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:80,
+                        width:110,
                         key: 'endDate',
                     },
                     {
                         title: '租期',
                         align:'right',
                         width:80,
-                        key: 'quotedPrice',
+                        key: 'rentDays',
+                        render(h,params){
+                            return params.row.rentDays+'天'
+                        }
                     },
                 ],
                 openMessage:false,
@@ -173,8 +220,7 @@ var layoutScrollHeight=0;
         mounted(){
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
-                this.getCommonParam();
-                this.getData(this.tabForms); 
+                this.getCommonParam(); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -216,28 +262,28 @@ var layoutScrollHeight=0;
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
 
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.tabForms=Object.assign({},formItem);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },
             //数据变化
             dataParams(data){
                 this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
+                // this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
             getData(params){
-                //getDailyInventory 
-                this.$http.get('getDueList', params).then((res)=>{
+                // getImtPutawayList
+                this.$http.get('getImtPutawayList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -260,7 +306,7 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
+                utils.commonExport(this.tabForms,'/api/order/operation/imtPutaway/list-excel');
             },
             //滚动监听
         onScrollListener(){            
@@ -313,6 +359,7 @@ var layoutScrollHeight=0;
     .enter-filed-table{
         position: relative;
         padding: 0 ;
+        padding-bottom:77px;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
         }
@@ -320,7 +367,7 @@ var layoutScrollHeight=0;
             display:inline-block;
             width:100%;
             border-top:1px solid #dddee1;
-            margin-bottom:20px;
+            margin-bottom:10px;
         }
         .daily-table{
             padding-bottom:77px; 
@@ -351,13 +398,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{
@@ -388,7 +436,7 @@ var layoutScrollHeight=0;
      .enter-filed-table{
             padding-bottom:77px; 
             margin:0 20px;
-            margin-top: 30px;
+            //margin-top: 30px;
             position: relative;
             .ivu-tooltip{
                 width:100%
@@ -416,13 +464,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{

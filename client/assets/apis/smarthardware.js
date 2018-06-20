@@ -86,6 +86,18 @@ export default  {
         url: '/api/krspace-finance-web/cmt/community/select/use/floor',
         method: 'get'
     },
+    //开门记录
+    'get-open-log-list': {
+        url: '/api/iot-platform/door-open-log/list',
+        method: 'get'
+    },
+    //通用字典
+    'get-smart-hard-ware-dict': {
+        url: '/api/iot-platform/dict/common',
+        method: 'get'
+    },
+    
+    
 
   }
 

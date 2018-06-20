@@ -70,10 +70,7 @@ export default {
          communityName:'',
          floorName:'',
          typeList:[
-             {
-                 label:'会议室',
-                 value:'BOARDROOM'
-             },
+             
              {
                  label:'路演厅',
                  value:'ROADSHOW_HALL'

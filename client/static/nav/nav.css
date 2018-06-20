@@ -169,13 +169,13 @@
   color: rgba(0, 0, 0, 0.65);
 }
 .app-header .u-header-logo {
-  width: 120px;
-  height: 34px;
+  width: 130px;
+  height: 50px;
   float: left;
-  background: url(images/logo.png) left center no-repeat;
+  background: url(images/OPLOGO.svg) left center no-repeat;
   background-size: contain;
-  margin-top: 14px;
-  margin-left: 20px;
+  margin-top: 4px;
+  /* margin-left: 20px; */
 }
 .app-header .u-header-sidebar {
   width: 180px;

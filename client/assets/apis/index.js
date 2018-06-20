@@ -14,6 +14,9 @@ import projectSetting from './projectSetting';
 import Inventory from './inventory.js';
 import Calculator from './calculator.js';
 import Smarthardware from './smarthardware.js';
+import Krmeeting from './krmeeting.js';
+import DoorRelationship from './doorRelationship.js';
+import KrmeetingRoom from './krmeetingRoom.js';
 
 export default {
   ...OrderApi,
@@ -30,5 +33,8 @@ export default {
   ...Calculator,
   ...projectSetting,
   ...Inventory,
-  ...Smarthardware
+  ...Smarthardware,
+  ...Krmeeting,
+  ...DoorRelationship,
+  ...KrmeetingRoom,
 }

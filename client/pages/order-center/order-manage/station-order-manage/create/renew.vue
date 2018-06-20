@@ -45,10 +45,6 @@
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
                 
-
-                
-
-
                 </Row>
                 <Row style="margin-bottom:10px">
                     <Col sapn="24">

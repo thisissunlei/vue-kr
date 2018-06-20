@@ -578,7 +578,6 @@ export default {
                 this.onScrollListener();
             },
             tabForms:function(val,old){
-                console.log('val--',val,old);
                 this.getListData(this.tabForms); 
                 this.floor=this.tabForms.floor;
                 this.communityId=this.tabForms.communityId;

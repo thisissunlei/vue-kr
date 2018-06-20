@@ -126,7 +126,7 @@ export default  {
     },
     //新曾重名借口
     'getNew-Rename': {
-       url: '/zhongyu/api/krspace-finance-web/cmt/goods/check-name',
+       url: '/api/krspace-finance-web/cmt/goods/check-name',
        method: 'get'
    },
 

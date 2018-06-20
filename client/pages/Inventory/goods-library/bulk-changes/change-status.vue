@@ -6,7 +6,7 @@
                       v-for="(item,index) in independentOfficeStr"
                       :key="item.id"
                     >
-                      <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
+                      <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.name}}</span>
                     </span>
                 </Form-item>
                 

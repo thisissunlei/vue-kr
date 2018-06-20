@@ -16,8 +16,8 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <!-- <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary" @click="importgoods">导入商品</Button> -->
+                <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary" @click="importgoods">导入商品</Button>
          </div>
 
             
@@ -110,7 +110,7 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">{{errdate}}</span></h2>
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">{{errdated}}</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
     
@@ -122,7 +122,7 @@
 
       <Modal
             title="添加成功!"
-            v-model="butpush"
+            v-model="butpushd"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
@@ -171,35 +171,38 @@
             <Form>
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
-            <span
+        <span>{{resect.moveStations}}</span>
+            <!-- <span
                       v-for="(item,index) in moveStationse"
                       :key="item.id"
                     >
-            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
-            </span>
+            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
+            </span> -->
      </Form-item >
 
             <Form-item  label='独立办公室：' style="text-align:left;"  >
-            <span
+                <span>{{resect.openStations}}</span>
+            <!-- <span
                       v-for="(item,index) in spaces"
                       :key="item.id"
                     >
-            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
-             </span>
+            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
+             </span> -->
             </Form-item >
 
             <Form-item  label='固定办公室：' style="text-align:left;"  >
-            <span
+                <span>{{resect.spaces}}</span>
+            <!-- <span
                       v-for="(item,index) in openStations"
                       :key="item.id"
                     >
-            <span  v-if="index!=0">,</span> <span>{{item.code}}</span>
-             </span>
+            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
+             </span> -->
             </Form-item > 
         </div>
 </Form> 
   <div slot="footer" style="text-align:center;">
-                 <Button type="primary">我知道了</Button>
+                 <Button type="primary" @click="continu">继续</Button>
             </div>
     </Modal>
 
@@ -227,12 +230,12 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span>{{errdate}},</span></h2>
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
     
              <div slot="footer">
-                 <Button type="primary"  >确定导入</Button>
+                 <Button type="primary" @click="determine" >确定导入</Button>
                  <Button type="ghost" style="margin-left:20px" >取消</Button>
             </div>
     </Modal>
@@ -241,11 +244,12 @@
 
 
     <Modal
-            title="导入失败！表格里有重名的商品"
-            v-model="butpush"
+            title="导入失败！"
+            v-model="butepush"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
+            <span>{{failurec}}</span>
             <div style="text-align:left;">
              <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
             </div>
@@ -257,11 +261,12 @@
 
     
     <Modal
-            title="导入失败！表格里未填的数据"
-            v-model="butpush"
+            title="导入失败!"
+            v-model="butdpush"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
+            <span>{{tables}}</span>
             <div style="text-align:left;">
                 <p>商品名称、楼层、房间类型、工位数量必填</p>
              <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
@@ -313,14 +318,24 @@ export default {
         },
     data() {
         return{
-            moveStationse:[],
-            openStations:[],
-            spaces:[],
+            fiteter:'',
+            tables:'',
+            failurec:'',
+            errdated:'',
+            butdpush:false,
+            butepush:false,
+            resect:{
+                moveStationse:"",
+                openStations:"",
+                spaces:"",
+            },
+           
             moveStations:'',//导入成功返回移动办公室列表
             spaces:'',//导入成功返回独立办公室列表	
             stations:'',//导入成功返回固定办公桌列表
             importsuccess:false,//导入成功	
             butsuccess:false,
+            butpushd:false,
             carel:false,
             errdate:'',
             formItem:{
@@ -465,7 +480,7 @@ export default {
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
                                 var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起';
-                                 var staRender=statusName;
+                                 var staRender=item.goodsStatusName?item.goodsStatusName:'-';
                                 return h('div', [
 
                                     h('Tooltip', {
@@ -476,8 +491,6 @@ export default {
                                     },
                                     
                                     [
-                    
-                                    
                                 ])
                             ]),
                              h('div', [
@@ -537,34 +550,34 @@ export default {
             statusOldData:[]    
         }
     },
-    mounted(){
-        var dom=document.getElementById('layout-content-main');
-        dom.addEventListener("scroll",this.onScrollListener);
-        window.addEventListener('resize',this.onResize);  
-        this.tableCommon();
-        var _this=this;
-        LISTENSIDEBAROPEN(function (params) {
-            _this.sideBar=params;
-        })
-    },
-    watch:{   
-        sideBar:function(val){
+        mounted(){
+            var dom=document.getElementById('layout-content-main');
+            dom.addEventListener("scroll",this.onScrollListener);
+            window.addEventListener('resize',this.onResize);  
             this.tableCommon();
-            this.onScrollListener();
+            var _this=this;
+            LISTENSIDEBAROPEN(function (params) {
+                _this.sideBar=params;
+            })
         },
-        tabForms:function(val,old){
-            this.getListData(this.tabForms); 
-            this.floor=this.tabForms.floor;
-           
+        watch:{   
+            sideBar:function(val){
+                this.tableCommon();
+                this.onScrollListener();
+            },
+            tabForms:function(val,old){
+                this.getListData(this.tabForms); 
+                this.floor=this.tabForms.floor;
+            
+            },
+        
         },
-    
-    },
-    destroyed(){
-        var dom=document.getElementById('layout-content-main');
-        dom.removeEventListener("scroll",this.onScrollListener);
-        window.removeEventListener('resize',this.onResize); 
-    },
-    methods:{
+        destroyed(){
+            var dom=document.getElementById('layout-content-main');
+            dom.removeEventListener("scroll",this.onScrollListener);
+            window.removeEventListener('resize',this.onResize); 
+        },
+        methods:{
         clanar(){
             window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
         },
@@ -647,45 +660,43 @@ export default {
 
         },
     upload(file){//商品导入重复
-        let _this = this;
+    // console.log('ppppppppppp',file)
+         let _this = this;
+         this.fiteter=file;
          var form = new FormData();
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
-		 var xhr = new XMLHttpRequest();
+         var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
 				 if (xhr.status === 200) {
+                     console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
-                         _this.judgeRepeat(file);
+                        _this.importsu();
+                        _this.judgeRepeat(file)
                         
+                     
 					 } else {
-                        //  _this.error(xhr.response);
-
-                        //  _this.$Notice.error({
-                        //     title:xhr.response.message
-                        //  });
-                         if(!error.message){
-                            this.getsubGods(error.data);
-                    } else{
-                        this.openMessage=true;
-                        this.MessageType="error";
-                        this.warn=error.message;
+                  if(xhr.response.code==-1){
+                      
+                            _this.getsubGods();
+                            _this.importgoods();
+                            _this.errdate=xhr.response.message;
+                    }
+                     else if(xhr.response.code==-2){
+                        _this.openMessage=true;
+                        _this.MessageType="error";
+                        _this.warn=xhr.response.message;
                     } 
 					 }
                  }
-                //  else {
-                //      _this.$Notice.error({
-                //         title:'上传失败'
-                //      });
-				//  }
+                
 			 }
 		 };
 		 xhr.open('POST','/zhongyu/api/krspace-finance-web/cmt/goods/check-excel',true);
 		 xhr.responseType = 'json';
 		 xhr.send(form);
        },
-
-
         error(response){
                    if(!error.message){
                             this.getsubGods(error.data);
@@ -697,18 +708,26 @@ export default {
         },
     
         getsubGods(){
-                    th9s.carel=!this.carel;
+                    this.carel=!this.carel;
         },
-        judgeRepeat(file){  //商品导入
+        continu(file){//继续
+        this.judgeRepeat(file);
+        this.importsu();
+        this.butpushd=!this.butpushd;
+        },
+        judgeRepeat(fiteter){  //商品导入      
+        // console.log('<iiiiiiii>',file)
+            
             let _this = this;
             var form = new FormData();
-            form.append('goodsData',file);
+            form.append('goodsData',fiteter);
             form.append('communityId',this.tabForms.communityId);
         
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
+                        console.log('eeesss2222ss', xhr.response.code )
                         if (xhr.response && xhr.response.code > 0) {
                             _this.success(xhr.response);
                         } else {
@@ -732,11 +751,14 @@ export default {
         success(response){
             this.importsu();
             this.importgoods();
+            this.fiteter=file;
+            this.resect=response.data;
+
         },
         error(response){
                   this.openMessage=true;
                   this.MessageType="error";
-                  this.warn=error.message;
+                  this.warn=response.message;
         },
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
@@ -821,6 +843,14 @@ export default {
                 return '';
             }
         },
+
+determine(file){//确定导入
+    this.getsubGods();
+    this.importsu();
+    // this.subsuccess();
+    this.judgeRepeat(file);
+},
+
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');

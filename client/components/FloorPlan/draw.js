@@ -40,21 +40,9 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
         ));
     }
 
-    function incrementCounter(e, obj) {
-        var node = obj.part;
-        var data = node.data;
-        console.log('data--',data);
-        // if (data) {
-        //   node.diagram.startTransaction("clicked");
-        //   var old = data.clickCount;
-        //   data.clickCount++;
-        //   node.diagram.model.raiseDataChanged(data, "clickCount", old, data.clickCount);
-        //   node.diagram.commitTransaction("clicked");
-        // }
-      }
     
-    function nodeCommonStatus(){
-        return null
+    function addNodeAndLink(){
+        console.log('node--');
     }
     
     //绘制
@@ -62,17 +50,13 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
-            new go.Binding("fill","color"),{ stroke:nodeCommonStatus()}),
+            new go.Binding("fill","color"),{ stroke:null}),
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置
             new go.Binding("position", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
             //元件名称
             $(go.Panel, "Table",
-                $("Button",
-                { margin: 2,
-                    click: incrementCounter },
-                $(go.Picture,{ width: 15, height: 15, source:"img/warning.png"})),
                 //元件属性
                 $(go.TextBlock,textStyle(),
                 { row: 0, column: 0,margin:5,textAlign:'center'},
@@ -81,6 +65,12 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                 { row: 1, column: 0},
                 new go.Binding("text", "property")),
             ),
+            $("Button",
+                {
+                    alignment: go.Spot.TopRight,
+                    click: addNodeAndLink  // this function is defined below
+                },
+                $(go.Picture,"/img/warning.png", { desiredSize: new go.Size(6, 6) })),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
                     enterFn(e,node)

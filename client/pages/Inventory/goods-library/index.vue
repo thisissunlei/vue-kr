@@ -146,7 +146,7 @@
                 <p>商品名称不能重复</p>
                 
             </div>
-            <div style="text-align:left;margin-top:20px;">
+            <div style="text-align:left;margin-top:20px;" v-if="vImport">
    
              <ImportFile 
             url="//jsonplaceholder.typicode.com/posts/"

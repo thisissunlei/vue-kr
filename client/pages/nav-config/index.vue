@@ -39,7 +39,7 @@
     >
         <div>
             <div>
-                <Form :model="formTop"  :rules="formValidate" label-position="top">
+                <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
                         <Col span="24">
                             <FormItem label="名称">
@@ -121,7 +121,7 @@ export default {
                 name: '',
                 code: ''
             },
-            formValidate: {
+            ruleValidate: {
                     name: [
                         { required: true, message: '不能为空', trigger: 'blur' }
                     ],
@@ -186,6 +186,7 @@ export default {
                 this.targetKeys =  existUser
             },100)
            
+
             
         },
         /**
@@ -249,8 +250,9 @@ export default {
 
 
             if(params.id ==''){
-      // this.$refs['formValidate'].validate((valid) => {
-            //         if (valid) {
+      this.$refs['formTop'].validate((valid) => {
+           console.log(params)
+                    if (valid) {
                         this.$http.post("roleSave",params).then((res)=>{
                 
                         this.editRoleId =''
@@ -258,14 +260,15 @@ export default {
                         this.getRoleEdit()
                          })
                       
-                    // } else {
-                        
-                    // }
+                    } else {
+                        console.log(params)
+                    }
             
-            // })
+            })
             }else{
-                // this.$refs['formValidate'].validate((valid) => {
-                //         if (valid) {
+                this.$refs['formTop'].validate((valid) => {
+                     console.log(params,valid)
+                        if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
                 
                         this.editRoleId =''
@@ -273,11 +276,11 @@ export default {
                         this.getRoleEdit()
                          })
                       
-                    // } else {
-                        
-                    // }
+                    } else {
+                         console.log(params)
+                    }
             
-            // })
+            })
             }
         
       

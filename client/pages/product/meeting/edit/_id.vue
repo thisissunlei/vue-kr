@@ -533,9 +533,11 @@ export default {
             
         },
         submitCreate(){
+            let {params}=this.$route;
+            this.formItem.id=params.id;
             this.$http.post('add-krmting-room', this.formItem).then((res)=>{
                 this.$Notice.success({
-                        title:'新建成功'
+                        title:'编辑成功'
                     });
                     setTimeout(function(){
                         window.close();

@@ -20,7 +20,6 @@
                 <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
          </div>
 
-            
             <Table 
                ref="selectionGoodsLibrary" 
                :loading="loading" 
@@ -99,11 +98,9 @@
                  <Button type="primary" @click="subGoods">确定添加</Button>
                  <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
             </div>
-            
-
         </Modal>
-          <Modal
 
+          <Modal
             title="注意！"
             v-model="careful"
             class-name="vertical-center-modal"
@@ -205,8 +202,6 @@
                  <Button type="primary" @click="continu">继续</Button>
             </div>
     </Modal>
-
-
       <Modal
             title="导入成功!"
             v-model="feated"
@@ -239,10 +234,6 @@
                  <Button type="ghost" style="margin-left:20px" >取消</Button>
             </div>
     </Modal>
-
-
-
-
     <Modal
            :title="feactye"
             v-model="pudyt"
@@ -666,9 +657,10 @@ export default {
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-
+                 window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
         },
         close(){
+            this.vImport=!this.vImport;
 
         },
     upload(file){//商品导入重复
@@ -694,7 +686,6 @@ export default {
                   if(xhr.response.code==-1){
                       
                             _this.getsubGods();
-                       
                             _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
@@ -711,7 +702,7 @@ export default {
                 
 			 }
 		 };
-		 xhr.open('POST','/zhongyu/api/krspace-finance-web/cmt/goods/check-excel',true);
+		 xhr.open('POST','/api/krspace-finance-web/cmt/goods/check-excel',true);
 		 xhr.responseType = 'json';
 		 xhr.send(form);
        },
@@ -763,7 +754,7 @@ export default {
                     }
                 }
             };
-            xhr.open('POST','/zhongyu/api/krspace-finance-web/cmt/goods/import/excel', true);
+            xhr.open('POST','/api/krspace-finance-web/cmt/goods/import/excel', true);
             xhr.responseType = 'json';
             xhr.send(form);
         },

@@ -16,8 +16,8 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary" @click="importgoods">导入商品</Button>
+                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
          </div>
 
             
@@ -209,7 +209,7 @@
 
       <Modal
             title="导入成功!"
-            v-model="butsuccess"
+            v-model="feated"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
@@ -218,7 +218,7 @@
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" @click="showpush">我知道了</Button>
+                 <Button type="primary" @click="primaryed">我知道了</Button>
             </div>
      </Modal>
 
@@ -244,40 +244,36 @@
 
 
     <Modal
-            title="导入失败！"
-            v-model="butepush"
+           :title="feactye"
+            v-model="pudyt"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
-            <span>{{failurec}}</span>
             <div style="text-align:left;">
              <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary">我知道了</Button>
+                 <Button type="primary" @click="getpudyt">我知道了</Button>
             </div>
      </Modal>
 
     
     <Modal
-            title="导入失败!"
-            v-model="butdpush"
+            :title="feactye"
+            v-model="butpudyt"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
-            <span>{{tables}}</span>
             <div style="text-align:left;">
                 <p>商品名称、楼层、房间类型、工位数量必填</p>
              <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary">我知道了</Button>
+                 <Button type="primary" >我知道了</Button>
             </div>
      </Modal>
-
-
 
     </div>
 </template>
@@ -298,8 +294,6 @@ import dateUtils from 'vue-dateutils';
 export default {
   
 
-    
-    
 
           name:'Join',
        components:{
@@ -319,11 +313,13 @@ export default {
     data() {
         return{
             fiteter:'',
+            feactye:'',
             tables:'',
             failurec:'',
             errdated:'',
             butdpush:false,
             butepush:false,
+            feated:false,            
             resect:{
                 moveStationse:"",
                 openStations:"",
@@ -353,6 +349,8 @@ export default {
             complete: false,
             newmodal:false,
             butpush:false,
+            pudyt:false,
+            butpudyt:false,
             vImport:false,//导入
             warn:'',
             MessageType:'',
@@ -593,7 +591,13 @@ export default {
                   },
         showStatus(){
                     this.butNewgoods();
-                },       
+                }, 
+        getpudyt(){  
+                this.pudyt=!this.pudyt;
+        },
+        getbutpudyt(){
+            this.butpudyt=!this.butpudyt
+        },      
          getsubGoods(){//注意
                      this.careful=!this.careful;
                      },
@@ -611,6 +615,9 @@ export default {
                     this.butPush();
                     this.getsubGoods();
                     this.getNew();
+            },
+            primarye(){
+                this.butsuccess=!this.butsuccess;
             },
             //添加弹窗2
             subGoods(){
@@ -633,7 +640,7 @@ export default {
                                 this.warn=error.message;
                             } 
                     })
-      },    
+            },
        //新增接口a
         getNew(){
             console.log('新增',this.newgoodForm);
@@ -646,6 +653,7 @@ export default {
                             });
                         })
         },
+
         //导入入口
         importgoods(){
                 this.vImport=!this.vImport;
@@ -665,6 +673,8 @@ export default {
         },
     upload(file){//商品导入重复
     // console.log('ppppppppppp',file)
+    // this.vImport=!this.vImport;
+         this.importgoods();
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
@@ -677,20 +687,24 @@ export default {
                      console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
                         _this.importsu();
-                        _this.judgeRepeat(file)
+                        // _this.judgeRepeat(file)
                         
                      
 					 } else {
                   if(xhr.response.code==-1){
                       
                             _this.getsubGods();
-                            _this.importgoods();
+                       
                             _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
+                         _this.getbutpudyt();
                         _this.openMessage=true;
                         _this.MessageType="error";
                         _this.warn=xhr.response.message;
+                    }else if(xhr.response.code==-3){
+                       _this.getpudyt(); 
+                       _this.feactye=xhr.response.message;
                     } 
 					 }
                  }
@@ -714,19 +728,20 @@ export default {
         getsubGods(){
                     this.carel=!this.carel;
         },
-        continu(file){//继续
-        this.judgeRepeat(file);
-        this.importsu();
-        this.butpushd=!this.butpushd;
+        primaryed(){
+            this.feated=!this.feated;
         },
-        judgeRepeat(fiteter){  //商品导入      
+        continu(){//继续
+        this.judgeRepeat();
+        this.feated=!this.feated;
+        },
+        judgeRepeat(file){  //商品导入      
         // console.log('<iiiiiiii>',file)
             
             let _this = this;
             var form = new FormData();
-            form.append('goodsData',fiteter);
+            form.append('goodsData',this.fiteter);
             form.append('communityId',this.tabForms.communityId);
-        
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -754,8 +769,7 @@ export default {
         },
         success(response){
             this.importsu();
-            this.importgoods();
-            this.fiteter=file;
+            // this.importgoods();
             this.resect=response.data;
 
         },
@@ -848,11 +862,10 @@ export default {
             }
         },
 
-determine(file){//确定导入
+determine(){//确定导入
     this.getsubGods();
-    this.importsu();
     // this.subsuccess();
-    this.judgeRepeat(file);
+    this.judgeRepeat();
 },
 
       //滚动监听

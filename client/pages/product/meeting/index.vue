@@ -291,6 +291,10 @@ export default {
             let params=Object.assign({},this.formItem);
             params.page=1;
             params.pageSize=15;
+            if(params.communityId==-1){
+                params.communityId=""
+            }
+
             this.getTableData(params);
         },
         jumpCreate(){

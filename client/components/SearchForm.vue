@@ -85,8 +85,9 @@ export default {
 			value[this.filterValue]=this.searchValue
 			value.content=this.searchValue;
 			console.log("value",value);
-			// if()
-			this.$emit("serachFormDataChanged",value)
+			if(this.serachFormDataChanged){
+				this.$emit("serachFormDataChanged",value)
+			}
 		},
         onSearch(){
             if(!this.flag){

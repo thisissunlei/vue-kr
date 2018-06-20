@@ -70,7 +70,7 @@
             title="Title"
             v-model="complete"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
                 <span style="color:red;">{{statusOldData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
@@ -82,7 +82,7 @@
             title="新增商品"
             v-model="newmodal"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <!-- /   v-if="newmodal" -->
             <Newgoods
@@ -104,7 +104,7 @@
             title="注意！"
             v-model="careful"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">{{errdated}}</span></h2>
@@ -121,7 +121,7 @@
             title="添加成功!"
             v-model="butpushd"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
                 <p>请及时在<span  @click="clanar"  style="color:red;text-decoration:underline;cursor: pointer;">平面图配置</span>中配置商品位置</p>
@@ -138,7 +138,7 @@
             title="导入商品"
             v-model="vImport"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;" class="uploadss">
                 <p>请下载模板，填写后导入</p>
@@ -146,8 +146,7 @@
                 <p>商品名称不能重复</p>
                 
             </div>
-            <div style="text-align:left;margin-top:20px;" v-if="vImport">
-   
+            <div style="text-align:left;margin-top:20px;">
              <ImportFile 
             url="//jsonplaceholder.typicode.com/posts/"
              @downFile="downFile"
@@ -164,7 +163,7 @@
             v-model="importsuccess"
             title="导入商品"
             class-name="vertical-center-modal"
-            style="text-align:center;">
+            style="text-align:left;">
             <Form>
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
@@ -206,7 +205,7 @@
             title="导入成功!"
             v-model="feated"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
                 <p>请及时在<span style="color:red;text-decoration:underline;" >平面图配置</span>中配置商品位置</p>
@@ -222,7 +221,7 @@
             title="注意！导入后会有重名的商品"
             v-model="carel"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
@@ -238,7 +237,7 @@
            :title="feactye"
             v-model="pudyt"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
              <span  style="color:red;text-decoration:underline;">请仔细检查后重新上传！</span>
@@ -254,7 +253,7 @@
             :title="feactye"
             v-model="butpudyt"
             class-name="vertical-center-modal"
-            style="text-align:center;"
+            style="text-align:left;"
             >
             <div style="text-align:left;">
                 <p>商品名称、楼层、房间类型、工位数量必填</p>

@@ -6,18 +6,30 @@
             <Row style="margin-bottom:30px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                        <selectCustomers 
+                            name="formItem.customerId" 
+                            :onchange="changeCustomer"
+                        />
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                        <selectCommunities 
+                            test="formItem" 
+                            :onchange="changeCommunity"
+                        />
+                            
                     </FormItem>
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler 
+                            name="formItem.salerId" 
+                            :onchange="changeSaler" 
+                            :value="salerName" 
+                        />
+                           
                     </FormItem>
                 </Col>
             </Row>
@@ -119,7 +131,7 @@
                             <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="5" class="discount-table-content" ></DatePicker>
+                    <Col span="5" class="discount-table-content" >
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
                     </Col>
@@ -130,8 +142,6 @@
                         <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
-
-                        
                     </Col>  
             </Row>
         </FormItem>

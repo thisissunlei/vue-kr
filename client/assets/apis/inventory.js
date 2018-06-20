@@ -140,8 +140,13 @@ export default  {
   'getNew-Whetherrepeat': {
     url: '/api/krspace-finance-web/cmt/goods/check-excel',
     method: 'post'
-},
+   },
 
+    //新增商品选择设备列表
+    'goods-service-list': {
+        url: '/api/krspace-finance-web/cmt/space/sso/list',
+        method: 'get'
+    },
 
   }
   

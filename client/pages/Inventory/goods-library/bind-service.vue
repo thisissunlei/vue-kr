@@ -1,7 +1,33 @@
 
 <template>
     <div>
-           
+     <Form ref="formItemService" :model="formItem" :rules="ruleService" label-position="left">
+        <Form-item prop="enable">
+            <RadioGroup v-model="formItem.enable" @on-change="radioChange">
+                    <Radio label="1">
+                        这是个新房间/工位（需硬件的同事协助才可完成绑定）
+                    </Radio>
+                    <Radio label="0">
+                        从现有的房间/工位的设备权限中选择（立即绑定）
+                    </Radio>
+            </RadioGroup>
+        </Form-item>
+        <Form-item  prop="room" v-if="isHave"> 
+            <Select
+                v-model="formItem.room"
+                style="width:250px"
+                placeholder="请选择房间"
+                filterable
+                clearable
+            >
+                <Option  v-for="item in roomList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
+            </Select>
+       </Form-item> 
+      </Form>
+      <div slot="footer">
+          <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+          <Button  @click="cancelStation">取消</Button>
+      </div>
     </div>
 </template>
 
@@ -9,17 +35,43 @@
 export default {  
     data() {
         return{
-           
+           formItem:{
+               enable:'',
+               room:''
+           },
+           roomList:[],
+           isHave:false,
+           ruleService:{
+               enable:[
+                    {required: true, message: '请绑定设备', trigger:'change' }
+                ],
+               room: [
+                    {required: true, message: '请选择房间/工位', trigger:'change' }
+                ]
+           }
         }
-    },
-    components: {
-      
-    },
-    methods:{
-       
     },
     mounted(){
        
+    },
+    methods:{
+       radioChange(val){
+           if(val=='0'){
+               this.isHave=true;
+           }else{
+               this.isHave=false;
+           }
+       },
+       cancelStation(){
+           this.$emit('cancel');
+       },
+       submitStation(){
+           this.$refs['formItemService'].validate((valid) => {
+                if (valid) {
+                    this.$emit('submit',this.formItem);
+                }
+           })
+       } 
     }
 }
 </script>

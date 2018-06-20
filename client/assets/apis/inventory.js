@@ -147,6 +147,11 @@ export default  {
         url: '/api/krspace-finance-web/cmt/space/sso/list',
         method: 'get'
     },
+    //新增商品添加设备
+    'goods-service-add': {
+        url: '/api/krspace-finance-web/cmt/goods/add/device',
+        method: 'post'
+    },
 
   }
   

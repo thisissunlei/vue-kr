@@ -265,6 +265,21 @@
             </div>
      </Modal>
 
+     <Modal
+            title="添加成功!"
+            v-model="openService"
+            class-name="vertical-center-modal"
+            >
+        <BindService 
+           v-if="openService"
+           @submit="submitService"
+           @cancel="cancelService"
+           :floor="floor"
+           :communityId="communityId"
+        />
+        <div slot='footer'></div>
+     </Modal>
+
     </div>
 </template>
 
@@ -281,11 +296,12 @@ import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
+import BindService from './bind-service';
 export default {
   
 
 
-          name:'Join',
+        name:'Join',
        components:{
        Loading,
        SearchForm,
@@ -295,13 +311,15 @@ export default {
        Newgoods,
          FlagLabel,
         ToolTip,
-        ImportFile
+        ImportFile,
+        BindService
     },
       props:{
             mask:String
         },
     data() {
         return{
+            openService:false,
             fiteter:'',
             feactye:'',
             tables:'',
@@ -539,6 +557,8 @@ export default {
             newgoodsData:[],
             floorList:[], 
             floor:'',
+            communityId:'',
+            serviceId:'',
             statusOldData:[]    
         }
     },
@@ -560,6 +580,7 @@ export default {
             tabForms:function(val,old){
                 this.getListData(this.tabForms); 
                 this.floor=this.tabForms.floor;
+                this.communityId=this.tabForms.communityId;
             },
         },
         destroyed(){
@@ -568,6 +589,25 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        submitService(params){
+            let data={
+                goodsType:this.newgoodForm.goodsType,
+                basicSpaceId:params.basicSpaceId,
+                id:this.serviceId
+            }
+            this.$http.post('goods-service-add',data).then((response)=>{
+                this.cancelService();
+                this.showpush();
+                this.getListData(this.tabForms);
+            }).catch((error)=>{
+               this.$Notice.error({
+                    title:error.message
+                }); 
+            })
+        },
+        cancelService(){
+            this.openService=!this.openService;
+        },
         clanar(){
             window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
         },
@@ -615,7 +655,6 @@ export default {
                        
                      this.$http.get('getNew-Rename',data).then((response)=>{
                              this.getNew();
-                             this.butPush();
                              this.butNewgoods();
                     }).catch((error)=>{
                         console.log('err',error)
@@ -631,15 +670,16 @@ export default {
             },
        //新增接口a
         getNew(){
-            console.log('新增',this.newgoodForm);
+        console.log('新增',this.newgoodForm);
         let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId});
-        this.$http.post('getNew-lyadded',data).then((response)=>{    
-            console.log('新增接口',response.data);
-                        }).catch((error)=>{
-                            this.$Notice.error({
-                                title:error.message
-                            });
-                        })
+        this.$http.post('getNew-lyadded',data).then((response)=>{ 
+            this.serviceId=response.data;
+            this.cancelService(); 
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
         },
 
         //导入入口

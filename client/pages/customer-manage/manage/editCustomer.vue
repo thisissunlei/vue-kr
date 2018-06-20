@@ -1,5 +1,5 @@
  <template>         
-            <Form ref="fromFieldValidate" :model="formItem" label-position="top" :rules="ruleValidate">
+            <Form ref="editCustomerData" :model="formItem" label-position="top" :rules="ruleValidate">
                 <Form-item label="客户名称" class="bill-search-class" prop="company">
                     <i-input 
                         v-model="formItem.company" 
@@ -43,7 +43,6 @@
                         placeholder="请选择客户类型" 
                         style="width: 252px"
                         clearable
-                        @on-change="changeGuestType"
 
                     >
                         <Option 
@@ -55,23 +54,6 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <!-- <Form-item label="客户二级来源" class="bill-search-class" prop="subSourceId">
-                    <Select 
-                        v-model="formItem.subSourceId" 
-                        placeholder="请输入订单类型" 
-                        style="width: 252px"
-                        clearable
-                        not-found-text="请先选择客户一级来源"
-                    >
-                        <Option 
-                            v-for="item in secondSource" 
-                            :value="item.value" 
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                   </Select> 
-                </Form-item> -->
                 <Form-item label="客户联系人" class="bill-search-class" prop="contactName">
                     <i-input 
                         v-model="formItem.contactName" 
@@ -104,7 +86,8 @@
         props: {
              mask:String,
              keys:String,
-             params:{}
+             params:{},
+            initailData :{}
         },
         data (){
             const validatephone = (rule, value, callback) => {
@@ -193,19 +176,12 @@
             }
         },
 
-        watch: {
-            $props: {
-                deep: true,
-                handler(nextProps) {
-                    this.formItem=Object.assign({},nextProps.params);
-                }
-            }
-        },
  
         mounted:function(){
             this.getCommunity();
             this.getCustomerSource();
             this.getCustomerTypeOptions();
+            this.formItem = this.initailData;
         },
 
         updated:function(){
@@ -219,13 +195,10 @@
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
-            this.$emit('newData', data,this.canSubmit);
+            this.$emit('editCustomer', data,this.canSubmit);
         },
 
         methods:{
-            changeGuestType(option){
-                console.log("option",option)
-            },
             getCustomerTypeOptions(){
                 this.$http.get('get-enmu-list',{enmuKey:this.industryCustomerTypeOptionsParam}).then((response)=>{   
                     

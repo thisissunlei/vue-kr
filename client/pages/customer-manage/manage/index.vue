@@ -65,6 +65,17 @@
                 <Button type="ghost" style="margin-left:8px" @click="createNew">取消</Button>
             </div>
         </Modal>
+        <Modal
+            v-model="openEdit"
+            title="编辑客户"
+            width="660"
+        >
+            <EditCustomer  @editCustomer="editCustomer" ref="editCustomerData" :initailData ="editData" v-if="openEdit" />
+            <div slot="footer">
+                <Button type="primary" @click="submitEdit('editCustomerData')">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="openEditDialog">取消</Button>
+            </div>
+        </Modal>
 
         <Modal
             v-model="openSwitch"
@@ -98,6 +109,7 @@
     import dateUtils from 'vue-dateutils';
     import SwitchCustomer from './switchCustomer';
     import Message from '~/components/Message';
+    import EditCustomer from './editCustomer';
 
     export default {
         name: 'customerAssets',
@@ -107,10 +119,13 @@
             CreateCustomer,
             HeightSearch,
             SwitchCustomer,
-            Message
+            Message,
+            EditCustomer
         },
         data () {
             return {
+                openEdit : false,
+                editData : {},
                 totalCount:0,
                 page:1,
                 pageSize:15,
@@ -120,7 +135,9 @@
                 openCreate:false,
                 upperError:'',
                 newPageData:{},
+                editPageData:{},
                 canSubmit:true,
+                editCanSubmit : true,
             /*转移客户*/
             isSwitch:false,
             switchIds:'',
@@ -140,6 +157,11 @@
                         type: 'selection',
                         title: '客户ID',
                         key: 'id',
+                        align:'center',
+                    },
+                    {
+                        title: '客户类型',
+                        key: 'typeStr',
                         align:'center',
                     },
                     {
@@ -196,6 +218,20 @@
                                             }
                                         }
                             }, '查看'),
+                            h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openEditFun(params.row)
+                                            }
+                                        }
+                            }, '编辑'),
                          ]);
 
                         
@@ -284,11 +320,36 @@
                 
 
             },
+            submitEdit(name){
+                var editPageRefs = this.$refs.editCustomerData.$refs;
+                var isSubmit = true;
+                editPageRefs[name].validate((valid,data) => {
+                    if (!valid || !this.editCanSubmit) {
+
+                        isSubmit = false
+                    }else{
+                        console.log("this.editPageData",this.editPageData);
+                    //    this.$http.post('edit-customer',this.editPageData).then( r => {
+                    //         this.openEditDialog();
+                    //         this.getListData()
+                    //     }).catch( e => {
+                    //         this.$Notice.error({
+                    //             title:e.message
+                    //         });
+                    //     })
+                    }
+                })
+            },
+            editCustomer(data,submit){
+                console.log('editCustomer',submit)
+                this.editCanSubmit = submit;
+                this.editPageData = Object.assign({},data);
+                var params = Object.assign({},data)  
+            },
             newCustomer(data,submit){
                 console.log('newCustomer',submit)
                 this.canSubmit = submit;
                 this.newPageData = Object.assign({},data);
-                var params = Object.assign({},data)  
             },
 
             //获取form数据
@@ -348,7 +409,34 @@
             //信息提示框
             onMessageChange(data){
                 this.openMessage=data;
-            }
+            },
+            openEditFun(param){
+                console.log("param",param);
+                //获取编辑客户回显数据
+                // this.$http.get('customer-detail',{id : param.id}).then((res)=>{
+                    // this.editData = res.data;
+                    this.editData = {
+                        communityId :"1",
+                        company : "姓名111",
+                        sourceId : '1',
+                        type : 'PERSONAL',
+                        contactName : "客户联系人",
+                        contactTel : '18310303043',
+                        contactMail : '88475847584@qq.com',
+                    }
+                    this.openEditDialog();
+
+                // }).catch((err)=>{
+                //     this.$Notice.error({
+                //         title:err.message
+                //     });
+                // })
+                
+            },
+            openEditDialog(){
+                this.openEdit = !this.openEdit;
+            },
+
         }
     }
 </script>

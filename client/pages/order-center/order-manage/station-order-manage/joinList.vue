@@ -492,7 +492,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less' >
 .m-join-list {
     .list-banner {
         width: 100%;
@@ -523,33 +523,35 @@ export default {
         margin: 10px 20px;
         overflow: hidden;
     }
-}
-.m-bill-search {
-    display: inline-block;
-    height: 22px;
-    margin: 16px 20px;
-    vertical-align: bottom;
-    span {
-        width: 22px;
+    .m-bill-search {
+        display: inline-block;
         height: 22px;
-        background: url("~assets/images/upperSearch.png") no-repeat center;
-        background-size: contain;
-        float: right;
+        margin: 16px 20px;
+        vertical-align: bottom;
+        span {
+            width: 22px;
+            height: 22px;
+            background: url("~assets/images/upperSearch.png") no-repeat center;
+            background-size: contain;
+            float: right;
+            cursor: pointer;
+        }
+    }
+    .m-search {
+        color: #2b85e4;
+        display: inline-block;
         cursor: pointer;
     }
+    .u-red {
+        color: red;
+    }
+    .u-nullify {
+        text-decoration: line-through;
+    }
+    .ivu-modal-footer {
+        display: none !important;
+    }
 }
-.m-search {
-    color: #2b85e4;
-    display: inline-block;
-    cursor: pointer;
-}
-.u-red {
-    color: red;
-}
-.u-nullify {
-    text-decoration: line-through;
-}
-// #nullifymodel .ivu-modal-footer {
-//     display: none !important;
-// }
+
+// #nullifymodel 
 </style>

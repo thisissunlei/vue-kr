@@ -116,7 +116,7 @@ export default {
                     render(tag, params){
                       let end=params.row.availableDetail.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.endDate)):'不限';
                       let ren=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.availableDetail.startDate))+'至'+end;
-                      return h('span',{},ren);
+                      return tag('span',{},ren);
                     } 
                 },
             ],

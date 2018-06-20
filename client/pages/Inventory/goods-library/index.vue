@@ -433,7 +433,7 @@ export default {
                      }else{
                          colorClass=''
                      }
-                    return h('span',{
+                    return tag('span',{
                             attrs: {
                                 class:colorClass
                             }
@@ -469,7 +469,7 @@ export default {
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
                                 var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起';
-                                 var staRender=statusName;
+                                var staRender=statusName;
                                 return h('div', [
 
                                     h('Tooltip', {

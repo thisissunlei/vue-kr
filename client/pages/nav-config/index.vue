@@ -95,7 +95,7 @@
                                         <tr v-for="(line,index) in  data.children" :key="index">
                                             <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:100px">{{index ==0? line.groupName:""}}</td>
                                             <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line.subGroupName}}</td>
-                                            <td  style="border:1px solid #e9eaec;height:30pxpadding-left:5px;">
+                                            <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
                                                 <RadioGroup v-model="line.subGroupRightType" >
                                                     <Radio label="NONE" >无</Radio>
                                                     <Radio label="READONLY" >读取</Radio>

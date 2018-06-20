@@ -52,6 +52,12 @@
                             </FormItem>
                         </Col>
                     </Row>
+                    <div slot="footer">
+                        <FormItem >
+                            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+                        </FormItem>
+                    </div>
+                    
                 </Form>
             </div>
             <div>

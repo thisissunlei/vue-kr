@@ -548,10 +548,9 @@ export default {
     .u-nullify {
         text-decoration: line-through;
     }
-    .ivu-modal-footer {
-        display: none !important;
-    }
 }
 
-// #nullifymodel 
+#nullifymodel .ivu-modal-footer {
+    display: none;
+}
 </style>

@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" show-sizer :current="page" @on-page-size-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" @on-page-size-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -287,6 +287,12 @@ export default {
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
+                        }).catch((e)=>{
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
                         })
                     
                     } else {
@@ -295,21 +301,27 @@ export default {
                 
                 })
             }else{
-                // this.$refs['formTop'].validate((valid) => {
-                //      console.log(params,valid)
-                //         if (valid) {
+                this.$refs['formTop'].validate((valid) => {
+                     console.log(params,valid)
+                        if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
                 
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
-                         })
+                         }).catch((e)=>{
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
+                        })
                       
-                    // } else {
-                    //      console.log(params)
-                    // }
+                    } else {
+                         console.log(params)
+                    }
             
-            // })
+            })
             }
         
       
@@ -322,6 +334,7 @@ export default {
             this.title = "新建";
             this.formTop.name='';
             this.formTop.code='';
+            this.getRoleEdit()
             this.openEdit = true;
          },
          goUpdateRole(param,vlaue){

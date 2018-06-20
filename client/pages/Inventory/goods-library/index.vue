@@ -99,7 +99,32 @@
                  <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
             </div>
         </Modal>
+                <Modal
+                        title="添加成功"
+                        v-model="eraty"
+                        class-name="vertical-center-modal"
+                        style="text-align:left;"
+                        >
+                    <RadioGroup  v-model="subbinding" style="margin-left:45px;"  >
+                                <Radio label="complete" >
+                                    这是个新房间/工位  （需硬件的同事协助才可完成绑定）
+                                </Radio>
+                                <Radio label="binding">
+                                    从现有的房间/工位的设备权限中选择（立即绑定）
+                                </Radio>
+                                <div v-if="subbinding=='binding'">
+                                            123
+                                </div>
+                                <p style="color:red;">绑定设备后，客户才有开门等设备权限</p>
+                        </RadioGroup> 
+                        <div slot="footer">
+                        <Button type="primary"  @click="subover">确定</Button>
+                        <Button type="ghost" style="margin-left:20px">跳过</Button>
+                        </div>
+                        
+                </Modal>
 
+   
           <Modal
             title="注意！"
             v-model="careful"
@@ -131,6 +156,15 @@
                  <Button type="primary" @click="showpush">我知道了</Button>
             </div>
      </Modal>
+
+
+
+
+
+
+
+
+
 
 
      <!-- 倒入商品 -->
@@ -302,6 +336,10 @@ export default {
         },
     data() {
         return{
+               subbinding:'',
+                 eraty:false,
+
+
             fiteter:'',
             feactye:'',
             tables:'',
@@ -356,6 +394,7 @@ export default {
             theHead:false,
             sideBar:true,
             loading:false,
+            
             left:'',
             width:'',
             totalCount:0,
@@ -603,14 +642,22 @@ export default {
 
             buttPush(){
                     this.butPush();
-                    this.getsubGoods();
+                    // this.eratybody()
                     this.getNew();
             },
+            eratybody(){
+                this.eraty=!this.eraty;
+  
+            },
+            subover(){
+            this.getsubGoods();
+            },  
             primarye(){
                 this.butsuccess=!this.butsuccess;
             },
             //添加弹窗2
             subGoods(){
+                this.eraty=!this.eraty;
                         //新增重名     
                      let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
                        console.log('66666666666666666666',this.tabForms);

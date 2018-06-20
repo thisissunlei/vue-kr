@@ -121,7 +121,7 @@ export default  {
     },
      //新增借口
      'getNew-lyadded': {
-        url: '/zhongyu/api/krspace-finance-web/cmt/goods/add',
+        url: '/api/krspace-finance-web/cmt/goods/add',
         method: 'post'
     },
     //新曾重名借口
@@ -140,8 +140,18 @@ export default  {
   'getNew-Whetherrepeat': {
     url: '/api/krspace-finance-web/cmt/goods/check-excel',
     method: 'post'
-},
+   },
 
+    //新增商品选择设备列表
+    'goods-service-list': {
+        url: '/api/krspace-finance-web/cmt/space/sso/list',
+        method: 'get'
+    },
+    //新增商品添加设备
+    'goods-service-add': {
+        url: '/api/krspace-finance-web/cmt/goods/add/device',
+        method: 'post'
+    },
 
   }
   

@@ -22,7 +22,7 @@
                     </Col>
                     <Col class="col">
                     <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.saleChanceId" :onchange="changeChance" :value="saleChanceId"></SelectChance>
+                        <SelectChance name="formItem.saleChanceId" @onChange="changeChance" :value="saleChanceId" :orderitems='orderitems'></SelectChance>
                         <!-- <Select
                           
                             filterable
@@ -249,6 +249,7 @@ export default {
         };
 
         return {
+            orderitems: {},
             showSaleChance: true,
             showFree: false,
             openStation: false,
@@ -465,6 +466,15 @@ export default {
     watch: {
         getFloor() {
             let _this = this;
+
+            let obj = {};
+            obj.customerId = this.formItem.customerId;
+            obj.communityId = this.formItem.communityId;
+            obj.salerId = this.formItem.salerId;
+            obj.saleChanceId = this.formItem.saleChanceId;
+            this.saleChanceId = this.formItem.saleChanceId;
+            this.orderitems = Object.assign({}, obj);
+
             if (this.formItem.communityId && this.formItem.customerId) {
                 let params = {
                     communityId: this.formItem.communityId,
@@ -594,7 +604,6 @@ export default {
                 _this.salerName = data.salerName;
                 _this.formItem.salerId = JSON.stringify(data.salerId);
 
-                console.log(data);
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
@@ -719,6 +728,8 @@ export default {
             formItem.customerId = this.formItem.customerId;
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
+            formItem.opportunityId = this.formItem.saleChanceId || '';
+
             formItem.timeRange = this.formItem.timeRange;
             formItem.rentAmount = this.formItem.rentAmount;
             formItem.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.firstPayTime));
@@ -1120,7 +1131,6 @@ export default {
             } else {
                 this.formItem.saleChanceId = value;
             }
-            console.log(value);
         },
         deleteStation: function () {
             // 工位表单的删除按钮

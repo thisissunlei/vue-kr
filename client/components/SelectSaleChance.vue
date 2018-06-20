@@ -31,10 +31,6 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
-        disabled: {
-            type: Boolean,
-            default: false,
-        },
         clearable: {
             type: Boolean,
             default: false,
@@ -47,40 +43,32 @@ export default {
     },
     data() {
         return {
-            value: '1',
+            disabled: false,
+            value: 0,
             saler: '',
             loading1: false,
             salerOptions: [
                 {
-                    label: 'New York',
-                    value: '1'
-                },
-                {
-                    label: 'London',
-                    value: '2'
-                },
-                {
-                    label: 'Sydney',
-                    value: '3'
-                },
-                {
-                    label: 'Ottawa',
-                    value: '4'
-                },
-                {
-                    label: 'Paris',
-                    value: '5'
-                },
-                {
-                    label: 'Canberra',
-                    value: '6'
+                    label: '请选择',
+                    value: 0
                 }
             ]
         };
     },
     watch: {
+        salerOptions() {
+            debugger;
+            this.value = Number(this.orderitems.saleChanceId);
+            if (this.value == 0 || !this.value) {
+                this.disabled = false;
+            } else {
+                this.disabled = true;
+            }
+        },
         orderitems() {
+
             this.getSalerChanceList();
+
         }
     },
     created() {

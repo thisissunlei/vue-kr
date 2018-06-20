@@ -19,7 +19,6 @@ export default {
     "join-bill-detail": {
         // url: "/api/krspace-op-web/order-seat-add/show",
         url: "/ben/api/op/order-seat-add/show",
-
         method: "get"
     },
     //减租订单列表－详情

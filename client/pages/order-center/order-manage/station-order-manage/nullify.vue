@@ -120,6 +120,6 @@ p {
 .m-nullify {
     padding: 5px 30px 5px 30px;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
 }
 </style>  

@@ -1061,8 +1061,6 @@ export default {
             obj.communityId = this.formItem.communityId;
             obj.salerId = this.formItem.salerId;
             this.orderitems = Object.assign({}, obj);
-
-            console.log(this.orderitems)
         },
         deleteStation: function () {
             // 工位表单的删除按钮

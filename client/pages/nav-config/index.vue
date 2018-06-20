@@ -64,16 +64,29 @@
                 数据权限：
             </div>
             <div>
-                <table class="table"  >
+                <table class="table" style="width:100%">
                     <tbody v-for="data in roleEditS" :key="data.code">
                         <tr>
-                            <td>
-                                <table class="table" style="border-collapse:collapse;border:1px solid #495060;width:100%">
+                            <td v-if="data.label == '物业档案'">
+                                <table class="table" style="border-collapse:collapse;border:1px solid #e9eaec;width:100%;border-bottom:none;" >
                                     <tbody>
                                         <tr>
-                                            <td >{{data.label}}</td>
-                                            <td ></td>
-                                            <td ></td>
+
+                                            <td style="height:30px;width:100px;padding-left:5px;">{{data.label}}</td>
+                                            <td style="height:30px;width:150px;padding-left:5px;"></td>
+                                            <td style="height:30px;padding-left:5px;"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                             <td v-else>
+                                <table class="table" style="border-collapse:collapse;border:1px solid #e9eaec;width:100%;border-top:none;border-bottom:none;" >
+                                    <tbody>
+                                        <tr>
+
+                                            <td style="height:30px;width:100px;padding-left:5px;">{{data.label}}</td>
+                                            <td style="height:30px;width:150px;padding-left:5px;"></td>
+                                            <td style="height:30px;padding-left:5px;"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -84,9 +97,9 @@
                                 <table class="table" style="border-collapse:collapse;width:100%">
                                     <tbody>
                                         <tr v-for="(line,index) in  data.children" :key="index">
-                                            <td style="border:1px solid #495060">{{index ==0? line.groupName:""}}</td>
-                                            <td  style="border:1px solid #495060">{{line.subGroupName}}</td>
-                                            <td  style="border:1px solid #495060">
+                                            <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:100px">{{index ==0? line.groupName:""}}</td>
+                                            <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line.subGroupName}}</td>
+                                            <td  style="border:1px solid #e9eaec;height:30pxpadding-left:5px;">
                                                 <RadioGroup v-model="line.subGroupRightType" >
                                                     <Radio label="NONE" >无</Radio>
                                                     <Radio label="READONLY" >读取</Radio>
@@ -362,11 +375,11 @@ export default {
     }
     .table{
         border-collapse:collapse;
-        border-color: #495060;
+        border-color: #e9eaec;
         width: 100%;
         background: red;
         td{
-            border:1px solid #495060;
+            border:1px solid #e9eaec;
         }
     }
 

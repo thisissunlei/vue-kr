@@ -31,11 +31,24 @@ function columns(){
                         },
                         style: {
                             marginRight: '5px',
+                            color:'blue',
                             cursor:'pointer'
                         },
                         on: {
                             click: () => {
-                                this.goUpdateRole("编辑权限")
+                                // this.editRoleid = params.id;
+
+                                
+                                this.$http.get('roledetail',{id:params.row.id}).then((res)=>{
+                                    // console.log(res,params)
+
+                                    this.formTop.name=params.row.name;
+                                    this.formTop.code = params.row.code;
+                                    this.roleEditS = res.data.groupList;
+                                    
+                                    this.goUpdateRole("编辑权限",params.row.id)
+                                })
+                             
                             }
                         }
                     }, '编辑权限'),
@@ -47,10 +60,13 @@ function columns(){
                         },
                           style: {
                             marginRight: '5px',
+                            color:'blue',
                             cursor:'pointer'
                         },
                         on: {
                             click: () => {
+                                // console.log(params,'params')
+                                this.roleid = params.row.id
                                 //@click="instance('warning')"
                                 this.instance('warning')
                             }
@@ -63,12 +79,14 @@ function columns(){
                            
                         },
                           style: {
+                              color:'blue',
                             marginRight: '5px',
                             cursor:'pointer'
                         },
                         on: {
                             click: () => {
-                                 this.goUpdatePerson()
+                                // this.editRoleid = params.id;
+                                 this.goUpdatePerson(params.row.id)
                             }
                         }
                     }, '分配人员')

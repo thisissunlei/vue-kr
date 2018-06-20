@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="100" show-sizer :current="page" @on-change="getRoleS"></Page>
+                  <Page :total="totalCount" show-sizer :current="page" @on-page-size-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -35,10 +35,11 @@
         v-model="openEdit"
         :title="title"
         @on-ok="ok"
-        @on-cancel="cancel">
+        @on-cancel="cancel"
+    >
         <div>
             <div>
-                <Form :model="formTop" label-position="top">
+                <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
                         <Col span="24">
                             <FormItem label="名称">
@@ -57,11 +58,11 @@
                 数据权限：
             </div>
             <div>
-                <table class="table">
+                <table class="table"  >
                     <tbody v-for="data in roleEditS" :key="data.code">
                         <tr>
                             <td>
-                                <table class="table">
+                                <table class="table" style="border-collapse:collapse;border:1px solid #495060;width:100%">
                                     <tbody>
                                         <tr>
                                             <td >{{data.label}}</td>
@@ -74,12 +75,12 @@
                         </tr>
                         <tr >
                             <td>
-                                <table class="table">
+                                <table class="table" style="border-collapse:collapse;width:100%">
                                     <tbody>
                                         <tr v-for="(line,index) in  data.children" :key="index">
-                                            <td >{{index ==0? line.groupName:""}}</td>
-                                            <td >{{line.subGroupName}}</td>
-                                            <td >
+                                            <td style="border:1px solid #495060">{{index ==0? line.groupName:""}}</td>
+                                            <td  style="border:1px solid #495060">{{line.subGroupName}}</td>
+                                            <td  style="border:1px solid #495060">
                                                 <RadioGroup v-model="line.subGroupRightType" >
                                                     <Radio label="NONE" >无</Radio>
                                                     <Radio label="READONLY" >读取</Radio>
@@ -106,6 +107,10 @@ import getColumns from './getColumns';
 export default {
     data(){
         return{
+            updatePersonid:'',
+            editRoleId:'',
+            roleid:0,
+            totalCount:0,
             userData: [],
             targetKeys: [],
             openEdit: false,
@@ -115,6 +120,14 @@ export default {
             formTop: {
                 name: '',
                 code: ''
+            },
+            ruleValidate: {
+                    name: [
+                        { required: true, message: '不能为空', trigger: 'blur' }
+                    ],
+                    code: [
+                        { required: true, message: '不能为空', trigger: 'blur' }
+                    ],
             },
             groupList:[],
             columns: getColumns.columns.call(this),
@@ -132,17 +145,18 @@ export default {
       this.getRoleEdit()
     },
     methods:{
+       
         radioGroupChange(e,item){
             console.log(e,"0000",item);
         },
-        getUserData () {
+        getUserData (param) {
             let userData = [];
-            this.$http.get('getSsoUserListAll',).then((res)=>{
+            this.$http.get('getSsoUserListAll',{id:param}).then((res)=>{
     
                 for(let item of res.data.items){
         
                     userData.push({
-                        key: item.uid,
+                        key: item.id,
                         label: item.name,
                         description: item.nickname,
                         disabled: false
@@ -153,20 +167,26 @@ export default {
             this.userData = userData;
         
         },
-        getTargetKeys () {
+        getTargetKeys (param) {
 
             let existUser = []
-            this.$http.get('existUserListAll',).then((res)=>{
+            this.$http.get('existUserListAll',{id:param}).then((res)=>{
     
                 for(let item of res.data.items){
+                    // console.log(item)
     
                 existUser.push(
-                    item.uid
+                    item.id
                 );
 
                 }
             })
-            this.targetKeys =  existUser
+            // console.log(existUser,'existUser')
+            setTimeout(()=>{
+                this.targetKeys =  existUser
+            },100)
+           
+
             
         },
         /**
@@ -190,7 +210,7 @@ export default {
         sure(){
 
             // console.log( this.targetKeys)
-            this.$http.post('addUser',{ssolds:null,id:this.targetKeys}).then((res=>{
+            this.$http.post('addUser',{ssoIdsStr:JSON.stringify(this.targetKeys),id:this.updatePersonid}).then((res=>{
               console.log('success')
             }))
 
@@ -209,29 +229,65 @@ export default {
                     title,
                     content,
                     onOk: () => {
-                        this.$Message.info('Clicked ok');
+                        this.$http.delete('roleDelete',{id:this.roleid}).then((res)=>{
+                        this.getRoleS()
+                        this.getRoleEdit()
+                             this.$Message.info("操作成功");
+                        })
                     },
                     onCancel: () => {
-                        this.$Message.info('Clicked cancel');
+                        // this.$Message.info('');
                     }
             })
         },
         ok () {
             let params = {
+                id:this.editRoleId,//
                 name:this.formTop.name,
                 code:this.formTop.code,
-                groupList:[].concat(this.roleEditS)
+                groupListStr:JSON.stringify([].concat(this.roleEditS))
             };
-            console.log(this.roleEditS,"ppppp")
-            // return;
-            this.$http.post("roleSave",params).then((res)=>{
-                console.log(res)
-            })
 
+
+            if(params.id ==''){
+      this.$refs['formTop'].validate((valid) => {
+           console.log(params)
+                    if (valid) {
+                        this.$http.post("roleSave",params).then((res)=>{
+                
+                        this.editRoleId =''
+                        this.getRoleS()
+                        this.getRoleEdit()
+                         })
+                      
+                    } else {
+                        console.log(params)
+                    }
+            
+            })
+            }else{
+                this.$refs['formTop'].validate((valid) => {
+                     console.log(params,valid)
+                        if (valid) {
+                        this.$http.post("roleEidtDetail",params).then((res)=>{
+                
+                        this.editRoleId =''
+                        this.getRoleS()
+                        this.getRoleEdit()
+                         })
+                      
+                    } else {
+                         console.log(params)
+                    }
+            
+            })
+            }
+        
+      
 
         },
         cancel () {
-            this.$Message.info('Clicked cancel');
+            // this.$Message.info('Clicked cancel');
         },
         goEdit(){
             this.title = "新建";
@@ -239,17 +295,24 @@ export default {
             this.formTop.code='';
             this.openEdit = true;
          },
-         goUpdateRole(param){
+         goUpdateRole(param,vlaue){
             this.title = param;
+            this.editRoleId = vlaue
             this.openEdit = true;
          },
          goUpdatePerson(param){
+             this.updatePersonid =param
     
             this.modalPerson = true;
-            this.getTargetKeys();
-
-            this.getUserData();
+            this.getTargetKeys(param);
+            this.getUserData(param);
          },
+        changePage(param){
+            
+            this.page = param
+        
+         this.getRoleS()
+        },
         getRoleS(){
             let params = {
                 page:this.page,
@@ -258,6 +321,8 @@ export default {
             this.$http.get('type-page',params).then((res)=>{
                
                 this.dataTable = [].concat(res.data.items);
+                this.totalCount=res.data.totalCount;
+
             })
 
         },
@@ -270,7 +335,7 @@ export default {
                 pageSize:this.pageSize
             }
             this.$http.get('roledetail').then((res)=>{
-                console.log(res,"9999999")
+              
                 this.roleEditS = res.data.groupList;
 
             })
@@ -280,7 +345,7 @@ export default {
 
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 .g-icon-manage{
     .u-search{
         padding: 20px;
@@ -289,31 +354,26 @@ export default {
     .div-table{
         padding-top: 20px;
     }
+    .table{
+        border-collapse:collapse;
+        border-color: #495060;
+        width: 100%;
+        background: red;
+        td{
+            border:1px solid #495060;
+        }
+    }
+
+   
+    .div-page{
+    margin-top: 20px;
+    text-align: right;
+    }
 }
 
-.table{
-    border-collapse:collapse;
-    border-color: #495060;
-    width: 100%;
-}
-
-td{
-
-    //  border:1px solid #495060;
-}
-.div-page{
-  margin-top: 20px;
-  text-align: right;
-}
-</style>
-<style>
-.table{
-     border-collapse:collapse;
-    border-color: #495060;
-    width: 100%;
-}
 
 </style>
+
 
 
 

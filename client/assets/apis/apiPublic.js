@@ -17,6 +17,9 @@ module.exports = {
         url:'/api/op/sys/downFile',
         method:'get'
     },
+
+
+
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',
@@ -43,7 +46,15 @@ module.exports = {
         method:'get'
     },
     'roleEdit':{
-        url:'/mockdata/77api/pm/role/action/edit',
+        url:'/api/pm/role/action/edit',
         method:'get'
     },
+    'roleDelete':{
+        url:'/api/pm/role/action/delete',
+        method:'delete'
+    },
+    'roleEidtDetail':{//'/api/pm/role/action/detail',
+        url:'/api/pm/role/action/edit',
+        method:'post'
+    }
 }

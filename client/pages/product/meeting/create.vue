@@ -92,9 +92,14 @@
                                         </UploadFile>
                                     </FormItem>
                                 </div>
-                                <FormItem label="会议室配套设施"  class="u-date">
-
-                                </FormItem>  
+                                <div class="u-community-check-list">
+                                        <div class="u-unload-label">
+                                            会议室配套设施
+                                        </div>
+                                        <CheckboxGroup v-model="checkGroup" @on-change="checkGroupChange">
+                                            <Checkbox v-for="item in deviceList" :key="item.value" :label="item.value">{{item.label}}</Checkbox>
+                                        </CheckboxGroup>
+                                </div>
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"
@@ -343,15 +348,39 @@ export default {
             imglist:[],
             endDates:'',
             startDate:'',
-
+            checkGroup:[],
+            checkList:[],
+            deviceList:[]
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
         this.getCommunityList('');
-       
+        this.getDeviceList();
     },
     methods:{
+        getDeviceList(){
+            this.$http.get('get-krmting-room-device-list').then((res)=>{
+              let list = []
+                res.data.devices.map((item)=>{
+                    let obj ={};
+                    obj.label = item.name;
+                    obj.value = item.id;
+                    list.push(obj)
+                });
+                this.deviceList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        checkGroupChange(data){
+            
+            let checkList=[].concat(this.checkGroup)
+            this.checkList=checkList.join(',');
+            this.formItem.meetingDevices=this.checkList;
+        },
         changeAppStartTime(data){
              this.formItem.appStartTime=data;
             if(this.formItem.appStartTime && this.formItem.appEndTime){
@@ -534,6 +563,9 @@ export default {
 </script> 
 <style lang="less">
 .g-create-meeting{
+    .u-community-check-list{
+        margin-bottom:10px;
+    }
     .m-detail-content{
 	    padding:30px 24px;
     }

@@ -242,7 +242,6 @@ export default{
 		}
 	},
 	mounted(){
-		console.log('defaultFileList',this.defaultFileList)
 		
 	},
 	methods:{

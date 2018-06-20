@@ -99,9 +99,14 @@
                                         </UploadFile>
                                     </FormItem>
                                 </div>
-                                <FormItem label="会议室配套设施"  class="u-date">
-                                    
-                                </FormItem>  
+                                <div class="u-community-check-list">
+                                        <div class="u-unload-label">
+                                            会议室配套设施
+                                        </div>
+                                        <CheckboxGroup v-model="checkGroup" @on-change="checkGroupChange">
+                                            <Checkbox v-for="item in deviceList" :key="item.value" :label="item.value">{{item.label}}</Checkbox>
+                                        </CheckboxGroup>
+                                </div> 
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"
@@ -353,19 +358,44 @@ export default {
             startDate:'',
             coverImgList:[],
             detailImgList:[],
-
+            checkGroup:[],
+            checkList:[],
+            deviceList:[]
 
         }
     },
     created(){
-        this.getDetailInfo()
+       
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
         this.getCommunityList('');
-       // this.getDetailInfo();
+        this.getDetailInfo()
+        this.getDeviceList();
     },
     methods:{
+        getDeviceList(){
+            this.$http.get('get-krmting-room-device-list').then((res)=>{
+              let list = []
+                res.data.devices.map((item)=>{
+                    let obj ={};
+                    obj.label = item.name;
+                    obj.value = item.id;
+                    list.push(obj)
+                });
+                this.deviceList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        checkGroupChange(data){
+            
+            let checkList=[].concat(this.checkGroup)
+            this.checkList=checkList.join(',');
+            this.formItem.meetingDevices=this.checkList;
+        },
         getDetailInfo(){
              let {params}=this.$route;
              let form={
@@ -400,6 +430,17 @@ export default {
                     this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
                     this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                     this.formItem.detailImgs=data.detailImg.join(',');
+                    let checkGroup=[];
+                    if(data.meetingDevices){
+                        data.meetingDevices.map((item)=>{
+                            checkGroup.push(item.id)
+                        })
+                        
+                    }
+                     this.checkGroup= checkGroup;
+                     this.formItem.meetingDevices=[].concat(checkGroup).join(',')
+                    
+                    
 
                 }).catch((error)=>{
                     this.$Notice.error({
@@ -592,6 +633,9 @@ export default {
 </script> 
 <style lang="less">
 .g-create-meeting{
+     .u-community-check-list{
+        margin-bottom:10px;
+    }
     .m-detail-content{
 	    padding:30px 24px;
     }

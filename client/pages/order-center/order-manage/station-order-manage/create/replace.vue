@@ -325,9 +325,8 @@
             width="90%"
             class-name="vertical-center-modal"
          >
-            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" @clear="clear"/>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap"/>
             <div slot="footer">
-                <span v-if="selectLen&&showMap">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
                 <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
                 <Button  @click="cancelStation">取消</Button>
             </div>
@@ -420,7 +419,6 @@
                 }
             };
             return {
-                selectLen:0,
                 discountCon:'',
                 entryPriceList:[],
                 openPrice:false,
@@ -862,9 +860,6 @@
            }
         },
         methods: {
-            clear(val){
-                this.selectLen=val.length;
-            },
             changeSaler(value){
                 this.formItem.salerId = value;
             },
@@ -1484,7 +1479,6 @@
                 this.showMap = true;
             },
             onResultChange:function(val){//组件互通数据的触发事件
-                this.selectLen=val.submitData.length;
                 this.stationData = val;
             },
             cancelStation:function(){//工位弹窗的取消
@@ -1492,9 +1486,7 @@
                     submitData:this.selecedStationList,
                     deleteData:[],
                 };
-                this.selectLen=0;
                 this.showMap = false
-
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;

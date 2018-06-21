@@ -193,12 +193,11 @@
         ok-text="保存"
         cancel-text="取消"
         width="95%"
-         class-name="vertical-center-modal"
+        class-name="vertical-center-modal"
      >
-         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"  @clear="clear"/>
+         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"/>
         <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap> -->
         <div slot="footer">
-            <span v-if="selectLen&&openStation">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
             <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
             <Button @click="cancelStation">取消</Button>
         </div>
@@ -258,7 +257,6 @@ import ListAndMap from '../listAndMap';
             };
             
             return {
-                selectLen:0,
                 showFree:false,
                 openStation:false,
                 customerName:'',
@@ -487,9 +485,6 @@ import ListAndMap from '../listAndMap';
            },
         },
         methods: {
-            clear(val){
-                this.selectLen=val.length;
-            },
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -1209,9 +1204,6 @@ import ListAndMap from '../listAndMap';
             },
             onResultChange(val){//组件互通数据的触发事件
 
-                let len=this.originStationList.length;
-                this.selectLen=val.submitData.length-len;
-
                 this.stationData =Object.assign({},val);    
                 console.log(this.stationData,"oooooooo",val)
             },
@@ -1220,7 +1212,6 @@ import ListAndMap from '../listAndMap';
                     submitData:this.stationList,
                     deleteData:[],
                 };
-                this.selectLen=0;
                 this.openStation = false;
 
             },

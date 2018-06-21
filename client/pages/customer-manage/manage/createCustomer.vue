@@ -19,17 +19,34 @@
                         <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="客户来源类型" class="bill-search-class" prop="sourceId">
+                <Form-item label="客户来源类型" class="bill-search-class" prop="channelType">
                     <Select 
-                        v-model="formItem.sourceId" 
-                        placeholder="请输入订单类型" 
+                        v-model="formItem.channelType" 
+                        placeholder="请选择客户来源类型" 
                         style="width: 252px"
                         clearable
-                        @on-change="firstSourceChange"
+                        @on-change="sourceTypeChange"
 
                     >
                         <Option 
-                            v-for="item in firstSource" 
+                            v-for="item in customerSourceTypeOptions" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
+                </Form-item>
+                <Form-item label="客户来源" class="bill-search-class" prop="channelId">
+                    <Select 
+                        v-model="formItem.channelId" 
+                        placeholder="请选择客户来源" 
+                        style="width: 252px"
+                        clearable
+
+                    >
+                        <Option 
+                            v-for="item in customerSourceOptions" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -43,7 +60,6 @@
                         placeholder="请选择客户类型" 
                         style="width: 252px"
                         clearable
-                        @on-change="changeGuestType"
 
                     >
                         <Option 
@@ -55,41 +71,25 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <!-- <Form-item label="客户二级来源" class="bill-search-class" prop="subSourceId">
-                    <Select 
-                        v-model="formItem.subSourceId" 
-                        placeholder="请输入订单类型" 
-                        style="width: 252px"
-                        clearable
-                        not-found-text="请先选择客户一级来源"
-                    >
-                        <Option 
-                            v-for="item in secondSource" 
-                            :value="item.value" 
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                   </Select> 
-                </Form-item> -->
-                <Form-item label="客户联系人" class="bill-search-class" prop="contactName">
+                
+                <Form-item label="客户联系人" class="bill-search-class" prop="name">
                     <i-input 
-                        v-model="formItem.contactName" 
+                        v-model="formItem.name" 
                         placeholder="请输入客户联系人"
                         style="width: 252px"
                         :maxlength="max"
                     />
                 </Form-item>
-                <Form-item label="联系人手机号" class="bill-search-class" prop="contactTel">
+                <Form-item label="联系人手机号" class="bill-search-class" prop="mobile">
                     <i-input 
-                        v-model="formItem.contactTel" 
+                        v-model="formItem.mobile" 
                         placeholder="请输入联系人手机号"
                         style="width: 252px"
                     />
                 </Form-item>
-                <Form-item label="联系人邮箱" class="bill-search-class" prop="contactMail">
+                <Form-item label="联系人邮箱" class="bill-search-class" prop="mail">
                     <i-input 
-                        v-model="formItem.contactMail" 
+                        v-model="formItem.mail" 
                         placeholder="请输入联系人邮箱"
                         style="width: 252px"
                     />
@@ -141,22 +141,24 @@
                 }
             };
             return{
-                industryCustomerTypeOptionsParam : 'com.krspace.op.api.enums.customer.CustomerType',
-                customerTypeOptions :[],
+                customerSourceTypeOptionsParam : 'com.krspace.order.api.enums.customer.CsrChannelType',
+                customerSourceTypeOptions :[],
+                customerSourceOptions:[],
+                customerTypeOptions:[],
                 dateError:false,
                 effectError:false,
                 canSubmit:true,
                 formItem:{
-                	sourceId:'',
-                	contactTel:'',
-                	contactName:'',
-                	contactMail:'',
                 	company:'',
-                	communityId:''
+                	communityId:'',
+                	channelType:'',
+                	channelId:'',
+                	type:'',
+                	name:'',
+                	mobile:'',
+                	mail:'',
                 },
                 statusList:[],
-                firstSource:[],
-                secondSource:[],
                 communityList:[],
                 max:25,
                 maxName:50,
@@ -168,24 +170,24 @@
                         { required: true, message: '请填写客户名称',trigger: 'change'},
                         { required: true, trigger: 'blur' ,validator: validateName},
                     ],
-                    contactMail:[
+                    mail:[
                         { required: true, message: '请填写客户联系人邮箱',type:"email"}
                     ],
-                    contactName:[
+                    name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    contactTel:[
+                    mobile:[
                         { required: true, message: '请填写客户联系人电话'},
                         { required: true, trigger: 'blur' ,validator: validatephone},
 
                     ],
-                    sourceId:[
-                        { required: true, message: '请选择客户来源'}
+                    channelType:[
+                        { required: true, message: '请选择客户来源类型'}
                     ],
                     type:[
                         { required: true, message: '请选择客户类型'}
                     ],
-                    subSourceId:[
+                    channelId:[
                         { required: true, message: '请选择客户来源',}
                         
                     ]
@@ -204,7 +206,7 @@
  
         mounted:function(){
             this.getCommunity();
-            this.getCustomerSource();
+            this.getCustomerSourceTypeOptions();
             this.getCustomerTypeOptions();
         },
 
@@ -216,6 +218,7 @@
                     haveNull = true;
                 }
             }
+            console.log("haveNull",haveNull)
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
@@ -223,13 +226,26 @@
         },
 
         methods:{
-            changeGuestType(option){
-                console.log("option",option)
-            },
+            
+            //获取客户类型列表
             getCustomerTypeOptions(){
-                this.$http.get('get-enmu-list',{enmuKey:this.industryCustomerTypeOptionsParam}).then((response)=>{   
+                var param = {enmuKey : "com.krspace.op.api.enums.customer.CustomerType"}
+                this.$http.get('get-enmu-list',param).then((response)=>{   
                     
                     this.customerTypeOptions = response.data.map(item=>{
+                        item.label = item.desc;
+                        return item;
+                    })
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                }) 
+            },
+            getCustomerSourceTypeOptions(){
+                this.$http.get('get-enmu-list',{enmuKey:this.customerSourceTypeOptionsParam}).then((response)=>{   
+                    
+                    this.customerSourceTypeOptions = response.data.map(item=>{
                         item.label = item.desc;
                         return item;
                     })
@@ -248,36 +264,24 @@
                         });
                     })
             },
-            getCustomerSource(){
-                this.$http.get('get-customer-source','').then((response)=>{   
-                    this.firstSource = response.data.map(item=>{
-                        item.value = item.id+'';
+            
+            
+            sourceTypeChange(value){
+                console.log("value",value);
+                var param = {type : value}
+                this.$http.get('get-customermanage-customer-type',param).then((response)=>{    
+                    console.log("response",response);
+                     this.customerSourceOptions = response.data.map(item=>{
                         item.label = item.name;
+                        item.value = item.id;
                         return item;
                     })
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
                     });
-                }) 
-            },
-            
-            firstSourceChange(value){
-        
-                let secondSource = []
-                let list = []
-                secondSource = this.firstSource.filter(item=>{
-                    if(item.id == this.formItem.sourceId){
-                        list = item.subSources || [];
-                        return true;
-                    }
-                    return false
                 })
-                this.secondSource =list.map(item=>{
-                    item.value = item.id+'';
-                        item.label = item.name;
-                        return item;
-                });
+              
             },
 
         }

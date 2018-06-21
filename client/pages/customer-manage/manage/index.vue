@@ -158,6 +158,7 @@
                         title: '客户ID',
                         key: 'id',
                         align:'center',
+                        width:60,
                     },
                     {
                         title: '客户类型',
@@ -224,7 +225,10 @@
                                             size: 'small'
                                         },
                                         style: {
-                                            color:'#2b85e4'
+                                            color:'#2b85e4',
+                                            display:"block",
+                                            marginLeft:"7px"
+                                            // display:params.row.crmId?'block':"none"
                                         },
                                         on: {
                                             click: () => {
@@ -298,15 +302,17 @@
                 this.upperData=params;
             },
             submitCreate(name){
+
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    console.log('======validate',this.canSubmit)
+                newPageRefs[name].validate((valid) => {
                     if (!valid || !this.canSubmit) {
 
                         isSubmit = false
                     }else{
-                       this.$http.post('add-customer',this.newPageData).then( r => {
+                        var addNewData = this.newPageData;
+                        console.log("addNewData",addNewData);
+                       this.$http.post('add-customer',addNewData).then( r => {
                             this.openCreate = false;
                             this.getListData()
                         }).catch( e => {
@@ -329,25 +335,23 @@
                         isSubmit = false
                     }else{
                         console.log("this.editPageData",this.editPageData);
-                    //    this.$http.post('edit-customer',this.editPageData).then( r => {
-                    //         this.openEditDialog();
-                    //         this.getListData()
-                    //     }).catch( e => {
-                    //         this.$Notice.error({
-                    //             title:e.message
-                    //         });
-                    //     })
+                       this.$http.post('edit-customer',this.editPageData).then( r => {
+                            this.openEditDialog();
+                            this.getListData()
+                        }).catch( e => {
+                            this.$Notice.error({
+                                title:e.message
+                            });
+                        })
                     }
                 })
             },
             editCustomer(data,submit){
-                console.log('editCustomer',submit)
                 this.editCanSubmit = submit;
                 this.editPageData = Object.assign({},data);
                 var params = Object.assign({},data)  
             },
             newCustomer(data,submit){
-                console.log('newCustomer',submit)
                 this.canSubmit = submit;
                 this.newPageData = Object.assign({},data);
             },
@@ -411,26 +415,25 @@
                 this.openMessage=data;
             },
             openEditFun(param){
-                console.log("param",param);
+                
                 //获取编辑客户回显数据
-                // this.$http.get('customer-detail',{id : param.id}).then((res)=>{
-                    // this.editData = res.data;
-                    this.editData = {
-                        communityId :"1",
-                        company : "姓名111",
-                        sourceId : '1',
-                        type : 'PERSONAL',
-                        contactName : "客户联系人",
-                        contactTel : '18310303043',
-                        contactMail : '88475847584@qq.com',
-                    }
+                this.$http.get('get-customer-detail',{customerId : param.id}).then((res)=>{
+                    // PERSONAL  ENTERPRISE
+                    console.log("res.data.detail",res.data.detail,"res.data.detail.communityId",res.data.detail.communityId)
+                    var responseData = Object.assign({},res.data.detail)
+                    this.editData = Object.assign({},responseData);
+                    // this.editData = res.data.detail;
+
+                    
+
+                    
                     this.openEditDialog();
 
-                // }).catch((err)=>{
-                //     this.$Notice.error({
-                //         title:err.message
-                //     });
-                // })
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
                 
             },
             openEditDialog(){

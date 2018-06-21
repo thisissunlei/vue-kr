@@ -19,17 +19,34 @@
                         <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="客户来源类型" class="bill-search-class" prop="sourceId">
+                <Form-item label="客户来源类型" class="bill-search-class" prop="channelType">
                     <Select 
-                        v-model="formItem.sourceId" 
-                        placeholder="请输入订单类型" 
+                        v-model="formItem.channelType" 
+                        placeholder="请选择客户来源类型" 
                         style="width: 252px"
                         clearable
-                        @on-change="firstSourceChange"
+                        @on-change="sourceTypeChange"
 
                     >
                         <Option 
-                            v-for="item in firstSource" 
+                            v-for="item in customerSourceTypeOptions" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
+                </Form-item>
+                <Form-item label="客户来源" class="bill-search-class" prop="channelId">
+                    <Select 
+                        v-model="formItem.channelId" 
+                        placeholder="请选择客户来源" 
+                        style="width: 252px"
+                        clearable
+
+                    >
+                        <Option 
+                            v-for="item in customerSourceOptions" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -43,7 +60,8 @@
                         placeholder="请选择客户类型" 
                         style="width: 252px"
                         clearable
-
+                        :disabled="isCompany"
+                        
                     >
                         <Option 
                             v-for="item in customerTypeOptions" 
@@ -54,26 +72,29 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="客户联系人" class="bill-search-class" prop="contactName">
+                
+                <Form-item v-if="!isCompany" label="客户联系人" class="bill-search-class" prop="name">
                     <i-input 
-                        v-model="formItem.contactName" 
+                        v-model="formItem.name" 
                         placeholder="请输入客户联系人"
                         style="width: 252px"
                         :maxlength="max"
                     />
                 </Form-item>
-                <Form-item label="联系人手机号" class="bill-search-class" prop="contactTel">
+                <Form-item v-if="!isCompany" label="联系人手机号" class="bill-search-class" prop="mobile">
                     <i-input 
-                        v-model="formItem.contactTel" 
+                        v-model="formItem.mobile" 
                         placeholder="请输入联系人手机号"
                         style="width: 252px"
+                        
                     />
                 </Form-item>
-                <Form-item label="联系人邮箱" class="bill-search-class" prop="contactMail">
+                <Form-item v-if="!isCompany" label="联系人邮箱" class="bill-search-class" prop="mail">
                     <i-input 
-                        v-model="formItem.contactMail" 
+                        v-model="formItem.mail" 
                         placeholder="请输入联系人邮箱"
                         style="width: 252px"
+                        
                     />
                 </Form-item>
          </Form>
@@ -90,6 +111,7 @@
             initailData :{}
         },
         data (){
+            let _this =this;
             const validatephone = (rule, value, callback) => {
                 let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
                 if (!phone.test(value)) {
@@ -106,36 +128,46 @@
                     this.canSubmit = false
                     callback(new Error('请填写客户联系人'));
                 }else{
-                   
-                    this.$http.get('check-company', {company:value}).then( r => {
-                        if(r.message == "ok"){
-                            this.canSubmit = true;
-                            callback()
-                        }else{
-                           callback(new Error('客户名称不可重复')) 
-                        }
-                    }).catch( e => {
-                        this.canSubmit = false;
-                        callback(new Error('客户名称不可重复')) 
+                   if(value==_this.initailData.company){
+                       this.canSubmit = true;
+                       callback()
+                   }else{
+                       this.$http.get('check-company', {company:value}).then( r => {
+                            if(r.message == "ok"){
+                                this.canSubmit = true;
+                                callback()
+                            }else{
+                                callback(new Error('客户名称不可重复')) 
+                            }
+                        }).catch( e => {
+                            this.canSubmit = false;
+                            callback(new Error('客户名称不可重复')) 
 
-                        
-                    })
+                            
+                        })
 
+                    }
+                    
                 }
             };
             return{
-                industryCustomerTypeOptionsParam : 'com.krspace.op.api.enums.customer.CustomerType',
-                customerTypeOptions :[],
+                isCompany : false,
+                customerSourceTypeOptionsParam : 'com.krspace.order.api.enums.customer.CsrChannelType',
+                customerSourceTypeOptions :[],
+                customerSourceOptions:[],
+                customerTypeOptions:[],
                 dateError:false,
                 effectError:false,
                 canSubmit:true,
                 formItem:{
-                	sourceId:'',
-                	contactTel:'',
-                	contactName:'',
-                	contactMail:'',
                 	company:'',
-                	communityId:''
+                	communityId:1,
+                	channelType:'',
+                	channelId:'',
+                	type:'',
+                	name:'',
+                	mobile:'',
+                	mail:'',
                 },
                 statusList:[],
                 firstSource:[],
@@ -151,26 +183,25 @@
                         { required: true, message: '请填写客户名称',trigger: 'change'},
                         { required: true, trigger: 'blur' ,validator: validateName},
                     ],
-                    contactMail:[
+                    mail:[
                         { required: true, message: '请填写客户联系人邮箱',type:"email"}
                     ],
-                    contactName:[
+                    name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    contactTel:[
+                    mobile:[
                         { required: true, message: '请填写客户联系人电话'},
                         { required: true, trigger: 'blur' ,validator: validatephone},
 
                     ],
-                    sourceId:[
-                        { required: true, message: '请选择客户来源'}
+                    channelType:[
+                        { required: true, message: '请选择客户来源类型'}
                     ],
                     type:[
                         { required: true, message: '请选择客户类型'}
                     ],
-                    subSourceId:[
+                    channelId:[
                         { required: true, message: '请选择客户来源',}
-                        
                     ]
                 },
             }
@@ -179,28 +210,40 @@
  
         mounted:function(){
             this.getCommunity();
-            this.getCustomerSource();
+            this.getCustomerSourceTypeOptions();
             this.getCustomerTypeOptions();
-            this.formItem = this.initailData;
+            console.log("this.initailData",this.initailData)
+            this.formItem =Object.assign({},this.initailData);
+            console.log("this.formItem",this.formItem)
+            this.formItem.communityId = this.initailData.communityId+"";
+            console.log("this.formItem",this.formItem)
+            this.isCompany = this.initailData.type=="ENTERPRISE"?true:false;
         },
+        
 
         updated:function(){
         	var data = false;
             var haveNull = false;
+
             for(let key in this.formItem){
                 if(!this.formItem[key]){
                     haveNull = true;
                 }
             }
+            console.log("haveNull",haveNull);
+
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
+            console.log("this.canSubmit",this.canSubmit);
             this.$emit('editCustomer', data,this.canSubmit);
         },
 
         methods:{
+            //获取客户类型列表
             getCustomerTypeOptions(){
-                this.$http.get('get-enmu-list',{enmuKey:this.industryCustomerTypeOptionsParam}).then((response)=>{   
+                var param = {enmuKey : "com.krspace.op.api.enums.customer.CustomerType"}
+                this.$http.get('get-enmu-list',param).then((response)=>{   
                     
                     this.customerTypeOptions = response.data.map(item=>{
                         item.label = item.desc;
@@ -212,6 +255,36 @@
                     });
                 }) 
             },
+            getCustomerSourceTypeOptions(){
+                this.$http.get('get-enmu-list',{enmuKey:this.customerSourceTypeOptionsParam}).then((response)=>{   
+                    
+                    this.customerSourceTypeOptions = response.data.map(item=>{
+                        item.label = item.desc;
+                        return item;
+                    })
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                }) 
+            },
+            sourceTypeChange(value){
+                var param = {type : value}
+                this.$http.get('get-customermanage-customer-type',param).then((response)=>{    
+                    console.log("response",response);
+                     this.customerSourceOptions = response.data.map(item=>{
+                        item.label = item.name;
+                        item.value = item.id;
+                        return item;
+                    })
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
+              
+            },
+          
              getCommunity(){
                 this.$http.get('join-bill-community','').then((response)=>{    
                         this.communityList=response.data.items 
@@ -221,37 +294,8 @@
                         });
                     })
             },
-            getCustomerSource(){
-                this.$http.get('get-customer-source','').then((response)=>{   
-                    this.firstSource = response.data.map(item=>{
-                        item.value = item.id+'';
-                        item.label = item.name;
-                        return item;
-                    })
-                }).catch((error)=>{
-                    this.$Notice.error({
-                        title:error.message
-                    });
-                }) 
-            },
             
-            firstSourceChange(value){
-        
-                let secondSource = []
-                let list = []
-                secondSource = this.firstSource.filter(item=>{
-                    if(item.id == this.formItem.sourceId){
-                        list = item.subSources || [];
-                        return true;
-                    }
-                    return false
-                })
-                this.secondSource =list.map(item=>{
-                    item.value = item.id+'';
-                        item.label = item.name;
-                        return item;
-                });
-            },
+            
 
         }
     }

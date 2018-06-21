@@ -242,6 +242,7 @@ export default {
                 console.log('success')
                 this.getRoleS()
                 this.getRoleEdit()
+                this.$Message.info("操作成功");
                 
             }))
 
@@ -263,11 +264,11 @@ export default {
                         this.$http.delete('roleDelete',{id:this.roleid}).then((res)=>{
                         this.getRoleS()
                         this.getRoleEdit()
-                             this.$Message.info("操作成功");
+                        this.$Message.info("操作成功");
                         })
                     },
                     onCancel: () => {
-                        // this.$Message.info('');
+                        this.$Message.info('取消操作');
                     }
             })
         },
@@ -290,6 +291,7 @@ export default {
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
+                         this.$Message.info("操作成功");
                         }).catch((e)=>{
                             console.log(e)
                              this.$Notice.info({
@@ -312,6 +314,7 @@ export default {
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
+                         this.$Message.info("操作成功");
                          }).catch((e)=>{
                             console.log(e)
                              this.$Notice.info({

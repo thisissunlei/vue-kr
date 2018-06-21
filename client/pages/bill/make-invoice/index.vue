@@ -23,13 +23,13 @@
                     <List v-if="type == 'waitMake'" :type="type" status="APPLYING"/>
                 </TabPane>
                 <TabPane label="已开发票" name="alreadyMake" >
-                    <List v-if="type == 'alreadyMake'" :type="type" status="INVOICED"/>
+                    <List v-if="type == 'alreadyMake'" :type="type" status="SIGNED_POST,SIGNED,RECEIVED,RECOVERYED,INVOICED"/>
                 </TabPane>
                 <TabPane label="待重开" name="returnMake" >
                     <List v-if="type == 'returnMake'" :type="type" status="RECOVERYED" />
                 </TabPane>
                 <TabPane label="全部" name="all">
-                    <List v-if="type == 'all'" :type="type" status="RECOVERYED,APPLYING,INVOICED"/>
+                    <List v-if="type == 'all'" :type="type" status="SIGNED_POST,SIGNED,RECEIVED,RECOVERYED,APPLYING,INVOICED"/>
                 </TabPane>
             </Tabs>
         </div>

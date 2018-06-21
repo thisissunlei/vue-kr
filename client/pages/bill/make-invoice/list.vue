@@ -28,7 +28,7 @@
                 width="500"
             >
             <div style="text-align:left;border:1px dashed #dddada;" v-if="openMakeInvaice">
-                <div v-for="(item,index) in invoiceData" :key="index">
+                <div v-for="(item,index) in invoiceData" :key="item.fileId">
                     <div  style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">  
                         <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  
                     </div>
@@ -60,9 +60,14 @@
                 width="660"
             >
             <div>
-                <span style="height:30px;display:inline-block;">回退原因:</span>
+                <Form ref="formValidate" :model="backData" :rules="ruleBackData">
+                    <FormItem prop="refundReason">
+                         <span style="height:30px;display:inline-block;">回退原因:</span>
                 
-                <Input v-model="backData.refundReason" :maxlength="200" type="textarea" :rows="4" placeholder="请输入退回原因" />
+                        <Input v-model="backData.refundReason" :maxlength="200" type="textarea" :rows="4" placeholder="请输入退回原因" />    
+                    </FormItem>
+                   
+                </Form >
             </div>
             <div slot="footer">
                 <Button type="primary" @click="goBackSubmit">确定</Button>
@@ -134,7 +139,7 @@ import utils from '~/plugins/utils';
                 },
                  ruleBackData: {
                     refundReason: [
-                        { required: true, message: '退回原因必填', trigger: 'blur' }
+                        { required: true, message: '退回原因必填', trigger: 'change' }
                     ],
                     
                 },
@@ -217,6 +222,7 @@ import utils from '~/plugins/utils';
                 let index = columnDetail.index;
                 this.invoiceData[index].fileId = params[0].fileId;
                 this.invoiceData[index].columnDetail = [].concat(params);
+                
                 this.changeData = new Date()
             },
             deleteData(index){
@@ -268,16 +274,24 @@ import utils from '~/plugins/utils';
             },
             //回退提交
             goBackSubmit(){
-                let params = Object.assign({},this.backData);
-                this.$http.post('csr-invoice-refund', params).then((res)=>{
-                   
-                    this.getListData();
-                    this.switchGoBack();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
+                // if(!this.backData.refundReason){
+                //     return ;
+                // }
+                this.$refs['formValidate'].validate((valid) => {
+                    if (valid) {
+                        let params = Object.assign({},this.backData);
+                        this.$http.post('csr-invoice-refund', params).then((res)=>{
+                        
+                            this.getListData();
+                            this.switchGoBack();
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
+                    }
                 })
+                
             },
             //开票按钮点击
             makeInvaice(data){  
@@ -338,7 +352,7 @@ import utils from '~/plugins/utils';
                 let postData = {
                     ticket:JSON.stringify(params)
                 }
-                console.log('=====>',postData)
+              
                 this.$http.post('post-new-invoice', postData).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();

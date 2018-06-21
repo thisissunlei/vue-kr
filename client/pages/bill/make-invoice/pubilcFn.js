@@ -193,7 +193,7 @@ function initListData(){
             title: '相关账单',
             key: 'billNUms',
             align:'center',
-            type:'alreadyMake,returnMake'
+            type:'waitMake,alreadyMake,returnMake'
         },
         {
             title: '开票状态',

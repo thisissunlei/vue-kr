@@ -166,7 +166,6 @@
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
-                                    placeholder="00:00" 
                                     style="width: 122px" 
                                     v-model="form.appStartTime"
                                     @on-change="changeAppStartTime"
@@ -174,8 +173,7 @@
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
-                                    format="HH:mm" 
-                                    placeholder="24:00" 
+                                    format="HH:mm"  
                                     style="width: 122px" 
                                     v-model="form.appEndTime"
                                     @on-change="changeAppEndTime"
@@ -213,7 +211,6 @@
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
-                                    placeholder="00:00" 
                                     style="width: 122px" 
                                     v-model="form.krmStartTime"
                                     :steps="[1,30]"
@@ -222,8 +219,7 @@
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
-                                    format="HH:mm" 
-                                    placeholder="24:00" 
+                                    format="HH:mm"
                                     style="width: 122px"
                                     v-model="form.krmEndTime" 
                                     :steps="[1,30]"
@@ -285,9 +281,9 @@ export default {
                 floor:'',
                 kmPromotionUnitPrice:'',
                 kmUnitPrice:'',
-                krmEndTime:'19:00:00',
+                krmEndTime:'19:00',
                 krmPublish:'',
-                krmStartTime:'09:00:00',
+                krmStartTime:'09:00',
                 lockBeginTime:'',
                 lockEndTime:'',
                 meetingDevices:''
@@ -295,10 +291,10 @@ export default {
             form:{
                startHour:'', 
                endHour:'',
-               appStartTime:'00:00:00',
-               appEndTime:'23:30:00',
-               krmStartTime:'09:00:00',
-               krmEndTime:'19:00:00',
+               appStartTime:'00:00',
+               appEndTime:'23:30',
+               krmStartTime:'09:00',
+               krmEndTime:'19:00',
 
             },
             isKrmError:false,
@@ -639,6 +635,9 @@ export default {
         margin-bottom:10px;
     }
     .m-detail-content{
+        width:100%;
+        max-width: 1300px;
+        box-sizing: border-box;
 	    padding:30px 24px;
     }
     .u-error{

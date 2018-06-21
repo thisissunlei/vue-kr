@@ -69,7 +69,7 @@
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
-                                            :maxSize="300"
+                                            :maxSize="2048"
                                             :maxLen="1"
                                             :onSuccess="coverImgSuccess"
                                             :onRemove="coverImgRemove"
@@ -77,7 +77,7 @@
                                             :onFormatError="imgSizeFormat"
                                             :defaultFileList="coverImgList"
                                         >
-                                            <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                                            <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
                                     </FormItem>
                                 </div>
@@ -89,7 +89,7 @@
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
-                                            :maxSize="300"
+                                            :maxSize="2048"
                                             :onSuccess="detailImgsSuccess"
                                             :onRemove="detailImgsRemove"
                                             :onExceededSize="imgSize"
@@ -97,7 +97,7 @@
                                             :defaultFileList="detailImgList"
                                             
                                         >
-                                            <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                                            <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
                                     </FormItem>
                                 </div>
@@ -509,6 +509,7 @@ export default {
         },
         coverImgSuccess(file){
             this.formItem.coverImg=file.data.url;
+             this.$refs.formItems.validateField('coverImg') 
         },
         detailImgsRemove(fileList){
             let imglist=[];
@@ -525,6 +526,7 @@ export default {
             })
             let detailImgs=imglist.join(',');
             this.formItem.detailImgs=detailImgs;
+            this.$refs.formItems.validateField('detailImgs') 
             
         },
         getFloor(){
@@ -652,7 +654,7 @@ export default {
 <style lang="less">
 .g-create-meeting{
      .u-community-check-list{
-        margin-bottom:10px;
+        margin-bottom:24px;
     }
     .m-detail-content{
         width:100%;
@@ -692,6 +694,10 @@ export default {
     }
     .u-upload{
         width:100%;
+        .ivu-form-item-label{
+           width:100%;
+           text-align: left;
+       } 
     }
     .u-unload-label{
         font-size: 12px;

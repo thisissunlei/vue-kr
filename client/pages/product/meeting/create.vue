@@ -478,9 +478,14 @@ export default {
                
                if(this.startDate && this.startHour){
                    this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+               }else{
+                   this.formItem.lockBeginTime=""
                }
+
                if(this.endDates && this.endHour){
                    this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+               }else{
+                    this.formItem.lockEndTime=""
                }
               
                 this.$refs[name].validate((valid) => {

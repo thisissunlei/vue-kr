@@ -431,7 +431,7 @@ export default {
                         this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                          this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                     }
-                    if(data.detailImgs){
+                    if(data.detailImg){
                          this.formItem.detailImgs=data.detailImg.join(',');
                     }
                     let checkGroup=[];
@@ -552,9 +552,13 @@ export default {
                
                if(this.startDate && this.startHour){
                    this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+               }else{
+                   this.formItem.lockBeginTime=""
                }
                if(this.endDates && this.endHour){
                    this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+               }else{
+                    this.formItem.lockEndTime=""
                }
               
                 this.$refs[name].validate((valid) => {
@@ -601,10 +605,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

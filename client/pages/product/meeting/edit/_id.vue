@@ -553,17 +553,17 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-              console.log('this.formItem----->>>',this.formItem)
-            //    if(this.startDate && this.startHour){
-            //        this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
-            //    }else{
-            //        this.formItem.lockBeginTime=""
-            //    }
-            //    if(this.endDates && this.endHour){
-            //        this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-            //    }else{
-            //         this.formItem.lockEndTime=""
-            //    }
+             
+               if(this.startDate && this.startHour){
+                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+               }else{
+                   this.formItem.lockBeginTime=""
+               }
+               if(this.endDates && this.endHour){
+                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+               }else{
+                    this.formItem.lockEndTime=""
+               }
               
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -609,10 +609,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    // setTimeout(function(){
-                    //     window.close();
-                    //     window.opener.location.reload();
-                    // },1000) 
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

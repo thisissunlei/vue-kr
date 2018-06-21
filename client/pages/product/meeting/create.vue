@@ -28,7 +28,6 @@
                                         v-model="formItem.floor"
                                         style="width:250px"
                                         placeholder="请选择"
-                                        filterable
                                         clearable
                                     >
                                         <Option  v-for="item in floorsList" :value="`${item.value}`"  :key="item.value" >{{ item.label }}</Option>

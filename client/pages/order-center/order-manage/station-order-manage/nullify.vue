@@ -120,7 +120,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
 p {
     text-align: left;
     margin-top: 10px;

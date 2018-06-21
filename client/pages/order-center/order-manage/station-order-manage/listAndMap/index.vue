@@ -73,6 +73,7 @@ export default {
            }else{
                this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
            }
+           console.log('val--',val);
            this.$emit('on-result-change',val);
        },
        goSearch(){

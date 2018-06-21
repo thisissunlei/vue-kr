@@ -265,7 +265,7 @@ export default {
                 name:'',
                 appBusyPrice:'',
                 appIdlePrice:'',
-                appEndTime:'00:00:00',
+                appEndTime:'23:30:00',
                 appPublish:'',
                 appStartTime:'00:00:00',
                 area:'',
@@ -288,7 +288,7 @@ export default {
                startHour:'', 
                endHour:'',
                appStartTime:'00:00:00',
-               appEndTime:'00:00:00',
+               appEndTime:'23:30:00',
                krmStartTime:'09:00:00',
                krmEndTime:'19:00:00',
 

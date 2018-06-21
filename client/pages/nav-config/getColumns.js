@@ -31,7 +31,7 @@ function columns(){
                         },
                         style: {
                             marginRight: '5px',
-                            color:'blue',
+                            color:'rgb(43, 133, 228)',
                             cursor:'pointer'
                         },
                         on: {
@@ -60,7 +60,7 @@ function columns(){
                         },
                           style: {
                             marginRight: '5px',
-                            color:'blue',
+                            color:'rgb(43, 133, 228)',
                             cursor:'pointer'
                         },
                         on: {
@@ -79,7 +79,7 @@ function columns(){
                            
                         },
                           style: {
-                              color:'blue',
+                              color:'rgb(43, 133, 228)',
                             marginRight: '5px',
                             cursor:'pointer'
                         },

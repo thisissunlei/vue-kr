@@ -851,7 +851,7 @@
                         },
                        
                         {
-                            primaryText: '角色权限',
+                            primaryText: '项目管理权限',
                             menuCode: 'sso_loginLog_base',
                             type: 'vue',
                             router: 'nav-config'

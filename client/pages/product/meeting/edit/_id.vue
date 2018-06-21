@@ -410,10 +410,16 @@ export default {
                     data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;
-                    this.form.appStartTime=data.appStartTime.substring(0,6);
-                    this.form.appEndTime=data.appEndTime.substring(0,6);
-                    this.form.krmStartTime=data.krmStartTime.substring(0,6);
-                    this.form.krmEndTime=data.krmEndTime.substring(0,6);
+                    this.form.appStartTime=data.appStartTime.substring(0,5);
+                    console.log('88888',data.appEndTime.substring(0,3))
+                    if(data.appEndTime.substring(0,2)==24){
+                        this.form.appEndTime='23:30';
+                    }else{
+                        this.form.appEndTime=data.appEndTime.substring(0,5);
+                    }
+                  
+                    this.form.krmStartTime=data.krmStartTime.substring(0,5);
+                    this.form.krmEndTime=data.krmEndTime.substring(0,5);
                     let coverImgList=[];
                     coverImgList.push({'url':data.coverImg});
                     this.coverImgList=coverImgList;

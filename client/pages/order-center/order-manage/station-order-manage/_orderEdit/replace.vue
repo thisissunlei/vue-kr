@@ -347,10 +347,9 @@
             width="90%"
             class-name="vertical-center-modal"
          >
-           <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"  @clear="clear"/>
+           <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"/>
             <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap> -->
             <div slot="footer">
-                <span v-if="selectLen&&showMap">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
                 <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
                 <Button  @click="cancelStation">取消</Button>
             </div>
@@ -424,7 +423,6 @@
                 }
             };
             return {
-                selectLen:0,
                 originBeginTime:'',
                 discountCon:'',
                 entryPriceList:[],
@@ -881,9 +879,6 @@
            }
         },
         methods: {
-            clear(val){
-                this.selectLen=val.length;
-            },
             changeSaler(value){
                 this.formItem.salerId = value;
             },
@@ -1552,8 +1547,6 @@
                 this.showMap = true;
             },
             onResultChange:function(val){//组件互通数据的触发事件
-                let len=this.originStationList.length;
-                this.selectLen=val.submitData.length-len;
                 this.stationData = val;
             },
             cancelStation:function(){//工位弹窗的取消
@@ -1561,7 +1554,6 @@
                     submitData:this.selecedStationList,
                     deleteData:[],
                 };
-                this.selectLen=0;
                 this.showMap = false
 
             },

@@ -239,7 +239,10 @@ export default {
 
             // console.log( this.targetKeys)
             this.$http.post('addUser',{ssoIdsStr:JSON.stringify(this.targetKeys),id:this.updatePersonid}).then((res=>{
-              console.log('success')
+                console.log('success')
+                this.getRoleS()
+                this.getRoleEdit()
+                
             }))
 
 

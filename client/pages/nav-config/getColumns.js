@@ -13,11 +13,11 @@ function columns(){
             key: 'resources'
         },
         {
-            title: '操作人',
+            title: '创建人',
             key: 'creator'
         },
         {
-            title: '操作时间',
+            title: '创建时间',
             key: 'cTime'
         },
         {
@@ -31,7 +31,7 @@ function columns(){
                         },
                         style: {
                             marginRight: '5px',
-                            color:'blue',
+                            color:'rgb(43, 133, 228)',
                             cursor:'pointer'
                         },
                         on: {
@@ -60,7 +60,7 @@ function columns(){
                         },
                           style: {
                             marginRight: '5px',
-                            color:'blue',
+                            color:'rgb(43, 133, 228)',
                             cursor:'pointer'
                         },
                         on: {
@@ -79,7 +79,7 @@ function columns(){
                            
                         },
                           style: {
-                              color:'blue',
+                              color:'rgb(43, 133, 228)',
                             marginRight: '5px',
                             cursor:'pointer'
                         },

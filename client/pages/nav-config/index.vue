@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" sshow-elevator :current="page" @on-page-size-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" @on-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -353,10 +353,8 @@ export default {
             this.getUserData(param);
          },
         changePage(param){
-            
-            this.page = param
-        
-         this.getRoleS()
+            this.page = param    
+            this.getRoleS()
         },
         getRoleS(){
             let params = {

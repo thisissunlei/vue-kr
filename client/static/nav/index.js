@@ -996,6 +996,20 @@
                         },
                     ]
                 },
+                {
+                    primaryText: "研发权限",
+                    iconName: 'icon-wendang',
+                    iconColor: '#79859a',
+                    menuItems: [
+                        {
+                            primaryText: '数据监控',
+                            type: 'vue',
+                            router: 'management-tool/data-monitoring',
+                            menuCode: 'sync_main_part',
+                        },
+                       
+                    ]
+                },
             ]
         }
     }

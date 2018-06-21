@@ -1,20 +1,50 @@
 <template>
     <div class="contract-center-list">
-        <SectionTitle title="数据监控" />
-        <Tabs value="name1">
-                <TabPane label="标签一" name="name1">
-                    <List />
-                </TabPane>
-                <TabPane label="标签二" name="name2">
-                    <List />
-                </TabPane>
-                <TabPane label="标签三" name="name3">
-                    <List />
-                </TabPane>
-                <TabPane label="标签三" name="name4">
-                    <List />
-                </TabPane>
-        </Tabs>
+        
+        <div style='margin-bottom:10px'>
+            <div style='display:inline-block;margin:10px 20px;'>
+                <span style='padding-right:10px'>订单号</span>
+                <i-input 
+                    v-model="params.customName" 
+                    placeholder="请输入订单号"
+                    style="width: 252px"
+                    
+                />
+            </div>
+            <div style='display:inline-block;margin:10px 20px;'>
+                <span style='padding-right:10px'>客户名称</span>
+                <i-input 
+                    v-model="params.customName" 
+                    placeholder="请输入客户名称"
+                    style="width: 252px"
+                />
+            </div>
+            <div style='display:inline-block;margin:10px 20px;'>
+                <span style='padding-right:10px'>校验类型</span>
+                <Select 
+                    v-model="priceType" 
+                    style="width: 252px;"
+                    clearable
+                >
+                    <Option v-for="item in priceList" :value="item.value" :key="item.value">{{ item.label}}</Option>
+                </Select> 
+            </div>
+           
+        </div>
+        <Table 
+            border 
+            ref="selection" 
+            :columns="columns" 
+            :data="detail" 
+            style="margin:20px"
+           
+        />
+        <div style="margin: 10px 20px;overflow: hidden">
+            
+            <div style="float: right;">
+                <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -27,7 +57,6 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    import List from './list'; 
     export default {
         head () {
             return {
@@ -41,8 +70,7 @@
             krUpload,
             Loading,
             Message,
-            Buttons,
-            List
+            Buttons
         },
        
         data () {

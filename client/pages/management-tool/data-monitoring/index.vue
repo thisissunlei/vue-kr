@@ -1,204 +1,57 @@
 <template>
     <div class="contract-center-list">
-        <SectionTitle title="数据监控" />
-        <Tabs value="name1">
-                <TabPane label="标签一" name="name1">
-                    <List />
-                </TabPane>
-                <TabPane label="标签二" name="name2">
-                    <List />
-                </TabPane>
-                <TabPane label="标签三" name="name3">
-                    <List />
-                </TabPane>
-                <TabPane label="标签三" name="name4">
-                    <List />
-                </TabPane>
+        <Tabs v-model="currenttab" @on-click='handletabclick'>
+            <TabPane label="工位收入与收入中心收入校验" name="name1">
+                <List v-if='tabstoggles.name1' :type='currenttab' />
+            </TabPane>
+            <TabPane label="收入与日费用校验" name="name2">
+                <List v-if='tabstoggles.name2' :type='currenttab' />
+            </TabPane>
+            <TabPane label="费用明细、分期、日收入租金校验" name="name3">
+                <List v-if='tabstoggles.name3' :type='currenttab' />
+            </TabPane>
+            <TabPane label="费用明细、分期押金校验" name="name4">
+                <List v-if='tabstoggles.name4' :type='currenttab' />
+            </TabPane>
         </Tabs>
     </div>
 </template>
 
 
 <script>
-    import SectionTitle from '~/components/SectionTitle';
-    import Loading from '~/components/Loading';
-    import krUpload from '~/components/KrUpload';
-    import dateUtils from 'vue-dateutils';
-    import utils from '~/plugins/utils';
-    import Message from '~/components/Message';
-    import Buttons from '~/components/Buttons';
-    import List from './list'; 
-    export default {
-        head () {
-            return {
-                title: "合同列表"
-            }
-           
-        },
+import List from './list';
+export default {
 
-        components: {
-            SectionTitle,
-            krUpload,
-            Loading,
-            Message,
-            Buttons,
-            List
-        },
-       
-        data () {
-            return {
-                params:{
-                    page:1,
-                    pageSize:15,
-                },
-                loadingStatus: true,
-                otherAgreed:0,
-                upperData:{},//高级查询的数据
-                upperError:false,
-                openSearch:false,
-                detail:[],
-                describeData:{},//其他约定的数据
-                totalCount:1,
-                downType:"down",
-                priceList:[
-                    {value:'1',label:'费用、收入、回款校验'},
-                    {value:'2',label:'明细、分期、日费用支付状态校验'},
-                    {value:'3',label:'押金、工位押金表、客户押金表校验'},
-                    {value:'4',label:'工位收入表与收入中心收入表校验'},
-                ],
-                columns: [
-                    
-                    {
-                        title: '社区id',
-                        key: 'communityId',
-                        align:'center',
-                    },
-                    {
-                        title: '社区名称',
-                        key: 'communityName',
-                        align:'center',
-                       
-                    },
-                    {
-                        title: '校验结果说明',
-                        key: 'content',
-                        align:'center'
-                    },
-                    {
-                        title: '客户id',
-                        key: 'customerId',
-                        align:'center'
-                       
-                    },
-                    {
-                        title: '客户名称',
-                        key: 'customerName',
-                        align:'center'
-                    },
-                    {
-                        title: '校验类型',
-                        key: 'validateType',
-                        align:'center'
-                    },
-                    {
-                        title: '创建时间',
-                        key: 'startAndEnd',
-                        align:'center',
-                        width: 150,
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
-                            return time;
-                        }
-                    },
-                ],
-                detail:[]
-            }
-        },
-       created(){
-          var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
-          this.getListData(params);
-          this.params=params; 
-        },
+    components: {
+        List
+    },
 
-        mounted(){
-         
-        },
-        
-        methods:{
-
-            config:function(){
-                this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
+    data() {
+        return {
+            currenttab: 'name1',
+            tabstoggles: {
+                name1: true,
+                name2: false,
+                name3: false,
+                name4: false,
             },
-            
-            onExport (){
-                var params = Object.assign({},this.params);
-                utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
-            },
-
-            getListData(params){
-                 this.config()
-                 this.$http.get('get-validate-list', params, r => {
-                    this.totalCount=r.data.totalCount;
-                    this.detail=r.data.items;
-                    this.openSearch=false;
-                   this.loadingStatus=false;
-                }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })   
-            },
-
-            //分页事件
-            onPageChange (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
-            },
-
-            //获取其他约定的信息
-            getOtherConvention(params){
-                this.config()
-                this.$http.get('get-contract-other-convention-data', params, r => {
-                    this.describeData.otherAgreed=r.data.otherAgreed;
-                }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })   
-            },
-      
-            //搜索框
-            submitLowerSearch(){
-                this.params.page = 1;
-                utils.addParams(this.params);
-            },
-
-            // 高级查询修改
-            onUpperChange(params,error){
-                this.upperError=error;
-                this.upperData=params;
-            },
-
-             //高级查询确定
-            submitUpperSearch(){
-                if(this.upperError){
-                    return ;
-                }
-                this.params.page = 1;
-                this.params=Object.assign({},this.params,this.upperData);
-                this.params.pigeonholed=this.params.pigeonholed?(this.params.pigeonholed=='true'?true:false):'';
-                this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
-                this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
-                utils.addParams(this.params);
-
-            }, 
         }
+    },
+
+    methods: {
+        handletabclick(name) {
+            let obj = {
+                name1: false,
+                name2: false,
+                name3: false,
+                name4: false,
+            };
+            obj[name] = true;
+            this.tabstoggles = Object.assign({}, obj)
+        },
+
     }
+}
 </script>
-<style lang="less" > 
-    
+<style lang="less" >
 </style>

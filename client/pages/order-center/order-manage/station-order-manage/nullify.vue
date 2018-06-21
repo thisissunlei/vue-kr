@@ -1,5 +1,5 @@
 <template>
-  <div class='m-nullify'>
+  <div class='nullifyform'>
     <Form ref="formItem" :model="formItem" :rules="rules" :label-width="80">
       <!-- <FormItem label="如真的需要作废请选择作废原因：">
         <Select v-model="formItem.select">
@@ -129,7 +129,7 @@ p {
 .input {
     margin-bottom: 20px;
 }
-.m-nullify {
+.nullifyform {
     padding: 5px 30px 5px 30px;
     font-size: 14px;
     text-align: left;

@@ -1,6 +1,7 @@
  <template>         
             <Form ref="formItem" :model="formItem"  :rules="ruleDaily"  label-position="left" class="goods-status">
                 <div class="coloname"><span>您选择了以下</span><span style="color:red;">{{num}}</span><span>个商品:</span></div>
+
                 <Form-item label="独立办公室:" style="margin-top:20px; word-wrap:break-word;" v-if="independentOfficeStr.length">
                     <span
                       v-for="(item,index) in independentOfficeStr"
@@ -18,7 +19,20 @@
                       <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
                     </span>
                 </Form-item>
-            
+
+      
+              <Form-item label="移动办公桌:" style="margin-top:20px; word-wrap:break-word;" v-if="opentLocationStr.length">
+                    <span
+                      v-for="(item,index) in opentLocationStr"
+                      :key="item.id"
+                    >
+                      <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
+                    </span>
+                </Form-item>
+
+
+        
+
                 <Form-item label="选择库存日期:" style="margin-top:20px;">
                     <Form-item prop="startDate" style=‘display:inline-block;float:left;margin-left:2px;’>
                     <DatePicker 
@@ -51,8 +65,8 @@
                             下架
                         </Radio>
                     </RadioGroup> 
-                   <div   v-if="formItem.goodsStatus=='DISABLE'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">显示</span>在平面图上，显<span style="color:red;">计入</span>出租率统计</div>
-                   <div   v-if="formItem.goodsStatus=='OFF'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">不显示</span>在平面图上，显<span style="color:red;">不计入</span>出租率统计</div>
+                   <div   v-if="formItem.goodsStatus=='DISABLE'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">显示</span>在平面图上,<span style="color:red;">计入</span>出租率统计</div>
+                   <div   v-if="formItem.goodsStatus=='OFF'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">下架的商品<span style="color:red;">不显示</span>在平面图上,<span style="color:red;">不计入</span>出租率统计</div>
                    <div    v-if="errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;"><span style="color:red;">部分商品该时段有合同，不能设为下架或不可用</span></div>
 
              </Form-item>
@@ -99,7 +113,7 @@ import dateUtils from 'vue-dateutils';
                 maxLength:200,
                 independentOfficeStr:[],
                 fixedLocationStr:[],
-   
+                opentLocationStr:[],
                 formItem:
                 {   
                     goodList:[],
@@ -158,6 +172,7 @@ import dateUtils from 'vue-dateutils';
             dataFormat(data){
                 this.independentOfficeStr=[];
                 this.fixedLocationStr=[];
+                this.opentLocationStr=[];
                 let arr = [].concat(data);
                 let error=[].concat(this.errorD);
                 let goodsMiddle=[];
@@ -176,6 +191,8 @@ import dateUtils from 'vue-dateutils';
                         this.independentOfficeStr.push(item);
                     }else if(item.goodsTypeName == '固定办公桌'){
                         this.fixedLocationStr.push(item);
+                    }else if(item.goodsTypeName == '移动办公桌'){
+                        this.opentLocationStr.push(item);
                     }
                     
                     var list={};

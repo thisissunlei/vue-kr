@@ -152,6 +152,5 @@ export default  {
         url: '/api/krspace-finance-web/cmt/goods/add/device',
         method: 'post'
     },
-
   }
   

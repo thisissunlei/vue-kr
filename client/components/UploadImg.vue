@@ -107,11 +107,10 @@ export default {
         let originalName='X:original_name';
         let content='Content-Disposition';
         this.data[originalName]=file.name;
-        this.data[content]=`attachment;filename=${file.name}`
+        //this.data[content]=`attachment;filename=${file.name}`
        
     },
     handleSuccess(res,file){
-        console.log('res--->>>',res.data)
         let id=res.data.id;
         this.imgIds.push(id);
         let ids=this.imgIds.join(',');

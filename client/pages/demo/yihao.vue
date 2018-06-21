@@ -2,14 +2,18 @@
 <template>
   <section class="container">
     <div>
-        yihao
+        <krUpload 
+            :file="[]"
+            type="only"
+            :columnDetail="{}"
+           
+        />
     </div>
   </section>
 </template>
 
 <script>
-import krInput from '~/components/EnglishInput.vue'
-
+import krUpload from '~/components/KrUpload';
 export default {
      
     data() {
@@ -20,7 +24,7 @@ export default {
         }
     },
     components: {
-      
+      krUpload
     },
     methods:{
      

@@ -44,6 +44,61 @@ export default  {
     'getOptionalTimeLine': {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
-    }
+    },
+    // 运营主页
+    'getOperating': {
+        url: '/api/order/operation/home',
+        method: 'get'
+    },
+    // 即将到期
+    'getDueList': {
+        url: '/api/order/operation/due/list',
+        method: 'post'
+    },
+    // 即将到期导出
+    'excelDueList': {
+        url: '/api/order/operation/due/list-excel',
+        method: 'post'
+    },
+    //已起租未付
+    'unpaidList': {
+        url: '/api/order/operation/rentNoPay/list',
+        method: 'get'
+    },
+     //逾期未付
+     'Overduelist': {
+        url: '/api/order/operation/overDateNoPay/list',
+        method: 'get'
+    },
+    //社区招商
+    'community-investment-list': {
+        url: '/api/krspace-finance-web/inventory/cmt-investment/list',
+    },
+    //每日库存-平面图
+    'getInventoryMap': {
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
+        method: 'get'
+    },
+    // 即将进场
+    'getImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list',
+        method: 'post'
+    },
+    // 即将进场导出
+    'excelImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list-excel',
+        method: 'get'
+    },
+      // 预约参观
+      'AnappointmentList': {
+        url: '/api/krspace-finance-web/sys/visit-record/list',
+        method: 'get'
+    },
+    
+    // 方可
+    'gitVisitorsList': {
+        url: '/api/order/operation/op-visit-list',
+        method: 'get'
+    },
   }
   

@@ -5,6 +5,7 @@ import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
 
+
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -123,10 +124,12 @@ import tableSort from './tableSort';
         // a.target = '_blank';
         //a.download = filename;
         a.download = filename;
+        console.log('a--',a,href,filename);
         a.click();
-       
-     
+        
+    
     }
+    //不要修改，修改找毅豪
     function downImg(href, filename) {
         var a = document.createElement('a');
         a.href = href;
@@ -208,6 +211,18 @@ import tableSort from './tableSort';
         return cached;
     }
 
+    //时间差
+    function timeRange(sDate1,sDate2){
+        var aDate, oDate1, oDate2, iDays;
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+        
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays  
+    }
+
 export default{
     smalltoBIG,
     clearForm,
@@ -227,7 +242,8 @@ export default{
     dateCompatible,
     tableSort,
     dateRange,
-    downImg
+    downImg,
+    timeRange
 }
 
 

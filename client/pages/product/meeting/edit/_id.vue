@@ -269,9 +269,9 @@ export default {
                 name:'',
                 appBusyPrice:'',
                 appIdlePrice:'',
-                appEndTime:'23:30:00',
+                appEndTime:'23:30',
                 appPublish:'',
-                appStartTime:'00:00:00',
+                appStartTime:'00:00',
                 area:'',
                 capacity:'',
                 communityId:'',
@@ -408,8 +408,6 @@ export default {
                     data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;
-                    this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
-                    this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                     this.form.appStartTime=data.appStartTime.substring(0,6);
                     this.form.appEndTime=data.appEndTime.substring(0,6);
                     this.form.krmStartTime=data.krmStartTime.substring(0,6);
@@ -425,9 +423,17 @@ export default {
                     })
                     this.detailImgList=detailImgList;
                     this.formItem=data;
-                    this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
-                    this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
-                    this.formItem.detailImgs=data.detailImg.join(',');
+                    if(data.lockBeginTime){
+                        this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
+                        this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
+                    }
+                    if(data.lockEndTime){
+                        this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
+                         this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
+                    }
+                    if(data.detailImgs){
+                         this.formItem.detailImgs=data.detailImg.join(',');
+                    }
                     let checkGroup=[];
                     if(data.meetingDevices){
                         data.meetingDevices.map((item)=>{

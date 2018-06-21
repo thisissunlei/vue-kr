@@ -520,8 +520,6 @@ export default {
             
         },
         submitCreate(){
-            console.log('this.formItem',this.formItem)
-            return;
             this.$http.post('add-krmting-room', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
@@ -540,7 +538,6 @@ export default {
             this.startDate=date;
         },
         endChange(date){
-            console.log('date',date)
             this.endDates=date;
         },
         startHourChange(date){

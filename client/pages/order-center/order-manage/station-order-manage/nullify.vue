@@ -15,7 +15,7 @@
         <Button type="ghost" style="margin-left: 8px">取消</Button>
       </FormItem> -->
 
-      <p>如真的需要作废请选择作废原因：</p>
+      <p class='required-label'>如真的需要作废请选择作废原因：</p>
       <Select v-model="formItem.select">
         <Option :value="item.value" v-for="(item,index ) in optionList" :key="index">{{item.desc}}</Option>
       </Select>
@@ -25,7 +25,7 @@
       <div class='buttonContainer'>
 
         <Button type="primary" @click="handleSubmit('formItem')">确认</Button>
-        <Button type="ghost" style="margin-left: 8px">取消</Button>
+        <Button type="ghost" style="margin-left: 8px" @click="handleCancel">取消</Button>
       </div>
 
       <FormItem>
@@ -79,15 +79,15 @@ export default {
           this.optionList = response.data;
         })
         .catch(error => {
-          this.openMessage = true;
-          this.MessageType = "error";
-          this.warn = error.message;
+          this.$Notice.error({
+            title: error.message
+          });
         });
     },
+    handleCancel() {
+      this.$emit('closeModalForm');
+    },
     handleSubmit(name) {
-      // if (!this.formItem.input || !this.formItem.select) {
-      //   this.$Message.error('请填写完整作废理由');
-      // } else 
       {
         let params = {
           id: this.id,
@@ -99,12 +99,19 @@ export default {
           .post("join-nullify", params)
           .then(response => {
             console.log(response.data)
+            this.formItem.select = '';
+            this.formItem.input = '';
             this.$emit('refershList', { id: params.id });
           })
           .catch(error => {
-            this.openMessage = true;
-            this.MessageType = "error";
-            this.warn = error.message;
+            // this.openMessage = true;
+            // this.MessageType = "error";
+            // this.warn = error.message;
+            this.$Notice.error({
+              title: error.message
+            });
+            this.formItem.select = '';
+            this.formItem.input = '';
           });
       }
 
@@ -124,10 +131,24 @@ p {
 }
 .m-nullify {
     padding: 5px 30px 5px 30px;
-    font-size: 16px;
+    font-size: 14px;
     text-align: left;
 }
 .buttonContainer {
     text-align: center;
+}
+.required-label {
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left: -7px;
+        top: 2px;
+    }
 }
 </style>  

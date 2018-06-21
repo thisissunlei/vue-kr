@@ -37,9 +37,10 @@
             </div>
         </Modal>
 
-        <Modal id='nullifymodel' v-model="openNullify" title="真的要是否作废订单吗？" width="500">
-            <Nullify :id='id' @refershList='refershJoinList' />
-            <div slot="footer">
+        <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+            <Nullify :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
+
+            <div id="nulldiv" slot="footer">
                 <!-- <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
             </div>
@@ -492,7 +493,7 @@ export default {
 }
 </script>
 
-<style lang='less' >
+<style lang='less'>
 .m-join-list {
     .list-banner {
         width: 100%;
@@ -549,8 +550,9 @@ export default {
         text-decoration: line-through;
     }
 }
-
-#nullifymodel .ivu-modal-footer {
-    display: none;
+#nullifymodel {
+    .ivu-modal-footer {
+        display: none;
+    }
 }
 </style>

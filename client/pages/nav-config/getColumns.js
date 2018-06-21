@@ -13,11 +13,11 @@ function columns(){
             key: 'resources'
         },
         {
-            title: '操作人',
+            title: '创建人',
             key: 'creator'
         },
         {
-            title: '操作时间',
+            title: '创建时间',
             key: 'cTime'
         },
         {

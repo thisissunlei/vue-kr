@@ -132,6 +132,12 @@ import utils from '~/plugins/utils';
                     id:0,
                     refundReason:''
                 },
+                 ruleBackData: {
+                    refundReason: [
+                        { required: true, message: '退回原因必填', trigger: 'blur' }
+                    ],
+                    
+                },
                 invoiceData:[
                     {
                         fileId:'',

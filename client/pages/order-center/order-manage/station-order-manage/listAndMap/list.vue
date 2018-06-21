@@ -205,6 +205,7 @@ export default {
              list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
              list.seatId=item.belongId;
              list.id=item.belongId;
+             list.originalPrice = item.originalPrice || item.seatPrice|| '';
              return list
          })
          this.endParams.submitData=[].concat(param).concat(this.originStationList);

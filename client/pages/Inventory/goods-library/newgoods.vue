@@ -67,7 +67,7 @@
                                     style="width: 200px;"
                                     clearable
                                 >
-                                    <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                      </Form-item>
 
@@ -219,12 +219,13 @@ import dateUtils from 'vue-dateutils';
         },
         mounted(){
         console.log('sss',this.seacchValue)
+        this.getSelectData();
         // console.log('eeeeeeeeeeeee',this.floorList)
      
                 },
         watch:{
 
-       
+            
 
         },
         updated(){
@@ -233,7 +234,19 @@ import dateUtils from 'vue-dateutils';
         methods:{
 
 
-
+                  //枚举 
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.community.SpaceSuiteType'
+            }).then((response)=>{
+               this.locationList=response.data;
+               console.log('<------------->',this.locationList)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
 
         //回车          
         onKeyEnter(){

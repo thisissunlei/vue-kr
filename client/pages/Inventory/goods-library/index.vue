@@ -6,7 +6,7 @@
               @clearClick="clearClick"
               @initData="initData"
               @getFloor="getFloor"
-                   @searchForms="searchstart"
+              @cityFloor="cityFloor"
             />
         </div>
         <SlotHead :class="theHead?'header-here':'header-no'"/>
@@ -274,8 +274,8 @@
            v-if="openService"
            @submit="submitService"
            @cancel="cancelService"
-           :floor="floor"
-           :communityId="communityId"
+           :singleForms="singleForms"
+           :floor="newgoodForm.floor"
         />
         <div slot='footer'></div>
      </Modal>
@@ -366,7 +366,6 @@ export default {
             openMessage:false,
             statusForm:{},
             newgoodForm:{},
-            searchForms:{},
             tabForms:{
                 page:1,
                 pageSize:100
@@ -557,9 +556,9 @@ export default {
             newgoodsData:[],
             floorList:[], 
             floor:'',
-            communityId:'',
             serviceId:'',
-            statusOldData:[]    
+            statusOldData:[],
+            singleForms:{}    
         }
     },
         mounted(){
@@ -580,7 +579,6 @@ export default {
             tabForms:function(val,old){
                 this.getListData(this.tabForms); 
                 this.floor=this.tabForms.floor;
-                this.communityId=this.tabForms.communityId;
             },
         },
         destroyed(){
@@ -589,6 +587,10 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        cityFloor(params){
+            this.singleForms=Object.assign({},this.tabForms,params);
+            this.getListData(this.singleForms);
+        },
         submitService(params){
             let data={
                 goodsType:this.newgoodForm.goodsType,
@@ -670,9 +672,10 @@ export default {
             },
        //新增接口a
         getNew(){
-        console.log('新增',this.newgoodForm);
-        let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId});
-        this.$http.post('getNew-lyadded',data).then((response)=>{ 
+         console.log('id--',this.tabForms);
+         this.newgoodForm.communityId=this.tabForms.communityId;
+         let data=Object.assign({},this.newgoodForm);
+         this.$http.post('getNew-lyadded',data).then((response)=>{ 
             this.serviceId=response.data;
             this.cancelService(); 
             }).catch((error)=>{
@@ -686,14 +689,14 @@ export default {
                 this.vImport=!this.vImport;
         },
         subsuccess(){
-                    this.butsuccess=!this.butsuccess
+                this.butsuccess=!this.butsuccess
         },      
-       
+        
         importsu(){
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-                 window.open('/api/order/goods/import/download-template','_blank')
+            window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
@@ -807,6 +810,7 @@ export default {
         },
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
+            this.singleForms=Object.assign({},this.tabForms);
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values);
@@ -822,9 +826,6 @@ export default {
          newStatus(obj){
            console.log('eeeeeeeeeeeeeeeee',obj)
            this.newgoodForm=Object.assign({},obj);  
-        },
-         searchstart(obj){
-           this.searchForms=Object.assign({},obj);  
         },
         tableCommon(){
             var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];

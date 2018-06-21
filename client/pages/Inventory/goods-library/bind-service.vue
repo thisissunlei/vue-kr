@@ -34,11 +34,11 @@
 <script>
 export default {  
     props:{
-        floor:{
-            type:String,
-            default:''
+        singleForms:{
+            type:Object,
+            default:{}
         },
-        communityId:{
+        floor:{
             type:[String,Number]
         }
     },
@@ -66,7 +66,7 @@ export default {
     methods:{
        getServiceList(){
            let data={
-               communityId:this.communityId,
+               communityId:this.singleForms.communityId,
                floor:this.floor
            }
            this.$http.get('goods-service-list',data).then((response)=>{

@@ -3,36 +3,13 @@
         <div class="community-header">
             <Form ref="formItemInvestment" :model="formItem" :rules="ruleInvestment" label-position="left">
 
-                <!-- 第一行-->
-                <div style="white-space: nowrap;"> 
-
-                  
-                        <Form-item label="商品名称" class='daily-form' prop="name" >
-                            <i-input 
-                                v-model="formItem.name" 
-                                placeholder="请输入商品名称"
-                                style="width: 200px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-
-                  <Form-item label="商品类型" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item>
-
-                          <Form-item class="priceForm community-form">
-                            <span class="attract-font">社<span style="display:inline-block;width:26px;"></span>区</span>
+            <div style="white-space: nowrap;"> 
+                <Form-item class="priceForm community-form">
+                            <span class="attract-font">社<span style="display:inline-block;width:24px;"></span>区</span>
                             <Select 
                                 v-model="formItem.cityId" 
                                 placeholder="请输入城市" 
-                                style="width: 90px;margin-right:20px;margin-left:7px;"
+                                style="width: 90px;margin-right:20px;"
                                 @on-change="cityChange"
                             >
                                 <Option 
@@ -62,6 +39,7 @@
                                     v-if="floorList && floorList.length !=0"
                                     placeholder="请输入楼层" 
                                     style="width: 90px;margin-left:20px;"
+                                     @on-change="floorChange"
                                 >
                                     <Option 
                                         v-for="item in floorList" 
@@ -72,8 +50,31 @@
                                     </Option>
                             </Select> 
                         </Form-item>
+                </div>
 
+                <!-- 第一行-->
+                <div style="white-space: nowrap;"> 
 
+                  
+                        <Form-item label="商品名称" class='daily-form' prop="name" >
+                            <i-input 
+                                v-model="formItem.name" 
+                                placeholder="请输入商品名称"
+                                style="width: 200px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+
+                  <Form-item label="商品类型" class='daily-form'> 
+                        <Select 
+                            v-model="formItem.goodsType" 
+                            placeholder="请输入商品类型" 
+                            style="width: 200px"
+                            clearable
+                        >
+                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select> 
+                    </Form-item>
                 </div>
 
                 <!-- 第二行-->
@@ -210,7 +211,8 @@
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
 import utils from '~/plugins/utils';
-import SelectSaler from '~/components/SelectSaler.vue'
+import SelectSaler from '~/components/SelectSaler.vue';
+var oldFloor='';
 export default {
     props:{
        identify:{
@@ -427,9 +429,6 @@ export default {
             _this.formItem = Object.assign({},this.formItem,this.$route.query)
         },500);
     },
-      updated(){
-            this.$emit('searchForm',this.formItem);
-        },
     methods:{
         //社区接口
         getCommunityList(id){
@@ -457,11 +456,18 @@ export default {
         getFloorList(param){
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                if(this.floorList.length>1){
-                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
+                var len=res.data.length;
+                if(len){
+                    if(len>1){
+                        this.floorList.unshift({floor:' ',floorName:"全部楼层"}) 
+                    }
+                    var floor=this.floorList[0].floor;
+                    this.formItem.floor=floor; 
+                    if(oldFloor==floor){
+                        this.floorChange(floor);
+                    }
+                    oldFloor=floor; 
                 }
-                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
-                console.log(this.floorList)
                 this.$emit('getFloor',this.floorList);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -503,6 +509,9 @@ export default {
         //社区change事件
         communityChange(param){
             this.getFloorList(param);
+        },
+        floorChange(param){
+            this.$emit('cityFloor',this.formItem);
         }
     }
 }

@@ -273,6 +273,7 @@ export default {
                 floor:'',
                 kmPromotionUnitPrice:'',
                 kmUnitPrice:'',
+                krmStartTime:'09:00',
                 krmEndTime:'19:00',
                 krmPublish:'',
                 lockBeginTime:'',

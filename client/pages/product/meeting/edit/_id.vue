@@ -65,6 +65,7 @@
                                 <div class="u-upload">
                                      <FormItem label="封面图片" class="u-input" prop="coverImg" style="width:100%">
                                         <UploadFile 
+                                            v-model="formItem.coverImg"
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
@@ -83,6 +84,7 @@
                                 <div class="u-upload">
                                     <FormItem label="会议室图片" class="u-input" prop="detailImgs" style="width:100%">
                                         <UploadFile 
+                                            v-model="formItem.detailImgs"
                                             multiple
                                             :category="category"
                                             withCredentials
@@ -424,12 +426,14 @@ export default {
                     this.detailImgList=detailImgList;
                     this.formItem=data;
                     if(data.lockBeginTime){
+                         this.startDate==dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockBeginTime));
                         this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
-                        this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
+                        this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
                     }
                     if(data.lockEndTime){
+                        this.endDates=dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockEndTime));
                         this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
-                         this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
+                         this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime)).substr(11,5);
                     }
                     if(data.detailImg){
                          this.formItem.detailImgs=data.detailImg.join(',');
@@ -549,17 +553,17 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               
-               if(this.startDate && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
-               }else{
-                   this.formItem.lockBeginTime=""
-               }
-               if(this.endDates && this.endHour){
-                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-               }else{
-                    this.formItem.lockEndTime=""
-               }
+              console.log('this.formItem----->>>',this.formItem)
+            //    if(this.startDate && this.startHour){
+            //        this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+            //    }else{
+            //        this.formItem.lockBeginTime=""
+            //    }
+            //    if(this.endDates && this.endHour){
+            //        this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+            //    }else{
+            //         this.formItem.lockEndTime=""
+            //    }
               
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -605,10 +609,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

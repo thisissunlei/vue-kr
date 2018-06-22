@@ -149,7 +149,7 @@ function initListData(){
             align:'center',
             type:'alreadyReceive',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.receiveTime));
                 return time;
             }
         },

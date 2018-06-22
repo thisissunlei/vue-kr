@@ -699,11 +699,11 @@ export default {
         subGoods(){
             // this.newmodal=!this.newmodal;
                     //新增重名     
+                    console.log('fdfffff',this.tabForms);
                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
                     // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
-                         this.butNewgoods();
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
@@ -725,9 +725,10 @@ export default {
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
-            this.serviceId=response.data;
-             this.getListData(this.tabForms);
-            this.cancelService(); 
+              this.serviceId=response.data;
+              this.getListData(this.tabForms);
+              this.cancelService(); 
+              this.butNewgoods();
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";

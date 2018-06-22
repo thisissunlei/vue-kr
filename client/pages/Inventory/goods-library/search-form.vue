@@ -3,205 +3,205 @@
         <div class="community-header">
             <Form ref="formItemInvestment" :model="formItem" :rules="ruleInvestment" label-position="left">
 
-            <div style="white-space: nowrap;"> 
-                <Form-item class="priceForm community-form">
-                            <span class="attract-font">社<span style="display:inline-block;width:24px;"></span>区</span>
-                            <Select 
-                                v-model="formItem.cityId" 
-                                placeholder="请输入城市" 
-                                style="width: 90px;margin-right:20px;"
-                                @on-change="cityChange"
-                            >
-                                <Option 
-                                    v-for="item in cityList" 
-                                    :value="item.cityId" 
-                                    :key="item.cityId"
-                                >
-                                    {{ item.cityName }}
-                                </Option>
-                            </Select>
-                            <Select 
-                                    v-model="formItem.communityId" 
-                                    placeholder="请输入社区" 
-                                    style="width: 90px;"
-                                    @on-change="communityChange"
+                <div style="white-space: nowrap;background: #fff;padding:10px 20px;"> 
+                    <Form-item class="priceForm community-form">
+                                <span class="attract-font">社<span style="display:inline-block;width:24px;"></span>区</span>
+                                <Select 
+                                    v-model="formItem.cityId" 
+                                    placeholder="请输入城市" 
+                                    style="width: 90px;margin-right:20px;"
+                                    @on-change="cityChange"
                                 >
                                     <Option 
-                                        v-for="item in communityList" 
-                                        :value="item.id" 
-                                        :key="item.id"
+                                        v-for="item in cityList" 
+                                        :value="item.cityId" 
+                                        :key="item.cityId"
                                     >
-                                        {{ item.name }}
+                                        {{ item.cityName }}
                                     </Option>
-                            </Select>
-                            <Select 
-                                    v-model="formItem.floor" 
-                                    v-if="floorList && floorList.length !=0"
-                                    placeholder="请输入楼层" 
-                                    style="width: 90px;margin-left:20px;"
-                                     @on-change="floorChange"
+                                </Select>
+                                <Select 
+                                        v-model="formItem.communityId" 
+                                        placeholder="请输入社区" 
+                                        style="width: 90px;"
+                                        @on-change="communityChange"
+                                    >
+                                        <Option 
+                                            v-for="item in communityList" 
+                                            :value="item.id" 
+                                            :key="item.id"
+                                        >
+                                            {{ item.name }}
+                                        </Option>
+                                </Select>
+                                <Select 
+                                        v-model="formItem.floor" 
+                                        v-if="floorList && floorList.length !=0"
+                                        placeholder="请输入楼层" 
+                                        style="width: 90px;margin-left:20px;"
+                                        @on-change="floorChange"
+                                    >
+                                        <Option 
+                                            v-for="item in floorList" 
+                                            :value="item.floor" 
+                                            :key="item.floor"
+                                        >
+                                            {{ item.floorName }}
+                                        </Option>
+                                </Select> 
+                            </Form-item>
+                    </div>
+
+                    <!-- 第一行-->
+                    <div style="padding: 30px 10px 10px 20px;background:#fff;margin-top:20px;">
+                        <div style="white-space: nowrap;"> 
+
+                        
+                                <Form-item label="商品名称" class='daily-form' prop="name" >
+                                    <i-input 
+                                        v-model="formItem.name" 
+                                        placeholder="请输入商品名称"
+                                        style="width: 200px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+
+                        <Form-item label="商品类型" class='daily-form'> 
+                                <Select 
+                                    v-model="formItem.goodsType" 
+                                    placeholder="请输入商品类型" 
+                                    style="width: 200px"
+                                    clearable
                                 >
-                                    <Option 
-                                        v-for="item in floorList" 
-                                        :value="item.floor" 
-                                        :key="item.floor"
+                                    <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select> 
+                            </Form-item>
+                        </div>
+
+                        <!-- 第二行-->
+                        <div style="white-space: nowrap; margin-right:0;">
+                            <div class="daily-form">
+                            <Form-item label="当前状态" class='daily-form'> 
+                                    <Select 
+                                        v-model="formItem.investmentStatus" 
+                                        placeholder="全部(可多选)" 
+                                        style="width: 200px"
+                                        multiple
                                     >
-                                        {{ item.floorName }}
-                                    </Option>
-                            </Select> 
-                        </Form-item>
-                </div>
-
-                <!-- 第一行-->
-                <div style="white-space: nowrap;"> 
-
-                  
-                        <Form-item label="商品名称" class='daily-form' prop="name" >
-                            <i-input 
-                                v-model="formItem.name" 
-                                placeholder="请输入商品名称"
-                                style="width: 200px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-
-                  <Form-item label="商品类型" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
+                                        <Option v-for="item in goodsStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
                     </Form-item>
-                </div>
 
-                <!-- 第二行-->
-                <div style="white-space: nowrap; margin-right:0;">
                     <div class="daily-form">
-                     <Form-item label="当前状态" class='daily-form'> 
-                            <Select 
-                                v-model="formItem.investmentStatus" 
-                                placeholder="全部(可多选)" 
-                                style="width: 200px"
-                                multiple
-                            >
-                                <Option v-for="item in goodsStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <span class="attract-font" style="padding-top:7px;">工位数量</span>
+                                <Form-item  class="priceForm" prop="stationsMin">
+                                    <i-input 
+                                        v-model="formItem.stationsMin" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />	
+                                </Form-item>
+                                <span class="attract-line">至</span>
+                                <Form-item  class="priceForm" prop="stationsMax">
+                                    <i-input 
+                                        v-model="formItem.stationsMax" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+                            </div>
+                            <Form-item label="商品属性" class='daily-form'> 
+                                <Select 
+                                    v-model="formItem.locationType" 
+                                    style="width: 90px;margin-right:20px;margin-left:9px;"
+                                    clearable
+                                >
+                                    <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
-             </Form-item>
+                            <Select 
+                                    v-model="formItem.suiteType" 
+                                    style="width: 90px;margin-right:0;"
+                                    clearable
+                                >
+                                    <Option v-for="item in suiteType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                            </Form-item>
+                            </div>
+                            <Button type="ghost" style="margin-left:13px;vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
+                        </div>
 
-            <div class="daily-form">
-                        <span class="attract-font" style="padding-top:7px;">工位数量</span>
-                        <Form-item  class="priceForm" prop="stationsMin">
-                            <i-input 
-                                v-model="formItem.stationsMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />	
-                        </Form-item>
-                        <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="stationsMax">
-                            <i-input 
-                                v-model="formItem.stationsMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
+                        <!-- 第三行-->
+                        <div style="white-space: nowrap;">
+                    
+                                    <span class="attract-font" style="padding-top:7px;">商品定价</span>
+                                <Form-item  class="priceForm" prop="priceMin">
+                                    <i-input 
+                                        v-model="formItem.priceMin" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+                                <span class="attract-line" style="margin:0 3px 0 4px">至</span>
+                                <Form-item  class="priceForm" prop="priceMax" >
+                                    <i-input 
+                                        v-model="formItem.priceMax" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+
+
+
+                            <div class='daily-form'>
+                                <span class="attract-font" style="padding-top:7px;margin-right:13px;margin-left:20px;">面<span style="display:inline-block;width:25px;"></span>积</span>
+                                <Form-item  class="priceForm" prop="areaMin">
+                                    <i-input 
+                                        v-model="formItem.areaMin" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+                                <span class="attract-line">至</span>
+                                <Form-item  class="priceForm" prop="areaMax">
+                                    <i-input 
+                                        v-model="formItem.areaMax" 
+                                        style="width: 90px"
+                                        @keyup.enter.native="onKeyEnter($event)"
+                                    />
+                                </Form-item>
+                            </div>
+
+                            <Form-item label="平面图配置" class='daily-form'> 
+                                <Select 
+                                    v-model="formItem.goodsLocation" 
+                                    placeholder="请输入商品类型" 
+                                    style="width: 200px"
+                                    clearable
+                                >
+                                    <Option v-for="item in graphList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select> 
+                            </Form-item>
+
+                            <Button type="primary" @click="searchClick" style="margin-left:30px;">搜索</Button>
+                        </div>
+
+
+                        <!-- 第四行-->
+                        <div style="white-space: nowrap;">
+                        
+                                <!-- <Form-item label="设备绑定" class='daily-form'> 
+                                <Select 
+                                    v-model="formItem.bindingText" 
+                                    placeholder="请输入商品类型" 
+                                    style="width: 200px"
+                                    clearable
+                                >
+                                    <Option v-for="item in bindingtList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select> 
+                            </Form-item> -->
+                        
+                        </div>
                     </div>
-                    <Form-item label="商品属性" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.locationType" 
-                            style="width: 90px;margin-right:20px;margin-left:9px;"
-                            clearable
-                        >
-                            <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select> 
-                    <Select 
-                            v-model="formItem.suiteType" 
-                            style="width: 90px;margin-right:0;"
-                            clearable
-                        >
-                            <Option v-for="item in suiteType" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </Form-item>
-                    </div>
-                    <Button type="ghost" style="margin-left:13px;vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
-                </div>
-
-                <!-- 第三行-->
-                <div style="white-space: nowrap;">
-            
-                             <span class="attract-font" style="padding-top:7px;">商品定价</span>
-                        <Form-item  class="priceForm" prop="priceMin">
-                            <i-input 
-                                v-model="formItem.priceMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                        <span class="attract-line" style="margin:0 3px 0 4px">至</span>
-                        <Form-item  class="priceForm" prop="priceMax" >
-                            <i-input 
-                                v-model="formItem.priceMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-
-
-
-                    <div class='daily-form'>
-                        <span class="attract-font" style="padding-top:7px;margin-right:13px;margin-left:20px;">面<span style="display:inline-block;width:25px;"></span>积</span>
-                        <Form-item  class="priceForm" prop="areaMin">
-                            <i-input 
-                                v-model="formItem.areaMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                        <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="areaMax">
-                            <i-input 
-                                v-model="formItem.areaMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
-
-                    <Form-item label="平面图配置" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsLocation" 
-                            placeholder="请输入商品类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in graphList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item>
-
-                    <Button type="primary" @click="searchClick" style="margin-left:30px;">搜索</Button>
-                </div>
-
-
-                 <!-- 第四行-->
-                <div style="white-space: nowrap;">
-                 
-                        <!-- <Form-item label="设备绑定" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.bindingText" 
-                            placeholder="请输入商品类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in bindingtList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item> -->
-                   
-                </div>
-
-
             </Form>
         </div>
     </div>
@@ -520,7 +520,8 @@ export default {
 <style lang='less'>
      .community-search-form{
          .community-header{
-            padding: 30px 10px 10px 20px;
+             background: #f5f7f9;
+            //padding: 30px 10px 10px 20px;
             .ivu-form .ivu-form-item-label{
                 color:#333;
                 font-weight: 500;
@@ -534,6 +535,7 @@ export default {
             }
             .community-form{
                 vertical-align: middle;
+                margin-bottom:0px;
                 .ivu-select-dropdown{
                     min-width:100px;
                     width:auto !important;

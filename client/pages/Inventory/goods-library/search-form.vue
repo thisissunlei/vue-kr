@@ -333,7 +333,7 @@ export default {
                     rentTimeType:'GT',
                     locationType:' ',
                     suiteType:' ',
-
+                    name:'',
                     source:[],
 
                 },

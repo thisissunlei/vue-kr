@@ -111,7 +111,7 @@ export default  {
     }, 
     //会员访客
     'gitVisitorsList': {
-        url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
+        url: '/api/order/operation/op-visit-list',
         method: 'get'
     },
      //社区开业

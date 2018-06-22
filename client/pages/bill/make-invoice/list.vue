@@ -174,10 +174,10 @@ import utils from '~/plugins/utils';
                    status.push('INVOICED','SIGNED_POST','SIGNED','RECEIVED');
                    break;
                case 'returnMake':
-                   status.push('RECOVERYED');
+                   status.push('FORREOPN');
                    break;
                default:
-                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','RECOVERYED');
+                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','FORREOPN');
                    break;
            } 
            var str='';
@@ -336,6 +336,7 @@ import utils from '~/plugins/utils';
             },
             //开票提交
             makeInvaiceSubmit(){
+
                 let result = this.checkData()
                 if(!result){
                     this.$Notice.error({
@@ -351,8 +352,12 @@ import utils from '~/plugins/utils';
                 let postData = {
                     ticket:JSON.stringify(params)
                 }
+                let url = 'post-reOpen-invoice';
+                if(this.waitMake == 'waitMake'){
+                    url = 'post-new-invoice';
+                }
               
-                this.$http.post('post-new-invoice', postData).then((res)=>{
+                this.$http.post(url, postData).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchMakeInvaice();

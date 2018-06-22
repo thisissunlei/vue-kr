@@ -15,6 +15,11 @@ export default  {
       url: '/api/order/csr-invoice-openTicket',
       method: 'post'
     },
+      //重开开接口
+    'post-reOpen-invoice': {
+        url: '/api/order/csr-invoice-reOpen',
+        method: 'post'
+    },
     
     //发票列表统一接口
     'invoice-list-unified': {

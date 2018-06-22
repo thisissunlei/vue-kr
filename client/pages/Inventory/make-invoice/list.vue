@@ -173,10 +173,10 @@
                    status.push('RECEIVED');
                    break;
                default:
-                   status.push('RETURNING');
+                   status.push('RETURNING,RECOVERYED');
                    break;
            } 
-           console.log('====>',this.type)
+           
            var str='';
            status.map((item,index)=>{
                str=str?item+','+str:item;    

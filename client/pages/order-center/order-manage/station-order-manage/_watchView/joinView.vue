@@ -26,6 +26,12 @@
 				<LabelText label="机   会：" v-show='opportunityStr'>
 					{{opportunityStr}}
 				</LabelText>
+				<LabelText label="作废原因：" v-show='nullifyReason'>
+					{{nullifyReason}}
+				</LabelText>
+				<LabelText label="作废说明：" v-show='nullifyRemark'>
+					{{nullifyRemark}}
+				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="租赁信息">
 				<LabelText label="租赁开始日期：">
@@ -104,6 +110,8 @@ export default {
 	},
 	data() {
 		return {
+			nullifyReason: '',
+			nullifyRemark: '',
 			opportunityStr: '',
 			basicInfo: {},
 			capitalService: '',
@@ -291,14 +299,20 @@ export default {
 			let list = [];
 			let _this = this;
 			this.$http.get('get-salechance', parms, r => {
-				list = r.data.items;
+				r.data.items.map(item => {
+					list.push({
+						label: item.name,
+						value: item.id
+					})
+				})
+
 				let obj = list.find(item => item.value == this.basicInfo.opportunityId)
 				debugger;
 				this.opportunityStr = obj.label || '';
 			}, error => {
-				// this.openMessage = true;
-				// this.MessageType = "error";
-				// this.warn = error.message;
+				this.$Notice.error({
+					title: error.message
+				});
 			}
 			)
 		},
@@ -323,8 +337,9 @@ export default {
 				} else {
 					this.installments = response.data.installments || [];
 				}
-				this.installmentAll = response.data.installments || []
-
+				this.installmentAll = response.data.installments || [];
+				this.nullifyReason = response.data.invalidString;
+				this.nullifyRemark = response.data.remark;
 				this.capitalTreatment = response.data.tactiscAmount ? utils.smalltoBIG(response.data.tactiscAmount) : '';
 				this.capitalService = response.data.seatRentAmount ? utils.smalltoBIG(response.data.seatRentAmount) : '';
 				this.serviceData = response.data.orderSeatDetailVo || [];

@@ -18,7 +18,8 @@ export default {
 
     //获取销售机会
     "get-salechance": {
-        url: "/api/order/csr/opportunity/list/type/order",
+        // url: "/api/order/csr/opportunity/list/type/order",
+        url: "/api/krspace-op-web/csr/opportunity/list/type/order",
         method: "get"
     },
 

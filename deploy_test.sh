@@ -1,5 +1,6 @@
 #!/bin/bash
-npm run build
+
+# npm run build
 
 
 buildEnvDir=$1

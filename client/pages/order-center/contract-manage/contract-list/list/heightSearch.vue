@@ -16,13 +16,13 @@
                 </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
                    <Select 
-                        v-model="formItem.communityName" 
+                        v-model="formItem.communityCode" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
                         clearable
                     >
-                        <Option v-for="item in communityList" :value="item.name" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in communityList" :value="item.code" :key="item.code">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
                 <Form-item label="合同类型" class='bill-search-class'>
@@ -103,6 +103,7 @@
 
                 formItem:Object.assign({
                    communityName:'',
+                   communityCode:'',
                    pigeonholed:'',
                    contractType:'',
                    customName:'',

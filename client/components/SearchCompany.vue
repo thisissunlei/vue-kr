@@ -11,12 +11,12 @@
             filterable
             remote
             :loading="loading1"
-             clearable
             @on-change="changeContent"
             :remote-method="remoteCustomer"
+            clearable
             >
             <Option 
-                v-for="(option, index) in companyOptions" 
+                v-for="option in companyOptions" 
                 :value="option.value" 
                 :key="option.value"
             >{{option.label}}</Option>
@@ -26,7 +26,7 @@
 
 
 <script>
-
+import http from '~/plugins/http.js';
 
     export default {
         props:{
@@ -48,35 +48,33 @@
                 this.onchange(value)
             },
             remoteCustomer (query) {
-                 if (query !== '') {
-                    this.loading1 = true;
-                    setTimeout(() => {
-                        this.loading1 = false;
-                        this.getCusomerList(query)
-                    }, 200);
-                } else {
-                   this.getCusomerList('');
-                }
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.getCusomerList(query)
+                }, 200);
             },
             getCusomerList:function(name,type){
-                 let params = {
-                    companyName:name
+                let params = {
+                    customerName:name || ''
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('getCompanyInfo', params, r => {
-                    list = r.data;
+                http.get('get-payment-customer-like', params).then( r => {
+                    list = r.data.items;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.companyName;
-                        obj.value = item.csrId;
+                        obj.label = item.company;
+                        obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
+
                     _this.companyOptions = list;
-                }, e => {
-                    console.log('error',e)
+                }).catch( e => {
+                    console.log('error--->',e)
                 })
-                return list;
+               
+               
             }
                     
                

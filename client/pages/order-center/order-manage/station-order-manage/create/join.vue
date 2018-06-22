@@ -344,11 +344,8 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
-                                            if(!price){
-                                                return
-                                            }
                                             var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                            if(!pattern.test(price)){
+                                            if(price && !pattern.test(price)){
                                                 this.$Notice.error({
                                                     title:'单价不得多余小数点后两位'
                                                 })
@@ -1067,6 +1064,12 @@ import utils from '~/plugins/utils';
                 if(!this.formItem.communityId){
                     this.$Notice.error({
                             title:'请先选择社区'
+                        });
+                    return;
+                }
+                if(!this.formItem.customerId){
+                    this.$Notice.error({
+                            title:'请先选择客户'
                         });
                     return;
                 }

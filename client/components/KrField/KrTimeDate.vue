@@ -1,11 +1,12 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-time-date">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <DatePicker 
                 :open="open"
@@ -64,6 +65,9 @@ export default {
 		}
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         handleClick(){
             this.open = !this.open;
         },
@@ -89,7 +93,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-time-date{
+    position: relative;
 	.edit-icon{
 		
 		position: absolute;

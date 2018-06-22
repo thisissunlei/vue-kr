@@ -1,12 +1,17 @@
 
 <template lang="html">
   <div class="select-tree">
-        <div style="width:200px" @click="inputClick">
+        <div :style="{width:inputWidth+'px'}" @click="inputClick">
             <Input 
                 @on-change="inputSearch"  
                 v-model="treeInput" 
                 :placeholder="placeholder"     
             />
+            <div class="div-input"></div>
+            <span 
+                class="select-tree-icon ivu-icon ivu-icon-arrow-down-b ivu-select-arrow"
+                :style="{ transform: mask?'rotateZ(180deg)':'rotateZ(0deg)'}"
+            ></span>
         </div>
         <div  class="select" v-if="mask" v-click-outside="clickedOutside">
             <div class="tree-content">
@@ -18,9 +23,9 @@
                 />
             </div>
            
-             <div class="footer">
-                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
-                <Button type="text" size="small" @click="clearClick">取消</Button>
+             <div class="footer" style="padding: 3px 0px 5px 0px;">
+                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;width:60px;height:24px;">确定</Button>
+                <Button type="text" size="small" @click="clearClick" style="width:60px;height:24px;border-radius:4px;background:#fff;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, .2), 0 1px 4px rgba(0, 0, 0, .2);">取消</Button>
             </div>
         </div>
        
@@ -43,6 +48,9 @@ export default {
         treeIds:{
             default:'',
             type:String
+        },
+        inputWidth:{
+            type:[String,Number]
         }
     },
     data(){
@@ -51,20 +59,9 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
-
-            str:'',
-
-            num:0
+            num:0,
+            isUp:false
 		}
-    },
-    watch:{
-        $props:{
-            deep:true,
-            handler(nextProps) {
-               this.nowData=nextProps.data;
-               //this.treeInput='';
-            }
-        }
     },
     mounted(){
         if(this.treeIds&&this.nowData){
@@ -72,19 +69,10 @@ export default {
              if(Number(this.calculateTree(this.nowData))==Number(ids.length)){
                  this.treeInput="全部任务"
              }else{
-                 this.treeInput="自定义"
+                 this.treeInput=ids[0]=='no'?"请选择":"自定义"
              }
         }
-
     },
-    /*updated(){
-         var htmlBox=document.getElementById('treeScroll');
-         if(htmlBox){
-            this.htmlBox = htmlBox;
-            console.log(this.htmlBox)
-            this.oldContent = this.htmlBox.innerHTML;
-         }
-    },*/
     directives:{
         'click-outside':{
             bind: function (el, binding, vNode) {
@@ -140,20 +128,6 @@ export default {
             })
             return this.num
         },
-        treeSelect(data){
-            data.map((item,index)=>{
-                    if(this.checkValue.length-1==index){
-                        this.str+=item.title;
-                    }else{
-                        this.str+=item.title+',';
-                    }
-                    if(item.children&&item.children.length){
-                        this.treeSelect(item.children);
-                    }
-            })
-            //this.treeInput=this.str;
-            return data
-        },
         sureClick(){
             this.clearClick();
             this.num=0;
@@ -163,7 +137,8 @@ export default {
                 }else{
                     this.treeInput="自定义"
                 }
-                this.treeSelect(this.checkValue);
+            }else{
+                this.treeInput="请选择"
             }
             this.$emit('okClick',this.checkValue);
         },
@@ -211,11 +186,33 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
     .select-tree{
+        .ivu-icon-arrow-down-b::before{
+            content: "\F123" !important;
+            font-size: 10px;
+        }
         text-align: left;
+        .select-tree-icon{
+            position: absolute;
+            display: inline-block;
+            width: 10px;
+            height: 16px;
+            margin-left: -20px;
+            transform: rotateX(180deg);
+            transform-origin:  center center;
+        }
+        .div-input{
+            display: inline-block;
+            // background: red;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: pointer;
+        }
         .select{
-
             .tree-content{
                 min-width: 200px;
                 max-height: 250px;

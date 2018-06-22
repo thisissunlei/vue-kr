@@ -1,4 +1,4 @@
-<style lang="less"> 
+<style lang="less">
    .com-select-saler{
     ::-webkit-input-placeholder { color:#666; }
     ::-moz-placeholder { color:#666; } /* firefox 19+ */
@@ -15,12 +15,13 @@
             :v-model="saler"
             filterable
             remote
+            :clearable="clearable"
             :placeholder="value"
             :remote-method="remoteSaler"
             :loading="loading1"
             :disabled="disabled"
             @on-change="changeContent">
-            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="option.label">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -33,7 +34,11 @@ import http from '~/plugins/http.js';
         props:{
             onchange :Function,
             value:String,
-            disabled:Boolean
+            disabled:Boolean,
+            clearable:{
+                type:Boolean,
+                default:false,
+            }
         },
         data () {
             return {
@@ -52,7 +57,7 @@ import http from '~/plugins/http.js';
                     setTimeout(() => {
                         this.getSalerList(query)
                     }, 200);
-                } 
+                }
 
             },
             getSalerList:function(name){
@@ -77,8 +82,8 @@ import http from '~/plugins/http.js';
                 })
 
             }
-                    
-               
+
+
         }
     }
 </script>

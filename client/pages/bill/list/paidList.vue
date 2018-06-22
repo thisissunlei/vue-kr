@@ -15,7 +15,7 @@
     </div>
     <div class="u-table">
         <Table  border :columns="columns" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <div  style="margin: 10px;overflow: hidden;">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
@@ -105,6 +105,7 @@ import PdfDownload from './pdfDownload';
                 itemDetail:{},
                 pageSize:15,
                 page:1,
+                queryParams:{},
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -258,20 +259,26 @@ import PdfDownload from './pdfDownload';
         },
         created(){
              this.getTableData(this.$route.query);
-             if(!this.$route.query.customerName){
-                 this.$route.query.customerName=""
-             }
              this.tabParams=this.$route.query;
-             
+        },
+        mounted(){
+              let mask=this.$route.query.mask;
+            if(!mask||mask=='paid'){
+               sessionStorage.setItem('paramsPaid',JSON.stringify(this.$route.query));
+            }
+            let jsonPaid=JSON.parse(sessionStorage.getItem('paramsPaid'));
+            this.queryParams=Object.assign({},jsonPaid,{page:1,pageSize:15});
+            this.getTableData(this.queryParams);
+            this.tabParams=this.queryParams;
         },
          watch: {
             $props: {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='paid'){
-                      this.getTableData(this.params);
+                       this.getTableData(this.queryParams);
+                       this.tabParams=this.tabParams;
                     }
-                  
                 }
             }
         },
@@ -319,9 +326,12 @@ import PdfDownload from './pdfDownload';
                           return bizType[obj.row.bizType];
                         }
                     }
-                if(this.columns.length<13){
-                    this.columns.splice(4, 0, billtype)
+                let arr=[].concat(this.columns);
+
+                if(arr.length<13){
+                   arr.splice(4, 0, billtype)
                 }
+                this.columns=[].concat(arr);
                 
             },
             showSearch (params) {
@@ -365,6 +375,7 @@ import PdfDownload from './pdfDownload';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
+                this.tabParams.mask='paid';
                 utils.addParams(this.tabParams);
 
             },
@@ -377,9 +388,10 @@ import PdfDownload from './pdfDownload';
                 this.tabParams={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    customerName:customerName,
+                    mask:'paid'
                 }
-                utils.addParams(this.tabParams);
+                 utils.addParams(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

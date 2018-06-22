@@ -66,7 +66,7 @@
 					<div class="table-button" v-if="showButton == true && showAll == false" @click="showAllList">
 						<span>展开</span>
 						<img class="showAll" src="~assets/images/arrows.svg" />
-						
+
 					</div>
 					<div class="table-button" v-if="showButton == true && showAll == true"  @click="notAllList">
 						<span>收起</span>
@@ -78,7 +78,7 @@
 				<div v-html="basicInfo.versionRemark" style="margin-left:12px"></div>
 			</DetailStyle>
 		</div>
-   </div>	
+   </div>
 </template>
 
 
@@ -110,7 +110,7 @@ export default {
 				{
 				 title: '工位/房间编号',
                  key: 'seatName',
-                 align:'center'	
+                 align:'center'
 				},
 				{
                         title: '类型',
@@ -130,12 +130,12 @@ export default {
 				{
                     title:'工位可容纳人数',
                     key:'capacity',
-                    align:'center'	
+                    align:'center'
                 },
 				{
 				 title: '标准单价(元/月)',
                  key: 'originalPrice',
-                 align:'center'	
+                 align:'center'
                 },
                 {
 				 title: '开始日期',
@@ -144,7 +144,7 @@ export default {
 				 render(tag, params){
 					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
 					 return time;
-				 }	
+				 }
                 },
                 {
 				 title: '结束日期',
@@ -153,12 +153,12 @@ export default {
 				 render(tag, params){
 					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
 					 return time;
-				 }	
+				 }
                 },
                 {
 				 title: '小计',
                  key: 'originalAmount',
-                 align:'center'	
+                 align:'center'
 				}
 			],
 
@@ -166,7 +166,7 @@ export default {
 				{
 				 title: '优惠类型',
                  key: 'tacticsName',
-                 align:'center'	
+                 align:'center'
 				},
 				{
 				 title: '开始日期',
@@ -175,7 +175,7 @@ export default {
 				 render(tag, params){
 					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.freeStart));
 					 return time;
-				 }		
+				 }
 				},
 				{
 				 title: '结束日期',
@@ -184,7 +184,7 @@ export default {
 				 render(tag, params){
 					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.freeEnd));
 					 return time;
-				 }		
+				 }
 				},
 				{
 				 title: '折扣比例',
@@ -196,26 +196,26 @@ export default {
 					 }else{
 						 return params.row.discountNum
 					 }
-				 }		
+				 }
 			   }
 			],
-			
+
             contract:[
                {
 				 title: '合同编号',
                  key: 'contractNum',
-                 align:'center'	
+                 align:'center'
 				},
 				{
 				 title: '合同金额',
                  key: 'rentAmount',
-                 align:'center'	
+                 align:'center'
 				},
 				{
 				 title: '状态',
                  key: 'orderStatusTypeName',
-                 align:'center'	
-				}  
+                 align:'center'
+				}
 			],
 			installments:[],
 			serviceData:[],
@@ -274,7 +274,7 @@ export default {
                 ],
 		}
 	},
-	
+
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
 		// GLOBALHEADERSET('订单合同')
@@ -287,7 +287,7 @@ export default {
 			let from={
 				id:params.watchView
 			};
-			this.$http.get('join-bill-detail', from).then((response)=>{  
+			this.$http.get('join-bill-detail', from).then((response)=>{
 					this.basicInfo=response.data;
 					if(response.data.installments.length>10){
 						this.showButton = true;
@@ -297,7 +297,7 @@ export default {
 						this.installments = response.data.installments || [];
 					}
 					this.installmentAll = response.data.installments || []
-					
+
 					this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
 					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					this.serviceData=response.data.orderSeatDetailVo||[];
@@ -325,9 +325,9 @@ export default {
 </script>
 
 
-<style lang="less" scoped>  
+<style lang="less" scoped>
    .g-order-detail{
-		margin:-10px;
+		// margin:-10px;
 		.m-detail-header{
 			height:50px;
 			border-bottom: 1px solid #E8E9E9;

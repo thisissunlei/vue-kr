@@ -1,5 +1,11 @@
-import thousand from './thousand' 
+import thousand from './thousand'; 
 import addEvent from './addEvent';
+import dataType from './dataType';
+import throttle from './throttle';
+import dateCompatible from './dateCompatible';
+import tableSort from './tableSort';
+
+
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -115,12 +121,109 @@ import addEvent from './addEvent';
     function downFile(href, filename) {
         var a = document.createElement('a');
         a.href = href;
+        // a.target = '_blank';
         //a.download = filename;
+        a.download = filename;
+        console.log('a--',a,href,filename);
         a.click();
-     
+        
+    
     }
-   
-   export default{
+    //不要修改，修改找毅豪
+    function downImg(href, filename) {
+        var a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        //a.download = filename;
+        a.download = filename;
+        a.click();
+      
+    }
+
+    function getDaysInOneMonth(year, month){  
+        month = parseInt(month, 10);  
+        var d= new Date(year, month, 0);  
+        return d.getDate();  
+    }  
+    //计算天数差
+    function dateDiff(sDate1, sDate2) {
+        var aDate, oDate1, oDate2, iDays;
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays  
+    }
+
+    function debounce(delay, atBegin, callback) {
+        return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+    };
+    //根据天数差计算日期
+    function dateRange(date1,num){
+        var date = new Date(date1);  
+        var newDate = new Date(date.getFullYear(),date.getMonth(),date.getDate()+num);  
+        var year1 = date.getFullYear();  
+        var month1 = date.getMonth()+1;  
+        var day1 = date.getDate();  
+        var year2 = newDate.getFullYear();  
+        var month2 = newDate.getMonth()+1;  
+        var day2 = newDate.getDate(); 
+        return  year2+'-'+month2+'-'+day2;
+    };
+    //获取滚动条的宽度
+    function getScrollBarSize() {
+       
+        var cached = 0;
+        const inner = document.createElement('div');
+        inner.style.width = '100%';
+        inner.style.height = '200px';
+
+        const outer = document.createElement('div');
+        const outerStyle = outer.style;
+
+        outerStyle.position = 'absolute';
+        outerStyle.top = 0;
+        outerStyle.left = 0;
+        outerStyle.pointerEvents = 'none';
+        outerStyle.visibility = 'hidden';
+        outerStyle.width = '200px';
+        outerStyle.height = '150px';
+        outerStyle.overflow = 'hidden';
+
+        outer.appendChild(inner);
+
+        document.body.appendChild(outer);
+
+        const widthContained = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        let widthScroll = inner.offsetWidth;
+
+        if (widthContained === widthScroll) {
+            widthScroll = outer.clientWidth;
+        }
+
+        document.body.removeChild(outer);
+
+        cached = widthContained - widthScroll;
+        
+        return cached;
+    }
+
+    //时间差
+    function timeRange(sDate1,sDate2){
+        var aDate, oDate1, oDate2, iDays;
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+        
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays  
+    }
+
+export default{
     smalltoBIG,
     clearForm,
     commonExport,
@@ -130,7 +233,17 @@ import addEvent from './addEvent';
     arrayCompare,
     thousand,
     downFile,
-    addEvent
-   }
+    addEvent,
+    dataType,
+    getDaysInOneMonth,
+    dateDiff,
+    debounce,
+    getScrollBarSize,
+    dateCompatible,
+    tableSort,
+    dateRange,
+    downImg,
+    timeRange
+}
 
 

@@ -25,7 +25,6 @@
 <script>
 import PaidList from './paidList';
 import WaitList from './waitList';
-import utils from '~/plugins/utils';
 
 export default {
    name:'billList',
@@ -56,7 +55,6 @@ export default {
         tabsClick(key){
            this.key=key;
            sessionStorage.setItem('billMask',key);
-            utils.addParams({});
         },
          getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{

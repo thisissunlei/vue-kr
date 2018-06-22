@@ -99,6 +99,9 @@
 			<LabelText label="收款账号：">
 				{{basicInfo.bankAccount}}
 			</LabelText>
+			<LabelText label="创建时间：">
+				{{basicInfo.createTime}}
+			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<div v-bind:class="[ISshow?showClass:hideClass]" >
@@ -184,8 +187,11 @@ export default {
 				 render(h, obj){
 					 let srcType={
 							'BALANCE':'余额',
+							'EARNEST':'定金',
+							'VOUCHER':'抵扣券',
 							'PAYONLINE':'在线支付',
-							'RELEASE':'反结算',
+							'BANKTRANSFER':'银行转账',
+							'RELEASE':'反结算'
 						}
 						return srcType[obj.row.srcType]
 						

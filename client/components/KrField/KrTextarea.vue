@@ -1,32 +1,29 @@
 
 <template>
-	<div class="edit-label-text">
-        
+	<div class="ui-kr-textarea">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
-            <div class="text-area-content">
-                <Input
-                    v-model="areaValue"
-                    :maxlength="maxLength"
-                    :placeholder="placeholder"
-                    type="textarea"
-                    @on-click="click"
-                    @on-enter="enter"
-                    @on-change="change"
-                    @on-focus="focus"
-                    @on-blur="blur"
-                    @on-keyup="keyup"
-                    @on-keydown="keydown"
-                    @on-keypress="keypress"
-                    :rows="rows"
-                />
-                <div style="text-align:right">
-                    {{areaValue?areaValue.length+"/"+maxLength:0+"/"+maxLength}}
-                </div>
+            <Input
+                v-model="areaValue"
+                :maxlength="maxLength"
+                :placeholder="placeholder"
+                :type="type"
+                @on-click="click"
+                @on-enter="enter"
+                @on-change="change"
+                @on-focus="focus"
+                @on-blur="blur"
+                @on-keyup="keyup"
+                @on-keydown="keydown"
+                @on-keypress="keypress"
+            />
+            <div style="text-align:right">
+                {{areaValue?areaValue.length+"/"+maxLength:0+"/"+maxLength}}
             </div>
         </EditLabel>
 	</div>
@@ -64,10 +61,12 @@ export default {
             isEdit:false,
             areaValue:this.value,
             labelValue:this.value,
-            rows:4,
 		}
 	},
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },
@@ -104,22 +103,26 @@ export default {
 }
 </script>
 
-<style lang="less" >
-.edit-label-text{
-    .g-edit-label{
-        line-height: 20px;
-        padding:7px 12px 10px 0;
-        .operation{
-            top:40px;
-            transform:translateY(0);
-        }
-    }
+<style lang="less" scoped>
+.ui-kr-textarea{
+      position: relative;
+	.edit-icon{
+		
+		position: absolute;
+		right: 0;
+		top: 0px;
+		line-height: 32px;
+		cursor: pointer;
+	}
+	.label-text{
+		padding-right: 20px;
+	}
+	.operation{
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		line-height: 32px;
 
-    .text-area-content{
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        min-width:300px;
-    }
+	}
 }
 </style>

@@ -1,17 +1,17 @@
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-input">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         >
             <Input
                 :placeholder="placeholder"
                 type="text"
-                size='default'
-                v-model="labelValue"
-                name='name'
+                v-model="inputValue"
                 @on-click="click"
                 @on-enter="enter"
                 @on-change="change"
@@ -20,7 +20,8 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
-                class="input-class"
+                style="width:252px;"
+
             />
         </EditLabel>
 	</div>
@@ -33,6 +34,10 @@ export default {
         EditLabel,
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         placeholder:{
             type:String,
             default:'请输入...',
@@ -41,15 +46,13 @@ export default {
 			type:[Number,String],
 			default:''
         },
-        name:{
-            type:String,
-            default:''
-        },
-
         readOrEdit:{
             type:Boolean,
             default:false,
 		},
+        name:{
+            type:String
+        }
 	},
 	data(){
 		return {
@@ -59,14 +62,18 @@ export default {
 		}
 	},
 	methods:{
+         recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },
+      
         enter(event){
             this.$emit('enter',event);
         },
         change(event){
-            console.log('=====change',event)
+         
             this.$emit('change',event);
         },
         focus(event){
@@ -84,24 +91,30 @@ export default {
         keypress(event){
             this.$emit('keypress',event);
         },
-        okClick(event){
-            console.log('okClick--',event)
-            console.log('labelValue--',this.labelValue)
-            console.log('inputValue--',this.inputValue)
-            this.inputValue = this.labelValue;
-            console.log('krInput=======>',this.labelValue)
-            this.$emit("submitClick",this.labelValue)
+        okClick(){
+            this.labelValue = this.inputValue;
+            var params = {
+                name:this.name,
+                value:this.inputValue,
+                type:'text',
+
+            }
+            this.$emit("okClick",params)
         },
         cancelClick(event){
-            this.labelValue = this.inputValue;
-
+            this.inputValue = event
         }
 	}
 }
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-input{
+    position: relative;
+    display: inline-block;
+    .edit-label{
+        height:40px;
+    }
 	.edit-icon{
 		
 		position: absolute;
@@ -120,9 +133,5 @@ export default {
 		line-height: 32px;
 
 	}
-    .edit-label .input-class{
-        width:170px;
-
-    }
 }
 </style>

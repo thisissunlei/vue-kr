@@ -6,15 +6,21 @@
 
 
 		<div class="content">
-			<LabelText label="客户ID：" type="circle" style="width:30%">
-				{{customerBasic.id}}
-			</LabelText>
-			<LabelText label="客户名称："  type="circle" style="width:30%">
-				{{customerBasic.company}}
-			</LabelText>
-			<LabelText label="客户状态："  type="circle" style="width:30%">
-				{{customerBasic.status}}
-			</LabelText> 
+			<Row>  
+                <Col class="col circle" >
+					<div class="title">客户ID：</div>
+					<div class="contents">{{customerBasic.id}}</div>
+                </Col>
+                
+                <Col class="col circle">
+					<div class="title">客户名称：</div>
+					<div class="contents"><span>{{customerBasic.company}}</span></div>
+                </Col>
+                <Col class="col circle">
+					<div class="title">客户状态：</div>
+					<div class="contents">{{customerBasic.status}}</div>
+                </Col>
+            </Row>
 		</div>
 		<div class="tab-list">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
@@ -23,7 +29,22 @@
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
-            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'"/>
+            	<div v-if="selectedTab=='menber'" class="tab-texts">
+            		<img src="./images/member.svg" alt="">
+            		<a href="javascript:void(0);" @click="openMember">点击查看会员列表</a>  
+            	</div>
+            	<div v-if="selectedTab=='bill'" class="tab-texts">
+            		<img src="./images/bill.svg" alt="">
+
+            		<a href="javascript:void(0);" @click="openBill">点击查看账单列表</a> 
+            	</div>
+            	<div v-if="selectedTab=='order'" class="tab-texts">
+            		<img src="./images/bill.svg" alt="">
+
+            		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
+            	</div>
+				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
+            	<Waiting v-if="selectedTab=='more' "/>
         </div>
 		
     </div>
@@ -36,7 +57,8 @@
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
     import Waiting from './waiting.vue'; 
-    import Basic from './basic/index.vue'; 
+	import Basic from './basic/index.vue'; 
+	import JoinInfo from './joinInfo.vue'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -45,7 +67,8 @@
 			LabelText,
 			Assets,
 			Waiting,
-			Basic
+			Basic,
+			JoinInfo
 		},
 		data (){
 
@@ -88,19 +111,25 @@
 				},{
 					value:'ENTERED',
 					status:'已入驻'
-				}]
+				}],
+
+				customerId:''
 
 				
 			}
 		},
 		methods:{
 			selectTab(name){
-				console.log('selectTab',name)
+				console.log('selectTab',name);
+				if(name=='order'){
+					window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+				}
 				this.selectedTab = name
 			},
 			getBasicInfo(){
 				// 获取客户进本信息
 				let {params}=this.$route;
+				this.customerId=params.customer;
 				 console.log('route',params.customer)
 				 let param = {
 				 	customerId:params.customer
@@ -112,7 +141,17 @@
                         title:err.message
                     });
                 })
-			}
+			},
+			openOrder(){
+				window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+			},
+			openBill(){
+				// window.open("/bill/list?page=1&pageSize=15&customerName="+this.customerBasic.company,'_blank');
+				window.open("/bill/list",'_blank');
+			},
+			openMember(){
+				window.open("/new/#/user/memberManage/list",'_blank');
+			},
 		},
 		mounted(){
 			this.getBasicInfo()
@@ -127,11 +166,11 @@
 <style lang="less" scoped>
     .customer-assets-detail{
 		.content{
-			height:50px;
-			line-height: 50px;
 			border-bottom: 1px solid #E8E9E9;
 			margin-bottom: 30px;
 			padding-left: 13px;
+			padding-top:20px;
+			padding-bottom:20px;
 		}
 		.tab-list{
 			margin-left: 25px;
@@ -170,5 +209,53 @@
 		.tab-content{
 			// border:1px solid red;
 		}
+		.tab-texts{
+			text-align:center;
+			margin:30px;
+			margin-top:45px;
+			img{
+				display:block;
+				margin:auto;
+				width:100px;
+				margin-bottom:20px;
+			}
+			a{
+				color:#499df1;
+			}
+		}
     }
+    .col{
+    	width:33%;
+    	display:inline-block;
+    	vertical-align:top;
+    }
+    .col>.title{
+    	display:inline-block;
+    	font-size:14px;
+    	font-weight:bold;
+    }
+    .col>.contents{
+    	font-size:14px;
+    	vertical-align:top;
+    	display:inline-block;
+    	&:nth-child(2){
+			max-width:70%;
+    	}
+    }
+    .contents>span{
+    	display:inline-block;
+    	line-height:20px;
+    }
+    .circle{
+		&::before{
+			content:'';
+			display: inline-block;
+			width:8px;
+			height: 8px;
+			border:1px solid #333;
+			border-radius: 5px;
+			margin-right:10px;
+		}
+	}
+
 </style>

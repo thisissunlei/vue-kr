@@ -131,7 +131,6 @@ import utils from '~/plugins/utils';
                     page:1,
                     pageSize:15,
                     totalCount:0,
-                    invoiceStatus:this.status
                 },
                 backData:{
                     id:0,
@@ -172,13 +171,13 @@ import utils from '~/plugins/utils';
                    status.push('APPLYING');
                    break;
                case 'alreadyMake':
-                   status.push('INVOICED');
+                   status.push('INVOICED','SIGNED_POST','SIGNED','RECEIVED');
                    break;
                case 'returnMake':
                    status.push('RECOVERYED');
                    break;
                default:
-                   status.push('RECOVERYED,APPLYING,INVOICED');
+                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','RECOVERYED');
                    break;
            } 
            var str='';

@@ -389,6 +389,66 @@ export default {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
+                     render(h, params){
+                         var ile= params.row.name;
+                         var nes=params.row.duplicateNo;
+                         var classN='display:none';
+                         if(nes===0){
+                             nes=''
+                             classN=classN;
+                         }else{
+                             nes=nes;
+                         }
+                               return h('div', [
+                                        h('div', [
+                                            h('p', { 
+                                        
+                                        },ile),
+
+                                            h('span', { 
+                                                  attrs: {
+                                            class:classN,
+                                                },
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            },'(有重复'),
+                                               h('span', { 
+                                                attrs: {
+                                            class:classN,
+                                                },
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            },' '),
+                                               h('span', { 
+                                                attrs: {
+                                            class:classN,
+                                                },
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },'编号'),
+                                               h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },nes),
+                                                h('span', { 
+                                                        attrs: {
+                                            class:classN,
+                                                },
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            },')')
+
+
+                                        ])
+                            ])
+                     
+
+                    }
                 },
                 {
                     title: '商品类型',
@@ -408,24 +468,26 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                        return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: params.row.locationTypeName+' '+params.row.suiteTypeName
+            
+                         var bacsk=params.row.suiteTypeName+'晚上';
+                         var devel=+params.row.locationTypeName;
+                         var colorClass='redClas' 
+                          h('div', [
+                                        h('span',{
+                                          attrs: {
+
+                                              class:colorClass
                                         }
-                                    }, [
-                                    h('div', [
-                                        h('div',{
-                                          style:{
-                                                textOverflow:'ellipsis',
-                                                whiteSpace:'nowrap',
-                                                overflow: 'hidden'
-                                           }
-                                        },params.row.locationTypeName+' '+params.row.suiteTypeName),
+                                        },devel),
+                                        h('span',{
+                                          
+                                    attrs: {
+                                            class:colorClass
+                                        }
+
+                                        },bacsk),
                                     ])
-                                ])
-                        ])
+
                     }
                 },
                 {
@@ -673,7 +735,7 @@ export default {
                             this.getNew();
                             this.getListData(this.tabForms);
                         //  this.butNewgoods();
-                        this.newmodal=!this.newmodal;
+                        // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
                             if(error.code==-1){
@@ -1021,5 +1083,8 @@ export default {
                 background-color: #f6f6f6;
             }
         }
+     }
+     .ww{
+         color: black;
      }
 </style>

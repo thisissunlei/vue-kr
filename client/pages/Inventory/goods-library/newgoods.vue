@@ -1,5 +1,5 @@
  <template>         
-     <Form ref="formItem" :model="formItem" style="text-align:center"  :rules="ruleInvestment"  label-position="top">
+     <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;"  :rules="ruleInvestment"  label-position="top">
 
             
                   <Form-item label="所在楼层" style="text-align:left" class='daily-form'> 

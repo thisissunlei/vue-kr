@@ -108,7 +108,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;"><span style="color:red;text-decoration:underline;">{{errdated}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
     
              <div slot="footer">
@@ -441,11 +441,10 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-            
-                         var bacsk=params.row.suiteTypeName+'晚上';
-                         var devel=+params.row.locationTypeName;
-                         var colorClass='redClas' 
-                          h('div', [
+                         var bacsk=params.row.suiteTypeName;
+                         var devel=params.row.locationTypeName;
+                         var colorClass='redClas' ; 
+                          return h('div', [
                                         h('span',{
                                           attrs: {
 
@@ -454,13 +453,13 @@ export default {
                                         },devel),
                                         h('span',{
                                           
-                                    attrs: {
-                                            class:colorClass
-                                        }
+                                        attrs: {
+                                                class:colorClass
+                                            }
 
                                         },bacsk),
                                     ])
-
+                                
                     }
                 },
                 {
@@ -643,6 +642,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
+                this.getListData()
                 this.showpush();
                 this.butpushd=!this.butpushd;
         
@@ -703,10 +703,9 @@ export default {
             // this.newmodal=!this.newmodal;
                     //新增重名     
                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                    console.log('66666666666666666666',this.tabForms);
+                    // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
-                            this.getListData(this.tabForms);
                          this.butNewgoods();
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
@@ -730,11 +729,12 @@ export default {
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
             this.serviceId=response.data;
+             this.getListData(this.tabForms);
             this.cancelService(); 
             }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
             })
         },
         cencel(){
@@ -751,7 +751,11 @@ export default {
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-            window.open('/api/order/goods/import/download-template');
+            var a = document.createElement('a');
+            a.href = '/api/order/goods/import/download-template';
+            a.download = name || "";
+            a.click();
+            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
@@ -812,7 +816,7 @@ export default {
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.judgeRepeat();
+        // this.judgeRepeat();
         this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      

@@ -2,7 +2,7 @@ Arguments:
   /usr/local/bin/node /usr/local/bin/yarn
 
 PATH: 
-  ~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  ~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 Yarn version: 
   1.6.0
@@ -14,11 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@nuxtjs%2faxios: ETIMEDOUT
-      at Timeout._onTimeout (/usr/local/lib/node_modules/yarn/lib/cli.js:133819:19)
+  Error: https://registry.yarnpkg.com/eslint-plugin-promise: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:133786:19)
+      at Object.onceWrapper (events.js:313:30)
+      at emitNone (events.js:106:13)
+      at ClientRequest.emit (events.js:208:7)
+      at TLSSocket.emitTimeout (_http_client.js:711:34)
+      at Object.onceWrapper (events.js:313:30)
+      at emitNone (events.js:106:13)
+      at TLSSocket.emit (events.js:208:7)
+      at TLSSocket.Socket._onTimeout (net.js:420:8)
       at ontimeout (timers.js:482:11)
-      at tryOnTimeout (timers.js:317:5)
-      at Timer.listOnTimeout (timers.js:277:5)
 
 npm manifest: 
   {

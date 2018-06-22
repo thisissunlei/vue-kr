@@ -274,7 +274,7 @@
            v-if="openService"
            @submit="submitService"
            @cancel="cancelService"
-           :singleForms="singleForms"
+           :singleForms="tabForms"
            :floor="newgoodForm.floor"
         />
         <div slot="footer">
@@ -597,8 +597,8 @@ export default {
             },
 
         cityFloor(params){
-            this.singleForms=Object.assign({},this.tabForms,params);
-            this.getListData(this.singleForms);
+            this.tabForms=Object.assign({},this.tabForms,params,{page:1});
+            //this.getListData(this.tabForms);
         },
         submitService(params){
             let data={
@@ -827,10 +827,9 @@ export default {
         },
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
-            this.singleForms=Object.assign({},this.tabForms);
         },
         searchClick(values){
-            this.tabForms=Object.assign({},this.tabForms,values);
+            this.tabForms=Object.assign({},this.tabForms,values,{page:1});
             //utils.addParams(this.tabForms);
         },
         clearClick(values){
@@ -944,8 +943,8 @@ export default {
                 })
             },
             onPageChange(page){
-                this.tabForms.page=page;
-                this.getListData(this.tabForms); 
+                this.tabForms=Object.assign({},this.tabForms,{page:page})
+                //this.getListData(this.tabForms); 
             },
             onMessageChange(data){
             this.openMessage=data;

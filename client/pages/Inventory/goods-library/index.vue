@@ -746,8 +746,6 @@ export default {
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
-                        _this.openMessage=true;
-                        _this.MessageType="error";
                         _this.warn=xhr.response.message;
                     }else if(xhr.response.code==-3){
                        _this.getpudyt(); 
@@ -798,9 +796,6 @@ export default {
                             _this.success(xhr.response);
                         } else {
                             _this.error(xhr.response);
-                            _this.$Notice.error({
-                                title:xhr.response.message
-                            });
                         }
                     }
                     else {

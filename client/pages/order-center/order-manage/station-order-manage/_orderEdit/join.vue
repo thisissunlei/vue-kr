@@ -1182,20 +1182,16 @@ import ListAndMap from '../listAndMap';
                 this.installmentType = value;
                 this.errorPayType = false;
             },
-            submitStation(){//工位弹窗的提交
-              
+            submitStation(){//工位弹窗的提交 
                 // this.stationList = [].concat([]) || [];
                 this.stationList = [].concat(this.stationData.submitData) || [];
                 this.delStation = [].concat(this.stationData.deleteData)|| [];
                 if(this.stationList.length){
                     this.disabled = false
                 }
-                console.log("000000------")
-                // this.getStationAmount()
-              
+                this.getStationAmount()
                 this.openStation = false
                 this.clearSale()
-
             },
             clearSale(){
                 this.formItem.items = [];

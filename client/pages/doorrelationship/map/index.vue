@@ -108,7 +108,8 @@ export default {
     },
    data(){
        return {
-            openAddEquipmentModal : false,
+            // openAddEquipmentModal : false,
+            openAddEquipmentModal : true,
             openEquipmentDetail : false,
             newCreateData : {},
             selectedNodeData : {},

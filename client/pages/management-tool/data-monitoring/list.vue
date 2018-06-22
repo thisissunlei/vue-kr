@@ -104,10 +104,11 @@ export default {
 
             name2: [
                 { title: '社区id', key: 'communityId', align: 'center', },
-                { title: '工位id', key: 'conditionId', align: 'center', },
-                { title: '工位**', key: 'conditionType', align: 'center', },
-                { title: '日费用', key: 'costAmount', align: 'center', },
                 { title: '客户id', key: 'customerId', align: 'center', },
+                { title: '工位id', key: 'conditionId', align: 'center', },
+                // { title: '工位**', key: 'conditionType', align: 'center', },
+                { title: '日费用', key: 'costAmount', align: 'center', },
+
                 { title: '收入金额', key: 'receiveAmount', align: 'center', },
                 { title: '工位类型', key: 'seatType', align: 'center', },
                 { title: '校验类型', key: 'validateType', align: 'center', },
@@ -115,25 +116,28 @@ export default {
             ],
             name3: [
                 { title: '社区id', key: 'communityId', align: 'center', },
-                { title: '工位id', key: 'conditionId', align: 'center', },
-                { title: '工位**', key: 'conditionType', align: 'center', },
-                { title: '日费用', key: 'cost', align: 'center', },
                 { title: '客户id', key: 'customerId', align: 'center', },
+                { title: '工位id', key: 'conditionId', align: 'center', },
+                // { title: '工位**', key: 'conditionType', align: 'center', }, 
+                { title: '订单号', key: 'orderNum', align: 'center', },
+                { title: '日费用', key: 'cost', align: 'center', },
+
                 { title: '费用明细', key: 'feeAmount', align: 'center', },
                 { title: '分期金额', key: 'installAmount', align: 'center', },
-                { title: '订单号', key: 'orderNum', align: 'center', },
+
                 { title: '校验类型', key: 'validateType', align: 'center', },
 
             ],
             name4: [
                 { title: '社区id', key: 'communityId', align: 'center', },
-                { title: '工位id', key: 'conditionId', align: 'center', },
-                { title: '工位**', key: 'conditionType', align: 'center', },
-
                 { title: '客户id', key: 'customerId', align: 'center', },
+                { title: '工位id', key: 'conditionId', align: 'center', },
+                // { title: '工位**', key: 'conditionType', align: 'center', },
+
+                { title: '订单号', key: 'orderNum', align: 'center', },
                 { title: '费用明细押金', key: 'feeDeposit', align: 'center', },
                 { title: '分期押金', key: 'installDeposit', align: 'center', },
-                { title: '订单号', key: 'orderNum', align: 'center', },
+
                 { title: '校验类型', key: 'validateType', align: 'center', },
 
             ],

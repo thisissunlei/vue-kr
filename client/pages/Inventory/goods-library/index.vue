@@ -393,18 +393,18 @@ export default {
                          var ile= params.row.name;
                          var nes=params.row.duplicateNo;
                          var classN='display:none';
-                         if(nes===0){
-                             nes=''
-                             classN=classN;
-                         }else{
-                             nes=nes;
-                         }
+                        //  if(nes===0){
+                        //      nes=''
+                        //      classN=classN;
+                        //  }else{
+                        //      nes=nes;
+                        //  }
                                return h('div', [
                                         h('div', [
                                             h('p', { 
                                         
                                         },ile),
-
+                                            
                                             h('span', { 
                                                   attrs: {
                                             class:classN,
@@ -412,15 +412,7 @@ export default {
                                                 style: {
                                                     color:'#FF6868'
                                                 }       
-                                            },'(有重复'),
-                                               h('span', { 
-                                                attrs: {
-                                            class:classN,
-                                                },
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            },' '),
+                                            },'(有重复 '),
                                                h('span', { 
                                                 attrs: {
                                             class:classN,
@@ -428,12 +420,7 @@ export default {
                                                 style: {
                                                     color:'black'
                                                 }       
-                                            },'编号'),
-                                               h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },nes),
+                                            },' 编号'+nes+')'),
                                                 h('span', { 
                                                         attrs: {
                                             class:classN,
@@ -734,7 +721,7 @@ export default {
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
                             this.getListData(this.tabForms);
-                        //  this.butNewgoods();
+                         this.butNewgoods();
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)

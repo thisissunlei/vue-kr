@@ -555,6 +555,12 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
+                        {
+                            primaryText: '客户会员',
+                            router: 'member',
+                            type:'vue',
+                            menuCode: 'customer_assets'
+                        },
                     ]
                 },
                 {

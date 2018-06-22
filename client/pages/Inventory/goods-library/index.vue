@@ -108,7 +108,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;"><span style="color:red;text-decoration:underline;">{{errdated}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
     
              <div slot="footer">
@@ -643,6 +643,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
+                this.getListData()
                 this.showpush();
                 this.butpushd=!this.butpushd;
         
@@ -703,11 +704,11 @@ export default {
             // this.newmodal=!this.newmodal;
                     //新增重名     
                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                    console.log('66666666666666666666',this.tabForms);
+                    // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
-                            this.getListData(this.tabForms);
-                         this.butNewgoods();
+                           
+                        //  this.butNewgoods();
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
@@ -730,11 +731,12 @@ export default {
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
             this.serviceId=response.data;
+             this.getListData(this.tabForms);
             this.cancelService(); 
             }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
             })
         },
         cencel(){

@@ -65,16 +65,28 @@ export default {
            this.clear();
            this.key=val;
        },
-       onResultChange(val){
+       unique(songs){
+            let result = {};
+            let finalResult=[];
+            for(let i=0;i<songs.length;i++){
+                result[songs[i].id]=songs[i];
+            }
+            for(var item in result){
+                finalResult.push(result[item]);
+            }
+            return finalResult;
+        },
+        onResultChange(val){
+           let rend=Object.assign({},val);
            let firstLen=val.submitData.length;
            let secondLen=this.originStationList.length;
            if(this.key=='list'){
                this.stationNum=firstLen;
            }else{
-               this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
+                rend.submitData=this.unique(val.submitData);
+                this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
            }
-           console.log('val--',val);
-           this.$emit('on-result-change',val);
+           this.$emit('on-result-change',rend);
        },
        goSearch(){
            window.open('/inventory/daily-inventory','_blank');

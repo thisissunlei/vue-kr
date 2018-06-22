@@ -402,11 +402,16 @@ export default {
                                      h('p', { 
                                         
                                         },ile),
-                                     h('span', { 
+                                         h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },'('),
+                                         h('span', { 
                                                 style: {
                                                     color:'#FF6868'
                                                 }       
-                                            },'(有重复 '),
+                                            },'有重复 '),
                                                h('span', { 
                                                 style: {
                                                     color:'black'
@@ -415,40 +420,6 @@ export default {
                             )
                           }
                           return h('div',btnRender)
-                        //  if(nes===0){
-                        //      nes=''
-                        //      classN=classN
-                        //  }else{
-                        //      nes=nes;
-                        //  }
-                            //    return h('div', [
-                            //             h('div', [
-                            //                 h('p', { 
-                                        
-                            //             },ile),
-                                            
-                            //                 h('span', { 
-                            //                       attrs: {
-                            //                 class:classN,
-                            //                     },
-                            //                     style: {
-                            //                         color:'#FF6868'
-                            //                     }       
-                            //                 },'(有重复 '),
-                            //                    h('span', { 
-                            //                     attrs: {
-                            //                 class:classN,
-                            //                     },
-                            //                     style: {
-                            //                         color:'black'
-                            //                     }       
-                            //                 },' 编号'+nes+')'),
-                                              
-
-
-                            //             ])
-                            // ])
-                     
 
                     }
                 },

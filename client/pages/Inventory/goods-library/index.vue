@@ -36,7 +36,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :current="tabForms.page" :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>

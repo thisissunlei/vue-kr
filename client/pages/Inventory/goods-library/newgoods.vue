@@ -220,6 +220,7 @@ import dateUtils from 'vue-dateutils';
         mounted(){
         console.log('sss',this.seacchValue)
         this.getSelectData();
+        this.$emit('newdateForm',this.formItem);
         // console.log('eeeeeeeeeeeee',this.floorList)
      
                 },

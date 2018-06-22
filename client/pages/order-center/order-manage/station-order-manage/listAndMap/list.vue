@@ -203,9 +203,7 @@ export default {
              var list=Object.assign({},item);
              list.name=item.cellName;
              list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
-             list.seatId=item.belongId;
              list.id=item.belongId;
-             list.originalPrice = item.originalPrice || item.seatPrice|| '';
              return list
          })
          this.endParams.submitData=[].concat(param).concat(this.originStationList);

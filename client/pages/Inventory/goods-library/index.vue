@@ -617,19 +617,9 @@ export default {
                 }); 
             })
         },
-                   //枚举 
-        getSelectData(){
-            this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.op.api.enums.community.SpaceSuiteType'
-            }).then((response)=>{
-               this.locationList=response.data;
-               console.log('<------------->',this.locationList)
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
+
+    
+
         cancelService(){
             this.openService=!this.openService;
         },
@@ -640,7 +630,7 @@ export default {
             this.floorList = [].concat(list);
         },
          butNewgoods(){//新增商品
-                    this.getSelectData();
+                    
                      this.newmodal=!this.newmodal;      
                   },
         showStatus(){
@@ -689,12 +679,9 @@ export default {
                             if(error.code==-1){
                                 this.newmodal=!this.newmodal;
                                 this.getsubGoods();
-                                this.getListData();
+                                // this.getListData();
                                 this.errdated=error.message;
-                        }else if(error.code==1){
-                                this.submitService();
-                                this.newmodal=!this.newmodal;
-                        } else{
+                        }else{
                             this.openMessage=true;
                             this.MessageType="error";
                             this.warn=error.message;
@@ -734,7 +721,6 @@ export default {
         close(){
             this.vImport=!this.vImport;
         },
-       
         upload(file){//商品导入重复
         // console.log('ppppppppppp',file)
         // this.vImport=!this.vImport;

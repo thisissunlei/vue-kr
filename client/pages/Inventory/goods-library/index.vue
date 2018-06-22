@@ -336,7 +336,6 @@ export default {
                 openStations:"",
                 spaces:"",
             },
-           
             moveStations:'',//导入成功返回移动办公室列表
             spaces:'',//导入成功返回独立办公室列表	
             stations:'',//导入成功返回固定办公桌列表
@@ -392,47 +391,63 @@ export default {
                      render(h, params){
                          var ile= params.row.name;
                          var nes=params.row.duplicateNo;
-                         var classN='display:none';
-                        //  if(nes===0){
-                        //      nes=''
-                        //      classN=classN;
-                        //  }else{
-                        //      nes=nes;
-                        //  }
-                               return h('div', [
-                                        h('div', [
-                                            h('p', { 
+                          var btnRender=[];
+                          if(params.row.duplicateNo==0){
+                                btnRender=[
+                                   h('p', {                                       
+                                        },ile),
+                                ];
+                          }else{
+                                 btnRender.push(
+                                     h('p', { 
                                         
                                         },ile),
-                                            
-                                            h('span', { 
-                                                  attrs: {
-                                            class:classN,
-                                                },
+                                     h('span', { 
                                                 style: {
                                                     color:'#FF6868'
                                                 }       
                                             },'(有重复 '),
                                                h('span', { 
-                                                attrs: {
-                                            class:classN,
-                                                },
                                                 style: {
                                                     color:'black'
                                                 }       
                                             },' 编号'+nes+')'),
-                                                h('span', { 
-                                                        attrs: {
-                                            class:classN,
-                                                },
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            },')')
+                            )
+                          }
+                          return h('div',btnRender)
+                        //  if(nes===0){
+                        //      nes=''
+                        //      classN=classN
+                        //  }else{
+                        //      nes=nes;
+                        //  }
+                            //    return h('div', [
+                            //             h('div', [
+                            //                 h('p', { 
+                                        
+                            //             },ile),
+                                            
+                            //                 h('span', { 
+                            //                       attrs: {
+                            //                 class:classN,
+                            //                     },
+                            //                     style: {
+                            //                         color:'#FF6868'
+                            //                     }       
+                            //                 },'(有重复 '),
+                            //                    h('span', { 
+                            //                     attrs: {
+                            //                 class:classN,
+                            //                     },
+                            //                     style: {
+                            //                         color:'black'
+                            //                     }       
+                            //                 },' 编号'+nes+')'),
+                                              
 
 
-                                        ])
-                            ])
+                            //             ])
+                            // ])
                      
 
                     }

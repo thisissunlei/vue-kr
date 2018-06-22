@@ -54,11 +54,12 @@ export default {
     data() {
         return{
            stationNum:0,
-           key:'list'
+           key:'list',
+           oldData:[]
         }
     },
     mounted(){ 
-       
+       this.oldData=this.stationData.submitData;
     },
     methods:{
        tabClick(val){
@@ -83,7 +84,8 @@ export default {
            if(this.key=='list'){
                this.stationNum=firstLen;
            }else{
-                rend.submitData=this.unique(val.submitData);
+                let middleArray=(val.submitData).concat(this.oldData);
+                rend.submitData=this.unique(middleArray);
                 this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
            }
            this.$emit('on-result-change',rend);

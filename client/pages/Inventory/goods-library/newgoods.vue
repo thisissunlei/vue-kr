@@ -9,10 +9,9 @@
                             style="width: 200px"
                             clearable
                         >
-                            <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
+                            <Option v-for="item in newFloorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
                         </Select> 
                     </Form-item>
-
                     <Form-item label="商品名称"  style="text-align:left"  class='daily-form' prop="name" >
                             <i-input 
                                 v-model="formItem.name" 
@@ -21,7 +20,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                      </Form-item>
-
                     <Form-item label="商品类型"     style="text-align:left"   class='daily-form'> 
                           <Select 
                             v-model="formItem.goodsType"
@@ -32,7 +30,6 @@
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select> 
                     </Form-item>
-
                     <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
                                 v-model="formItem.capacity" 
@@ -41,7 +38,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                     </Form-item>
-
                      <Form-item label="面积" class='daily-form' style="text-align:left;padding-left:10px;margin-left:-10px;"  prop="area" > 
                             <i-input 
                                 v-model="formItem.area" 
@@ -52,6 +48,7 @@
                      </Form-item>
 
                       <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"   label="方位" class='daily-form'>     
+
                         <Select 
                             v-model="formItem.locationType" 
                             placeholder="请选择方位"
@@ -164,10 +161,10 @@ import dateUtils from 'vue-dateutils';
                         {   
                             floor:this.floorValue,//所在楼层
                             name:'',//商品名称
-                            goodsType:' ',//商品类型
+                            goodsType:'',//商品类型
                             capacity:'',//工位数
                             area:'',//面积
-                            locationType:' ',//方位
+                            locationType:'',//方位
                             suiteType:'',//套间
                             quotedPrice:'',//商品定价
                             descr:'',//补充描述
@@ -186,13 +183,11 @@ import dateUtils from 'vue-dateutils';
                     // {value:'UNKNOWN',label:'未知'},
                 ],
                 locationTypeList:[
-
-                    // {value:' ',label:'全部方位'},
                     {value:'OUTSIDE_SPACE',label:'外侧间'},
                     {value:'INSIDE_SPACE',label:'内侧间'},
                     {value:'UNKNOWN',label:'未知'}
                 ],
-                
+                newFloorList:[], 
             ruleInvestment: {
                     name:[
                         { validator: validateName, trigger: 'change' }
@@ -214,7 +209,10 @@ import dateUtils from 'vue-dateutils';
             }
         },
         mounted(){
-        console.log('sss',this.seacchValue)
+        this.newFloorList=[].concat(this.floorList);
+        if(this.newFloorList.length>1){
+            this.newFloorList.splice(0,1);
+        }
         this.getSelectData();
         this.$emit('newdateForm',this.formItem);
         // console.log('eeeeeeeeeeeee',this.floorList)

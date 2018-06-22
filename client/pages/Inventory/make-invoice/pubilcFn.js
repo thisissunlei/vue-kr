@@ -259,7 +259,7 @@ function initListData(){
                         }, '查看') 
                 ];
                 
-                if(colData.invoiceStatus == 'RECOVERYED'){
+                if(colData.invoiceStatus != 'RECOVERYED'){
                     arr.push(h('Button', {
                             props: {
                                 type: 'text',

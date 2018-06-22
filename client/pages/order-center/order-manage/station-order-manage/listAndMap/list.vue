@@ -62,8 +62,8 @@ export default {
             default:{}
         },
         stationData:{
-            type:Object,
-            default:{}
+            type:Array,
+            default:()=>[]
         }
     }, 
     components:{
@@ -210,7 +210,7 @@ export default {
              list.originalPrice=item.originalPrice||item.seatPrice||'';
              return list
          })
-         this.endParams.submitData=[].concat(param).concat(this.stationData.submitData);
+         this.endParams.submitData=[].concat(param).concat(this.stationData);
          this.$emit('on-result-change',this.endParams);
        }
     }

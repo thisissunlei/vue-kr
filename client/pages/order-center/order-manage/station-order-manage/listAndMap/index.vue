@@ -16,7 +16,7 @@
                     :params.sync="params" 
                     :floors.sync="floors" 
                     @on-result-change="onResultChange" 
-                    :stationData.sync="stationData"
+                    :stationData.sync="oldData"
                     :originStationList.sync="originStationList" 
                     @clear="clear"
                 />
@@ -81,11 +81,11 @@ export default {
         onResultChange(val){
            let rend=Object.assign({},val);
            let firstLen=val.submitData.length;
-           let secondLen=this.stationData.length;
+           let secondLen=this.oldData.length;
            if(this.key=='list'){
                this.stationNum=firstLen;
            }else{
-                let middleArray=(val.submitData).concat(this.oldData);
+                let middleArray=val.submitData;
                 rend.submitData=this.unique(middleArray);
                 this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
            }

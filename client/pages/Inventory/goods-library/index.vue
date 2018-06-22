@@ -784,10 +784,9 @@ export default {
                         _this.importsu();
                         _this.judgeRepeat(file);
 					 } else {
-                  if(xhr.response.code==-1){
-                      
-                            _this.getsubGods();
-                            _this.errdate=xhr.response.message;
+                  if(xhr.response.code==-1){                    
+                        _this.getsubGods();
+                        _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();

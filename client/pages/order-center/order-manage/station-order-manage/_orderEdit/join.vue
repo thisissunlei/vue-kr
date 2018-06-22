@@ -20,7 +20,16 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                     </Col>
+
                     <Col class="col">
+                    <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems'></SelectChance>
+                    </FormItem>
+
+                    <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
+                    </Col>
+
+                    <!-- <Col class="col">
                     <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
                         <SelectChance name="formItem.saleChanceId" @onChange="changeChance" :value="saleChanceId" :orderitems='orderitems'></SelectChance>
                         <!-- <Select
@@ -32,8 +41,8 @@
                         >
                                 <Option v-for="(option, index) in salerOptions" :value="option"  :key="index">{{option}}</Option>
                         </Select> -->
-                    </FormItem>
-                    </Col>
+                    <!-- </FormItem> -->
+                    <!-- </Col> -->-->
                 </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -249,6 +258,9 @@ export default {
         };
 
         return {
+            opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
+            OpportunityRequired: true,
+            showChanceSelector: true,
             orderitems: {},
             showSaleChance: true,
             showFree: false,
@@ -1126,11 +1138,18 @@ export default {
             this.formItem.salerId = value;
         },
         changeChance: function (value) {
-            if (!value || value === '请选择') {
+            if (!value || value === 0 || value == -1) {
                 this.formItem.saleChanceId = '';
             } else {
                 this.formItem.saleChanceId = value;
             }
+        },
+        handleGotChancelist(count) {
+            debugger;
+            this.showChanceSelector = count >= 1
+            this.$Notice.info({
+                title: '您没有可用的机会，请确认登录账户或前往CRM检查'
+            });
         },
         deleteStation: function () {
             // 工位表单的删除按钮
@@ -1490,5 +1509,13 @@ export default {
     .ivu-modal {
         top: 0;
     }
+}
+#chancemsg {
+    position: absolute;
+    bottom: 2px;
+    display: block;
+}
+.OpportunityRequired {
+    color: #ed3f14;
 }
 </style>

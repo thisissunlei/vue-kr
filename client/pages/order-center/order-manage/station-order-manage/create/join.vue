@@ -22,8 +22,10 @@
                     </Col>
                     <Col class="col">
                     <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" :orderitems='orderitems'></SelectChance>
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems'></SelectChance>
                     </FormItem>
+
+                    <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
                 </Row>
             </DetailStyle>
@@ -242,6 +244,9 @@ export default {
             }
         };
         return {
+            opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
+            OpportunityRequired: true,
+            showChanceSelector: true,
             orderitems: {},
             test: "test",
             showSaleChance: false,
@@ -1046,13 +1051,19 @@ export default {
             this.validSaleChance();
         },
         changeChance(value) {
-            console.log("changeChance" + value)
-            if (!value || value === '请选择') {
+            if (!value || value === 0 || value == -1) {
                 this.formItem.saleChanceId = '';
             } else {
                 this.formItem.saleChanceId = value;
             }
             console.log(this.formItem.saleChanceId)
+        },
+        handleGotChancelist(count) {
+            debugger;
+            this.showChanceSelector = count >= 1
+            this.$Notice.info({
+                title: '您没有可用的机会，请确认登录账户或前往CRM检查'
+            });
         },
         validSaleChance() {
             this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
@@ -1060,6 +1071,7 @@ export default {
             obj.customerId = this.formItem.customerId;
             obj.communityId = this.formItem.communityId;
             obj.salerId = this.formItem.salerId;
+
             this.orderitems = Object.assign({}, obj);
         },
         deleteStation: function () {
@@ -1419,5 +1431,13 @@ export default {
     .ivu-modal {
         top: 0;
     }
+}
+#chancemsg {
+    position: absolute;
+    bottom: 2px;
+    display: block;
+}
+.OpportunityRequired {
+    color: #ed3f14;
 }
 </style>

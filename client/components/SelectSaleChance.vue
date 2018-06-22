@@ -19,7 +19,7 @@
 
 <template>
     <div class="com-select-chance">
-        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" @on-change="changeContent">
+        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent">
             <Option v-for="option in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -43,6 +43,7 @@ export default {
     },
     data() {
         return {
+            labelinvalue: true,
             disabled: false,
             value: 0,
             saler: '',
@@ -51,7 +52,8 @@ export default {
                 {
                     label: '请选择',
                     value: 0
-                }
+                },
+                { label: '无需机会', value: -1 }
             ]
         };
     },
@@ -84,8 +86,15 @@ export default {
         // console.log(this.orderitems)
     },
     methods: {
-        changeContent(value) {
-            this.$emit('onChange', value);
+        changeContent(item) {
+
+            let v;
+            if (item.label === "请选择" || item.label == '无需机会') {
+                v = '';
+            } else {
+                v = item.value
+            }
+            this.$emit('onChange', v);
         },
         //获取销售机会列表
         getSalerChanceList() {
@@ -98,13 +107,19 @@ export default {
             let list = [];
             let _this = this;
             http.get('get-salechance', parms, r => {
-                list = r.data.items;
+                r.data.items.map(item => {
+                    list.push({
+                        label: item.name,
+                        value: item.id
+                    })
+                })
+                list.unshift({ label: '无需机会', value: -1 })
                 _this.salerOptions = list;
-                console.log(list)
+                this.$emit('gotChanceList', list.length - 1);
             }, error => {
-                this.openMessage = true;
-                this.MessageType = "error";
-                this.warn = error.message;
+                this.$Notice.error({
+                    title: error.message
+                });
             }
             )
 

@@ -49,17 +49,16 @@
             </FormItem>
             <FormItem label="其他："> 
                 <SearchForm 
-                
                     :searchFilter="searchFilter"
-                    :onSubmit="onSubmitSearchForm"
                     :openSearch = true
                     @serachFormDataChanged="onSubmitSearchForm"
+                    :notShowSearchIconProps = true
                 />
             </FormItem>
         </Form>
         
-        <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
-        <Button type="primary" icon="ios-plus-outline"  @click="addEquipmentToGroup"  class="search-btn">添加</Button>
+        <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn"></Button>
+        <Button type="primary" icon="ios-plus-outline"  @click="addEquipmentToGroup"  class="search-btn"></Button>
 
 </div>
 
@@ -130,7 +129,10 @@ export default{
          },
          searchEquipment(){
              let _this = this;
+            console.log("otherSearchData",_this.otherSearchData)
+
             var newSearchData = Object.assign({},_this.otherSearchData,_this.formItem,{communityId:_this.communityId})
+            console.log("newSearchData",newSearchData)
             this.$emit('searchEquipment',_this.formItem,newSearchData);  
          },
         getCommunity(callback,sendMsg){
@@ -158,8 +160,9 @@ export default{
 
 
         onSubmitSearchForm(value){
+            console.log("value====>",value);
             this.otherSearchData = value;
-
+            console.log("this,.otherSearchData",this.otherSearchData)
         },
 
 

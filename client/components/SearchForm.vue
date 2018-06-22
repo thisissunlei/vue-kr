@@ -30,7 +30,7 @@
             />
         </div>
     </div>
-    <span :class="[flag?'click':'','icon-searching']" @click="onSearch"></span>
+    <span :class="[flag?'click':'','icon-searching']" @click="onSearch" v-if="showSearchIcon"></span>
 </div>
 </template>
 
@@ -41,7 +41,8 @@
      *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填
 	 *  @param {Function} onSubmit 提交函数
 	 * @param {Boolean} openSearch 初始时是否打开search
-	 * @param {Function} serachFormDataChanged 如果有这个函数则放大镜Icon不显示 
+	 * @param {Function} serachFormDataChanged 当input输入时直接将data传出去
+	 * @param {Boolean} notShowSearchIconProps 不显示放大镜
 	*/	
 export default {
     props:{
@@ -49,7 +50,9 @@ export default {
         inputName:String,
         searchFilter:Array,
 		onSubmit:Function,
-		openSearch : Boolean
+		openSearch : Boolean,
+		serachFormDataChanged :Function,
+		notShowSearchIconProps : Boolean
     },
     data(){
         return{
@@ -60,7 +63,8 @@ export default {
            ulClass:'',
            searchLabel:'',
            filterValue:'',
-           searchValue:''
+		   searchValue:'',
+		   showSearchIcon :true
         }  
     },
     created(){
@@ -78,16 +82,16 @@ export default {
 			}
 			this.flag=true;
 		}
+		if(this.notShowSearchIconProps){
+			
+			this.showSearchIcon = false
+		}
     },
     methods:{
 		passDataToFather(){
-			var value={};;
+			var value={};
 			value[this.filterValue]=this.searchValue
-			value.content=this.searchValue;
-			console.log("value",value);
-			if(this.serachFormDataChanged){
-				this.$emit("serachFormDataChanged",value)
-			}
+			this.notShowSearchIconProps && this.$emit("serachFormDataChanged",value)
 		},
         onSearch(){
             if(!this.flag){
@@ -115,7 +119,7 @@ export default {
             this.searchLabel=item.label ;
             this.filterValue=item.value;
             this.ulClass="";
-            
+            this.passDataToFather();
         },
         selectShow(){
             this.ulClass="show-li";

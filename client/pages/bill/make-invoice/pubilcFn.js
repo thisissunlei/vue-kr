@@ -191,7 +191,7 @@ function initListData(){
         },
         {
             title: '相关账单',
-            key: 'billNUms',
+            key: 'billNums',
             align:'center',
             type:'waitMake,alreadyMake,returnMake'
         },

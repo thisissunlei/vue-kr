@@ -1,11 +1,11 @@
  <template>         
-     <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;"  :rules="ruleInvestment"  label-position="top">
+     <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;" placeholder="请选择楼层" :rules="ruleInvestment"  label-position="top">
 
             
                   <Form-item label="所在楼层" style="text-align:left" class='daily-form'> 
                         <Select 
                             v-model="formItem.floor" 
-                            placeholder="所在楼层" 
+                            placeholder="请选择楼层" 
                             style="width: 200px"
                             clearable
                         >
@@ -13,7 +13,7 @@
                         </Select> 
                     </Form-item>
 
-                    <Form-item label="商品名称" style="text-align:left"  class='daily-form' prop="name" >
+                    <Form-item label="商品名称"  style="text-align:left"  class='daily-form' prop="name" >
                             <i-input 
                                 v-model="formItem.name" 
                                 placeholder="请输入商品名称"
@@ -22,10 +22,10 @@
                             />
                      </Form-item>
 
-                    <Form-item label="商品类型" style="text-align:left"  class='daily-form'> 
+                    <Form-item label="商品类型"     style="text-align:left"   class='daily-form'> 
                           <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
+                            v-model="formItem.goodsType"
+                            placeholder="请选择商品类型" 
                             style="width: 200px;"
                             clearable
                         >
@@ -54,6 +54,7 @@
                       <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"   label="方位" class='daily-form'>     
                         <Select 
                             v-model="formItem.locationType" 
+                            placeholder="请选择方位"
                             style="width: 200px;"
                             clearable
                         >
@@ -63,6 +64,7 @@
 
                      <Form-item v-if="formItem.goodsType=='SPACE'"  style="text-align:left"  label="是否套间" class='daily-form'>     
                                     <Select 
+                                    placeholder="请选择套间"
                                     v-model="formItem.suiteType" 
                                     style="width: 200px;"
                                     clearable
@@ -89,11 +91,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
- 
-               
-                 
-
-    
     </Form>   
 </template>
 <script>
@@ -178,7 +175,6 @@ import dateUtils from 'vue-dateutils';
                         },
                 // floorList:[],//所在楼层list
                  productList:[//商品类型list
-                    {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
@@ -191,7 +187,7 @@ import dateUtils from 'vue-dateutils';
                 ],
                 locationTypeList:[
 
-                    {value:' ',label:'全部方位'},
+                    // {value:' ',label:'全部方位'},
                     {value:'OUTSIDE_SPACE',label:'外侧间'},
                     {value:'INSIDE_SPACE',label:'内侧间'},
                     {value:'UNKNOWN',label:'未知'}

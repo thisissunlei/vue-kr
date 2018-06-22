@@ -441,11 +441,10 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-            
-                         var bacsk=params.row.suiteTypeName+'晚上';
-                         var devel=+params.row.locationTypeName;
-                         var colorClass='redClas' 
-                          h('div', [
+                         var bacsk=params.row.suiteTypeName;
+                         var devel=params.row.locationTypeName;
+                         var colorClass='redClas' ; 
+                          return h('div', [
                                         h('span',{
                                           attrs: {
 
@@ -454,13 +453,13 @@ export default {
                                         },devel),
                                         h('span',{
                                           
-                                    attrs: {
-                                            class:colorClass
-                                        }
+                                        attrs: {
+                                                class:colorClass
+                                            }
 
                                         },bacsk),
                                     ])
-
+                                
                     }
                 },
                 {
@@ -707,8 +706,7 @@ export default {
                     // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
-                           
-                        //  this.butNewgoods();
+                         this.butNewgoods();
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
@@ -814,7 +812,7 @@ export default {
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.judgeRepeat();
+        // this.judgeRepeat();
         this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      

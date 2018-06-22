@@ -67,7 +67,7 @@
         </Modal>
 
         <Modal
-            title="Title"
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"

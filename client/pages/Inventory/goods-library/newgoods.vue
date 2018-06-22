@@ -12,7 +12,6 @@
                             <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
                         </Select> 
                     </Form-item>
-
                     <Form-item label="商品名称"  style="text-align:left"  class='daily-form' prop="name" >
                             <i-input 
                                 v-model="formItem.name" 
@@ -21,7 +20,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                      </Form-item>
-
                     <Form-item label="商品类型"     style="text-align:left"   class='daily-form'> 
                           <Select 
                             v-model="formItem.goodsType"
@@ -32,7 +30,6 @@
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select> 
                     </Form-item>
-
                     <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
                                 v-model="formItem.capacity" 
@@ -41,7 +38,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                     </Form-item>
-
                      <Form-item label="面积" class='daily-form' style="text-align:left;padding-left:10px;margin-left:-10px;"  prop="area" > 
                             <i-input 
                                 v-model="formItem.area" 
@@ -50,7 +46,6 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                      </Form-item>
-
                       <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"   label="方位" class='daily-form'>     
                         <Select 
                             v-model="formItem.locationType" 

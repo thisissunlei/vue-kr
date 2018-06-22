@@ -175,7 +175,6 @@
             <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
             </span> -->
      </Form-item >
-
             <Form-item  label='独立办公室：' style="text-align:left;"  >
                 <span>{{resect.openStations}}</span>
             <!-- <span
@@ -185,7 +184,6 @@
             <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
              </span> -->
             </Form-item >
-
             <Form-item  label='固定办公室：' style="text-align:left;"  >
                 <span>{{resect.spaces}}</span>
             <!-- <span
@@ -227,7 +225,6 @@
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
-    
              <div slot="footer">
                  <Button type="primary" @click="determine" >确定导入</Button>
                  <Button type="ghost" style="margin-left:20px" @click="cencel" >取消</Button>
@@ -379,11 +376,11 @@ export default {
             width:'',
             totalCount:0,
             attractColumns:[
-                {
-                    title: '商品编号',
-                    key: 'code',
-                    align:'center' 
-                },
+                // {
+                //     title: '商品编号',
+                //     key: 'code',
+                //     align:'center' 
+                // },
                 {
                     title: '商品名称',
                     key: 'name',
@@ -767,8 +764,16 @@ export default {
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
+         var floors='';
+         var floorList=this.tabForms.floorList;
+        for(var i=0;i<floorList;i++){
+            floors+='floorList[i]','';
+            floors+=',';
+        }
+         form.append('floors',floors);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
+    
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
@@ -816,6 +821,7 @@ export default {
             this.feated=!this.feated;
         },
         continu(){//继续
+        this.importsuccess=!this.importsuccess;
         // this.judgeRepeat();
         this.feated=!this.feated;
         },
@@ -824,8 +830,10 @@ export default {
             
             let _this = this;
             var form = new FormData();
-            form.append('goodsData',this.fiteter);
+        
+            form.append('goodsData',this.fiteter); 
             form.append('communityId',this.tabForms.communityId);
+    
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {

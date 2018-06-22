@@ -108,7 +108,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;"><span style="color:red;text-decoration:underline;">{{errdated}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
     
              <div slot="footer">
@@ -274,7 +274,7 @@
            v-if="openService"
            @submit="submitService"
            @cancel="cancelService"
-           :singleForms="singleForms"
+           :singleForms="tabForms"
            :floor="newgoodForm.floor"
         />
         <div slot="footer">
@@ -336,7 +336,6 @@ export default {
                 openStations:"",
                 spaces:"",
             },
-           
             moveStations:'',//导入成功返回移动办公室列表
             spaces:'',//导入成功返回独立办公室列表	
             stations:'',//导入成功返回固定办公桌列表
@@ -389,6 +388,40 @@ export default {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
+                     render(h, params){
+                         var ile= params.row.name;
+                         var nes=params.row.duplicateNo;
+                          var btnRender=[];
+                          if(params.row.duplicateNo==0){
+                                btnRender=[
+                                   h('p', {                                       
+                                        },ile),
+                                ];
+                          }else{
+                                 btnRender.push(
+                                     h('p', { 
+                                        
+                                        },ile),
+                                         h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },'('),
+                                         h('span', { 
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            },'有重复 '),
+                                               h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },' 编号'+nes+')'),
+                            )
+                          }
+                          return h('div',btnRender)
+
+                    }
                 },
                 {
                     title: '商品类型',
@@ -408,24 +441,25 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                        return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: params.row.locationTypeName+' '+params.row.suiteTypeName
+                         var bacsk=params.row.suiteTypeName;
+                         var devel=params.row.locationTypeName;
+                         var colorClass='redClas' ; 
+                          return h('div', [
+                                        h('span',{
+                                          attrs: {
+
+                                              class:colorClass
                                         }
-                                    }, [
-                                    h('div', [
-                                        h('div',{
-                                          style:{
-                                                textOverflow:'ellipsis',
-                                                whiteSpace:'nowrap',
-                                                overflow: 'hidden'
-                                           }
-                                        },params.row.locationTypeName+' '+params.row.suiteTypeName),
+                                        },devel),
+                                        h('span',{
+                                          
+                                        attrs: {
+                                                class:colorClass
+                                            }
+
+                                        },bacsk),
                                     ])
-                                ])
-                        ])
+                                
                     }
                 },
                 {
@@ -597,8 +631,8 @@ export default {
             },
 
         cityFloor(params){
-            this.singleForms=Object.assign({},this.tabForms,params);
-            this.getListData(this.singleForms);
+            this.tabForms=Object.assign({},this.tabForms,params,{page:1});
+            //this.getListData(this.tabForms);
         },
         submitService(params){
             let data={
@@ -608,6 +642,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
+                this.getListData()
                 this.showpush();
                 this.butpushd=!this.butpushd;
         
@@ -617,19 +652,9 @@ export default {
                 }); 
             })
         },
-                   //枚举 
-        getSelectData(){
-            this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.op.api.enums.community.SpaceSuiteType'
-            }).then((response)=>{
-               this.locationList=response.data;
-               console.log('<------------->',this.locationList)
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
+
+    
+
         cancelService(){
             this.openService=!this.openService;
         },
@@ -640,7 +665,7 @@ export default {
             this.floorList = [].concat(list);
         },
          butNewgoods(){//新增商品
-                    this.getSelectData();
+                    
                      this.newmodal=!this.newmodal;      
                   },
         showStatus(){
@@ -678,23 +703,19 @@ export default {
             // this.newmodal=!this.newmodal;
                     //新增重名     
                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                    console.log('66666666666666666666',this.tabForms);
+                    // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
-                            this.getListData(this.tabForms);
-                        //  this.butNewgoods();
-                        this.newmodal=!this.newmodal;
+                         this.butNewgoods();
+                        // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
                             if(error.code==-1){
                                 this.newmodal=!this.newmodal;
                                 this.getsubGoods();
-                                this.getListData();
+                                // this.getListData();
                                 this.errdated=error.message;
-                        }else if(error.code==1){
-                                this.submitService();
-                                this.newmodal=!this.newmodal;
-                        } else{
+                        }else{
                             this.openMessage=true;
                             this.MessageType="error";
                             this.warn=error.message;
@@ -708,11 +729,12 @@ export default {
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
             this.serviceId=response.data;
+             this.getListData(this.tabForms);
             this.cancelService(); 
             }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
             })
         },
         cencel(){
@@ -729,12 +751,15 @@ export default {
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-            window.open('/api/order/goods/import/download-template');
+            var a = document.createElement('a');
+            a.href = '/api/order/goods/import/download-template';
+            a.download = name || "";
+            a.click();
+            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
         },
-       
         upload(file){//商品导入重复
         // console.log('ppppppppppp',file)
         // this.vImport=!this.vImport;
@@ -760,8 +785,6 @@ export default {
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
-                        _this.openMessage=true;
-                        _this.MessageType="error";
                         _this.warn=xhr.response.message;
                     }else if(xhr.response.code==-3){
                        _this.getpudyt(); 
@@ -793,7 +816,7 @@ export default {
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.judgeRepeat();
+        // this.judgeRepeat();
         this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      
@@ -812,9 +835,6 @@ export default {
                             _this.success(xhr.response);
                         } else {
                             _this.error(xhr.response);
-                            _this.$Notice.error({
-                                title:xhr.response.message
-                            });
                         }
                     }
                     else {
@@ -841,10 +861,9 @@ export default {
         },
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
-            this.singleForms=Object.assign({},this.tabForms);
         },
         searchClick(values){
-            this.tabForms=Object.assign({},this.tabForms,values);
+            this.tabForms=Object.assign({},this.tabForms,values,{page:1});
             //utils.addParams(this.tabForms);
         },
         clearClick(values){
@@ -958,8 +977,8 @@ export default {
                 })
             },
             onPageChange(page){
-                this.tabForms.page=page;
-                this.getListData(this.tabForms); 
+                this.tabForms=Object.assign({},this.tabForms,{page:page})
+                //this.getListData(this.tabForms); 
             },
             onMessageChange(data){
             this.openMessage=data;
@@ -1035,5 +1054,8 @@ export default {
                 background-color: #f6f6f6;
             }
         }
+     }
+     .ww{
+         color: black;
      }
 </style>

@@ -353,7 +353,7 @@ import utils from '~/plugins/utils';
                     ticket:JSON.stringify(params)
                 }
                 let url = 'post-reOpen-invoice';
-                if(this.waitMake == 'waitMake'){
+                if(this.type == 'waitMake'){
                     url = 'post-new-invoice';
                 }
               

@@ -751,7 +751,11 @@ export default {
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-            window.open('/api/order/goods/import/download-template');
+            var a = document.createElement('a');
+            a.href = '/api/order/goods/import/download-template';
+            a.download = name || "";
+            a.click();
+            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;

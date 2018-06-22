@@ -314,7 +314,8 @@
                         console.log("addNewData",addNewData);
                        this.$http.post('add-customer',addNewData).then( r => {
                             this.openCreate = false;
-                            this.getListData()
+                            this.getListData();
+                            this.$Message.success('新增成功');
                         }).catch( e => {
                             this.$Notice.error({
                                 title:e.message
@@ -337,7 +338,8 @@
                         console.log("this.editPageData",this.editPageData);
                        this.$http.post('edit-customer',this.editPageData).then( r => {
                             this.openEditDialog();
-                            this.getListData()
+                            this.getListData();
+                            this.$Message.success('编辑成功');
                         }).catch( e => {
                             this.$Notice.error({
                                 title:e.message

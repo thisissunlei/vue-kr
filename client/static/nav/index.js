@@ -18,6 +18,7 @@
     function setHref(type, router) {
         var href = '';
         var alias = '/new/#/';
+        var hostname = location.hostname;
         var port = location.port || '';
         if (port) {
             port = ":" + port;
@@ -25,6 +26,9 @@
         if (type && type == "vue") {
             alias = '/';
         }
+        if(type && type == "member"){
+            hostname =  memberadmintest03.krspace.cn;
+        }   
         href = location.protocol + "//" + location.hostname + port + alias + router;
         return href;
     }
@@ -556,9 +560,9 @@
                             menuCode: 'oper_csr_base',
                         },
                         {
-                            primaryText: '客户会员',
-                            router: 'member',
-                            type:'vue',
+                            primaryText: '协助客户授权',
+                            router: 'accredit',
+                            type:'member',
                             menuCode: 'customer_assets'
                         },
                     ]

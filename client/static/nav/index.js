@@ -27,9 +27,10 @@
             alias = '/';
         }
         if(type && type == "member"){
-            hostname =  memberadmintest03.krspace.cn;
+            alias = '/';
+            hostname =  'memberadmintest03.krspace.cn';
         }   
-        href = location.protocol + "//" + location.hostname + port + alias + router;
+        href = location.protocol + "//" + hostname + port + alias + router;
         return href;
     }
     //获取侧边栏里的数据

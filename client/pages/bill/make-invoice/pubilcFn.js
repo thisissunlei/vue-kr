@@ -179,8 +179,8 @@ function initListData(){
             align:'center',
             type:'returnMake',
             render(tag, params){
-                if(params.row.refundTime){
-                   let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.refundTime));
+                if(params.row.exchangeTime){
+                   let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.exchangeTime));
                     return time; 
                 }else{
                     return '--'

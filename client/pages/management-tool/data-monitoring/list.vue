@@ -234,7 +234,7 @@ export default {
                             'class': 'demo-spin-icon-load',
                             props: {
                                 type: 'load-c',
-                                size: 18
+                                size: 30
                             }
                         }),
                         h('div', '拼命加载中')

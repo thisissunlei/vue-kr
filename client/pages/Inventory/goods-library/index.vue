@@ -93,6 +93,7 @@
                    @newdateForm="newStatus"
                    :floorList="floorList"
                    :floorValue='floor'
+                   ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
@@ -572,7 +573,8 @@ export default {
             floor:'',
             serviceId:'',
             statusOldData:[],
-            singleForms:{}    
+            singleForms:{},
+            floorStr:'',    
         }
     },
         mounted(){
@@ -611,8 +613,8 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
-                this.showpush();
-            console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
+             this.showpush();
+            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
             let data={
                 goodsType:this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -655,6 +657,7 @@ export default {
             this.butpudyt=!this.butpudyt
         },      
          getsubGoods(){//注意
+
                     // this.newmodal=!this.newmodal;
                      this.careful=!this.careful;
                      },
@@ -678,32 +681,42 @@ export default {
         },
             //添加弹窗2
         subGoods(){
-            // this.newmodal=!this.newmodal;
-                    //新增重名     
-                    console.log('fdfffff',this.tabForms);
-                    let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                    // console.log('66666666666666666666',this.tabForms);
-                    this.$http.get('getNew-Rename',data).then((response)=>{
-                            this.getNew();
-                            
-                        // this.newmodal=!this.newmodal;
-                }).catch((error)=>{
-                    console.log('err',error)
-                            if(error.code==-1){
-                                this.newmodal=!this.newmodal;
-                                this.getsubGoods();
-                                // this.getListData();
-                                this.errdated=error.message;
-                        }else{
-                            this.openMessage=true;
-                            this.MessageType="error";
-                            this.warn=error.message;
-                        } 
+              let newPage=this.$refs.goodsNewPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       // this.newmodal=!this.newmodal;
+                            //新增重名     
+                            // console.log('fdfffff',this.tabForms);
+                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+                            // console.log('66666666666666666666',this.tabForms);
+                            this.$http.get('getNew-Rename',data).then((response)=>{
+                                    this.getNew();
+                                    
+                                // this.newmodal=!this.newmodal;
+                        }).catch((error)=>{
+                            // console.log('err',error)
+                                    if(error.code==-1){
+                                        this.newmodal=!this.newmodal;
+                                        this.getsubGoods();
+                                        // this.getListData();
+                                        this.errdated=error.message;
+                                }else{
+                                    this.openMessage=true;
+                                    this.MessageType="error";
+                                    this.warn=error.message;
+                                } 
+                        })
+                    }
                 })
+
+
+
+
+            
         },
        //新增接口a
         getNew(){
-         console.log('id--',this.tabForms);
+        //  console.log('id--',this.tabForms);
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
@@ -748,15 +761,15 @@ export default {
          this.fiteter=file;
          var form = new FormData();
 
-        console.log(this.tabForms.floor,"ppppp")
-         form.append('floors',this.tabForms.floor);
+        // console.log(this.tabForms.floor,"ppppp")
+         form.append('floors',this.floorStr);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
 				 if (xhr.status === 200) {
-                     console.log('eeessssssssssss', xhr.response.code )
+                    //  console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
                         _this.judgeRepeat(file);
 					 } else {
@@ -830,7 +843,7 @@ export default {
             xhr.send(form);
         },
         success(response){
-            console.log('<this.importsuccess>',this.importsuccess)
+            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
             // this.importgoods();
             this.resect=response.data;
@@ -855,7 +868,7 @@ export default {
                     }
                 }
                 str=str.substring(0,str.length-1);
-                this.tabForms.floor = str;
+                this.floorStr = str;
             }
            console.log('floorListfloorListfloorListfloorList',floorList)
         },
@@ -871,7 +884,7 @@ export default {
            this.statusForm=Object.assign({},obj);  
         },
          newStatus(obj){
-           console.log('eeeeeeeeeeeeeeeee',obj)
+        //    console.log('eeeeeeeeeeeeeeeee',obj)
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){

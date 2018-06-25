@@ -59,7 +59,7 @@
                                 <Form-item label="商品名称" class='daily-form' prop="name" >
                                     <i-input 
                                         v-model="formItem.name" 
-                                        placeholder="请输入商品名称"
+                                        placeholder="请输入房间号或商品名称"
                                         style="width: 200px"
                                         @keyup.enter.native="onKeyEnter($event)"
                                     />
@@ -489,7 +489,11 @@ export default {
                         str=str?str+','+item:item;
                     }) 
                     this.formItem.goodsStatus=str; 
+
+              
                     this.$emit('searchClick',this.formItem);
+       
+
                 }
             })
             
@@ -498,7 +502,10 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.formItem.investmentStatus=[];
-            this.$emit('clearClick',this.formItem);
+
+                    this.$emit('clearClick',this.formItem);
+
+    
         },
         //回车
         onKeyEnter(){
@@ -515,7 +522,14 @@ export default {
         },
         floorChange(param){
              this.num++;
-            this.$emit('cityFloor',this.formItem);
+
+                this.$refs['formItemInvestment'].validate((valid) => {
+                if (valid) {
+                    console.log('搜索',this.formItem)
+                    this.$emit('cityFloor',this.formItem);
+                }
+            })
+           
         }
     }
 }

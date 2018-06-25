@@ -10,20 +10,20 @@
                         <i-input v-model="formItem.applyNum" placeholder="请输入申请编号" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" />
                     </Form-item>
 
-                    <Form-item label="客户名称" class='daily-form' prop="customerName">
-                        <selectCustomers name="formItem.customerName" :onchange="changeCustomer" style="width: 200px"></selectCustomers>
-                        <!-- <i-input v-model="formItem.customerName" placeholder="请输入客户名称" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" /> -->
+                    <Form-item label="客户名称" class='daily-form' prop="customerID">
+                        <SelectCustomers name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px"></SelectCustomers>
+                        <!-- <i-input v-model="formItem.customerID" placeholder="请输入客户名称" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" /> -->
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
                         <span class="attract-font">社
                             <span style="display:inline-block;width:26px;"></span>区</span>
-                        <Select v-model="formItem.cityId" placeholder="请选择社区" style="width: 90px;margin-right:20px;" @on-change="cityChange">
+                        <Select v-model="formItem.cityId" placeholder="请选择社区" style="width: 90px;margin-right:20px;" @on-change="handleChangeCity">
                             <Option v-for="item in cityList" :value="item.cityId" :key="item.cityId">
                                 {{ item.cityName }}
                             </Option>
                         </Select>
-                        <Select v-model="formItem.communityId" placeholder="请输入社区" style="width: 90px;" @on-change="communityChange">
+                        <Select v-model="formItem.communityId" placeholder="请输入社区" style="width: 90px;" @on-change="handleChangeCommunity">
                             <Option v-for="item in communityList" :value="item.id" :key="item.id">
                                 {{ item.name }}
                             </Option>
@@ -35,23 +35,23 @@
                 <div style="white-space: nowrap;">
                     <div style="width:850px;display:inline-block;">
                         <Form-item label="操作类型" class='daily-form'>
-                            <Select v-model="formItem.invoiceType" placeholder="请输入操作类型" style="width: 200px" clearable>
-                                <Option v-for="item in invoiceSpe" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Select v-model="formItem.operateType" placeholder="请输入操作类型" style="width: 200px" clearable>
+                                <Option v-for="item in operateTypes" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </Form-item>
 
                         <Form-item label="操作款项" class='daily-form'>
-                            <Select v-model="formItem.contentType" placeholder="请输入操作款项" style="width: 200px" clearable>
-                                <Option v-for="item in invoiceDetail" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Select v-model="formItem.moneyType" placeholder="请输入操作款项" style="width: 200px" clearable>
+                                <Option v-for="item in moneyTypes" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="操作日期" class='priceForm' prop="ticketStartDate">
-                                <DatePicker v-model="formItem.ticketStartDate" placeholder="开始日期" style="width: 90px" />
+                            <Form-item label="操作日期" class='priceForm' prop="operateStartDate">
+                                <DatePicker v-model="formItem.operateStartDate" placeholder="开始日期" style="width: 90px" />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item class='priceForm' prop="ticketEndDate">
-                                <DatePicker v-model="formItem.ticketEndDate" placeholder="结束日期" style="width: 90px" />
+                            <Form-item class='priceForm' prop="operateEndDate">
+                                <DatePicker v-model="formItem.operateEndDate" placeholder="结束日期" style="width: 90px" />
                             </Form-item>
                         </div>
 
@@ -64,18 +64,17 @@
 
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;width:850px;">
-                        <span class="attract-font">状
-                            <span style="display:inline-block;width:26px;"></span>态</span>
-                        <Form-item class='daily-form' prop="customerName">
-                            <Select v-model="receiverName" filterable remote :placeholder="formItem.receiverName" :label-in-value="labelValue" :remote-method="remoteFun" @on-change="receiveBlur">
-                                <Option v-for="(option, index) in receiverOptions" :value="option.uid" :key="option.name">{{option.name}}</Option>
+                        <span class="attract-font status">状
+                            <span style="display:inline-block;width:22px;"></span>态</span>
+                        <Form-item class='daily-form ' prop="applyState">
+                            <Select v-model="formItem.applyState" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
+                                <Option v-for="option in applyStates" :value="option.uid" :key="option.name">{{option.name}}</Option>
                             </Select>
                         </Form-item>
 
                     </div>
                     <Button type="primary" @click="searchClick">搜索</Button>
                 </div>
-
             </Form>
         </div>
     </div>
@@ -83,8 +82,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
-import SelectSaler from '~/components/SelectSaler.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import SelectCustomers from '~/components/SelectCustomers.vue'
 export default {
     props: {
         type: {
@@ -92,7 +90,7 @@ export default {
         }
     },
     components: {
-        SelectSaler
+        SelectCustomers
     },
     data() {
         const validateName = (rule, value, callback) => {
@@ -105,9 +103,9 @@ export default {
         const validateTime = (rule, value, callback) => {
             var start = '';
             var end = '';
-            if (rule.field == 'ticketStartDate' || rule.field == 'ticketEndDate') {
-                start = this.formItem.ticketStartDate;
-                end = this.formItem.ticketEndDate;
+            if (rule.field == 'operateStartDate' || rule.field == 'operateEndDate') {
+                start = this.formItem.operateStartDate;
+                end = this.formItem.operateEndDate;
             }
             if (rule.field == 'receiveStartDate' || rule.field == 'receiveEndDate') {
                 start = this.formItem.receiveStartDate;
@@ -125,42 +123,29 @@ export default {
         };
 
         return {
-            receiverName: '',
             labelValue: true,
-            receiverOptions: [],
+            applyStates: [],
             loading: false,
             params: {},
             formItem: {
-                applyNum: '',
-                billNums: '',
-
+                applyNum: '',//申请编号
+                customerID: '',
                 communityId: '',
-                cityId: '',
-                companyId: '',
-                contentType: ' ',
-
-                customerName: '',
-                invoiceType: ' ',
-                startAmount: ' ',
-                invoiceStatus: ' ',
-
-
-                ticketEndDate: '',
-                ticketStartDate: '',
-                receiveEndDate: '',
-                receiveStartDate: '',
-                callbackStartDate: '',
-                callbackEndDate: '',
+                cityId: '', operateType: ' ',
+                moneyType: ' ',
+                operateEndDate: '',
+                operateStartDate: '',
+                applyState: '',
             },
             communityList: [],
             cityList: [],
-            invoiceSpe: [
+            operateTypes: [
                 { value: ' ', label: '全部规格' },
                 { value: 'COMMON_INVOICE', label: '增值税普通发票' },
                 { value: 'SPECIAL_INVOICE', label: '增值税专用发票' },
                 { value: 'SPECIAL_ELEC_INVOICE', label: '增值税普通电子发票' }
             ],
-            invoiceDetail: [
+            moneyTypes: [
                 { value: ' ', label: '全部内容' },
                 { value: 'SERVICE', label: '服务费' },
                 { value: 'SEAT', label: '工位服务费' },
@@ -178,97 +163,79 @@ export default {
                 { value: 'RETURNING', label: '未回收' },
                 { value: 'RECOVERYED', label: '已收回' },
             ],
-
+            applyStates: [
+                { value: ' ', label: '全部' },
+                { value: 'RETURNING', label: '未回收' },
+                { value: 'RECOVERYED', label: '已收回' },
+            ],
             formItemOld: {
-                ticketEndDate: '',
-                ticketStartDate: '',
-                receiveEndDate: '',
-                receiveStartDate: '',
-                callbackStartDate: '',
-                callbackEndDate: '',
+                operateEndDate: '',
+                operateStartDate: ''
             },
             ruleOperation: {
                 applyNum: [
                     { validator: validateName, trigger: 'change' }
                 ],
-                customerName: [
+                customerID: [
                     { validator: validateName, trigger: 'change' }
                 ],
-                ticketEndDate: [
+                operateEndDate: [
                     { validator: validateTime, trigger: 'change' }
                 ],
-                ticketStartDate: [
+                operateStartDate: [
                     { validator: validateTime, trigger: 'change' }
                 ],
-                receiveEndDate: [
-                    { validator: validateTime, trigger: 'change' }
+                applyState: [
+                    { validator: validateName, trigger: 'change' }
                 ],
-                receiveStartDate: [
-                    { validator: validateTime, trigger: 'change' }
-                ],
-                callbackStartDate: [
-                    { validator: validateTime, trigger: 'change' }
-                ],
-                callbackEndDate: [
-                    { validator: validateTime, trigger: 'change' }
-                ]
             }
         }
     },
     mounted() {
         this.getCityList();
-        this.getSourceData();
+        this.getApplyStateList();
+        this.getOperateTypeList();
+        this.getMoneyTypeList();
         var _this = this;
         this.params = _this.$route.query;
         _this.$emit('initData', this.formItem);
         let params = Object.assign({}, this.$route.query);
-        if (params.callbackEndDate) {
-            params.callbackEndDate = new Date(parseInt(params.callbackEndDate)).getTime();
+        if (params.operateStartDate) {
+            params.operateStartDate = new Date(parseInt(params.operateStartDate)).getTime();
         }
-        if (params.callbackStartDate) {
-            params.callbackStartDate = new Date(parseInt(params.callbackStartDate)).getTime();
-        }
-        if (params.receiveStartDate) {
-            params.receiveStartDate = new Date(parseInt(params.receiveStartDate)).getTime();
-        }
-        if (params.receiveEndDate) {
-            params.receiveEndDate = new Date(parseInt(params.receiveEndDate)).getTime();
-        }
-        if (params.ticketStartDate) {
-            params.ticketStartDate = new Date(parseInt(params.ticketStartDate)).getTime();
-        }
-        if (params.ticketEndDate) {
-            params.ticketEndDate = new Date(parseInt(params.ticketEndDate)).getTime();
+        if (params.operateEndDate) {
+            params.operateEndDate = new Date(parseInt(params.operateEndDate)).getTime();
         }
         this.formItem = Object.assign({}, this.formItem, params);
         setTimeout(() => {
-            if (!_this.formItem.contentType) {
-                _this.formItem.contentType = ' ';
+            if (!_this.formItem.moneyType) {
+                _this.formItem.moneyType = ' ';
             }
-            if (!_this.formItem.invoiceType) {
-                _this.formItem.invoiceType = ' ';
+            if (!_this.formItem.operateType) {
+                _this.formItem.operateType = ' ';
             }
         }, 500);
 
     },
     methods: {
+
         remoteFun(query) {
             if (query !== '') {
                 this.loading1 = true;
                 setTimeout(() => {
-                    this.getRecList(query)
+                    this.getApplyStateList(query)
                 }, 200);
             }
 
         },
-        getRecList: function (name) {
+        //获取申请状态枚举
+        getApplyStateList: function (name) {
             let params = {
                 name: name
             }
             let list = [];
             let _this = this;
-            this.$http.get('changeUserByName', params, r => {
-                // list = r.data.slice(0,10);
+            this.$http.get('get-apply-state-enum', params, r => {
                 list = r.data;
                 list.map((item) => {
                     let obj = item;
@@ -276,41 +243,55 @@ export default {
                     return obj;
                 });
                 _this.loading1 = false;
-                _this.receiverOptions = list;
+                _this.applyStates = list;
             }, e => {
-
-                console.log('error', e)
+                this.$Notice.error({
+                    title: e.message
+                });
             })
 
         },
-        //销售员搜索
-        remoteSaler(query) {
-            if (query !== '') {
-                this.loading = true;
-                setTimeout(() => {
-                    this.getSalerData(query)
-                }, 200);
+        //获取操作类型枚举
+        getOperateTypeList() {
+            let params = {
+                name: name
             }
-        },
-        //销售员
-        getSalerData(name) {
             let list = [];
-            this.$http.get('get-saler', { phoneOrEmail: name }).then((res) => {
-                list = res.data.slice(0, 10);
-                this.loading = false;
-            }).catch((error) => {
+            let _this = this;
+            this.$http.get('get-operate-type-enum', params, r => {
+                list = r.data;
+                list.map((item) => {
+                    let obj = item;
+                    obj.uid = item.uid + '';
+                    return obj;
+                });
+                _this.loading1 = false;
+                _this.operateTypes = list;
+            }, e => {
                 this.$Notice.error({
-                    title: error.message
+                    title: e.message
                 });
             })
         },
-        //渠道来源
-        getSourceData() {
-            this.$http.get('get-customer-source').then((res) => {
-
-            }).catch((error) => {
+        //获取操作款项枚举
+        getMoneyTypeList() {
+            let params = {
+                name: name
+            }
+            let list = [];
+            let _this = this;
+            this.$http.get('get-money-type-enum', params, r => {
+                list = r.data;
+                list.map((item) => {
+                    let obj = item;
+                    obj.uid = item.uid + '';
+                    return obj;
+                });
+                _this.loading1 = false;
+                _this.moneyTypes = list;
+            }, e => {
                 this.$Notice.error({
-                    title: error.message
+                    title: e.message
                 });
             })
         },
@@ -362,6 +343,25 @@ export default {
             var today = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date());
             return today;
         },
+
+        handleChangeCustomer(item) {
+            this.formItem.customerID = item.value;
+        },
+        //城市change事件
+        handleChangeCity(param) {
+            console.log('changeCIty', param)
+            if (this.params.cityId == param) {
+                this.getCommunityList(param)
+            } else {
+                this.getCommunityList(param)
+                this.param = {}
+            }
+
+        },
+        //社区change事件
+        handleChangeCommunity(param) {
+
+        },
         //搜索
         searchClick() {
             this.$refs['formItemOperation'].validate((valid) => {
@@ -379,35 +379,7 @@ export default {
         onKeyEnter() {
             this.searchClick();
         },
-        //城市change事件
-        cityChange(param) {
-            console.log('changeCIty', param)
-            if (this.params.cityId == param) {
-                this.getCommunityList(param)
-            } else {
-                this.getCommunityList(param)
-                this.param = {}
-            }
 
-        },
-        //社区change事件
-        communityChange(param) {
-
-        },
-        changeInvoiceStatus(val) {
-            var tab = localStorage.getItem('operation-side-invoice');
-            if (tab === 'TO_RETURN') {
-                this.formItem.invoiceStatusList = 'TO_RETURN,' + val
-            }
-
-
-        },
-        receiveBlur(value) {
-            if (value) {
-                this.formItem.receiverName = value.label;
-                this.formItem.receiverId = value.value;
-            }
-        },
     }
 }
 </script>
@@ -468,6 +440,10 @@ export default {
         }
         .ivu-tooltip-inner {
             white-space: normal;
+        }
+        .status {
+            position: relative;
+            top: 8px;
         }
     }
 }

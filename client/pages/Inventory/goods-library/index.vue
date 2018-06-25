@@ -230,7 +230,7 @@
 
     
     <Modal
-            :title="warn"
+            :title="warnCode"
             v-model="butpudyt"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -303,7 +303,7 @@ export default {
             },
           data() {
                 return{
-           
+            warnCode:'',
             openService:false,
             fiteter:'',
             feactye:'',
@@ -784,7 +784,7 @@ export default {
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
-                        _this.warn=xhr.response.message;
+                        _this.warnCode=xhr.response.message;
                     }else if(xhr.response.code==-3){
                        _this.getpudyt(); 
                        _this.feactye=xhr.response.message;

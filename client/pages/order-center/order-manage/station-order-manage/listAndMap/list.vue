@@ -61,6 +61,10 @@ export default {
             type:Object,
             default:{}
         },
+        stationData:{
+            type:Array,
+            default:()=>[]
+        }
     }, 
     components:{
        Loading
@@ -167,7 +171,6 @@ export default {
                 page.height = document.body.clientHeight;
             }
             this.page = Object.assign({},page);
-            console.log('page',page);
         },
         initFormat(){
             this.floorList=[].concat(this.floors);
@@ -207,7 +210,7 @@ export default {
              list.originalPrice=item.originalPrice||item.seatPrice||'';
              return list
          })
-         this.endParams.submitData=[].concat(param).concat(this.originStationList);
+         this.endParams.submitData=[].concat(param).concat(this.stationData);
          this.$emit('on-result-change',this.endParams);
        }
     }

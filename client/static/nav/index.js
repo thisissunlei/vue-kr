@@ -18,6 +18,7 @@
     function setHref(type, router) {
         var href = '';
         var alias = '/new/#/';
+        var hostname = location.hostname;
         var port = location.port || '';
         if (port) {
             port = ":" + port;
@@ -25,7 +26,11 @@
         if (type && type == "vue") {
             alias = '/';
         }
-        href = location.protocol + "//" + location.hostname + port + alias + router;
+        if(type && type == "member"){
+            alias = '/';
+            hostname =  'memberadmintest03.krspace.cn';
+        }   
+        href = location.protocol + "//" + hostname + port + alias + router;
         return href;
     }
     //获取侧边栏里的数据
@@ -555,6 +560,12 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
+                        // {
+                        //     primaryText: '协助客户授权',
+                        //     router: 'accredit',
+                        //     type:'member',
+                        //     menuCode: 'customer_assets'
+                        // },
                     ]
                 },
                 {
@@ -626,6 +637,12 @@
                             primaryText: '工位',
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
+                        },
+                        {
+                            primaryText: "商品库",
+                            router: 'inventory/goods-library',
+                            type: 'vue',
+                            menuCode: 'goods_list',
                         },
                         {
                             primaryText: '平面图配置',

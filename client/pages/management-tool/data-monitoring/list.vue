@@ -92,7 +92,7 @@ export default {
                 { value: '4', label: '工位收入表与收入中心收入表校验' },
             ],
 
-            name1: [
+            name4: [
                 { title: '社区id', key: 'communityId', align: 'center', },
                 { title: '社区名称', key: 'communityName', align: 'center', },
                 { title: '客户id', key: 'customerId', align: 'center', },
@@ -104,7 +104,7 @@ export default {
 
             ],
 
-            name2: [
+            name1: [
                 { title: '社区名称', key: 'communityName', align: 'center', },
 
                 { title: '工位id', key: 'conditionId', align: 'center', },
@@ -118,7 +118,7 @@ export default {
                 { title: '校验类型', key: 'validateType', align: 'center', },
 
             ],
-            name3: [
+            name2: [
                 { title: '社区id', key: 'communityId', align: 'center', },
                 { title: '社区名称', key: 'communityName', align: 'center', },
                 { title: '订单id', key: 'conditionId', align: 'center', },
@@ -131,7 +131,7 @@ export default {
                 { title: '校验类型', key: 'validateType', align: 'center', },
 
             ],
-            name4: [
+            name3: [
                 { title: '社区id', key: 'communityId', align: 'center', },
                 { title: '社区名称', key: 'communityName', align: 'center', },
                 { title: '订单id', key: 'conditionId', align: 'center', },

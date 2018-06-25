@@ -1,6 +1,5 @@
 
 dist
-.nuxt
 build
 
 npm-debug.log

@@ -14,7 +14,7 @@
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
                 <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
                 <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
@@ -279,6 +279,7 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
+import Buttons from '~/components/Buttons';
 export default {
 
 
@@ -294,7 +295,8 @@ export default {
                 FlagLabel,
                 ToolTip,
                 ImportFile,
-                BindService
+                BindService,
+                Buttons
                  },
         props:{
                 mask:String

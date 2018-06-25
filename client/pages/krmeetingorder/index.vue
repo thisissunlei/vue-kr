@@ -142,9 +142,7 @@ export default {
             })
         },
         returnText(param){
-            console.log("param",param);
             var meetingStatusOptions = this.meetingStatusOptions;
-            console.log("meetingStatusOptions",meetingStatusOptions)
             for(var i =0;i<meetingStatusOptions.length;i++){
                 if(param == meetingStatusOptions[i].name){
                     

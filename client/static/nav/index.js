@@ -874,12 +874,7 @@
                             menuCode: 'sso_appVersion_base',
                         },
                        
-                        {
-                            primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
-                            type: 'vue',
-                            router: 'nav-config'
-                        },
+                       
                     ]
                 },
                 {
@@ -994,6 +989,12 @@
                             menuCode: 'ops_tool_management',
                             type: 'vue',
                             router: 'ops'
+                        },
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'sso_loginLog_base',
+                            type: 'vue',
+                            router: 'nav-config'
                         },
 
                     ]

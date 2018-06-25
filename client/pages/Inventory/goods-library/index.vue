@@ -241,7 +241,7 @@
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" >我知道了</Button>
+                 <Button type="primary"  @click="innown">我知道了</Button>
             </div>
      </Modal>
 
@@ -656,6 +656,9 @@ export default {
                 this.pudyt=!this.pudyt;
         },
         getbutpudyt(){
+            this.butpudyt=!this.butpudyt
+        },      
+          innown(){
             this.butpudyt=!this.butpudyt
         },      
          getsubGoods(){//注意

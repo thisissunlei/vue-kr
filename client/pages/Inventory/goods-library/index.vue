@@ -14,10 +14,10 @@
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
+                <!-- <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button> -->
          </div>
 
             <Table 
@@ -36,7 +36,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :current="tabForms.page" :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         </Modal>
 
         <Modal
-            title="Title"
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -296,6 +296,7 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
+import Buttons from '~/components/Buttons';
 export default {
 
 
@@ -311,7 +312,8 @@ export default {
                 FlagLabel,
                 ToolTip,
                 ImportFile,
-                BindService
+                BindService,
+                Buttons
                  },
         props:{
                 mask:String
@@ -455,8 +457,7 @@ export default {
                                             }
 
                                         },bacsk),
-                                    ])
-                                
+                                    ])                               
                     }
                 },
                 {
@@ -688,6 +689,7 @@ export default {
               this.careful=!this.careful;
          },   
         buttPush(){
+            this.newmodal=!this.newmodal;
                 this.butPush();
                 this.getsubGoods();
                 this.getNew();
@@ -704,6 +706,7 @@ export default {
                     // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
+                            
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
@@ -765,16 +768,11 @@ export default {
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
-         var floors='';
-         var floorList=this.tabForms.floorList;
-        for(var i=0;i<floorList;i++){
-            floors+='floorList[i]','';
-            floors+=',';
-        }
-         form.append('floors',floors);
+
+        console.log(this.tabForms.floor,"ppppp")
+         form.append('floors',this.tabForms.floor);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
-    
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
@@ -782,12 +780,12 @@ export default {
                      console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
                         _this.importsu();
+                        // return;
                         _this.judgeRepeat(file);
 					 } else {
-                  if(xhr.response.code==-1){
-                      
-                            _this.getsubGods();
-                            _this.errdate=xhr.response.message;
+                  if(xhr.response.code==-1){                    
+                        _this.getsubGods();
+                        _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
@@ -831,7 +829,6 @@ export default {
             
             let _this = this;
             var form = new FormData();
-        
             form.append('goodsData',this.fiteter); 
             form.append('communityId',this.tabForms.communityId);
     
@@ -839,7 +836,7 @@ export default {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log('eeesss2222ss', xhr.response.code )
+                        
                         if (xhr.response && xhr.response.code > 0) {
                             _this.success(xhr.response);
                         } else {
@@ -868,8 +865,27 @@ export default {
                   this.MessageType="error";
                   this.warn=response.message;
         },
-        initData(formItem){
+        initData(formItem,floorList){
+            // console.log('hhihhh',foorlist)
+        
+            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
+            var str='';
+            if(this.tabForms.floor==' '||this.tabForms.floor==''){
+                // for
+                for(var i=floorList.length-1; i>=0; i--){
+                    if(floorList[i].floor!=' '){
+                             str=str+floorList[i].floor+','
+                    }
+
+                }
+                str=str.substring(0,str.length-1);
+                this.tabForms.floor = str;
+            }
+            
+        //    console.log('str',str)
+
+
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
@@ -950,8 +966,9 @@ export default {
         },
         determine(){//确定导入
             this.getsubGods();
-            // this.subsuccess();
+            this.subsuccess();
             this.judgeRepeat();
+          
         },
       //滚动监听
          onScrollListener(){            
@@ -971,8 +988,10 @@ export default {
                 this.statusData=select;
                 this.statusOldData=select;
             },
-            getListData(params){//列表
+            getListData(tabParams){//列表
                 this.loading=true;
+                let params = Object.assign({},tabParams)
+                params.floor = params.floor.length>1?' ':params.floor;
                 this.$http.get('getGoodsList',params).then((response)=>{
                     console.log('商品列表',response.data);
                     this.totalCount=response.data.totalCount;

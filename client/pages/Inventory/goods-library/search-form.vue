@@ -51,7 +51,6 @@
                                 </Select> 
                             </Form-item>
                     </div>
-
                     <!-- 第一行-->
                     <div style="padding: 30px 10px 10px 20px;background:#fff;margin-top:20px;">
                         <div style="white-space: nowrap;"> 
@@ -417,17 +416,12 @@ export default {
                     rentTime:[
                         { validator: validateTime, trigger: 'change' }
                     ]
-                }
+                },
+                num:0
             }
     },
     mounted(){
         this.getCityList();
-        var _this=this;
-        setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            _this.formItemOld=Object.assign({},this.formItem);
-            _this.formItem = Object.assign({},this.formItem,this.$route.query)
-        },500);
     },
     methods:{
         //社区接口
@@ -435,6 +429,10 @@ export default {
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=[].concat(res.data);
                 this.formItem.communityId=res.data.length?res.data[0].id:'';
+                if(this.num==0){
+                    this.$emit('initData',this.formItem);
+                    this.formItemOld=Object.assign({},this.formItem);
+                }  
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -445,7 +443,7 @@ export default {
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data;
-                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                this.formItem.cityId=res.data.length?res.data[0].cityId:'';      
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -467,6 +465,7 @@ export default {
                         this.floorChange(floor);
                     }
                     oldFloor=floor; 
+                    this.$emit('initData',this.formItem,res.data);
                 }
                 this.$emit('getFloor',this.floorList);
             }).catch((error)=>{
@@ -508,6 +507,7 @@ export default {
         },
         //社区change事件
         communityChange(param){
+            this.num++;
             this.getFloorList(param);
         },
         floorChange(param){

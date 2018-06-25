@@ -168,30 +168,12 @@
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
         <span>{{resect.moveStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in moveStationse"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-            </span> -->
      </Form-item >
             <Form-item  label='独立办公室：' style="text-align:left;"  >
                 <span>{{resect.openStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in spaces"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item >
             <Form-item  label='固定办公室：' style="text-align:left;"  >
                 <span>{{resect.spaces}}</span>
-            <!-- <span
-                      v-for="(item,index) in openStations"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item > 
         </div>
 </Form> 
@@ -361,7 +343,6 @@ export default {
             vImport:false,//导入
             warn:'',
             MessageType:'',
-   
             openMessage:false,
             statusForm:{},
             newgoodForm:{},
@@ -607,7 +588,6 @@ export default {
         watch:{   
             sideBar:function(val){
                 this.tableCommon();
-         
                 this.onScrollListener();
             },
             tabForms:function(val,old){
@@ -631,6 +611,8 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
+                this.showpush();
+            console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
             let data={
                 goodsType:this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -638,8 +620,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
-                this.getListData()
-                this.showpush();
+                this.getListData(this.tabForms)
                 this.butpushd=!this.butpushd;
         
             }).catch((error)=>{
@@ -777,12 +758,9 @@ export default {
 				 if (xhr.status === 200) {
                      console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
-                        _this.importsu();
-                        // return;
                         _this.judgeRepeat(file);
 					 } else {
                   if(xhr.response.code==-1){
-                      
                             _this.getsubGods();
                             _this.errdate=xhr.response.message;
                     }
@@ -811,7 +789,6 @@ export default {
                         this.warn=error.message;
                     } 
         },
-    
         getsubGods(){
                     this.carel=!this.carel;
         },
@@ -825,7 +802,6 @@ export default {
         },
         judgeRepeat(file){  //商品导入      
         // console.log('<iiiiiiii>',file)
-            
             let _this = this;
             var form = new FormData();
             form.append('goodsData',this.fiteter); 
@@ -854,6 +830,7 @@ export default {
             xhr.send(form);
         },
         success(response){
+            console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
             // this.importgoods();
             this.resect=response.data;
@@ -876,15 +853,11 @@ export default {
                     if(floorList[i].floor!=' '){
                              str=str+floorList[i].floor+','
                     }
-
                 }
                 str=str.substring(0,str.length-1);
                 this.tabForms.floor = str;
             }
-            
            console.log('floorListfloorListfloorListfloorList',floorList)
-
-
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});

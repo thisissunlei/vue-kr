@@ -39,7 +39,7 @@
                             type="only"
                             category="contract/upload"
                             :columnDetail="item.slogn"
-                            :multiple="false"
+                            :multiple="true"
                             @upSuccess="upSuccess"
                         />
                     </div>
@@ -216,11 +216,11 @@ import utils from '~/plugins/utils';
             },
             
             //上传成功
-            upSuccess(params,columnDetail){
+            upSuccess(params,columnDetail,list){
                 
                 let index = columnDetail.index;
                 this.invoiceData[index].fileId = params[0].fileId;
-                this.invoiceData[index].columnDetail = [].concat(params);
+                this.invoiceData[index].columnDetail = [].concat(list);
                 
                 this.changeData = new Date()
             },

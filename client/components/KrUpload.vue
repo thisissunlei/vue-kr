@@ -276,16 +276,17 @@ export default{
 			
 			var detail = Object.assign({},params);
 			if(this.multiple){
+				console.log(this.defaultList,"ppppp")
 				this.defaultList.push(detail)
 				this.upIconShow = true;
 			}else{
 				this.defaultList = [detail];
 				this.upIconShow = false;
 			}
-			console.log(this.onUpUrl,"ppppppp")
+			
 			// this.onUpUrl && this.onUpUrl();
-			this.$emit('onChange',[detail],this.columnDetail,this.defaultList);
-			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
+			this.$emit('onChange',[detail],this.columnDetail,[].concat(this.defaultList));
+			this.$emit('upSuccess',[detail],this.columnDetail,[].concat(this.defaultList));
 			
 		},
 		onTokenSuccess(){

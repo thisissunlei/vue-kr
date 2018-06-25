@@ -163,7 +163,6 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
-            console.log(item,"kkkkkkkkkk")
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
@@ -171,7 +170,8 @@
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
-                    href = setHref(child.type, child.router)
+                    href = setHref(child.type, child.router);
+                    console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -628,6 +628,12 @@
                             router: 'product/communityAllocation/communityStation'
                         },
                         {
+                            primaryText: "商品库",
+                            router: 'inventory/goods-library',
+                            type: 'vue',
+                            menuCode: 'goods_list',
+                        },
+                        {
                             primaryText: '平面图配置',
                             menuCode: 'oper_cmt_graph_base',
                             router: 'product/communityAllocation/communityPlanList'
@@ -1077,7 +1083,8 @@
                             },{
                                 primaryText: '开门记录',
                                 menuCode: 'iot_door_open_log',
-                                router: 'smarthardware/doorManage/openlog',
+                                type: 'vue',
+                                router: 'smarthardware/openlog',
                             },
                             {
                                 primaryText: '故障报警',
@@ -1148,11 +1155,11 @@
 
                     {
                         primaryText: '设备查询',
-                        menuCode: 'public',
+                        menuCode: 'device_deploy_search',
                         router: 'smarthardware/equipmentmanage/equipmentsearch',
                     },{
                         primaryText: 'IP冲突检测',
-                        menuCode: 'public',
+                        menuCode: 'device_ip_detection',
                         router: 'smarthardware/equipmentmanage/checkrepeatip',
                     }
                 ]

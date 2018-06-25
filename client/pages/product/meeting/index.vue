@@ -12,13 +12,7 @@
                         placeholder="请选择"
                         clearable
                     >
-                        <Option
-                            v-for="item in communityList"
-                            :value="item.value"
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
+                       <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
                  </div>
                  <div class="u-select-list">
@@ -193,7 +187,8 @@ export default {
                     align:'center',
                     render:(h,params)=>{
                         let status=params.row.appPublish?'已上架':'未上架'
-                        return status
+                        return h('span',{},status)
+                        
                     }
                 },
                 {
@@ -202,7 +197,7 @@ export default {
                     align:'center',
                     render:(h,params)=>{
                         let status=params.row.kmPublish?'已上架':'未上架'
-                        return status
+                        return h('span',{},status)
                     }
                 },
                 {
@@ -248,10 +243,33 @@ export default {
         }
     },
     mounted:function(){
-		this.getTableData(this.tabParams)
+        this.getTableData(this.tabParams);
+        this.getCommunityList(' ');
 	},
     methods:{
-        changePage(){
+        getCommunityList(name){
+            let params = {
+                    cmtName:name
+                }
+            this.$http.get('get-community-new-list', params).then((res)=>{
+              let  list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                this.communityList = list;
+               
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            
+            
+        },
+        changePage(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
@@ -273,6 +291,10 @@ export default {
             let params=Object.assign({},this.formItem);
             params.page=1;
             params.pageSize=15;
+            if(params.communityId==-1){
+                params.communityId=""
+            }
+
             this.getTableData(params);
         },
         jumpCreate(){
@@ -302,7 +324,7 @@ export default {
          openDelete(value){
             this.openCancel=!this.openCancel;
             if(value){
-                this.roomId=value.roomId
+                this.roomId=value.id
             }
         },
     }

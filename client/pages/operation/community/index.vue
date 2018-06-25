@@ -20,14 +20,14 @@
             <span class="content">
               <img src="~/assets/images/customer.png" alt="" style="margin:15px auto;width:30px;height:30px;margin-top:20px;">
             </span>
-            <span class="content title">现入驻客户</span>
+            <span class="content title">在驻客户</span>
             <span class="content number"><span>{{pageData.settledCustomer}}</span>个</span>
           </div>
           <div class="card-two item">
             <span class="content">
               <img src="~/assets/images/member.png" alt="" style="margin:12px auto;width:36px;height:33px;margin-top:20px;">
             </span>
-            <span class="content title">现入驻会员</span>
+            <span class="content title">在驻会员</span>
             <span class="content number"><span>{{pageData.settledMember}}</span>位</span>
           </div>
           <div class="card-three">
@@ -87,7 +87,7 @@
                       即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                     </Tooltip>
                   </div>
-                <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
+                <div class="header-right" v-if="list.length&&(list[0].toPutawayDays<8)">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:14px">个</span>
                   <span style="font-size:14px">({{list[0].remark2}}工位)</span>
@@ -123,7 +123,7 @@
                     即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>   
-                <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
+                <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays<8)">
                   {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
                   <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:14px">个</span>
                   <span style="font-size:14px">({{DueList[0].remark2}}工位)</span>
@@ -454,9 +454,9 @@ export default {
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<6){
+                }else if(way&&way<8){
                    item.payDaysName=this.getWeekNum(item.startDate);
-                }else if(way&&way>=6){
+                }else if(way&&way>=8){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';
@@ -480,9 +480,9 @@ export default {
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<6){
+                }else if(way&&way<8){
                    item.payDaysName=this.getWeekNum(item.endDate);
-                }else if(way&&way>=6){
+                }else if(way&&way>=8){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';
@@ -553,9 +553,9 @@ export default {
                       item.payDaysName='今日'
                     }else if(item.compareTime&&item.compareTime==1){
                       item.payDaysName='明日'
-                    }else if(item.compareTime&&item.compareTime<6){
+                    }else if(item.compareTime&&item.compareTime<7){
                       item.payDaysName=this.getWeekNum(item.visitTime);
-                    }else if(item.compareTime&&item.compareTime>=6){
+                    }else if(item.compareTime&&item.compareTime>=7){
                       item.payDaysName=item.compareTime+'日后'
                     }else{
                       item.payDaysName='-';

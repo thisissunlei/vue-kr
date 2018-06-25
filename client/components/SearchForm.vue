@@ -26,10 +26,11 @@
                 class="search-val" 
                 :placeholder="[placeholder?placeholder:'请输入搜索关键字']" 
                 :name="[inputName?inputName:'search']" 
+				@input="passDataToFather"
             />
         </div>
     </div>
-    <span :class="[flag?'click':'','icon-searching']" @click="onSearch"></span>
+    <span :class="[flag?'click':'','icon-searching']" @click="onSearch" v-if="showSearchIcon"></span>
 </div>
 </template>
 
@@ -39,13 +40,19 @@
      *  @param {String} inputName  单一搜索框的name名
      *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填
 	 *  @param {Function} onSubmit 提交函数
-	*/
+	 * @param {Boolean} openSearch 初始时是否打开search
+	 * @param {Function} serachFormDataChanged 当input输入时直接将data传出去
+	 * @param {Boolean} notShowSearchIconProps 不显示放大镜
+	*/	
 export default {
     props:{
         placeholder:String,
         inputName:String,
         searchFilter:Array,
-        onSubmit:Function
+		onSubmit:Function,
+		openSearch : Boolean,
+		serachFormDataChanged :Function,
+		notShowSearchIconProps : Boolean
     },
     data(){
         return{
@@ -56,16 +63,36 @@ export default {
            ulClass:'',
            searchLabel:'',
            filterValue:'',
-           searchValue:''
+		   searchValue:'',
+		   showSearchIcon :true
         }  
     },
     created(){
         if(this.searchFilter){
 			this.searchLabel=this.searchFilter[0].label;
 			this.filterValue=this.searchFilter[0].value;
-        }
+		}
+		if(this.openSearch){
+			if(this.searchFilter){
+				this.otherName="renderFilter";
+				this.className = "filter-show-form";
+			}else{
+				this.otherName='';
+				this.className = "show-form";
+			}
+			this.flag=true;
+		}
+		if(this.notShowSearchIconProps){
+			
+			this.showSearchIcon = false
+		}
     },
     methods:{
+		passDataToFather(){
+			var value={};
+			value[this.filterValue]=this.searchValue
+			this.notShowSearchIconProps && this.$emit("serachFormDataChanged",value)
+		},
         onSearch(){
             if(!this.flag){
                 if(this.searchFilter){
@@ -92,7 +119,7 @@ export default {
             this.searchLabel=item.label ;
             this.filterValue=item.value;
             this.ulClass="";
-            
+            this.passDataToFather();
         },
         selectShow(){
             this.ulClass="show-li";

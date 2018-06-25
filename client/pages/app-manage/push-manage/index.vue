@@ -172,7 +172,7 @@ export default {
           if(this.Params.createrName){
             this.Params.createrName="";
           }
-          let params=Object.assign(form,this.Params);
+          let params=Object.assign({},this.Params,form);
           utils.addParams(params);
       },
       showSearch (params) {
@@ -183,7 +183,7 @@ export default {
             this.searchData=form;
       },
       searchSubmit(){
-            let params=Object.assign(this.Params,this.searchData);
+            let params=Object.assign({},this.Params,this.searchData);
             utils.addParams(params);
      },
       getTableData(params){

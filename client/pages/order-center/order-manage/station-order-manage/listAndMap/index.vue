@@ -5,18 +5,22 @@
            <span>找不到商品?</span>
            <span style="cursor:pointer;text-decoration:underline;" @click="goSearch">去查询</span>
        </div>
-       <Tabs size="default" value="list" :animated="false">
+       <Tabs size="default" value="list" :animated="false" @on-click="tabClick">
             <TabPane label="以平面图方式选择" name="list">
-                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap>     
+                <planMap  v-if="key=='list'" :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap> 
+                <span v-if="stationNum&&key=='list'" class="select-num">已选中<span style="color:red;">{{stationNum}}</span>个商品</span>    
             </TabPane>
             <TabPane label="以列表方式选择" name="map">
-                <List  
+                <List 
+                    v-if="key=='map'"
                     :params.sync="params" 
                     :floors.sync="floors" 
                     @on-result-change="onResultChange" 
+                    :stationData.sync="oldData"
                     :originStationList.sync="originStationList" 
                     @clear="clear"
                 />
+                <span v-if="stationNum&&key=='map'" class="select-num">已选中<span style="color:red;">{{stationNum}}</span>个商品</span>
             </TabPane>
         </Tabs>
    </div>
@@ -50,23 +54,48 @@ export default {
     }, 
     data() {
         return{
-          
+           stationNum:0,
+           key:'list',
+           oldData:[]
         }
     },
-    mounted(){ 
-       
+    mounted(){
+       this.oldData=this.stationData.submitData;
     },
     methods:{
-       onResultChange(val){
-        //    console.log(val,"pppp")
-        //    return ;
-           this.$emit('on-result-change',val);
+       tabClick(val){
+           this.clear();
+           this.key=val;
+       },
+       unique(songs){
+            let result = {};
+            let finalResult=[];
+            for(let i=0;i<songs.length;i++){
+                result[songs[i].id]=songs[i];
+            }
+            for(var item in result){
+                finalResult.push(result[item]);
+            }
+            return finalResult;
+        },
+        onResultChange(val){
+           let rend=Object.assign({},val);
+           let firstLen=val.submitData.length;
+           let secondLen=this.oldData.length;
+           if(this.key=='list'){
+               this.stationNum=firstLen;
+           }else{
+                let middleArray=val.submitData;
+                rend.submitData=this.unique(middleArray);
+                this.stationNum=(firstLen-secondLen)>=0?(firstLen-secondLen):0;
+           }
+           this.$emit('on-result-change',rend);
        },
        goSearch(){
            window.open('/inventory/daily-inventory','_blank');
        },
-       clear(val){
-           this.$emit('clear',val);
+       clear(){
+           this.stationNum=0;
        }
     }
 }
@@ -74,6 +103,12 @@ export default {
 
 <style lang="less">
   .order-map-list{
+       .select-num{
+        display: inline-block;
+        position: absolute;
+        right: 150px;
+        bottom: -55px;
+       }
       .ivu-tabs{
             overflow: visible;
         }

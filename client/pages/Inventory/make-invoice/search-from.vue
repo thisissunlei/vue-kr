@@ -116,7 +116,7 @@
                                 />
                             </Form-item>
                         </div>
-                          <div v-if="type =='waitReturn' " style="display:inline-block">
+                          <!-- <div v-if="type =='waitReturn' " style="display:inline-block">
                             <Form-item label="收回时间" class='priceForm' prop="callbackStartDate">
                                 <DatePicker 
                                     v-model="formItem.callbackStartDate" 
@@ -132,7 +132,7 @@
                                     style="width: 90px"
                                 />
                             </Form-item>
-                        </div>
+                        </div> -->
                          
                     </div>
 
@@ -145,23 +145,35 @@
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;width:850px;">
                        <Form-item v-if="type=='alreadyReceive'" label="领取人员" class='daily-form' prop="invoiceTitle">
-                            <i-input 
-                                v-model="formItem.invoiceTitle" 
+                            <!-- <i-input 
+                                v-model="formItem.receiverName" 
                                 placeholder="请输入领取人员"
                                 style="width: 200px"
+                                @on-blur="receiveBlur"
                                 @keyup.enter.native="onKeyEnter($event)"
-                            />
+                            /> -->
+                            <Select
+                                v-model="receiverName"
+                                filterable
+                                remote
+                                :placeholder="formItem.receiverName"
+                                :label-in-value="labelValue"
+                                :remote-method="remoteFun"
+                                @on-change="receiveBlur">
+                                <Option v-for="(option, index) in receiverOptions" :value="option.uid" :key="option.name">{{option.name}}</Option>
+                            </Select>
                         </Form-item>
-                        <Form-item v-if="type =='waitReturn'"   label="收回状态" class='daily-form'> 
+                       <!--  <Form-item v-if="type =='waitReturn'"   label="收回状态" class='daily-form'> 
                             <Select 
-                                v-model="formItem.goodsType" 
+                                v-model="formItem.invoiceStatus" 
                                 placeholder="请选择收回状态" 
                                 style="width: 200px"
                                 clearable
+                                @on-change="changeInvoiceStatus"
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in returnList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
-                        </Form-item>
+                        </Form-item> -->
                         
                     </div>
                     <Button type="primary" @click="searchClick">搜索</Button>
@@ -216,7 +228,11 @@ export default {
             };
 
             return { 
+                receiverName:'',
+                labelValue:true,
+                receiverOptions:[],
                 loading:false, 
+                params:{},
                 formItem:{
                     applyNum:'',
                     billNums:'',
@@ -228,14 +244,16 @@ export default {
 
                     invoiceTitle:'',
                     invoiceType:' ',
-                    startAmount:'',
+                    startAmount:' ',
+                    invoiceStatus:' ',
 
-                    ticketEndDate:this.getToDay(),
-                    ticketStartDate:this.getToDay(),
-                    receiveEndDate:this.getToDay(),
-                    receiveStartDate:this.getToDay(),
-                    callbackStartDate:this.getToDay(),
-                    callbackEndDate:this.getToDay(),
+
+                    ticketEndDate:'',
+                    ticketStartDate:'',
+                    receiveEndDate:'',
+                    receiveStartDate:'',
+                    callbackStartDate:'',
+                    callbackEndDate:'',
                 },
                 communityList:[],
                 cityList:[],
@@ -258,8 +276,20 @@ export default {
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
+                returnList:[
+                    {value:' ',label:'全部'},
+                    {value:'RETURNING',label:'未回收'},
+                    {value:'RECOVERYED',label:'已收回'},
+                ],
                 
-                formItemOld:{},
+                formItemOld:{
+                    ticketEndDate:'',
+                    ticketStartDate:'',
+                    receiveEndDate:'',
+                    receiveStartDate:'',
+                    callbackStartDate:'',
+                    callbackEndDate:'',
+                },
                 ruleOperation: {
                     applyNum:[
                         { validator: validateName, trigger: 'change' }
@@ -292,11 +322,29 @@ export default {
         this.getCityList();
         this.getSourceData();
         var _this=this;
+        this.params = _this.$route.query;
+        _this.$emit('initData',this.formItem);
+        let params = Object.assign({},this.$route.query);
+        if(params.callbackEndDate){
+            params.callbackEndDate = new Date(parseInt(params.callbackEndDate)).getTime();
+        }
+        if(params.callbackStartDate){
+            params.callbackStartDate =  new Date(parseInt(params.callbackStartDate)).getTime();
+        }
+        if(params.receiveStartDate){
+            params.receiveStartDate = new Date(parseInt(params.receiveStartDate)).getTime();
+        }
+        if(params.receiveEndDate){
+            params.receiveEndDate =  new Date(parseInt(params.receiveEndDate)).getTime();
+        }
+        if(params.ticketStartDate){
+            params.ticketStartDate = new Date(parseInt(params.ticketStartDate)).getTime();
+        }
+        if(params.ticketEndDate){
+            params.ticketEndDate =  new Date(parseInt(params.ticketEndDate)).getTime();
+        }
+        this.formItem=Object.assign({},this.formItem,params);
         setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            _this.formItemOld=Object.assign({},_this.formItem);
-            _this.formItem=Object.assign({},_this.formItem,_this.$route.query);
-            
             if(!_this.formItem.contentType){
                 _this.formItem.contentType=' ';
             }
@@ -307,6 +355,37 @@ export default {
         
     },
     methods:{
+         remoteFun (query) {
+                if (query !== '') {
+                    this.loading1 = true;
+                    setTimeout(() => {
+                        this.getRecList(query)
+                    }, 200);
+                }
+
+            },
+        getRecList:function(name){
+                let params = {
+                    name:name
+                }
+                let list = [];
+                let _this = this;
+                this.$http.get('changeUserByName', params, r => {
+                    // list = r.data.slice(0,10);
+                    list = r.data;
+                    list.map((item)=>{
+                        let obj = item;
+                        obj.uid = item.uid+'';
+                        return obj;
+                    });
+                    _this.loading1 = false;
+                    _this.receiverOptions = list;
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {
@@ -341,8 +420,16 @@ export default {
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
-                this.formItem.communityId=res.data.length?res.data[0].id:'';
+                res.data.unshift({cityId:' ',name:'全部社区',id:' '})
+                 this.communityList=res.data.map(item=>{
+                    item.id = item.id+'';
+                    return item;
+                });
+                if(this.params.communityId){
+                    this.formItem.communityId=this.params.communityId;
+                }else{
+                    this.formItem.communityId=res.data.length?res.data[0].id:'';
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -352,8 +439,21 @@ export default {
         //城市接口
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data;
-                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                res.data.unshift({cityId:' ',cityName:'全部城市'})
+
+                this.cityList=res.data.map(item=>{
+                    item.cityId = item.cityId+''
+                    return item;
+                });
+
+                if(this.params.cityId){
+                    this.formItem.cityId=this.params.cityId;
+                }else{
+                    this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                    
+
+                }
+                this.getCommunityList(this.formItem.cityId)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -362,7 +462,7 @@ export default {
         },
         //获取今天的日期
         getToDay(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+            var today = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date());
             return today; 
         },
         //搜索
@@ -384,12 +484,33 @@ export default {
         },
         //城市change事件
         cityChange(param){
-            this.getCommunityList(param)
+            console.log('changeCIty',param)
+            if(this.params.cityId == param){
+                this.getCommunityList(param)
+            }else{
+                this.getCommunityList(param)
+                this.param = {}
+            }
+            
         },
         //社区change事件
         communityChange(param){
             
-        }
+        },
+        changeInvoiceStatus(val){
+            var tab=localStorage.getItem('operation-side-invoice');
+            if(tab === 'TO_RETURN'){
+                this.formItem.invoiceStatusList = 'TO_RETURN,'+val
+            }
+            
+            
+        },
+        receiveBlur(value){
+            if(value){
+                this.formItem.receiverName = value.label;
+                this.formItem.receiverId = value.value;
+            }
+        },
     }
 }
 </script>

@@ -8,9 +8,10 @@
     />
     <div class='enter-filed-table' id="daily-inventory-table-list">
         <span class="line"></span>
+        <span style="color:#495060;font-size:12px;margin-bottom:10px;display:inline-block;">即将到期而且还未续约的房间（工位）</span>
         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
             <div slot="loading">
-                    <Loading/>
+                <Loading/>
             </div> 
         </Table>
         <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
@@ -109,19 +110,29 @@ var layoutScrollHeight=0;
                     {
                         title: '商品类型',
                         key: 'type',
-                        width:110,
+                        width:75,
                         align:'center',
+                        render(h,params){
+                            let one = params.row.type.substr(0,2);
+                            let two = params.row.type.substr(2,3);
+                            return h('div',[
+                                    h('p',{
+                                    },one),
+                                    h('p',{
+                                    },two),
+                            ])
+                        }
                     },
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:70,
+                        width:65,
                         align:'center',
                     },
                     {
                         title: '剩余租期',
                         align:'center',
-                        width:90,
+                        width:80,
                         key: 'leaseRemainingDays',
                         render(h, params){
                             if(params.row.leaseRemainingDays<30){
@@ -163,13 +174,13 @@ var layoutScrollHeight=0;
                     {
                         title: '进场日',
                         align:'center',
-                        width:110,
+                        width:105,
                         key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:110,
+                        width:105,
                         key: 'endDate',
                     },
                     {
@@ -184,13 +195,34 @@ var layoutScrollHeight=0;
                     {
                         title: '当前签约价',
                         align:'right',
-                        width:100,
+                        width:80,
                         key: 'price',
                     },
                     {
                         title: '当前客户',
                         align:'center',
                         key: 'customerName',
+                        render(h, params){
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: params.row.customerName
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden'
+                                                }
+                                            },params.row.customerName),
+                                        ])
+                                    ])
+                            ])
+                        }
+
                     },
                     {
                         title: '当前在租工位数',
@@ -286,7 +318,7 @@ var layoutScrollHeight=0;
                     {
                         title: '商品定价',
                         align:'right',
-                        width:100,
+                        width:75,
                         key: 'quotedPrice',
                     },
                 ],
@@ -296,11 +328,9 @@ var layoutScrollHeight=0;
             }
         },
         mounted(){
-            console.log('this.$route.query',this.$route.query)
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                // this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -324,8 +354,6 @@ var layoutScrollHeight=0;
                 this.onScrollListener();
             },
             tabForms:function(val,old){
-                console.log('watch-----')
-
                 this.getCommonParam();
                 this.getData(this.tabForms); 
             }
@@ -448,7 +476,7 @@ var layoutScrollHeight=0;
             display:inline-block;
             width:100%;
             border-top:1px solid #dddee1;
-            margin-bottom:20px;
+            margin-bottom:10px;
         }
         .daily-table{
             padding-bottom:77px; 
@@ -517,7 +545,7 @@ var layoutScrollHeight=0;
      .enter-filed-table{
             padding-bottom:77px; 
             margin:0 20px;
-            margin-top: 30px;
+            //margin-top: 30px;
             position: relative;
             .ivu-tooltip{
                 width:100%

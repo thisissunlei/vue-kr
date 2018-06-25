@@ -1,7 +1,7 @@
 <template>
     <div class='make-invoice-form'>
         <div class="community-header">
-            <Form ref="formItemInvestment" :model="formItem"  label-position="left">
+            <Form ref="formItemInvestment" :model="formItem"  label-position="left" :rules="ruleOperation">
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;"> 
@@ -77,21 +77,21 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in contentTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in contentTypeList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="申请时间" class='priceForm' prop="endTime">
+                            <Form-item label="申请时间" class='priceForm' prop="applyStartDate">
                                 <DatePicker 
-                                    v-model="formItem.startTime" 
+                                    v-model="formItem.applyStartDate" 
                                     placeholder="开始日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endTime">
+                            <Form-item  class='priceForm' prop="applyEndDate">
                                 <DatePicker 
-                                    v-model="formItem.endTime" 
+                                    v-model="formItem.applyEndDate" 
                                     placeholder="结束日期"
                                     style="width: 90px"
                                 />
@@ -112,15 +112,15 @@
                             <span class="attract-font" style="padding-top:7px;">发票金额</span>
                             <Form-item  class="priceForm" prop="startAmount">
                                 <i-input 
-                                    v-model="formItem.startAmount" 
+                                    v-model="formItem.minAmount" 
                                     style="width: 90px"
                                     @keyup.enter.native="onKeyEnter($event)"
                                 />
                             </Form-item>
                             <span class="attract-line">至</span>
-                            <Form-item  class="priceForm" prop="endAmount">
+                            <Form-item  class="priceForm" prop="maxAmount">
                                 <i-input 
-                                    v-model="formItem.endAmount" 
+                                    v-model="formItem.maxAmount" 
                                     style="width: 90px"
                                     @keyup.enter.native="onKeyEnter($event)"
                                 />
@@ -130,7 +130,7 @@
                         </div>
                         <Form-item v-if="type =='all'"   label="我司主体" class='daily-form'> 
                             <Select 
-                                v-model="formItem.goodsType" 
+                                v-model="formItem.corporationId" 
                                 placeholder="请选择我司主体" 
                                 style="width: 200px"
                                 clearable
@@ -232,17 +232,47 @@ export default {
             //商品名称
             const validateName = (rule, value, callback) => {
                 // var str=publicFn.fucCheckLength(value);
-                if(value&&str>20){
+                if(value&&value.length>20){
                     callback('名称最多20个字节');
                 }else{
                     callback();
                 }
             };
-            //租期天数
-            const validateTime = (rule, value, callback) => {
+            const validateMoney = (rule, value, callback)=>{
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
+                }else if (this.formItem.startAmount&&this.formItem.maxAmount&&Number(this.formItem.startAmount)>Number(this.formItem.maxAmount)) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            }
+            const validateApplyNum = (rule, value, callback) => {
+                // var str=publicFn.fucCheckLength(value);
+                if(value&&value.length>20){
+                    callback('最多20个字节');
+                }else{
+                    callback();
+                }
+            }; 
+            const validateBillNums =  (rule, value, callback) => {
+                // var str=publicFn.fucCheckLength(value);
+                if(value&&value.length>20){
+                    callback('最多20个字节');
+                }else{
+                    callback();
+                }
+            }; 
+             const validateTime = (rule, value, callback) => {
+                var start='';
+                var end='';
+                if(rule.field=='applyEndDate'||rule.field=='applyStartDate'){
+                    start=this.formItem.applyStartDate;
+                    end=this.formItem.applyEndDate;
+                }
+                if (start&&end&&start>end){
+                    callback('后者需要大于前者');
                 }else{
                     callback();
                 }
@@ -253,23 +283,22 @@ export default {
                 formItem:{
                     applyNum:'',
                     billNums:'',
-
-                    communityId:'',
+                    communityId:' ',
                     companyId:'',
-                    contentType:'',
-                    endAmount:' ',
-                    endRefundTime:'',
-                    endTicketTime:'',
-
-                    endTime:' ',
+                    maxAmount:'',
                     invoiceTitle:'',
-                    invoiceType:'',
+                    invoiceType:' ',
                     startAmount:'',
+                    cityId:' ',
 
                     startRefundTime:'',
                     startTicketTime:'',
-
                     startTime:'',
+                    endRefundTime:'',
+                    endTicketTime:'',
+                    endTime:'',
+                    contentType:' ',
+                    corporationId:' '
                 },
                 //发票规格数组
                 invoiceTypeList:[],
@@ -278,20 +307,81 @@ export default {
 
                 communityList:[],
                 cityList:[],
-                productList:[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-                ],
+                productList:[],
                 
                 formItemOld:{},
+                ruleOperation:{
+                    applyNum:[
+                        { validator: validateApplyNum, trigger: 'change' }
+                    ],
+                    billNums:[
+                        { validator: validateBillNums, trigger: 'change' }
+                    ],
+                    invoiceTitle: [
+                        { validator: validateName, trigger: 'change' }
+                    ],
+                    ticketEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    ticketStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    receiveEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    receiveStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    callbackStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    callbackEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    minAmount:[
+                        { validator: validateMoney, trigger: 'change' }
+                    ],
+                    maxAmount:[
+                        { validator: validateMoney, trigger: 'change' }
+                    ],
+                    applyStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    applyEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                }
             
             }
     },
     mounted(){
         this.getCityList();
         this.getInvoiceTypeList();
+        this.getContentTypeList();
+        this.getList();
+        var _this=this;
+        this.params = _this.$route.query;
+        _this.$emit('initData',this.formItem);      
+        let params = Object.assign({},this.$route.query);
+        if(params.startRefundTime){
+            params.startRefundTime = new Date(parseInt(params.startRefundTime)).getTime();
+        }
+        if(params.startTicketTime){
+            params.startTicketTime =  new Date(parseInt(params.startTicketTime)).getTime();
+        }
+        if(params.startTime){
+            params.startTime = new Date(parseInt(params.startTime)).getTime();
+        }
+        if(params.endRefundTime){
+            params.endRefundTime =  new Date(parseInt(params.endRefundTime)).getTime();
+        }
+        if(params.endTicketTime){
+            params.endTicketTime = new Date(parseInt(params.endTicketTime)).getTime();
+        }
+        if(params.endTime){
+            params.endTime =  new Date(parseInt(params.endTime)).getTime();
+        }
+        this.formItem=Object.assign({},this.formItem,params);
     },
 
     methods:{
@@ -300,8 +390,9 @@ export default {
             this.$http.get('get-enum-all-data',{
                 enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
             }).then((res)=>{
-                // utils.addAllselect('全部给个',res.data)
-                this.invoiceTypeList = [].concat(utils.addAllselect('全部规格',res.data));
+                res.data.unshift({code:'',desc:'全部',value:' '})
+
+                this.invoiceTypeList = res.data;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -310,9 +401,11 @@ export default {
         },
         getContentTypeList(){
             this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
+                enmuKey:'com.krspace.order.api.enums.invoice.ContentType'
             }).then((res)=>{
-                this.contentTypeList = [].concat(utils.addAllselect('全部内容',res.data));
+                 res.data.unshift({code:'',desc:'全部',value:' '})
+
+                this.contentTypeList = res.data;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -321,9 +414,19 @@ export default {
         },
         //社区接口
         getCommunityList(id){
+            console.log('---------');
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
-                this.formItem.communityId=res.data.length?res.data[0].id:'';
+                 res.data.unshift({cityId:' ',name:'全部社区',id:' '})
+                 this.communityList=res.data.map(item=>{
+                    item.id = item.id+'';
+                    return item;
+                });
+                 console.log('======')
+                if(this.params.communityId){
+                    this.formItem.communityId=this.params.communityId;
+                }else{
+                    this.formItem.communityId=res.data.length?res.data[0].id:'';
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -333,8 +436,40 @@ export default {
         //城市接口
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data;
-                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+               
+                res.data.unshift({cityId:' ',cityName:'全部城市'})
+
+                this.cityList=res.data.map(item=>{
+                    item.cityId = item.cityId+''
+                    return item;
+                });
+                 console.log('======',res.data)
+
+                if(this.params.cityId){
+                    this.formItem.cityId=this.params.cityId;
+                }else{
+                    this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                    
+
+                }
+                this.getCommunityList(this.formItem.cityId)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        getList(){
+            this.$http.get('corporation-list').then((res)=>{
+               
+                res.data.unshift({cityId:' ',cityName:'全部'})
+                this.productList = res.data.map(item=>{
+                    item.value = item.id+'';
+                    item.label = item.corporationName;
+                    return item;
+                })
+
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -345,20 +480,10 @@ export default {
         //搜索
         searchClick(){
             this.$refs['formItemInvestment'].validate((valid) => {
-                 this.$emit('searchClick',this.formItem);
+                 
                 if (valid) {
-                    //招商状态格式转换
-                    var str='';
-                    this.formItem.status.map((item,index)=>{
-                            str=str?str+','+item:item;
-                    }) 
-                    this.formItem.investmentStatus=str; 
-                    //渠道来源格式转换
-                    var length=this.formItem.source.length;
-                    if(length){
-                        this.formItem.sourceId=this.formItem.source[0];
-                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
-                    }
+                    console.log('===>',this.formItem)
+                    this.$emit('searchClick',this.formItem);
                    
                 }
             })
@@ -375,6 +500,7 @@ export default {
         },
         //城市change事件
         cityChange(param){
+            console.log('---------',param);
             this.getCommunityList(param)
         },
         //社区change事件

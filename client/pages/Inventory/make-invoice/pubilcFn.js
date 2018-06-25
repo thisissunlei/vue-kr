@@ -13,7 +13,7 @@ function initListData(){
                     },
                     on:{
                         click:()=>{
-                            this.goAddPage();
+                            this.goView(params.row);
                         }
                     }
                 },params.row.applyNum)
@@ -29,13 +29,28 @@ function initListData(){
             title: '发票抬头',
             key: 'invoiceTitle',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            render:(h,params)=>{
+               
+                let {qualificationVO} =  params.row;
+                if(!qualificationVO){
+                    return '';
+                }
+                return qualificationVO.invoiceTitle
+            }
         },
         {
             title: '纳税人识别号',
             key: 'taxpayerNumber',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive',
+            render:(h,params)=>{
+                let {qualificationVO} =  params.row;
+                if(!qualificationVO){
+                    return '';
+                }
+                return qualificationVO.taxpayerNumber;
+            }
         },
         {
             title: '发票规格',
@@ -52,13 +67,15 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '--';
                 }
                 var detailList = [].concat(obj.row.invoiceDetailList)
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+
                 for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
-                            borderBottom:'1px solid #e9eaec',
+                            borderBottom:line,
                             padding:'8px 10px'
                         },
                         on: {
@@ -80,13 +97,16 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '--';
                 }
+
                 var detailList = [].concat(obj.row.invoiceDetailList)
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+
                 for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
-                            borderBottom:'1px solid #e9eaec',
+                            borderBottom:line,
                             padding:'8px 10px'
                         },
                         on: {
@@ -113,7 +133,7 @@ function initListData(){
         },
         {
             title: '收回状态',
-            key: 'name',
+            key: 'invoiceStatusName',
             align:'center',
             type:'waitReturn'
         },
@@ -129,7 +149,7 @@ function initListData(){
             align:'center',
             type:'alreadyReceive',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.receiveTime));
                 return time;
             }
         },
@@ -137,6 +157,7 @@ function initListData(){
             title: '发票张数',
             key: 'invoiceCount',
             align:'center',
+            width:70,
             type:'waitArrive,waitMail,waitReceive'
         },
         {
@@ -145,7 +166,7 @@ function initListData(){
             align:'center',
             type:'waitArrive,waitReceive,',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:ss",new Date(params.row.ctime));
                 return time;
             }
 
@@ -180,7 +201,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.receivedClick()
+                                    this.receivedClick(params.row)
                                 }
                             }
                         }, '签收')
@@ -206,7 +227,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.mailClick()
+                                    this.mailClick(params.row)
                                 }
                             }
                         }, '邮寄')
@@ -220,51 +241,58 @@ function initListData(){
             align:'center',
             type:'waitReturn',
             render:(h,params)=>{
+                let colData = params.row;
+                let arr = [
+                        h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.goView(colData)
+                                }
+                            }
+                        }, '查看') 
+                ];
+                
+                if(colData.invoiceStatus != 'RECOVERYED'){
+                    arr.push(h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.modifyClick(colData)
+                                }
+                            }
+                        }, '修改') )
+                }
+                if(colData.invoiceStatus == 'RETURNING'){
+                    arr.push(h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.callbackClick(colData)
+                                }
+                            }
+                        }, '收回'),)
+                }
                
-                return h('div', [
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    this.goView()
-                                }
-                            }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    this.callbackClick()
-                                }
-                            }
-                        }, '收回'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    this.modifyClick()
-                                }
-                            }
-                        }, '修改')  
-                ]);  
+                return h('div',arr );  
               
             }
         }

@@ -165,6 +165,21 @@ export default  {
         url: '/api/krspace-finance-web/coupon/city-and-type',
         method: 'get'
     },
+     //app管理--产品运营主页--app用户活跃情况分页
+     'get-app-operation-online-data': {
+        url: '/api/krspace-op-web/app/operation/online-data',
+        method: 'get'
+    },
+    //app管理--产品运营主页--会员7天线上化率
+    'get-app-operation-use-rate': {
+        url: '/api/krspace-op-web/app/operation/use-rate',
+        method: 'get'
+    },
+    //app管理--产品运营主页--活动情况
+    'get-app-operation-activity-data': {
+        url: '/api/krspace-op-web/app/operation/activity-data',
+        method: 'get'
+    },
     'get-community-list': {
         url: '/api/krspace-finance-web/operation/city-cmt-list',
         method: 'get'

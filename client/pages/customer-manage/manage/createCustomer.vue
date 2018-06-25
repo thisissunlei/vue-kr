@@ -5,7 +5,7 @@
                         v-model="formItem.company" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        :maxlength="max"
+                        :maxlength="maxName"
                     />
                 </Form-item>
                 <Form-item label="相关社区" class="bill-search-class" prop="communityId"> 
@@ -140,6 +140,7 @@
                 secondSource:[],
                 communityList:[],
                 max:25,
+                maxName:50,
                 ruleValidate:{
                     communityId:[
                         { required: true, message: '请选择社区'}

@@ -6,15 +6,21 @@
 
 
 		<div class="content">
-			<LabelText label="客户ID：" type="circle" style="width:30%">
-				{{customerBasic.id}}
-			</LabelText>
-			<LabelText label="客户名称："  type="circle" style="width:30%">
-				{{customerBasic.company}}
-			</LabelText>
-			<LabelText label="客户状态："  type="circle" style="width:30%">
-				{{customerBasic.status}}
-			</LabelText> 
+			<Row>  
+                <Col class="col circle" >
+					<div class="title">客户ID：</div>
+					<div class="contents">{{customerBasic.id}}</div>
+                </Col>
+                
+                <Col class="col circle">
+					<div class="title">客户名称：</div>
+					<div class="contents"><span>{{customerBasic.company}}</span></div>
+                </Col>
+                <Col class="col circle">
+					<div class="title">客户状态：</div>
+					<div class="contents">{{customerBasic.status}}</div>
+                </Col>
+            </Row>
 		</div>
 		<div class="tab-list">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
@@ -160,11 +166,11 @@
 <style lang="less" scoped>
     .customer-assets-detail{
 		.content{
-			height:50px;
-			line-height: 50px;
 			border-bottom: 1px solid #E8E9E9;
 			margin-bottom: 30px;
 			padding-left: 13px;
+			padding-top:20px;
+			padding-bottom:20px;
 		}
 		.tab-list{
 			margin-left: 25px;
@@ -218,4 +224,38 @@
 			}
 		}
     }
+    .col{
+    	width:33%;
+    	display:inline-block;
+    	vertical-align:top;
+    }
+    .col>.title{
+    	display:inline-block;
+    	font-size:14px;
+    	font-weight:bold;
+    }
+    .col>.contents{
+    	font-size:14px;
+    	vertical-align:top;
+    	display:inline-block;
+    	&:nth-child(2){
+			max-width:70%;
+    	}
+    }
+    .contents>span{
+    	display:inline-block;
+    	line-height:20px;
+    }
+    .circle{
+		&::before{
+			content:'';
+			display: inline-block;
+			width:8px;
+			height: 8px;
+			border:1px solid #333;
+			border-radius: 5px;
+			margin-right:10px;
+		}
+	}
+
 </style>

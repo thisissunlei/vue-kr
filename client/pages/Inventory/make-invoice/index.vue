@@ -14,19 +14,19 @@
             >
             <!-- waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn -->
                 <TabPane label="待签收" name="waitArrive"> 
-                    <List v-if="type == 'waitArrive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitArrive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待邮寄" name="waitMail" >
-                    <List v-if="type == 'waitMail'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitMail'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待领取" name="waitReceive" >
-                    <List v-if="type == 'waitReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitReceive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="已领取" name="alreadyReceive">
-                    <List v-if="type == 'alreadyReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'alreadyReceive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待退还" name="waitReturn">
-                    <List v-if="type == 'waitReturn'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitReturn'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -60,11 +60,38 @@
              this.type=tab?tab:'waitArrive';
         },
         methods:{
+            //格式转换
+            dateSwitch(data){
+                console.log('data=======',data)
+                if(data){
+                    return new Date(data).getTime();
+                }else{
+                    return '';
+                }
+            },
             tabsClick(val){
                 localStorage.setItem('operation-side-invoice',val);
                 this.type = val;
             },
             searchClick(params){
+                if(params.ticketEndDate){
+                    params.ticketEndDate = new Date(params.ticketEndDate).getTime();
+                }
+                if(params.ticketStartDate){
+                    params.ticketStartDate = new Date(params.ticketStartDate).getTime();
+                }
+                if(params.receiveEndDate){
+                    params.receiveEndDate = new Date(params.receiveEndDate).getTime();
+                }
+                if(params.receiveStartDate){
+                    params.receiveStartDate = new Date(params.receiveStartDate).getTime();
+                }
+                if(params.callbackStartDate){
+                    params.callbackStartDate = new Date(params.callbackStartDate).getTime();
+                }
+                if(params.callbackEndDate){
+                    params.callbackEndDate = new Date(params.callbackEndDate).getTime();
+                }
                 utils.addParams(params);
             },
             clearClick(params){

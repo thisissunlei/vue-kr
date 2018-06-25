@@ -1,12 +1,15 @@
 <template>
     <div class='make-invoice-list'>
+
          <Table 
             :columns="listColumns" 
             :data="listData"
             border
-        ></Table>
-         <div style="margin: 10px;overflow: hidden">
-            <!-- <Button type="primary" @click="onExport">导出</Button> -->
+        >
+            
+        </Table>
+     <div style="margin: 10px;overflow: hidden">
+            <Button type="primary" @click="onExport" v-if="type == 'all'">导出</Button>
             <div style="float: right;">
                 <Page 
                     :current="tableParams.page"
@@ -24,24 +27,26 @@
                 title="提示信息"
                 width="500"
             >
-            <div style="text-align:center;">
-                <div v-for="(item,index) in invoiceData" :key="index">
-                    <div  style="margin:10px 0px; text-align: left;width:350px;margin-left:50px;">  
-                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票编号" />  
+            <div style="text-align:left;border:1px dashed #dddada;" v-if="openMakeInvaice">
+                <div v-for="(item,index) in invoiceData" :key="item.fileId">
+                    <div  style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">  
+                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  
                     </div>
-                    <div style="margin:10px 0px; text-align: left;width:350px;margin-left:50px;">
+                    <div style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">
                         <span>上传文件:</span>
-                        <krUpload 
-                        style="margin-left:30px;"
-                            :file="[]"
+                        <KrUpload 
+                            :file="item.columnDetail||[]"
                             type="only"
-                            :columnDetail="{}"
-                            :multiple="false"
+                            category="contract/upload"
+                            :columnDetail="item.slogn"
+                            :multiple="true"
                             @upSuccess="upSuccess"
                         />
                     </div>
+                    <Button type="primary"  style="margin-right: 20px;float:right;margin-top:-45px;" @click="deleteData(index)" v-if="invoiceData.length>1">删除</Button>
+
                 </div>
-                
+                <Button type="primary" :disabled="addSubmit" style="margin-left: 20px;" @click="addData">添加</Button>
                 
             </div>
             <div slot="footer">
@@ -55,11 +60,33 @@
                 width="660"
             >
             <div>
-                <span style="height:30px;display:inline-block;">回退原因:</span><Input v-model="backData.refundReason" type="textarea" :rows="4" placeholder="请输入退回原因" />
+                <Form ref="formValidate" :model="backData" :rules="ruleBackData">
+                    <FormItem prop="refundReason">
+                         <span style="height:30px;display:inline-block;">回退原因:</span>
+                
+                        <Input v-model="backData.refundReason" :maxlength="200" type="textarea" :rows="4" placeholder="请输入退回原因" />    
+                    </FormItem>
+                   
+                </Form >
             </div>
             <div slot="footer">
                 <Button type="primary" @click="goBackSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="switchGoBack">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+                v-model="showSure"
+                title="提示信息"
+                width="660"
+            >
+            <div>
+                <span style="height:30px;display:inline-block;margin-left:20px;">发票张数:</span>
+                 <InputNumber :max="10" :min="1" v-model="piaoNumber" value="piaoNumber"></InputNumber>
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="sureSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openSure">取消</Button>
             </div>
         </Modal>
      
@@ -70,11 +97,14 @@
 <script>
     import publicFn from './pubilcFn';
     import KrField from '~/components/KrField';
-    import krUpload from '~/components/KrUpload';
+    import KrUpload from '~/components/KrUpload';
+    import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
+    
     export default {
         components:{
             KrField,
-            krUpload
+            KrUpload
         },
         props:{
             type:{
@@ -87,7 +117,13 @@
         },
         data () {
             return {
-                listData:[{name:'11'}],
+                addSubmit:true,
+                changeData:new Date(),
+                editItem:{},
+                number:true,
+                piaoNumber:null,
+                showSure:false,
+                listData:[],
                 openMakeInvaice:false,
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
@@ -95,18 +131,26 @@
                     page:1,
                     pageSize:15,
                     totalCount:0,
-                    flag:'list',
-                    invoiceStatus:this.status
                 },
                 backData:{
                     id:0,
                     refundReason:''
+                },
+                 ruleBackData: {
+                    refundReason: [
+                        { required: true, message: '退回原因必填', trigger: 'change' }
+                    ],
+                    
                 },
                 invoiceData:[
                     {
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
+                        slogn:{
+                            index:0
+                        },
+                        disabled:true
                     }
                 ]
 
@@ -120,25 +164,97 @@
             // this.tableParams=params; 
             //   utils.addParams(this.params);
         },
-        mounted(){
-            this.getListData(this.tableParams);
+        mounted(){   
+            var status=[];
+           switch (this.type) {
+               case 'waitMake':
+                   status.push('APPLYING');
+                   break;
+               case 'alreadyMake':
+                   status.push('INVOICED','SIGNED_POST','SIGNED','RECEIVED');
+                   break;
+               case 'returnMake':
+                   status.push('FORREOPN');
+                   break;
+               default:
+                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','FORREOPN');
+                   break;
+           } 
+           var str='';
+           status.map((item,index)=>{
+               str=str?item+','+str:item;    
+           })
+           this.tableParams.invoiceStatusList=str;
+           
+
+           var params=Object.assign({},this.tableParams,this.searchForm);
+           this.tableParams=params; 
+           this.getListData();
+        },
+        watch:{
+            changeData(val){ 
+                let disabled = false;
+                this.invoiceData.map(item=>{
+                    if(!item.fileId || !item.invoiceNum){
+                        disabled = true;
+                    }
+                })
+                this.addSubmit = disabled;
+            }
         },
 
         methods:{
-            //跳转创建页面
-            goAddPage(params){
-                 window.open(`/bill/make-invoice/${params.id}/add-invoice?id=${params.id}&isReady=edit`);
+            onExport(){
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                utils.commonExport(params,'/api/order/csr-invoice/export');
             },
+            
             //上传成功
-            upSuccess(params){
-                let arr = [].concat(this.invoiceData);
-                arr[arr.length-1] = params[0].fileId;
-                arr.push( {
+            upSuccess(params,columnDetail,list){
+                
+                let index = columnDetail.index;
+                this.invoiceData[index].fileId = params[0].fileId;
+                this.invoiceData[index].columnDetail = [].concat(list);
+                
+                this.changeData = new Date()
+            },
+            deleteData(index){
+                var invoiceData = [].concat(this.invoiceData);
+              
+                invoiceData.splice(index,1)
+                this.invoiceData = [].concat(invoiceData);
+                this.changeData = new Date()
+            },
+            addData(){
+                let length = this.invoiceData.length
+                let obj ={
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
-                    });
-                this.invoiceData=[].concat(arr);
+                        slogn:{
+                            index:length
+                        },
+                        disabled:true
+                    };
+                this.invoiceData.push(obj);
+                this.changeData = new Date()
+              
+
+            },
+            openpiaozi(index){
+                this.changeData = new Date()
+            },
+            openSure(item){
+                this.makeInvaice(item)
+                // this.showSure = !this.showSure
+            },
+            sureSubmit(){
 
             },
             //回退按钮点击
@@ -152,59 +268,147 @@
                 this.openGoBack = !this.openGoBack;
             },
             //跳转查看页面
-            goView(){
-
+            goView(params){
+                 window.open(`/publicPage/make-invoice/${params.id}/view-detail`);
             },
             //回退提交
             goBackSubmit(){
-                let params = Object.assign({},this.backData);
-                this.$http.post('get-project-home', params).then((res)=>{
-                    // this.listData=res.data.items;
-                    this.getListData();
-                    this.switchGoBack();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
+                // if(!this.backData.refundReason){
+                //     return ;
+                // }
+                this.$refs['formValidate'].validate((valid) => {
+                    if (valid) {
+                        let params = Object.assign({},this.backData);
+                        this.$http.post('csr-invoice-refund', params).then((res)=>{
+                        
+                            this.getListData();
+                            this.switchGoBack();
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
+                    }
                 })
+                
             },
             //开票按钮点击
-            makeInvaice(){  
+            makeInvaice(data){  
                 this.invoiceData = [
                     {
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
+                        slogn:{
+                            index:0
+                        },
+                        disabled:true
                     }
                 ];
-
+                this.editItem = data;
                 this.switchMakeInvaice();
             },
             //开票页面开关
             switchMakeInvaice(){
                 this.openMakeInvaice = !this.openMakeInvaice;
+                if(!this.openMakeInvaice){
+                    this.invoiceData = [
+                        {
+                            fileId:'',
+                            invoiceId:'',
+                            invoiceNum:'',
+                            slogn:{
+                                index:0
+                            },
+                            disabled:true
+                        }
+                    ];
+                }
+            },
+            checkData(){
+                let result = true;
+                this.invoiceData.map(item=>{
+                    if(!item.fileId || !item.invoiceNum){
+                        result = false;
+                    }
+                });
+                return result;
             },
             //开票提交
             makeInvaiceSubmit(){
-                let params = [].concat(this.invoiceData);
-                this.$http.post('post-make-invoice', params).then((res)=>{
+
+                let result = this.checkData()
+                if(!result){
+                    this.$Notice.error({
+                        title:'请填写完整开票信息。'
+                    });
+                    return;
+                }
+                let params = this.invoiceData.map(item=>{
+                    item.invoiceId = this.editItem.id;
+                    return item;
+                });
+
+                let postData = {
+                    ticket:JSON.stringify(params)
+                }
+                let url = 'post-reOpen-invoice';
+                if(this.type == 'waitMake'){
+                    url = 'post-new-invoice';
+                }
+              
+                this.$http.post(url, postData).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchMakeInvaice();
                 }).catch((err)=>{
+                    console.log('=====',err)
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
             //页面切换
-            changePage(){
-
+            changePage(page){
+                console.log('页面切换',page)
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                params.page = page;
+                this.$http.get('get-invoice-list', params).then((res)=>{
+                        this.listData=res.data.items;
+                        this.tableParams.totalCount = res.data.totalCount;
+                        this.tableParams.page = res.data.page;
+                     
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    data = parseInt(data);
+                    return dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data));
+                }else{
+                    return '';
+                }
             },
             //获取列表数据
             getListData(){
-                let tabParams = Object.assign({},this.tableParams);
-                this.$http.get('get-invoice-list', tabParams).then((res)=>{
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                this.$http.get('get-invoice-list', params).then((res)=>{
                         this.listData=res.data.items;
                         this.tableParams.totalCount = res.data.totalCount;
                         this.tableParams.page = res.data.page;

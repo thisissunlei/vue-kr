@@ -7,7 +7,7 @@
             <span 
                 v-if="data.taskStatus"
                 class="task-status" 
-                style="background: #EEEEEE;color: #666666;"
+                style="background: transparent;color: #666666;"
             >
                 <span 
                     class="actual"

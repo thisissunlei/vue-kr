@@ -1,16 +1,17 @@
 <template>
     <div class="add-invoice">
-        <SectionTitle title="申请开票"></SectionTitle>
+        <SectionTitle title="资料详情"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
                 <Row style="margin-bottom:30px">  
                     <Col span="12" class="col">
-                        <FormItem label="企业类别" style="width:252px" prop="customerId">
+                        <FormItem label="企业类别" style="width:252px" prop="titleType">
                             <Select 
                                 :disabled="isReady"
                                 v-model="formItem.titleType" 
                                 placeholder="请输入企业类别" 
                                 clearable
+                                @on-change="changeType"
                             >
                                 <Option v-for="item in unitTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -18,7 +19,18 @@
                     </Col>
 
                     <Col class="col">
-                        <FormItem label="纳税类型" style="width:252px"  prop="communityId">
+                        <FormItem label="发票抬头" style="width:252px" prop="invoiceTitle">
+                             <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.invoiceTitle" 
+                                placeholder="请输入发票抬头" 
+                            />
+                        </FormItem>
+                    </Col>
+
+
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="纳税类型" style="width:252px"  prop="taxpayerType">
                             <Select 
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerType" 
@@ -29,17 +41,9 @@
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col class="col">
-                        <FormItem label="发票抬头" style="width:252px" prop="salerId">
-                             <Input 
-                                :disabled="isReady" 
-                                v-model="formItem.invoiceTitle" 
-                                placeholder="请输入发票抬头" 
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col class="col">
-                        <FormItem label="纳税人识别码" style="width:252px" prop="startDate">
+                    
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="纳税人识别码" style="width:252px" prop="taxpayerNumber" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerNumber" 
@@ -48,8 +52,8 @@
                         </FormItem>
                     </Col>
 
-                    <Col class="col">
-                        <FormItem label="注册地址" style="width:252px" prop="startDate">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="注册地址" style="width:252px" prop="registerAddress">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.registerAddress" 
@@ -58,8 +62,8 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col">
-                        <FormItem label="注册电话" style="width:252px" prop="startDate">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="注册电话" style="width:252px" prop="registerPhone">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.registerPhone" 
@@ -68,8 +72,8 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col">
-                        <FormItem label="开户银行" style="width:252px" prop="startDate">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="开户银行" style="width:252px" prop="bank">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bank" 
@@ -78,8 +82,8 @@
                         </FormItem>
                         
                     </Col>
-                     <Col class="col">
-                        <FormItem label="银行账户" style="width:252px" prop="startDate">
+                     <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="银行账户" style="width:252px" prop="bankAccount">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bankAccount" 
@@ -90,48 +94,77 @@
                     </Col>
                 </Row>
             </DetailStyle>
-            <DetailStyle info="开票信息">
+            <DetailStyle info="开票信息" v-if="formItem.titleType=='COMPANY'">
                 <Row  style="margin-bottom:30px">   
                     <Col style="display:block;">
                        营业执照:
-                       <span 
+                        <KrUpload 
+                            :file="businessUrlName"
+                            type="only"
+                            :columnDetail="{}"
+                            :multiple="true"
+                            :disabled="isReady"
+                            category="contract/upload"
+                            @delete="(index)=>{
+                                imgDelete(index,'businessUrlName')
+                            }"
+                            @upSuccess="(detail)=>{
+                                upChange(detail,'businessUrlName')
+                            }"
+                        />
+                       <!-- <span 
                         v-for="(item,index) in businessUrlName"
                         :key="item.id"
                         style="color:#499df1;cursor:pointer;margin-right:10px;"
                         @click="businessClick(item,index,'bus')"
                        >
+                       
                          {{item.fileName}}
-                       </span>
+                       </span> -->
+                       
                     </Col>
                     <Col style="display:block;margin-top:20px;">
                        一般纳税人证明:
-                       <span 
+                        <KrUpload 
+                            :file="taxUrlName"
+                            type="only"
+                            category="contract/upload"
+                            :columnDetail="{}"
+                            @delete="(index)=>{
+                                imgDelete(index,'taxUrlName')
+                            }"
+                            @upSuccess="(detail)=>{
+                                upChange(detail,'taxUrlName')
+                            }"
+                            :multiple="true"
+                            :disabled="isReady"
+                        />
+                       <!-- <span 
                         v-for="item in taxUrlName"
                         :key="item.id"
                         style="color:#499df1;cursor:pointer;margin-right:10px;"
                         @click="businessClick(item,index,'txt')"
                        >
                          {{item.fileName}}
-                       </span>
+                       </span> -->
                     </Col>
                 </Row>
             </DetailStyle>
-
-            <PhotoAlbum 
+            
+            <!-- <PhotoAlbum 
                 :data="imgData" 
                 v-if="openBussiness" 
                 :eyeIndex="eyeIndex" 
                 @close="bussinessClose"
                 @downFile="downImg"
-             />
+             /> -->
             
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
-                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="!disabled">编辑</Button>
-                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">确定</Button>
-                    <Button class="view-btn" @click="rejectedSubmit">驳回</Button>
+                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
+                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
+                    <Button class="view-btn" @click="rejectedSubmit" v-if="isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
                 </div>
-                <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
 
         </Form>
@@ -149,33 +182,57 @@ import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import PhotoAlbum from '~/components/PhotoAlbum';
+import KrUpload from '~/components/KrUpload';
+
 
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
     export default {
+        components:{
+            KrUpload,
+            SectionTitle,
+            selectCommunities,
+            DetailStyle,
+            selectCustomers,
+            SelectSaler,
+            planMap,
+            PhotoAlbum
+        },
         data() {
-            const validateFirst = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.formItem.startDate)<new Date(value)){
-                    callback(new Error('首付款日期不得晚于起始日期'));
+            const validateMust = (rule, value, callback) => {
+                if(this.formItem.titleType=='PERSON'){
+                    callback();
+                }
+                if(this.formItem.titleType!='PERSON' && value === ''){
+                    callback(new Error('此项为必填项。'));
                 }else{
                      callback();
                 }
             };
+            const validatephone = (rule, value, callback) => {
+                if(this.formItem.titleType=='PERSON'){
+                    callback();
+                }
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (this.formItem.titleType!='PERSON' && !phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
+                }
+            };
             return {
+
                 isReady:true, //只读页面
                 disabled:false,
                 openBussiness:false,
                 //单位类型
                 unitTypeList:[
-                    {value:' ',label:'全部'},
                     {value:'COMPANY',label:'企业单位'},
                     {value:'PERSON',label:'个人/非企业单位'}
                 ],
                 //纳税类型
                 taxTypeList:[
-                    {value:' ',label:'全部'},
                     {value:'SMALL',label:'小规模纳税人'},
                     {value:'GENERAL',label:'一般纳税人'}
                 ],
@@ -240,62 +297,95 @@ import utils from '~/plugins/utils';
                     registerAddress:'',
                     registerPhone:'',
                     bank:'',
-                    bankAccount:''   
+                    bankAccount:'' ,
+                    verifyStatus:''  
                 },
                 //校验
                 ruleCustom:{
-                //     startDate: [
-                //         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
-                //     ],
-                //     firstPayTime: [
-                //         { required: true, trigger: 'change' ,validator: validateFirst},
-                //     ],
-                //     endDate: [
-                //         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                //     ],
-                //     endDateStatus: [
-                //         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                //     ],
-                //     communityId:[
-                //         { required: true, message: '请选择社区', trigger: 'change' }
-                //     ],
-                //     customerId:[
-                //         { required: true, message: '请选择客户', trigger: 'change' }
-                //     ],
-                //     salerId:[
-                //         { required: true, message: '请选择销售员', trigger: 'change' }
-                //     ],
-                //     signDate:[
-                //         { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
-                //     ]
+                    titleType: [
+                        { required: true, message: '请先选择企业类别', trigger: 'change' }
+                    ],
+                    taxpayerType: [
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    invoiceTitle: [
+                        { required: true, message: '请先选择结束时间', trigger: 'change' }
+                    ],
+                    taxpayerNumber: [
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    registerAddress:[
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    registerPhone:[
+                        {trigger: 'change' ,validator: validatephone},
+                    ],
+                    bank:[
+                       {trigger: 'change' ,validator: validateMust},
+                    ],
+                    bankAccount:[
+                       {trigger: 'change' ,validator: validateMust},
+                    ]
                 },
                 salerName:'请选择',
                 businessUrlName:[],
                 taxUrlName:[],
                 eyeIndex:0,
-                imgData:[]
+                imgData:[],
 
             }
         },
         head() {
             return {
-                title: '新建订单'
+                title: '资料详情'
             }
         },
-        components: {
-            SectionTitle,
-            selectCommunities,
-            DetailStyle,
-            selectCustomers,
-            SelectSaler,
-            planMap,
-            PhotoAlbum
-        },
          mounted(){
+            let params = Object.assign({},this.$route.query);
+            if(params.type == 'edit'){
+                //编辑模式
+                this.isReady = false;
+                
+            }else{
+                //查看模式
+                this.isReady = true;
+            }
             GLOBALSIDESWITCH("false");
             this.getViewDetail();
         },
         methods: {
+            changeType(value){
+                if(value){
+                    this.formItem.titleType = value;
+                }else{
+                    this.formItem.titleType = ''
+                }
+                //欢哥说的，切换类别，清空除抬头外其他数据
+                if(value=='PERSON'){
+                    let obj = {
+                        invoiceTitle : this.formItem.invoiceTitle,
+                        titleType :value,
+                        id:this.formItem.id,
+                        verifyStatus:this.formItem.verifyStatus
+                    }
+                    this.formItem = obj;
+                }
+            },
+            upChange(detail,type){
+                console.log('upChange',detail)
+                let businessUrlName = [].concat(this.businessUrlName);
+                console.log('this.businessUrlName==',this.businessUrlName)
+                let taxUrlName = [].concat(this.taxUrlName);
+                console.log('this.taxUrlName==',this.taxUrlName)
+                if(type == 'taxUrlName' && !this.taxUrlName.length){
+
+                    this.taxUrlName = taxUrlName.concat(detail);
+                }
+                if(type == 'businessUrlName' && !this.businessUrlName.length){
+
+                    this.businessUrlName = businessUrlName.concat(detail)
+                }
+            },
             bussinessClose(){
                 this.openBussiness=!this.openBussiness;
             },
@@ -312,13 +402,19 @@ import utils from '~/plugins/utils';
                 utils.downImg(url);
             },
             rejectedSubmit(){
-                // this.$http.put('get-financial-invoice-rejected',editData).then((res)=>{
-                //     console.log('editok',res);
-                // }).catch((err)=>{
-                //     this.$Notice.error({
-                //         title:err.message
-                //     });
-                // })
+                let param = Object.assign({},this.$route.query);
+                let params = {
+                    handleType:'reject',
+                    id :param.id,
+                }
+                this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                    window.close();
+                window.opener.location.reload(); 
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             getViewDetail(){
                 let params = Object.assign({},this.$route.query);
@@ -329,6 +425,7 @@ import utils from '~/plugins/utils';
                          list.fieldUrl=list.url;
                          this.businessUrlName.push(list);
                     })
+                    console.log(this.formItem)
                     this.formItem.taxCertificate.map((item,index)=>{
                          var list=Object.assign({},item);
                          list.fieldUrl=list.url;
@@ -341,24 +438,65 @@ import utils from '~/plugins/utils';
                 })
             },
             tabelInputChange(event){
-                console.log(event,"pppppppppp")
+                // console.log(event,"pppppppppp")
             },
             editClick(){
                 this.isReady = false;
+            },
+            imgDelete(index,type){
+                let businessUrlName = [].concat(this.businessUrlName);
+                let taxUrlName = [].concat(this.taxUrlName);
+                if(type == 'taxUrlName'){
+                    taxUrlName.splice(index)
+                    this.taxUrlName = [].concat(taxUrlName);
+                }   
+                if(type == 'businessUrlName'){
+                    businessUrlName.splice(index)
+                    this.bussinessClose = [].concat(businessUrlName)
+                }
             },
             back(){
                 window.history.go(-1);
             },
             handleSubmit:function(name) {
                let editData=Object.assign({},this.formItem);   
-               delete editData.ctime;     
-               this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
-                    console.log('editok',res);
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
+               delete editData.ctime;  
+               delete editData.rejectTime;
+               delete editData.verifyTime ; 
+               delete editData.utime ;
+               this.businessUrlName = this.businessUrlName.map(item=>{
+                item.sourceType = 'BUSINESS_LICENSE';
+                item.qualificationId = this.formItem.id;
+                return item;
+               })
+               this.taxUrlName = this.taxUrlName.map(item=>{
+                item.sourceType = 'TAX_CERTIFICATE';
+                item.qualificationId = this.formItem.id;
+                return item;
+               })
+               
+               editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
+               editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
+                delete editData.taxCertificate;
+               delete editData.businessLicense;
+
+
+               console.log('=====>',editData,this.businessUrlName)
+               // return;
+               this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
+                            console.log('editok',res);
+                            window.close();
+                        window.opener.location.reload();
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
+                    }
                 })
+               
             },
             changeCommunity(value){
                 // 选择社区

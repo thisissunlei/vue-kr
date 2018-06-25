@@ -2,11 +2,17 @@
   <div class="project-setting" id="projectSetting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="待开业项目" name="PREPARE">
-                <ProjectView  v-if="tabs=='PREPARE'"/>
+                <!--项目管理档案列表
+                 <Archives v-if="mask"/> 
+                -->
+                <ProjectView projectStatus="PREPARE"  v-if="tabs=='PREPARE'"/>
             </TabPane>
-
             <TabPane label="已开业项目" name="OPENED">
-               <ProjectView  v-if="tabs=='OPENED'" />
+
+                <!-- 项目总览
+                    <ProgressView v-if="!mask"/> 
+                -->
+               <ProjectView projectStatus="OPENED"  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
   </div>
@@ -15,43 +21,37 @@
 
 <script>
 
+import Archives from './archives'
 import ProjectView from './project-view';
 export default {
     components:{
+        Archives,
         ProjectView
     },
     data(){
         return{
-            mask:true,
+         
             tabs:'PREPARE'
         }
     },
     mounted(){
         GLOBALSIDESWITCH("false");
-        var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+        // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
        
-        this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
-        if(this.tabs=='OPENED'){
-            this.mask=false;
-            tabDom.style.overflow = 'visible';
-        }else{
-             tabDom.style.overflow = 'hidden';
-        }
+        // this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
+        // if(this.tabs=='OPENED'){
+        //     this.mask=false;
+        //     tabDom.style.overflow = 'visible';
+        // }else{
+        //      tabDom.style.overflow = 'hidden';
+        // }
     },
     methods:{
         tabsClick(key){
-            var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+            // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
-            if(key=='OPENED'){
-                tabDom.style.overflow = 'visible';
-                this.mask=false;
-
-            }else{
-                tabDom.style.overflow = 'hidden';
-                this.mask=true;
-            }
             this.tabs=key;
-            sessionStorage.setItem('chartSetting',key);
+            // sessionStorage.setItem('chartSetting',key);
         },
     }
 }

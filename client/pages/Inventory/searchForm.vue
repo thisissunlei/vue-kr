@@ -51,7 +51,7 @@
                             style="width: 200px"
                             multiple
                         >
-                            <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                        </Select> 
                     </Form-item>
                 </div>
@@ -306,12 +306,7 @@ export default {
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
-                inventoryList:[
-                    {value:'AVAILABLE',label:'未租'},
-                    {value:'NOT_EFFECT',label:'合同未生效'},
-                    {value:'IN_RENT',label:'在租'},
-                    {value:'DISABLE',label:'不可用'}
-                ],
+                inventoryList:[],
                 priceList:[
                     {value:'UNIT_PRICE',label:'工位单价'},
                     {value:'AMOUNT',label:'商品总价'}
@@ -362,8 +357,20 @@ export default {
     },
     mounted(){
         this.getCityList();
+        this.getSelectData();
     },
     methods:{
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.inventory.InventoryStatus'
+            }).then((response)=>{
+               this.inventoryList=response.data;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{

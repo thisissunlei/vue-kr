@@ -38,13 +38,20 @@ function initListData(){
             title: '纳税人识别码',
             key: 'taxpayerNumber',
             align:'center',
-            type:'VERIFYING,PASSED'
+            type:'VERIFYING,PASSED',
+            render:(h,params)=>{
+                return params.row.taxpayerNumber || '--';
+            }
         },
         {
             title: '注册地址',
-            key: ' registerAddress',
+            key: 'registerAddress',
             align:'center',
-            type:'VERIFYING,PASSED'
+            type:'VERIFYING,PASSED',
+            render:(h,params)=>{
+                return params.row.registerAddress || '-';
+            }
+
         },
         {
             title: '注册电话',
@@ -70,7 +77,7 @@ function initListData(){
             align:'center',
             type:'VERIFYING',
             render(tag, params){
-                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime)):'-';
+                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.ctime)):'-';
                 return time;
             }
         },
@@ -80,13 +87,15 @@ function initListData(){
             align:'center',
             type:'PASSED',
             render(tag, params){
-                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.verifyTime)):'-';
+                
+                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.verifyTime)):'-';
+                console.log(time,"llllllll")
                 return time;
             }
         },
         {
             title: '确认人员',
-            key: 'verifyUser',
+            key: 'verifyUserName',
             align:'center',
             type:'PASSED'
         },
@@ -122,7 +131,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.makeSure(colData)
                                 }
                             }
                         }, '确认'),
@@ -136,7 +145,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.cancel(colData)
                                 }
                             }
                         }, '驳回')
@@ -177,7 +186,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.goEdit(colData)
                                 }
                             }
                         }, '编辑') 

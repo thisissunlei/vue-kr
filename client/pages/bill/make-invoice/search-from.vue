@@ -120,7 +120,7 @@
                             <span class="attract-line">至</span>
                             <Form-item  class="priceForm" prop="maxAmount">
                                 <i-input 
-                                    v-model="formItem.endAmount" 
+                                    v-model="formItem.maxAmount" 
                                     style="width: 90px"
                                     @keyup.enter.native="onKeyEnter($event)"
                                 />

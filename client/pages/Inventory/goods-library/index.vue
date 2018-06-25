@@ -16,8 +16,8 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
+                <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" @click="butNewgoods"/>
+                <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  @click="importgoods"/>
          </div>
 
             <Table 

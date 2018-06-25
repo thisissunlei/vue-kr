@@ -17,7 +17,7 @@
                     <dl>
                         <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderShowStatus)}}</dd>
                     </dl>
-                    <dl>
+                    <dl @click="goToMember(detail.uid)">
                         <dt>下单会员ID：</dt><dd>{{detail.uid}}</dd>
                     </dl>
                     <dl>
@@ -174,6 +174,9 @@ export default {
       
    },
    methods:{
+       goToMember(id){
+            window.open(`/member/memberManage/list/${id}`,'_blank');
+       },
        getDetailInfo(){
            let _this =this;
             var params = {orderId :this.$route.query.orderId };

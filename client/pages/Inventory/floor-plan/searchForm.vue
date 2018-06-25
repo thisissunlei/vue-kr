@@ -142,6 +142,9 @@ export default {
             .ivu-form-item-content{
                 display:inline-block;
             }
+            .ivu-form-item:after, .ivu-form-item:before{
+                    content: none;
+                }
         }
         .ivu-form-item{
             margin-bottom:18px;

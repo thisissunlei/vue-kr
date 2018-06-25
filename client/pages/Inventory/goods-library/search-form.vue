@@ -430,7 +430,7 @@ export default {
                 this.communityList=[].concat(res.data);
                 this.formItem.communityId=res.data.length?res.data[0].id:'';
                 if(this.num==0){
-                    this.$emit('initData',this.formItem);
+                
                     this.formItemOld=Object.assign({},this.formItem);
                 }  
             }).catch((error)=>{
@@ -461,12 +461,15 @@ export default {
                     }
                     var floor=this.floorList[0].floor;
                     this.formItem.floor=floor; 
+
                     if(oldFloor==floor){
                         this.floorChange(floor);
                     }
                     oldFloor=floor; 
-                    this.$emit('initData',this.formItem,res.data);
+                    // this.$emit('initData',this.formItem,res.data);
+                      this.$emit('initData',this.formItem,this.floorList);
                 }
+                
                 this.$emit('getFloor',this.floorList);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -507,10 +510,11 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            this.num++;
+          
             this.getFloorList(param);
         },
         floorChange(param){
+             this.num++;
             this.$emit('cityFloor',this.formItem);
         }
     }

@@ -14,6 +14,14 @@
             @close="close"
             @upload="upload"
         />
+        <Input 
+            v-model="num"
+            placeholder="留言最多30字"
+            type="textarea"
+            :autosize="{minRows:2,maxRows:2}" 
+            :maxlength="200"
+        />
+        <Button type="primary" @click="jumpCreate">新建</Button>
     </div>
 </template>
 
@@ -35,10 +43,23 @@ export default {
                 planEndTime:1521504000000,
                 planStartTime:1520640000000
             },
-            file:{}
+            file:{},
+            num:''
         }
     },
     methods:{
+       jumpCreate(){
+                let data={
+                    text:this.num
+                }
+                this.$http.get('goods-ceshi', data).then((res)=>{
+                   
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+       },
        downFile(){
 
        },

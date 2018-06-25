@@ -265,6 +265,8 @@ export default {
                         this.getRoleS()
                         this.getRoleEdit()
                         this.$Message.info("操作成功");
+                        }).catch(()=>{
+                            this.$Message.warning("操作失败");
                         })
                     },
                     onCancel: () => {

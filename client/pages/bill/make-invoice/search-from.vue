@@ -242,7 +242,7 @@ export default {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if (this.formItem.startAmount&&this.formItem.endAmount&&Number(this.formItem.startAmount)>Number(this.formItem.endAmount)) {
+                }else if (this.formItem.startAmount&&this.formItem.maxAmount&&Number(this.formItem.startAmount)>Number(this.formItem.maxAmount)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
@@ -285,7 +285,7 @@ export default {
                     billNums:'',
                     communityId:' ',
                     companyId:'',
-                    endAmount:'',
+                    maxAmount:'',
                     invoiceTitle:'',
                     invoiceType:' ',
                     startAmount:'',

@@ -866,7 +866,6 @@ export default {
         },
         initData(formItem,floorList){
             // console.log('hhihhh',foorlist)
-        
             // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
             var str='';
@@ -876,14 +875,12 @@ export default {
                     if(floorList[i].floor!=' '){
                              str=str+floorList[i].floor+','
                     }
-
                 }
                 str=str.substring(0,str.length-1);
                 this.tabForms.floor = str;
             }
             
         //    console.log('str',str)
-
 
         },
         searchClick(values){

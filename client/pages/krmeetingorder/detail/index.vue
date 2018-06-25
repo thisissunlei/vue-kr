@@ -18,7 +18,7 @@
                         <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderShowStatus)}}</dd>
                     </dl>
                     <dl @click="goToMember(detail.uid)" >
-                        <dt>下单会员ID：</dt><dd style="color:#499df1">{{detail.uid}}</dd>
+                        <dt>下单会员ID：</dt><dd style="color:#499df1;cursor:pointer;">{{detail.uid}}</dd>
                     </dl>
                     <dl>
                         <dt>下单会员微信ID：</dt><dd>{{detail.wechatId}}</dd>

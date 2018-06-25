@@ -874,7 +874,12 @@
                             menuCode: 'sso_appVersion_base',
                         },
                        
-                       
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'pm_manage_role',
+                            type: 'vue',
+                            router: 'nav-config'
+                        },
                     ]
                 },
                 {

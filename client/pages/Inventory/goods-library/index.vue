@@ -16,8 +16,8 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <!-- <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button> -->
+                <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
+                <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
          </div>
 
             <Table 
@@ -36,7 +36,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :current="tabForms.page" :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         </Modal>
 
         <Modal
-            title="提示"
+            title="Title"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -93,6 +93,7 @@
                    @newdateForm="newStatus"
                    :floorList="floorList"
                    :floorValue='floor'
+                   ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
@@ -168,30 +169,12 @@
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
         <span>{{resect.moveStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in moveStationse"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-            </span> -->
      </Form-item >
             <Form-item  label='独立办公室：' style="text-align:left;"  >
                 <span>{{resect.openStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in spaces"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item >
             <Form-item  label='固定办公室：' style="text-align:left;"  >
                 <span>{{resect.spaces}}</span>
-            <!-- <span
-                      v-for="(item,index) in openStations"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item > 
         </div>
 </Form> 
@@ -247,7 +230,7 @@
 
     
     <Modal
-            :title="feactye"
+            :title="warnCode"
             v-model="butpudyt"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -258,7 +241,7 @@
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" >我知道了</Button>
+                 <Button type="primary"  @click="innown">我知道了</Button>
             </div>
      </Modal>
 
@@ -320,7 +303,7 @@ export default {
             },
           data() {
                 return{
-           
+            warnCode:'',
             openService:false,
             fiteter:'',
             feactye:'',
@@ -363,7 +346,6 @@ export default {
             vImport:false,//导入
             warn:'',
             MessageType:'',
-   
             openMessage:false,
             statusForm:{},
             newgoodForm:{},
@@ -457,8 +439,7 @@ export default {
                                             }
 
                                         },bacsk),
-                                    ])
-                                
+                                    ])                               
                     }
                 },
                 {
@@ -594,7 +575,8 @@ export default {
             floor:'',
             serviceId:'',
             statusOldData:[],
-            singleForms:{}    
+            singleForms:{},
+            floorStr:'',    
         }
     },
         mounted(){
@@ -610,7 +592,6 @@ export default {
         watch:{   
             sideBar:function(val){
                 this.tableCommon();
-         
                 this.onScrollListener();
             },
             tabForms:function(val,old){
@@ -634,6 +615,8 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
+             this.showpush();
+            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
             let data={
                 goodsType:this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -641,8 +624,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
-                this.getListData()
-                this.showpush();
+                this.getListData(this.tabForms)
                 this.butpushd=!this.butpushd;
         
             }).catch((error)=>{
@@ -676,7 +658,11 @@ export default {
         getbutpudyt(){
             this.butpudyt=!this.butpudyt
         },      
+          innown(){
+            this.butpudyt=!this.butpudyt
+        },      
          getsubGoods(){//注意
+
                     // this.newmodal=!this.newmodal;
                      this.careful=!this.careful;
                      },
@@ -690,6 +676,7 @@ export default {
               this.careful=!this.careful;
          },   
         buttPush(){
+            this.newmodal=!this.newmodal;
                 this.butPush();
                 this.getsubGoods();
                 this.getNew();
@@ -699,31 +686,42 @@ export default {
         },
             //添加弹窗2
         subGoods(){
-            // this.newmodal=!this.newmodal;
-                    //新增重名     
-                    console.log('fdfffff',this.tabForms);
-                    let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                    // console.log('66666666666666666666',this.tabForms);
-                    this.$http.get('getNew-Rename',data).then((response)=>{
-                            this.getNew();
-                        // this.newmodal=!this.newmodal;
-                }).catch((error)=>{
-                    console.log('err',error)
-                            if(error.code==-1){
-                                this.newmodal=!this.newmodal;
-                                this.getsubGoods();
-                                // this.getListData();
-                                this.errdated=error.message;
-                        }else{
-                            this.openMessage=true;
-                            this.MessageType="error";
-                            this.warn=error.message;
-                        } 
+              let newPage=this.$refs.goodsNewPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       // this.newmodal=!this.newmodal;
+                            //新增重名     
+                            // console.log('fdfffff',this.tabForms);
+                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+                            // console.log('66666666666666666666',this.tabForms);
+                            this.$http.get('getNew-Rename',data).then((response)=>{
+                                    this.getNew();
+                                    
+                                // this.newmodal=!this.newmodal;
+                        }).catch((error)=>{
+                            // console.log('err',error)
+                                    if(error.code==-1){
+                                        this.newmodal=!this.newmodal;
+                                        this.getsubGoods();
+                                        // this.getListData();
+                                        this.errdated=error.message;
+                                }else{
+                                    this.openMessage=true;
+                                    this.MessageType="error";
+                                    this.warn=error.message;
+                                } 
+                        })
+                    }
                 })
+
+
+
+
+            
         },
        //新增接口a
         getNew(){
-         console.log('id--',this.tabForms);
+        //  console.log('id--',this.tabForms);
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
@@ -767,32 +765,26 @@ export default {
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
-         var floors='';
-         var floorList=this.tabForms.floorList;
-        for(var i=0;i<floorList;i++){
-            floors+='floorList[i]','';
-            floors+=',';
-        }
-         form.append('floors',floors);
+
+        // console.log(this.tabForms.floor,"ppppp")
+         form.append('floors',this.floorStr);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
-    
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
 				 if (xhr.status === 200) {
-                     console.log('eeessssssssssss', xhr.response.code )
+                    //  console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
-                        _this.importsu();
                         _this.judgeRepeat(file);
 					 } else {
-                  if(xhr.response.code==-1){                    
-                        _this.getsubGods();
-                        _this.errdate=xhr.response.message;
+                  if(xhr.response.code==-1){
+                            _this.getsubGods();
+                            _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
-                        _this.warn=xhr.response.message;
+                        _this.warnCode=xhr.response.message;
                     }else if(xhr.response.code==-3){
                        _this.getpudyt(); 
                        _this.feactye=xhr.response.message;
@@ -815,7 +807,6 @@ export default {
                         this.warn=error.message;
                     } 
         },
-    
         getsubGods(){
                     this.carel=!this.carel;
         },
@@ -829,10 +820,8 @@ export default {
         },
         judgeRepeat(file){  //商品导入      
         // console.log('<iiiiiiii>',file)
-            
             let _this = this;
             var form = new FormData();
-        
             form.append('goodsData',this.fiteter); 
             form.append('communityId',this.tabForms.communityId);
     
@@ -840,7 +829,7 @@ export default {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log('eeesss2222ss', xhr.response.code )
+                        
                         if (xhr.response && xhr.response.code > 0) {
                             _this.success(xhr.response);
                         } else {
@@ -859,6 +848,7 @@ export default {
             xhr.send(form);
         },
         success(response){
+            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
             // this.importgoods();
             this.resect=response.data;
@@ -869,8 +859,23 @@ export default {
                   this.MessageType="error";
                   this.warn=response.message;
         },
-        initData(formItem){
+        initData(formItem,floorList){
+            // console.log('hhihhh',foorlist)
+        
+            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
+            var str='';
+            if(this.tabForms.floor==' '||this.tabForms.floor==''){
+                // for
+                for(var i=floorList.length-1; i>=0; i--){
+                    if(floorList[i].floor!=' '){
+                             str=str+floorList[i].floor+','
+                    }
+                }
+                str=str.substring(0,str.length-1);
+                this.floorStr = str;
+            }
+           console.log('floorListfloorListfloorListfloorList',floorList)
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
@@ -884,7 +889,7 @@ export default {
            this.statusForm=Object.assign({},obj);  
         },
          newStatus(obj){
-           console.log('eeeeeeeeeeeeeeeee',obj)
+        //    console.log('eeeeeeeeeeeeeeeee',obj)
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){
@@ -951,8 +956,9 @@ export default {
         },
         determine(){//确定导入
             this.getsubGods();
-            // this.subsuccess();
+            this.subsuccess();
             this.judgeRepeat();
+          
         },
       //滚动监听
          onScrollListener(){            
@@ -972,8 +978,10 @@ export default {
                 this.statusData=select;
                 this.statusOldData=select;
             },
-            getListData(params){//列表
+            getListData(tabParams){//列表
                 this.loading=true;
+                let params = Object.assign({},tabParams)
+                params.floor = params.floor.length>1?' ':params.floor;
                 this.$http.get('getGoodsList',params).then((response)=>{
                     console.log('商品列表',response.data);
                     this.totalCount=response.data.totalCount;

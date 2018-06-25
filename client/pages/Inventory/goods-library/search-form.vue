@@ -51,7 +51,6 @@
                                 </Select> 
                             </Form-item>
                     </div>
-
                     <!-- 第一行-->
                     <div style="padding: 30px 10px 10px 20px;background:#fff;margin-top:20px;">
                         <div style="white-space: nowrap;"> 
@@ -60,7 +59,7 @@
                                 <Form-item label="商品名称" class='daily-form' prop="name" >
                                     <i-input 
                                         v-model="formItem.name" 
-                                        placeholder="请输入商品名称"
+                                        placeholder="请输入房间号或商品名称"
                                         style="width: 200px"
                                         @keyup.enter.native="onKeyEnter($event)"
                                     />
@@ -431,7 +430,7 @@ export default {
                 this.communityList=[].concat(res.data);
                 this.formItem.communityId=res.data.length?res.data[0].id:'';
                 if(this.num==0){
-                    this.$emit('initData',this.formItem);
+                
                     this.formItemOld=Object.assign({},this.formItem);
                 }  
             }).catch((error)=>{
@@ -462,11 +461,15 @@ export default {
                     }
                     var floor=this.floorList[0].floor;
                     this.formItem.floor=floor; 
+
                     if(oldFloor==floor){
                         this.floorChange(floor);
                     }
                     oldFloor=floor; 
+                    // this.$emit('initData',this.formItem,res.data);
+                      this.$emit('initData',this.formItem,this.floorList);
                 }
+                
                 this.$emit('getFloor',this.floorList);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -486,7 +489,11 @@ export default {
                         str=str?str+','+item:item;
                     }) 
                     this.formItem.goodsStatus=str; 
+
+              
                     this.$emit('searchClick',this.formItem);
+       
+
                 }
             })
             
@@ -495,7 +502,10 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.formItem.investmentStatus=[];
-            this.$emit('clearClick',this.formItem);
+
+                    this.$emit('clearClick',this.formItem);
+
+    
         },
         //回车
         onKeyEnter(){
@@ -507,11 +517,19 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            this.num++;
+          
             this.getFloorList(param);
         },
         floorChange(param){
-            this.$emit('cityFloor',this.formItem);
+             this.num++;
+
+                this.$refs['formItemInvestment'].validate((valid) => {
+                if (valid) {
+                    console.log('搜索',this.formItem)
+                    this.$emit('cityFloor',this.formItem);
+                }
+            })
+           
         }
     }
 }

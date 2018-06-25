@@ -1,3 +1,38 @@
+import Vue from 'vue'
+
+const transitionsKeys = [
+  'name',
+  'mode',
+  'appear',
+  'css',
+  'type',
+  'duration',
+  'enterClass',
+  'leaveClass',
+  'appearClass',
+  'enterActiveClass',
+  'enterActiveClass',
+  'leaveActiveClass',
+  'appearActiveClass',
+  'enterToClass',
+  'leaveToClass',
+  'appearToClass'
+]
+const listenersKeys = [
+  'beforeEnter',
+  'enter',
+  'afterEnter',
+  'enterCancelled',
+  'beforeLeave',
+  'leave',
+  'afterLeave',
+  'leaveCancelled',
+  'beforeAppear',
+  'appear',
+  'afterAppear',
+  'appearCancelled'
+]
+
 export default {
   name: 'nuxt-child',
   functional: true,
@@ -6,7 +41,6 @@ export default {
     const _parent = parent
     const transitions = parent.$nuxt.nuxt.transitions
     const defaultTransition = parent.$nuxt.nuxt.defaultTransition
-
     let depth = 0
     while (parent) {
       if (parent.$vnode && parent.$vnode.data.nuxtChild) {
@@ -28,7 +62,6 @@ export default {
         listeners[key] = transition[key].bind(_parent)
       }
     })
-
     return h('transition', {
       props: transitionProps,
       on: listeners
@@ -37,37 +70,3 @@ export default {
     ])
   }
 }
-
-const transitionsKeys = [
-  'name',
-  'mode',
-  'appear',
-  'css',
-  'type',
-  'duration',
-  'enterClass',
-  'leaveClass',
-  'appearClass',
-  'enterActiveClass',
-  'enterActiveClass',
-  'leaveActiveClass',
-  'appearActiveClass',
-  'enterToClass',
-  'leaveToClass',
-  'appearToClass'
-]
-
-const listenersKeys = [
-  'beforeEnter',
-  'enter',
-  'afterEnter',
-  'enterCancelled',
-  'beforeLeave',
-  'leave',
-  'afterLeave',
-  'leaveCancelled',
-  'beforeAppear',
-  'appear',
-  'afterAppear',
-  'appearCancelled'
-]

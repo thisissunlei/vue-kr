@@ -876,7 +876,7 @@
                        
                         {
                             primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
+                            menuCode: 'pm_manage_role',
                             type: 'vue',
                             router: 'nav-config'
                         },

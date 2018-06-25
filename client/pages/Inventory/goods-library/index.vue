@@ -230,7 +230,7 @@
 
     
     <Modal
-            :title="feactye"
+            :title="warn"
             v-model="butpudyt"
             class-name="vertical-center-modal"
             style="text-align:left;"

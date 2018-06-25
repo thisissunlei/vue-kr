@@ -5,8 +5,16 @@ import { compile } from '../utils'
 
 export default {
   name: 'nuxt',
+<<<<<<< HEAD
   props: ['nuxtChildKey', 'keepAlive'],
   render(h) {
+=======
+  props: ['nuxtChildKey'],
+  render(h) {
+    if (this.nuxt._redirected) {
+      return h('div', [ 'Redirecting to external page.' ])
+    }
+>>>>>>> 7cbf1c16b6cc682b146defadfe7cb1de20b04e3d
     // If there is some error
     if (this.nuxt.err) {
       return h('nuxt-error', {
@@ -17,8 +25,12 @@ export default {
     }
     // Directly return nuxt child
     return h('nuxt-child', {
+<<<<<<< HEAD
       key: this.routerViewKey,
       props: this.$props
+=======
+      key: this.routerViewKey
+>>>>>>> 7cbf1c16b6cc682b146defadfe7cb1de20b04e3d
     })
   },
   beforeCreate () {

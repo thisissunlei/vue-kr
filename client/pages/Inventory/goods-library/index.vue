@@ -14,10 +14,10 @@
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
+                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <!-- <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button> -->
+                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
          </div>
 
             <Table 
@@ -36,7 +36,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :current="tabForms.page" :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         </Modal>
 
         <Modal
-            title="提示"
+            title="Title"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -168,30 +168,12 @@
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
         <span>{{resect.moveStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in moveStationse"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-            </span> -->
      </Form-item >
             <Form-item  label='独立办公室：' style="text-align:left;"  >
                 <span>{{resect.openStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in spaces"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item >
             <Form-item  label='固定办公室：' style="text-align:left;"  >
                 <span>{{resect.spaces}}</span>
-            <!-- <span
-                      v-for="(item,index) in openStations"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item > 
         </div>
 </Form> 
@@ -296,7 +278,6 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
-import Buttons from '~/components/Buttons';
 export default {
 
 
@@ -312,8 +293,7 @@ export default {
                 FlagLabel,
                 ToolTip,
                 ImportFile,
-                BindService,
-                Buttons
+                BindService
                  },
         props:{
                 mask:String
@@ -363,7 +343,6 @@ export default {
             vImport:false,//导入
             warn:'',
             MessageType:'',
-   
             openMessage:false,
             statusForm:{},
             newgoodForm:{},
@@ -609,7 +588,6 @@ export default {
         watch:{   
             sideBar:function(val){
                 this.tableCommon();
-         
                 this.onScrollListener();
             },
             tabForms:function(val,old){
@@ -633,6 +611,8 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
+                this.showpush();
+            console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
             let data={
                 goodsType:this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -640,8 +620,7 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
-                this.getListData()
-                this.showpush();
+                this.getListData(this.tabForms)
                 this.butpushd=!this.butpushd;
         
             }).catch((error)=>{
@@ -779,13 +758,11 @@ export default {
 				 if (xhr.status === 200) {
                      console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
-                        _this.importsu();
-                        // return;
                         _this.judgeRepeat(file);
 					 } else {
-                  if(xhr.response.code==-1){                    
-                        _this.getsubGods();
-                        _this.errdate=xhr.response.message;
+                  if(xhr.response.code==-1){
+                            _this.getsubGods();
+                            _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
@@ -812,7 +789,6 @@ export default {
                         this.warn=error.message;
                     } 
         },
-    
         getsubGods(){
                     this.carel=!this.carel;
         },
@@ -826,7 +802,6 @@ export default {
         },
         judgeRepeat(file){  //商品导入      
         // console.log('<iiiiiiii>',file)
-            
             let _this = this;
             var form = new FormData();
             form.append('goodsData',this.fiteter); 
@@ -855,6 +830,7 @@ export default {
             xhr.send(form);
         },
         success(response){
+            console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
             // this.importgoods();
             this.resect=response.data;
@@ -877,15 +853,11 @@ export default {
                     if(floorList[i].floor!=' '){
                              str=str+floorList[i].floor+','
                     }
-
                 }
                 str=str.substring(0,str.length-1);
                 this.tabForms.floor = str;
             }
-            
-        //    console.log('str',str)
-
-
+           console.log('floorListfloorListfloorListfloorList',floorList)
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});

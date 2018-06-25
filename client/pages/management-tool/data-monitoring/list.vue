@@ -57,7 +57,7 @@ export default {
         return {
             validateType: '',
             customerName: '',
-            communityId: -1,
+            communityId: '',
             priceType: '',
             // priceTypes: {
             //     name1: 'INCOME',
@@ -66,10 +66,10 @@ export default {
             //     name4: 'DEPOSIT_FEE_INSTALL'
             // },
             priceTypes: {
-                name1: { validateType: 'INCOME', resAttName: 'incomeVO' },
-                name2: { validateType: 'COST_RECEIVE', resAttName: 'costReceiveVo' },
-                name3: { validateType: 'FEE_INSTALL_COST', resAttName: 'feeInstallCostVO' },
-                name4: { validateType: 'DEPOSIT_FEE_INSTALL', resAttName: 'depositFeeInstallVO' }
+                name1: { validateType: 'COST_RECEIVE', resAttName: 'costReceiveVo' },
+                name2: { validateType: 'FEE_INSTALL_COST', resAttName: 'feeInstallCostVO' },
+                name3: { validateType: 'DEPOSIT_FEE_INSTALL', resAttName: 'depositFeeInstallVO' },
+                name4: { validateType: 'INCOME', resAttName: 'incomeVO' }
             },
             params: {
                 page: 1,
@@ -197,6 +197,8 @@ export default {
     },
     mounted() {
         this.columns = this.$data[this.type]
+        debugger;
+        this.handleSearch();
     },
 
     methods: {
@@ -210,18 +212,35 @@ export default {
                 customerName: this.customerName,
                 communityId: this.communityId,
             };
+            debugger;
             this.$http.get('get-validate-list', parms, r => {
                 let detail = [];
                 debugger;
                 let attName = this.priceTypes[this.type].resAttName
                 r.data.items.map(item => detail.push(item[attName]))
                 this.detail = detail;
+                this.$Spin.hide();
             }, e => {
                 debugger;
                 this.$Notice.error({
                     title: e.message
                 });
             })
+
+            this.$Spin.show({
+                render: (h) => {
+                    return h('div', [
+                        h('Icon', {
+                            'class': 'demo-spin-icon-load',
+                            props: {
+                                type: 'load-c',
+                                size: 18
+                            }
+                        }),
+                        h('div', '拼命加载中')
+                    ])
+                }
+            });
 
         },
 
@@ -301,5 +320,27 @@ export default {
 <style lang="less" >
 .selectors {
     display: inline;
+}
+.demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.demo-spin-col {
+    height: 100px;
+    position: relative;
+    border: 1px solid #eee;
+}
+.demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
 }
 </style>

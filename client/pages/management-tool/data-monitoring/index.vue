@@ -1,16 +1,16 @@
 <template>
     <div class="contract-center-list">
         <Tabs v-model="currenttab" @on-click='handletabclick'>
-            <TabPane label="工位收入与收入中心收入校验" name="name1">
+            <TabPane label="收入与日费用校验" name="name1">
                 <List v-if='tabstoggles.name1' :type='currenttab' />
             </TabPane>
-            <TabPane label="收入与日费用校验" name="name2">
+            <TabPane label="费用明细、分期、日收入租金校验" name="name2">
                 <List v-if='tabstoggles.name2' :type='currenttab' />
             </TabPane>
-            <TabPane label="费用明细、分期、日收入租金校验" name="name3">
+            <TabPane label="费用明细、分期押金校验" name="name3">
                 <List v-if='tabstoggles.name3' :type='currenttab' />
             </TabPane>
-            <TabPane label="费用明细、分期押金校验" name="name4">
+            <TabPane label="工位收入与收入中心收入校验" name="name4">
                 <List v-if='tabstoggles.name4' :type='currenttab' />
             </TabPane>
         </Tabs>

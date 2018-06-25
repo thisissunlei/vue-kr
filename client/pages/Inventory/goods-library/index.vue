@@ -14,10 +14,10 @@
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
+                <!-- <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button> -->
          </div>
 
             <Table 
@@ -36,7 +36,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :current="tabForms.page" :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         </Modal>
 
         <Modal
-            title="Title"
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -296,6 +296,7 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
+import Buttons from '~/components/Buttons';
 export default {
 
 
@@ -311,7 +312,8 @@ export default {
                 FlagLabel,
                 ToolTip,
                 ImportFile,
-                BindService
+                BindService,
+                Buttons
                  },
         props:{
                 mask:String
@@ -781,10 +783,9 @@ export default {
                         // return;
                         _this.judgeRepeat(file);
 					 } else {
-                  if(xhr.response.code==-1){
-                      
-                            _this.getsubGods();
-                            _this.errdate=xhr.response.message;
+                  if(xhr.response.code==-1){                    
+                        _this.getsubGods();
+                        _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();

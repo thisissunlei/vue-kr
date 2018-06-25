@@ -175,7 +175,7 @@ export default {
    },
    methods:{
        goToMember(id){
-            window.open(`/member/memberManage/list/${id}`,'_blank');
+            window.open(`/new/#/member/memberManage/list/${id}`,'_blank');
        },
        getDetailInfo(){
            let _this =this;

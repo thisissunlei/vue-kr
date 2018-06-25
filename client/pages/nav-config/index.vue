@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" show-sizer :current="page" @on-page-size-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" @on-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -34,19 +34,19 @@
     <Modal
         v-model="openEdit"
         :title="title"
-        @on-ok="ok"
-        @on-cancel="cancel"
+    
     >
         <div>
             <div v-if="openEdit">
                 <Form ref="formTop" :model="formTop"  :rules="ruleValidate" label-position="top">
                     <Row>
-                        <Col span="24">
+                        <Col span="11">
                             <FormItem label="名称" prop="name"> 
                                 <Input v-model="formTop.name" :maxlength="30" />
                             </FormItem> 
                         </Col>
-                        <Col span="24">
+                        <Col span="2">&nbsp;</Col>
+                        <Col span="11">
                             <FormItem label="编码" prop="code" >
                                 <Input v-bind:disabled="title=='编辑权限'" :maxlength="30" v-model="formTop.code" />
                             </FormItem>
@@ -94,10 +94,10 @@
                                     <tbody  v-for="(line,index) in  data.children" :key="index">
                                        
                                             <tr v-for="(line2,index2) in  line.children" :key="index2">
-                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==1? line.groupName:''}}</td>
+                                                    <td style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:130px">{{ index2 ==0? line.groupName:''}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;width:150px">{{line2.groupName}}</td>
                                                     <td  style="border:1px solid #e9eaec;height:30px;padding-left:5px;">
-                                                        <RadioGroup v-model="line.groupRightType" >
+                                                        <RadioGroup v-model="line2.groupRightType" >
                                                             <Radio label="NONE" >无</Radio>
                                                             <Radio label="READONLY" >读取</Radio>
                                                             <Radio label="READWRITE" >写入</Radio>
@@ -115,11 +115,11 @@
             </div>
 
         </div>
-         <!-- <div slot="footer">
-            <FormItem >
-                <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
-            </FormItem>
-        </div> -->
+         <div slot="footer">
+    
+                <Button type="default" @click="cancel">取消</Button>
+                <Button type="primary" @click="ok">确定</Button>
+        </div>
     </Modal>
 </div>
 </template>
@@ -132,6 +132,7 @@ export default {
         return{
             updatePersonid:'',
             editRoleId:'',
+            loading: true,
             roleid:0,
             totalCount:0,
             userData: [],
@@ -238,7 +239,11 @@ export default {
 
             // console.log( this.targetKeys)
             this.$http.post('addUser',{ssoIdsStr:JSON.stringify(this.targetKeys),id:this.updatePersonid}).then((res=>{
-              console.log('success')
+                console.log('success')
+                this.getRoleS()
+                this.getRoleEdit()
+                this.$Message.info("操作成功");
+                
             }))
 
 
@@ -259,11 +264,13 @@ export default {
                         this.$http.delete('roleDelete',{id:this.roleid}).then((res)=>{
                         this.getRoleS()
                         this.getRoleEdit()
-                             this.$Message.info("操作成功");
+                        this.$Message.info("操作成功");
+                        }).catch(()=>{
+                            this.$Message.warning("操作失败");
                         })
                     },
                     onCancel: () => {
-                        // this.$Message.info('');
+                        this.$Message.info('取消操作');
                     }
             })
         },
@@ -283,44 +290,66 @@ export default {
                     if (valid) {
                         this.$http.post("roleSave",params).then((res)=>{
                 
+                        this.openEdit = false
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
+                         this.$Message.info("操作成功");
+                        }).catch((e)=>{
+                            this.openEdit = false
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
                         })
                     
                     } else {
+                         this.openEdit = true
                         console.log(params)
                     }
                 
                 })
             }else{
-                // this.$refs['formTop'].validate((valid) => {
-                //      console.log(params,valid)
-                //         if (valid) {
+                this.$refs['formTop'].validate((valid) => {
+                     console.log(params,valid)
+                        if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
-                
+                        this.openEdit = false
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
-                         })
+                         this.$Message.info("操作成功");
+                         }).catch((e)=>{
+                             this.openEdit = false
+                            console.log(e)
+                             this.$Notice.info({
+                                    title: '系统提示',
+                                    desc: e.message
+                                });
+                        })
                       
-                    // } else {
-                    //      console.log(params)
-                    // }
+                    } else {
+                        this.openEdit = true
+                         console.log(params)
+                    }
             
-            // })
+            })
             }
         
       
 
         },
         cancel () {
+            
+             this.openEdit = false;
             // this.$Message.info('Clicked cancel');
         },
         goEdit(){
             this.title = "新建";
             this.formTop.name='';
             this.formTop.code='';
+            this.getRoleEdit()
             this.openEdit = true;
          },
          goUpdateRole(param,vlaue){
@@ -336,10 +365,8 @@ export default {
             this.getUserData(param);
          },
         changePage(param){
-            
-            this.page = param
-        
-         this.getRoleS()
+            this.page = param    
+            this.getRoleS()
         },
         getRoleS(){
             let params = {

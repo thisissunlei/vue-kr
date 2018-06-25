@@ -59,7 +59,7 @@
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">添加房间/工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                      <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
@@ -189,16 +189,18 @@
     
     <Modal
         v-model="openStation"
-        title="选择工位"
+        title="选择商品"
         ok-text="保存"
         cancel-text="取消"
         width="95%"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap>
+         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"  @clear="clear"/>
+        <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap> -->
         <div slot="footer">
-            <Button type="primary" @click="submitStation">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+            <span v-if="selectLen&&openStation">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+            <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+            <Button @click="cancelStation">取消</Button>
         </div>
     </Modal>
     <Modal
@@ -210,7 +212,7 @@
      >  
         <div v-if="openPrice">
             <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
-            <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+            <Input v-model="price" placeholder="工位单价" style="width:150px" />
             <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
                 
         </div>
@@ -237,6 +239,7 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -255,6 +258,7 @@ import utils from '~/plugins/utils';
             };
             
             return {
+                selectLen:0,
                 showFree:false,
                 openStation:false,
                 customerName:'',
@@ -382,7 +386,7 @@ import utils from '~/plugins/utils';
                     {
                         title: '小计',
                         key: 'originalAmount',
-                        render:function(h,params){
+                        render(h,params){
                             return utils.thousand(params.row.originalAmount)
                          }
                     }
@@ -454,7 +458,8 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap
+            planMap,
+            ListAndMap
         },
         mounted(){
             this.getDetailData();
@@ -482,6 +487,9 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            clear(val){
+                this.selectLen=val.length;
+            },
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -623,7 +631,7 @@ import utils from '~/plugins/utils';
                         });
                 })
             },
-            config:function(){
+            config(){
                 this.$Notice.config({
                     top: 80,
                     duration: 3
@@ -860,7 +868,7 @@ import utils from '~/plugins/utils';
                     _this.dealSaleInfo(true)
                 },200)
             },
-            handleSubmit:function(name) {
+            handleSubmit(name) {
                 let message = '请填写完表单';
                 this.$Notice.config({
                     top: 80,
@@ -905,7 +913,7 @@ import utils from '~/plugins/utils';
                     }
                 })
             },
-            selectDiscount:function(value){
+            selectDiscount(value){
                 // checkbox的全选事件
                 let items = this.formItem.items;
                 items = items.map((item)=>{
@@ -916,7 +924,7 @@ import utils from '~/plugins/utils';
                 this.selectAll = value;
                 this.formItem.items = items;
             },
-            deleteDiscount:function(){
+            deleteDiscount(){
                 // 删除选中的优惠信息
                 let items = this.formItem.items;
                 let select = []
@@ -975,7 +983,7 @@ import utils from '~/plugins/utils';
                 return true;
             },
             
-            changeType:function(val){
+            changeType(val){
                 //优惠类型选择
                 if(!val){
                     return;
@@ -1045,7 +1053,7 @@ import utils from '~/plugins/utils';
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
-            changeCommunity:function(value){
+            changeCommunity(value){
                 // 选择社区
                 if(value){
                     this.formItem.communityId = value;
@@ -1057,7 +1065,7 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
                 
             },
-            clearStation:function(){
+            clearStation(){
                 // 清除所选的工位
                 if(this.stationList.length){
                     this.stationData={
@@ -1078,7 +1086,7 @@ import utils from '~/plugins/utils';
 
                 }
             },
-            changeCustomer:function(value){
+            changeCustomer(value){
                 // 客户
                 if(value){
                     this.formItem.customerId = value;
@@ -1088,11 +1096,11 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
 
             },
-            changeSaler:function(value){
+            changeSaler(value){
                 // 销售员
                 this.formItem.salerId = value;
             },
-            deleteStation:function(){
+            deleteStation(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
@@ -1107,7 +1115,7 @@ import utils from '~/plugins/utils';
                 this.formItem.items = []
                 // this.stationData.submitData = stationVos;
             },
-            showStation:function(){
+            showStation(){
                 // 选择工位的按钮
                 this.config()
 
@@ -1143,7 +1151,7 @@ import utils from '~/plugins/utils';
                 this.openStation = true;
                 this.params = params;
             },
-            selectRow:function(selection){
+            selectRow(selection){
                 // 工位表单的全选
                 let selectionList = [];
                 selectionList = selection.map((item)=>{
@@ -1169,24 +1177,27 @@ import utils from '~/plugins/utils';
                     show:true,
                 });
             },
-            selectDeposit:function(value){
+            selectDeposit(value){
                 // 选择保证金
                 this.depositAmount = value
                 this.errorAmount = false;
             },
-            selectPayType:function(value){
+            selectPayType(value){
                 // 选择付款方式
                 this.installmentType = value;
                 this.errorPayType = false;
             },
-            submitStation:function(){//工位弹窗的提交
-
-                this.stationList = this.stationData.submitData || [];
-                this.delStation = this.stationData.deleteData|| [];
+            submitStation(){//工位弹窗的提交
+              
+                // this.stationList = [].concat([]) || [];
+                this.stationList = [].concat(this.stationData.submitData) || [];
+                this.delStation = [].concat(this.stationData.deleteData)|| [];
                 if(this.stationList.length){
                     this.disabled = false
                 }
-                this.getStationAmount()
+                console.log("000000------")
+                // this.getStationAmount()
+              
                 this.openStation = false
                 this.clearSale()
 
@@ -1196,21 +1207,25 @@ import utils from '~/plugins/utils';
                 this.formItem.saleAmount = 0;
                 this.saleAmounts = utils.smalltoBIG(0)
             },
-            onResultChange:function(val){//组件互通数据的触发事件
-                this.stationData = val;
+            onResultChange(val){//组件互通数据的触发事件
 
-                
+                let len=this.originStationList.length;
+                this.selectLen=val.submitData.length-len;
+
+                this.stationData =Object.assign({},val);    
+                console.log(this.stationData,"oooooooo",val)
             },
-            cancelStation:function(){//工位弹窗的取消
+            cancelStation(){//工位弹窗的取消
                 this.stationData = {
                     submitData:this.stationList,
                     deleteData:[],
                 };
+                this.selectLen=0;
                 this.openStation = false;
 
             },
             
-            changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+            changeBeginTime(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
                 this.clearStation()
                  if(!val || !this.formItem.endDate){
@@ -1275,7 +1290,7 @@ import utils from '~/plugins/utils';
                 this.timeError = error;
               
             },
-            changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+            changeEndTime(val){//租赁结束时间的触发事件，判断时间大小
                   this.clearStation();
                 if(!val){
                     return;
@@ -1312,7 +1327,7 @@ import utils from '~/plugins/utils';
               
 
             },
-            contractDateRange:function(params){//获取租赁范围
+            contractDateRange(params){//获取租赁范围
                 let _this = this;
                  this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
@@ -1320,7 +1335,7 @@ import utils from '~/plugins/utils';
 
                 })
             },
-            getSaleTactics:function(params){//获取优惠信息
+            getSaleTactics(params){//获取优惠信息
                 let list = [];
                 let maxDiscount = {};
                 let _this = this;
@@ -1360,6 +1375,7 @@ import utils from '~/plugins/utils';
 
                 })
             },
+            //获取页面数据
              getStationAmount(list){
                 this.config()
                 //判断标准单价是否有值，若无值，则不提交计算总价

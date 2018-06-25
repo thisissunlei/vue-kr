@@ -58,7 +58,7 @@
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">添加房间/工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
@@ -188,15 +188,17 @@
     
     <Modal
         v-model="openStation"
-        title="选择工位"
+        title="选择商品"
         ok-text="保存"
         cancel-text="取消"
         width="90%"
-         class-name="vertical-center-modal"
+        class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
+        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" @clear="clear"/>
         <div slot="footer">
-            <Button type="primary" @click="submitStation">确定</Button>
+            <span v-if="selectLen&&openStation">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+            <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+            <Button  @click="cancelStation">取消</Button>
         </div>
     </Modal>
 
@@ -232,10 +234,10 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -439,7 +441,8 @@ import utils from '~/plugins/utils';
                 price:'',
                 priceError:false,
                 //录入单价的数组
-                priceToStation:[]
+                priceToStation:[],
+                selectLen:0
 
             }
         },
@@ -454,7 +457,7 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -492,6 +495,9 @@ import utils from '~/plugins/utils';
            }
         },
         methods: {
+            clear(val){
+                this.selectLen=val.length;
+            },
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -1152,14 +1158,16 @@ import utils from '~/plugins/utils';
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 console.log('onResultChange',val)
+                this.selectLen=val.submitData.length;
                 this.stationData = val;
-                
+                 
             },
             cancelStation:function(){//工位弹窗的取消
                 this.stationData = {
                     submitData:this.stationList,
                     deleteData:[],
                 };
+                this.selectLen=0;
                 this.openStation = false
 
             },
@@ -1402,6 +1410,5 @@ import utils from '~/plugins/utils';
             top: 0;
         }
     }
-   
    
 </style>

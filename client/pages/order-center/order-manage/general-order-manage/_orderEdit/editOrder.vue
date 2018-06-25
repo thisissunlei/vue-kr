@@ -11,7 +11,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test='formItem' :value="communityName" disabled/>
+                      <selectCommunities test='sformItem' :value="communityName" disabled/>
                     </FormItem>
                 </Col>
 

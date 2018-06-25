@@ -65,12 +65,12 @@ export default {
     };
   },
   mounted() {
-    this.getOptionList();
+    this.getOptionList()
   },
   methods: {
     getOptionList() {
       let params = {
-        enmuKey: 'com.krspace.op.api.enums.seatorder.InvalidType'
+        enmuKey: 'com.krspace.op.api.enums.seatorder.InvalidType',
         // enmuKey: 'com.krspace.erp.api.enums.pm.PmDepartment'
       };
       this.$http

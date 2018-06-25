@@ -455,8 +455,7 @@ export default {
                                             }
 
                                         },bacsk),
-                                    ])
-                                
+                                    ])                               
                     }
                 },
                 {
@@ -688,6 +687,7 @@ export default {
               this.careful=!this.careful;
          },   
         buttPush(){
+            this.newmodal=!this.newmodal;
                 this.butPush();
                 this.getsubGoods();
                 this.getNew();
@@ -704,6 +704,7 @@ export default {
                     // console.log('66666666666666666666',this.tabForms);
                     this.$http.get('getNew-Rename',data).then((response)=>{
                             this.getNew();
+                            
                         // this.newmodal=!this.newmodal;
                 }).catch((error)=>{
                     console.log('err',error)
@@ -765,16 +766,11 @@ export default {
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
-         var floors='';
-         var floorList=this.tabForms.floorList;
-        for(var i=0;i<floorList;i++){
-            floors+='floorList[i]','';
-            floors+=',';
-        }
-         form.append('floors',floors);
+
+        console.log(this.tabForms.floor,"ppppp")
+         form.append('floors',this.tabForms.floor);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
-    
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
@@ -782,6 +778,7 @@ export default {
                      console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
                         _this.importsu();
+                        // return;
                         _this.judgeRepeat(file);
 					 } else {
                   if(xhr.response.code==-1){
@@ -831,7 +828,6 @@ export default {
             
             let _this = this;
             var form = new FormData();
-        
             form.append('goodsData',this.fiteter); 
             form.append('communityId',this.tabForms.communityId);
     
@@ -839,7 +835,7 @@ export default {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log('eeesss2222ss', xhr.response.code )
+                        
                         if (xhr.response && xhr.response.code > 0) {
                             _this.success(xhr.response);
                         } else {
@@ -868,8 +864,27 @@ export default {
                   this.MessageType="error";
                   this.warn=response.message;
         },
-        initData(formItem){
+        initData(formItem,floorList){
+            // console.log('hhihhh',foorlist)
+        
+            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
+            var str='';
+            if(this.tabForms.floor==' '||this.tabForms.floor==''){
+                // for
+                for(var i=floorList.length-1; i>=0; i--){
+                    if(floorList[i].floor!=' '){
+                             str=str+floorList[i].floor+','
+                    }
+
+                }
+                str=str.substring(0,str.length-1);
+                this.tabForms.floor = str;
+            }
+            
+        //    console.log('str',str)
+
+
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
@@ -950,8 +965,9 @@ export default {
         },
         determine(){//确定导入
             this.getsubGods();
-            // this.subsuccess();
+            this.subsuccess();
             this.judgeRepeat();
+          
         },
       //滚动监听
          onScrollListener(){            
@@ -971,8 +987,10 @@ export default {
                 this.statusData=select;
                 this.statusOldData=select;
             },
-            getListData(params){//列表
+            getListData(tabParams){//列表
                 this.loading=true;
+                let params = Object.assign({},tabParams)
+                params.floor = params.floor.length>1?' ':params.floor;
                 this.$http.get('getGoodsList',params).then((response)=>{
                     console.log('商品列表',response.data);
                     this.totalCount=response.data.totalCount;

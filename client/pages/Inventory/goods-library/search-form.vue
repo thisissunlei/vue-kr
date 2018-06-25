@@ -51,7 +51,6 @@
                                 </Select> 
                             </Form-item>
                     </div>
-
                     <!-- 第一行-->
                     <div style="padding: 30px 10px 10px 20px;background:#fff;margin-top:20px;">
                         <div style="white-space: nowrap;"> 
@@ -424,7 +423,9 @@ export default {
         this.getCityList();
         var _this=this;
         setTimeout(() => {
-            _this.$emit('initData',this.formItem);
+            // _this.$emit('initData',this.formItem,this.floorList);
+
+            // console.log('<iiiiii>',this.formItem)
             _this.formItemOld=Object.assign({},this.formItem);
             _this.formItem = Object.assign({},this.formItem,this.$route.query)
         },500);
@@ -467,6 +468,7 @@ export default {
                         this.floorChange(floor);
                     }
                     oldFloor=floor; 
+                    this.$emit('initData',this.formItem,res.data);
                 }
                 this.$emit('getFloor',this.floorList);
             }).catch((error)=>{

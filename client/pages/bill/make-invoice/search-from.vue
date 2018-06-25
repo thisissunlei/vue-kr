@@ -112,13 +112,13 @@
                             <span class="attract-font" style="padding-top:7px;">发票金额</span>
                             <Form-item  class="priceForm" prop="startAmount">
                                 <i-input 
-                                    v-model="formItem.startAmount" 
+                                    v-model="formItem.minAmount" 
                                     style="width: 90px"
                                     @keyup.enter.native="onKeyEnter($event)"
                                 />
                             </Form-item>
                             <span class="attract-line">至</span>
-                            <Form-item  class="priceForm" prop="endAmount">
+                            <Form-item  class="priceForm" prop="maxAmount">
                                 <i-input 
                                     v-model="formItem.endAmount" 
                                     style="width: 90px"
@@ -338,10 +338,10 @@ export default {
                     callbackEndDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    startAmount:[
+                    minAmount:[
                         { validator: validateMoney, trigger: 'change' }
                     ],
-                    endAmount:[
+                    maxAmount:[
                         { validator: validateMoney, trigger: 'change' }
                     ],
                     applyStartDate:[

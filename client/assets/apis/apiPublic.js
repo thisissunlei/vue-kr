@@ -58,7 +58,7 @@ module.exports = {
         method:'post'
     },
     "typePage":{
-        url:'/mockdata/77/api/pm/discuss/list/type/page',
+        url:'/api/pm/discuss/list/type/page',
         method:'get'
 
     }

@@ -7,26 +7,28 @@
       
        </div>
 
-<Scroll :on-reach-edge="getcomments">
+<Scroll :on-reach-bottom="getcomments">
        
 
-         <div dis-hover v-for="(item, index) in list3" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
-          <div style="float:left;border-radius:50%;border:1px solid #f7b634;background-color:#f7b634;width:50px;height:50px;line-height:50px;text-align:center;color:#fff">刘钊</div>
+         <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
+          <div style="float:left;border-radius:50%;border:1px solid #f7b634;background-color:#f7b634;width:50px;height:50px;line-height:50px;text-align:center;color:#fff">{{item.creator.length>2?item.creator.slice(item.creator.length-3,2):item.creator}}</div>
           <div style="margin-left:66px;min-height:60px">
             <div style="height:25px">
 
               <div style="float:left">
-                    <span style="margin:0;padding:0;font-size:14px;">刘钊</span>&nbsp;&nbsp;<span style="color:#c1c1c1">2018.1.1.1.1.1111</span>
+                    <span style="margin:0;padding:0;font-size:14px;">{{item.creator}}</span>&nbsp;&nbsp;<span style="color:#c1c1c1">{{item.cTime}}</span>
               </div>
               <div style="float:right">
-                  <a href="" >删除</a>
+                  <a v-if="item.canDel" >回复</a>
+                   <a v-else >删除</a>
+                  
               </div>
               <div style="clear:both;"></div>
             </div>
     
               <div >
                 <span>
-                  属性是一个简写属性,用于设置四个 border-*-radius 属性。 提示:该属性允许您为元素添加圆角边框!
+                  {{item.comment}}
                 </span>
               </div>
               <div>
@@ -45,7 +47,7 @@
 
 
 
-       <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
+       <!-- <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
           <div style="float:left;border-radius:50%;border:1px solid #f7b634;background-color:#f7b634;width:50px;height:50px;line-height:50px;text-align:center;color:#fff">刘钊</div>
           <div style="margin-left:66px;min-height:60px">
             <div style="height:25px">
@@ -76,13 +78,24 @@
 
           </div>
           <div style="clear:both;"></div>
-       </div>
+       </div> -->
 
     </div>
     <div class="div-one">
 
 
     </div>
+
+
+    <Modal
+        v-model="modal1"
+        title="Common Modal dialog box title"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+    </Modal>
    
   </div>
 </template>
@@ -97,7 +110,7 @@ data(){
     pageSize:10,
     comments:[],
     totalCount:0,
-    list3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    modal1: false
   }
 },
 mounted(){
@@ -105,11 +118,16 @@ mounted(){
 },
 methods:{
   getcomments(){
-    let param = {page:this.page,pageSize:this.pageSize }
+    let param = {page:this.page,pageSize:this.pageSize ,projectId:38}
     this.$http.get('typePage',param).then((res)=>{
-      this.comments = res.data.items
+      if(res.data.items && res.data.items.length>0)
+      for(let i = 0 ;i<res.data.items.length;i++){
+          this.comments.push (res.data.items[i])
+      }
+     
+
       this.totalCount = res.data.totalCount
-      this.list3.push(1,1,1,1,1,1,1,1,1)
+   
       console.log(res)
     }).catch((e)=>{
       console.log(e)
@@ -142,7 +160,8 @@ methods:{
     float: right;
     margin: 20px 20px 20px 0;
     width: 400px;
-    min-height: 200px;
+    height: 500px;
+    overflow: auto;
 
 
   }

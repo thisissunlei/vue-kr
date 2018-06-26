@@ -18,6 +18,7 @@
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
+                <Buttons type="primary" :label="isShowEdit?'编辑操作':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
          </div>
 
             <Table 
@@ -87,17 +88,32 @@
             <!-- /   v-if="newmodal" -->
             <Newgoods
                     v-if="newmodal"
-                   :data="newgoodsData"
-                   :newgooddata="newgooddata"
-                   :seacchValue="seacchValue"
                    @newdateForm="newStatus"
                    :floorList="floorList"
-                   :floorValue='floor'
                    ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
                  <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+            title="编辑商品"
+            v-model="editOpen"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+            <EditGoods
+                   v-if="editOpen"
+                   @newdateForm="newStatus"
+                   :floorList="floorList"
+                   :editData="serviceData"
+                   ref="goodsEditPage"
+                />
+             <div slot="footer">
+                 <Button type="primary" @click="submitEdit">确定</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="cancelEdit">取消</Button>
             </div>
         </Modal>
 
@@ -281,6 +297,7 @@ import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
 import Buttons from '~/components/Buttons';
+import EditGoods from './editGoods';
 export default {
 
 
@@ -297,13 +314,15 @@ export default {
                 ToolTip,
                 ImportFile,
                 BindService,
-                Buttons
+                Buttons,
+                EditGoods
                  },
         props:{
                 mask:String
             },
           data() {
                 return{
+            editOpen:false,
             serviceData:{},
             warnCode:'',
             openService:false,
@@ -334,15 +353,13 @@ export default {
             },
             errorData:[],
             typelist2:[],
-            newgooddata:[],
-            seacchValue:{},
             careful:false,
             isShowBatch:true,
+            isShowEdit:true,
             switchParams:{},
             modifystate: false,
             complete: false,
             newmodal:false,
-            butpush:false,
             pudyt:false,
             butpudyt:false,
             vImport:false,//导入
@@ -590,7 +607,8 @@ export default {
             serviceId:'',
             statusOldData:[],
             singleForms:{},
-            floorStr:'',    
+            floorStr:'', 
+            isAdd:false   
         }
     },
         mounted(){
@@ -632,8 +650,7 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
-             this.showpush();
-             console.log('<iiiiiiiii>',this.newgoodForm.goodsType,params)
+            //  console.log('<iiiiiiiii>',this.newgoodForm.goodsType,params)
             let data={
                 goodsType:this.newgoodForm.goodsType||this.serviceData.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -681,72 +698,67 @@ export default {
         },      
          getsubGoods(){//注意
 
-                    // this.newmodal=!this.newmodal;
-                     this.careful=!this.careful;
-                     },
-         butPush(){//成功
-                    this.butpush=!this.butpush;
-         } ,        
-         showpush(){
-                  this.butpush=!this.butpush;
-         },
+                // this.newmodal=!this.newmodal;
+                    this.careful=!this.careful;
+                    },  
          showtPush(){//二次确定
               this.careful=!this.careful;
          },   
         buttPush(){
-            this.newmodal=!this.newmodal;
-                this.butPush();
-                this.getsubGoods();
-                this.getNew();
+            this.getsubGoods();
+            this.getNew();
         },
         primarye(){
             this.butsuccess=!this.butsuccess;
+        },
+
+        getCheckName(){
+            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+            this.$http.get('getNew-Rename',data).then((response)=>{
+                this.getNew();          
+            }).catch((error)=>{
+                    if(error.code==-1){
+                        this.newmodal=false;
+                        this.editOpen=false;
+                        this.getsubGoods();
+                        this.errdated=error.message;
+                    }else{
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=error.message;
+                    } 
+            })
         },
             //添加弹窗2
         subGoods(){
               let newPage=this.$refs.goodsNewPage.$refs;
               newPage['formItem'].validate((valid) => {
                     if (valid) {
-                       // this.newmodal=!this.newmodal;
-                            //新增重名     
-                            // console.log('fdfffff',this.tabForms);
-                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                            // console.log('66666666666666666666',this.tabForms);
-                            this.$http.get('getNew-Rename',data).then((response)=>{
-                                    this.getNew();
-                                    
-                                // this.newmodal=!this.newmodal;
-                        }).catch((error)=>{
-                            // console.log('err',error)
-                                    if(error.code==-1){
-                                        this.newmodal=!this.newmodal;
-                                        this.getsubGoods();
-                                        // this.getListData();
-                                        this.errdated=error.message;
-                                }else{
-                                    this.openMessage=true;
-                                    this.MessageType="error";
-                                    this.warn=error.message;
-                                } 
-                        })
+                       this.getCheckName();
+                       this.isAdd=false;
                     }
-                })
-
-
-
-
-            
+                })     
+        },
+        submitEdit(){
+            let newPage=this.$refs.goodsEditPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       this.getCheckName();
+                       this.isAdd=true;
+                    }
+             })  
         },
        //新增接口a
         getNew(){
-        //  console.log('id--',this.tabForms);
+        let url=this.isAdd?'getNew-lyadded':'getNew-lyadded';
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
-         this.$http.post('getNew-lyadded',data).then((response)=>{ 
+         this.$http.post(url,data).then((response)=>{ 
               this.serviceId=response.data;
               this.getListData(this.tabForms);
-              this.cancelService(); 
-              this.butNewgoods();
+              this.cancelService();
+              this.newmodal=false;
+              this.editOpen=false;
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";
@@ -906,8 +918,7 @@ export default {
         updateStatus(obj){
            this.statusForm=Object.assign({},obj);  
         },
-         newStatus(obj){
-        //    console.log('eeeeeeeeeeeeeeeee',obj)
+        newStatus(obj){
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){
@@ -929,6 +940,41 @@ export default {
                 this.$refs.selectionGoodsLibrary.selectAll(true); 
             }else{
                 this.attractColumns.splice(0,1);
+            }
+        },
+        cancelEdit(){
+            this.editOpen=!this.editOpen;
+        },
+        openEdit(params){
+            this.serviceData=params;
+            this.cancelEdit();
+        },
+        openEditStyle(){
+            this.isShowEdit=!this.isShowEdit;
+            if(!this.isShowEdit){
+                this.attractColumns.push(
+                   {
+                    title: '操作',
+                    key: 'action',
+                    align:'center',
+                    width:100,
+                    render:(h,params)=>{
+                        return h('span', {
+                                style: {
+                                    color:'#499df1',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.openEdit(params.row)
+                                    }
+                                }
+                        },'编辑')
+                    }
+                }
+             )  
+            }else{
+                this.attractColumns.splice(this.attractColumns.length-1,1);
             }
         },
         openStatus(){

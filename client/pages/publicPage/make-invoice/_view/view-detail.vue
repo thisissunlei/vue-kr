@@ -12,32 +12,32 @@
                 <LabelText  :inline="inline" label="发票规格：">
                     {{formItem.invoiceTypeName}}
                 </LabelText>
-                <LabelText :inline="inline" label="需退换发票金额："  v-if="invoiceStatus == 'TO_RETURN'">
+                <LabelText :inline="inline" label="需退换发票金额："  v-if="invoiceStatus == 'RECOVERYED'">
                     {{formItem.needRefund}}
                 </LabelText>
-                <LabelText :inline="inline" label="实际退换发票金额：" v-if="invoiceStatus == 'TO_RETURN'">
+                <LabelText :inline="inline" label="实际退换发票金额：" v-if="invoiceStatus == 'RECOVERYED'">
                     {{formItem.refund}}
                 </LabelText>
-                <LabelText :inline="inline" label="发票内容：" v-if="invoiceStatus == 'TO_RETURN'">
+                <LabelText :inline="inline" label="发票内容：" v-if="invoiceStatus == 'RECOVERYED'">
                     {{formItem.invoiceContent}}
                 </LabelText>
-                <div class="bill-list" v-if="invoiceStatus == 'TO_RETURN'">
+                <div class="bill-list" v-if="invoiceStatus == 'RECOVERYED'">
                     <div class="bill-title">相关账单：</div>
-                    <div v-for="item in formItem.amountDetailList">{{item.billNum}}</div>
+                    <div v-for="(item,index) in formItem.amountDetailList" :key="index">{{item.billNum}}</div>
                 </div>
-                <LabelText :inline="inline" label="发票金额："  v-if="invoiceStatus != 'TO_RETURN'">
+                <LabelText :inline="inline" label="发票金额："  v-if="invoiceStatus != 'RECOVERYED'">
                     {{formItem.amount}}
                 </LabelText>
-                <LabelText :inline="inline" label="发票张数："  v-if="invoiceStatus != 'TO_RETURN'">
+                <LabelText :inline="inline" label="发票张数："  v-if="invoiceStatus != 'RECOVERYED'">
                     {{formItem.invoiceCount}}
                 </LabelText>
-                <LabelText :inline="inline" label="申请人员："  v-if="invoiceStatus != 'TO_RETURN'">
+                <LabelText :inline="inline" label="申请人员："  v-if="invoiceStatus != 'RECOVERYED'">
                     {{formItem.applyUserName}}
                 </LabelText>
-                <LabelText :inline="inline" label="申请时间："  v-if="invoiceStatus != 'TO_RETURN'">
+                <LabelText :inline="inline" label="申请时间："  v-if="invoiceStatus != 'RECOVERYED'">
                     {{formItem.ctime  |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
-                <LabelText :inline="inline" label="备注信息："  v-if="invoiceStatus != 'TO_RETURN'">
+                <LabelText :inline="inline" label="备注信息："  v-if="invoiceStatus != 'RECOVERYED'">
                     {{formItem.remark}}
                 </LabelText>
 
@@ -45,7 +45,7 @@
 
             </Card>
             <span class="space"></span>
-            <Card id="step-two" v-if="invoiceStatus != 'TO_RETURN'">
+            <Card id="step-two" v-if="invoiceStatus != 'RECOVERYED'">
                 <p slot="title" class="card-title">
                    明细信息
                 </p>
@@ -95,7 +95,7 @@
                 </LabelText>
             </Card>
             <span class="space" ></span>
-            <Card id="step-four" v-if="invoiceStatus != 'TO_RETURN'">
+            <Card id="step-four" v-if="invoiceStatus != 'RECOVERYED'">
                 <p slot="title" class="card-title">
                     领取方式
                 </p>
@@ -115,7 +115,7 @@
                 
             </Card>
             <span class="space" ></span>
-            <Card id="step-four" v-if="invoiceStatus != 'TO_RETURN'">
+            <Card id="step-four" v-if="invoiceStatus != 'RECOVERYED'">
                 <p slot="title" class="card-title">
                     账单信息
                 </p>
@@ -124,7 +124,7 @@
                 
             </Card>
             <span class="space"></span>
-            <Card id="step-four" v-if="invoiceStatus != 'TO_RETURN'">
+            <Card id="step-four" v-if="invoiceStatus != 'RECOVERYED'">
                 <p slot="title" class="card-title">
                     其他信息
                 </p>
@@ -167,6 +167,7 @@ export default {
             invoiceStatus:'normal',
             inline:true,
             invoicePostVO:[],
+            type:this.$route.query.type,
             billInfo:[
                 {
                     title: '账单编号',
@@ -218,6 +219,7 @@ export default {
     mounted:function(){
         GLOBALSIDESWITCH('false');
         this.getDetail()
+        console.log(this.$route.query)
     },
 
     methods:{

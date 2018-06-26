@@ -1058,7 +1058,7 @@ export default {
             console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
-            debugger;
+
             if (parms.isNewUser) {
                 if (parms.count >= 1) {
                     this.showChanceSelector = true;
@@ -1077,6 +1077,10 @@ export default {
                     this.OpportunityRequired = false;
                     this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
                 }
+                else if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    this.defaultChanceID = parms.list[1].value
+                }
             }
         },
         validSaleChance() {
@@ -1085,7 +1089,7 @@ export default {
             obj.customerId = this.formItem.customerId;
             obj.communityId = this.formItem.communityId;
             obj.salerId = this.formItem.salerId;
-
+            // this.defaultChanceID = -1;
             this.orderitems = Object.assign({}, obj);
         },
         deleteStation: function () {

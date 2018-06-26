@@ -16,7 +16,6 @@
 </style>
 
 
-
 <template>
     <div class="com-select-chance">
         <!-- <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent"> -->
@@ -65,15 +64,13 @@ export default {
                 return this.defaultValue;
             },
             set(val) {
-
+                console.log(val)
             }
 
         },
     },
     watch: {
-
         salerOptions() {
-            // this.value = Number(this.orderitems.saleChanceId);
             let chanceid = Number(this.orderitems.saleChanceId);
             if (chanceid == 0 || !chanceid) {
                 this.disabled = false;
@@ -82,9 +79,7 @@ export default {
             }
         },
         orderitems() {
-
             this.getSalerChanceList();
-
         }
     },
     methods: {
@@ -123,7 +118,6 @@ export default {
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                // this.$emit('gotChanceList', list.length - 1);
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({

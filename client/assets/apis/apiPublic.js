@@ -56,5 +56,10 @@ module.exports = {
     'roleEidtDetail':{//'/api/pm/role/action/detail',
         url:'/api/pm/role/action/edit',
         method:'post'
+    },
+    "typePage":{
+        url:'/mockdata/77/api/pm/discuss/list/type/page',
+        method:'get'
+
     }
 }

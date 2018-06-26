@@ -162,7 +162,7 @@
                     },
                     {
                         title: '客户类型',
-                        key: 'typeStr',
+                        key: 'customerTypeName',
                         align:'center',
                     },
                     {

@@ -1058,6 +1058,7 @@ export default {
             console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
+            debugger;
             if (parms.isNewUser) {
                 if (parms.count >= 1) {
                     this.showChanceSelector = true;

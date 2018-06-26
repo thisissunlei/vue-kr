@@ -155,6 +155,9 @@ export default {
     .watch-record{
         .daily-form{
             display: inline-block;
+            .ivu-form-item:after, .ivu-form-item:before{
+                content: none;
+            }
         }
     }
 </style>

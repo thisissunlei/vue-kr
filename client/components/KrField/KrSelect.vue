@@ -7,7 +7,8 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
-            :isOk="isOk"        
+            :isOk="isOk" 
+            :right="right"       
         >
             <Select
                 :placeholder="placeholder"
@@ -36,6 +37,9 @@ export default {
         isOk:{
             type:Boolean,
             default:true,
+        },
+        right:{
+            type:String
         },
         name:{
             type:String

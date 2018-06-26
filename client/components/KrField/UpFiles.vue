@@ -11,6 +11,7 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 			:isOk="isOk"  
+			:right="right"
 		>
 			<div class="view-box">
 				
@@ -94,6 +95,9 @@ export default{
 		KrImg
 	},
     props:{
+		right:{
+            type:String
+        },
         publicUse:{
             default:false,
 			type:Boolean,

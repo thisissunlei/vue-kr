@@ -6,6 +6,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :right="right"
         >
             <Cascader
                 :data="data"
@@ -31,6 +32,9 @@ export default {
         placeholder:{
             type:String,
             default:'请输入...',
+        },
+        right:{
+            type:String,
         },
 		value:{
             default:'',
@@ -135,7 +139,7 @@ export default {
     }
 	.edit-icon{
 		
-		position: absolute;
+		position: relative;
 		right: 0;
 		top: 0px;
 		line-height: 32px;

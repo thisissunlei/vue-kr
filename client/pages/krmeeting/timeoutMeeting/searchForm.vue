@@ -40,11 +40,13 @@
                 
             </FormItem>
             <FormItem label="" class="form-item-search">
-            
-                <SearchFormInput 
+                <SearchForm
                     :searchFilter="searchFilter"
-                    @changeSearchFormData = "changeSearchFormData"
+                    :openSearch = true
+                    :notShowSearchIconProps = true
+                    @serachFormDataChanged="changeSearchFormData"
                 /> 
+                 
             </FormItem>
             <Button type="primary" icon="ios-search" @click="submitSearchData">搜索</Button>
              
@@ -103,10 +105,13 @@ export default {
         
        
         changeSearchFormData(searchData){
-            
-            var param = {
-                 phone:  searchData.searchValue
+            console.log("searchData",searchData)
+            for(var key in searchData ){
+                var param = {
+                    phone : searchData[key]
+                }
             }
+          
             var newObj = Object.assign({},this.formItem,param);
             this.formItem = newObj;
         },

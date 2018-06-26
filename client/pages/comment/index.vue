@@ -92,9 +92,46 @@
         title="Common Modal dialog box title"
         @on-ok="ok"
         @on-cancel="cancel">
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
+        <Form :model="formItem" :label-width="80">
+          <FormItem label="Text">
+            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="写评论">
+            </Input>
+        </FormItem>
+        </Form>
+
+        <div class="demo-upload-list" v-for="item in uploadList">
+        <template v-if="item.status === 'finished'">
+            <img :src="item.url">
+            <div class="demo-upload-list-cover">
+                <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
+                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+            </div>
+        </template>
+        <template v-else>
+            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+        </template>
+    </div>
+    <Upload
+        ref="upload"
+        :show-upload-list="false"
+        :default-file-list="defaultList"
+        :on-success="handleSuccess"
+        :format="['jpg','jpeg','png']"
+        :max-size="2048"
+        :on-format-error="handleFormatError"
+        :on-exceeded-size="handleMaxSize"
+        :before-upload="handleBeforeUpload"
+        multiple
+        type="drag"
+        action="//jsonplaceholder.typicode.com/posts/"
+        style="display: inline-block;width:58px;">
+        <div style="width: 58px;height:58px;line-height: 58px;">
+            <Icon type="camera" size="20"></Icon>
+        </div>
+    </Upload>
+    <Modal title="View Image" v-model="visible">
+        <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+    </Modal>
     </Modal>
    
   </div>
@@ -110,13 +147,23 @@ data(){
     pageSize:10,
     comments:[],
     totalCount:0,
-    modal1: false
+    modal1: false,
+    formItem: {
+        
+        textarea: ''
+    }
   }
 },
 mounted(){
   this.getcomments()
 },
 methods:{
+  ok () {
+      this.$Message.info('Clicked ok');
+  },
+  cancel () {
+      this.$Message.info('Clicked cancel');
+  },
   getcomments(){
     let param = {page:this.page,pageSize:this.pageSize ,projectId:38}
     this.$http.get('typePage',param).then((res)=>{

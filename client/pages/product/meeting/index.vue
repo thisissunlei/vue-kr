@@ -272,6 +272,7 @@ export default {
         changePage(page){
             this.tabParams.page=page;
             this.page=page;
+
             this.getTableData(this.tabParams);
         },
         getTableData(params){
@@ -294,7 +295,7 @@ export default {
             if(params.communityId==-1){
                 params.communityId=""
             }
-
+            this.tabParams=Object.assign({},params);
             this.getTableData(params);
         },
         jumpCreate(){

@@ -228,7 +228,12 @@ export default {
             this.$http.get('csr-invoice-invoiceDetail', {invoiceId:view}).then( r => {
                  this.formItem = r.data;
                  this.info = this.formItem.qualificationVO
-                 this.invoiceStatus = r.data.invoiceStatus;
+                 if(r.data.invoiceStatus == 'RECOVERYED' || r.data.invoiceStatus == 'FORREOPN'){
+                      this.invoiceStatus = 'RECOVERYED';
+                 }else{
+                     this.invoiceStatus = r.data.invoiceStatus;
+                 }
+                
             }).catch( e => {
                 this.$Notice.error({
                     title:e.message

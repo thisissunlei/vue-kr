@@ -15,5 +15,10 @@ export default {
     "get-money-type-enum": {
         url: "/api/krspace-pay/bill/release?",
         method: "get"
+    },
+    //获取申请列表
+    "get-apply-list": {
+        url: "/api/krspace-pay/bill/release?",
+        method: "get"
     }
 };

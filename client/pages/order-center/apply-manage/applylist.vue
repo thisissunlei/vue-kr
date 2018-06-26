@@ -30,6 +30,30 @@ export default {
     },
     data() {
         return {
+            operateTypeIndex: 0,
+            operateTypes: [
+                {
+                    name: '转社区',
+                    component: 'QS'
+                },
+                {
+                    name: '转营业外',
+                    component: 'YYW'
+                },
+                {
+                    name: '转余额',
+                    component: 'YE'
+                },
+
+                {
+                    name: '押金转租金',
+                    component: 'YJ2ZJ'
+                },
+                {
+                    name: '释放服务保证金',
+                    component: 'ReleaseFWBZJ'
+                },
+            ],
             applyDatas: [],
             columns: [
                 {
@@ -62,7 +86,7 @@ export default {
                     key: 'totalRent',
                     align: 'center',
                     render: (h, params) => {
-                        return '￥' + utils.thousand(params.row.totalRent)
+                        return '￥' + utils.thousand((params.row.totalRent / 100).toFixed(2))
                     }
                 },
                 {
@@ -85,9 +109,9 @@ export default {
                     align: 'center',
                     render(tag, params) {
                         var orderStatus = {
-                            'NOT_EFFECTIVE': '未生效',
-                            'EFFECTIVE': '已生效',
-                            'INVALID': '已作废'
+                            'PROCESSED': '待处理',
+                            'PENDING': '已处理',
+                            'RETREATE': '已退回'
                         }
                         for (var item in orderStatus) {
                             if (item == params.row.orderStatus) {
@@ -146,7 +170,17 @@ export default {
     methods: {
 
         //搜索
-        handleSearch() {
+        handleSearch(params) {
+            // this.applyDatas
+            let list = [];
+            let _this = this;
+            this.$http.get('get-apply-list', params, r => {
+                this.applyDatas = r.data.items;
+            }, e => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
 
         },
 
@@ -156,41 +190,66 @@ export default {
         },
         //转社区
         handle2SQ() {
-            return;
-
+            this.operateTypeIndex = 0;
+            let ui = this.operateTypes[this.operateTypeIndex].component;
+            window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
         },
 
         //转营业外
         handle2YYW() {
+            this.operateTypeIndex = 1;
+            let ui = this.operateTypes[this.operateTypeIndex].component;
+            window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
             return;
 
         },
 
         //转余额
         handle2YE() {
+            this.operateTypeIndex = 2;
+            let ui = this.operateTypes[this.operateTypeIndex].component;
+            window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
             return;
 
         },
 
         //押金转租金
         handleYJ2ZJ() {
+            this.operateTypeIndex = 3;
+            let ui = this.operateTypes[this.operateTypeIndex].component;
+            window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
             return;
 
         },
 
         //释放服务保证金
         handleReleaseFWBZJ() {
+            this.operateTypeIndex = 4;
+            let ui = this.operateTypes[this.operateTypeIndex].component;
+            window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
             return;
         },
 
         //查看申请
         handleCheckApplyInfo(params) {
-
+            var viewName = '';
+            if (params.row.orderType == 'CONTINUE') {
+                viewName = 'renewView';
+            } else {
+                viewName = 'joinView';
+            }
+            window.open(`/order-center/apply-manage/${params.row.id}/${viewName}`, '_blank');
         },
 
         //退回申请
         handleRejectApply(params) {
-
+            var viewName = '';
+            if (params.row.orderType == 'CONTINUE') {
+                viewName = 'renewView';
+            } else {
+                viewName = 'joinView';
+            }
+            window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`, '_blank');
         }
     }
     ,

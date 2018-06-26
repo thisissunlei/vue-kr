@@ -198,7 +198,7 @@
                     this.openModify = false;
                     this.getListData();
                 }).catch((err)=>{
-                  console.log('====',err)
+                 
                     this.$Notice.error({
                         title:err.message
                     });
@@ -230,7 +230,7 @@
                     this.mailClick()
                     this.getListData();
                 }).catch((err)=>{
-                  console.log('====',err)
+                  
                     this.$Notice.error({
                         title:err.message
                     });
@@ -262,9 +262,12 @@
                     this.backSubmit()
                 }).catch((err)=>{
                   console.log('====',err)
-                    this.$Notice.error({
-                        title:err.message
-                    });
+                   this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=err.message;
+                    // this.$Notice.error({
+                    //     title:err.message
+                    // });
                 })
             },
             //签收按钮点击

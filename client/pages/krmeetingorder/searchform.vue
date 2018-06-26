@@ -58,9 +58,11 @@
             </FormItem>
             <FormItem label="" class="form-item-search">
             
-                <SearchFormInput 
+                <SearchForm
                     :searchFilter="searchFilter"
-                    @changeSearchFormData = "changeSearchFormData"
+                    :openSearch = true
+                    :notShowSearchIconProps = true
+                    @serachFormDataChanged="changeSearchFormData"
                 /> 
             </FormItem>
             <Button type="primary" icon="ios-search" @click="submitSearchData">搜索</Button>
@@ -71,7 +73,7 @@
 
 <script>
 
-import SearchFormInput from '~/components/SearchFormInput';
+
 import SearchForm from '~/components/SearchForm';
 
 export default {
@@ -101,7 +103,7 @@ export default {
        "meetingStatusOptions"
    ],
    components:{
-       SearchForm,SearchFormInput
+       SearchForm
    },
    mounted(){
       this.getCommunity();
@@ -122,12 +124,15 @@ export default {
         
        
         changeSearchFormData(searchData){
-            
-            var param = {
-                keyWordType : searchData.searchFilter,
-                keyWord : searchData.searchValue
+            for(var key in searchData ){
+                var param = {
+                    keyWordType : key,
+                    keyWord : searchData[key]
+                }
             }
+            
             var newObj = Object.assign({},this.formItem,param);
+            console.log("newObj",newObj);
             this.formItem = newObj;
         },
         submitSearchData(){
@@ -144,7 +149,7 @@ export default {
             this.$emit("submitSearchData",this.formItem);
         },
         dataChanged(){
-            console.log("this.formItem",this.formItem);
+            // console.log("this.formItem",this.formItem);
         }
     }
  }

@@ -241,7 +241,7 @@ export default {
           if(this.Params.createName){
             this.Params.createName="";
           }
-          let params=Object.assign(form,this.Params);
+          let params=Object.assign({},this.Params,form);
           utils.addParams(params);
       },
     showSearch (params) {

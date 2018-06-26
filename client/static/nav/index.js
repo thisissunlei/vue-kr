@@ -18,6 +18,7 @@
     function setHref(type, router) {
         var href = '';
         var alias = '/new/#/';
+        var hostname = location.hostname;
         var port = location.port || '';
         if (port) {
             port = ":" + port;
@@ -25,7 +26,11 @@
         if (type && type == "vue") {
             alias = '/';
         }
-        href = location.protocol + "//" + location.hostname + port + alias + router;
+        if(type && type == "member"){
+            alias = '/';
+            hostname =  'memberadmintest03.krspace.cn';
+        }   
+        href = location.protocol + "//" + hostname + port + alias + router;
         return href;
     }
     //获取侧边栏里的数据
@@ -555,6 +560,12 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
+                        // {
+                        //     primaryText: '协助客户授权',
+                        //     router: 'accredit',
+                        //     type:'member',
+                        //     menuCode: 'customer_assets'
+                        // },
                     ]
                 },
                 {
@@ -628,6 +639,12 @@
                             router: 'product/communityAllocation/communityStation'
                         },
                         {
+                            primaryText: "商品库",
+                            router: 'inventory/goods-library',
+                            type: 'vue',
+                            menuCode: 'goods_list',
+                        },
+                        {
                             primaryText: '平面图配置',
                             menuCode: 'oper_cmt_graph_base',
                             router: 'product/communityAllocation/communityPlanList'
@@ -681,12 +698,19 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        //}, 
+                        //},
+                        {
+                            primaryText: '会议室',
+                            router: 'product/meeting',
+                            type: 'vue',
+                            menuCode: 'meeting_room_goods',
+                        },
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
+                        
                     ]
                 },
              ]
@@ -850,12 +874,12 @@
                             menuCode: 'sso_appVersion_base',
                         },
                        
-                        // {
-                        //     primaryText: '免费额度优惠券',
-                        //     menuCode: 'op_member_coupon_internal',
-                        //     type: 'vue',
-                        //     router: 'app-manage/coupon'
-                        // },
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'pm_manage_role',
+                            type: 'vue',
+                            router: 'nav-config'
+                        },
                     ]
                 },
                 {
@@ -970,6 +994,12 @@
                             menuCode: 'ops_tool_management',
                             type: 'vue',
                             router: 'ops'
+                        },
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'sso_loginLog_base',
+                            type: 'vue',
+                            router: 'nav-config'
                         },
 
                     ]

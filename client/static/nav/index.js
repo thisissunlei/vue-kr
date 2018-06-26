@@ -1380,10 +1380,10 @@
                     type: 'vue',
                     menuItems: [
                         {
-                            primaryText: "数据监控",
+                            primaryText: "订单数据监控",
                             router: 'management-tool/data-monitoring',
                             type: 'vue',
-                            menuCode: 'pm_manage_list'
+                            menuCode: 'order_validate_list'
                         }
                     ]
                 }

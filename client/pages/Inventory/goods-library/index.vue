@@ -256,6 +256,7 @@
            @cancel="cancelService"
            :singleForms="tabForms"
            :floor="newgoodForm.floor"
+           :editData="serviceData"
         />
         <div slot="footer">
         
@@ -303,6 +304,7 @@ export default {
             },
           data() {
                 return{
+            serviceData:{},
             warnCode:'',
             openService:false,
             fiteter:'',
@@ -540,11 +542,23 @@ export default {
                 },
                 {
                     title: '设备绑定',
-                    key: 'binding',
+                    key: 'bindingText',
                     align:'center',
                     width:60,
-                    render(h,params){
-                        return h('span',{},'-')
+                    render:(h,params)=>{
+                        let middle=params.row.binding;
+                        let ren=params.row.bindingText?params.row.bindingText:'-';
+                        return h('span', {
+                                style: {
+                                    color:middle=='0'?'red':'',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.editService(params.row)
+                                    }
+                                }
+                        },ren)
                     }
                 },
                 {
@@ -605,10 +619,13 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
-
-            showpushe(){
-                this.butpushd=!this.butpushd;
-            },
+        editService(params){
+            this.cancelService();
+            this.serviceData=params;
+        },
+        showpushe(){
+            this.butpushd=!this.butpushd;
+        },
 
         cityFloor(params){
             this.tabForms=Object.assign({},this.tabForms,params,{page:1});
@@ -616,11 +633,11 @@ export default {
         },
         submitService(params){
              this.showpush();
-            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
+             console.log('<iiiiiiiii>',this.newgoodForm.goodsType,params)
             let data={
-                goodsType:this.newgoodForm.goodsType,
+                goodsType:this.newgoodForm.goodsType||this.serviceData.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:this.serviceId
+                id:this.serviceId||this.serviceData.id
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -637,6 +654,7 @@ export default {
     
 
         cancelService(){
+            this.serviceData={};
             this.openService=!this.openService;
         },
         clanar(){

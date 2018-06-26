@@ -228,7 +228,7 @@
                                             color:'#2b85e4',
                                             display:"block",
                                             marginLeft:"7px",
-                                            display:params.row.crmId?'block':"none"
+                                            display:params.row.crmId?'none':"block"
                                         },
                                         on: {
                                             click: () => {

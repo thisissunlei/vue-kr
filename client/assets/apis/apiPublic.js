@@ -17,5 +17,13 @@ module.exports = {
         url:'/api/op/sys/downFile',
         method:'get'
     },
-   
+    'down-file':{
+        url:'/api/op/sys/downFile',
+        method:'get'
+    },
+    'get-customers-order-currency':{
+        url:'customer/my-customers/order-currency',
+        method:'get'
+    },
+    
 }

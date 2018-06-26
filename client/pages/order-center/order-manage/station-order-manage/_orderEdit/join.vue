@@ -22,8 +22,8 @@
                     </Col>
 
                     <Col class="col">
-                    <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems'></SelectChance>
+                    <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
 
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
@@ -42,7 +42,7 @@
                                 <Option v-for="(option, index) in salerOptions" :value="option"  :key="index">{{option}}</Option>
                         </Select> -->
                     <!-- </FormItem> -->
-                    <!-- </Col> -->-->
+                    <!-- </Col> -->
                 </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -258,6 +258,7 @@ export default {
         };
 
         return {
+            defaultChanceID: 0,
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
@@ -485,6 +486,7 @@ export default {
             obj.salerId = this.formItem.salerId;
             obj.saleChanceId = this.formItem.saleChanceId;
             this.saleChanceId = this.formItem.saleChanceId;
+            this.defaultChanceID = this.formItem.saleChanceId;
             this.orderitems = Object.assign({}, obj);
 
             if (this.formItem.communityId && this.formItem.customerId) {
@@ -1098,7 +1100,8 @@ export default {
             } else {
                 this.formItem.communityId = '';
             }
-            this.clearStation()
+            this.clearStation();
+            this.validSaleChance();
             this.getFloor = +new Date()
 
         },
@@ -1131,11 +1134,12 @@ export default {
                 this.formItem.customerId = '';
             }
             this.getFloor = +new Date()
-
+            this.validSaleChance();
         },
         changeSaler: function (value) {
             // 销售员
             this.formItem.salerId = value;
+            this.validSaleChance();
         },
         changeChance: function (value) {
             if (!value || value === 0 || value == -1) {
@@ -1144,12 +1148,35 @@ export default {
                 this.formItem.saleChanceId = value;
             }
         },
-        handleGotChancelist(count) {
-            debugger;
-            this.showChanceSelector = count >= 1
-            this.$Notice.info({
-                title: '您没有可用的机会，请确认登录账户或前往CRM检查'
-            });
+        validSaleChance() {
+            // this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
+            let obj = {};
+            obj.customerId = this.formItem.customerId;
+            obj.communityId = this.formItem.communityId;
+            obj.salerId = this.formItem.salerId;
+            this.orderitems = Object.assign({}, obj);
+        },
+        handleGotChancelist(parms) {
+            debugger
+            if (parms.isNewUser) {
+                if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    this.defaultChanceID = parms.list[1].value
+                    // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
+                }
+                else {
+                    this.showChanceSelector = false;
+                    this.OpportunityRequired = true;
+                    this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
+                }
+            }
+            else {
+                if (parms.count == 0) {
+                    this.showChanceSelector = false;
+                    this.OpportunityRequired = false;
+                    this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+            }
         },
         deleteStation: function () {
             // 工位表单的删除按钮
@@ -1517,5 +1544,8 @@ export default {
 }
 .OpportunityRequired {
     color: #ed3f14;
+}
+.requiremark .ivu-form-item-label::before {
+    content: "";
 }
 </style>

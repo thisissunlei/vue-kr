@@ -87,7 +87,7 @@
                         style="width: 252px"
                     />
                 </Form-item>
-                <Form-item label="联系人邮箱" class="bill-search-class" prop="mail">
+                <Form-item  label="联系人邮箱" class="bill-search-class" prop="mail">
                     <i-input 
                         v-model="formItem.mail" 
                         placeholder="请输入联系人邮箱"
@@ -146,6 +146,7 @@
                 customerSourceOptions:[],
                 customerTypeOptions:[],
                 dateError:false,
+                isShow:true,
                 effectError:false,
                 canSubmit:true,
                 formItem:{
@@ -153,7 +154,7 @@
                 	communityId:'',
                 	channelType:'',
                 	channelId:'',
-                	type:'',
+                	type:'PERSONAL',
                 	name:'',
                 	mobile:'',
                 	mail:'',

@@ -73,7 +73,7 @@
                    </Select> 
                 </Form-item>
                 
-                <Form-item v-if="!isCompany" label="客户联系人" class="bill-search-class" prop="name">
+                <Form-item v-if="isShow" label="客户联系人" class="bill-search-class" prop="name">
                     <i-input 
                         v-model="formItem.name" 
                         placeholder="请输入客户联系人"
@@ -81,7 +81,7 @@
                         :maxlength="max"
                     />
                 </Form-item>
-                <Form-item v-if="!isCompany" label="联系人手机号" class="bill-search-class" prop="mobile">
+                <Form-item v-if="isShow" label="联系人手机号" class="bill-search-class" prop="mobile">
                     <i-input 
                         v-model="formItem.mobile" 
                         placeholder="请输入联系人手机号"
@@ -89,7 +89,7 @@
                         
                     />
                 </Form-item>
-                <Form-item v-if="!isCompany" label="联系人邮箱" class="bill-search-class" prop="mail">
+                <Form-item v-if="isShow" label="联系人邮箱" class="bill-search-class" prop="mail">
                     <i-input 
                         v-model="formItem.mail" 
                         placeholder="请输入联系人邮箱"
@@ -108,7 +108,8 @@
              mask:String,
              keys:String,
              params:{},
-            initailData :{}
+            initailData :{},
+            
         },
         data (){
             let _this =this;
@@ -151,7 +152,7 @@
                 }
             };
             return{
-                isCompany : false,
+                isCompany : true,
                 customerSourceTypeOptionsParam : 'com.krspace.order.api.enums.customer.CsrChannelType',
                 customerSourceTypeOptions :[],
                 customerSourceOptions:[],
@@ -159,6 +160,7 @@
                 dateError:false,
                 effectError:false,
                 canSubmit:true,
+                isShow:true,
                 formItem:{
                 	company:'',
                 	communityId:1,
@@ -212,12 +214,12 @@
             this.getCommunity();
             this.getCustomerSourceTypeOptions();
             this.getCustomerTypeOptions();
-            console.log("this.initailData",this.initailData)
+            console.log("this.initailData",this.initailData);
             this.formItem =Object.assign({},this.initailData);
             console.log("this.formItem",this.formItem)
             this.formItem.communityId = this.initailData.communityId+"";
             console.log("this.formItem",this.formItem)
-            this.isCompany = this.initailData.type=="ENTERPRISE"?true:false;
+            this.isShow = this.initailData.type=="ENTERPRISE"?false:true;
         },
         
 

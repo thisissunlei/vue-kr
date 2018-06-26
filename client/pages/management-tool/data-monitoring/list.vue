@@ -197,7 +197,7 @@ export default {
     },
     mounted() {
         this.columns = this.$data[this.type]
-        debugger;
+        // debugger;
         this.handleSearch();
     },
 
@@ -212,35 +212,35 @@ export default {
                 customerName: this.customerName,
                 communityId: this.communityId,
             };
-            debugger;
+            // debugger;
             this.$http.get('get-validate-list', parms, r => {
                 let detail = [];
-                debugger;
+                // debugger;
                 let attName = this.priceTypes[this.type].resAttName
                 r.data.items.map(item => detail.push(item[attName]))
                 this.detail = detail;
                 this.$Spin.hide();
             }, e => {
-                debugger;
+                // debugger;
                 this.$Notice.error({
                     title: e.message
                 });
             })
 
-            this.$Spin.show({
-                render: (h) => {
-                    return h('div', [
-                        h('Icon', {
-                            'class': 'demo-spin-icon-load',
-                            props: {
-                                type: 'load-c',
-                                size: 30
-                            }
-                        }),
-                        h('div', '拼命加载中')
-                    ])
-                }
-            });
+            // this.$Spin.show({
+            //     render: (h) => {
+            //         return h('div', [
+            //             h('Icon', {
+            //                 'class': 'demo-spin-icon-load',
+            //                 props: {
+            //                     type: 'load-c',
+            //                     size: 30
+            //                 }
+            //             }),
+            //             h('div', '拼命加载中')
+            //         ])
+            //     }
+            // });
 
         },
 
@@ -317,24 +317,25 @@ export default {
     }
 }
 </script>
-<style lang="less" >
+
+<style lang="less"  scoped>
 .selectors {
     display: inline;
 }
-.demo-spin-icon-load {
-    animation: ani-demo-spin 1s linear infinite;
-}
-@keyframes ani-demo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
+// .demo-spin-icon-load {
+//     animation: ani-demo-spin 1s linear infinite;
+// }
+// @keyframes ani-demo-spin {
+//     from {
+//         transform: rotate(0deg);
+//     }
+//     50% {
+//         transform: rotate(180deg);
+//     }
+//     to {
+//         transform: rotate(360deg);
+//     }
+// }
 .demo-spin-col {
     height: 100px;
     position: relative;

@@ -505,7 +505,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),devToolSetting()];
 
         return arr;
     }
@@ -1077,20 +1077,7 @@
                         },
                     ]
                 },
-                {
-                    primaryText: "研发权限",
-                    iconName: 'icon-wendang',
-                    iconColor: '#79859a',
-                    menuItems: [
-                        {
-                            primaryText: '数据监控',
-                            type: 'vue',
-                            router: 'management-tool/data-monitoring',
-                            menuCode: 'sync_main_part',
-                        },
-                       
-                    ]
-                },
+               
             ]
         }
     }
@@ -1380,5 +1367,29 @@
             ]
         }
     }
+    function devToolSetting(){
+        return  {
+            primaryText: "开发工具",
+            router: 'dev',
+            type: 'vue',
+            menuItems: [
+                {
+                    primaryText: '后端工具',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    type: 'vue',
+                    menuItems: [
+                        {
+                            primaryText: "数据监控",
+                            router: 'management-tool/data-monitoring',
+                            type: 'vue',
+                            menuCode: 'pm_manage_list'
+                        }
+                    ]
+                }
 
+            ]
+        }
+    }
+    
 })(window);

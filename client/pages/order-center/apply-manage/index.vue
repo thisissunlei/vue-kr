@@ -27,7 +27,7 @@
 
 <script>
 // import SearchFrom from './search-from';
-import SearchFrom from './operate/SearchForm.vue';
+import SearchFrom from './_transferOperate/SearchForm.vue';
 
 import utils from '~/plugins/utils';
 import List from './list';

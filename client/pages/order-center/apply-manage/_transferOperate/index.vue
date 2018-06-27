@@ -1,15 +1,15 @@
 <template>
     <div class="apply-manage-container">
         <div class='apply-search-panel'>
-            <SearchFrom @searchClick="handleSearch" @clearClick="handleClear" @initData="initData" :type="type" />
+            <SearchForm @searchClick="handleSearch" @clearClick="handleClear" @initData="initData" />
         </div>
         <div class="business-operation-btns">
 
-            <Button type="primary" @click="handle2SQ" class='join-btn'>转社区</Button>
-            <Button type="primary" @click="handle2YYW" class='join-btn'>转营业外</Button>
-            <Button type="primary" @click="handle2YE" class='join-btn'>转余额</Button>
-            <Button type="primary" @click="handleYJ2ZJ" class='join-btn'>押金转租金</Button>
-            <Button type="primary" @click="handleReleaseFWBZJ" class='join-btn'>释放服务保证金</Button>
+            <Button type="primary" @click="handle2SQ" class='operate-btn'>转社区</Button>
+            <Button type="primary" @click="handle2YYW" class='operate-btn'>转营业外</Button>
+            <Button type="primary" @click="handle2YE" class='operate-btn'>转余额</Button>
+            <Button type="primary" @click="handleYJ2ZJ" class='operate-btn'>押金转租金</Button>
+            <Button type="primary" @click="handleReleaseFWBZJ" class='operate-btn'>释放服务保证金</Button>
 
         </div>
         <div class="apply-list-table">
@@ -169,6 +169,9 @@ export default {
     },
     methods: {
 
+        initData(formItem) {
+            console.log(formItem)
+        },
         //搜索
         handleSearch(params) {
             // this.applyDatas
@@ -258,4 +261,12 @@ export default {
 </script>
 
 <style lang="less">
+.apply-manage-container {
+    .business-operation-btns {
+        margin: 0 0 10px 10px;
+        .operate-btn {
+            margin-right: 10px;
+        }
+    }
+}
 </style>

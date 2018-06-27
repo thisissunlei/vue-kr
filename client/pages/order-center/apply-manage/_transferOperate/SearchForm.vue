@@ -12,7 +12,6 @@
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
                         <SelectCustomers name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px"></SelectCustomers>
-                        <!-- <i-input v-model="formItem.customerID" placeholder="请输入客户名称" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" /> -->
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
@@ -68,7 +67,7 @@
                             <span style="display:inline-block;width:22px;"></span>态</span>
                         <Form-item class='daily-form ' prop="applyState">
                             <Select v-model="formItem.applyState" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
-                                <Option v-for="option in applyStates" :value="option.uid" :key="option.name">{{option.name}}</Option>
+                                <Option v-for="option in applyStates" :value="option.value" :key="option.value">{{option.label}}</Option>
                             </Select>
                         </Form-item>
 
@@ -84,11 +83,7 @@
 import dateUtils from 'vue-dateutils';
 import SelectCustomers from '~/components/SelectCustomers.vue'
 export default {
-    props: {
-        type: {
-            type: String,
-        }
-    },
+    name: 'searchform',
     components: {
         SelectCustomers
     },
@@ -124,19 +119,8 @@ export default {
 
         return {
             labelValue: true,
-            applyStates: [],
             loading: false,
             params: {},
-            formItem: {
-                applyNum: '',//申请编号
-                customerID: '',
-                communityId: '',
-                cityId: '', operateType: ' ',
-                moneyType: ' ',
-                operateEndDate: '',
-                operateStartDate: '',
-                applyState: '',
-            },
             communityList: [],
             cityList: [],
             operateTypes: [
@@ -152,19 +136,8 @@ export default {
                 { value: 'RENT', label: '租金' },
                 { value: 'SPACE_MANAGE', label: '众创空间管理费' }
             ],
-            productList: [
-                { value: ' ', label: '全部' },
-                { value: 'OPEN', label: '固定办公桌' },
-                { value: 'SPACE', label: '独立办公室' },
-                { value: 'MOVE', label: '移动办公桌' }
-            ],
-            returnList: [
-                { value: ' ', label: '全部' },
-                { value: 'RETURNING', label: '未回收' },
-                { value: 'RECOVERYED', label: '已收回' },
-            ],
             applyStates: [
-                { value: ' ', label: '全部' },
+                { value: 'ALL', label: '全部' },
                 { value: 'RETURNING', label: '未回收' },
                 { value: 'RECOVERYED', label: '已收回' },
             ],
@@ -188,7 +161,17 @@ export default {
                 applyState: [
                     { validator: validateName, trigger: 'change' }
                 ],
-            }
+            },
+            formItem: {
+                applyNum: '',//申请编号
+                customerID: '',
+                communityId: '',
+                cityId: '', operateType: ' ',
+                moneyType: ' ',
+                operateEndDate: '',
+                operateStartDate: '',
+                applyState: '',
+            },
         }
     },
     mounted() {
@@ -218,7 +201,6 @@ export default {
 
     },
     methods: {
-
         remoteFun(query) {
             if (query !== '') {
                 this.loading1 = true;
@@ -226,48 +208,28 @@ export default {
                     this.getApplyStateList(query)
                 }, 200);
             }
-
         },
         //获取申请状态枚举
         getApplyStateList: function (name) {
-            let params = {
-                name: name
-            }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-apply-state-enum', params, r => {
-                list = r.data;
-                list.map((item) => {
-                    let obj = item;
-                    obj.uid = item.uid + '';
-                    return obj;
-                });
-                _this.loading1 = false;
-                _this.applyStates = list;
-            }, e => {
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
+            }).then((r) => {
+                this.applyStates = [].concat({ value: 'ALL', label: '全部' }, r.data);
+
+            }).catch((e) => {
                 this.$Notice.error({
                     title: e.message
                 });
             })
-
         },
         //获取操作类型枚举
         getOperateTypeList() {
-            let params = {
-                name: name
-            }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-operate-type-enum', params, r => {
-                list = r.data;
-                list.map((item) => {
-                    let obj = item;
-                    obj.uid = item.uid + '';
-                    return obj;
-                });
-                _this.loading1 = false;
-                _this.operateTypes = list;
-            }, e => {
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferType'
+            }).then((r) => {
+                this.operateTypes = [].concat({ value: 'ALL', label: '全部' }, r.data);
+
+            }).catch((e) => {
                 this.$Notice.error({
                     title: e.message
                 });
@@ -275,21 +237,12 @@ export default {
         },
         //获取操作款项枚举
         getMoneyTypeList() {
-            let params = {
-                name: name
-            }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-money-type-enum', params, r => {
-                list = r.data;
-                list.map((item) => {
-                    let obj = item;
-                    obj.uid = item.uid + '';
-                    return obj;
-                });
-                _this.loading1 = false;
-                _this.moneyTypes = list;
-            }, e => {
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
+            }).then((r) => {
+                this.operateTypes = [].concat({ value: 'ALL', label: '全部' }, r.data);
+
+            }).catch((e) => {
                 this.$Notice.error({
                     title: e.message
                 });
@@ -328,8 +281,6 @@ export default {
                     this.formItem.cityId = this.params.cityId;
                 } else {
                     this.formItem.cityId = res.data.length ? res.data[0].cityId : '';
-
-
                 }
                 this.getCommunityList(this.formItem.cityId)
             }).catch((error) => {

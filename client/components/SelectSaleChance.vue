@@ -16,10 +16,10 @@
 </style>
 
 
-
 <template>
     <div class="com-select-chance">
-        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent">
+        <!-- <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent"> -->
+        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :label-in-value='labelinvalue' @on-change="changeContent">
             <Option v-for="option in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -31,6 +31,7 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
+        defaultValue: 0,
         clearable: {
             type: Boolean,
             default: false,
@@ -39,13 +40,13 @@ export default {
 
         orderitems: {
             type: Object
-        }
+        },
+
     },
     data() {
         return {
             labelinvalue: true,
             disabled: false,
-            value: 0,
             saler: '',
             loading1: false,
             salerOptions: [
@@ -57,37 +58,32 @@ export default {
             ]
         };
     },
+    computed: {
+        value: {
+            get() {
+                return this.defaultValue;
+            },
+            set(val) {
+                console.log(val)
+            }
+
+        },
+    },
     watch: {
         salerOptions() {
-            debugger;
-            this.value = Number(this.orderitems.saleChanceId);
-            if (this.value == 0 || !this.value) {
+            let chanceid = Number(this.orderitems.saleChanceId);
+            if (chanceid == 0 || !chanceid) {
                 this.disabled = false;
             } else {
                 this.disabled = true;
             }
         },
         orderitems() {
-
             this.getSalerChanceList();
-
         }
-    },
-    created() {
-        // console.log('created')
-        // console.log(this.orderitems)
-    },
-    updated() {
-        // console.log('updated')
-        // console.log(this.orderitems);
-    },
-    mounted() {
-        // console.log('mounted')
-        // console.log(this.orderitems)
     },
     methods: {
         changeContent(item) {
-
             let v;
             if (item.label === "请选择" || item.label == '无需机会') {
                 v = '';
@@ -106,8 +102,9 @@ export default {
             if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
             let list = [];
             let _this = this;
+
             http.get('get-salechance', parms, r => {
-                r.data.items.map(item => {
+                r.data.items.data.map(item => {
                     list.push({
                         label: item.name,
                         value: item.id
@@ -115,7 +112,13 @@ export default {
                 })
                 list.unshift({ label: '无需机会', value: -1 })
                 _this.salerOptions = list;
-                this.$emit('gotChanceList', list.length - 1);
+
+                let parms = {
+                    count: list.length - 1,
+                    isNewUser: r.data.items.isNewUser,
+                    list: list
+                }
+                this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({
                     title: error.message

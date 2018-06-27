@@ -1,7 +1,21 @@
 <template>
     <div class='create-apply-sq'>
-        <SectionTitle title="同客户社区间转账申请"></SectionTitle>
+        <SectionTitle title="同客户社区间转账申请详情查看"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
+            <Row style="margin-bottom:30px">
+                <Col class="col">
+                <FormItem label="申请编号" style="width:252px" prop="customerId">
+                    <!-- <selectCustomers name="formItem.applyNum" :onchange="changeCustomer"></selectCustomers> -->
+                    <span class="noEditFormItem">{{formItem.applyNum}}</span>
+                </FormItem>
+                </Col>
+                <Col class="col">
+                <FormItem label="操作类型" style="width:252px" prop="communityId">
+                    <!-- <selectCommunities test="formItem.operateType" :onchange="changeCommunity"></selectCommunities> -->
+                    <span class="noEditFormItem">{{formItem.operateType}}</span>
+                </FormItem>
+                </Col>
+            </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
@@ -27,16 +41,24 @@
                 </Col>
             </Row>
 
-            <FormItem class="remark" label="备注" style="width:650px;">
+            <FormItem class="remark" label="备注" style="width:100%;">
                 <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
             </FormItem>
 
-            <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
+            <FormItem style="margin-top:40px">
+                <div class="btnContainer">
+                    <Button class='operateBtn' type="primary" @click="handleEdit">编辑</Button>
+                    <Button class='operateBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
+                    <Button class='operateBtn' type="primary" @click="handleReject('formItem')">退回</Button>
+                </div>
             </FormItem>
-        </Form>
 
+        </Form>
+        <SectionTitle title="操作记录"></SectionTitle>
+        <div class="apply-list-table">
+            <Table :columns="operateHistoryTableColums" :data="operateHistoryData" border class='list-table' />
+        </div>
     </div>
 </template>
 
@@ -73,8 +95,30 @@ export default {
             }
         };
         return {
-
+            isEdit: false,
+            editBtnEnable: false,
+            approveBtnEnable: false,
+            approveBtnText: '同意',
+            rejectBtnEnable: false,
+            operateHistoryData: [],
+            operateHistoryTableColums: [
+                {
+                    title: '操作时间',
+                    key: 'operateTime',
+                    align: 'center'
+                }, {
+                    title: '操作人员',
+                    key: 'operatePsn',
+                    align: 'center'
+                }, {
+                    title: '备注',
+                    key: 'remark',
+                    align: 'center'
+                }
+            ],
             formItem: {
+                applyNum: 'ZY201805290001',
+                operateType: '转社区',
                 customerID: '',
                 communityOut: '',
                 communityIn: '',
@@ -110,6 +154,8 @@ export default {
         },
         changeCustomer() { },
         changeCommunity() { },
+        handleEdit() { },
+        handleReject() { },
         handleSubmit(formItem) {
             let parms = {}
             this.$http.post('join-bill-detail', parms).then((response) => {
@@ -128,14 +174,21 @@ export default {
 
 <style lang="less">
 .create-apply-sq {
+    width: 60%;
+    max-width: 800px;
+
     .creat-order-form {
         padding: 20px;
+        .noEditFormItem {
+            position: absolute;
+            top: 35px;
+            left: 4px;
+        }
         .remark {
             width: 680px;
         }
         .col {
-            width: 33%;
-            min-width: 400px;
+            width: 50%;
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
@@ -152,6 +205,23 @@ export default {
                 left: -7px;
                 top: 14px;
             }
+        }
+        .btnContainer {
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            transform: translateX(-50%);
+            .operateBtn {
+                margin: 0 20px;
+            }
+        }
+    }
+
+    .apply-list-table {
+        padding-top: 20px;
+        .list-table {
+            margin: 20px;
+            margin-top: 0px;
         }
     }
 }

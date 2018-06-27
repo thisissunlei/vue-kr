@@ -1,5 +1,5 @@
 //公共的api
-module.exports = {
+export default  {
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
@@ -22,7 +22,7 @@ module.exports = {
         method:'get'
     },
     'get-customers-order-currency':{
-        url:'customer/my-customers/order-currency',
+        url:'/api/krspace-erp-web/customer/my-customers/order-currency',
         method:'get'
     },
     

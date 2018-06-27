@@ -1,5 +1,5 @@
 //公共的api
-module.exports = {
+export default {
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'

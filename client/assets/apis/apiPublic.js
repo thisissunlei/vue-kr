@@ -23,7 +23,7 @@ export default  {
         method:'get'
     },
     'get-customers-order-currency':{
-        url:'/api/krspace-erp-web/customer/my-customers/order-currency',
+        url:'/api/krspace-op-web/customer/my-customers/order-currency',
         method:'get'
     },
     

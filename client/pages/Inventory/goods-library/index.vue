@@ -16,6 +16,7 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
                 <Buttons type="primary" :label="isShowEdit?'编辑操作':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
@@ -64,6 +65,21 @@
             <div slot="footer">
                  <Button type="primary" @click="submitStatus">修改</Button>
                  <Button type="ghost" style="margin-left:20px" @click="openStatus">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+            width="660"
+            v-model="priceOpen"
+            title="修改定价"
+        >
+            <ChangePrice 
+              v-if="priceOpen"
+              :data="statusData"
+              />
+            <div slot="footer">
+                 <Button type="primary" @click="submitPrice">修改</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="openPrice">取消</Button>
             </div>
         </Modal>
 
@@ -263,11 +279,11 @@
 
      <Modal
             title="添加成功!"
-            v-model="openService"
+            v-model="serviceOpen"
             class-name="vertical-center-modal"
             >
         <BindService 
-           v-if="openService"
+           v-if="serviceOpen"
            @submit="submitService"
            @cancel="cancelService"
            :singleForms="tabForms"
@@ -288,6 +304,7 @@ import ToolTip from '~/components/ToolTip';
 import ImportFile from '~/components/ImportFile';
 import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
+import ChangePrice from './bulk-changes/change-price';
 import Loading from '~/components/Loading';
 import SearchForm from './search-form';
 import Message from '~/components/Message';
@@ -315,7 +332,8 @@ export default {
                 ImportFile,
                 BindService,
                 Buttons,
-                EditGoods
+                EditGoods,
+                ChangePrice
                  },
         props:{
                 mask:String
@@ -323,9 +341,10 @@ export default {
           data() {
                 return{
             editOpen:false,
+            priceOpen:false,
             serviceData:{},
             warnCode:'',
-            openService:false,
+            serviceOpen:false,
             fiteter:'',
             feactye:'',
             tables:'',
@@ -637,8 +656,20 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        openPrice(){
+            // if(!this.statusData.length){
+            //     this.$Notice.error({
+            //         title:'请选择至少一个商品'
+            //     });
+            //     return ;
+            // }
+            this.priceOpen=!this.priceOpen;
+        },
+        submitPrice(){
+            
+        },
         editService(params){
-            this.cancelService();
+            this.openService();
             this.serviceData=params;
         },
         showpushe(){
@@ -650,11 +681,11 @@ export default {
             //this.getListData(this.tabForms);
         },
         submitService(params){
-            //  console.log('<iiiiiiiii>',this.newgoodForm.goodsType,params)
+            let middleData=Object.assign({},this.serviceData);
             let data={
-                goodsType:this.newgoodForm.goodsType||this.serviceData.goodsType,
+                goodsType:this.newgoodForm.goodsType||middleData.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:this.serviceId||this.serviceData.id
+                id:this.serviceId||middleData.id
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -672,7 +703,10 @@ export default {
 
         cancelService(){
             this.serviceData={};
-            this.openService=!this.openService;
+            this.openService();
+        },
+        openService(){
+            this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
             window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
@@ -750,13 +784,13 @@ export default {
         },
        //新增接口a
         getNew(){
-        let url=this.isAdd?'getNew-lyadded':'getNew-lyadded';
+        let url=this.isAdd?'goods-service-edit':'getNew-lyadded';
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
          this.$http.post(url,data).then((response)=>{ 
-              this.serviceId=response.data;
+              this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.cancelService();
+              this.openService();
               this.newmodal=false;
               this.editOpen=false;
             }).catch((error)=>{

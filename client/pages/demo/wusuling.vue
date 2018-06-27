@@ -14,19 +14,6 @@
             @close="close"
             @upload="upload"
         />
-
-        <div style="display:inline-block;width:200px;">
-            <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
-        </div>
-        <div style="display:inline-block;width:100px;">
-            
-            <Input 
-                v-model="num"
-                placeholder="留言最多30字"
-                type="textarea"
-                :autosize="{minRows:2,maxRows:2}" 
-            />
-        </div>
         <Button type="primary" @click="jumpCreate">新建</Button>
     </div>
 </template>
@@ -50,20 +37,7 @@ export default {
                 planStartTime:1520640000000
             },
             file:{},
-            num:'',
-            joinOrder:[
-                {
-                    title: '订单编号',
-                    key: 'orderNum',
-                    align:'center'
-                },
-                {
-                    title: '客户名称',
-                    key: 'customerName',
-                    align:'center'
-                }
-            ],
-            joinData:[]
+            num:''
         }
     },
     methods:{

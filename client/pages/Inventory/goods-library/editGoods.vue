@@ -30,14 +30,16 @@
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select> 
                     </Form-item>
-                    <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
+                    <div style="display:inline-block;" v-if="formItem.goodsType=='SPACE'">
+                        <Form-item   style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
-                                v-model="formItem.capacity" 
+                               v-model="formItem.capacity" 
                                placeholder="请输入工位数" 
-                                style="width: 200px"
-                                @keyup.enter.native="onKeyEnter($event)"
+                               style="width: 200px"
+                               @keyup.enter.native="onKeyEnter($event)"
                             />	
-                    </Form-item>
+                        </Form-item>
+                    </div>
                      <Form-item label="面积" class='daily-form' style="text-align:left;padding-left:10px;margin-left:-10px;"  prop="area" > 
                             <i-input 
                                 v-model="formItem.area" 

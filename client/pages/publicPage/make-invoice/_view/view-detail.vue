@@ -19,6 +19,9 @@
                     {{formItem.refund}}
                 </LabelText>
                 <LabelText :inline="inline" label="发票内容：" v-if="invoiceStatus == 'RECOVERYED'">
+                    <div v-for="(item,index) in formItem.invoiceDetailList" :key="index">
+                       <span>{{item.contentTypeName}}</span> <span style="padding-left:20px;">{{`￥${item.amount}`}}</span>
+                    </div>
                     {{formItem.invoiceContent}}
                 </LabelText>
                 <div class="bill-list" v-if="invoiceStatus == 'RECOVERYED'">

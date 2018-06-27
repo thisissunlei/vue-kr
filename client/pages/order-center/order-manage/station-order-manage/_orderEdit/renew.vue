@@ -631,6 +631,7 @@ export default {
             renewForm.customerId = this.renewForm.customerId;
             renewForm.communityId = this.renewForm.communityId;
             renewForm.salerId = this.renewForm.salerId;
+            renewForm.opportunityId = this.renewForm.saleChanceId;//销售机会ID
             renewForm.rentAmount = this.renewForm.rentAmount;
             renewForm.signDate = signDate;
             renewForm.startDate = start;

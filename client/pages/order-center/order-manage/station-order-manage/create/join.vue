@@ -20,6 +20,13 @@
                     <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                    </FormItem>
+
+                    <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -58,7 +65,7 @@
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">添加房间/工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
@@ -188,15 +195,16 @@
     
     <Modal
         v-model="openStation"
-        title="选择工位"
+        title="选择商品"
         ok-text="保存"
         cancel-text="取消"
         width="90%"
-         class-name="vertical-center-modal"
+        class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
-        <div slot="footer">
-            <Button type="primary" @click="submitStation">确定</Button>
+        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
+        <div slot="footer">  
+            <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+            <Button  @click="cancelStation">取消</Button>
         </div>
     </Modal>
 
@@ -232,11 +240,11 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-
+import ListAndMap from '../listAndMap';
+import SelectChance from '~/components/SelectSaleChance.vue';
 
 
 
@@ -254,6 +262,13 @@ import utils from '~/plugins/utils';
                 }
             };
             return {
+                defaultChanceID: 0,
+                opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
+                OpportunityRequired: true,
+                showChanceSelector: true,
+                orderitems: {},
+                test: "test",
+                showSaleChance: false,
                 showFree:false,
                 openStation:false,
                 inputNumberType:true,
@@ -396,6 +411,7 @@ import utils from '~/plugins/utils';
                     rentAmount:'',
                     items:[],
                     stationAmount:0,
+                    saleChanceId: ''
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
@@ -439,7 +455,7 @@ import utils from '~/plugins/utils';
                 price:'',
                 priceError:false,
                 //录入单价的数组
-                priceToStation:[]
+                priceToStation:[],
 
             }
         },
@@ -454,7 +470,8 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap,
+            ListAndMap,
+            SelectChance
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -476,7 +493,7 @@ import utils from '~/plugins/utils';
                     if(!_this.formItem.salerId){
                         _this.formItem.salerId = JSON.stringify(r.data.ssoId);
                         _this.salerName = r.data.ssoName
-
+                        _this.validSaleChance()
                     }
 
                 }, e => {
@@ -632,6 +649,7 @@ import utils from '~/plugins/utils';
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
+                formItem.opportunityId = this.formItem.saleChanceId;//销售机会ID
                 formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
 
@@ -1005,7 +1023,7 @@ import utils from '~/plugins/utils';
                 }
                 this.clearStation()
                 this.getFloor = +new Date()
-                
+                this.validSaleChance();
             },
             clearStation:function(){
                 // 清除所选的工位
@@ -1038,12 +1056,56 @@ import utils from '~/plugins/utils';
                     this.formItem.customerId = '';
                 }
                 this.getFloor = +new Date()
-
+                this.validSaleChance();
             },
             changeSaler:function(value){
                 // 销售员
                 this.formItem.salerId = value;
+                this.validSaleChance();
             },
+            changeChance(value) {
+                if (!value || value === 0 || value == -1) {
+                    this.formItem.saleChanceId = '';
+                } else {
+                    this.formItem.saleChanceId = value;
+                }
+                console.log(this.formItem.saleChanceId)
+        },
+        handleGotChancelist(parms) {
+
+            if (parms.isNewUser) {
+                if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    this.defaultChanceID = parms.list[1].value
+                    // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
+                }
+                else {
+                    this.showChanceSelector = false;
+                    this.OpportunityRequired = true;
+                    this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
+                }
+            }
+            else {
+                if (parms.count == 0) {
+                    this.showChanceSelector = false;
+                    this.OpportunityRequired = false;
+                    this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+                else if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    this.defaultChanceID = parms.list[1].value
+                }
+            }
+        },
+        validSaleChance() {
+            this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
+            let obj = {};
+            obj.customerId = this.formItem.customerId;
+            obj.communityId = this.formItem.communityId;
+            obj.salerId = this.formItem.salerId;
+            // this.defaultChanceID = -1;
+            this.orderitems = Object.assign({}, obj);
+        },
             deleteStation:function(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
@@ -1153,7 +1215,7 @@ import utils from '~/plugins/utils';
             onResultChange:function(val){//组件互通数据的触发事件
                 console.log('onResultChange',val)
                 this.stationData = val;
-                
+                 
             },
             cancelStation:function(){//工位弹窗的取消
                 this.stationData = {
@@ -1402,6 +1464,15 @@ import utils from '~/plugins/utils';
             top: 0;
         }
     }
-   
-   
+   #chancemsg {
+    position: absolute;
+    bottom: 2px;
+    display: block;
+}
+.OpportunityRequired {
+    color: #ed3f14;
+}
+.requiremark .ivu-form-item-label::before {
+    content: "";
+}
 </style>

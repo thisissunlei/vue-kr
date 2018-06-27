@@ -18,7 +18,7 @@ export default {
     },
     //获取申请列表
     "get-apply-list": {
-        url: "/api/krspace-pay/bill/release?",
+        url: "/mockdata/98/transfer/list?",
         method: "get"
     }
 };

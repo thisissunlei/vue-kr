@@ -58,7 +58,7 @@ export default {
             columns: [
                 {
                     title: '单据编号',
-                    key: 'orderNum',
+                    key: 'applyNo',
                     align: 'center'
                 },
                 {
@@ -73,39 +73,39 @@ export default {
                 },
                 {
                     title: '操作类型',
-                    key: 'rentAmount',
+                    key: 'transferTypeName',
                     align: 'center'
                 },
                 {
                     title: '操作款项',
-                    key: 'depositAmount',
+                    key: 'transferFeeTypeName',
                     align: 'center'
                 },
                 {
                     title: '转移金额',
-                    key: 'totalRent',
+                    key: 'transferAmount',
                     align: 'center',
                     render: (h, params) => {
-                        return '￥' + utils.thousand((params.row.totalRent / 100).toFixed(2))
+                        return '￥' + utils.thousand((params.row.transferAmount / 100).toFixed(2))
                     }
                 },
                 {
                     title: '操作人员',
-                    key: 'totalRent',
+                    key: 'operaterUserName',
                     align: 'center'
                 },
                 {
                     title: '操作时间',
-                    key: 'ctime',
+                    key: 'utime',
                     align: 'center',
                     width: 100,
                     render(tag, params) {
-                        return dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.ctime));
+                        return dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
                     }
                 },
                 {
                     title: '状态',
-                    key: 'orderStatus',
+                    key: 'transferStatusName',
                     align: 'center',
                     render(tag, params) {
                         var orderStatus = {
@@ -114,12 +114,12 @@ export default {
                             'RETREATE': '已退回'
                         }
                         for (var item in orderStatus) {
-                            if (item == params.row.orderStatus) {
+                            if (item == params.row.transferStatus) {
                                 var style = {};
-                                if (item == 'NOT_EFFECTIVE') {
+                                if (item == 'PROCESSED') {
                                     style = 'u-red';
                                 }
-                                if (item == 'INVALID') {
+                                if (item == 'PENDING') {
                                     style = 'u-nullify';
                                 }
                                 return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
@@ -164,18 +164,65 @@ export default {
                         return tag('div', btnRender);
                     }
                 }
-            ]
+            ],
+            formItem: {},
+            params: {
+                page: 1,
+                pageSize: 15,
+            },
         }
     },
     methods: {
 
         initData(formItem) {
-            console.log(formItem)
+            let obj = {};
+            obj.applyNo = formItem.applyNum
+            obj.cityId = formItem.cityId
+            obj.communityId = formItem.communityId
+            obj.customerId = formItem.customerID
+            obj.page = this.params.page
+            obj.pageSize = this.params.pageSize
+            obj.transferStatus = formItem.applyState
+            obj.transferType = formItem.operateType
+            obj.uEndTime = formItem.operateEndDate
+            obj.uStartTime = formItem.operateStartDate
+            this.formItem = obj;
         },
         //搜索
-        handleSearch(params) {
+        handleSearch(formItem) {
+
+
+            let obj = {};
+            obj.applyNo = formItem.applyNum
+            obj.cityId = Number(formItem.cityId)
+            obj.communityId = Number(formItem.communityId)
+            obj.customerId = Number(formItem.customerID)
+            obj.page = this.params.page
+            obj.pageSize = this.params.pageSize
+            obj.transferStatus = formItem.applyState
+            obj.transferType = formItem.operateType
+            obj.uEndTime = formItem.operateEndDate
+            obj.uStartTime = formItem.operateStartDate
+
+
+            obj.pageSize = 12
+            obj.communityId = 1
+            obj.customerId = 1
+            obj.applyNo = 1
+            obj.transferType = 1
+            obj.cityId = 1
+            obj.transferStatus = 1
+            obj.uEndTime = 1
+            obj.uStartTime = 1
+            obj.page = 1
+
+
+
+            this.formItem = obj;
+
             debugger;
-            this.$http.get('get-apply-list', params, r => {
+            this.$http.get('get-apply-list', this.formItem, r => {
+                debugger;
                 this.applyDatas = r.data.items;
             }, e => {
                 this.$Notice.error({

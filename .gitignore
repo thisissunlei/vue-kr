@@ -1,8 +1,9 @@
 
+.vscode
 dist
-.nuxt
+.idea
 build
-
+.nuxt
 npm-debug.log
 npm-debug.log.*
 
@@ -10,7 +11,7 @@ npm-debug.log.*
 
 *.DS_Store
 node_modules
-
+yarn.lock
 npm-debug.log
 
 

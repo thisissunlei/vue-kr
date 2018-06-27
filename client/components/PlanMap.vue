@@ -113,7 +113,7 @@ import http from '~/plugins/http.js';
 				this.page = Object.assign({},page)
 				this.stylePlan = {
 					width:'100%',
-					height:page.height-200+"px",
+					height:page.height-300+"px",
 					border:'1px solid #000'
 				}
 			},

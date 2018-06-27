@@ -472,7 +472,8 @@ import SelectChance from '~/components/SelectSaleChance.vue';
             selectCustomers,
             SelectSaler,
             ListAndMap,
-            SelectChance
+            SelectChance,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");

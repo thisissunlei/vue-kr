@@ -20,7 +20,7 @@
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
-                        clearable
+                         clearable
                     >
                         <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 

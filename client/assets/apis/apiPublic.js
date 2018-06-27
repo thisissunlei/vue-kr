@@ -27,4 +27,44 @@ export default  {
         method:'get'
     },
     
+
+
+
+    //权限
+    'type-page':{
+        url:'/api/pm/role/list/type/page',
+        method:'get'
+    },
+    'roledetail':{
+        url:'/api/pm/role/action/detail',
+        method:'get'
+    },
+    'roleSave':{
+        url:'/api/pm/role/action/add',
+        method:'post'
+    },
+    'getSsoUserListAll':{
+        url:'/api/pm/role-resource/pmUser',
+        method:'get'
+    },
+    'existUserListAll':{
+        url:'/api/pm/role-resource/exist',
+        method:'get'
+    },
+    'addUser':{
+        url:'/api/pm/role-resource/add',
+        method:'get'
+    },
+    'roleEdit':{
+        url:'/api/pm/role/action/edit',
+        method:'get'
+    },
+    'roleDelete':{
+        url:'/api/pm/role/action/delete',
+        method:'delete'
+    },
+    'roleEidtDetail':{//'/api/pm/role/action/detail',
+        url:'/api/pm/role/action/edit',
+        method:'post'
+    }
 }

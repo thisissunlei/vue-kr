@@ -24,9 +24,10 @@
             </Tooltip>
             <div class="right-part">   
                 <span class="text-span">输入内容查找设备所在的组：</span>
-                <SearchFormNew 
+                <SearchForm
                     :searchFilter="searchFilter"
                     :onSubmit="onSubmitSearchForm"
+                    :openSearch = true
                 />
                 
             </div>
@@ -94,7 +95,7 @@
 <script>
 
 import Drawer from '~/components/Drawer';
-import SearchFormNew from '~/components/SearchFormNew';
+import SearchForm from '~/components/SearchForm';
 import GroupDetail from './groupDetail';
 import AllEquipmentList from './allEquipmentList';
 
@@ -147,7 +148,7 @@ export default {
    components:{
     Drawer,
     GroupDetail,
-    AllEquipmentList,SearchFormNew
+    AllEquipmentList,SearchForm
    },
    mounted(){
        var doorTypeParam = {enmuKey : "com.krspace.iot.platform.api.enums.door.DoorType"}

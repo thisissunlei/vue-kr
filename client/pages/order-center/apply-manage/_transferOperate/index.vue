@@ -174,9 +174,7 @@ export default {
         },
         //搜索
         handleSearch(params) {
-            // this.applyDatas
-            let list = [];
-            let _this = this;
+            debugger;
             this.$http.get('get-apply-list', params, r => {
                 this.applyDatas = r.data.items;
             }, e => {
@@ -263,7 +261,7 @@ export default {
 <style lang="less">
 .apply-manage-container {
     .business-operation-btns {
-        margin: 0 0 10px 10px;
+        margin: 0 0 20px 10px;
         .operate-btn {
             margin-right: 10px;
         }

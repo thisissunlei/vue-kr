@@ -296,7 +296,7 @@ export default {
         },
 
         handleChangeCustomer(item) {
-            this.formItem.customerID = item.value;
+            this.formItem.customerID = item;
         },
         //城市change事件
         handleChangeCity(param) {

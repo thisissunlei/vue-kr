@@ -247,6 +247,7 @@ export default {
             }
         };
         return {
+
             remindinfoNewUser: false,
             remindinfo: false,
             chanceRemindStr: "",

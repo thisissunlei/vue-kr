@@ -1,6 +1,6 @@
 <template>
     <div class="contract-center-list">
-        <Tabs v-model="currenttab" @on-click='handletabclick'>
+        <Tabs v-model="currenttab" @on-click='handletabclick' :animated="false"	>
             <TabPane label="收入与日费用校验" name="name1">
                 <List v-if='tabstoggles.name1' :type='currenttab' />
             </TabPane>

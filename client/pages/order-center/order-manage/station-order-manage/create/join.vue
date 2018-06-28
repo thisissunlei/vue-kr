@@ -624,6 +624,7 @@ export default {
             if (complete == 'complete') {
                 return;
             }
+            
             let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.startDate));
             let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.signDate || new Date()));
             let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.endDate || this.formItem.endDateStatus));

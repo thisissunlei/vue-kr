@@ -1,4 +1,5 @@
 
+.vscode
 dist
 .idea
 build
@@ -13,3 +14,10 @@ node_modules
 yarn.lock
 npm-debug.log
 
+
+.idea/inspectionProfiles/Project_Default.xml
+.idea/kr-vue.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml

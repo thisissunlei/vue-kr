@@ -161,6 +161,11 @@ export default  {
     'goods-change-price': {
         url: '/api/krspace-finance-web/cmt/goods/batch/price',
         method: 'post'
-    }
+    },
+    //编辑商品回显
+    'goods-service-get': {
+        url: '/api/krspace-finance-web/cmt/goods/getGoodsInfo',
+        method: 'get'
+    },
   }
   

@@ -651,12 +651,12 @@ export default {
         },
         methods:{
         openPrice(){
-            // if(!this.statusData.length){
-            //     this.$Notice.error({
-            //         title:'请选择至少一个商品'
-            //     });
-            //     return ;
-            // }
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
             this.cancelPrice();
         },
         cancelPrice(){

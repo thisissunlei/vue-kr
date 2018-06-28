@@ -254,6 +254,7 @@ import ListAndMap from '../listAndMap';
 
 
 
+<<<<<<< HEAD
     export default {
         data() {
             const validateFirst = (rule, value, callback) => {
@@ -335,6 +336,89 @@ import ListAndMap from '../listAndMap';
                         title: '工位房间编号',
                         key: 'name'
                     },
+=======
+export default {
+    data() {
+        const validateFirst = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请先选择首付款日期'));
+            } else if (new Date(this.formItem.startDate) < new Date(value)) {
+                callback(new Error('首付款日期不得晚于起始日期'));
+            } else {
+                callback()
+            }
+        };
+
+        return {
+            remindinfoNewUser: false,
+            remindinfo: false,
+            chanceRemindStr: "",
+            defaultChanceID: 0,
+            opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
+            OpportunityRequired: true,
+            showChanceSelector: true,
+            orderitems: {},
+            showSaleChance: true,
+            showFree: false,
+            openStation: false,
+            customerName: '',
+            communityName: '',
+            //销售机会list
+            salerOptions: [{ value: ' ', label: '请选择' }],
+            selectAll: false,
+            discountError: false,
+            index: 0,
+            saleAmount: 0,
+            saleAmounts: 0,
+            salerName: '',
+            saleChanceId: '请选择',
+            depositAmount: '',
+            errorAmount: false,
+            disabled: false,
+            delStation: [],
+            stationAmount: '',
+            installmentType: '',
+            maxDiscount: {},//折扣最大限制
+            minDiscount: '',
+            timeError: false,//租赁时间校验
+            corporationName: '',
+            discount: 0,
+            stationData: {
+                submitData: [],
+                deleteData: [],
+            },
+            orderType: '',
+            stationAll: {},
+            payList: [
+
+                { value: 'ONE', label: '月付' },
+                { value: 'TWO', label: '两月付' },
+                { value: 'THREE', label: '季付' },
+                { value: 'SIX', label: '半年付' },
+                { value: 'TWELVE', label: '年付' },
+                { value: 'ALL', label: '全款' },
+            ],
+            params: {},
+            depositList: [
+
+                { label: '2个月', value: '2' },
+                { label: '3个月', value: '3' },
+                { label: '4个月', value: '4' },
+                { label: '5个月', value: '5' },
+                { label: '6个月', value: '6' },
+            ],
+            youhui: [],
+            columns4: [
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
+                {
+                    title: '工位房间编号',
+                    key: 'name'
+                },              
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     {
                         title: '类型',
                         key: 'seatType',
@@ -406,6 +490,7 @@ import ListAndMap from '../listAndMap';
                     {
                         title: '小计',
                         key: 'originalAmount',
+<<<<<<< HEAD
                         render:function(h,params){
                             return h('span',{},utils.thousand(params.row.originalAmount))
                          }
@@ -413,6 +498,15 @@ import ListAndMap from '../listAndMap';
                 ],
                 stationList: [
                 ],
+=======
+                        render(h,params){
+                            return utils.thousand(params.row.originalAmount)
+                         }
+                    }
+                ],
+                stationList: [
+                ],
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                 floors:[],
                 selectedStation:[],
                 formItem: {
@@ -430,6 +524,7 @@ import ListAndMap from '../listAndMap';
                     stationAmount:0,
                     saleChanceId: ''
                 },
+<<<<<<< HEAD
 
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
@@ -491,6 +586,79 @@ import ListAndMap from '../listAndMap';
         watch:{
            getFloor(){
             let _this = this;
+=======
+
+                errorPayType:false,//付款方式的必填错误信息
+                ruleCustom:{
+                    startDate: [
+                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                    ],
+                    firstPayTime: [
+                        { required: true, trigger: 'change' ,validator: validateFirst},
+                    ],
+                    endDate: [
+                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
+                    ],
+                    communityId:[
+                        { required: true, message: '请选择社区', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '请选择客户', trigger: 'change' }
+                    ],
+                    salerId:[
+                        { required: true, message: '请选择销售员', trigger: 'change' }
+                    ],
+                    signDate:[
+                        { required: true,type: 'date',  message: '请先选择签署时间', trigger: 'change' }
+                    ]
+                },
+                getFloor:+new Date(),
+                ssoId:'',
+                ssoName:'',
+                changeSale:+new Date(),
+                originStationList:[],
+                orderType:'',
+                change:{},
+                showSaleDiv:true,
+                openPrice:false,
+                price:'',
+                priceError:false,
+            }
+        },
+        head() {
+            return {
+                title: '编辑订单'
+            }
+        },
+        components: {
+            SectionTitle,
+            selectCommunities,
+            DetailStyle,
+            selectCustomers,
+            SelectSaler,
+            planMap,
+            ListAndMap,
+            SelectChance
+        },
+        mounted(){
+            this.getDetailData();
+            this.getFreeDeposit();
+            GLOBALSIDESWITCH("false");
+        },
+        watch:{
+           getFloor(){
+            let _this = this;
+
+            let obj = {};
+            obj.customerId = this.formItem.customerId;
+            obj.communityId = this.formItem.communityId;
+            obj.salerId = this.formItem.salerId;
+            obj.saleChanceId = this.formItem.saleChanceId;
+            this.saleChanceId = this.formItem.saleChanceId;
+            this.defaultChanceID = this.formItem.saleChanceId;
+            this.orderitems = Object.assign({}, obj);
+
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
             if(this.formItem.communityId && this.formItem.customerId){
                 let params = {
                     communityId:this.formItem.communityId,
@@ -509,6 +677,25 @@ import ListAndMap from '../listAndMap';
            },
         },
         methods: {
+<<<<<<< HEAD
+=======
+        //获取机会列表
+        getSalerList(name) {
+            let params = {
+                phoneOrEmail: ''
+            }
+            // this.http.get(name,params,()=>{})
+            //
+            this.http.get('get-saler', params, r => {
+                this.salerOptions = this.salerOptions.concat(r.data);
+
+            }, e => {
+
+                console.log('error', e)
+            })
+
+        },
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -546,9 +733,15 @@ import ListAndMap from '../listAndMap';
                     this.selectedStation = [];
                     this.getStationAmount()
                 }
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
             },
             openPriceButton(){
                 
@@ -796,6 +989,73 @@ import ListAndMap from '../listAndMap';
                 if(!zhekou && !show){
                     return;
                 }
+<<<<<<< HEAD
+
+                saleList = saleList.map(item=>{
+                    let obj =Object.assign({},item);
+                    if(item.tacticsType=='3'){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
+                    return obj;
+                })
+
+                this.getSaleAmount(saleList)
+            },
+            getSaleAmount(list){
+                this.config()
+                let params = {
+                    communityId:this.formItem.communityId,
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate)),
+                    seats:JSON.stringify(this.stationList),
+                    saleList:JSON.stringify(list)
+                };
+                let _this = this;
+                 _this.disabled = false;
+                    _this.discountError = false;
+
+                 this.$http.post('count-sale', params).then( r => {
+                    _this.stationList = r.data.seats;
+                    _this.formItem.rentAmount = r.data.totalrent;
+                    let money = this.formItem.stationAmount - r.data.totalrent;
+                    
+                    // let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
+                    
+                }).catch( e => {
+                    if(_this.stationList.length){
+
+                     _this.disabled = true;
+                    
+                    _this.discountError = e.message;
+
+                     _this.$Notice.error({
+                        title:e.message
+                    })
+                 }
+
+                })
+
+            },
+            changezhekou(val){
+                val = val.target.value;
+                if(!val){
+                    return
+                }
+                val = val.replace(/\s/g,'');
+                if(!(/^(\d|[0-9])(\.\d)?$/.test(val)) ){
+                    this.discountError = '折扣只能为一位小数或整数';
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣只能为一位小数或整数'
+                    })
+                    return;
+=======
 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
@@ -882,6 +1142,137 @@ import ListAndMap from '../listAndMap';
                     this.$Notice.error({
                         title:'折扣不得大于9.9'
                     })
+                    return;
+                }
+                this.discount = val;
+                this.dealSaleInfo(true)
+            },
+            changeSaleTime(val){
+                let _this = this;
+                setTimeout(function(){
+                    _this.dealSaleInfo(true)
+                },200)
+            },
+            handleSubmit(name) {
+                let message = '请填写完表单';
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+                let _this = this;
+                if(!this.installmentType){
+                    this.errorPayType = true
+                }
+                if(!this.depositAmount){
+                    this.errorAmount = true;
+                }
+                if(this.timeError){
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    });
+                    return
+                }
+                
+                if(this.errorPayType || this.errorAmount){
+                    this.$Notice.error({
+                        title:'请填写完表单'
+                    });
+                }
+                this.disabled = true;
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        if(!_this.stationList.length){
+                            _this.$Notice.error({
+                                title:'请选择入驻工位'
+                            });
+                            _this.disabled = false;
+                            return
+                        }
+                        this.joinFormSubmit()
+                    } else {
+                        _this.disabled = false;
+
+                        this.$Notice.error({
+                            title:message
+                        });
+                    }
+                })
+            },
+            selectDiscount(value){
+                // checkbox的全选事件
+                let items = this.formItem.items;
+                items = items.map((item)=>{
+                    let obj = item;
+                    obj.select = value;
+                    return obj;
+                })
+                this.selectAll = value;
+                this.formItem.items = items;
+            },
+            deleteDiscount(){
+                // 删除选中的优惠信息
+                let items = this.formItem.items;
+                let select = []
+                select = items.map((item)=>{
+                    return item.selelct;
+                })
+                items = items.map(function(item, index) {
+                    if (item.select) {
+                        item.show = false;
+                    }
+                return item;
+                });
+                this.formItem.items = items;
+                this.discount = ''
+                this.selectDiscount(false);
+                this.dealSaleInfo(true)
+
+            },
+            getTacticsId(type){
+                let typeId = '';
+                typeId = this.youhui.filter((item)=>{
+                    if(item.tacticsName != type ){
+                        return false;
+                    }
+                    return true;
+                })
+                return typeId[0].tacticsId
+
+            },
+            dealzhekou(val){
+                if(!val){
+                    return false;
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
+                }
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+<<<<<<< HEAD
+                    return
+=======
+                    return false
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
+                }
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.minDiscount
+                    })
+<<<<<<< HEAD
+                    return;
+=======
+                    return false;
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+<<<<<<< HEAD
                     return;
                 }
                 this.discount = val;
@@ -1072,6 +1463,77 @@ import ListAndMap from '../listAndMap';
                     this.formItem.items = items;
                     return;
                 }
+=======
+                    return false;
+                }
+                return true;
+            },
+            
+            changeType(val){
+                //优惠类型选择
+                if(!val){
+                    return;
+                }
+                let label = val.label;
+                let value = val.value;
+                this.config()
+                let itemValue = value.split('/')[0];
+                let itemIndex = value.split('/')[1];
+                let itemName = value.split('/')[2]
+                let itemId = value.split('/')[3]
+                this.formItem.items[itemIndex].tacticsType = itemValue;
+                this.formItem.items[itemIndex].tacticsName = itemName;
+                this.formItem.items[itemIndex].tacticsId = itemId;
+
+                let items = [];
+                items = this.formItem.items.map((item)=>{
+                    if(item.value == 'qianmian'){
+                        item.validStart = this.formItem.startDate;
+                        item.discount = '';
+                        item.name = label;
+                    }else if(item.tacticsType == 3 && item.show){
+                        item.validStart=item.validStart || ''
+                        item.validEnd = this.formItem.endDate
+                        item.tacticsId = item.tacticsId || itemId
+                        item.discount = '';
+                    }else if(item.tacticsType == 1 && item.show){
+                        item.validStart=this.formItem.startDate
+                        item.tacticsId = item.tacticsId || itemId
+                        item.discount = item.discount || '';
+                        item.validEnd = this.formItem.endDate
+                    }
+                    return item;
+                })
+                let error=false;
+                let message = '';
+                
+                let typeList = items.map(item=>{
+                    if(item.show){
+                        return item.tacticsType;
+                    }else{
+                        return;
+                    }
+                })
+                let qianmian = typeList.join(",").split('qianmian').length-1;
+                let houmian = typeList.join(",").split('3').length-1;
+                let zhekou = typeList.join(",").split('1').length-1;
+                if(qianmian + houmian>1){
+                    error = true;
+                    message = '只能有一个免租期。'
+                }
+                if(zhekou>1){
+                    error = true;
+                    message = '只能有一个折扣。'
+                }
+                if(error){
+                    this.$Notice.error({
+                        title:message
+                    });
+                    items[itemIndex].show = false;
+                    this.formItem.items = items;
+                    return;
+                }
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                 if(itemValue == 1){
                     this.minDiscount = this.maxDiscount[label]
                 }
@@ -1171,6 +1633,7 @@ import ListAndMap from '../listAndMap';
                 }
             }
         },
+<<<<<<< HEAD
             deleteStation(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
@@ -1178,6 +1641,16 @@ import ListAndMap from '../listAndMap';
                 stationVos = stationVos.filter(function(item, index) {
                     if (selectedStation.indexOf(item.seatId) != -1) {
                         return false;
+=======
+        deleteStation: function () {
+            // 工位表单的删除按钮
+            let stationVos = this.stationList;
+            let selectedStation = this.selectedStation;
+            stationVos = stationVos.filter(function (item, index) {
+                if (selectedStation.indexOf(item.seatId) != -1) {
+                    return false;
+
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     }
                 return true;
                 });

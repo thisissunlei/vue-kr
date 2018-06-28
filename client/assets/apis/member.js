@@ -37,7 +37,7 @@ export default {
     },
     //新增客户
     'add-customer': {
-        url: '/api/krspace-op-web/customer-center/add',
+        url: '/api/order/csr/customer/actions/add',
         method: 'post'
     },
     //客户名称校验接口
@@ -91,4 +91,19 @@ export default {
         url: 'api/krspace-op-web/customer/manager/manage-cmt-list',
         method: 'get'
     },
+    //客户会员--客户管理
+    'get-customermanage-customer-type': {
+        url: 'api/order/csr/source/type',
+        method: 'get'
+    },
+    //客户会员--客户管理-编辑回显
+    'get-customer-detail': {
+        url: 'api/order/csr/customer/detail',
+        method: 'get'
+    },
+    //
+    'edit-customer':{
+        url: 'api/order/csr/customer/actions/update',
+        method: 'post' 
+    }
 } 

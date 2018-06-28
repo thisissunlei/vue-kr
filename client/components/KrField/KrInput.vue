@@ -7,6 +7,7 @@
             @cancelClick="cancelClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         >
             <Input
                 :placeholder="placeholder"
@@ -37,6 +38,9 @@ export default {
         isOk:{
             type:Boolean,
             default:true,
+        },
+        right:{
+            type:String
         },
         placeholder:{
             type:String,

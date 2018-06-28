@@ -7,30 +7,42 @@
             <Row style="margin-bottom:30px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
+<<<<<<< HEAD
                         <selectCustomers 
                             name="formItem.customerId" 
                             :onchange="changeCustomer"
                         />
+=======
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="communityId">
+<<<<<<< HEAD
                         <selectCommunities 
                             test="formItem" 
                             :onchange="changeCommunity"
                         />
                             
+=======
+                    <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     </FormItem>
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
+<<<<<<< HEAD
                         <SelectSaler 
                             name="formItem.salerId" 
                             :onchange="changeSaler" 
                             :value="salerName" 
                         />
                            
+=======
+                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -142,7 +154,11 @@
                             <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id" >{{ types.label }}</Option>
                         </Select>
                     </Col>
+<<<<<<< HEAD
                     <Col span="5" class="discount-table-content" >
+=======
+                    <Col span="5" class="discount-table-content" ></DatePicker>
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
                     </Col>
@@ -153,6 +169,11 @@
                         <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
+<<<<<<< HEAD
+=======
+
+                        
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                     </Col>  
             </Row>
         </FormItem>
@@ -305,6 +326,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                     deleteData:[],
                     clearAll:false
                 },
+<<<<<<< HEAD
                 stationAll:{},
                 payList:[
                     {value:'ONE',label:'月付'},
@@ -336,6 +358,9 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                         key: 'name'
                     },
                     {
+=======
+                {
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                         title: '类型',
                         key: 'seatType',
                         render:(h, params) => {
@@ -408,7 +433,11 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                         title: '小计',
                         key: 'originalAmount',
                         render:function(h,params){
+<<<<<<< HEAD
                             return h('span',{},utils.thousand(params.row.originalAmount))
+=======
+                            return utils.thousand(params.row.originalAmount)
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                          }
                     }
                 ],
@@ -826,6 +855,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                         title:'折扣不得小于'+this.minDiscount
                     })
                     return;
+<<<<<<< HEAD
                 }
                 if(val>9.9){
                     this.discountError = '折扣不得大于9.9'
@@ -835,6 +865,17 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                     })
                     return;
                 }
+=======
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return;
+                }
+>>>>>>> 30d5fcd1c47b4b61a309fb90a6874e92e62e8a57
                 this.discount = val;
                 this.dealSaleInfo(false)
             },

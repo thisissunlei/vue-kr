@@ -44,7 +44,6 @@ export default {
             type:Boolean,
 
         },
-        defaultValue:Object,
         clearable: {
             type: Boolean,
             default: false,

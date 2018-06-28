@@ -1074,6 +1074,7 @@ export default {
             console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
+            console.log(parms)
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {

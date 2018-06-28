@@ -4,7 +4,7 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:252px" prop="customerId">
+                <FormItem label="客户名称" style="width:252px" prop="customerID">
                     <selectCustomers name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
@@ -88,7 +88,7 @@ export default {
                 communityId: [
                     { required: true, message: '请选择社区', trigger: 'change' }
                 ],
-                customerId: [
+                customerID: [
                     { required: true, message: '请选择客户', trigger: 'change' }
                 ],
                 balance: [
@@ -107,7 +107,10 @@ export default {
 
             this.maxAmount=maxAmount;
         },
-        changeCustomer() { },
+        changeCustomer(item) { 
+            this.formItem=Object.assign({},this.formItem,{customerID:item})
+            console.log(item)
+        },
         changeCommunity(commIn) { 
             this.$set(this.formItem,'communityIn',commIn)
             let all=[].concat(this.communities);

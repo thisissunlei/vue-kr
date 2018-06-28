@@ -35,13 +35,13 @@
                     <div style="width:850px;display:inline-block;">
                         <Form-item label="操作类型" class='daily-form'>
                             <Select v-model="formItem.operateType" placeholder="请输入操作类型" style="width: 200px" clearable>
-                                <Option v-for="item in operateTypes" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in operateTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
 
                         <Form-item label="操作款项" class='daily-form'>
                             <Select v-model="formItem.moneyType" placeholder="请输入操作款项" style="width: 200px" clearable>
-                                <Option v-for="item in moneyTypes" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in moneyTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
                         <div style="display:inline-block">
@@ -67,7 +67,7 @@
                             <span style="display:inline-block;width:22px;"></span>态</span>
                         <Form-item class='daily-form ' prop="applyState">
                             <Select v-model="formItem.applyState" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
-                                <Option v-for="option in applyStates" :value="option.value" :key="option.value">{{option.label}}</Option>
+                                <Option v-for="option in applyStates" :value="option.code" :key="option.code">{{option.desc}}</Option>
                             </Select>
                         </Form-item>
 
@@ -123,24 +123,9 @@ export default {
             params: {},
             communityList: [],
             cityList: [],
-            operateTypes: [
-                { value: ' ', label: '全部规格' },
-                { value: 'COMMON_INVOICE', label: '增值税普通发票' },
-                { value: 'SPECIAL_INVOICE', label: '增值税专用发票' },
-                { value: 'SPECIAL_ELEC_INVOICE', label: '增值税普通电子发票' }
-            ],
-            moneyTypes: [
-                { value: ' ', label: '全部内容' },
-                { value: 'SERVICE', label: '服务费' },
-                { value: 'SEAT', label: '工位服务费' },
-                { value: 'RENT', label: '租金' },
-                { value: 'SPACE_MANAGE', label: '众创空间管理费' }
-            ],
-            applyStates: [
-                { value: 'ALL', label: '全部' },
-                { value: 'RETURNING', label: '未回收' },
-                { value: 'RECOVERYED', label: '已收回' },
-            ],
+            operateTypes: [],
+            moneyTypes: [],
+            applyStates: [],
             formItemOld: {
                 operateEndDate: '',
                 operateStartDate: ''
@@ -166,8 +151,9 @@ export default {
                 applyNum: '',//申请编号
                 customerID: '',
                 communityId: '',
-                cityId: '', operateType: ' ',
-                moneyType: ' ',
+                cityId: '', 
+                operateType:'' ,
+                moneyType:'',
                 operateEndDate: '',
                 operateStartDate: '',
                 applyState: '',
@@ -211,10 +197,10 @@ export default {
         },
         //获取申请状态枚举
         getApplyStateList: function (name) {
-            this.$http.get('get-enum-all-data', {
+            this.$http.get('get-apply-state-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
             }).then((r) => {
-                this.applyStates = [].concat({ value: 'ALL', label: '全部' }, r.data);
+                this.applyStates = [].concat({ code: -1, desc: '全部' }, r.data);
 
             }).catch((e) => {
                 this.$Notice.error({
@@ -224,10 +210,10 @@ export default {
         },
         //获取操作类型枚举
         getOperateTypeList() {
-            this.$http.get('get-enum-all-data', {
+            this.$http.get('get-operate-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferType'
             }).then((r) => {
-                this.operateTypes = [].concat({ value: 'ALL', label: '全部' }, r.data);
+                this.operateTypes = [].concat({ code: -1, desc: '全部' }, r.data);
 
             }).catch((e) => {
                 this.$Notice.error({
@@ -237,10 +223,10 @@ export default {
         },
         //获取操作款项枚举
         getMoneyTypeList() {
-            this.$http.get('get-enum-all-data', {
+            this.$http.get('get-money-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
             }).then((r) => {
-                this.operateTypes = [].concat({ value: 'ALL', label: '全部' }, r.data);
+                this.moneyTypes = [].concat({ code: -1, desc: '全部' }, r.data);
 
             }).catch((e) => {
                 this.$Notice.error({

@@ -29,9 +29,14 @@ import http from '~/plugins/http.js';
                 clearable:true
             };
         },
-
         mounted:function(){
             this.getCusomerList(' ')
+        },
+        watch:{
+            test(){
+                debugger;
+                this.getCusomerList();
+            }
         },
         methods: {
             changeContent:function(value){
@@ -53,11 +58,11 @@ import http from '~/plugins/http.js';
             },
             getCusomerList:function(name){
                 let params = {
-                    customerId:this.customerId
+                    customerId:Number(this.customerId)
                 }
                 let list = [];
                 let _this = this;
-
+                console.log(params)
                 this.$http.get('get-cmts-customerid',params).then((response)=>{    
                     response.data.map((item)=>{
                         let obj = Object.create(null);

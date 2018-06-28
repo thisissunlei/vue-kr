@@ -252,35 +252,34 @@ export default {
         }
     },
     created(){
+        var _this=this;
+        this.getCommunityList(' ',function(){
+            _this.tabParams=Object.assign({},_this.$route.query);
+            _this.formItem=Object.assign({},_this.$route.query);
+            if(_this.formItem.communityId=="" && _this.formItem.communityName=="全部社区"){
+                _this.formItem.communityId=-1;
+            }
+            if(_this.tabParams.appPublish=='true'){
+                _this.formItem.appPublishName='已上架';
+            }else if(_this.tabParams.appPublish=='false'){
+                _this.formItem.appPublishName='未上架';
+            }
+            if(_this.tabParams.kmPublish=='true'){
+                _this.formItem.kmPublishName='已上架';
+            }else if(_this.tabParams.kmPublish=='false'){
+                _this.formItem.kmPublishName='未上架';
+            }
+        });
         this.getTableData(this.$route.query);
-        this.tabParams=Object.assign({},this.$route.query);
-        this.formItem=Object.assign({},this.tabParams);
-        this.formItem.communityName=this.tabParams.communityName || '';
         
-        if(this.formItem.communityId=="" && this.formItem.communityName=="全部社区"){
-            this.formItem.communityId=-1;
-        }
         
-        if(this.tabParams.appPublish=='true'){
-             this.formItem.appPublishName='已上架';
-        }else if(this.tabParams.appPublish=='false'){
-            this.formItem.appPublishName='未上架';
-        }
-        if(this.tabParams.kmPublish=='true'){
-             this.formItem.kmPublishName='已上架';
-        }else if(this.tabParams.kmPublish=='false'){
-            this.formItem.kmPublishName='未上架';
-        }
       
     },
-    mounted:function(){
-        this.getCommunityList(' ');
-	},
     methods:{
         communityChange(item){
             this.communityName=item.label;
         },
-        getCommunityList(name){
+        getCommunityList(name,callback){
             let params = {
                     cmtName:name
                 }
@@ -293,7 +292,7 @@ export default {
                     return obj;
                 });
                 this.communityList = list;
-               
+                callback && callback();
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

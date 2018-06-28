@@ -48,6 +48,7 @@ export default {
             type: Boolean,
             default: false,
         },
+        disabled:{type:Boolean,default:false},
         placeholder: '请选择',
 
         orderitems: {
@@ -58,7 +59,7 @@ export default {
     data() {
         return {
             labelinvalue: true,
-            disabled: false,
+           
             saler: '',
             showValue:''+this.defaultValue,
             loading1: false,
@@ -87,9 +88,9 @@ export default {
     //     },
     // },
     watch: {
-        // salerOptions() {
-        //     let chanceid = Number(this.orderitems.saleChanceId);
-        //     if (chanceid == 0 || !chanceid) {
+        // disabled() {
+         
+        //     if (disabled) {
         //         this.disabled = false;
         //     } else {
         //         this.disabled = true;

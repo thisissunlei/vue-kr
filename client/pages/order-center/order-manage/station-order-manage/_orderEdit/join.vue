@@ -6,24 +6,24 @@
                 <Row>
                     <Col class="col">
                     <FormItem label="客户名称" style="width:252px">
-                        <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
+                        <selectCustomers :disabled="!!formItem.saleChanceId" name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem label="所属社区" style="width:252px">
-                        <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                        <selectCommunities :disabled="!!formItem.saleChanceId" test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                     </Col>
                     <Col class="col">
                     <FormItem label="销售员" style="width:252px">
-                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler name="formItem.salerId" :disabled="!!formItem.saleChanceId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance name="formItem.salerId" :disabled="!!saleChanceId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>

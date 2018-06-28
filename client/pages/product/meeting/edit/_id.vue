@@ -425,7 +425,9 @@ export default {
                     this.form.krmStartTime=data.krmStartTime.substring(0,5);
                     this.form.krmEndTime=data.krmEndTime.substring(0,5);
                     let coverImgList=[];
-                    coverImgList.push({'url':data.coverImg});
+                    if(data.coverImg!=''){
+                        coverImgList.push({'url':data.coverImg});
+                    }
                     this.coverImgList=coverImgList;
                     let detailImgList=[];
                     data.detailImg.map((item)=>{

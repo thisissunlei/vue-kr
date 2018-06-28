@@ -1143,6 +1143,7 @@ export default {
             }
             this.getFloor = +new Date()
             this.validSaleChance();
+            this.clearStation()
         },
         changeSaler: function (value) {
             // 销售员

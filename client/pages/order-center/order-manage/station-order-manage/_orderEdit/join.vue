@@ -23,7 +23,7 @@
 
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -208,7 +208,7 @@
         </Form>
 
         <Modal v-model="openStation" title="选择工位" ok-text="保存" cancel-text="取消" width="95%" class-name="vertical-center-modal">
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"/>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
@@ -243,6 +243,7 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -474,7 +475,8 @@ export default {
         selectCustomers,
         SelectSaler,
         planMap,
-        SelectChance
+        SelectChance,
+        ListAndMap
     },
     mounted() {
         this.getDetailData();
@@ -1519,7 +1521,7 @@ export default {
 
 
             }).catch(e => {
-                console.log('====>', e)
+              
                 _this.disabled = false;
                 _this.$Notice.error({
                     title: e.message

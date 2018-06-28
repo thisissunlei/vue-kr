@@ -197,8 +197,9 @@
 
         </Form>
 
+
         <Modal v-model="openStation" title="选择工位" ok-text="保存" cancel-text="取消" width="90%" class-name="vertical-center-modal">
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
             </div>
@@ -234,6 +235,7 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -467,7 +469,8 @@ export default {
         selectCustomers,
         SelectSaler,
         planMap,
-        SelectChance
+        SelectChance,
+        ListAndMap
     },
     mounted() {
         GLOBALSIDESWITCH("false");
@@ -624,6 +627,7 @@ export default {
             if (complete == 'complete') {
                 return;
             }
+            
             let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.startDate));
             let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.signDate || new Date()));
             let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.endDate || this.formItem.endDateStatus));
@@ -1072,6 +1076,7 @@ export default {
             console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
+            console.log(parms)
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {

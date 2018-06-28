@@ -486,7 +486,7 @@ export default {
             let stationVos = this.selecedStation;
             //选中的工位
             let selectedStation = this.selectedDel;
-            console.log('====>', selectedStation)
+          
             if (!selectedStation.length) {
                 this.$Notice.error({
                     title: '请先选择录入单价的工位'
@@ -677,7 +677,7 @@ export default {
                     station.push(obj)
                 }
                 _this.stationListData = station;
-                console.log('getRenewStation=====', station)
+               
 
             }, e => {
 
@@ -685,15 +685,19 @@ export default {
             })
 
         },
-        changeCustomer: function (value) {
+        changeCustomer(value) {
+         
             if (value) {
                 this.renewForm.customerId = value;
+              
                 this.getStationFn = +new Date()
                 this.clearStation()
             } else {
                 this.renewForm.customerId = '';
             }
+              
             this.validSaleChance();
+            
 
         },
         changeCommunity: function (value) {
@@ -707,13 +711,13 @@ export default {
             this.clearStation()
         },
         changeChance(value) {
-            console.log("changeChance" + value)
+           
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {
                 this.renewForm.saleChanceId = value;
             }
-            console.log(this.renewForm.saleChanceId)
+           
         },
         handleGotChancelist(parms) {
             if (parms.isNewUser) {
@@ -763,9 +767,12 @@ export default {
         },
         clearStation() {
             // 清除所选的工位
+            console.log('--------------11')
             if (this.selecedStation.length) {
+                console.log(";;;;;;;;;;;;;;;;")
                 this.selecedStation = [];
                 this.selecedArr = [];
+
             }
             if (this.renewForm.items.length) {
                 this.renewForm.items = [];
@@ -1042,7 +1049,7 @@ export default {
             if (!val.length) {
                 return;
             }
-            console.log('submitStation====', this.selecedArr)
+           
             this.selecedArr = this.selecedArr.map(item => {
                 let obj = item;
                 obj.originalPrice = item.oldPrice;
@@ -1054,16 +1061,16 @@ export default {
             let day = 1000 * 60 * 60 * 24;
             let start = date + day;
             this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(start));
-            console.log('========')
+          
             this.getStationAmount()
             this.clearStation()
 
         },
-        clearStation() {
-            this.renewForm.items = [];
-            this.renewForm.saleAmount = 0;
-            this.saleAmount = utils.smalltoBIG(0)
-        },
+        // clearStation() {
+        //     this.renewForm.items = [];
+        //     this.renewForm.saleAmount = 0;
+        //     this.saleAmount = utils.smalltoBIG(0)
+        // },
         getStationAmount() {
 
             let val = this.selecedArr;
@@ -1095,7 +1102,7 @@ export default {
                 seats: JSON.stringify(station)
 
             }
-            console.log('========', station)
+          
             this.selecedStation = station
             if (originalPrice) {
                 return
@@ -1142,7 +1149,7 @@ export default {
             this.openStation = false;
         },
         onStationChange: function (val) {
-            console.log(val, "mmmmm")
+            
             this.selecedArr = val;
         },
         getSaleTactics: function (params) {//获取优惠信息

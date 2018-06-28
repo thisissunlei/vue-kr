@@ -81,7 +81,7 @@ export default {
     //             return this.defaultValue;
     //         },
     //         set(val) {
-    //             console.log(val)
+    //            
     //         }
 
     //     },
@@ -97,20 +97,20 @@ export default {
         // },
         orderitems() {
             this.getSalerChanceList();
-            // nconsole.log("09999999")
+           
         },
         showType(){
             this.show = this.showType;
             
         },
         // defaultValue(){
-        //     console.log("899999")
-        //     console.log(this.defaultValue,this.salerOptions)
+        //   
+        //    
         //     this.value = this.defaultValue;
         // }
     },
     mounted() {
-        console.log(this.showType,"")
+       
     },
     methods: {
         changeContent(item) {
@@ -154,7 +154,7 @@ export default {
                 }else{
                     this.showValue = '';
                 }
-                 console.log(this.showValue,"iiiiii",list)
+                
                 // this.value = 
                 this.$emit('gotChanceList', parms);
             }, error => {

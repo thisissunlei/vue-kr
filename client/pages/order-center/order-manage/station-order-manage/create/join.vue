@@ -1031,6 +1031,7 @@ export default {
         clearStation: function () {
             // 清除所选的工位
             if (this.stationList.length) {
+                
 
                 this.stationData = {
                     submitData: [],
@@ -1059,7 +1060,7 @@ export default {
                 this.formItem.customerId = '';
             }
             this.getFloor = +new Date();
-             this.clearStation();
+            
             this.validSaleChance();
             this.clearStation()
 

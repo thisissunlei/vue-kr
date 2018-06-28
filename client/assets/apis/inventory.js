@@ -159,7 +159,7 @@ export default  {
     },
     //修改定价
     'goods-change-price': {
-        url: '/zhong/api/krspace-finance-web/cmt/goods/batch/price',
+        url: '/api/krspace-finance-web/cmt/goods/batch/price',
         method: 'post'
     }
   }

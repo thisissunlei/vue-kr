@@ -117,7 +117,7 @@ export default {
                 newPriceContents:this.numArea
             }
             this.$http.post('goods-change-price',data).then((response)=>{
-                this.priceList=response.data.goodsList;
+                this.priceList=response.data;
             }).catch((error)=>{
                this.$Notice.error({
                     title:error.message
@@ -126,7 +126,7 @@ export default {
        },
        submitPriceSecond(){
            let data={
-                goodsList:this.priceList,
+                goodsList:JSON.stringify([].concat(this.priceList)),
                 newPriceContents:this.numArea,
                 remark:this.remark
             }

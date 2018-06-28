@@ -1061,6 +1061,7 @@ export default {
             this.getFloor = +new Date();
              this.clearStation();
             this.validSaleChance();
+            this.clearStation()
 
         },
         changeSaler(value) {

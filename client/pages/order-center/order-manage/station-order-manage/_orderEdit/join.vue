@@ -1142,6 +1142,7 @@ export default {
                 this.formItem.customerId = '';
             }
             this.getFloor = +new Date()
+            this.clearStation();
             this.validSaleChance();
         },
         changeSaler: function (value) {

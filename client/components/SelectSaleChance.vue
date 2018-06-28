@@ -76,20 +76,14 @@ export default {
             ]
         };
     },
-
-    mounted() {
-       console.log() 
-
-    },
-    computed: {
-        customerId: {
-            get() {
-                console.log("got-value"+this.defaultValue)
-                return this.defaultValue;
-            },
-            set(val) {
-                console.log("got-value"+val)
-            }
+    // computed: {
+    //     value: {
+    //         get() {
+    //             return this.defaultValue;
+    //         },
+    //         set(val) {
+    //             console.log(val)
+    //         }
 
     //     },
     // },

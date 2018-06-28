@@ -397,11 +397,6 @@ export default {
             width:'',
             totalCount:0,
             attractColumns:[
-                // {
-                //     title: '商品编号',
-                //     key: 'code',
-                //     align:'center' 
-                // },
                 {
                     title: '商品名称',
                     key: 'name',
@@ -682,7 +677,6 @@ export default {
 
         cityFloor(params){
             this.tabForms=Object.assign({},this.tabForms,params,{page:1});
-            //this.getListData(this.tabForms);
         },
         submitService(params){
             let middleData=Object.assign({},this.serviceData);
@@ -735,8 +729,6 @@ export default {
             this.butpudyt=!this.butpudyt
         },      
          getsubGoods(){//注意
-
-                // this.newmodal=!this.newmodal;
                     this.careful=!this.careful;
                     },  
          showtPush(){//二次确定
@@ -821,7 +813,6 @@ export default {
             a.href = '/api/order/goods/import/download-template';
             a.download = name || "";
             a.click();
-            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
@@ -876,18 +867,16 @@ export default {
                     } 
         },
         getsubGods(){
-                    this.carel=!this.carel;
+            this.carel=!this.carel;
         },
         primaryed(){
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.importsuccess=!this.importsuccess;
-        // this.judgeRepeat();
-        this.feated=!this.feated;
+            this.importsuccess=!this.importsuccess;
+            this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      
-        // console.log('<iiiiiiii>',file)
             let _this = this;
             var form = new FormData();
             form.append('goodsData',this.fiteter); 
@@ -916,21 +905,16 @@ export default {
             xhr.send(form);
         },
         success(response){
-            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
-            // this.importgoods();
             this.resect=response.data;
 
         },
         error(response){
-                  this.openMessage=true;
-                  this.MessageType="error";
-                  this.warn=response.message;
+            this.openMessage=true;
+            this.MessageType="error";
+            this.warn=response.message;
         },
         initData(formItem,floorList){
-            // console.log('hhihhh',foorlist)
-        
-            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
             var str='';
             if(this.tabForms.floor==' '||this.tabForms.floor==''){
@@ -947,11 +931,9 @@ export default {
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
-            //utils.addParams(this.tabForms);
         },
         clearClick(values){
             this.tabForms=Object.assign({},this.tabForms,values);
-            //utils.addParams(this.tabForms);
         },
         updateStatus(obj){
            this.statusForm=Object.assign({},obj);  
@@ -1098,7 +1080,6 @@ export default {
             },
             onPageChange(page){
                 this.tabForms=Object.assign({},this.tabForms,{page:page})
-                //this.getListData(this.tabForms); 
             },
             onMessageChange(data){
             this.openMessage=data;

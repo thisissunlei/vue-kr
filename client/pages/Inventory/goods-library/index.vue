@@ -69,18 +69,17 @@
         </Modal>
 
         <Modal
-            width="660"
+            width="530"
             v-model="priceOpen"
             title="修改定价"
         >
             <ChangePrice 
               v-if="priceOpen"
               :data="statusData"
+              @submit="submitPrice"
+              @cancel="cancelPrice"
               />
-            <div slot="footer">
-                 <Button type="primary" @click="submitPrice">修改</Button>
-                 <Button type="ghost" style="margin-left:20px" @click="openPrice">取消</Button>
-            </div>
+            <div slot="footer"></div>
         </Modal>
 
         <Modal
@@ -663,10 +662,15 @@ export default {
             //     });
             //     return ;
             // }
+            this.cancelPrice();
+        },
+        cancelPrice(){
             this.priceOpen=!this.priceOpen;
         },
         submitPrice(){
-            
+            this.getListData(this.tabForms);
+            this.statusData=[];
+            this.cancelPrice();
         },
         editService(params){
             this.openService();

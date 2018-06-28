@@ -139,7 +139,7 @@
                     </Row>
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
-                        <Button type="primary" @click="openPlanMap">添加房间/工位</Button>
+                        <Button type="primary" @click="openPlanMap">选择工位</Button>
                         <span style="padding:0 5px"> </span>
                         <Button type="primary" @click="entryPrice">录入单价</Button>
 
@@ -341,17 +341,15 @@
 
         <Modal
             v-model="showMap"
-            title="选择商品"
+            title="选择工位"
             ok-text="保存"
             cancel-text="取消"
             width="90%"
             class-name="vertical-center-modal"
          >
-           <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"/>
-            <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap> -->
+            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap>
             <div slot="footer">
-                <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
-                <Button  @click="cancelStation">取消</Button>
+                <Button type="primary" @click="submitStation">确定</Button>
             </div>
         </Modal>
         <div class="view" v-if="orderStatus=='view'">
@@ -370,7 +368,6 @@
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
     import utils from '~/plugins/utils';
-    import ListAndMap from '../listAndMap';
 
     // 新建换租订单步骤说明
     // step：1
@@ -835,8 +832,7 @@
             SelectSaler,
             selectCustomers,
             ReplaceView,
-            planMap,
-            ListAndMap
+            planMap
         },
          mounted(){
             this.getFreeDeposit()

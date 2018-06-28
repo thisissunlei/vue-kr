@@ -216,195 +216,195 @@ import SelectChance from '~/components/SelectSaleChance.vue';
 
 
 
-    export default {
-      data() {
-             const validateFirst = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.renewForm.start)<new Date(value)){
-                    callback(new Error('首付款日期不得晚于起始日期'));
-                }else{
-                    callback()
-                }
-            };
-           return{
-                remindinfoNewUser: false,
-                remindinfo: false,
-                chanceRemindStr: "",
-                defaultChanceID: 0,
-                opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
-                OpportunityRequired: true,
-                showChanceSelector: true,
-                showSaleChance: false,
-                orderitems: {},
-                showFree:false,
-                discount:0,
-                disabled:false,//提交按钮是否有效
-                index:1,//优惠的index
-                openStation:false,//弹窗开关
-                stationAmount:'',
-                renewForm:{
-                    communityId:'',
-                    customerId:'',
-                    endDate:'',
-                    saler:'',
-                    rentAmount:'',
-                    items:[],
-                    signDate:new Date(),
-                    saleChanceId: ''
+export default {
+    data() {
+        const validateFirst = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请先选择首付款日期'));
+            } else if (new Date(this.renewForm.start) < new Date(value)) {
+                callback(new Error('首付款日期不得晚于起始日期'));
+            } else {
+                callback()
+            }
+        };
+        return {
+            remindinfoNewUser: false,
+            remindinfo: false,
+            chanceRemindStr: "",
+            defaultChanceID: 0,
+            opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
+            OpportunityRequired: true,
+            showChanceSelector: true,
+            showSaleChance: false,
+            orderitems: {},
+            showFree: false,
+            discount: 0,
+            disabled: false,//提交按钮是否有效
+            index: 1,//优惠的index
+            openStation: false,//弹窗开关
+            stationAmount: '',
+            renewForm: {
+                communityId: '',
+                customerId: '',
+                endDate: '',
+                saler: '',
+                rentAmount: '',
+                items: [],
+                signDate: new Date(),
+                saleChanceId: ''
+            },
+            disabled: false,//提交按钮是否禁止
+            discountError: false,
+            selectedDel: [],//选择要删除的工位
+            ruleCustom: {
+                communityId: [
+                    { required: true, message: '此项不可为空', trigger: 'change' }
+                ],
+                customerId: [
+                    { required: true, message: '此项不可为空', trigger: 'change' }
+                ],
+                salerId: [
+                    { required: true, message: '此项不可为空', trigger: 'change' }
+                ],
+                time: [
+                    { required: true, type: 'date', message: '此项不可为空!', trigger: 'change' }
+                ],
+                firstPayTime: [
+                    { required: true, trigger: 'change', validator: validateFirst },
+                ],
+                endDate: [
+                    { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
+                ],
+                signDate: [
+                    { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
+                ],
+            },
+            stationListData: [],
+            selecedStation: [],
+            selecedArr: [],
+            depositAmount: '',
+            installmentType: '',
+            maxDiscount: {},
+            minDiscount: '',
+            errorAmount: false,
+            columns: [
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
                 },
-               disabled:false,//提交按钮是否禁止
-               discountError:false,
-               selectedDel:[],//选择要删除的工位
-               ruleCustom:{
-                    communityId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    salerId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    time: [
-                        { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
-                    ],
-                    firstPayTime: [
-                        { required: true, trigger: 'change' ,validator: validateFirst},
-                    ],
-                    endDate: [
-                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    ],
-                    signDate: [
-                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    ],
-               },
-               stationListData:[],
-               selecedStation:[],
-               selecedArr:[],
-               depositAmount:'',
-               installmentType:'',
-               maxDiscount:{},
-               minDiscount:'',
-               errorAmount:false,
-               columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '工位房间编号',
-                        key: 'name'
-                    },
-                    {
-                        title: '类型',
-                        key: 'seatType',
-                        render:(h, params) => {
-                            let type = params.row.seatType;
-                            let typeName = '开放工位';
-                            if(type =='SPACE'){
-                                typeName = '独立办公室'
-                            }else{
-                                typeName = "开放工位"
-                            }
-                            return typeName
+                {
+                    title: '工位房间编号',
+                    key: 'name'
+                },
+                {
+                    title: '类型',
+                    key: 'seatType',
+                    render: (h, params) => {
+                        let type = params.row.seatType;
+                        let typeName = '开放工位';
+                        if (type == 'SPACE') {
+                            typeName = '独立办公室'
+                        } else {
+                            typeName = "开放工位"
                         }
-                    },
-                    {
-                        title:'工位可容纳人数',
-                        key:'capacity'
-                    },
-                    {
-                        title: '定价',
-                        key: 'guidePrice'
-                    },
-                    {
-                        title: '标准单价（元/月）',
-                        key: 'guidePrice',
-                        render: (h, params) => {
-                            let price = params.row.originalPrice;
-                            return h('Input', {
-                                    props: {
-                                        min:params.row.guidePrice,
-                                        value:params.row.originalPrice,
-                                    },
-                                    on:{
-                                        'on-change':(event)=>{
-                                            let e = event.target.value;
-                                            if(isNaN(e)){
-                                                e = params.row.guidePrice
-                                            }
-                                            price = e;
-                                        },
-                                        'on-blur':()=>{
-                                            var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                            if(!pattern.test(price)){
-                                                this.$Notice.error({
-                                                    title:'单价不得多余小数点后两位'
-                                                })
-                                                var num2=Number(price).toFixed(3);
-                                                price = num2.substring(0,num2.lastIndexOf('.')+3) 
-                                            }
-                                            if(price<params.row.guidePrice){
-                                                price = params.row.guidePrice
-                                                this.$Notice.error({
-                                                    title:'单价不得小于'+params.row.guidePrice
-                                                })
-                                            }
-                                            this.changePrice(params.index,price)
-                                        }
-                                    }
-                                },'44')
-                        }
-                    },
-                    {
-                        title: '租赁期限',
-                        key: 'address',
-                        render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.end)))
-                        }
-                    },
-                    {
-                        title: '小计',
-                        key: 'originalAmount',
-                        render:function(h,params){
-                            return utils.thousand(params.row.originalAmount)
-                         }
+                        return typeName
                     }
-                ],
-                payList:[
-                    {value:'ONE',label:'月付'},
-                    {value:'TWO',label:'两月付'},
-                    {value:'THREE',label:'季付'},
-                    {value:'SIX',label:'半年付'},
-                    {value:'TWELVE',label:'年付'},
-                    {value:'ALL',label:'全款'},
-                ],
-                depositList:[
-                    {label:'2个月',value:'2'},
-                    {label:'3个月',value:'3'},
-                    {label:'4个月',value:'4'},
-                    {label:'5个月',value:'5'},
-                    {label:'6个月',value:'6'},
-                ],
-                selectAll:false,//工位全选
-                youhui:[],
-                errorPayType:false,
-                getStationFn:'',
-                ssoId:'',
-                ssoName:'',
-                salerName:'请选择',
-                saleAmount:0,
-                saleAmounts:utils.smalltoBIG(0),
-                change:{},
-                showSaleDiv:true,
-                openPrice:false,
-                price:'',
-                priceError:false,
+                },
+                {
+                    title: '工位可容纳人数',
+                    key: 'capacity'
+                },
+                {
+                    title: '定价',
+                    key: 'guidePrice'
+                },
+                {
+                    title: '标准单价（元/月）',
+                    key: 'guidePrice',
+                    render: (h, params) => {
+                        let price = params.row.originalPrice;
+                        return h('Input', {
+                            props: {
+                                min: params.row.guidePrice,
+                                value: params.row.originalPrice,
+                            },
+                            on: {
+                                'on-change': (event) => {
+                                    let e = event.target.value;
+                                    if (isNaN(e)) {
+                                        e = params.row.guidePrice
+                                    }
+                                    price = e;
+                                },
+                                'on-blur': () => {
+                                    var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+                                    if (!pattern.test(price)) {
+                                        this.$Notice.error({
+                                            title: '单价不得多余小数点后两位'
+                                        })
+                                        var num2 = Number(price).toFixed(3);
+                                        price = num2.substring(0, num2.lastIndexOf('.') + 3)
+                                    }
+                                    if (price < params.row.guidePrice) {
+                                        price = params.row.guidePrice
+                                        this.$Notice.error({
+                                            title: '单价不得小于' + params.row.guidePrice
+                                        })
+                                    }
+                                    this.changePrice(params.index, price)
+                                }
+                            }
+                        }, '44')
+                    }
+                },
+                {
+                    title: '租赁期限',
+                    key: 'address',
+                    render: (h, params) => {
+                        return h('strong', dateUtils.dateToStr("YYYY-MM-dd", new Date(params.row.start)) + '至' + dateUtils.dateToStr("YYYY-MM-dd", new Date(params.row.end)))
+                    }
+                },
+                {
+                    title: '小计',
+                    key: 'originalAmount',
+                    render: function (h, params) {
+                        return utils.thousand(params.row.originalAmount)
+                    }
+                }
+            ],
+            payList: [
+                { value: 'ONE', label: '月付' },
+                { value: 'TWO', label: '两月付' },
+                { value: 'THREE', label: '季付' },
+                { value: 'SIX', label: '半年付' },
+                { value: 'TWELVE', label: '年付' },
+                { value: 'ALL', label: '全款' },
+            ],
+            depositList: [
+                { label: '2个月', value: '2' },
+                { label: '3个月', value: '3' },
+                { label: '4个月', value: '4' },
+                { label: '5个月', value: '5' },
+                { label: '6个月', value: '6' },
+            ],
+            selectAll: false,//工位全选
+            youhui: [],
+            errorPayType: false,
+            getStationFn: '',
+            ssoId: '',
+            ssoName: '',
+            salerName: '请选择',
+            saleAmount: 0,
+            saleAmounts: utils.smalltoBIG(0),
+            change: {},
+            showSaleDiv: true,
+            openPrice: false,
+            price: '',
+            priceError: false,
 
-           }
-        },
+        }
+    },
     head() {
         return {
             title: '新建续租服务订单管理'
@@ -716,7 +716,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
             console.log(this.renewForm.saleChanceId)
         },
         handleGotChancelist(parms) {
-             if (parms.isNewUser) {
+            if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count >= 1) {
                     this.remindinfoNewUser = false
@@ -1387,7 +1387,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
 }
 #chancemsg {
     position: absolute;
-    bottom:-20px;
+    bottom: 2px;
     display: block;
 }
 .OpportunityRequired {

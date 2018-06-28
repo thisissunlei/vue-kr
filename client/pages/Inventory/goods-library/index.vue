@@ -968,7 +968,7 @@ export default {
             this.serviceData=Object.assign({},params);
             this.$http.get('goods-service-get',params).then((response)=>{ 
                 this.editData=response.data;
-                this.cancelEdit();
+                this.editOpen=!this.editOpen;
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

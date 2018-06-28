@@ -39,15 +39,12 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
-<<<<<<< HEAD
         defaultValue: 0,
         showType:{
             type:Boolean,
 
         },
-=======
         defaultValue:Object,
->>>>>>> 1a22363c9ac6d3f78b90d986948e91b63adf8cc4
         clearable: {
             type: Boolean,
             default: false,

@@ -123,7 +123,7 @@
                    v-if="editOpen"
                    @newdateForm="newStatus"
                    :floorList="floorList"
-                   :editData="serviceData"
+                   :editData="editData"
                    ref="goodsEditPage"
                 />
              <div slot="footer">
@@ -341,6 +341,7 @@ export default {
                 return{
             editOpen:false,
             priceOpen:false,
+            editData:{},
             serviceData:{},
             warnCode:'',
             serviceOpen:false,
@@ -668,8 +669,8 @@ export default {
             this.cancelPrice();
         },
         editService(params){
-            this.openService();
-            this.serviceData=params;
+            this.cancelService();
+            this.serviceData=Object.assign({},params);
         },
         showpushe(){
             this.butpushd=!this.butpushd;
@@ -681,9 +682,9 @@ export default {
         submitService(params){
             let middleData=Object.assign({},this.serviceData);
             let data={
-                goodsType:this.newgoodForm.goodsType||middleData.goodsType,
+                goodsType:middleData.goodsType||this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:this.serviceId||middleData.id
+                id:middleData.id||this.serviceId
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -701,9 +702,6 @@ export default {
 
         cancelService(){
             this.serviceData={};
-            this.openService();
-        },
-        openService(){
             this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
@@ -786,7 +784,7 @@ export default {
          this.$http.post(url,data).then((response)=>{ 
               this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.openService();
+              this.serviceOpen=!this.serviceOpen;
               this.newmodal=false;
               this.editOpen=false;
             }).catch((error)=>{
@@ -964,10 +962,18 @@ export default {
         },
         cancelEdit(){
             this.editOpen=!this.editOpen;
+            this.serviceData={};
         },
         openEdit(params){
-            this.serviceData=params;
-            this.cancelEdit();
+            this.serviceData=Object.assign({},params);
+            this.$http.get('goods-service-get',params).then((response)=>{ 
+                this.editData=response.data;
+                this.editOpen=!this.editOpen;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                }); 
+            })  
         },
         openEditStyle(){
             this.isShowEdit=!this.isShowEdit;

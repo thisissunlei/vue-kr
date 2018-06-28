@@ -71,7 +71,7 @@ export default {
        getServiceList(){
            let data={
                communityId:this.singleForms.communityId,
-               floor:this.floor||this.editData.floor
+               floor:this.editData.floor||this.floor
            }
            this.$http.get('goods-service-list',data).then((response)=>{
                 this.roomList=response.data; 

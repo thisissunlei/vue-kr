@@ -750,17 +750,22 @@ export default {
             obj.salerId = this.renewForm.salerId;
             this.orderitems = Object.assign({}, obj);
         },
-        handleGotChancelist(parms) {
+         handleGotChancelist(parms) {
             if (parms.isNewUser) {
                 this.remindinfo = false
-                if (parms.count >= 1) {
+                if (parms.count == 1) {
                     this.remindinfoNewUser = false
                     this.chanceRemindStr = '';
                     this.showChanceSelector = true;
                     this.defaultChanceID = parms.list[1].value
                     // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
                 }
-                else {
+                else if(parms.count >1){
+                    this.remindinfoNewUser = false
+                    this.chanceRemindStr = '';
+                    this.showChanceSelector = true;
+                }
+                else if(parms.count==0){
                     this.remindinfoNewUser = true
                     this.chanceRemindStr = '入驻订单必须绑定机会'
                     this.showChanceSelector = false;
@@ -772,10 +777,14 @@ export default {
                 this.remindinfoNewUser = false
                 this.remindinfo = true
                 this.chanceRemindStr = '新入驻客户，须选择机会'
+                this.OpportunityRequired = false;
                 if (parms.count == 0) {
                     this.showChanceSelector = false;
-                    this.OpportunityRequired = false;
                     this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+                else if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    // this.defaultChanceID = parms.list[1].value
                 }
             }
         },

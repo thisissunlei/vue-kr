@@ -19,7 +19,7 @@
 <template>
     <div class="com-select-chance">
         <!-- <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent"> -->
-        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :label-in-value='labelinvalue' @on-change="changeContent">
+        <Select v-model="defaultValue.id " filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :label-in-value='labelinvalue' @on-change="changeContent">
             <Option v-for="option in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -31,7 +31,7 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
-        defaultValue: 0,
+        defaultValue:Object,
         clearable: {
             type: Boolean,
             default: false,
@@ -49,6 +49,7 @@ export default {
             disabled: false,
             saler: '',
             loading1: false,
+            isRender:false,
             salerOptions: [
                 {
                     label: '请选择',
@@ -58,13 +59,18 @@ export default {
             ]
         };
     },
+    mounted() {
+       console.log() 
+
+    },
     computed: {
-        value: {
+        customerId: {
             get() {
+                console.log("got-value"+this.defaultValue)
                 return this.defaultValue;
             },
             set(val) {
-                console.log(val)
+                console.log("got-value"+val)
             }
 
         },
@@ -80,6 +86,12 @@ export default {
         },
         orderitems() {
             this.getSalerChanceList();
+        },
+        defaultValue(){
+            console.log("watch_defaultvalue ")
+            console.log(this.defaultValue)
+            console.log(this.salerOptions)
+            this.isRender = !this.isRender;
         }
     },
     methods: {
@@ -111,7 +123,7 @@ export default {
                     })
                 })
                 list.unshift({ label: '无需机会', value: -1 })
-                _this.salerOptions = list;
+                _this.salerOptions = [].concat(list);
 
                 let parms = {
                     count: list.length - 1,
@@ -123,10 +135,7 @@ export default {
                 this.$Notice.error({
                     title: error.message
                 });
-            }
-            )
-
-
+            })
         }
 
 

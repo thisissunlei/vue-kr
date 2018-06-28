@@ -48,15 +48,16 @@
                 </Select>
             </FormItem>
             <FormItem label="其他："> 
-                <SearchFormData 
+                <SearchForm 
                     :searchFilter="searchFilter"
-                    :onSubmit="onSubmitSearchForm"
+                    :openSearch = true
                     @serachFormDataChanged="onSubmitSearchForm"
+                    :notShowSearchIconProps = true
                 />
             </FormItem>
         </Form>
         
-        <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
+        <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn"></Button>
         <Button type="primary" icon="ios-plus-outline"  @click="addEquipmentToGroup"  class="search-btn">添加</Button>
 
 </div>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import SearchFormData from '~/components/SearchFormData';
+import SearchForm from '~/components/SearchForm';
 export default{
     name:'equipmentSearch',
     data (){
@@ -103,7 +104,7 @@ export default{
         "communityId","doorTypeOptions"
     ],
     components: {
-     SearchFormData
+     SearchForm
     },
     methods:{
 
@@ -157,7 +158,6 @@ export default{
 
         onSubmitSearchForm(value){
             this.otherSearchData = value;
-
         },
 
 

@@ -89,15 +89,72 @@ export default  {
         url: '/api/order/operation/imtPutaway/list-excel',
         method: 'get'
     },
-      // 预约参观
-      'AnappointmentList': {
-        url: '/api/krspace-finance-web/sys/visit-record/list',
+    //商品列表
+    'getGoodsList': {
+        url: '/api/order/goods/list',
         method: 'get'
     },
-    
-    // 方可
+    //商品库枚举
+    'get-goodsStatusList-data':{
+        url:'/api/krspace-sso-web/sys/enmu',
+        method:'get'
+    }, 
+    //批量修改状态借口
+    'get-change-status':{
+        url:'/api/order/goods/status/batch',
+        method:'post'
+    }, 
+    // 预约参观
+    'AnappointmentList': {
+        url: '/api/krspace-finance-web/sys/visit-record/list',
+        method: 'get'
+    }, 
+    //会员访客
     'gitVisitorsList': {
-        url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
+        url: '/api/order/operation/op-visit-list',
+        method: 'get'
+    },
+     //社区开业
+     'getCommunityList': {
+        url: '/api/order/cmt/community/date',
+        method: 'get'
+    },
+     //新增借口
+     'getNew-lyadded': {
+        url: '/api/krspace-finance-web/cmt/goods/add',
+        method: 'post'
+    },
+    //新曾重名借口
+    'getNew-Rename': {
+       url: '/api/krspace-finance-web/cmt/goods/check-name',
+       method: 'get'
+   },
+
+    //下单选择商品列表
+    'downOrderGoodsList': {
+        url: '/api/krspace-op-web/cmt/floor-graph/vue/list',
+        method: 'get'
+    },
+
+  //导入去重
+  'getNew-Whetherrepeat': {
+    url: '/api/krspace-finance-web/cmt/goods/check-excel',
+    method: 'post'
+   },
+
+    //新增商品选择设备列表
+    'goods-service-list': {
+        url: '/api/krspace-finance-web/cmt/space/sso/list',
+        method: 'get'
+    },
+    //新增商品添加设备
+    'goods-service-add': {
+        url: '/api/krspace-finance-web/cmt/goods/add/device',
+        method: 'post'
+    },
+    //新增商品添加设备
+    'goods-ceshi': {
+        url: '/song/api/krspace-order-web/goods/test/text',
         method: 'get'
     },
   }

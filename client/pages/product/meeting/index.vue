@@ -253,14 +253,14 @@ export default {
     },
     created(){
         this.getTableData(this.$route.query);
-        this.tabParams=this.$route.query;
-        this.formItem=this.tabParams;
+        this.tabParams=Object.assign({},this.$route.query);
+        this.formItem=Object.assign({},this.tabParams);
         this.formItem.communityName=this.tabParams.communityName || '';
+        
         if(this.formItem.communityId=="" && this.formItem.communityName=="全部社区"){
             this.formItem.communityId=-1;
         }
-       
-
+        
         if(this.tabParams.appPublish=='true'){
              this.formItem.appPublishName='已上架';
         }else if(this.tabParams.appPublish=='false'){
@@ -322,12 +322,12 @@ export default {
                 
         },
         lowerSubmit(){
+            let communityId=this.formItem.communityId==-1?"":this.formItem.communityId;
             let params=Object.assign({},this.formItem);
             params.page=1;
             params.pageSize=15;
-            if(params.communityId==-1){
-                params.communityId=""
-            }
+            params.communityId=communityId
+        
             params.communityName = this.communityName;
             this.tabParams=Object.assign({},params);
             utils.addParams(this.tabParams);

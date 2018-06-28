@@ -75,6 +75,16 @@
                                     <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select> 
                             </Form-item>
+                        
+                            <Form-item label="设备绑定" class='daily-form'> 
+                                <Select 
+                                    v-model="formItem.binding" 
+                                    style="width: 200px;;margin-left:10px;"
+                                    clearable
+                                >
+                                    <Option v-for="item in bindingtList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select> 
+                            </Form-item>
                         </div>
 
                         <!-- 第二行-->
@@ -182,23 +192,6 @@
                             </Form-item>
 
                             <Button type="primary" @click="searchClick" style="margin-left:30px;">搜索</Button>
-                        </div>
-
-
-                        <!-- 第四行-->
-                        <div style="white-space: nowrap;">
-                        
-                                <!-- <Form-item label="设备绑定" class='daily-form'> 
-                                <Select 
-                                    v-model="formItem.bindingText" 
-                                    placeholder="请输入商品类型" 
-                                    style="width: 200px"
-                                    clearable
-                                >
-                                    <Option v-for="item in bindingtList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select> 
-                            </Form-item> -->
-                        
                         </div>
                     </div>
             </Form>
@@ -322,7 +315,7 @@ export default {
                     stationsMin:'',
                     goodsType:' ',
                     goodsLocation:' ',
-                    bindingText:' ',
+                    binding:' ',
                     priceMin:'',
                     priceMax:'',
                     areaMin:'',
@@ -353,7 +346,8 @@ export default {
                 ],
                 bindingtList:[
                         {value:' ',label:'全部'},
-
+                        {value:'1',label:'已绑定'},
+                        {value:'0',label:'未绑定'},
                 ]
                 ,
                 inventoryList:[

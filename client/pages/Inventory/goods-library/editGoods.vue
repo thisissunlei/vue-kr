@@ -101,7 +101,11 @@ import dateUtils from 'vue-dateutils';
              floorList:{
                  type:Array,
                  default:()=>[],
-             }
+             },
+             editData:{
+                type:Object,
+                default:{}
+            }
         },
         data (){
            //商品名称
@@ -211,28 +215,20 @@ import dateUtils from 'vue-dateutils';
             this.newFloorList.splice(0,1);
         }
         this.getSelectData();
+        this.formItem=Object.assign({},this.editData);
+        this.formItem.floor=this.formItem.floor?''+this.formItem.floor:'';
         this.$emit('newdateForm',this.formItem);
-        // console.log('eeeeeeeeeeeee',this.floorList)
-     
-                },
-        watch:{
-
-            
-
         },
         updated(){
             this.$emit('newdateForm',this.formItem);
         },
         methods:{
-
-
-                  //枚举 
+        //枚举 
         getSelectData(){
             this.$http.get('get-enum-all-data',{
                 enmuKey:'com.krspace.op.api.enums.community.SpaceSuiteType'
             }).then((response)=>{
                this.locationList=response.data;
-               console.log('<------------->',this.locationList)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

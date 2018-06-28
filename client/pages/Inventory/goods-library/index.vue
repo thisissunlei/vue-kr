@@ -16,8 +16,10 @@
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
+                <Buttons type="primary" :label="isShowEdit?'编辑操作':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
          </div>
 
             <Table 
@@ -67,6 +69,20 @@
         </Modal>
 
         <Modal
+            width="530"
+            v-model="priceOpen"
+            title="修改定价"
+        >
+            <ChangePrice 
+              v-if="priceOpen"
+              :data="statusData"
+              @submit="submitPrice"
+              @cancel="cancelPrice"
+              />
+            <div slot="footer"></div>
+        </Modal>
+
+        <Modal
             title="Title"
             v-model="complete"
             class-name="vertical-center-modal"
@@ -87,17 +103,32 @@
             <!-- /   v-if="newmodal" -->
             <Newgoods
                     v-if="newmodal"
-                   :data="newgoodsData"
-                   :newgooddata="newgooddata"
-                   :seacchValue="seacchValue"
                    @newdateForm="newStatus"
                    :floorList="floorList"
-                   :floorValue='floor'
                    ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
                  <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+            title="编辑商品"
+            v-model="editOpen"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+            <EditGoods
+                   v-if="editOpen"
+                   @newdateForm="newStatus"
+                   :floorList="floorList"
+                   :editData="serviceData"
+                   ref="goodsEditPage"
+                />
+             <div slot="footer">
+                 <Button type="primary" @click="submitEdit">确定</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="cancelEdit">取消</Button>
             </div>
         </Modal>
 
@@ -247,15 +278,16 @@
 
      <Modal
             title="添加成功!"
-            v-model="openService"
+            v-model="serviceOpen"
             class-name="vertical-center-modal"
             >
         <BindService 
-           v-if="openService"
+           v-if="serviceOpen"
            @submit="submitService"
            @cancel="cancelService"
            :singleForms="tabForms"
            :floor="newgoodForm.floor"
+           :editData="serviceData"
         />
         <div slot="footer">
         
@@ -271,6 +303,7 @@ import ToolTip from '~/components/ToolTip';
 import ImportFile from '~/components/ImportFile';
 import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
+import ChangePrice from './bulk-changes/change-price';
 import Loading from '~/components/Loading';
 import SearchForm from './search-form';
 import Message from '~/components/Message';
@@ -280,6 +313,7 @@ import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
 import Buttons from '~/components/Buttons';
+import EditGoods from './editGoods';
 export default {
 
 
@@ -296,15 +330,20 @@ export default {
                 ToolTip,
                 ImportFile,
                 BindService,
-                Buttons
+                Buttons,
+                EditGoods,
+                ChangePrice
                  },
         props:{
                 mask:String
             },
           data() {
                 return{
+            editOpen:false,
+            priceOpen:false,
+            serviceData:{},
             warnCode:'',
-            openService:false,
+            serviceOpen:false,
             fiteter:'',
             feactye:'',
             tables:'',
@@ -332,15 +371,13 @@ export default {
             },
             errorData:[],
             typelist2:[],
-            newgooddata:[],
-            seacchValue:{},
             careful:false,
             isShowBatch:true,
+            isShowEdit:true,
             switchParams:{},
             modifystate: false,
             complete: false,
             newmodal:false,
-            butpush:false,
             pudyt:false,
             butpudyt:false,
             vImport:false,//导入
@@ -360,11 +397,6 @@ export default {
             width:'',
             totalCount:0,
             attractColumns:[
-                // {
-                //     title: '商品编号',
-                //     key: 'code',
-                //     align:'center' 
-                // },
                 {
                     title: '商品名称',
                     key: 'name',
@@ -540,11 +572,23 @@ export default {
                 },
                 {
                     title: '设备绑定',
-                    key: 'binding',
+                    key: 'bindingText',
                     align:'center',
                     width:60,
-                    render(h,params){
-                        return h('span',{},'-')
+                    render:(h,params)=>{
+                        let middle=params.row.binding;
+                        let ren=params.row.bindingText?params.row.bindingText:'-';
+                        return h('span', {
+                                style: {
+                                    color:middle=='0'?'red':'',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.editService(params.row)
+                                    }
+                                }
+                        },ren)
                     }
                 },
                 {
@@ -576,7 +620,8 @@ export default {
             serviceId:'',
             statusOldData:[],
             singleForms:{},
-            floorStr:'',    
+            floorStr:'', 
+            isAdd:false   
         }
     },
         mounted(){
@@ -605,22 +650,40 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
-
-            showpushe(){
-                this.butpushd=!this.butpushd;
-            },
+        openPrice(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
+            this.cancelPrice();
+        },
+        cancelPrice(){
+            this.priceOpen=!this.priceOpen;
+        },
+        submitPrice(){
+            this.getListData(this.tabForms);
+            this.statusData=[];
+            this.cancelPrice();
+        },
+        editService(params){
+            this.openService();
+            this.serviceData=params;
+        },
+        showpushe(){
+            this.butpushd=!this.butpushd;
+        },
 
         cityFloor(params){
             this.tabForms=Object.assign({},this.tabForms,params,{page:1});
-            //this.getListData(this.tabForms);
         },
         submitService(params){
-             this.showpush();
-            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
+            let middleData=Object.assign({},this.serviceData);
             let data={
-                goodsType:this.newgoodForm.goodsType,
+                goodsType:this.newgoodForm.goodsType||middleData.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:this.serviceId
+                id:this.serviceId||middleData.id
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -637,7 +700,11 @@ export default {
     
 
         cancelService(){
-            this.openService=!this.openService;
+            this.serviceData={};
+            this.openService();
+        },
+        openService(){
+            this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
             window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
@@ -662,73 +729,66 @@ export default {
             this.butpudyt=!this.butpudyt
         },      
          getsubGoods(){//注意
-
-                    // this.newmodal=!this.newmodal;
-                     this.careful=!this.careful;
-                     },
-         butPush(){//成功
-                    this.butpush=!this.butpush;
-         } ,        
-         showpush(){
-                  this.butpush=!this.butpush;
-         },
+                    this.careful=!this.careful;
+                    },  
          showtPush(){//二次确定
               this.careful=!this.careful;
          },   
         buttPush(){
-            this.newmodal=!this.newmodal;
-                this.butPush();
-                this.getsubGoods();
-                this.getNew();
+            this.getsubGoods();
+            this.getNew();
         },
         primarye(){
             this.butsuccess=!this.butsuccess;
+        },
+
+        getCheckName(){
+            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+            this.$http.get('getNew-Rename',data).then((response)=>{
+                this.getNew();          
+            }).catch((error)=>{
+                    if(error.code==-1){
+                        this.newmodal=false;
+                        this.editOpen=false;
+                        this.getsubGoods();
+                        this.errdated=error.message;
+                    }else{
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=error.message;
+                    } 
+            })
         },
             //添加弹窗2
         subGoods(){
               let newPage=this.$refs.goodsNewPage.$refs;
               newPage['formItem'].validate((valid) => {
                     if (valid) {
-                       // this.newmodal=!this.newmodal;
-                            //新增重名     
-                            // console.log('fdfffff',this.tabForms);
-                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                            // console.log('66666666666666666666',this.tabForms);
-                            this.$http.get('getNew-Rename',data).then((response)=>{
-                                    this.getNew();
-                                    
-                                // this.newmodal=!this.newmodal;
-                        }).catch((error)=>{
-                            // console.log('err',error)
-                                    if(error.code==-1){
-                                        this.newmodal=!this.newmodal;
-                                        this.getsubGoods();
-                                        // this.getListData();
-                                        this.errdated=error.message;
-                                }else{
-                                    this.openMessage=true;
-                                    this.MessageType="error";
-                                    this.warn=error.message;
-                                } 
-                        })
+                       this.getCheckName();
+                       this.isAdd=false;
                     }
-                })
-
-
-
-
-            
+                })     
+        },
+        submitEdit(){
+            let newPage=this.$refs.goodsEditPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       this.getCheckName();
+                       this.isAdd=true;
+                    }
+             })  
         },
        //新增接口a
         getNew(){
-        //  console.log('id--',this.tabForms);
+        let url=this.isAdd?'goods-service-edit':'getNew-lyadded';
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
-         this.$http.post('getNew-lyadded',data).then((response)=>{ 
-              this.serviceId=response.data;
+         this.$http.post(url,data).then((response)=>{ 
+              this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.cancelService(); 
-              this.butNewgoods();
+              this.openService();
+              this.newmodal=false;
+              this.editOpen=false;
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";
@@ -753,7 +813,6 @@ export default {
             a.href = '/api/order/goods/import/download-template';
             a.download = name || "";
             a.click();
-            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
@@ -808,18 +867,16 @@ export default {
                     } 
         },
         getsubGods(){
-                    this.carel=!this.carel;
+            this.carel=!this.carel;
         },
         primaryed(){
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.importsuccess=!this.importsuccess;
-        // this.judgeRepeat();
-        this.feated=!this.feated;
+            this.importsuccess=!this.importsuccess;
+            this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      
-        // console.log('<iiiiiiii>',file)
             let _this = this;
             var form = new FormData();
             form.append('goodsData',this.fiteter); 
@@ -848,21 +905,16 @@ export default {
             xhr.send(form);
         },
         success(response){
-            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
-            // this.importgoods();
             this.resect=response.data;
 
         },
         error(response){
-                  this.openMessage=true;
-                  this.MessageType="error";
-                  this.warn=response.message;
+            this.openMessage=true;
+            this.MessageType="error";
+            this.warn=response.message;
         },
         initData(formItem,floorList){
-            // console.log('hhihhh',foorlist)
-        
-            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
             var str='';
             if(this.tabForms.floor==' '||this.tabForms.floor==''){
@@ -879,17 +931,14 @@ export default {
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
-            //utils.addParams(this.tabForms);
         },
         clearClick(values){
             this.tabForms=Object.assign({},this.tabForms,values);
-            //utils.addParams(this.tabForms);
         },
         updateStatus(obj){
            this.statusForm=Object.assign({},obj);  
         },
-         newStatus(obj){
-        //    console.log('eeeeeeeeeeeeeeeee',obj)
+        newStatus(obj){
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){
@@ -911,6 +960,41 @@ export default {
                 this.$refs.selectionGoodsLibrary.selectAll(true); 
             }else{
                 this.attractColumns.splice(0,1);
+            }
+        },
+        cancelEdit(){
+            this.editOpen=!this.editOpen;
+        },
+        openEdit(params){
+            this.serviceData=params;
+            this.cancelEdit();
+        },
+        openEditStyle(){
+            this.isShowEdit=!this.isShowEdit;
+            if(!this.isShowEdit){
+                this.attractColumns.push(
+                   {
+                    title: '操作',
+                    key: 'action',
+                    align:'center',
+                    width:100,
+                    render:(h,params)=>{
+                        return h('span', {
+                                style: {
+                                    color:'#499df1',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.openEdit(params.row)
+                                    }
+                                }
+                        },'编辑')
+                    }
+                }
+             )  
+            }else{
+                this.attractColumns.splice(this.attractColumns.length-1,1);
             }
         },
         openStatus(){
@@ -996,7 +1080,6 @@ export default {
             },
             onPageChange(page){
                 this.tabForms=Object.assign({},this.tabForms,{page:page})
-                //this.getListData(this.tabForms); 
             },
             onMessageChange(data){
             this.openMessage=data;

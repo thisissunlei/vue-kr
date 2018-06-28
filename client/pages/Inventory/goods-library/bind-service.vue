@@ -40,6 +40,10 @@ export default {
         },
         floor:{
             type:[String,Number]
+        },
+        editData:{
+            type:Object,
+            default:{}
         }
     },
     data() {
@@ -67,10 +71,18 @@ export default {
        getServiceList(){
            let data={
                communityId:this.singleForms.communityId,
-               floor:this.floor
+               floor:this.floor||this.editData.floor
            }
            this.$http.get('goods-service-list',data).then((response)=>{
                 this.roomList=response.data; 
+                if(this.editData.basicSpaceId){
+                    this.formItem.enable='no'
+                    this.isHave=true;
+                    this.formItem.basicSpaceId=''+this.editData.basicSpaceId;
+                }else{
+                    this.formItem.enable='ok'
+                    this.isHave=false;
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

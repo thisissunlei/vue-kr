@@ -325,7 +325,7 @@
             width="90%"
             class-name="vertical-center-modal"
          >
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap"></planMap>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap"/>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
             </div>
@@ -368,6 +368,7 @@
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
     import utils from '~/plugins/utils';
+    import ListAndMap from '../listAndMap';
     // 新建换租订单步骤说明
     // step：1
     // 选择客户名称->根据客户带出相对应的社区；其他为必填项；
@@ -813,7 +814,8 @@
             SelectSaler,
             selectCustomers,
             ReplaceView,
-            planMap
+            planMap,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");

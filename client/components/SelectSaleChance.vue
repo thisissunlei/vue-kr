@@ -39,11 +39,15 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
+<<<<<<< HEAD
         defaultValue: 0,
         showType:{
             type:Boolean,
 
         },
+=======
+        defaultValue:Object,
+>>>>>>> 1a22363c9ac6d3f78b90d986948e91b63adf8cc4
         clearable: {
             type: Boolean,
             default: false,
@@ -63,7 +67,10 @@ export default {
             showValue:''+this.defaultValue,
             loading1: false,
             isRender:false,
+<<<<<<< HEAD
             show:this.showType,
+=======
+>>>>>>> 1a22363c9ac6d3f78b90d986948e91b63adf8cc4
             salerOptions: [
                 {
                     label: '请选择',
@@ -73,6 +80,7 @@ export default {
             ]
         };
     },
+<<<<<<< HEAD
     // computed: {
     //     value: {
     //         get() {
@@ -81,6 +89,21 @@ export default {
     //         set(val) {
     //             console.log(val)
     //         }
+=======
+    mounted() {
+       console.log() 
+
+    },
+    computed: {
+        customerId: {
+            get() {
+                console.log("got-value"+this.defaultValue)
+                return this.defaultValue;
+            },
+            set(val) {
+                console.log("got-value"+val)
+            }
+>>>>>>> 1a22363c9ac6d3f78b90d986948e91b63adf8cc4
 
     //     },
     // },
@@ -95,6 +118,7 @@ export default {
         // },
         orderitems() {
             this.getSalerChanceList();
+<<<<<<< HEAD
             // nconsole.log("09999999")
         },
         showType(){
@@ -109,6 +133,15 @@ export default {
     },
     mounted() {
         console.log(this.showType,"")
+=======
+        },
+        defaultValue(){
+            console.log("watch_defaultvalue ")
+            console.log(this.defaultValue)
+            console.log(this.salerOptions)
+            this.isRender = !this.isRender;
+        }
+>>>>>>> 1a22363c9ac6d3f78b90d986948e91b63adf8cc4
     },
     methods: {
         changeContent(item) {
@@ -159,10 +192,7 @@ export default {
                 this.$Notice.error({
                     title: error.message
                 });
-            }
-            )
-
-
+            })
         }
 
 

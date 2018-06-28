@@ -257,8 +257,8 @@ export default {
         this.formItem=Object.assign({},this.tabParams);
         this.formItem.communityName=this.tabParams.communityName || '';
         
-        if(this.formItem.communityId=="" && this.formItem.communityName=="全部社区"){
-            this.formItem.communityId=-1;
+        if(this.tabParams.communityId=="" && this.formItem.communityName=="全部社区"){
+            this.formItem.communityId="-1";
         }
         
         if(this.tabParams.appPublish=='true'){

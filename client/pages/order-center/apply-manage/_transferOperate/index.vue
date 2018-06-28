@@ -21,6 +21,8 @@
 <script>
 import Buttons from '~/components/Buttons';
 import SearchForm from './SearchForm.vue'
+import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
 
 export default {
     name: 'apply',
@@ -34,7 +36,7 @@ export default {
             operateTypes: [
                 {
                     name: '转社区',
-                    component: 'QS'
+                    component: 'SQ'
                 },
                 {
                     name: '转营业外',
@@ -78,15 +80,27 @@ export default {
                 },
                 {
                     title: '操作款项',
-                    key: 'transferFeeTypeName',
-                    align: 'center'
+                    key: 'detailList',
+                    align: 'center',
+                    render:(tag,params)=>{
+                        let lines=[];
+                        params.row.detailList.map(item=>{
+                           lines.push( tag('p',item.transferFeeTypeName))
+                        })
+                        return tag('div',lines)
+                    }
                 },
                 {
                     title: '转移金额',
-                    key: 'transferAmount',
+                    key: 'detailList',
                     align: 'center',
-                    render: (h, params) => {
-                        return '￥' + utils.thousand((params.row.transferAmount / 100).toFixed(2))
+                    render: (tag, params) => {
+                        let lines=[];
+                         params.row.detailList.map(item=>{
+                             let amount=utils.thousand((item.transferAmount / 100).toFixed(2))
+                           lines.push( tag('p','￥' +amount))
+                        })
+                        return tag('div',lines)
                     }
                 },
                 {
@@ -98,47 +112,30 @@ export default {
                     title: '操作时间',
                     key: 'utime',
                     align: 'center',
-                    width: 100,
-                    render(tag, params) {
-                        return dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
-                    }
+                    render(tag, params){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.utime));
+                                return tag('div',time)
+                        }                  
                 },
                 {
                     title: '状态',
                     key: 'transferStatusName',
-                    align: 'center',
-                    render(tag, params) {
-                        var orderStatus = {
-                            'PROCESSED': '待处理',
-                            'PENDING': '已处理',
-                            'RETREATE': '已退回'
-                        }
-                        for (var item in orderStatus) {
-                            if (item == params.row.transferStatus) {
-                                var style = {};
-                                if (item == 'PROCESSED') {
-                                    style = 'u-red';
-                                }
-                                if (item == 'PENDING') {
-                                    style = 'u-nullify';
-                                }
-                                return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                            }
-                        }
-                    }
+                    align: 'center'
                 },
-
                 {
                     title: '操作',
-                    key: 'action',
+                    key: 'id',
                     align: 'center',
+                    width: 150,
                     render: (tag, params) => {
+                        console.log(tag)
+                        let status=params.row.transferStatusName
                         var btnRender = [
                             tag(Buttons, {
                                 props: {
                                     type: 'text',
-                                    checkAction: 'seat_order_view',
                                     label: '查看',
+                                    checkAction:'seat_order_release',
                                     styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
                                 },
                                 on: {
@@ -150,8 +147,8 @@ export default {
                             tag(Buttons, {
                                 props: {
                                     type: 'text',
-                                    checkAction: 'seat_order_view',
                                     label: '退回',
+                                    checkAction:'seat_order_release',
                                     styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
                                 },
                                 on: {
@@ -170,6 +167,13 @@ export default {
                 page: 1,
                 pageSize: 15,
             },
+            transformType2UIDic:{
+                TRANSFER_COMMUNITY:'SQInfo',
+                TRANSFER_BALANCE:'YEInfo',
+                TRANSFER_NONBUSINESS:'YYWInfo',
+                TRANSFER_RENT:'YJ2ZJInfo',
+                TRANSFER_LOCK_DEPOSIT:'ReleaseFWBZJInfo'
+            }
         }
     },
     methods: {
@@ -216,14 +220,11 @@ export default {
             obj.uStartTime = 1
             obj.page = 1
 
-
-
             this.formItem = obj;
 
-            debugger;
             this.$http.get('get-apply-list', this.formItem, r => {
-                debugger;
-                this.applyDatas = r.data.items;
+                this.applyDatas =[].concat(r.data.items);
+                console.log(this.applyDatas)
             }, e => {
                 this.$Notice.error({
                     title: e.message
@@ -248,8 +249,6 @@ export default {
             this.operateTypeIndex = 1;
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
-            return;
-
         },
 
         //转余额
@@ -257,8 +256,6 @@ export default {
             this.operateTypeIndex = 2;
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
-            return;
-
         },
 
         //押金转租金
@@ -266,7 +263,6 @@ export default {
             this.operateTypeIndex = 3;
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
-            return;
 
         },
 
@@ -275,18 +271,14 @@ export default {
             this.operateTypeIndex = 4;
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
-            return;
         },
 
         //查看申请
         handleCheckApplyInfo(params) {
-            var viewName = '';
-            if (params.row.orderType == 'CONTINUE') {
-                viewName = 'renewView';
-            } else {
-                viewName = 'joinView';
-            }
-            window.open(`/order-center/apply-manage/${params.row.id}/${viewName}`, '_blank');
+            let transformtype=params.row.transferType;
+            var viewName = this.transformType2UIDic[transformtype];
+
+            window.open(`/order-center/apply-manage/${params.row.applyNo}/${viewName}`, '_blank');
         },
 
         //退回申请

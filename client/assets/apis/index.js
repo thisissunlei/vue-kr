@@ -16,6 +16,7 @@ import Smarthardware from "./smarthardware.js";
 import Krmeeting from "./krmeeting.js";
 import DoorRelationship from "./doorRelationship.js";
 import KrmeetingRoom from "./krmeetingRoom.js";
+import ProductGoods from './productGoods.js';
 import FinancialtransferApply from "./financialtransferApply.js";
 
 export default {
@@ -37,5 +38,6 @@ export default {
     ...Krmeeting,
     ...DoorRelationship,
     ...KrmeetingRoom,
+    ...ProductGoods,
     ...FinancialtransferApply
 };

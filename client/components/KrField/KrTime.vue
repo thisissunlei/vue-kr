@@ -7,6 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :right="right"
         >
             <TimePicker 
                 :open="open"
@@ -38,6 +39,9 @@ export default {
         EditLabel,
     },
     props:{
+        right:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',

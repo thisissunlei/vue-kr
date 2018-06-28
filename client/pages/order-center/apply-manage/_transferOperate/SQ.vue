@@ -10,19 +10,22 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityOut" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' :customerId='formItem.customerID'></selectCommunities>                       
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities>
+                    <!-- <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities> -->
+                    <Select v-model="formItem.communityOut" style="width:252px">
+                        <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>               
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" placeholder='maxbalanceOut' style="width: 252px"></Input>
+                    <Input v-model="formItem.balanceOut" placeholder='maxAmount' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
@@ -42,7 +45,7 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
+import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 
 export default {
@@ -51,9 +54,7 @@ export default {
         selectCommunities,
         selectCustomers
     },
-    props: {
-        maxbalanceOut: 3000,
-    },
+
     data() {
         let maxbalanceOut = (this.maxbalanceOut / 100).toFixed(2);
         const validateFirst = (rule, value, callback) => {
@@ -73,12 +74,14 @@ export default {
             }
         };
         return {
-
+            maxAmount:8000,
+            communitiesOut:[],
+            communities:[],
             formItem: {
-                customerID: '',
+                customerID: 12246,
                 communityOut: '',
                 communityIn: '',
-                balanceOut: 0,
+                balanceOut:'',
                 remark: ''
             },
             ruleCustom: {
@@ -94,23 +97,28 @@ export default {
             },
         }
     },
+    mounted() {
+        this.getMaxAmount()
+    },
     methods: {
-        getInfo() {
-            let { params } = this.$route;
-            let from = {
-                id: params.operate
-            };
-            this.$http.get('join-bill-detail', from).then((response) => {
-                this.basicInfo = response.data;
-            }).catch((error) => {
-                this.$Notice.error({
-                    title: error.message
-                });
-            })
+        getMaxAmount(){
+            let maxAmount=6000
+
+
+            this.maxAmount=maxAmount;
         },
         changeCustomer() { },
-        changeCommunity() { },
+        changeCommunity(commIn) { 
+            this.$set(this.formItem,'communityIn',commIn)
+            let all=[].concat(this.communities);
+            this.communitiesOut=all.filter(item=>item.value!==commIn)
+            console.log(this.communitiesOut)
+        },
+        onGetCusomerList(list){
+            this.communities=[].concat(list);
+        },
         handleSubmit(formItem) {
+            debugger;
             let parms = {}
             this.$http.post('join-bill-detail', parms).then((response) => {
                 this.basicInfo = response.data;
@@ -120,7 +128,6 @@ export default {
                 });
             })
         }
-
     }
 }
 </script>

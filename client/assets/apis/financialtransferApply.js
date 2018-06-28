@@ -20,5 +20,15 @@ export default {
     "get-apply-list": {
         url: "/mockdata/98/transfer/list?",
         method: "get"
-    }
+    },
+    // //获取申请列表
+    // "get-apply-list": {
+    //     url: "/ben/transfer/list?",
+    //     method: "get"
+    // },
+    //获取操作款项
+    "get-cmts-customerid": {
+        url: "/ben/transfer/getTransferCmts?",
+        method: "get"
+    },
 };

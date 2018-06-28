@@ -138,11 +138,16 @@ export default {
             },
         }
     },
+    mounted() {
+        this.getInfo();
+    },
     methods: {
         getInfo() {
+            debugger;
+            console.log('getInfo')
             let { params } = this.$route;
             let from = {
-                id: params.operate
+                id: params.transferOperate
             };
             this.$http.get('join-bill-detail', from).then((response) => {
                 this.basicInfo = response.data;
@@ -157,6 +162,7 @@ export default {
         handleEdit() { },
         handleReject() { },
         handleSubmit(formItem) {
+            
             let parms = {}
             this.$http.post('join-bill-detail', parms).then((response) => {
                 this.basicInfo = response.data;

@@ -10,19 +10,19 @@
 		>
 		<div class="only-up" v-if="uiType=='uploadImg'">
 			<div class="content-box" >
-				<div class="up-show-box" v-for="(item,index) in fileList" :key="index">
-					<KrImg :src="item.url" width="60" height="60" type="cover"/>
+				<div class="up-show-box"  :style="`width:${imgWidth}px;height:${imgHeight}px;line-height:${imgHeight}px;`"  v-for="(item,index) in fileList" :key="index">
+					<KrImg :src="item.url" :width="imgWidth+2" :height="imgHeight+2" type="cover"/>
 					<div v-if="!disabled" class="img-mask">
-						<div style="line-height:60px;text-align:center;">
-							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
+						<div :style="`line-height:${imgHeight}px;text-align:center;`">
+							<div v-if="imgView" class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
 							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="handleRemove(index)"></div>
 						</div>
 						
 					</div>
 				</div>
 			</div>
-			<div v-if="upIconShow && !disabled" class="up-icon" @click="upBtnClick">
-				<Icon type="plus-round"></Icon>
+			<div v-if="upIconShow && !disabled" class="up-icon" :style="`width:${imgWidth}px;height:${imgHeight}px;line-height:${imgHeight}px;`" @click="upBtnClick">
+				<Icon type="plus-round u-position"></Icon>
 			</div>
 			<slot  name="up-btn" ></slot>
 		
@@ -203,6 +203,18 @@ export default{
 			type:Boolean,
 			default:false
 		},
+		imgView:{
+			type:Boolean,
+			default:false
+		},
+		imgWidth:{
+			type:Number,
+			default:60,
+		},
+		imgHeight:{
+			type:Number,
+			default:60,
+		}
 
 	},
 	data(){
@@ -229,8 +241,22 @@ export default{
 		}
 		
 	},
+	 watch: {
+		defaultFileList: {
+			deep: true,
+			handler(nextProps) {
+				this.fileList=nextProps;
+				if(this.maxLen){
+					if(this.fileList.length<this.maxLen){
+						this.upIconShow =true;
+					}else{
+						this.upIconShow =false;
+					}
+				}
+			}
+		}
+	},
 	mounted(){
-		console.log(this.disabled,"pppppppp")
 		
 	},
 	methods:{
@@ -500,12 +526,15 @@ export default{
 		cursor: pointer;
 	}
 }
+.u-position{
+	position: absolute;
+	left:50%;
+	top:50%;
+	transform: translate3d(-50%,-50%,0);
+}
 .only-up{
 	.up-icon{
-		height: 58px;
-		width: 58px;
 		text-align: center;
-		line-height: 58px;
 		border: 1px dashed #dddee1;
 		cursor: pointer;
 		font-size: 30px;
@@ -516,6 +545,7 @@ export default{
 		box-sizing: content-box;
 		border-radius:4px;
 		margin: 0px 10px;
+		position:relative;
 	}
 	.content-box{
 		display: inline-block;
@@ -527,8 +557,8 @@ export default{
 	.up-show-box{
 		display: inline-block;
 		position: relative;
-		width: 60px;
-		height: 60px;
+		// width: 88px;
+		// height: 88px;
 		border-radius: 4px;
 		overflow: hidden;
 		margin: 0 10px;

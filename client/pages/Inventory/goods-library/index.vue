@@ -668,8 +668,8 @@ export default {
             this.cancelPrice();
         },
         editService(params){
-            this.openService();
-            this.serviceData=params;
+            this.cancelService();
+            this.serviceData=Object.assign({},params);
         },
         showpushe(){
             this.butpushd=!this.butpushd;
@@ -701,9 +701,6 @@ export default {
 
         cancelService(){
             this.serviceData={};
-            this.openService();
-        },
-        openService(){
             this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
@@ -786,7 +783,7 @@ export default {
          this.$http.post(url,data).then((response)=>{ 
               this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.openService();
+              this.cancelService();
               this.newmodal=false;
               this.editOpen=false;
             }).catch((error)=>{

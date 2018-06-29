@@ -653,6 +653,7 @@ export default {
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
             formItem.opportunityId = this.formItem.saleChanceId;//销售机会ID
+            console.log(this.formItem.saleChanceId,'joinFormSubmit_join_this.formItem.saleChanceId')
             formItem.signDate = signDate;
             formItem.timeRange = this.formItem.timeRange;
 

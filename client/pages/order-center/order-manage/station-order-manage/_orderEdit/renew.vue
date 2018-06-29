@@ -436,7 +436,7 @@ export default {
         getSalerChanceList() {
         let chanceid=this.renewForm.saleChanceId;
             if(chanceid){
-                this.chancedisabled=false
+                this.chancedisabled=true
                 return;
             }
             else{

@@ -19,30 +19,30 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers  name="formItem.customerID" disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers  name="formItem.customerID" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityOut" disabled='UIDisable.cummunityIn' :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem.communityOut" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity"></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityIn" disabled='UIDisable.cummunityOut' :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem.communityIn" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity"></selectCommunities>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" disabled="UIDisable.blance" placeholder='maxbalanceOut' style="width: 252px"></Input>
+                    <Input v-model="formItem.balanceOut" :disabled="UIDisable.blance" placeholder='maxbalanceOut' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
 
             <FormItem class="remark" label="备注" style="width:100%;">
-                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."  disabled='UIDisable.remark' />
+                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."  :disabled='UIDisable.remark' />
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
             </FormItem>
 
@@ -180,8 +180,11 @@ export default {
                 remark:true,
                 editBtn:true,
                 approveBtn:true,
-                rejectBtn:true },
-                this.UIDisable=Object.assign({},obj);
+                rejectBtn:true 
+                };
+                console.log(obj)
+                this.UIDisable=Object.assign({},obj)
+                
          },
         handleReject() { },
         handleSubmit(formItem) {           

@@ -104,6 +104,9 @@ export default {
             this.getSalerChanceList();
            
         },
+        defaultValue(){
+            this.showValue = this.defaultValue;
+        },
         showType(){
             this.show = this.showType;
             
@@ -154,10 +157,8 @@ export default {
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                if(list.length ==2&&this.type=='edit'){
+                if(list.length ==2&&this.type != 'edit'){
                     this.showValue = ''+list[1].value;
-                }else{
-                    this.showValue = '';
                 }
                 
                 // this.value = 

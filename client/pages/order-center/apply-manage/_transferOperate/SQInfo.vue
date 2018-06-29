@@ -31,18 +31,18 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityIn" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" :disabled="UIDisable.blance" placeholder='maxbalanceOut' style="width: 252px"></Input>
+                    <Input v-model="formItem.balanceOut" :disabled="UIDisable.balance" placeholder='maxbalanceOut' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
 
             <FormItem class="remark" label="备注" style="width:100%;">
-                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."  :disabled='UIDisable.remark' />
+                <Input v-model="formItem.remark" :disabled='UIDisable.remark' :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
             </FormItem>
 
@@ -97,19 +97,19 @@ export default {
         
         return {
             UIShowAble:{
-                editBtn:true,
+                editBtn:true,//true显示
                 approveBtn:false,
                 rejectBtn:false
             },
             UIDisable:{
-                customer:false,
-                cummunityIn:false,
-                cummunityOut:false,
-                balance:false,
-                remark:false,
+                customer:true,//true 禁用
+                cummunityIn:true,
+                cummunityOut:true,
+                balance:true,
+                remark:true,
                 editBtn:false,
-                approveBtn:false,
-                rejectBtn:false
+                approveBtn:true,
+                rejectBtn:true
             },
             isEdit: false,
             approveBtnText: '同意',
@@ -170,7 +170,9 @@ export default {
             })
         },
         changeCustomer() { },
-        changeCommunity() { },
+        changeCommunity() { 
+
+        },
         handleEdit() {
             let obj={
                 customer:false,

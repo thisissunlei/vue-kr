@@ -347,8 +347,6 @@ export default {
         typeChange(form){
             let type=form;
             this.$refs.formItems.resetFields();
-            this.isCoverError=false;
-            this.isLogoError=false;
             this.isTimeError=false;
             this.formItem.couponType=type;
         },

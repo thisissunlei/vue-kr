@@ -14,7 +14,7 @@ function initListData(){
                     },
                     on:{
                         click:()=>{
-                            this.goAddPage(colData);
+                            this.goView(params.row);
                         }
                     }
                 }, params.row.applyNum)

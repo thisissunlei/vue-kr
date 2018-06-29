@@ -289,9 +289,12 @@
 
             },
             //跳转查看页面
-            goView(data){
-              window.open(`/publicPage/make-invoice/${data.id}/view-detail`,data.id);
+            // goView(data){
+            //   window.open(`/publicPage/make-invoice/${data.id}/view-detail`,data.id);
 
+            // },
+             goView(params){
+                 window.open(`/publicPage/make-invoice/${params.id}/view-detail`);
             },
             //回收按钮点击
             callbackClick(item){

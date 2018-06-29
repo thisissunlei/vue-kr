@@ -65,8 +65,8 @@
             />
         </FormItem>
        
-          <FormItem label="Icon：" style="width:352px" class="ivu-form-item-required">
-            <div class="demo-upload-list" v-if="this.imgUrl">
+          <FormItem label="Icon：" style="width:352px" prop="iconUrl">
+            <!-- <div class="demo-upload-list" v-if="this.imgUrl">
                 <img :src="this.imgUrl">
                 <div class="demo-upload-list-cover">
                     <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
@@ -88,15 +88,22 @@
                     <Icon type="camera" size="20"></Icon>
                 </div>
             </Upload>
-            <div v-if="isError" class="u-error">请选择要上传的图片</div>
-
+            <div v-if="isError" class="u-error">请选择要上传的图片</div> -->
             <UploadFile 
-                :multiple="false"
+                :category="category"
+                withCredentials
+                :format="['jpg','jpeg','png','gif']"
+                :maxLen="1"
+                :onSuccess="handleSuccess"
+                :onRemove="handleRemove"
+                :onFormatError="imgSizeFormat"
+            />
                
-            >
+            
+           
              
            
-            </UploadFile>
+           
         </FormItem>
         <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
@@ -132,6 +139,7 @@ export default {
     },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
               iconName:'',
               destUrl:'',
@@ -142,7 +150,6 @@ export default {
               iconUrl:'',
               iconDesc:''
           },
-          isError:false,
           maxLength:30,
           iconType:[
             {
@@ -155,7 +162,6 @@ export default {
             },
           ],
           locationList:[],
-          imgUrl:'',
           ruleCustom:{
             iconName:[
                 { required: true, message: '请输入图标名称', trigger:'change' }
@@ -178,6 +184,9 @@ export default {
             
             iconDesc:[
                 { required: true, message: '请输入图片描述', trigger: 'change' }
+            ],
+            iconUrl:[
+                { required: true, message: '请选择要上传的图片', trigger: 'change' }
             ],
           }
       }
@@ -236,22 +245,25 @@ export default {
         })
     },
 
-    handleSuccess(res,file){
-        if(res.code==1){
-            this.isError=false;
-            this.formItem.iconUrl=res.data.imgUrl;
-            this.imgUrl=res.data.imgUrl
-        }
+    handleSuccess(file){
+        this.formItem.iconUrl=file.data.url;
+        this.$refs.formItems.validateField('iconUrl') ;
+       
     },
     handleRemove(){
       this.formItem.iconUrl="";
-      this.imgUrl="" 
+     
     },
     handleError(error,file){
          this.$Notice.error({
                 title:error.message
         });
-    }
+    },
+    imgSizeFormat(){
+        this.$Notice.error({
+            title:'图片格式不正确'
+        });
+    },
 
    
 

@@ -110,10 +110,12 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
   components:{
      SectionTitle,
+     UploadFile
   },
    head () {
         return {
@@ -122,6 +124,7 @@ export default {
     },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
               iconName:'',
               destUrl:'',

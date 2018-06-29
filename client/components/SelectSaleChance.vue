@@ -151,7 +151,6 @@ export default {
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-               debugger
                 if(list.length ==2&&this.type=='edit'){
                     this.showValue = ''+list[1].value;
                 }else{

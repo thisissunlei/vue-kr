@@ -38,7 +38,12 @@ export default {
     },
     //获取申请详情
     'get-apply-info-id':{
-        url: "/ben//transfer/view",
+        url: "/ben/transfer/view",
+        method: "get"
+    },
+    //提交申请
+    'get-apply-submit':{
+        url: "/ben/transfer/submit",
         method: "get"
     }
 };

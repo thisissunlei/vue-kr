@@ -1,6 +1,6 @@
 <template>
     <div class='create-apply-sq'>
-        <SectionTitle title="转营业外申请"></SectionTitle>
+        <SectionTitle title="同客户社区间转账申请"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
@@ -9,38 +9,23 @@
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>
+                <FormItem label="转入社区名称" style="width:252px" prop="communityId">
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
                 </FormItem>
                 </Col>
             </Row>
-            <d style="margin-bottom:30px">
-                <Col class="col amount">
-                <FormItem label="转移款项" style="width:252px" prop="balance">
-                    <CheckboxGroup v-model="disabledGroup">
-                        <div class="amount-row">
-                            <Col class='amount-col amount-col1'>
-                            <Checkbox label="余额" />
-                            </Col>
-                            <Col class='amount-col amount-col2'>
-                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                            </Col>
-                        </div>
-                        <div class="amount-row">
-                            <Col class='amount-col'>
-                            <Checkbox label="门禁卡押金" /> </Col>
-                            <Col class='amount-col'>
-                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                            </Col>
-                        </div>
-                        <div class="amount-row">
-                            <Col class='amount-col'>
-                            <Checkbox label="其他保证金" /> </Col>
-                            <Col class='amount-col'>
-                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                            </Col>
-                        </div>
-                    </CheckboxGroup>
+            <Row style="margin-bottom:30px">
+                <Col class="col">
+                <FormItem label="转出社区名称" style="width:252px" prop="communityId">
+                    <!-- <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities> -->
+                    <Select v-model="formItem.communityOut" style="width:252px">
+                        <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>               
+                </FormItem>
+                </Col>
+                <Col class="col">
+                <FormItem label="转移余额" style="width:252px" prop="balance">
+                    <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
@@ -89,15 +74,14 @@ export default {
             }
         };
         return {
-            disabledGroup: [],
-            maxAmount: '0',
-            communitiesOut: [],
-            communities: [],
+            maxAmount:0,
+            communitiesOut:[],
+            communities:[],
             formItem: {
                 customerID: 12246,
                 communityOut: '',
                 communityIn: '',
-                balanceOut: '',
+                balanceOut:'',
                 remark: ''
             },
             ruleCustom: {
@@ -114,40 +98,54 @@ export default {
         }
     },
     methods: {
-        getMaxAmount() {
-            let maxAmount = 0
-            let parms = {
-                communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID
+        getMaxAmount(){
+            let maxAmount=0
+            let parms={
+                communityId:this.formItem.communityIn,
+                customerId:this.formItem.customerID
             }
-            var _this = this
+            var _this=this
             this.$http.post('get-max-amount', parms).then((r) => {
-                _this.maxAmount = r.data
+                _this.maxAmount=r.data
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });
             })
 
-            this.maxAmount = maxAmount;
+            this.maxAmount=maxAmount;
         },
-        changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item })
+        changeCustomer(item) { 
+            this.formItem=Object.assign({},this.formItem,{customerID:item})
         },
-        changeCommunity(commIn) {
-            this.$set(this.formItem, 'communityIn', commIn)
-            let all = [].concat(this.communities);
-            this.communitiesOut = all.filter(item => item.value !== commIn)
+        changeCommunity(commIn) { 
+            this.$set(this.formItem,'communityIn',commIn)
+            let all=[].concat(this.communities);
+            this.communitiesOut=all.filter(item=>item.value!==commIn)
             console.log(this.communitiesOut)
             this.getMaxAmount();
         },
-        onGetCusomerList(list) {
-            this.communities = [].concat(list);
+        onGetCusomerList(list){
+            this.communities=[].concat(list);
         },
         handleSubmit(formItem) {
             debugger;
-            let parms = {}
-            this.$http.post('join-bill-detail', parms).then((response) => {
+            let parms = {
+                applyMemo:this.formItem.remark,
+                communityId:this.formItem.communityIn,
+                customerId:this.formItem.customerID,
+                id:'',
+                transferType:'TRANSFER_COMMUNITY',
+                detailList:[
+                    {
+                        communityIdIn:this.formItem.communityIn,
+                        communityIdOut:this.formItem.communityOut,
+                        transferAmount:this.formItem.balanceOut,
+                        transferFeeType:''
+                    }
+                ]
+            }
+            this.$http.post('get-apply-submit', parms).then((response) => {
                 this.basicInfo = response.data;
             }).catch((error) => {
                 this.$Notice.error({
@@ -173,29 +171,6 @@ export default {
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
-        }
-        .amount {
-            .ivu-form-item-content {
-                width: 600px;
-            }
-            .ivu-checkbox-group {
-                .amount-row {
-                    top: 40px;
-                    margin-bottom: 20px;
-                    .amount-col1 {
-                        left: 0px;
-                        position: absolute;
-                    }
-                    .amount-col2 {
-                        left: 124px;
-                        position: relative;
-                    }
-                    .amount-col {
-                        display: inline-block;
-                        width: 200px;
-                    }
-                }
-            }
         }
         .required-label {
             font-size: 14px;

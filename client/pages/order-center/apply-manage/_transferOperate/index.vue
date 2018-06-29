@@ -36,24 +36,24 @@ export default {
             operateTypes: [
                 {
                     name: '转社区',
-                    component: 'SQ'
+                    component: 'transformZone'
                 },
                 {
                     name: '转营业外',
-                    component: 'YYW'
+                    component: 'nonoperating'
                 },
                 {
                     name: '转余额',
-                    component: 'YE'
+                    component: 'blance'
                 },
 
                 {
                     name: '押金转租金',
-                    component: 'YJ2ZJ'
+                    component: 'depositRent'
                 },
                 {
                     name: '释放服务保证金',
-                    component: 'ReleaseFWBZJ'
+                    component: 'releaseDeposit'
                 },
             ],
             applyDatas: [],
@@ -168,11 +168,11 @@ export default {
                 pageSize: 15,
             },
             transformType2UIDic:{
-                TRANSFER_COMMUNITY:'SQInfo',
-                TRANSFER_BALANCE:'YEInfo',
-                TRANSFER_NONBUSINESS:'YYWInfo',
-                TRANSFER_RENT:'YJ2ZJInfo',
-                TRANSFER_LOCK_DEPOSIT:'ReleaseFWBZJInfo'
+                TRANSFER_COMMUNITY:'transformZoneInfo',
+                TRANSFER_BALANCE:'blanceInfo',
+                TRANSFER_NONBUSINESS:'nonoperatingInfo',
+                TRANSFER_RENT:'depositRentInfo',
+                TRANSFER_LOCK_DEPOSIT:'releaseDepositInfo'
             }
         }
     },

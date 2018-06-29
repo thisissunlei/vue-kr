@@ -36,5 +36,9 @@ export default {
         url: "/api/krspace-pay-web/transfer/max-amount-fee",
         method: "get"
     },
-    
+    //获取申请详情
+    'get-apply-info-id':{
+        url: "/ben//transfer/view",
+        method: "get"
+    }
 };

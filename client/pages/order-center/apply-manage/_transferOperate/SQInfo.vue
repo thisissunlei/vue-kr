@@ -161,7 +161,7 @@ export default {
             let from = {
                 id: params.transferOperate
             };
-            this.$http.get('join-bill-detail', from).then((response) => {
+            this.$http.get('get-apply-info-id', from).then((response) => {
                 this.basicInfo = response.data;
             }).catch((error) => {
                 this.$Notice.error({

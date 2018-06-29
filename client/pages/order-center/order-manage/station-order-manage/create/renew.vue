@@ -37,7 +37,7 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" :showType="showChanceSelector" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance type='edit' :disabled='chanceDisable' name="formItem.salerId" @onChange="changeChance" :showType="showChanceSelector" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -228,6 +228,7 @@ export default {
             }
         };
         return {
+            chanceDisable:false,
             remindinfoNewUser: false,
             remindinfo: false,
             chanceRemindStr: "",

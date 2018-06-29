@@ -6,13 +6,13 @@
                 <Row style="margin-bottom:20px">
                     <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                        <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer" :value="customerName"></SelectCustomers>
+                        <SelectCustomers :disabled='customerdisabled'  name="renewForm.customerId" :onchange="changeCustomer" :value="customerName"></SelectCustomers>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId">
-                        <SelectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></SelectCommunities>
+                        <SelectCommunities :disabled='cummunitydisabled'  test="renewForm" :onchange="changeCommunity" :value="communityName"></SelectCommunities>
                     </FormItem>
                     </Col>
                     <Col class="col" v-if="false">
@@ -27,7 +27,7 @@
                     </Col>
                     <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                        <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler  :disabled='salerdisabled' name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                     </Col>
                     <Col class="col">
@@ -37,12 +37,12 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance  type='edit' :disabled='chancedisabled' name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
-                    <div v-if='remindinfoNewUser' class="title-container">(
+                    <!-- <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
                     <div v-if='remindinfo' class="title-container">(如是
-                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div> -->
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
                 </Row>
@@ -221,6 +221,10 @@ export default {
             }
         };
         return {
+            chancedisabled:true,
+            salerdisabled:true,
+            cummunitydisabled:true,
+            customerdisabled:true,
             remindinfoNewUser: false,
             remindinfo: false,
             chanceRemindStr: "",
@@ -428,6 +432,50 @@ export default {
         },
     },
     methods: {
+                //获取销售机会列表
+        getSalerChanceList() {
+        let chanceid=this.renewForm.saleChanceId;
+            if(chanceid){
+                this.chancedisabled=false
+                return;
+            }
+            else{
+                    let parms = {
+                    customerId: this.renewForm.customerId,
+                    communityId: this.renewForm.communityId,
+                    receiveId: this.renewForm.salerId
+                }
+                let list = [];
+                let _this = this;
+
+                this.$http.get('get-salechance', parms, r => {
+                    debugger;
+                    if (r.data.items.data.length==0) {                       
+                        _this.remindinfoNewUser = false
+                        _this.remindinfo = true
+                        _this.chanceRemindStr = '新入驻客户，须选择机会'
+                        _this.OpportunityRequired = false;
+                        _this.showChanceSelector = false;
+                        _this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                        return;
+                    }
+                    else{
+                        _this.validSaleChance();
+                        _this.chancedisabled=false
+                        _this.remindinfo = false
+                        _this.remindinfoNewUser = false
+                        _this.chanceRemindStr = '';
+                        _this.showChanceSelector = true;
+                        
+                    }
+                    console.log(this.chancedisabled,'chancedisabled')
+                }, error => {
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+            }
+        },
         submitPrice() {
             let price = false;
             let _this = this;
@@ -567,6 +615,7 @@ export default {
                     _this.dealSaleInfo(false)
                 }, 500)
                 _this.getStationFn = +new Date();
+                _this.getSalerChanceList();
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -751,6 +800,8 @@ export default {
             this.orderitems = Object.assign({}, obj);
         },
          handleGotChancelist(parms) {
+             debugger;
+             return;
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {

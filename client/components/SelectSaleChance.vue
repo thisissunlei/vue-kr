@@ -53,12 +53,15 @@ export default {
         orderitems: {
             type: Object
         },
-
+        disabled:{
+            type:Boolean,
+            default:true
+        }
     },
     data() {
         return {
             labelinvalue: true,
-            disabled: false,
+            // disabled: false,
             saler: '',
             showValue:''+this.defaultValue,
             loading1: false,
@@ -147,7 +150,7 @@ export default {
                     list: list
                 }
                
-                if(list.length ==2 ){
+                if(list.length ==2&&this.type=='edit'){
                     this.showValue = ''+list[1].value;
                 }else{
                     this.showValue = '';

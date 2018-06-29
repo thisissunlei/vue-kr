@@ -54,6 +54,7 @@ import http from '~/plugins/http.js';
             };
         },
          mounted:function(){
+            console.log(this.disabled,'ddd')
             this.remoteCustomer()
         },
         methods: {

@@ -9,7 +9,10 @@
               @cityFloor="cityFloor"
             />
         </div>
-        <SlotHead :class="theHead?'header-here':'header-no'"/>
+        <SlotHead 
+         :class="theHead?'header-here':'header-no'"
+         :isShowEdit="isShowEdit"
+         />
 
         <div style="margin:0 20px;" class="attract-investment-table">
 

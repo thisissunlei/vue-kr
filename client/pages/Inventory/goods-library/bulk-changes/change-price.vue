@@ -32,6 +32,7 @@
                     type="textarea"
                     v-model="numArea" 
                     id="goodsAreaScrollFuck"
+                    @on-change="areaChange"
                 />
             </div>
         </div>
@@ -77,6 +78,7 @@ export default {
     data() {
         return{
             numArea:'',
+            numReplace:'',
             joinData:[],
             remark:'',
             priceColumns:[
@@ -111,10 +113,13 @@ export default {
         leftPrice&&leftPrice.removeEventListener('resize',this.scrollLeft); 
     },
     methods:{
+       areaChange(e){
+           this.numReplace=e.target.value.replace(/\n/g,'-');  
+       },
        submitPriceFirst(){
            let data={
                 goodsList:JSON.stringify([].concat(this.data)),
-                newPriceContents:this.numArea
+                newPriceContents:this.numReplace
             }
             this.$http.post('goods-change-price',data).then((response)=>{
                 this.priceList=response.data;
@@ -127,7 +132,7 @@ export default {
        submitPriceSecond(){
            let data={
                 goodsList:JSON.stringify([].concat(this.priceList)),
-                newPriceContents:this.numArea,
+                newPriceContents:this.numReplace,
                 remark:this.remark
             }
             this.$http.post('goods-change-price',data).then((response)=>{

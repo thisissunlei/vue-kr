@@ -10,27 +10,37 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
-            <Row style="margin-bottom:30px">
+            <d style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:252px" prop="balance">
                     <CheckboxGroup v-model="disabledGroup">
-                        <Row class="amount-row">
-                            <Col><Checkbox label="余额" /></Col>
-                            <Col><Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input></Col>
-                        </Row>
-                        <Row class="amount-row">
-                            <Col><Checkbox label="门禁卡押金" /> </Col>
-                            <Col><Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input></Col>
-                        </Row>
-                         <Row class="amount-row">
-                            <Col><Checkbox label="其他保证金" /> </Col>
-                            <Col><Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input></Col>
-                        </Row>  
-                    </CheckboxGroup>                   
+                        <div class="amount-row">
+                            <Col class='amount-col amount-col1'>
+                            <Checkbox label="余额" />
+                            </Col>
+                            <Col class='amount-col amount-col2'>
+                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
+                            </Col>
+                        </div>
+                        <div class="amount-row">
+                            <Col class='amount-col'>
+                            <Checkbox label="门禁卡押金" /> </Col>
+                            <Col class='amount-col'>
+                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
+                            </Col>
+                        </div>
+                        <div class="amount-row">
+                            <Col class='amount-col'>
+                            <Checkbox label="其他保证金" /> </Col>
+                            <Col class='amount-col'>
+                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
+                            </Col>
+                        </div>
+                    </CheckboxGroup>
                 </FormItem>
                 </Col>
             </Row>
@@ -79,15 +89,15 @@ export default {
             }
         };
         return {
-            disabledGroup:[],
-            maxAmount:'0',
-            communitiesOut:[],
-            communities:[],
+            disabledGroup: [],
+            maxAmount: '0',
+            communitiesOut: [],
+            communities: [],
             formItem: {
                 customerID: 12246,
                 communityOut: '',
                 communityIn: '',
-                balanceOut:'',
+                balanceOut: '',
                 remark: ''
             },
             ruleCustom: {
@@ -104,35 +114,35 @@ export default {
         }
     },
     methods: {
-        getMaxAmount(){
-            let maxAmount=0
-            let parms={
-                communityId:this.formItem.communityIn,
-                customerId:this.formItem.customerID
+        getMaxAmount() {
+            let maxAmount = 0
+            let parms = {
+                communityId: this.formItem.communityIn,
+                customerId: this.formItem.customerID
             }
-            var _this=this
+            var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
-                _this.maxAmount=r.data
+                _this.maxAmount = r.data
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });
             })
 
-            this.maxAmount=maxAmount;
+            this.maxAmount = maxAmount;
         },
-        changeCustomer(item) { 
-            this.formItem=Object.assign({},this.formItem,{customerID:item})
+        changeCustomer(item) {
+            this.formItem = Object.assign({}, this.formItem, { customerID: item })
         },
-        changeCommunity(commIn) { 
-            this.$set(this.formItem,'communityIn',commIn)
-            let all=[].concat(this.communities);
-            this.communitiesOut=all.filter(item=>item.value!==commIn)
+        changeCommunity(commIn) {
+            this.$set(this.formItem, 'communityIn', commIn)
+            let all = [].concat(this.communities);
+            this.communitiesOut = all.filter(item => item.value !== commIn)
             console.log(this.communitiesOut)
             this.getMaxAmount();
         },
-        onGetCusomerList(list){
-            this.communities=[].concat(list);
+        onGetCusomerList(list) {
+            this.communities = [].concat(list);
         },
         handleSubmit(formItem) {
             debugger;
@@ -164,12 +174,27 @@ export default {
             padding-right: 10px;
             vertical-align: top;
         }
-        .amount{
-            .ivu-form-item-content{
+        .amount {
+            .ivu-form-item-content {
                 width: 600px;
             }
-            .ivu-checkbox-group{
- 
+            .ivu-checkbox-group {
+                .amount-row {
+                    top: 40px;
+                    margin-bottom: 20px;
+                    .amount-col1 {
+                        left: 0px;
+                        position: absolute;
+                    }
+                    .amount-col2 {
+                        left: 124px;
+                        position: relative;
+                    }
+                    .amount-col {
+                        display: inline-block;
+                        width: 200px;
+                    }
+                }
             }
         }
         .required-label {

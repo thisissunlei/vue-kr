@@ -558,9 +558,6 @@ export default {
       },
        //社区
       getCityList(name){
-        //    let params = {
-        //             cmtName:name
-        //         }
             let list = [];
             let _this = this;
             this.$http.get('coupon-city-list', '').then((res)=>{

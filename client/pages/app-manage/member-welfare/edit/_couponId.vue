@@ -46,8 +46,8 @@
                               :maxlength="faceValueLength"
                           />
                       </FormItem>
-                       <FormItem label="福利封面" style="width:516px" class="ivu-form-item-required">
-                            <div class="demo-upload-list" v-if="this.imgCoverUrl">
+                       <FormItem label="福利封面" style="width:516px" prop="couponCover">
+                            <!-- <div class="demo-upload-list" v-if="this.imgCoverUrl">
                                 <img :src="this.imgCoverUrl">
                                 <div class="demo-upload-list-cover">
                                     <Icon type="ios-trash-outline" @click.native="coverRemove()"></Icon>
@@ -69,15 +69,29 @@
                                     <Icon type="camera" size="40"></Icon>
                                 </div>
                             </Upload>
-                             <div v-if="isCoverError" class="u-error">请选择要上传的图片</div>
+                             <div v-if="isCoverError" class="u-error">请选择要上传的图片</div> -->
+                             <UploadFile 
+                                :category="category"
+                                withCredentials
+                                :format="['jpg','png','gif']"
+                                :maxLen="1"
+                                :onSuccess="coverSuccess"
+                                :onRemove="coverRemove"
+                                :onFormatError="imgSizeFormat"
+                                :imgWidth="148"
+                                :imgHeight="148"
+                                :defaultFileList="coverImgList"
+                            >
+                                <div slot="tip" class="u-unload-tip">  图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                            </UploadFile>
                         </FormItem>
-                        <div class="u-upload-tip">
+                        <!-- <div class="u-upload-tip">
                             图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
-                        </div>
+                        </div> -->
                         <div class="u-upload-logo" v-if="formItem.couponType=='OFFLINESTORE'">
                                 <IconTip style="left:95px;top:9px;">用于到店凭证展示给店主</IconTip>
-                                <FormItem label="商户LOGO" style="width:516px" class="ivu-form-item-required">
-                                    <div class="demo-upload-list" v-if="this.imgLogoUrl">
+                                <FormItem label="商户LOGO" style="width:516px" prop="merchantLogo">
+                                    <!-- <div class="demo-upload-list" v-if="this.imgLogoUrl">
                                         <img :src="this.imgLogoUrl">
                                         <div class="demo-upload-list-cover">
                                             <Icon type="ios-trash-outline" @click.native="logoRemove()"></Icon>
@@ -99,11 +113,25 @@
                                             <Icon type="camera" size="40"></Icon>
                                         </div>
                                     </Upload>
-                                     <div v-if="isLogoError" class="u-error">请选择要上传的图片</div>
+                                     <div v-if="isLogoError" class="u-error">请选择要上传的图片</div> -->
+                                     <UploadFile 
+                                            :category="category"
+                                            withCredentials
+                                            :format="['jpg','png','gif']"
+                                            :maxLen="1"
+                                            :onSuccess="logoSuccess"
+                                            :onRemove="logoRemove"
+                                            :onFormatError="imgSizeFormat"
+                                            :imgWidth="148"
+                                            :imgHeight="148"
+                                            :defaultFileList="logoImgList"
+                                        >
+                                            <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                    </UploadFile>
                                 </FormItem>
-                                <div class="u-upload-tip">
+                                <!-- <div class="u-upload-tip">
                                     图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
-                                </div>
+                                </div> -->
                         </div>
                         <div class="u-welfare-tag">
                              <FormItem label="福利标签" style="width:516px" >
@@ -248,15 +276,18 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import dateUtils from 'vue-dateutils';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
   components:{
      SectionTitle,
      DetailStyle,
-     IconTip
+     IconTip,
+     UploadFile
   },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
               couponType:'OFFLINESTORE',
               title:'',
@@ -268,7 +299,8 @@ export default {
               merchantAddress:'',
           },
           id:'',
-          imgCoverUrl:'',
+          coverImgList:[],
+          logoImgList:[],
           tag:'',
           imgLogoUrl:'',
           titleLength:15,
@@ -308,6 +340,12 @@ export default {
             getTime:[
                 { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
+             couponCover:[
+                { required: true, message: '请选择要上传的图片', trigger: 'change' }
+            ],
+            merchantLogo:[
+                { required: true, message: '请选择要上传的图片', trigger: 'change' }
+            ],
           }
 
       }
@@ -336,8 +374,17 @@ export default {
                               return item;
                           })
                         }
-                        this.imgCoverUrl=data.couponCover;
-                        this.imgLogoUrl=data.merchantLogo;
+                        let coverImgList=[];
+                        if(data.couponCover!=''){
+                            coverImgList.push({'url':data.couponCover});
+                        }
+                        this.coverImgList=coverImgList;
+                        let logoImgList=[];
+                        if(data.merchantLogo!=''){
+                            logoImgList.push({'url':data.merchantLogo});
+                        }
+                        this.logoImgList=logoImgList;
+
                         this.tagList=data.tags;
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
@@ -448,38 +495,21 @@ export default {
                 this.isTimeError=false;
             }
         },
-        coverSuccess(res,file){
-            if(res.code==1){
-                this.isCoverError=false;
-                this.formItem.couponCover=res.data.imgUrl;
-                this.imgCoverUrl=res.data.imgUrl
-            }
+        coverSuccess(res){
+            this.formItem.couponCover=res.data.url;
+            this.$refs.formItems.validateField('couponCover') 
         },
-        logoSuccess(res,file){
-            if(res.code==1){
-                this.isLogoError=false;
-                this.formItem.merchantLogo=res.data.imgUrl;
-                this.imgLogoUrl=res.data.imgUrl
-            }
+        logoSuccess(res){
+            this.formItem.merchantLogo=res.data.url;
+            this.$refs.formItems.validateField('merchantLogo') 
         },
         coverRemove(){
             this.formItem.couponCover="";
-            this.imgCoverUrl="" 
         },
         logoRemove(){
             this.formItem.merchantLogo="";
-            this.imgLogoUrl="" 
         },
-        coverError(error,file){
-            this.$Notice.error({
-                title:error.message
-            });
-        },
-        logoError(error,file){
-            this.$Notice.error({
-                title:error.message
-            });
-        },
+        
         cancelSubmit(){
             window.close();
             window.opener.location.reload();
@@ -613,6 +643,11 @@ export default {
             return list;
             
       },
+      imgSizeFormat(){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+        },
     
 
   }

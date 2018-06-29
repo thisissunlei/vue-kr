@@ -20,7 +20,26 @@
                 />
             </FormItem>
             <FormItem label="通知配图" style="width:516px" >
-                <div class="demo-upload-list" v-if="this.imgUrl">
+                <UploadFile 
+                        multiple
+                        :category="category"
+                        withCredentials
+                        :format="['jpg','png','gif']"
+                        :maxSize="300"
+                        :onSuccess="handleSuccess"
+                        :onRemove="handleRemove"
+                        :onExceededSize="imgSize"
+                        :onFormatError="imgSizeFormat"
+                        :imgWidth="148"
+                        :imgHeight="148"
+                        :maxLen="1"
+                        :defaultFileList="imgList"
+                        
+                    >
+                      <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div>
+                </UploadFile>
+                <!-- <div class="demo-upload-list" v-if="this.imgUrl">
                     <img :src="this.imgUrl">
                     <div class="demo-upload-list-cover">
                         <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
@@ -41,10 +60,10 @@
                     <div style="width: 148px;height:148px;line-height: 158px;">
                         <Icon type="camera" size="40"></Icon>
                     </div>
-                </Upload>
+                </Upload> -->
             </FormItem>
-            <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
-（上传图片后，即为APP中用户可见效果）</div>
+            <!-- <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div> -->
             <FormItem label="通知详情" style="width:400px" prop="jumpType">
                  <RadioGroup 
                     v-model="formItem.jumpType" 
@@ -100,7 +119,7 @@
 				{{formItem.push=="0"?'否':'是'}}
 			</LabelText>
         </DetailStyle>
-        <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
+        <FormItem  style="margin:0 24px; height:60px;">
             <div class="u-btn-content">
                 <Button style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
                 <Button type="ghost" @click="onCanlce()" >取消</Button>
@@ -116,12 +135,14 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
   components:{
      SectionTitle,
      DetailStyle,
-     LabelText
+     LabelText,
+     UploadFile
   },
   head () {
         return {
@@ -130,6 +151,7 @@ export default {
     },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
               title:'',
               content:'',
@@ -149,6 +171,7 @@ export default {
           contentLength:200,
           targetDetail:{},
           imgUrl:'',
+          imgList:[],
           ruleCustom:{
             title:[
                 { required: true, message: '请输入推送标题', trigger:'change' }
@@ -179,11 +202,16 @@ export default {
 				notificationId:params.notificationId
             };
 			this.$http.get('get-notification-detail', from).then((res)=>{
-                this.imgUrl=res.data.imgUrl;
-                this.formItem = res.data;
-                if(res.data.jumpType){
-                     this.formItem.jumpType=res.data.jumpType.toString();
-                }
+                let data=Object.assign({},res.data)
+                this.formItem = data;
+                this.formItem.jumpType=data.jumpType.toString();
+                
+
+                let imgList=[];
+                    if(res.data.imgUrl && res.data.imgUrl!=''){
+                        imgList.push({'url':res.data.imgUrl});
+                    }
+                this.imgList=imgList;
                 this.targetDetail=res.data.targetDetail;
                 switch (res.data.gender){
                     case 0:
@@ -231,6 +259,7 @@ export default {
                     duration: 3
                 });
                   
+                 
                if(this.formItem.jumpType=='1'){
                     if(!this.formItem.jumpUrl){
                         this.$Notice.error({
@@ -269,14 +298,12 @@ export default {
     },
    
    handleRemove(){
-      this.formItem.iconUrl="";
-      this.imgUrl="" 
+      this.formItem.imgUrl="";
+     
     },
-     handleSuccess(res,file){
-        if(res.code==1){
-            this.formItem.imgUrl=res.data.imgUrl;
-            this.imgUrl=res.data.imgUrl
-        }
+    handleSuccess(file){
+        this.formItem.imgUrl=file.data.url;
+       
     },
    
     onCanlce(){
@@ -287,7 +314,17 @@ export default {
          this.$Notice.error({
               title:error.message
         });
-     }
+     },
+     imgSizeFormat(){
+        this.$Notice.error({
+            title:'图片格式不正确'
+        });
+     },
+     imgSize(){
+        this.$Notice.error({
+            title:'图片大小超出限制'
+        });
+     },
 
 
 

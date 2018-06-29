@@ -522,7 +522,7 @@ export default {
         //获取销售机会列表
         getSalerChanceList() {
         let chanceid=this.formItem.saleChanceId;
-        debugger
+        console.log(chanceid,'getSalerChanceList000000')
             if(chanceid){
                 this.chancedisabled=true
                 return;
@@ -537,7 +537,6 @@ export default {
                 let _this = this;
 
                 this.$http.get('get-salechance', parms, r => {
-                    debugger;
                     if (r.data.items.data.length==0) {                       
                         _this.remindinfoNewUser = false
                         _this.remindinfo = true
@@ -662,6 +661,8 @@ export default {
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
+                console.log(data.opportunityId,'_this.saleChanceId')
+
                 _this.communityName = data.communityName;
                 _this.formItem.startDate = new Date(data.startDate);
                 _this.formItem.endDate = new Date(data.endDate);
@@ -702,7 +703,7 @@ export default {
                     _this.formItem.items = data.contractTactics;
                 }, 700)
                 _this.getFloor = +new Date()
-
+                console.log(_this.formItem)
                 _this.getSalerChanceList();
             }, e => {
                 _this.$Notice.error({
@@ -785,7 +786,7 @@ export default {
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
             formItem.opportunityId = this.formItem.saleChanceId || '';
-
+            console.log(this.formItem.saleChanceId,'joinFormSubmit-this.formItem.saleChanceId')
             formItem.timeRange = this.formItem.timeRange;
             formItem.rentAmount = this.formItem.rentAmount;
             formItem.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.firstPayTime));
@@ -1201,9 +1202,9 @@ export default {
         },
         handleGotChancelist(parms) {
 
-
-            return;
             console.log('handleGotChancelist');
+            return;
+           
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {

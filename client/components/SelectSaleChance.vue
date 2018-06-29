@@ -74,7 +74,7 @@ export default {
                     label: '请选择',
                     value: 0
                 },
-                { label: '无需机会', value: -1 }
+                { label: '不绑定机会', value: -1 }
             ]
         };
     },
@@ -118,7 +118,7 @@ export default {
     methods: {
         changeContent(item) {
             let v;
-            if (item.label === "请选择" || item.label == '无需机会') {
+            if (item.label === "请选择" || item.label == '不绑定机会') {
                 v = '';
             } else {
                 v = item.value
@@ -137,13 +137,14 @@ export default {
             let _this = this;
 
             http.get('get-salechance', parms, r => {
+                console.log(r.data.items.data)
                 r.data.items.data.map(item => {
                     list.push({
                         label: item.name,
                         value: item.id
                     })
                 })
-                list.unshift({ label: '无需机会', value: -1 })
+                list.unshift({ label: '不绑定机会', value: -1 })
                 _this.salerOptions = [].concat(list);
 
                 let parms = {

@@ -23,7 +23,15 @@
 
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance type='edit' :disabled='chancedisabled' name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance 
+                            type='edit' 
+                            :disabled='chancedisabled' 
+                            name="formItem.salerId" 
+                            @onChange="changeChance" 
+                            @gotChanceList='handleGotChancelist' 
+                            :showType="showChanceSelector" 
+                            v-show="showChanceSelector" :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
                     <!-- <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -662,6 +670,7 @@ export default {
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
                 console.log(data.opportunityId,'_this.saleChanceId')
+                _this.defaultChanceID = data.opportunityId;
 
                 _this.communityName = data.communityName;
                 _this.formItem.startDate = new Date(data.startDate);

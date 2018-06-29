@@ -230,7 +230,7 @@ export default {
             let view = this.$route.params.view;
             this.$http.get('csr-invoice-invoiceDetail', {invoiceId:view}).then( r => {
                  this.formItem = r.data;
-                 this.info = this.formItem.qualificationVO
+                 this.info = this.formItem.qualificationVO||{}
                  if(r.data.invoiceStatus == 'RECOVERYED' || r.data.invoiceStatus == 'FORREOPN'||r.data.invoiceStatus == "RETURNING"){
                       this.invoiceStatus = 'RECOVERYED';
                  }else{

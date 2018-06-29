@@ -29,6 +29,8 @@
                             :showType="showChanceSelector" 
                             :orderitems='orderitems' 
                             :defaultValue='defaultChanceID'
+                            :disabled='chanceDisable'
+                            type='edit'
                         ></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
@@ -256,7 +258,7 @@ export default {
             }
         };
         return {
-
+            chanceDisable:false,
             remindinfoNewUser: false,
             remindinfo: false,
             chanceRemindStr: "",

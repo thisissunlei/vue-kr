@@ -19,38 +19,38 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers  name="formItem.customerID" disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityOut" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem.communityOut" disabled='UIDisable.cummunityIn' :onchange="changeCommunity"></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem.communityIn" disabled='UIDisable.cummunityOut' :onchange="changeCommunity"></selectCommunities>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" placeholder='maxbalanceOut' style="width: 252px"></Input>
+                    <Input v-model="formItem.balanceOut" disabled="UIDisable.blance" placeholder='maxbalanceOut' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
 
             <FormItem class="remark" label="备注" style="width:100%;">
-                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
+                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."  disabled='UIDisable.remark' />
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
             </FormItem>
 
             <FormItem style="margin-top:40px">
                 <div class="btnContainer">
-                    <Button class='operateBtn' type="primary" @click="handleEdit">编辑</Button>
-                    <Button class='operateBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
-                    <Button class='operateBtn' type="primary" @click="handleReject('formItem')">退回</Button>
+                    <Button class='operateBtn'  v-if='UIShowAble.editBtn' :disabled='UIDisable.editBtn' type="primary" @click="handleEdit">编辑</Button>
+                    <Button class='operateBtn'  v-if='UIShowAble.approveBtn' :disabled='UIDisable.approveBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
+                    <Button class='operateBtn'  v-if='UIShowAble.rejectBtn' :disabled='UIDisable.rejectBtn' type="primary" @click="handleReject('formItem')">退回</Button>
                 </div>
             </FormItem>
 
@@ -64,7 +64,7 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
+import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 
 export default {
@@ -74,7 +74,7 @@ export default {
         selectCustomers
     },
     props: {
-        maxbalanceOut: 3000,
+        maxbalanceOut: 0,
     },
     data() {
         let maxbalanceOut = (this.maxbalanceOut / 100).toFixed(2);
@@ -94,12 +94,25 @@ export default {
                 callback();
             }
         };
+        
         return {
+            UIShowAble:{
+                editBtn:true,
+                approveBtn:false,
+                rejectBtn:false
+            },
+            UIDisable:{
+                customer:false,
+                cummunityIn:false,
+                cummunityOut:false,
+                balance:false,
+                remark:false,
+                editBtn:false,
+                approveBtn:false,
+                rejectBtn:false
+            },
             isEdit: false,
-            editBtnEnable: false,
-            approveBtnEnable: false,
             approveBtnText: '同意',
-            rejectBtnEnable: false,
             operateHistoryData: [],
             operateHistoryTableColums: [
                 {
@@ -143,7 +156,6 @@ export default {
     },
     methods: {
         getInfo() {
-            debugger;
             console.log('getInfo')
             let { params } = this.$route;
             let from = {
@@ -159,10 +171,20 @@ export default {
         },
         changeCustomer() { },
         changeCommunity() { },
-        handleEdit() { },
+        handleEdit() {
+            let obj={
+                customer:true,
+                cummunityIn:true,
+                cummunityOut:true,
+                balance:true,
+                remark:true,
+                editBtn:true,
+                approveBtn:true,
+                rejectBtn:true },
+                this.UIDisable=Object.assign({},obj);
+         },
         handleReject() { },
-        handleSubmit(formItem) {
-            
+        handleSubmit(formItem) {           
             let parms = {}
             this.$http.post('join-bill-detail', parms).then((response) => {
                 this.basicInfo = response.data;

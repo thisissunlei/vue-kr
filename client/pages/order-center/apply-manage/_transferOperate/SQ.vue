@@ -10,7 +10,7 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' :customerId='formItem.customerID'></selectCommunities>                       
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
                 </FormItem>
                 </Col>
             </Row>
@@ -25,7 +25,7 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" placeholder='maxAmount' style="width: 252px"></Input>
+                    <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
@@ -74,7 +74,7 @@ export default {
             }
         };
         return {
-            maxAmount:8000,
+            maxAmount:0,
             communitiesOut:[],
             communities:[],
             formItem: {
@@ -97,25 +97,33 @@ export default {
             },
         }
     },
-    mounted() {
-        this.getMaxAmount()
-    },
     methods: {
         getMaxAmount(){
-            let maxAmount=6000
-
+            let maxAmount=0
+            let parms={
+                communityId:this.formItem.communityIn,
+                customerId:this.formItem.customerID
+            }
+            var _this=this
+            this.$http.post('get-max-amount', parms).then((r) => {
+                _this.maxAmount=r.data
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
 
             this.maxAmount=maxAmount;
         },
         changeCustomer(item) { 
             this.formItem=Object.assign({},this.formItem,{customerID:item})
-            console.log(item)
         },
         changeCommunity(commIn) { 
             this.$set(this.formItem,'communityIn',commIn)
             let all=[].concat(this.communities);
             this.communitiesOut=all.filter(item=>item.value!==commIn)
             console.log(this.communitiesOut)
+            this.getMaxAmount();
         },
         onGetCusomerList(list){
             this.communities=[].concat(list);

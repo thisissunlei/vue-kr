@@ -1,7 +1,7 @@
 <template>
     <div class="com-select-community">
         <Select :v-model="test.communityIn" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+            <Option v-for="option in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -33,9 +33,8 @@ import http from '~/plugins/http.js';
             this.getCusomerList(' ')
         },
         watch:{
-            test(){
-                debugger;
-                this.getCusomerList();
+            customerId(){
+                this.getCusomerList();           
             }
         },
         methods: {

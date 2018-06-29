@@ -104,6 +104,7 @@ export default {
         },
         defaultValue(){
             this.showValue = this.defaultValue;
+             console.log(this.showValue,"-----")
         },
         showType(){
             this.show = this.showType;
@@ -140,7 +141,7 @@ export default {
             let _this = this;
 
             http.get('get-salechance', parms, r => {
-                console.log(r.data.items.data)
+              
                 r.data.items.data.map(item => {
                     list.push({
                         label: item.name,
@@ -158,8 +159,8 @@ export default {
                 if(list.length ==2&&this.type != 'edit'){
                     this.showValue = ''+list[1].value;
                 }
-                 console.log(this.showValue,"iiiiii",list)
-                // this.value = 
+                 
+            //   
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({

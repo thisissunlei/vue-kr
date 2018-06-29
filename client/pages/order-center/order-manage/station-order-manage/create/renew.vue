@@ -37,7 +37,17 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance type='edit' :disabled='chanceDisable' name="formItem.salerId" @onChange="changeChance" :showType="showChanceSelector" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance 
+                            type='edit' 
+                            :disabled='chanceDisable' 
+                            name="formItem.salerId" 
+                            @onChange="changeChance" 
+                            :showType="showChanceSelector" 
+                            @gotChanceList='handleGotChancelist' 
+                            v-show="showChanceSelector" 
+                            :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'
+                        ></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -721,13 +731,14 @@ export default {
            
         },
         handleGotChancelist(parms) {
+            // return ;
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {
                     this.remindinfoNewUser = false
                     this.chanceRemindStr = '';
                     this.showChanceSelector = true;
-                    this.defaultChanceID = parms.list[1].value
+                    // this.defaultChanceID = parms.list[1].value
                     // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
                 }
                 else if(parms.count >1){

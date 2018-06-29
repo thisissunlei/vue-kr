@@ -30,7 +30,7 @@
                             :orderitems='orderitems' 
                             :defaultValue='defaultChanceID'
                             :disabled='chanceDisable'
-                            type='edit'
+                          
                         ></SelectChance>
                     </FormItem>
                     <div v-if='remindinfoNewUser' class="title-container">(
@@ -262,7 +262,7 @@ export default {
             remindinfoNewUser: false,
             remindinfo: false,
             chanceRemindStr: "",
-            defaultChanceID:{id:0},
+            defaultChanceID:0,
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
@@ -1080,6 +1080,7 @@ export default {
             console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
+            // return ;
             console.log(parms)
             if (parms.isNewUser) {
                 this.remindinfo = false
@@ -1087,7 +1088,7 @@ export default {
                     this.remindinfoNewUser = false
                     this.chanceRemindStr = '';
                     this.showChanceSelector = true;
-                    this.defaultChanceID =Object.assign({},{id:parms.list[1].value}) 
+                    // this.defaultChanceID =parms.list[1].value; 
                     // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
                 }
                 else if(parms.count >1){

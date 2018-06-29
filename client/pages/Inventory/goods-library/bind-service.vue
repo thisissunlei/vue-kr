@@ -66,12 +66,13 @@ export default {
     },
     mounted(){
        this.getServiceList();
+       console.log('data--',this.floor,'g',this.editData);
     },
     methods:{
        getServiceList(){
            let data={
                communityId:this.singleForms.communityId,
-               floor:this.editData.floor||this.floor
+               floor:this.floor||this.editData.floor
            }
            this.$http.get('goods-service-list',data).then((response)=>{
                 this.roomList=response.data; 

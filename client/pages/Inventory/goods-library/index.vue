@@ -684,10 +684,11 @@ export default {
         },
         submitService(params){
             let middleData=Object.assign({},this.serviceData);
+            console.log('middle--',this.newgoodForm,'3',middleData);
             let data={
-                goodsType:middleData.goodsType||this.newgoodForm.goodsType,
+                goodsType:this.newgoodForm.goodsType||middleData.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:middleData.id||this.serviceId
+                id:this.serviceId||middleData.id
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -705,6 +706,7 @@ export default {
 
         cancelService(){
             this.serviceData={};
+            this.newgoodForm={};
             this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
@@ -718,6 +720,7 @@ export default {
                      this.newmodal=!this.newmodal;      
                   },
         showStatus(){
+                this.newgoodForm={};
                     this.butNewgoods();
                 }, 
         getpudyt(){  
@@ -966,6 +969,7 @@ export default {
         cancelEdit(){
             this.editOpen=!this.editOpen;
             this.serviceData={};
+            this.newgoodForm={};
         },
         openEdit(params){
             this.serviceData=Object.assign({},params);

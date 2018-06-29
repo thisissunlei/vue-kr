@@ -173,17 +173,17 @@ export default {
         changeCommunity() { },
         handleEdit() {
             let obj={
-                customer:true,
-                cummunityIn:true,
-                cummunityOut:true,
-                balance:true,
-                remark:true,
-                editBtn:true,
-                approveBtn:true,
-                rejectBtn:true 
+                customer:false,
+                cummunityIn:false,
+                cummunityOut:false,
+                balance:false,
+                remark:false,
+                editBtn:false,
+                approveBtn:false,
+                rejectBtn:false 
                 };
                 console.log(obj)
-                this.UIDisable=Object.assign({},obj)
+                this.UIDisable=Object.assign({},this.UIDisable,obj)
                 
          },
         handleReject() { },

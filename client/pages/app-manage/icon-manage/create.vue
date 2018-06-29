@@ -254,11 +254,6 @@ export default {
       this.formItem.iconUrl="";
      
     },
-    handleError(error,file){
-         this.$Notice.error({
-                title:error.message
-        });
-    },
     imgSizeFormat(){
         this.$Notice.error({
             title:'图片格式不正确'

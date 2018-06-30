@@ -71,7 +71,7 @@ import http from '~/plugins/http.js';
                     });
                     _this.loading1 = false;
                     _this.options1 = list;
-                    _this.$emit("onGetCusomerList",[].concat(list))
+                    _this.$emit("onGetCmtsList",[].concat(list))
                     }).catch((error)=>{
                         this.$Notice.error({
                             title:error.message

@@ -24,14 +24,17 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityOut" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem.communityIn" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
+                    <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>                        -->
+                      <Select v-model="formItem.communityOut" :disabled='UIDisable.cummunityOut' style="width:252px">
+                        <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>  
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -57,7 +60,8 @@
         </Form>
         <SectionTitle title="操作记录"></SectionTitle>
         <div class="apply-list-table">
-            <Table :columns="operateHistoryTableColums" :data="operateHistoryData" border class='list-table' />
+            <!-- <Table :columns="operateHistoryTableColums" :data="operateHistoryData" border class='list-table' /> -->
+            <OperateLog :data="operateHistoryData" class='list-table' />
         </div>
     </div>
 </template>
@@ -66,12 +70,14 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
+import OperateLog from './operateLog.vue'
 
 export default {
     components: {
         SectionTitle,
         selectCommunities,
-        selectCustomers
+        selectCustomers,
+        OperateLog
     },
     props: {
         maxbalanceOut: 0,
@@ -103,32 +109,19 @@ export default {
             },
             UIDisable:{
                 customer:true,//true 禁用
-                cummunityIn:true,
+                cummunityIn:false,
                 cummunityOut:true,
-                balance:true,
-                remark:true,
+                balance:false,
+                remark:false,
                 editBtn:false,
-                approveBtn:true,
-                rejectBtn:true
+                approveBtn:false,
+                rejectBtn:false
             },
+            communitiesOut:[],
+            communities:[],
             isEdit: false,
             approveBtnText: '同意',
             operateHistoryData: [],
-            operateHistoryTableColums: [
-                {
-                    title: '操作时间',
-                    key: 'operateTime',
-                    align: 'center'
-                }, {
-                    title: '操作人员',
-                    key: 'operatePsn',
-                    align: 'center'
-                }, {
-                    title: '备注',
-                    key: 'remark',
-                    align: 'center'
-                }
-            ],
             formItem: {
                 applyNum: 'ZY201805290001',
                 operateType: '转社区',
@@ -171,7 +164,14 @@ export default {
         },
         changeCustomer() { },
         changeCommunity() { 
-
+            this.$set(this.formItem,'communityIn',commIn)
+            let all=[].concat(this.communities);
+            this.communitiesOut=all.filter(item=>item.value!==commIn)
+            console.log(this.communitiesOut)
+            this.getMaxAmount();
+        },
+        onGetCmtsList(){
+            this.communities=[].concat(list);
         },
         handleEdit() {
             let obj={

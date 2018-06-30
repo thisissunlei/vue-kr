@@ -10,7 +10,7 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>                       
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
@@ -20,12 +20,13 @@
                     <!-- <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities> -->
                     <Select v-model="formItem.communityOut" style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>               
+                    </Select>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转移余额" style="width:252px" prop="balance">
                     <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
+                    <!-- <BlanceInputEdit :defaultValue="item.code" :blanceType="item.desc" @blanceChange='handleBlanceChange' :maxAmount='item.code' :placeholder="formatBlance(item.code)" /> -->
                 </FormItem>
                 </Col>
             </Row>
@@ -47,7 +48,7 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-
+import BlanceInputEdit from './blanceEdit.vue'
 export default {
     components: {
         SectionTitle,
@@ -74,14 +75,14 @@ export default {
             }
         };
         return {
-            maxAmount:0,
-            communitiesOut:[],
-            communities:[],
+            maxAmount: 0,
+            communitiesOut: [],
+            communities: [],
             formItem: {
                 customerID: 12246,
                 communityOut: '',
                 communityIn: '',
-                balanceOut:'',
+                balanceOut: '',
                 remark: ''
             },
             ruleCustom: {
@@ -98,50 +99,50 @@ export default {
         }
     },
     methods: {
-        getMaxAmount(){
-            let maxAmount=0
-            let parms={
-                communityId:this.formItem.communityIn,
-                customerId:this.formItem.customerID
+        getMaxAmount() {
+            let maxAmount = 0
+            let parms = {
+                communityId: this.formItem.communityIn,
+                customerId: this.formItem.customerID
             }
-            var _this=this
+            var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
-                _this.maxAmount=r.data
+                _this.maxAmount = r.data
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });
             })
 
-            this.maxAmount=maxAmount;
+            this.maxAmount = maxAmount;
         },
-        changeCustomer(item) { 
-            this.formItem=Object.assign({},this.formItem,{customerID:item})
+        changeCustomer(item) {
+            this.formItem = Object.assign({}, this.formItem, { customerID: item })
         },
-        changeCommunity(commIn) { 
-            this.$set(this.formItem,'communityIn',commIn)
-            let all=[].concat(this.communities);
-            this.communitiesOut=all.filter(item=>item.value!==commIn)
+        changeCommunity(commIn) {
+            this.$set(this.formItem, 'communityIn', commIn)
+            let all = [].concat(this.communities);
+            this.communitiesOut = all.filter(item => item.value !== commIn)
             console.log(this.communitiesOut)
             this.getMaxAmount();
         },
-        onGetCusomerList(list){
-            this.communities=[].concat(list);
+        onGetCmtsList(list) {
+            this.communities = [].concat(list);
         },
         handleSubmit(formItem) {
             debugger;
             let parms = {
-                applyMemo:this.formItem.remark,
-                communityId:this.formItem.communityIn,
-                customerId:this.formItem.customerID,
-                id:'',
-                transferType:'TRANSFER_COMMUNITY',
-                detailList:[
+                applyMemo: this.formItem.remark,
+                communityId: this.formItem.communityIn,
+                customerId: this.formItem.customerID,
+                id: '',
+                transferType: 'TRANSFER_COMMUNITY',
+                detailList: [
                     {
-                        communityIdIn:this.formItem.communityIn,
-                        communityIdOut:this.formItem.communityOut,
-                        transferAmount:this.formItem.balanceOut,
-                        transferFeeType:''
+                        communityIdIn: this.formItem.communityIn,
+                        communityIdOut: this.formItem.communityOut,
+                        transferAmount: this.formItem.balanceOut,
+                        transferFeeType: ''
                     }
                 ]
             }

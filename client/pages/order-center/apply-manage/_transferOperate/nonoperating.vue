@@ -16,51 +16,22 @@
             </Row>
             <div style="margin-bottom:30px">
                 <Col class="col amount">
-                <FormItem label="转移款项" style="width:700px" prop="balance">
+                <FormItem label="转移款项" style="width:700px" >
                     <CheckboxGroup v-model="checkGroup" @on-change='checkgroupchange'>
                         <ul>
-                            <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index" >
-                                <Row  :class="{firstrow:index===0}" class="amount-row">
-                                        <Col class='amount-col1 '>
-                                        <Checkbox :label="item.desc" />
-                                        </Col>
-                                        <Col class='amount-col2 '>
-                                        <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
-                                        <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
-                                        <span class='blance-error'>error</span>
-                                        </Col>
+                            <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index">
+                                <Row :class="{firstrow:index===0}" class="amount-row">
+                                    <Col class='amount-col1 '>
+                                    <Checkbox :label="item.desc" />
+                                    </Col>
+                                    <Col class='amount-col2 '>
+                                    <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
+                                    <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
+                                    <span class='blance-error'>error</span>
+                                    </Col>
                                 </Row>
                             </li>
                         </ul>
-
-                        <!-- <Row class="amount-row ">
-                            <div class='amount-row1'>
-                                <Col class='amount-col1 '>
-                                <Checkbox label="余额" />
-                                </Col>
-                                <Col class='amount-col2 '>
-                                <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                                <Button style='display:inline' type="text">全部转移</Button>
-                                </Col>
-                            </div>
-                        </Row>
-                        <Row class="amount-row">
-                            <Col class='amount-col1'>
-                            <Checkbox label="门禁卡押金" /> </Col>
-                            <Col class='amount-col2'>
-                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                            <Button style='display:inline' type="text">全部转移</Button>
-                            </Col>
-                        </Row>
-                        <Row class="amount-row">
-                            <Col class='amount-col1'>
-                            <Checkbox label="其他保证金" /> </Col>
-                            <Col class='amount-col2'>
-                            <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
-                            <Button style='display:inline;' type="text">全部转移</Button>
-                            </Col>
-                        </Row> -->
-
                     </CheckboxGroup>
                 </FormItem>
                 </Col>
@@ -143,27 +114,27 @@ export default {
         this.getMoneyTypeList();
     },
     methods: {
-        checkgroupchange(){
+        checkgroupchange() {
             console.log(this.checkGroup)
         },
         //转移金额BtnClick
-        handleBlanceTransClk(event){
-            let current=event.currentTarget;
-            let target=event.target;
+        handleBlanceTransClk(event) {
+            let current = event.currentTarget;
+            let target = event.target;
             let btn;
-            if (current.nodeName.toLowerCase()==='button') {
-                btn=current;
+            if (current.nodeName.toLowerCase() === 'button') {
+                btn = current;
             }
-            else if(target.nodeName.toLowerCase()==='button'){
-                btn=target
+            else if (target.nodeName.toLowerCase() === 'button') {
+                btn = target
             }
-            let li=btn.parentElement.parentElement.parentElement;
-            let maxamount=li.getAttribute('rowkey');
+            let li = btn.parentElement.parentElement.parentElement;
+            let maxamount = li.getAttribute('rowkey');
             console.log(maxamount)
 
         },
-        formatBlance(blance){
-            return '最大'+ utils.thousand((blance / 100).toFixed(2))+'元'
+        formatBlance(blance) {
+            return '最大' + utils.thousand((blance / 100).toFixed(2)) + '元'
         },
         //获取操作款项枚举
         getMoneyTypeList() {
@@ -265,7 +236,7 @@ export default {
                         width: 380px;
                         display: inline-block;
                     }
-                    .blance-error{
+                    .blance-error {
                         position: absolute;
                         top: 26px;
                         left: 0px;
@@ -273,12 +244,12 @@ export default {
                         font-size: 10px;
                     }
                 }
-                .firstrow{
-                    .amount-col1{
+                .firstrow {
+                    .amount-col1 {
                         position: absolute;
                         left: 0px;
                     }
-                    .amount-col2{
+                    .amount-col2 {
                         position: absolute;
                         left: 150px;
                     }

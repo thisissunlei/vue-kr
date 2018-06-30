@@ -28,7 +28,13 @@
                                     <!-- <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
                                     <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
                                     <span class='blance-error'>error</span> -->
-                                    <BlanceInputEdit :defaultValue="item.code" :blanceType="item.desc" @blanceChange='handleBlanceChange' :maxAmount='item.code' :placeholder="formatBlance(item.code)"/>
+                                    <BlanceInputEdit 
+                                        :canEdit="balanceCanEdit[item.desc]" 
+                                        :defaultValue="item.code" 
+                                        :blanceType="item.desc"                                    
+                                        :maxAmount='item.code' 
+                                        :placeholder="formatBlance(item.code)"
+                                        @blanceChange='handleBlanceChange' />
                                     </Col>
                                 </Row>
                             </li>
@@ -88,13 +94,12 @@ export default {
         };
         return {
             // moneyTypes: [],//操作款项
-
-            moneyTypes: [{ "code": -1, "desc": "全部" }, { "code": 1, "desc": "余额", "value": "BALANCE" }, { "code": 3, "desc": "可用服务保证金", "value": "DEPOSIT" }, { "code": 14, "desc": "门禁卡押金", "value": "GUARDCARDDEPOSIT" }, { "code": 4, "desc": "冻结服务保证金", "value": "FROZEN_DEPOSIT" }, { "code": 54, "desc": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" }, { "code": 57, "desc": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" }, { "code": 58, "desc": "注册地址押金", "value": "REGISTEREDEPOSIT" }],
-
+            moneyTypes:[],
             checkGroup: [],
             maxAmount: '0',
             communitiesOut: [],
             communities: [],
+            balanceCanEdit:{},//金额编辑是否可用
             formItem: {
                 customerID: 12246,
                 communityIn: '',
@@ -145,11 +150,21 @@ export default {
         },
         //获取操作款项枚举
         getMoneyTypeList() {
+
+            this.moneyTypes=[{ "code": -1, "desc": "全部" }, { "code": 1, "desc": "余额", "value": "BALANCE" }, { "code": 3, "desc": "可用服务保证金", "value": "DEPOSIT" }, { "code": 14, "desc": "门禁卡押金", "value": "GUARDCARDDEPOSIT" }, { "code": 4, "desc": "冻结服务保证金", "value": "FROZEN_DEPOSIT" }, { "code": 54, "desc": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" }, { "code": 57, "desc": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" }, { "code": 58, "desc": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
+            let canEdit={};
+            this.moneyTypes.map(item=>{
+                canEdit[item.desc]=false
+            })
+            this.blanceCanEdit=Object.assign({},canEdit)
+            console.log(this.blanceCanEdit)
+            return
+
             this.$http.get('get-money-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
             }).then((r) => {
                 this.moneyTypes = [].concat(r.data);
-                
+
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message

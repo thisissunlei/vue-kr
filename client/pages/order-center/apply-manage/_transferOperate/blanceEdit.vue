@@ -60,8 +60,13 @@ export default {
             this.inputvalue = this.maxAmount;
         },
         validateInput(input) {
-            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-            if (isNaN(input)) {
+            // var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            var reg=/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+            if (!reg.test(input)) {
+                this.errorText = '请填写转移金额';
+            }
+
+            else if (isNaN(input)) {
                 this.errorText = '转移金额请填写数字';
             }
             else if (Number(input) > Number(this.maxAmount)) {

@@ -1,6 +1,6 @@
 <template>
     <div class='blance-inupt'>
-        <Input  :disabled='!canEdit' v-model="inputvalue" :placeholder="placeholder" style="width: 252px"></Input>
+        <Input :disabled='!canEdit' v-model="inputvalue" :placeholder="placeholder" style="width: 252px"></Input>
         <Button v-if='btnDisable' :disabled='!canEdit' style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
         <span v-if='!!errorText' class='blance-error'>{{errorText}}</span>
     </div>
@@ -29,30 +29,42 @@ export default {
             type: Boolean,
             default: true
         },
-        btnDisable:{
-            type:Boolean,
-            default:true
+        btnDisable: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
         return {
-            inputvalue: 0,
+            inputvalue: '',
             blanceInputError: false,
             errorText: ''
         }
     },
     watch: {
+        canEdit() {
+            if (!this.canEdit) this.errorText = '';
+            else {
+                this.validateInput(this.inputvalue);
+                this.$emit('blanceChange',
+                    {
+                        blanceType: this.blanceType,
+                        blance: this.inputvalue,
+                        error: !!this.errorText
+                    })
+            }
+        },
         defaultValue() {
             this.inputvalue = this.defaultValue
         },
         inputvalue() {
             this.validateInput(this.inputvalue);
-            this.$emit('blanceChange', 
-            { 
-                blanceType: this.blanceType,
-                blance: this.inputvalue ,
-                error:!!this.errorText
-            })
+            this.$emit('blanceChange',
+                {
+                    blanceType: this.blanceType,
+                    blance: this.inputvalue,
+                    error: !!this.errorText
+                })
         }
     },
     methods: {
@@ -61,7 +73,7 @@ export default {
         },
         validateInput(input) {
             // var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-            var reg=/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+            var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
             if (!reg.test(input)) {
                 this.errorText = '请填写转移金额';
             }

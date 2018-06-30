@@ -29,8 +29,7 @@
                                     <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
                                     <span class='blance-error'>error</span> -->
                                     <BlanceInputEdit 
-                                        :canEdit="balanceCanEdit[item.desc]" 
-                                        :defaultValue="item.code" 
+                                        :canEdit="blanceCanEdit[item.desc]" 
                                         :blanceType="item.desc"                                    
                                         :maxAmount='item.code' 
                                         :placeholder="formatBlance(item.code)"
@@ -99,7 +98,8 @@ export default {
             maxAmount: '0',
             communitiesOut: [],
             communities: [],
-            balanceCanEdit:{},//金额编辑是否可用
+            blanceCanEdit:{},//金额编辑是否可用
+            initBlanceCanEdit:{},
             formItem: {
                 customerID: 12246,
                 communityIn: '',
@@ -127,7 +127,12 @@ export default {
             console.log(receiveBlance)
         },
         checkgroupchange() {
+            let copyBlanceCanEdit=Object.assign({},this.initBlanceCanEdit);
+            this.checkGroup.map(item=>copyBlanceCanEdit[item]=true)
+            this.blanceCanEdit=Object.assign({},copyBlanceCanEdit)
             console.log(this.checkGroup)
+            console.log(this.blanceCanEdit)
+
         },
         //转移金额BtnClick
         handleBlanceTransClk(event) {
@@ -156,8 +161,8 @@ export default {
             this.moneyTypes.map(item=>{
                 canEdit[item.desc]=false
             })
+            this.initBlanceCanEdit=Object.assign({},canEdit);
             this.blanceCanEdit=Object.assign({},canEdit)
-            console.log(this.blanceCanEdit)
             return
 
             this.$http.get('get-money-type-enum', {

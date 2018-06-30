@@ -10,13 +10,14 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'></selectCommunities>
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'>
+                    </selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <div style="margin-bottom:30px">
                 <Col class="col amount">
-                <FormItem label="转移款项" style="width:700px" >
+                <FormItem label="转移款项" style="width:700px">
                     <CheckboxGroup v-model="checkGroup" @on-change='checkgroupchange'>
                         <ul>
                             <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index">
@@ -28,12 +29,7 @@
                                     <!-- <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
                                     <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
                                     <span class='blance-error'>error</span> -->
-                                    <BlanceInputEdit 
-                                        :canEdit="blanceCanEdit[item.desc]" 
-                                        :blanceType="item.desc"                                    
-                                        :maxAmount='item.code' 
-                                        :placeholder="formatBlance(item.code)"
-                                        @blanceChange='handleBlanceChange' />
+                                    <BlanceInputEdit :canEdit="blanceCanEdit[item.desc]" :blanceType="item.desc" :maxAmount='item.code' :placeholder="formatBlance(item.code)" @blanceChange='handleBlanceChange' />
                                     </Col>
                                 </Row>
                             </li>
@@ -44,8 +40,8 @@
             </div>
 
             <FormItem class="remark" label="备注" style="width:650px;">
-                <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
-                <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
+                <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
+                <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
@@ -93,17 +89,17 @@ export default {
         };
         return {
             // moneyTypes: [],//操作款项
-            moneyTypes:[],
+            moneyTypes: [],
             checkGroup: [],
             maxAmount: '0',
             communitiesOut: [],
             communities: [],
-            blanceCanEdit:{},//金额编辑是否可用
-            initBlanceCanEdit:{},
+            blanceCanEdit: {},//金额编辑是否可用
+            initBlanceCanEdit: {},
             formItem: {
                 customerID: 12246,
                 communityIn: '',
-                balanceOut:[],
+                balanceOut: [],
                 remark: ''
             },
             ruleCustom: {
@@ -123,18 +119,21 @@ export default {
         this.getMoneyTypeList();
     },
     methods: {
-        handleBlanceChange(receiveBlance){
+        handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
-        },
-        checkgroupchange() {
-            let copyBlanceCanEdit=Object.assign({},this.initBlanceCanEdit);
-            this.checkGroup.map(item=>copyBlanceCanEdit[item]=true)
-            this.blanceCanEdit=Object.assign({},copyBlanceCanEdit)
-            console.log(this.checkGroup)
-            console.log(this.blanceCanEdit)
+            this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
+            // blanceType: this.blanceType,
+            // blance: this.inputvalue,
+            // error: !!this.errorText
 
         },
-        //转移金额BtnClick
+        //勾选与要提交的转移款项同步
+        checkgroupchange() {
+            let copyBlanceCanEdit = Object.assign({}, this.initBlanceCanEdit);
+            this.checkGroup.map(item => copyBlanceCanEdit[item] = true)
+            this.blanceCanEdit = Object.assign({}, copyBlanceCanEdit)
+        },
+        //转移金额BtnClick [abolish]
         handleBlanceTransClk(event) {
             let current = event.currentTarget;
             let target = event.target;
@@ -155,14 +154,13 @@ export default {
         },
         //获取操作款项枚举
         getMoneyTypeList() {
-
-            this.moneyTypes=[{ "code": -1, "desc": "全部" }, { "code": 1, "desc": "余额", "value": "BALANCE" }, { "code": 3, "desc": "可用服务保证金", "value": "DEPOSIT" }, { "code": 14, "desc": "门禁卡押金", "value": "GUARDCARDDEPOSIT" }, { "code": 4, "desc": "冻结服务保证金", "value": "FROZEN_DEPOSIT" }, { "code": 54, "desc": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" }, { "code": 57, "desc": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" }, { "code": 58, "desc": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
-            let canEdit={};
-            this.moneyTypes.map(item=>{
-                canEdit[item.desc]=false
+            this.moneyTypes = [{ "code": -1, "desc": "全部" }, { "code": 1, "desc": "余额", "value": "BALANCE" }, { "code": 3, "desc": "可用服务保证金", "value": "DEPOSIT" }, { "code": 14, "desc": "门禁卡押金", "value": "GUARDCARDDEPOSIT" }, { "code": 4, "desc": "冻结服务保证金", "value": "FROZEN_DEPOSIT" }, { "code": 54, "desc": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" }, { "code": 57, "desc": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" }, { "code": 58, "desc": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
+            let canEdit = {};
+            this.moneyTypes.map(item => {
+                canEdit[item.desc] = false
             })
-            this.initBlanceCanEdit=Object.assign({},canEdit);
-            this.blanceCanEdit=Object.assign({},canEdit)
+            this.initBlanceCanEdit = Object.assign({}, canEdit);
+            this.blanceCanEdit = Object.assign({}, canEdit)
             return
 
             this.$http.get('get-money-type-enum', {
@@ -205,13 +203,17 @@ export default {
             this.communities = [].concat(list);
         },
         handleSubmit(formItem) {
-            debugger;
+
+            let blanceTypes=[];
+
+
+
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: '',
-                transferType: 'TRANSFER_COMMUNITY',
+                transferType: 'TRANSFER_NONBUSINESS',
                 detailList: [
                     {
                         communityIdIn: this.formItem.communityIn,

@@ -99,7 +99,7 @@ export default {
             formItem: {
                 customerID: 12246,
                 communityIn: '',
-                balanceOut: [],
+                balanceOut:{},
                 remark: ''
             },
             ruleCustom: {
@@ -202,11 +202,36 @@ export default {
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
+        verifyBlance(){
+
+            // this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
+            // blanceType: this.blanceType,
+            // blance: this.inputvalue,
+            // error: !!this.errorText
+            let hasError=true //无错误
+            this.checkGroup.map(item =>{
+                hasError=hasError&&this.formItem.balanceOut[item].error
+            })
+            return !hasError
+        },
+        
         handleSubmit(formItem) {
 
-            let blanceTypes=[];
-
-
+            if(!this.verifyBlance()){
+                this.$Notice.error({title:'转移金额填写有误'});
+                return
+            }
+            let detailList=[]
+            this.checkGroup.map(item =>{
+                this.formItem.balanceOut[item]
+                let obj={
+                            communityIdIn: this.formItem.communityIn,
+                            communityIdOut: this.formItem.communityIn,
+                            transferAmount: this.formItem.balanceOut[item].blance,
+                            transferFeeType: this.formItem.balanceOut[item].blanceType,
+                        };
+                detailList.push(obj)
+            })
 
             let parms = {
                 applyMemo: this.formItem.remark,
@@ -214,14 +239,7 @@ export default {
                 customerId: this.formItem.customerID,
                 id: '',
                 transferType: 'TRANSFER_NONBUSINESS',
-                detailList: [
-                    {
-                        communityIdIn: this.formItem.communityIn,
-                        communityIdOut: this.formItem.communityOut,
-                        transferAmount: this.formItem.balanceOut,
-                        transferFeeType: ''
-                    }
-                ]
+                detailList: [].concat(detailList)
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.basicInfo = response.data;

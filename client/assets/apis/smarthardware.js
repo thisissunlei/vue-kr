@@ -101,6 +101,12 @@ export default  {
         url: '/api/iot-platform/door-device/accessible-user',
         method: 'get'
     },
+
+    //获取门禁设备详情
+    'get-smart-hardware-door-device-detail':{
+        url: '/api/iot-platform/door-device/detail',
+        method: 'get'
+    },
     
     
 

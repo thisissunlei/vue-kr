@@ -96,6 +96,11 @@ export default  {
         url: '/api/iot-platform/dict/common',
         method: 'get'
     },
+    //获取智能硬件权限所有人列表
+    'get-smart-hardware-power-owner':{
+        url: '/api/iot-platform/door-device/accessible-user',
+        method: 'get'
+    },
     
     
 

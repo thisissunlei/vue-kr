@@ -1,6 +1,19 @@
 <template>
-  <div class="overflow-label" :id="overflowId">
-      {{label}}
+  <div class="overflow-label">
+            <div v-if="!showTooltip"  :id="overflowId">
+                {{label}}
+            </div>
+           <Tooltip v-if="showTooltip" :content="label"  :always="always"  placement="top">
+            <div  :id="overflowId" :class="overflowLabelName" @click="getAlways">
+                {{label}}
+            </div>
+             <div slot="content">
+                    <div style="width:200px;word-wrap:break-word; word-break:break-normal;white-space: initial;">
+
+                    {{label}}
+                    </div>
+            </div>
+        </Tooltip>
   </div>
 </template>
 
@@ -23,21 +36,30 @@ export default {
 //   },
   data () {
     return {
-        overflowId:'overflow'+this._uid
+        always:false,
+        overflowLabelName:'overflow',
+        overflowId:'overflow'+this._uid,
+        showTooltip:false,
     }
   },
   mounted(){
       this.$nextTick(()=>{
-          console.log()
+
           const labelDom = document.getElementById(this.overflowId);
           const labelHeight = labelDom.clientHeight;
-          if(labelHeight>35){
-              labelDom.className='overflow';
+          if(labelHeight>36){
+              this.showTooltip  = true;
+              this.overflowLabelName='overflow';
+              
           }
-          console.log(labelHeight,"oooooo")
+    
       })
-    //   console.log(this.label,"pppppooooo")
-      
+
+  },
+  methods:{
+      getAlways() {
+          this.always = !this.always;
+      }
   }
 }
 </script>

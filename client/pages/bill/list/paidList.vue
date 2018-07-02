@@ -169,16 +169,17 @@ import PdfDownload from './pdfDownload';
                         key: 'payStatus',
                         align:'center',
                         render(h, obj){
-                            // if(!obj.row.billingDate){
-                            //     return '-'
-                            // }
-                            // let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
-                            // // return time;
+                            let time = '-'
+                            if(obj.row.billingDate){
+                                time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                              
+                            }
+                            
                             return h('span', { 
                                 style: {
-                                    color:'#FF6868'
+                                    // color:'#FF6868'
                                 }       
-                            }, '待付款');
+                            }, time);
                         }
                     },
                     {

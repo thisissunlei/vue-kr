@@ -1,7 +1,7 @@
 import  "./index.less" 
 import krCity from './krCity.js';
 import KrInput from './KrInput.vue'
-import PhotoAlbum from './../../components/PhotoAlbum'
+import PhotoAlbum from '~/components/PhotoAlbum'
 import OverFlowLabel from './overFlowLabel'
 import IndexData from './indexData'
 export  default  {

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import EditLabel from './../../components/KrField/EditLabel';
+import EditLabel from '~/components/KrField/EditLabel';
 export default {
     components:{
         EditLabel,

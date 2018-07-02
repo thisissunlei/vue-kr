@@ -178,6 +178,7 @@
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
             this.memberDetailList()
+            console.log(this.$route.query,"ppppppp")
         },
         methods: IndexMethod
     }

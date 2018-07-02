@@ -1,4 +1,7 @@
-export default () =>({
+
+
+export default function (){
+    return{
                 eyeIndex:1,
                 imgData:[],
                 isPhotoAlbum:false,
@@ -39,4 +42,5 @@ export default () =>({
                         trigger: 'blur'
                     }]
                 }
-})
+}
+}

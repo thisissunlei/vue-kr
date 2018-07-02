@@ -4,7 +4,7 @@
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button> 
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> 
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button> 
-            <Button type="primary" >编辑档案</Button>
+            <Button type="primary" @click="goProjectDetail">编辑档案</Button>
         </div>
 
         <div class='title-left'>
@@ -140,6 +140,13 @@
                 this.memberDetailList('openProject')
                 this.modalProject = true;
 
+            },
+            goProjectDetail(){
+                
+                console.log(this.$router,"pppppp")
+                console.log(this.$route.query,"ppppp")
+                // return ;
+                this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
             //获取项目成员
             memberDetailList(val){

@@ -1,12 +1,9 @@
 <template>
     <div class="g-icon-manage comment">
         <div class='comment-title'>
-          <!-- <div class='title-right'>
-              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  >终止该项目</Button> 
-              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> 
-              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" >查看编辑纪录</Button> <Button type="primary" >编辑档案</Button></div> -->
+          <!-- <div class='title-right'><Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  >终止该项目</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" >查看编辑纪录</Button> <Button type="primary" >编辑档案</Button></div>
 
-                    <!-- <div class='title-left'>
+                    <div class='title-left'>
                         <div class='title-name-line'><span class='title-name' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
                         <span style="color:#499DF1;font-size:14px">开业进度总览</span><span  style="color:#499DF1;font-size:14px">>骏豪-中央公园广场-物业档案</span>
@@ -14,7 +11,7 @@
 
                     </div> -->
           </div>
-            <PublicHander />
+           <PublicHander />
         <div class="div-two">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">
@@ -43,9 +40,7 @@
                           {{item.comment}}
                         </span>
                         </div>
-                        <div v-for="(img1,index) in item.photo" 
-                            :key="index"
-                            style="width:130px;height:100px;text-align:center;display:inline-block;float:left;overflow:hidden">
+                        <div v-for="(img1,index) in item.photo" :key="index" style="width:130px;height:100px;text-align:center;display:inline-block;float:left;overflow:hidden">
                          <img :src="img1.preUrl" @click='queryImgMethod(item.photo,index)' style="float:left;height:100%;padding:5px;" alt="">
                         </div>
                     </div>
@@ -55,7 +50,7 @@
         </div>
         <div class="div-one">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
-    
+
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px;text-align:left">项目档案</div>
             </div>
             <Row>
@@ -65,15 +60,15 @@
                     <Col span="8"> &nbsp;</Col>
                 </div>
                 <div>
-                    <Col span="8" :key="index" v-for=' (item,index) in  typeCodeInfo' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" v-for='(item,index) in  typeCodeInfo' :key="index" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoBusiness' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" v-for='(item,index) in  coreinfoBusiness' :key="index" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoFinance' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" v-for='(item,index) in  coreinfoFinance' :key="index" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
                             <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
@@ -98,75 +93,55 @@
                     </Input>
                 </FormItem>
             </Form>
+
             <div class="demo-upload-list" v-for="item in uploadList" :key='item.id'>
                 <template v-if="item.status === 'finished'">
                     <img :src="item.url"  >
                     <div class="demo-upload-list-cover">
                         <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
                     </div>
-                </template>
-                <template v-else>
-                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                </template>
-            </div>
-            <Upload
-                ref="upload"
-                :show-upload-list="false"
-                :default-file-list="defaultList"
-                :on-success="handleSuccess"
-                :format="['jpg','jpeg','png']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                :before-upload="handleBeforeUpload"
-                :data="data"
-                :action="getupfileurl"
-                style="display: inline-block;width:58px;"
-            >
-                <div style="width: 58px;height:58px;line-height: 58px;border:1px dashed #ccc;text-align:center">
-                    <Icon type="camera" size="20"></Icon>
-                </div>
-            </Upload>
-        </Modal>
-        <Modal v-model="modalProject" title="项目成员" width=700>
-            <div slot='footer'>
-                <Button type="default" @click='cancelproject'>取消</Button>
-                <Button type="info" @click='okproject'>确定</Button>
-            </div>
-            <div>
-                <Row>
-                    <Col 
-                        span="12" 
-                        v-if="memberDetailView" 
-                        v-for="(item,index) in  memberDetail" 
-                        :key="index"
-                    >
-                        <label 
-                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;"
-                        > 
-                            {{item.displayName}} 
-                        </label> 
-                        <KrInput 
-                            :readOrEdit="true" 
-                            :value="item.memberName" 
-                            style="width:160px" 
-                            @okClick="okClick($event,item)" 
-                        />
-                    </Col>
-                </Row>
-            </div>
-        </Modal>
-        <PhotoAlbum 
-            v-if="isPhotoAlbum" 
-            :data='imgData' 
-            :eyeIndex="eyeIndex" 
-            @close = "closeOrOpen"
-        ></PhotoAlbum>
+</template>
+<template v-else>
+    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+</template>
     </div>
+    <Upload
+        ref="upload"
+        :show-upload-list="false"
+        :default-file-list="defaultList"
+        :on-success="handleSuccess"
+        :format="['jpg','jpeg','png']"
+        :max-size="2048"
+        :on-format-error="handleFormatError"
+        :on-exceeded-size="handleMaxSize"
+        :before-upload="handleBeforeUpload"
+        :data="data"
+        :action="getupfileurl"
+        style="display: inline-block;width:58px;">
+        <div style="width: 58px;height:58px;line-height: 58px;border:1px dashed #ccc;text-align:center">
+            <Icon type="camera" size="20"></Icon>
+        </div>
+    </Upload>
+</Modal>
+<Modal v-model="modalProject" title="项目成员" width=700>
+    <div slot='footer'>
+        <Button type="default" @click='cancelproject'>取消</Button>
+        <Button type="info" @click='okproject'>确定</Button>
+    </div>
+    <div>
+            <Row>
+                <Col span="12" v-if="memberDetailView" v-for="(item,index) in  memberDetail" :key="index"><label style="width:100px;display:inline-block;text-align:right;padding-right:3px;"> {{item.displayName}} </label> <KrInput :readOrEdit="true" :value="item.memberName" style="width:160px" @okClick="okClick($event,item)" /></Col>
+            </Row>
+    </div>
+<div>
+</div>
+</Modal>
+   <PhotoAlbum v-if="isPhotoAlbum" :data='imgData' :eyeIndex="eyeIndex" @close = "closeOrOpen"></PhotoAlbum>
+  </div>
 </template>
 
 <script>
-    import  "./index.less" 
+    import  "./index.less"
     import krCity from './krCity.js';
     import KrInput from './KrInput.vue'
     import PhotoAlbum from '~/components/PhotoAlbum'
@@ -202,7 +177,6 @@
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
             this.memberDetailList()
-            console.log(this.$route.query,"ppppppp")
         },
         methods: IndexMethod
     }

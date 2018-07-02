@@ -227,7 +227,6 @@ export default {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
             }).then((r) => {
                 this.moneyTypes = [].concat({ code: -1, desc: '全部' }, r.data);
-                console.log(JSON.stringify(this.moneyTypes))
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message

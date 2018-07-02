@@ -1,29 +1,17 @@
 <template>
     <CheckboxGroup class='blance-inupt-group' v-model="checkGroupModel" @on-change='checkgroupchange'>
         <ul>
-            <li class='blance-row' v-for="(item) in dataList" :key="item.code">
+            <li class='blance-row' v-for="(item) in dataList" :key="item.feeType">
                 <div class='col-check '>
-                    <Checkbox :label="item.label" :disabled='disables[item.label].chk' />
+                    <Checkbox :label="item.feeTypeName" :disabled='disables[item.feeTypeName].chk' />
                 </div>
                 <div class='col-input '>
-                    <Input 
-                        v-model="models[item.label].input" 
-                        :name='gotRefTag(item.label)' 
-                        :disabled='disables[item.label].input' 
-                        :placeholder="formatBlance(item.amountmax)" 
-                        style="width: 252px" 
-                        @on-change='handleInputChange'>
+                    <Input v-model="models[item.feeTypeName].input" :name='gotRefTag(item.feeTypeName)' :disabled='disables[item.feeTypeName].input' :placeholder="formatBlance(item.maxAmount)" style="width: 252px" @on-change='handleInputChange'>
                     </Input>
-                    <span v-if="vifs[item.label].error" class='blance-error'>{{errorTexts[item.label]}}</span>
+                    <span v-if="vifs[item.feeTypeName].error" class='blance-error'>{{errorTexts[item.feeTypeName]}}</span>
                 </div>
                 <div class='col-btn'>
-                    <Button 
-                        v-if="vifs[item.label].btn" 
-                        :name='gotRefTag(item.label)' 
-                        :disabled='disables[item.label].btn'
-                        style='display:inline' 
-                        type="text" 
-                        @click='handleBlanceTransClk'>全部转移
+                    <Button v-if="vifs[item.feeTypeName].btn" :name='gotRefTag(item.feeTypeName)' :disabled='disables[item.feeTypeName].btn' style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移
                     </Button>
                 </div>
             </li>
@@ -46,6 +34,10 @@ export default {
             type: Boolean,
             default: true
         },
+        editType: {
+            type: String,
+            default: 'edit'
+        }
     },
     data() {
         return {
@@ -68,41 +60,52 @@ export default {
     },
     methods: {
         initStates() {
-            this.dataList.map(item => {
-                this.maxAmounts[item.label] = item.amountmax
-                this.models[item.label] = Object.assign({}, { input: '' });
-                this.disables[item.label] = Object.assign({}, { chk: false }, { input: false }, { btn: false })
-                this.vifs[item.label] = Object.assign({}, { error: false }, { btn: true })
-                this.errorTexts[item.label] = ''
-            })
+            if (this.editType === "edit") {
+                this.dataList.map(item => {
+                    this.maxAmounts[item.feeTypeName] = item.maxAmount
+                    this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});
+                    this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
+                    this.errorTexts[item.feeTypeName] = ''
+                })
+            }
+            else if (this.editType === "readonly") {
+                this.dataList.map(item => {
+                    this.maxAmounts[item.feeTypeName] = item.maxAmount
+                    this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});
+                    this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: false }, { btn: true })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: true })
+                    this.errorTexts[item.feeTypeName] = ''
+                })
+            }
         },
         gotRefTag(type) {
             return '' + type;
         },
         formatBlance(blance) {
-            return '最大' + utils.thousand((blance).toFixed(2)) + '元'
+            return '最大' + utils.thousand((blance||0).toFixed(2)) + '元'
         },
         checkgroupchange() {
             this.dataList.map(item => {
-                if (this.checkGroupModel.includes(item.label)) {
-                    this.disables[item.label] = Object.assign({}, { input: false }, { btn: false })
-                    this.vifs[item.label] = Object.assign({}, { error: false })
+                if (this.checkGroupModel.includes(item.feeTypeName)) {
+                    this.disables[item.feeTypeName] = Object.assign({}, { input: false }, { btn: false })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: true }, { btn: true })
                 }
                 else {
-
-                    this.disables[item.label] = Object.assign({}, { input: true }, { btn:false  })
-                    this.vifs[item.label] = Object.assign({}, { error: true })
+                    this.disables[item.feeTypeName] = Object.assign({}, { input: true }, { btn: true })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                 }
             })
-            
             this.$forceUpdate();
-            debugger;
             this.$emit("onChange", this.models)
         },
         handleBlanceTransClk(e) {
             let label = e.target.name || e.target.parentNode.name
             this.models[label].input = this.maxAmounts[label];
+            this.models[label].error = false;
+            this.vifs[label] = Object.assign({}, { error: false }, { btn: true })
             this.$forceUpdate();
+            this.$emit("onChange", this.models)
         },
         handleInputChange(e) {
             let label = e.target.name
@@ -113,13 +116,16 @@ export default {
                 this.$set(this.errorTexts, label, errorText)
                 let obj = Object.assign({}, this.vifs[label]);
                 this.$set(this.vifs, label, Object.assign(obj, { 'error': true }))
+                this.$set(this.models, label, Object.assign(this.models[label], { 'error': true }))
             }
             else {
                 this.$set(this.errorTexts, label, errorText)
                 let obj = Object.assign({}, this.vifs[label]);
-                this.$set(this.vifs, label, Object.assign(obj, { 'error': false }))
+                this.$set(this.vifs, label, Object.assign(obj, { 'error': true }))
+                this.$set(this.models, label, Object.assign(this.models[label], { 'error': false }))
             }
             this.$forceUpdate();
+            this.$emit("onChange", this.models)
         },
         validateInput(input, maxAmount) {
             // var pattern = /^[0-9]+(.[0-9]{1,2})?$/;

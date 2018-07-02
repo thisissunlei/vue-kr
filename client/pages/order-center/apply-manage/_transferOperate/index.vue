@@ -82,12 +82,12 @@ export default {
                     title: '操作款项',
                     key: 'detailList',
                     align: 'center',
-                    render:(tag,params)=>{
-                        let lines=[];
-                        params.row.detailList.map(item=>{
-                           lines.push( tag('p',item.transferFeeTypeName))
+                    render: (tag, params) => {
+                        let lines = [];
+                        params.row.detailList.map(item => {
+                            lines.push(tag('p', item.transferFeeTypeName))
                         })
-                        return tag('div',lines)
+                        return tag('div', lines)
                     }
                 },
                 {
@@ -95,12 +95,12 @@ export default {
                     key: 'detailList',
                     align: 'center',
                     render: (tag, params) => {
-                        let lines=[];
-                         params.row.detailList.map(item=>{
-                             let amount=utils.thousand((item.transferAmount / 100).toFixed(2))
-                           lines.push( tag('p','￥' +amount))
+                        let lines = [];
+                        params.row.detailList.map(item => {
+                            let amount = utils.thousand((item.transferAmount).toFixed(2))
+                            lines.push(tag('p', '￥' + amount))
                         })
-                        return tag('div',lines)
+                        return tag('div', lines)
                     }
                 },
                 {
@@ -112,10 +112,10 @@ export default {
                     title: '操作时间',
                     key: 'utime',
                     align: 'center',
-                    render(tag, params){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.utime));
-                                return tag('div',time)
-                        }                  
+                    render(tag, params) {
+                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
+                        return tag('div', time)
+                    }
                 },
                 {
                     title: '状态',
@@ -128,14 +128,13 @@ export default {
                     align: 'center',
                     width: 150,
                     render: (tag, params) => {
-                        console.log(tag)
-                        let status=params.row.transferStatusName
+                        let status = params.row.transferStatusName
                         var btnRender = [
                             tag(Buttons, {
                                 props: {
                                     type: 'text',
                                     label: '查看',
-                                    checkAction:'seat_order_release',
+                                    checkAction: 'seat_order_release',
                                     styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
                                 },
                                 on: {
@@ -148,7 +147,7 @@ export default {
                                 props: {
                                     type: 'text',
                                     label: '退回',
-                                    checkAction:'seat_order_release',
+                                    checkAction: 'seat_order_release',
                                     styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
                                 },
                                 on: {
@@ -167,14 +166,17 @@ export default {
                 page: 1,
                 pageSize: 15,
             },
-            transformType2UIDic:{
-                TRANSFER_COMMUNITY:'transformZoneInfo',
-                TRANSFER_BALANCE:'blanceInfo',
-                TRANSFER_NONBUSINESS:'nonoperatingInfo',
-                TRANSFER_RENT:'depositRentInfo',
-                TRANSFER_LOCK_DEPOSIT:'releaseDepositInfo'
+            transformType2UIDic: {
+                TRANSFER_COMMUNITY: 'transformZoneInfo',
+                TRANSFER_BALANCE: 'blanceInfo',
+                TRANSFER_NONBUSINESS: 'nonoperatingInfo',
+                TRANSFER_RENT: 'depositRentInfo',
+                TRANSFER_LOCK_DEPOSIT: 'releaseDepositInfo'
             }
         }
+    },
+    mounted(){
+        this.getAllApply();
     },
     methods: {
 
@@ -194,8 +196,6 @@ export default {
         },
         //搜索
         handleSearch(formItem) {
-
-
             let obj = {};
             obj.applyNo = formItem.applyNum
             obj.cityId = Number(formItem.cityId)
@@ -223,7 +223,7 @@ export default {
             this.formItem = obj;
 
             this.$http.get('get-apply-list', this.formItem, r => {
-                this.applyDatas =[].concat(r.data.items);
+                this.applyDatas = [].concat(r.data.items);
                 console.log(this.applyDatas)
             }, e => {
                 this.$Notice.error({
@@ -232,7 +232,16 @@ export default {
             })
 
         },
-
+        getAllApply() {
+            this.$http.get('get-apply-list', {}, r => {
+                this.applyDatas = [].concat(r.data.items);
+                console.log(this.applyDatas)
+            }, e => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
         //清除
         handleClear() {
 
@@ -275,10 +284,10 @@ export default {
 
         //查看申请
         handleCheckApplyInfo(params) {
-            let transformtype=params.row.transferType;
+            let transformtype = params.row.transferType;
             var viewName = this.transformType2UIDic[transformtype];
 
-            window.open(`/order-center/apply-manage/${params.row.applyNo}/${viewName}`, '_blank');
+            window.open(`/order-center/apply-manage/${params.row.id}/${viewName}`, '_blank');
         },
 
         //退回申请

@@ -18,7 +18,8 @@ export default {
     },
     //获取申请列表
     "get-apply-list": {
-        url: "/mockdata/98/transfer/list?",
+        // url: "/mockdata/98/transfer/list?",
+        url: "/ben/transfer/list?",
         method: "get"
     },
     // //获取申请列表
@@ -33,7 +34,8 @@ export default {
     },
     //获取最大转移金额
     "get-max-amount": {
-        url: "/api/krspace-pay-web/transfer/max-amount-fee",
+        // url: "/api/krspace-pay-web/transfer/max-amount-fee",
+        url: "/ben/transfer/max-amount-fee",
         method: "get"
     },
     //获取申请详情
@@ -44,6 +46,6 @@ export default {
     //提交申请
     'get-apply-submit':{
         url: "/ben/transfer/submit",
-        method: "get"
+        method: "post"
     }
 };

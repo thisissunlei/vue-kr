@@ -17,24 +17,8 @@
             </Row>
             <div style="margin-bottom:30px">
                 <Col class="col amount">
-                <FormItem label="转移款项" style="width:700px">
-                    <CheckboxGroup v-model="checkGroup" @on-change='checkgroupchange'>
-                        <ul>
-                            <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index">
-                                <Row :class="{firstrow:index===0}" class="amount-row">
-                                    <Col class='amount-col1 '>
-                                    <Checkbox  :label="item.desc" />
-                                    </Col>
-                                    <Col class='amount-col2 '>
-                                    <!-- <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
-                                    <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
-                                    <span class='blance-error'>error</span> -->
-                                    <BlanceInputEdit :canEdit="blanceCanEdit[item.desc]" :blanceType="item.desc" :maxAmount='item.code' :placeholder="formatBlance(item.code)" @blanceChange='handleBlanceChange' />
-                                    </Col>
-                                </Row>
-                            </li>
-                        </ul>
-                    </CheckboxGroup>
+                <FormItem label="转移款项" style="width:700px" prop="balance">
+                    <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -56,8 +40,8 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import utils from '~/plugins/utils';
 import BlanceInputEdit from './blanceEdit.vue'
+import BlanceInputGroup from './blanceEdit.1.vue'
 
 
 export default {
@@ -65,92 +49,55 @@ export default {
         SectionTitle,
         selectCommunities,
         selectCustomers,
-        BlanceInputEdit
+        BlanceInputEdit,
+        BlanceInputGroup
+
     },
 
     data() {
-        let maxbalanceOut = (this.maxbalanceOut / 100).toFixed(2);
-        const validateFirst = (rule, value, callback) => {
-            debugger;
-            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-
-            if (isNaN(value)) {
-                console.log('isNaN(value)', isNaN(value))
-                callback(new Error('转移金额请填写数字'))
+        const validateBlance = (rule, value, callback) => {
+            callback()
+            return;
+        };
+        const validateCustomer = (rule, value, callback) => {
+            if (!value) {
+                callback("请选择客户")
             }
-            if (Number(value) > Number(maxbalanceOut)) {
-                callback(new Error('转移金额不得大于可转金额'));
-            }
-            if (value === '') {
-                callback(new Error('请填写转移金额'));
-            } else {
-                callback();
+        };
+        const validateCummity = (rule, value, callback) => {
+            if (!value) {
+                callback("请选择社区")
             }
         };
         return {
-            // moneyTypes: [],//操作款项
-            moneyTypes: [],
-            checkGroup: [],
-            maxAmount: '0',
-            communitiesOut: [],
+            dataList: [],
             communities: [],
-            blanceCanEdit: {},//金额编辑是否可用
-            initBlanceCanEdit: {},
             formItem: {
                 customerID: 12246,
                 communityIn: '',
-                balanceOut:{},
+                balanceOut: {},
                 remark: ''
             },
             ruleCustom: {
                 communityId: [
-                    { required: true, message: '请选择社区', trigger: 'change' }
+                    { required: true, validator: validateCummity, trigger: 'change' }
                 ],
                 customerID: [
-                    { required: true, message: '请选择客户', trigger: 'change' }
+                    { required: true, validator: validateCustomer, trigger: 'change' }
                 ],
                 balance: [
-                    { required: true, trigger: 'change', validator: validateFirst }
+                    { required: true, validator: validateBlance, trigger: 'change' }
                 ]
             },
         }
     },
     mounted() {
-        this.getMoneyTypeList();
+        // this.getMoneyTypeList();
     },
     methods: {
         handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
-            this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
-            // blanceType: this.blanceType,
-            // blance: this.inputvalue,
-            // error: !!this.errorText
-
-        },
-        //勾选与要提交的转移款项同步
-        checkgroupchange() {
-            let copyBlanceCanEdit = Object.assign({}, this.initBlanceCanEdit);
-            this.checkGroup.map(item => copyBlanceCanEdit[item] = true)
-            this.blanceCanEdit = Object.assign({}, copyBlanceCanEdit)
-        },
-        //转移金额BtnClick [abolish]
-        handleBlanceTransClk(event) {
-            let current = event.currentTarget;
-            let target = event.target;
-            let btn;
-            if (current.nodeName.toLowerCase() === 'button') {
-                btn = current;
-            }
-            else if (target.nodeName.toLowerCase() === 'button') {
-                btn = target
-            }
-            let li = btn.parentElement.parentElement.parentElement;
-            let maxamount = li.getAttribute('rowkey');
-            console.log(maxamount)
-
-        },
-        formatBlance(blance) {
-            return '最大' + utils.thousand((blance / 100).toFixed(2)) + '元'
+            this.formItem.balanceOut = Object.assign({}, receiveBlance)
         },
         //获取操作款项枚举
         getMoneyTypeList() {
@@ -161,12 +108,25 @@ export default {
             })
             this.initBlanceCanEdit = Object.assign({}, canEdit);
             this.blanceCanEdit = Object.assign({}, canEdit)
+
+            // [{code label amountmax blance}]
+            this.dataList = [
+                { 'amountmax': 20, 'blance': 10, "code": -1, "label": "全部" },
+                { 'amountmax': 20, 'blance': 11, "code": 1, "label": "余额", "value": "BALANCE" },
+                { 'amountmax': 20, 'blance': 12, "code": 3, "label": "可用服务保证金", "value": "DEPOSIT" },
+                { 'amountmax': 20, 'blance': 13, "code": 14, "label": "门禁卡押金", "value": "GUARDCARDDEPOSIT" },
+                { 'amountmax': 20, 'blance': 14, "code": 4, "label": "冻结服务保证金", "value": "FROZEN_DEPOSIT" },
+                { 'amountmax': 20, 'blance': 15, "code": 54, "label": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" },
+                { 'amountmax': 20, 'blance': 16, "code": 57, "label": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" },
+                { 'amountmax': 20, 'blance': 17, "code": 58, "label": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
+
+
             return
 
             this.$http.get('get-money-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
             }).then((r) => {
-                this.moneyTypes = [].concat(r.data);
+                this.dataList = [].concat(r.data);
 
             }).catch((e) => {
                 this.$Notice.error({
@@ -174,72 +134,54 @@ export default {
                 });
             })
         },
-        getMaxAmount() {
-            let maxAmount = 0
+        getFeeAmount() {
             let parms = {
                 communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID
+                customerId: this.formItem.customerID,
+                id: ''
             }
             var _this = this
-            this.$http.post('get-max-amount', parms).then((r) => {
-                _this.maxAmount = r.data
+            this.$http.get('get-max-amount', parms).then((r) => {
+                _this.dataList = [].concat(r.data);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });
             })
-
-            this.maxAmount = maxAmount;
         },
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
-
         },
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityIn', commIn)
-            this.getMaxAmount();
+            this.getFeeAmount();
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
-        verifyBlance(){
 
-            // this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
-            // blanceType: this.blanceType,
-            // blance: this.inputvalue,
-            // error: !!this.errorText
-            let hasError=true //无错误
-            this.checkGroup.map(item =>{
-                hasError=hasError&&this.formItem.balanceOut[item].error
-            })
-            return !hasError
-        },
-        
         handleSubmit(formItem) {
+            let detailList = []
+            for (const key in this.formItem.balanceOut) {
+                if (this.formItem.balanceOut.hasOwnProperty(key)) {
+                    let obj = {
+                        communityIdIn: this.formItem.communityIn,
+                        communityIdOut: this.formItem.communityIn,
+                        transferAmount: this.formItem.balanceOut[key].input,
+                        transferFeeType: this.formItem.balanceOut[key].feeType,
+                    };
+                    detailList.push(obj)
 
-            if(!this.verifyBlance()){
-                this.$Notice.error({title:'转移金额填写有误'});
-                return
+                }
             }
-            let detailList=[]
-            this.checkGroup.map(item =>{
-                this.formItem.balanceOut[item]
-                let obj={
-                            communityIdIn: this.formItem.communityIn,
-                            communityIdOut: this.formItem.communityIn,
-                            transferAmount: this.formItem.balanceOut[item].blance,
-                            transferFeeType: this.formItem.balanceOut[item].blanceType,
-                        };
-                detailList.push(obj)
-            })
-
+            let detailStr = JSON.stringify([].concat(detailList));
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: '',
                 transferType: 'TRANSFER_NONBUSINESS',
-                detailList: [].concat(detailList)
+                detailStr: detailStr
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.basicInfo = response.data;
@@ -262,40 +204,13 @@ export default {
             width: 680px;
         }
         .col {
-            width: 50%;
+            width: 340px;
             min-width: 250px;
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
         }
         .amount {
-            .ivu-form-item-content {
-                width: 600px;
-            }
-            .ivu-checkbox-group {
-                .amount-row {
-                    top: 40px;
-                    margin-bottom: 20px;
-                    .amount-col1 {
-                        width: 150px;
-                        display: inline-block;
-                    }
-                    .amount-col2 {
-                        width: 380px;
-                        display: inline-block;
-                    }
-                }
-                .firstrow {
-                    .amount-col1 {
-                        position: absolute;
-                        left: 0px;
-                    }
-                    .amount-col2 {
-                        position: absolute;
-                        left: 150px;
-                    }
-                }
-            }
         }
         .required-label {
             font-size: 14px;

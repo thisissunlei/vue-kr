@@ -18,7 +18,23 @@
             <div style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:700px">
-                    <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
+                    <CheckboxGroup v-model="checkGroup" @on-change='checkgroupchange'>
+                        <ul>
+                            <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index">
+                                <Row :class="{firstrow:index===0}" class="amount-row">
+                                    <Col class='amount-col1 '>
+                                    <Checkbox  :label="item.desc" />
+                                    </Col>
+                                    <Col class='amount-col2 '>
+                                    <!-- <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
+                                    <Button style='display:inline' type="text" @click='handleBlanceTransClk($event)'>全部转移</Button>
+                                    <span class='blance-error'>error</span> -->
+                                    <BlanceInputEdit :canEdit="blanceCanEdit[item.desc]" :blanceType="item.desc" :maxAmount='item.code' :placeholder="formatBlance(item.code)" @blanceChange='handleBlanceChange' />
+                                    </Col>
+                                </Row>
+                            </li>
+                        </ul>
+                    </CheckboxGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -42,7 +58,6 @@ import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import utils from '~/plugins/utils';
 import BlanceInputEdit from './blanceEdit.vue'
-import BlanceInputGroup from './blanceEdit.1.vue'
 
 
 export default {
@@ -50,9 +65,7 @@ export default {
         SectionTitle,
         selectCommunities,
         selectCustomers,
-        BlanceInputEdit,
-        BlanceInputGroup
-
+        BlanceInputEdit
     },
 
     data() {
@@ -75,7 +88,6 @@ export default {
             }
         };
         return {
-            dataList: [],
             // moneyTypes: [],//操作款项
             moneyTypes: [],
             checkGroup: [],
@@ -87,7 +99,7 @@ export default {
             formItem: {
                 customerID: 12246,
                 communityIn: '',
-                balanceOut: {},
+                balanceOut:{},
                 remark: ''
             },
             ruleCustom: {
@@ -109,7 +121,7 @@ export default {
     methods: {
         handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
-            this.formItem.balanceOut[receiveBlance.blanceType] = receiveBlance
+            this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
             // blanceType: this.blanceType,
             // blance: this.inputvalue,
             // error: !!this.errorText
@@ -149,19 +161,6 @@ export default {
             })
             this.initBlanceCanEdit = Object.assign({}, canEdit);
             this.blanceCanEdit = Object.assign({}, canEdit)
-
-// [{code label amountmax blance}]
-            this.dataList = [
-                {'amountmax':20,'blance':10,"code": -1, "label": "全部" },
-                {'amountmax':20,'blance':11,"code": 1, "label": "余额", "value": "BALANCE" },
-                {'amountmax':20,'blance':12,"code": 3, "label": "可用服务保证金", "value": "DEPOSIT" },
-                {'amountmax':20,'blance':13,"code": 14, "label": "门禁卡押金", "value": "GUARDCARDDEPOSIT" },
-                {'amountmax':20,'blance':14,"code": 4, "label": "冻结服务保证金", "value": "FROZEN_DEPOSIT" },
-                {'amountmax':20,'blance':15,"code": 54, "label": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" },
-                {'amountmax':20,'blance':16,"code": 57, "label": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" },
-                {'amountmax':20,'blance':17,"code": 58, "label": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
-
-
             return
 
             this.$http.get('get-money-type-enum', {
@@ -203,34 +202,34 @@ export default {
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
-        verifyBlance() {
+        verifyBlance(){
 
             // this.formItem.balanceOut[receiveBlance.blanceType]=receiveBlance
             // blanceType: this.blanceType,
             // blance: this.inputvalue,
             // error: !!this.errorText
-            let hasError = true //无错误
-            this.checkGroup.map(item => {
-                hasError = hasError && this.formItem.balanceOut[item].error
+            let hasError=true //无错误
+            this.checkGroup.map(item =>{
+                hasError=hasError&&this.formItem.balanceOut[item].error
             })
             return !hasError
         },
-
+        
         handleSubmit(formItem) {
 
-            if (!this.verifyBlance()) {
-                this.$Notice.error({ title: '转移金额填写有误' });
+            if(!this.verifyBlance()){
+                this.$Notice.error({title:'转移金额填写有误'});
                 return
             }
-            let detailList = []
-            this.checkGroup.map(item => {
+            let detailList=[]
+            this.checkGroup.map(item =>{
                 this.formItem.balanceOut[item]
-                let obj = {
-                    communityIdIn: this.formItem.communityIn,
-                    communityIdOut: this.formItem.communityIn,
-                    transferAmount: this.formItem.balanceOut[item].blance,
-                    transferFeeType: this.formItem.balanceOut[item].blanceType,
-                };
+                let obj={
+                            communityIdIn: this.formItem.communityIn,
+                            communityIdOut: this.formItem.communityIn,
+                            transferAmount: this.formItem.balanceOut[item].blance,
+                            transferFeeType: this.formItem.balanceOut[item].blanceType,
+                        };
                 detailList.push(obj)
             })
 

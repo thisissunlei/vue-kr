@@ -1,6 +1,6 @@
 <template>
   <div class="g-power-owner">
-            <SectionTitle title="门禁权限所有人列表" />
+            <SectionTitle title="门禁权限详情" />
             <div class="page-box">
                 <DeviceData :data="deviceInfo"/>
                 <div class="table-box">
@@ -69,7 +69,7 @@ export default {
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.time))+"——"+dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.time)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.startAt))+"——"+dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.endAt)))
                             ]);
                             
                         }
@@ -106,9 +106,9 @@ export default {
 
    },
    mounted(){
-       this.searchData.deviceId = this.$route.query.deviceId || "";
+    //    this.searchData.deviceId = this.$route.query.deviceId || "";
 
-    //    this.searchData.id = this.$route.query.id || "";
+       this.searchData.id = this.$route.query.id || "";
        this.getListData();
    },
    methods:{
@@ -118,14 +118,14 @@ export default {
            let _this =this;
            let params = this.searchData;
 
-            // this.$http.get('get-smart-hardware-power-owner',params).then((res)=>{
-            this.$http.get('get-open-log-list',params).then((res)=>{
+            this.$http.get('get-smart-hardware-power-owner',params).then((res)=>{
+            // this.$http.get('get-open-log-list',params).then((res)=>{
 
                 _this.loading = false;
                 var resData = res.data;
                 console.log("resData",resData)
                 // _this.deviceInfo = resData.deviceInfo;
-                _this.powerOwnerList = resData.items;
+                _this.powerOwnerList = resData.list;
                 
                 
             }).catch((error)=>{

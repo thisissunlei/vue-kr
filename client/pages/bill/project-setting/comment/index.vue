@@ -1,16 +1,20 @@
 <template>
     <div class="g-icon-manage comment">
         <div class='comment-title'>
-          <div class='title-right'><Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  >终止该项目</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" >查看编辑纪录</Button> <Button type="primary" >编辑档案</Button></div>
+          <!-- <div class='title-right'>
+              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  >终止该项目</Button> 
+              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> 
+              <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" >查看编辑纪录</Button> <Button type="primary" >编辑档案</Button></div> -->
 
-                    <div class='title-left'>
+                    <!-- <div class='title-left'>
                         <div class='title-name-line'><span class='title-name' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
                         <span style="color:#499DF1;font-size:14px">开业进度总览</span><span  style="color:#499DF1;font-size:14px">>骏豪-中央公园广场-物业档案</span>
                         </div>
 
-                    </div>
+                    </div> -->
           </div>
+            <PublicHander />
         <div class="div-two">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">
@@ -169,11 +173,13 @@
     import OverFlowLabel from './overFlowLabel'
     import IndexData from './indexData'
     import IndexMethod from './indexMethod'
+    import PublicHander from '../public-hander'
     export default {
         components:{
             KrInput,
             PhotoAlbum,
-            OverFlowLabel
+            OverFlowLabel,
+            PublicHander
         },
         data() {
             return  IndexData.call(this)

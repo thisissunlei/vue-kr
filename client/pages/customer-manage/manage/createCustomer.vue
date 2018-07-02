@@ -155,11 +155,7 @@
                     contactName:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    contactTel:[
-                        { required: true, message: '请填写客户联系人电话'},
-                        { required: true, trigger: 'blur' ,validator: validatephone},
-
-                    ],
+                  
                     sourceId:[
                         { required: true, message: '请选择客户来源'}
                     ],

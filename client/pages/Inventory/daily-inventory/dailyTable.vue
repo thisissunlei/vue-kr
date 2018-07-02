@@ -194,7 +194,7 @@ export default {
                     width:90,
                     render(tag, params){
                         var ren=params.row.statusName?params.row.statusName:'-'
-                        return <span style={params.row.statusName=='不可用'?'color:red':''}>{ren}</span>
+                        return <span style={(params.row.statusName=='不可用' || params.row.statusName=='下架') ?'color:red':''}>{ren}</span>
                     }
                 },
                 {

@@ -152,6 +152,10 @@ export default  {
         url: '/api/krspace-finance-web/cmt/goods/add/device',
         method: 'post'
     },
-
+    //新增商品添加设备
+    'goods-ceshi': {
+        url: '/song/api/krspace-order-web/goods/test/text',
+        method: 'get'
+    },
   }
   

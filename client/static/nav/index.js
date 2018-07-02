@@ -18,6 +18,7 @@
     function setHref(type, router) {
         var href = '';
         var alias = '/new/#/';
+        var hostname = location.hostname;
         var port = location.port || '';
         if (port) {
             port = ":" + port;
@@ -25,7 +26,11 @@
         if (type && type == "vue") {
             alias = '/';
         }
-        href = location.protocol + "//" + location.hostname + port + alias + router;
+        if(type && type == "member"){
+            alias = '/';
+            hostname =  'memberadmin.krspace.cn';
+        }   
+        href = location.protocol + "//" + hostname + port + alias + router;
         return href;
     }
     //获取侧边栏里的数据
@@ -555,6 +560,12 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
+                        {
+                            primaryText: '协助客户授权',
+                            router: 'accredit',
+                            type:'member',
+                            menuCode: 'op_admin_auth'
+                        },
                     ]
                 },
                 {
@@ -687,12 +698,19 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        //}, 
+                        //},
+                        {
+                            primaryText: '会议室',
+                            router: 'product/meeting',
+                            type: 'vue',
+                            menuCode: 'meeting_room_goods',
+                        },
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
+                        
                     ]
                 },
              ]
@@ -858,7 +876,7 @@
                        
                         {
                             primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
+                            menuCode: 'pm_manage_role',
                             type: 'vue',
                             router: 'nav-config'
                         },
@@ -982,6 +1000,12 @@
                             menuCode: 'ops_tool_management',
                             type: 'vue',
                             router: 'ops'
+                        },
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'sso_loginLog_base',
+                            type: 'vue',
+                            router: 'nav-config'
                         },
 
                     ]

@@ -14,10 +14,10 @@
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-                <Button style="margin-right:20px;" type="primary"    @click="butNewgoods">新增商品</Button>
-                <Button style="margin-right:20px;" type="primary"   @click="importgoods">导入商品</Button>
+                <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
+                <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
          </div>
 
             <Table 
@@ -93,6 +93,7 @@
                    @newdateForm="newStatus"
                    :floorList="floorList"
                    :floorValue='floor'
+                   ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
@@ -107,8 +108,8 @@
             style="text-align:left;"
             >
             <div style="text-align:left;">
-                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">{{errdated}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <h2 style="color:red;margin-bottom:10px;"><span style="color:red;text-decoration:underline;">{{errdated}}</span></h2>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
     
              <div slot="footer">
@@ -128,7 +129,7 @@
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" @click="showpush">我知道了</Button>
+                 <Button type="primary" @click="showpushe">我知道了</Button>
             </div>
      </Modal>
 
@@ -168,32 +169,12 @@
     <div>
     <Form-item  label='移动办公室：' style="text-align:left;"    >
         <span>{{resect.moveStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in moveStationse"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-            </span> -->
      </Form-item >
-
             <Form-item  label='独立办公室：' style="text-align:left;"  >
                 <span>{{resect.openStations}}</span>
-            <!-- <span
-                      v-for="(item,index) in spaces"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item >
-
             <Form-item  label='固定办公室：' style="text-align:left;"  >
                 <span>{{resect.spaces}}</span>
-            <!-- <span
-                      v-for="(item,index) in openStations"
-                      :key="item.id"
-                    >
-            <span  v-if="index!=0">,</span> <span>{{item.name}}</span>
-             </span> -->
             </Form-item > 
         </div>
 </Form> 
@@ -208,7 +189,7 @@
             style="text-align:left;"
             >
             <div style="text-align:left;">
-                <p>请及时在<span style="color:red;text-decoration:underline;" >平面图配置</span>中配置商品位置</p>
+                <p>请及时在<span  @click="clanar"    style="color:red;text-decoration:underline;cursor: pointer;" >平面图配置</span>中配置商品位置</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -227,10 +208,9 @@
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
-    
              <div slot="footer">
                  <Button type="primary" @click="determine" >确定导入</Button>
-                 <Button type="ghost" style="margin-left:20px" >取消</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="cencel" >取消</Button>
             </div>
     </Modal>
     <Modal
@@ -250,7 +230,7 @@
 
     
     <Modal
-            :title="feactye"
+            :title="warnCode"
             v-model="butpudyt"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -261,7 +241,7 @@
             </div>
     
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" >我知道了</Button>
+                 <Button type="primary"  @click="innown">我知道了</Button>
             </div>
      </Modal>
 
@@ -274,10 +254,12 @@
            v-if="openService"
            @submit="submitService"
            @cancel="cancelService"
-           :singleForms="singleForms"
+           :singleForms="tabForms"
            :floor="newgoodForm.floor"
         />
-        <div slot='footer'></div>
+        <div slot="footer">
+        
+         </div>
      </Modal>
 
     </div>
@@ -297,28 +279,31 @@ import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
+import Buttons from '~/components/Buttons';
 export default {
 
 
 
         name:'Join',
        components:{
-       Loading,
-       SearchForm,
-       Message,
-       SlotHead,
-       ChangeStatus,
-       Newgoods,
-         FlagLabel,
-        ToolTip,
-        ImportFile,
-        BindService
-    },
-      props:{
-            mask:String
-        },
-    data() {
-        return{
+                Loading,
+                SearchForm,
+                Message,
+                SlotHead,
+                ChangeStatus,
+                Newgoods,
+                FlagLabel,
+                ToolTip,
+                ImportFile,
+                BindService,
+                Buttons
+                 },
+        props:{
+                mask:String
+            },
+          data() {
+                return{
+            warnCode:'',
             openService:false,
             fiteter:'',
             feactye:'',
@@ -333,7 +318,6 @@ export default {
                 openStations:"",
                 spaces:"",
             },
-           
             moveStations:'',//导入成功返回移动办公室列表
             spaces:'',//导入成功返回独立办公室列表	
             stations:'',//导入成功返回固定办公桌列表
@@ -362,7 +346,6 @@ export default {
             vImport:false,//导入
             warn:'',
             MessageType:'',
-   
             openMessage:false,
             statusForm:{},
             newgoodForm:{},
@@ -377,15 +360,49 @@ export default {
             width:'',
             totalCount:0,
             attractColumns:[
-                {
-                    title: '商品编号',
-                    key: 'code',
-                    align:'center' 
-                },
+                // {
+                //     title: '商品编号',
+                //     key: 'code',
+                //     align:'center' 
+                // },
                 {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
+                     render(h, params){
+                         var ile= params.row.name;
+                         var nes=params.row.duplicateNo;
+                          var btnRender=[];
+                          if(params.row.duplicateNo==0){
+                                btnRender=[
+                                   h('p', {                                       
+                                        },ile),
+                                ];
+                          }else{
+                                 btnRender.push(
+                                     h('p', { 
+                                        
+                                        },ile),
+                                         h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },'('),
+                                         h('span', { 
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            },'有重复 '),
+                                               h('span', { 
+                                                style: {
+                                                    color:'black'
+                                                }       
+                                            },' 编号'+nes+')'),
+                            )
+                          }
+                          return h('div',btnRender)
+
+                    }
                 },
                 {
                     title: '商品类型',
@@ -405,24 +422,24 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                        return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: params.row.locationTypeName+' '+params.row.suiteTypeName
+                         var bacsk=params.row.suiteTypeName;
+                         var devel=params.row.locationTypeName;
+                         var colorClass='redClas' ; 
+                          return h('div', [
+                                        h('span',{
+                                          attrs: {
+
+                                              class:colorClass
                                         }
-                                    }, [
-                                    h('div', [
-                                        h('div',{
-                                          style:{
-                                                textOverflow:'ellipsis',
-                                                whiteSpace:'nowrap',
-                                                overflow: 'hidden'
-                                           }
-                                        },params.row.locationTypeName+' '+params.row.suiteTypeName),
-                                    ])
-                                ])
-                        ])
+                                        },devel),
+                                        h('span',{
+                                          
+                                        attrs: {
+                                                class:colorClass
+                                            }
+
+                                        },bacsk),
+                                    ])                               
                     }
                 },
                 {
@@ -488,7 +505,7 @@ export default {
                         }
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
-                                var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起';
+                                var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+' ';
                                  var staRender=item.goodsStatusName?item.goodsStatusName:'-';
                                 return h('div', [
 
@@ -558,7 +575,8 @@ export default {
             floor:'',
             serviceId:'',
             statusOldData:[],
-            singleForms:{}    
+            singleForms:{},
+            floorStr:'',    
         }
     },
         mounted(){
@@ -587,11 +605,18 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+
+            showpushe(){
+                this.butpushd=!this.butpushd;
+            },
+
         cityFloor(params){
-            this.singleForms=Object.assign({},this.tabForms,params);
-            this.getListData(this.singleForms);
+            this.tabForms=Object.assign({},this.tabForms,params,{page:1});
+            //this.getListData(this.tabForms);
         },
         submitService(params){
+             this.showpush();
+            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
             let data={
                 goodsType:this.newgoodForm.goodsType,
                 basicSpaceId:params.basicSpaceId,
@@ -599,14 +624,18 @@ export default {
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
-                this.showpush();
-                this.getListData(this.tabForms);
+                this.getListData(this.tabForms)
+                this.butpushd=!this.butpushd;
+        
             }).catch((error)=>{
                this.$Notice.error({
                     title:error.message
                 }); 
             })
         },
+
+    
+
         cancelService(){
             this.openService=!this.openService;
         },
@@ -617,6 +646,7 @@ export default {
             this.floorList = [].concat(list);
         },
          butNewgoods(){//新增商品
+                    
                      this.newmodal=!this.newmodal;      
                   },
         showStatus(){
@@ -628,7 +658,12 @@ export default {
         getbutpudyt(){
             this.butpudyt=!this.butpudyt
         },      
+          innown(){
+            this.butpudyt=!this.butpudyt
+        },      
          getsubGoods(){//注意
+
+                    // this.newmodal=!this.newmodal;
                      this.careful=!this.careful;
                      },
          butPush(){//成功
@@ -640,98 +675,116 @@ export default {
          showtPush(){//二次确定
               this.careful=!this.careful;
          },   
-
-            buttPush(){
-                    this.butPush();
-                    this.getsubGoods();
-                    this.getNew();
-            },
-            primarye(){
-                this.butsuccess=!this.butsuccess;
-            },
+        buttPush(){
+            this.newmodal=!this.newmodal;
+                this.butPush();
+                this.getsubGoods();
+                this.getNew();
+        },
+        primarye(){
+            this.butsuccess=!this.butsuccess;
+        },
             //添加弹窗2
-            subGoods(){
-                        //新增重名     
-                     let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                       console.log('66666666666666666666',this.tabForms);
-                    
-                     this.$http.get('getNew-Rename',data).then((response)=>{
-                             this.getNew();
-                             this.butNewgoods();
-                    }).catch((error)=>{
-                        console.log('err',error)
-                              if(!error.message){
-                                   this.getsubGoods(error.data);
-                                   this.errdate=error.data;
-                            } else{
-                                this.openMessage=true;
-                                this.MessageType="error";
-                                this.warn=error.message;
-                            } 
-                    })
-            },
+        subGoods(){
+              let newPage=this.$refs.goodsNewPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       // this.newmodal=!this.newmodal;
+                            //新增重名     
+                            // console.log('fdfffff',this.tabForms);
+                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+                            // console.log('66666666666666666666',this.tabForms);
+                            this.$http.get('getNew-Rename',data).then((response)=>{
+                                    this.getNew();
+                                    
+                                // this.newmodal=!this.newmodal;
+                        }).catch((error)=>{
+                            // console.log('err',error)
+                                    if(error.code==-1){
+                                        this.newmodal=!this.newmodal;
+                                        this.getsubGoods();
+                                        // this.getListData();
+                                        this.errdated=error.message;
+                                }else{
+                                    this.openMessage=true;
+                                    this.MessageType="error";
+                                    this.warn=error.message;
+                                } 
+                        })
+                    }
+                })
+
+
+
+
+            
+        },
        //新增接口a
         getNew(){
-         console.log('id--',this.tabForms);
+        //  console.log('id--',this.tabForms);
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
          this.$http.post('getNew-lyadded',data).then((response)=>{ 
-            this.serviceId=response.data;
-            this.cancelService(); 
+              this.serviceId=response.data;
+              this.getListData(this.tabForms);
+              this.cancelService(); 
+              this.butNewgoods();
             }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
             })
+        },
+        cencel(){
+                this.carel=!this.carel;
         },
         //导入入口
         importgoods(){
                 this.vImport=!this.vImport;
         },
         subsuccess(){
-                this.butsuccess=!this.butsuccess
-        },      
-        
+                    this.butsuccess=!this.butsuccess
+        },    
         importsu(){
                 this.importsuccess=!this.importsuccess;
         },
         downFile(){
-            window.open('/api/order/goods/import/download-template');
+            var a = document.createElement('a');
+            a.href = '/api/order/goods/import/download-template';
+            a.download = name || "";
+            a.click();
+            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
-
         },
-    upload(file){//商品导入重复
-    // console.log('ppppppppppp',file)
-    // this.vImport=!this.vImport;
+        upload(file){//商品导入重复
+        // console.log('ppppppppppp',file)
+        // this.vImport=!this.vImport;
          this.importgoods();
          let _this = this;
          this.fiteter=file;
          var form = new FormData();
+
+        // console.log(this.tabForms.floor,"ppppp")
+         form.append('floors',this.floorStr);
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
          var xhr = new XMLHttpRequest();
 		 xhr.onreadystatechange = function() {
 			 if (xhr.readyState === 4) {
 				 if (xhr.status === 200) {
-                     console.log('eeessssssssssss', xhr.response.code )
+                    //  console.log('eeessssssssssss', xhr.response.code )
 					 if (xhr.response && xhr.response.code > 0) {
-                        _this.importsu();
-                        // _this.judgeRepeat(file)
-                        
-
+                        _this.judgeRepeat(file);
 					 } else {
                   if(xhr.response.code==-1){
-                      
                             _this.getsubGods();
                             _this.errdate=xhr.response.message;
                     }
                      else if(xhr.response.code==-2){
                          _this.getbutpudyt();
-                        _this.openMessage=true;
-                        _this.MessageType="error";
-                        _this.warn=xhr.response.message;
+                        _this.warnCode=xhr.response.message;
                     }else if(xhr.response.code==-3){
                        _this.getpudyt(); 
                        _this.feactye=xhr.response.message;
@@ -754,7 +807,6 @@ export default {
                         this.warn=error.message;
                     } 
         },
-    
         getsubGods(){
                     this.carel=!this.carel;
         },
@@ -762,28 +814,26 @@ export default {
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.judgeRepeat();
+        this.importsuccess=!this.importsuccess;
+        // this.judgeRepeat();
         this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      
         // console.log('<iiiiiiii>',file)
-            
             let _this = this;
             var form = new FormData();
-            form.append('goodsData',this.fiteter);
+            form.append('goodsData',this.fiteter); 
             form.append('communityId',this.tabForms.communityId);
+    
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        console.log('eeesss2222ss', xhr.response.code )
+                        
                         if (xhr.response && xhr.response.code > 0) {
                             _this.success(xhr.response);
                         } else {
                             _this.error(xhr.response);
-                            _this.$Notice.error({
-                                title:xhr.response.message
-                            });
                         }
                     }
                     else {
@@ -798,6 +848,7 @@ export default {
             xhr.send(form);
         },
         success(response){
+            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
             // this.importgoods();
             this.resect=response.data;
@@ -808,12 +859,26 @@ export default {
                   this.MessageType="error";
                   this.warn=response.message;
         },
-        initData(formItem){
+        initData(formItem,floorList){
+            // console.log('hhihhh',foorlist)
+        
+            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
-            this.singleForms=Object.assign({},this.tabForms);
+            var str='';
+            if(this.tabForms.floor==' '||this.tabForms.floor==''){
+                // for
+                for(var i=floorList.length-1; i>=0; i--){
+                    if(floorList[i].floor!=' '){
+                             str=str+floorList[i].floor+','
+                    }
+                }
+                str=str.substring(0,str.length-1);
+                this.floorStr = str;
+            }
+           console.log('floorListfloorListfloorListfloorList',floorList)
         },
         searchClick(values){
-            this.tabForms=Object.assign({},this.tabForms,values);
+            this.tabForms=Object.assign({},this.tabForms,values,{page:1});
             //utils.addParams(this.tabForms);
         },
         clearClick(values){
@@ -824,7 +889,7 @@ export default {
            this.statusForm=Object.assign({},obj);  
         },
          newStatus(obj){
-           console.log('eeeeeeeeeeeeeeeee',obj)
+        //    console.log('eeeeeeeeeeeeeeeee',obj)
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){
@@ -889,15 +954,14 @@ export default {
                 return '';
             }
         },
-
-determine(){//确定导入
-    this.getsubGods();
-    // this.subsuccess();
-    this.judgeRepeat();
-},
-
+        determine(){//确定导入
+            this.getsubGods();
+            this.subsuccess();
+            this.judgeRepeat();
+          
+        },
       //滚动监听
-      onScrollListener(){            
+         onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
             var headDom=document.querySelectorAll('div.slot-head-attract-investment')[0];
             if(headDom){
@@ -909,33 +973,35 @@ determine(){//确定导入
             }else{
                 this.theHead=false;
             }
-      },
-      tableChange(select){
-          this.statusData=select;
-          this.statusOldData=select;
-      },
-      getListData(params){//列表
-           this.loading=true;
-           this.$http.get('getGoodsList',params).then((response)=>{
-               console.log('商品列表',response.data);
-                this.totalCount=response.data.totalCount;
-                this.attractData=response.data.items;           
-                this.name=response.data;    
-                this.loading=false;
-            }).catch((error)=>{
-                this.openMessage=true;
-                this.MessageType="error";
-                this.warn=error.message;
-            })
-      },
-      onPageChange(page){
-         this.tabForms.page=page;
-         this.getListData(this.tabForms); 
-      },
-      onMessageChange(data){
-        this.openMessage=data;
-      }
-    }
+            },
+            tableChange(select){
+                this.statusData=select;
+                this.statusOldData=select;
+            },
+            getListData(tabParams){//列表
+                this.loading=true;
+                let params = Object.assign({},tabParams)
+                params.floor = params.floor.length>1?' ':params.floor;
+                this.$http.get('getGoodsList',params).then((response)=>{
+                    console.log('商品列表',response.data);
+                    this.totalCount=response.data.totalCount;
+                    this.attractData=response.data.items;           
+                    this.name=response.data;    
+                    this.loading=false;
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                })
+            },
+            onPageChange(page){
+                this.tabForms=Object.assign({},this.tabForms,{page:page})
+                //this.getListData(this.tabForms); 
+            },
+            onMessageChange(data){
+            this.openMessage=data;
+            },
+        }
 }
 </script>
 <style lang='less'>
@@ -1006,5 +1072,8 @@ determine(){//确定导入
                 background-color: #f6f6f6;
             }
         }
+     }
+     .ww{
+         color: black;
      }
 </style>

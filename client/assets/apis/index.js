@@ -18,6 +18,7 @@ import Krmeeting from './krmeeting.js';
 import DoorRelationship from './doorRelationship.js';
 import KrmeetingRoom from './krmeetingRoom.js';
 import comment from './comment.js';
+import ProductGoods from './productGoods.js';
 export default {
   ...OrderApi,
   ...OrderManageApi,
@@ -37,5 +38,6 @@ export default {
   ...Krmeeting,
   ...DoorRelationship,
   ...KrmeetingRoom,
-  ...comment
+  ...comment,
+  ...ProductGoods
 }

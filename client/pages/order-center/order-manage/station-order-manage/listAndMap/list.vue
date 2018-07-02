@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="list-and-map-list">
         <div>
             <Select 
                v-model="formItem.floor" 
@@ -34,7 +34,7 @@
                 <Option v-for="item in suiteTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </div>
-        <div style="margin-top:20px;height:500px;overflow:auto;">
+        <div class="table-list" :style="{height:(page.height-300)+'px'}">
             <Table :loading="loading" stripe  :columns="attractColumns" :data="attractData" border @on-selection-change="tableChange">
                 <div slot="loading">
                     <Loading/>
@@ -61,6 +61,10 @@ export default {
             type:Object,
             default:{}
         },
+        stationData:{
+            type:Array,
+            default:()=>[]
+        }
     }, 
     components:{
        Loading
@@ -142,16 +146,32 @@ export default {
             endParams:{
                 deleteData:[],
                 submitData:[]
-            }
+            },
+            page:{}
         }
      },
      mounted(){
+        this.getPageWidthOrHeight();
         this.initFormat();
         let params=Object.assign({},this.params,this.formItem);
         this.getListData(params);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },
      methods:{
+        //获取屏幕的高度
+        getPageWidthOrHeight(){
+            var page = {};
+            page.width = window.innerWidth;
+            page.height = window.innerHeight;
+            if(document.compatMode == 'CSS1Compat'){
+                page.width = document.documentElement.clientWidth;
+                page.height = document.documentElement.clientHeight;
+            }else{
+                page.width = document.body.clientWidth;
+                page.height = document.body.clientHeight;
+            }
+            this.page = Object.assign({},page);
+        },
         initFormat(){
             this.floorList=[].concat(this.floors);
             let len=this.floorList.length;
@@ -167,8 +187,7 @@ export default {
                this.formItem.floor=this.params.floor;
             }
             let params=Object.assign({},this.params,this.formItem);
-            let newStation=[];
-            this.$emit('clear',newStation);
+            this.$emit('clear');
             this.getListData(params);
         },
         getListData(params){
@@ -187,11 +206,11 @@ export default {
              var list=Object.assign({},item);
              list.name=item.cellName;
              list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
-             list.seatId=item.belongId;
              list.id=item.belongId;
+             list.originalPrice=item.originalPrice||item.seatPrice||'';
              return list
          })
-         this.endParams.submitData=[].concat(param);
+         this.endParams.submitData=[].concat(param).concat(this.stationData);
          this.$emit('on-result-change',this.endParams);
        }
     }
@@ -199,5 +218,10 @@ export default {
 </script>
 
 <style lang='less' scoped>
-     
+     .list-and-map-list{
+         .table-list{
+             margin-top:20px;
+             overflow:auto;
+         }
+     }
 </style>

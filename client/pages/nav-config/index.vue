@@ -34,8 +34,7 @@
     <Modal
         v-model="openEdit"
         :title="title"
-        @on-ok="ok"
-        @on-cancel="cancel"
+    
     >
         <div>
             <div v-if="openEdit">
@@ -116,11 +115,11 @@
             </div>
 
         </div>
-         <!-- <div slot="footer">
-            <FormItem >
-                <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
-            </FormItem>
-        </div> -->
+         <div slot="footer">
+    
+                <Button type="default" @click="cancel">取消</Button>
+                <Button type="primary" @click="ok">确定</Button>
+        </div>
     </Modal>
 </div>
 </template>
@@ -133,6 +132,7 @@ export default {
         return{
             updatePersonid:'',
             editRoleId:'',
+            loading: true,
             roleid:0,
             totalCount:0,
             userData: [],
@@ -290,11 +290,13 @@ export default {
                     if (valid) {
                         this.$http.post("roleSave",params).then((res)=>{
                 
+                        this.openEdit = false
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
                          this.$Message.info("操作成功");
                         }).catch((e)=>{
+                            this.openEdit = false
                             console.log(e)
                              this.$Notice.info({
                                     title: '系统提示',
@@ -303,6 +305,7 @@ export default {
                         })
                     
                     } else {
+                         this.openEdit = true
                         console.log(params)
                     }
                 
@@ -312,12 +315,13 @@ export default {
                      console.log(params,valid)
                         if (valid) {
                         this.$http.post("roleEidtDetail",params).then((res)=>{
-                
+                        this.openEdit = false
                         this.editRoleId =''
                         this.getRoleS()
                         this.getRoleEdit()
                          this.$Message.info("操作成功");
                          }).catch((e)=>{
+                             this.openEdit = false
                             console.log(e)
                              this.$Notice.info({
                                     title: '系统提示',
@@ -326,6 +330,7 @@ export default {
                         })
                       
                     } else {
+                        this.openEdit = true
                          console.log(params)
                     }
             
@@ -336,6 +341,8 @@ export default {
 
         },
         cancel () {
+            
+             this.openEdit = false;
             // this.$Message.info('Clicked cancel');
         },
         goEdit(){

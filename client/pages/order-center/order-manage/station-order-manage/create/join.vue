@@ -194,9 +194,8 @@
         width="90%"
         class-name="vertical-center-modal"
      >
-        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" @clear="clear"/>
-        <div slot="footer">
-            <span v-if="selectLen&&openStation">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
+        <div slot="footer">  
             <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
             <Button  @click="cancelStation">取消</Button>
         </div>
@@ -442,7 +441,6 @@ import ListAndMap from '../listAndMap';
                 priceError:false,
                 //录入单价的数组
                 priceToStation:[],
-                selectLen:0
 
             }
         },
@@ -495,9 +493,6 @@ import ListAndMap from '../listAndMap';
            }
         },
         methods: {
-            clear(val){
-                this.selectLen=val.length;
-            },
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -1158,7 +1153,6 @@ import ListAndMap from '../listAndMap';
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 console.log('onResultChange',val)
-                this.selectLen=val.submitData.length;
                 this.stationData = val;
                  
             },
@@ -1167,7 +1161,6 @@ import ListAndMap from '../listAndMap';
                     submitData:this.stationList,
                     deleteData:[],
                 };
-                this.selectLen=0;
                 this.openStation = false
 
             },

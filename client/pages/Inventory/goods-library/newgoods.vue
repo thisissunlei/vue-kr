@@ -1,19 +1,18 @@
  <template>         
-     <Form ref="formItem" :model="formItem" style="text-align:left"  :rules="ruleInvestment"  label-position="top">
+     <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;" placeholder="请选择楼层" :rules="ruleInvestment"  label-position="top">
 
             
-                  <Form-item label="所在楼层" class='daily-form'> 
+                  <Form-item label="所在楼层" style="text-align:left" class='daily-form'> 
                         <Select 
                             v-model="formItem.floor" 
-                            placeholder="所在楼层" 
+                            placeholder="请选择楼层" 
                             style="width: 200px"
                             clearable
                         >
-                            <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
+                            <Option v-for="item in newFloorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
                         </Select> 
                     </Form-item>
-
-                    <Form-item label="商品名称" class='daily-form' prop="name" >
+                    <Form-item label="商品名称"  style="text-align:left"  class='daily-form' prop="name" >
                             <i-input 
                                 v-model="formItem.name" 
                                 placeholder="请输入商品名称"
@@ -21,19 +20,17 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                      </Form-item>
-
-                    <Form-item label="商品类型" class='daily-form'> 
+                    <Form-item label="商品类型"     style="text-align:left"   class='daily-form'> 
                           <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
+                            v-model="formItem.goodsType"
+                            placeholder="请选择商品类型" 
                             style="width: 200px;"
                             clearable
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select> 
                     </Form-item>
-
-                    <Form-item v-if="formItem.goodsType=='SPACE'" prop="capacity" label="工位数" class='daily-form'> 
+                    <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
                                 v-model="formItem.capacity" 
                                placeholder="请输入工位数" 
@@ -41,8 +38,7 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                     </Form-item>
-
-                     <Form-item label="面积" class='daily-form' prop="area"  style="padding-left:10px;margin-left:-10px;"> 
+                     <Form-item label="面积" class='daily-form' style="text-align:left;padding-left:10px;margin-left:-10px;"  prop="area" > 
                             <i-input 
                                 v-model="formItem.area" 
                                 style="width: 200px;"
@@ -51,9 +47,11 @@
                             />	
                      </Form-item>
 
-                      <Form-item v-if="formItem.goodsType=='SPACE'"  label="方位" class='daily-form'>     
+                      <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"   label="方位" class='daily-form'>     
+
                         <Select 
                             v-model="formItem.locationType" 
+                            placeholder="请选择方位"
                             style="width: 200px;"
                             clearable
                         >
@@ -61,17 +59,18 @@
                          </Select> 
                      </Form-item>
 
-                     <Form-item v-if="formItem.goodsType=='SPACE'"  label="是否套间" class='daily-form'>     
+                     <Form-item v-if="formItem.goodsType=='SPACE'"  style="text-align:left"  label="是否套间" class='daily-form'>     
                                     <Select 
+                                    placeholder="请选择套间"
                                     v-model="formItem.suiteType" 
                                     style="width: 200px;"
                                     clearable
                                 >
-                                    <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                      </Form-item>
 
-                      <Form-item label="商品定价"  prop="quotedPrice" class='daily-form'>
+                      <Form-item label="商品定价"  prop="quotedPrice" style="text-align:left"  class='daily-form'>
                             <i-input 
                                 v-model="formItem.quotedPrice" 
                                 style="width: 200px;"
@@ -79,19 +78,16 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-                        <Form-item label="补充描述" prop="descr"  class='daily-form'>
-                            <i-input 
+                        <Form-item label="补充描述" prop="descr"  style="text-align:left"  class='daily-form'>
+                            
+                            <Input
+                                 type="textarea"
                                 v-model="formItem.descr" 
                                 style="width: 200px"
                                 placeholder="请输入描述"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
- 
-               
-                 
-
-    
     </Form>   
 </template>
 <script>
@@ -160,40 +156,38 @@ import dateUtils from 'vue-dateutils';
             };
 
             return{
-            
+                 enmuKey:'',
                 formItem:
-                {   
-                    floor:this.floorValue,//所在楼层
-                    name:'',//商品名称
-                    goodsType:' ',//商品类型
-                    capacity:'',//工位数
-                    area:'',//面积
-                    locationType:' ',//方位
-                    suiteType:'',//套间
-                    quotedPrice:'',//商品定价
-                    descr:'',//补充描述
-                 
-                },
+                        {   
+                            floor:this.floorValue,//所在楼层
+                            name:'',//商品名称
+                            goodsType:'',//商品类型
+                            capacity:'',//工位数
+                            area:'',//面积
+                            locationType:'',//方位
+                            suiteType:'',//套间
+                            quotedPrice:'',//商品定价
+                            descr:'',//补充描述
+                        
+                        },
                 // floorList:[],//所在楼层list
                  productList:[//商品类型list
-                    {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                  locationList:[//是否套间list
-                     {value:'SUITE',label:'有套间'},
-                    {value:'UNSUITE',label:'无套间'},
-                    {value:'UNKNOWN',label:'未知'},
+                    //  {value:'SUITE',label:'有套间'},
+                    // {value:'UNSUITE',label:'无套间'},
+                    // {value:'UNKNO',label:'有2套间'},
+                    // {value:'UNKNOWN',label:'未知'},
                 ],
                 locationTypeList:[
-
-                        {value:' ',label:'全部方位'},
                     {value:'OUTSIDE_SPACE',label:'外侧间'},
                     {value:'INSIDE_SPACE',label:'内侧间'},
                     {value:'UNKNOWN',label:'未知'}
                 ],
-                
+                newFloorList:[], 
             ruleInvestment: {
                     name:[
                         { validator: validateName, trigger: 'change' }
@@ -211,24 +205,43 @@ import dateUtils from 'vue-dateutils';
                         { validator: validateStation, trigger: 'change' }
                     ],
                     
-                         },
+                         }
             }
         },
         mounted(){
-        console.log('sss',this.seacchValue)
+        this.newFloorList=[].concat(this.floorList);
+        if(this.newFloorList.length>1){
+            this.newFloorList.splice(0,1);
+        }
+        this.getSelectData();
+        this.$emit('newdateForm',this.formItem);
         // console.log('eeeeeeeeeeeee',this.floorList)
+     
                 },
         watch:{
-              
+
+            
+
         },
         updated(){
             this.$emit('newdateForm',this.formItem);
         },
         methods:{
-            //新增借口
 
 
-
+                  //枚举 
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.community.SpaceSuiteType'
+            }).then((response)=>{
+               this.locationList=response.data;
+               console.log('<------------->',this.locationList)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
 
         //回车          
         onKeyEnter(){

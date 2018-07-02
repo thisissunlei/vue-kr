@@ -32,6 +32,7 @@ export default {
     },
     data() {
         return {
+            isFinancialSide: false,
             operateTypeIndex: 0,
             operateTypes: [
                 {
@@ -128,22 +129,30 @@ export default {
                     align: 'center',
                     width: 150,
                     render: (tag, params) => {
+
+                        // 待处理时财务人员查看显示按钮“查看”和“退回”，非财务人员查看时显示“查看”；
+                        // 已处理时所有人员查看只显示按钮“查看”。
+                        // 已退回时所有人员查看显示按钮“查看”、“编辑”和“删除”
+
                         let status = params.row.transferStatusName
-                        var btnRender = [
-                            tag(Buttons, {
-                                props: {
-                                    type: 'text',
-                                    label: '查看',
-                                    checkAction: 'seat_order_release',
-                                    styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.handleCheckApplyInfo(params)
-                                    }
+
+                        var btnRender = [];
+                        btnRender.push(tag(Buttons, {
+                            props: {
+                                type: 'text',
+                                label: '查看',
+                                checkAction: 'seat_order_release',
+                                styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
+                            },
+                            on: {
+                                click: () => {
+                                    this.handleCheckApplyInfo(params)
                                 }
-                            }),
-                            tag(Buttons, {
+                            }
+                        }), )
+
+                        if (status === '待处理' && this.isFinancialSide) {
+                            btnRender.push(tag(Buttons, {
                                 props: {
                                     type: 'text',
                                     label: '退回',
@@ -155,8 +164,23 @@ export default {
                                         this.handleRejectApply(params)
                                     }
                                 }
-                            })
-                        ];
+                            }))
+                        }
+                        else if (status === '已退回') {
+                            btnRender.push(tag(Buttons, {
+                                props: {
+                                    type: 'text',
+                                    label: '删除',
+                                    checkAction: 'seat_order_release',
+                                    styles: 'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.handleDeleteApply(params)
+                                    }
+                                }
+                            }))
+                        }
                         return tag('div', btnRender);
                     }
                 }
@@ -175,7 +199,7 @@ export default {
             }
         }
     },
-    mounted(){
+    mounted() {
         this.getAllApply();
     },
     methods: {
@@ -234,8 +258,8 @@ export default {
         },
         getAllApply() {
             this.$http.get('get-apply-list', {}, r => {
+                this.isFinancialSide = r.data.financialSide;
                 this.applyDatas = [].concat(r.data.items);
-                console.log(this.applyDatas)
             }, e => {
                 this.$Notice.error({
                     title: e.message
@@ -299,6 +323,9 @@ export default {
                 viewName = 'joinView';
             }
             window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`, '_blank');
+        },
+        handleDeleteApply(params) {
+
         }
     }
     ,

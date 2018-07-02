@@ -1,6 +1,6 @@
 <template>
     <div class="com-select-community">
-        <Select :v-model="test.communityIn" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
+        <Select v-model="defaultValue" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
             <Option v-for="option in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -26,15 +26,21 @@ import http from '~/plugins/http.js';
                 loading1:false,
                 options1:[],
                 labelInValue:true,
-                clearable:true
+                clearable:true,
+                defaultValue:''
             };
         },
         mounted:function(){
             this.getCusomerList(' ')
+            console.log(this.test)
         },
         watch:{
             customerId(){
                 this.getCusomerList();           
+            },
+            test(){
+                console.log(this.test,'watch_test')
+                this.defaultValue=this.test.communityIn
             }
         },
         methods: {
@@ -70,7 +76,8 @@ import http from '~/plugins/http.js';
                         list.push(obj)
                     });
                     _this.loading1 = false;
-                    _this.options1 = list;
+                    _this.options1 = [].concat(list);
+                    console.log(list)
                     _this.$emit("onGetCmtsList",[].concat(list))
                     }).catch((error)=>{
                         this.$Notice.error({

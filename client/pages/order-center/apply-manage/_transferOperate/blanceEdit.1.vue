@@ -28,7 +28,7 @@ export default {
     props: {
         dataList: {
             type: Array,
-            default: () => []//[{code label amountmax blance}]
+            default: () => []//[{feeType feeTypeName maxAmount amount}]
         },
         groupCanEdit: {
             type: Boolean,
@@ -63,7 +63,7 @@ export default {
             if (this.editType === "edit") {
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
-                    this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});
+                    this.models[item.feeTypeName] = Object.assign({}, { input: item.amount },{feeType:item.feeType});
                     this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                     this.errorTexts[item.feeTypeName] = ''

@@ -12,9 +12,25 @@
 
 <script>
    export default {
+    props:{
+        isShowEdit:{
+            type:Boolean
+        }
+    },
+    watch:{
+      isShowEdit:function(val){
+          if(!val){
+              this.data.push('操作');
+          }else{
+              if(this.data.length==11){
+                  this.data.splice(10,1);
+              }
+          }
+      }
+    },
     data() {
         return{
-            data:['商品名称','商品类型','工位数量','商品属性','面积','商品定价','当前状态','后续状态变化','设备锁定','商品设置',]
+            data:['商品名称','商品类型','工位数量','商品属性','面积','商品定价','当前状态','后续状态变化','设备绑定','商品设置']
         }
     }
 }

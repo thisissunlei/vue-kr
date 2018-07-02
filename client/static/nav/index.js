@@ -28,7 +28,7 @@
         }
         if(type && type == "member"){
             alias = '/';
-            hostname =  'memberadmintest03.krspace.cn';
+            hostname =  'memberadmin.krspace.cn';
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;
@@ -560,12 +560,12 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
-                        // {
-                        //     primaryText: '协助客户授权',
-                        //     router: 'accredit',
-                        //     type:'member',
-                        //     menuCode: 'customer_assets'
-                        // },
+                        {
+                            primaryText: '协助客户授权',
+                            router: 'accredit',
+                            type:'member',
+                            menuCode: 'op_admin_auth'
+                        },
                     ]
                 },
                 {

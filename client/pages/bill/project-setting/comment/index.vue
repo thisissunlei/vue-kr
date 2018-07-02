@@ -42,6 +42,7 @@
                         </span>
                         </div>
                         <div v-for="(img1,index) in item.photo" 
+                            :key="index"
                             style="width:130px;height:100px;text-align:center;display:inline-block;float:left;overflow:hidden">
                          <img :src="img1.preUrl" @click='queryImgMethod(item.photo,index)' style="float:left;height:100%;padding:5px;" alt="">
                         </div>

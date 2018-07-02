@@ -151,15 +151,7 @@ var layoutScrollHeight=0;
                          render(tag,params){ 
                           var end='';      
                           if(params.row.payableAmount){
-                             var parent=(''+params.row.payableAmount/100).split('.');
-                             var first=utils.thousand(parent[0]);
-                             var second='';
-                             if(parent.length>1){
-                                 second=Number(parent[1])<10?parent[1]+'0':parent[1];
-                             }else{
-                                 second='00'; 
-                             }
-                             end=first+'.'+second;
+                             end=utils.thousand(params.row.payableAmountStr);
                           }else{
                              end='-';
                           }
@@ -176,15 +168,7 @@ var layoutScrollHeight=0;
                          render(tag,params){ 
                           var end='';      
                           if(params.row.debt){
-                             var parent=(''+params.row.debt/100).split('.');
-                             var first=utils.thousand(parent[0]);
-                             var second='';
-                             if(parent.length>1){
-                                 second=Number(parent[1])<10?parent[1]+'0':parent[1];
-                             }else{
-                                 second='00'; 
-                             }
-                             end=first+'.'+second;
+                             end=utils.thousand(params.row.debtStr);
                           }else{
                              end='-';
                           }
@@ -281,8 +265,6 @@ var layoutScrollHeight=0;
             getData(params){
                 params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
                 params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
-                params.debtMin=params.debtMin?(params.debtMin*100+'').split('.')[0]:'';
-                params.debtMax=params.debtMax?(params.debtMax*100+'').split('.')[0]:'';
                 this.$http.get('Overduelist', params).then((res)=>{
 
                     this.tableList=res.data.items;

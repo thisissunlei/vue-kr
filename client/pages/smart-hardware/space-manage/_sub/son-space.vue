@@ -133,7 +133,7 @@ export default {
             addSpace:false,
             tabAllParams:{
                 page:1,
-                pageSize:10,
+                pageSize:10
             },
             tabParams:{
                 page:1,
@@ -329,7 +329,8 @@ export default {
             this.tabAllParams={
                 page:1,
                 pageSize:10,
-                communityId:communityId
+                communityId:communityId,
+                hasParent : false
             }
             this.getTableAllData(this.tabAllParams)
         },
@@ -362,13 +363,27 @@ export default {
         },
         getTableAllData(para){
             this.$http.get('get-space-actions-list', para).then((res)=>{
-                this.tableListAll=res.data.items;
+                
+                
+                this.tableListAll=this.setCheckboxDisable(res.data.items);
                 this.totalAllCount=res.data.totalCount;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
                 });
             })
+        },
+        setCheckboxDisable(data){
+            var resItems = data,items;
+            let {params}=this.$route;
+            var parentId = params.sub
+            items = resItems.map(function(item,index){
+                if(item.id == parentId){
+                    item._disabled = true;
+                }
+                return item;
+            })
+            return items;
         },
         getTableData(para){
             let {params}=this.$route;

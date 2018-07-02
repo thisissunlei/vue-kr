@@ -66,5 +66,9 @@ export default  {
     'roleEidtDetail':{//'/api/pm/role/action/detail',
         url:'/api/pm/role/action/edit',
         method:'post'
+    },
+    "typePage":{
+        url:'/api/pm/discuss/list/type/page',
+        method:'get'
     }
 }

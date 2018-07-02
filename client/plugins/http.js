@@ -9,6 +9,7 @@ const env = process.env.NODE_ENV;
 
 axios.defaults.withCredentials = true;
 
+<<<<<<< HEAD
 axios.defaults.mode = "cors";
 
 axios.interceptors.request.use(
@@ -38,6 +39,33 @@ function toType(obj) {
         .call(obj)
         .match(/\s([a-zA-Z]+)/)[1]
         .toLowerCase();
+=======
+axios.defaults.mode = 'cors';
+
+
+axios.interceptors.request.use(config => {
+  if(config.method  == 'post'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
+  if(config.url.indexOf('mockjs ') !==-1 ){
+    config.baseURL = 'http://rap.krspace.cn';
+  }else if(config.url.indexOf('/st/') !==-1){
+    config.url = config.url.split('/st/')[1]
+    config.baseURL = 'http://st.krspace.cn';
+  }else{
+    config.baseURL = '/';
+  } 
+
+  return config
+}, error => {
+ return Promise.reject(error)
+})
+
+
+function toType (obj) {
+ return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+>>>>>>> feature/项目管理六期
 }
 // 参数过滤函数
 function filterNull(o) {

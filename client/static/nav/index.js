@@ -880,6 +880,12 @@
                             type: 'vue',
                             router: 'nav-config'
                         },
+                        {
+                            primaryText: '项目管理权限',
+                            menuCode: 'sso_loginLog_base',
+                            type: 'vue',
+                            router: 'comment'
+                        }
                     ]
                 },
                 {

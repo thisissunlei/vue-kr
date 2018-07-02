@@ -1,7 +1,10 @@
  <template>         
      <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;" placeholder="请选择楼层" :rules="ruleInvestment"  label-position="top">
 
-            
+                 <div style="color:red;margin-bottom:20px;">
+                    下方数据编辑后立即生效，可能影响历史数据如有需要请下架商品再重新创建商品
+                 </div>
+
                   <Form-item label="所在楼层" style="text-align:left" class='daily-form' prop="floor"> 
                         <Select 
                             v-model="formItem.floor" 
@@ -91,8 +94,9 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-    </Form>   
-</template>
+                      <div>启用状态、绑定设备、平面图配置可在列表中直接点击操作</div>
+            </Form>   
+        </template>
 <script>
 import dateUtils from 'vue-dateutils';
     export default{

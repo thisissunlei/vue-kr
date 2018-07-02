@@ -7,8 +7,8 @@
                 <span class="goods-title">当前定价</span>
                 <span class="goods-title" style="width:210px;">更新后定价</span>
             </div>
-            <div id="goodsPriceScrollFuck" class="goodsPriceScrollFuck">
-                    <div  style="display:inline-block;width:100px;">
+            <div id="goodsPriceScrollFuck" class="goodsPriceScrollFuck" @mouseover="leftOver" @mouseout="leftOut">
+                    <div  style="display:inline-block;width:100px;vertical-align:top;">
                         <span 
                             class="left-font"
                             v-for="item in joinData"
@@ -17,7 +17,7 @@
                             {{item.name}}
                         </span>
                     </div>
-                    <div   style="display:inline-block;width:100px;"> 
+                    <div   style="display:inline-block;width:100px;vertical-align:top;"> 
                         <span 
                             class="left-font"
                             v-for="item in joinData"
@@ -33,6 +33,7 @@
                     v-model="numArea" 
                     id="goodsAreaScrollFuck"
                     @on-change="areaChange"
+                    @on-keydown="keyDown"
                 />
             </div>
         </div>
@@ -98,7 +99,8 @@ export default {
                     align:'center',
                 }
             ],
-            priceList:[]
+            priceList:[],
+            changeList:[]
         }
     },
     mounted(){
@@ -106,15 +108,28 @@ export default {
        rightPrice=document.getElementById('goodsAreaScrollFuck').querySelector('textarea');
        leftPrice=document.getElementById('goodsPriceScrollFuck');
        rightPrice.addEventListener('scroll',this.scrollRight,false);
-       leftPrice.addEventListener('scroll',this.scrollLeft,false);
     },
     destroyed(){
         rightPrice&&rightPrice.removeEventListener("scroll",this.scrollRight);
-        leftPrice&&leftPrice.removeEventListener('resize',this.scrollLeft); 
     },
     methods:{
+       keyDown(event){
+            event = event || window.event;
+            if(this.changeList.length==this.data.length){
+                if(event.keyCode == 13) {
+                  event.returnValue = false;
+                }
+            }
+       },
        areaChange(e){
-           this.numReplace=e.target.value.replace(/\n/g,'-');  
+           let middle=e.target.value.replace(/\n/g,'-');
+           this.numReplace=e.target.value.replace(/\n/g,'-');
+           this.changeList=middle.split('-');
+           if(this.changeList.length>=this.data.length){
+               this.changeList.splice(this.data.length,this.changeList.length-this.data.length);
+               this.numReplace=([].concat(this.changeList)).join('-');
+               this.numArea=([].concat(this.changeList)).join('\n');
+           }  
        },
        submitPriceFirst(){
            let data={
@@ -149,8 +164,11 @@ export default {
        cancelSecond(){
            this.priceList=[];
        },
-       scrollLeft(e){
-           rightPrice.scrollTop=leftPrice.scrollTop;
+       leftOver(){
+           leftPrice.style.overflow='hidden';
+       },
+       leftOut(){
+           leftPrice.style.overflow='auto';
        },
        scrollRight(e){
            leftPrice.scrollTop=rightPrice.scrollTop;
@@ -171,6 +189,7 @@ export default {
                     height:100%;
                     textarea.ivu-input{
                         height:100%;
+                        line-height: 26px;
                     }
                 }
           }
@@ -179,6 +198,7 @@ export default {
               width:100%;
               text-align:center;
               font-size:14px;
+              line-height: 26px;
           }
           .goods-title{
             width: 100px;
@@ -194,6 +214,9 @@ export default {
               height:100%;
               height:300px;
               overflow:auto;
+          }
+          .goodsPriceScrollFuck::-webkit-scrollbar {
+               width:0px;
           }
      }
 </style>

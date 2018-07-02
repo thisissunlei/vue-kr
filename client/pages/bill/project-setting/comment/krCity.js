@@ -1,4 +1,4 @@
-import cityData from '~/components/KrField/data/cityData.json'
+import cityData from './../../components/KrField/data/cityData.json'
 
 export default (cityValue)=>{
    return getProvince(cityValue);

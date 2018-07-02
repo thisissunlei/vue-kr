@@ -1,18 +1,16 @@
 <template>
     <div class="g-icon-manage comment">
-        <div class='detail-title'>
+        <div class='comment-title'>
+          <div class='title-right'><Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  >终止该项目</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" >查看编辑纪录</Button> <Button type="primary" >编辑档案</Button></div>
+
                     <div class='title-left'>
-                        <div class='title-name-line'><span class='title-name'>项目档案</span></div>
-                        <div class='title-bread'>
-                            <Breadcrumb separator=">">
-                                <BreadcrumbItem to="/bill/project-setting">首页</BreadcrumbItem>
-                                <BreadcrumbItem><span  style="cursor:pointer;">开业进度总览>骏豪-中央公园广场-物业档案</span></BreadcrumbItem>
-                            </Breadcrumb>
+                        <div class='title-name-line'><span class='title-name' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
+
+                        <span style="color:#499DF1;font-size:14px">开业进度总览</span><span  style="color:#499DF1;font-size:14px">>骏豪-中央公园广场-物业档案</span>
                         </div>
+
                     </div>
-                    <div class='title-right'><Button type="primary"  >查看编辑记录</Button></div>
-                    <div class='title-right'><Button type="default" style="color:#4F9EED;border:1px solid #4F9EED" @click="openProject" >项目成员</Button></div>
-        </div>
+          </div>
         <div class="div-two">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">

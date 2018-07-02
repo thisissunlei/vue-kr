@@ -7,9 +7,9 @@
               :type="type"
         />
 
-        <div style="padding:0px 20px;">
+        <!-- <div style="padding:0px 20px;">
              <Button type="primary" @click="goAddPage">新建</Button>
-        </div>
+        </div> -->
 
         <div style="padding:0px 20px;">
        

@@ -34,9 +34,9 @@ export default {
             type: Boolean,
             default: true
         },
-        editType: {
-            type: String,
-            default: 'edit'
+        readOnly: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         initStates() {
-            if (this.editType === "edit") {
+            if (!this.editType) {
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount },{feeType:item.feeType});
@@ -69,7 +69,7 @@ export default {
                     this.errorTexts[item.feeTypeName] = ''
                 })
             }
-            else if (this.editType === "readonly") {
+            else{
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});

@@ -32,7 +32,7 @@
             <div style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:700px" prop="balance">
-                    <BlanceInputGroup :dataList='feeTypeArray' @onChange="handleBlanceChange"></BlanceInputGroup>
+                    <BlanceInputGroup :dataList='feeTypeArray' :readOnly='UIDisable.balance' @onChange="handleBlanceChange"></BlanceInputGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -94,7 +94,7 @@ export default {
         };
         return {
             UIShowAble: {
-                editBtn: true,//true显示
+                editBtn: false,//true显示
                 approveBtn: false,
                 rejectBtn: false
             },
@@ -104,16 +104,15 @@ export default {
                 cummunityOut: true,
                 balance: true,
                 remark: true,
-                editBtn: false,
-                approveBtn: false,
-                rejectBtn: false
+                editBtn: true,
+                approveBtn: true,
+                rejectBtn: true
             },
             receivedApplyInfo: {},
             feeTypeArray: [],
-        
             communities: [],
-            isFinancialSide:false,//是否财务端查看 
-            transferStatus:'',//申请处理状态
+            isFinancialSide: false,//是否财务端查看 
+            transferStatus: '',//申请处理状态 
             approveBtnText: '同意',
             operateHistoryData: [],
             formItem: {
@@ -161,11 +160,35 @@ export default {
             })
         },
         //校验查看编辑权限
-        checkRights(status,isFinancialSide) {
-            // 待处理时财务人员查看显示按钮“查看”和“退回”，非财务人员查看时显示“查看”；
-            // 已处理时所有人员查看只显示按钮“查看”。
-            // 已退回时所有人员查看显示按钮“查看”、“编辑”和“删除”
-            
+        checkRights(status, isFinancialSide) {
+            //   UIShowAble: {
+            //         editBtn: false,//true显示
+            //         approveBtn: false,
+            //         rejectBtn: false
+            //     },
+            //  UIDisable: {
+            //         customer: true,//true 禁用
+            //         cummunityIn: true,
+            //         cummunityOut: true,
+            //         balance: true,
+            //         remark: true,
+            //         editBtn: false,
+            //         approveBtn: false,
+            //         rejectBtn: false
+            //     },
+
+            if (status === '待处理') {
+                if (isFinancialSide) {
+                    this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: true }, { approveBtn: true }, { rejectBtn: true })
+                    this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: false }, { approveBtn: false }, { rejectBtn: false })
+                }
+            } else if (status === '已处理') {
+
+            } else if (status === '已退回') {
+                this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: true }, { approveBtn: true }, { rejectBtn: false })
+                this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: false }, { approveBtn: false }, { rejectBtn: true })
+            }
+
         },
         //获取转移款项
         getFeeAmount() {

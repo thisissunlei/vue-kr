@@ -57,7 +57,8 @@ function filterNull (o) {
 function check401(res) {
  res = res.data;
    if (res.code ===-4011) {
-     window.location.href = '/new/login.html';
+     const redirectUrl = encodeURIComponent(window.location.href);
+     window.location.href = `/new/login.html?RU=${redirectUrl}`;
    } else if (res.code ===-4033) {
      // console.log('您没有操作权限，请联系管理员')
    }

@@ -107,9 +107,9 @@ export default {
    },
    mounted(){
     //    this.searchData.deviceId = this.$route.query.deviceId || "";
-
-       this.searchData.id = this.$route.query.id || "";
-       this.getListData();
+        GLOBALSIDESWITCH("false");
+        this.searchData.id = this.$route.query.id || "";
+        this.getListData();
    },
    methods:{
        

@@ -147,7 +147,7 @@
     import  "./index.less" 
     import krCity from './krCity.js';
     import KrInput from './KrInput.vue'
-    import PhotoAlbum from './../../components/PhotoAlbum'
+    import PhotoAlbum from '~/components/PhotoAlbum'
     import OverFlowLabel from './overFlowLabel'
     import IndexData from './indexData'
     import IndexMethod from './indexMethod'
@@ -178,6 +178,7 @@
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
             this.memberDetailList()
+            console.log(this.$route.query,"ppppppp")
         },
         methods: IndexMethod
     }

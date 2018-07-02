@@ -46,7 +46,7 @@
                     <Button type="primary"  style="margin-right: 20px;float:right;margin-top:-45px;" @click="deleteData(index)" v-if="invoiceData.length>1">删除</Button>
 
                 </div>
-                <Button type="primary" :disabled="addSubmit" style="margin-left: 20px;" @click="addData">添加</Button>
+                <Button type="primary" :disabled="addSubmit" style="margin-left: 20px;" @click="addData">添加多张</Button>
                 
             </div>
             <div slot="footer">

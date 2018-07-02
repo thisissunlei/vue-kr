@@ -94,51 +94,71 @@
                     </Input>
                 </FormItem>
             </Form>
-    
             <div class="demo-upload-list" v-for="item in uploadList" :key='item.id'>
                 <template v-if="item.status === 'finished'">
                     <img :src="item.url"  >
                     <div class="demo-upload-list-cover">
                         <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
                     </div>
-</template>
-<template v-else>
-    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-</template>
+                </template>
+                <template v-else>
+                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                </template>
+            </div>
+            <Upload
+                ref="upload"
+                :show-upload-list="false"
+                :default-file-list="defaultList"
+                :on-success="handleSuccess"
+                :format="['jpg','jpeg','png']"
+                :max-size="2048"
+                :on-format-error="handleFormatError"
+                :on-exceeded-size="handleMaxSize"
+                :before-upload="handleBeforeUpload"
+                :data="data"
+                :action="getupfileurl"
+                style="display: inline-block;width:58px;"
+            >
+                <div style="width: 58px;height:58px;line-height: 58px;border:1px dashed #ccc;text-align:center">
+                    <Icon type="camera" size="20"></Icon>
+                </div>
+            </Upload>
+        </Modal>
+        <Modal v-model="modalProject" title="项目成员" width=700>
+            <div slot='footer'>
+                <Button type="default" @click='cancelproject'>取消</Button>
+                <Button type="info" @click='okproject'>确定</Button>
+            </div>
+            <div>
+                <Row>
+                    <Col 
+                        span="12" 
+                        v-if="memberDetailView" 
+                        v-for="(item,index) in  memberDetail" 
+                        :key="index"
+                    >
+                        <label 
+                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;"
+                        > 
+                            {{item.displayName}} 
+                        </label> 
+                        <KrInput 
+                            :readOrEdit="true" 
+                            :value="item.memberName" 
+                            style="width:160px" 
+                            @okClick="okClick($event,item)" 
+                        />
+                    </Col>
+                </Row>
+            </div>
+        </Modal>
+        <PhotoAlbum 
+            v-if="isPhotoAlbum" 
+            :data='imgData' 
+            :eyeIndex="eyeIndex" 
+            @close = "closeOrOpen"
+        ></PhotoAlbum>
     </div>
-    <Upload
-        ref="upload"
-        :show-upload-list="false"
-        :default-file-list="defaultList"
-        :on-success="handleSuccess"
-        :format="['jpg','jpeg','png']"
-        :max-size="2048"
-        :on-format-error="handleFormatError"
-        :on-exceeded-size="handleMaxSize"
-        :before-upload="handleBeforeUpload"
-        :data="data"
-        :action="getupfileurl"
-        style="display: inline-block;width:58px;">
-        <div style="width: 58px;height:58px;line-height: 58px;border:1px dashed #ccc;text-align:center">
-            <Icon type="camera" size="20"></Icon>
-        </div>
-    </Upload>
-</Modal>
-<Modal v-model="modalProject" title="项目成员" width=700>
-    <div slot='footer'>
-        <Button type="default" @click='cancelproject'>取消</Button>
-        <Button type="info" @click='okproject'>确定</Button>
-    </div>
-    <div>
-            <Row>
-                <Col span="12" v-if="memberDetailView" v-for="(item,index) in  memberDetail" :key="index"><label style="width:100px;display:inline-block;text-align:right;padding-right:3px;"> {{item.displayName}} </label> <KrInput :readOrEdit="true" :value="item.memberName" style="width:160px" @okClick="okClick($event,item)" /></Col>
-            </Row>
-    </div>
-<div>
-</div>
-</Modal>
-   <PhotoAlbum v-if="isPhotoAlbum" :data='imgData' :eyeIndex="eyeIndex" @close = "closeOrOpen"></PhotoAlbum>
-  </div>
 </template>
 
 <script>

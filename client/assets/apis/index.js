@@ -38,6 +38,6 @@ export default {
   ...Krmeeting,
   ...DoorRelationship,
   ...KrmeetingRoom,
-  ...ProductGoods
+  ...ProductGoods,
   ...comment
 }

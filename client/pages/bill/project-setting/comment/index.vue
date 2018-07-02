@@ -62,15 +62,15 @@
                     <Col span="8"> &nbsp;</Col>
                 </div>
                 <div>
-                    <Col span="8" v-for=' item in  typeCodeInfo' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  typeCodeInfo' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" v-for=' item in  coreinfoBusiness' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoBusiness' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" v-for=' item in  coreinfoFinance' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoFinance' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
                             <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
@@ -146,7 +146,7 @@
     import  "./index.less" 
     import krCity from './krCity.js';
     import KrInput from './KrInput.vue'
-    import PhotoAlbum from './../../components/PhotoAlbum'
+    import PhotoAlbum from '~/components/PhotoAlbum'
     import OverFlowLabel from './overFlowLabel'
     import IndexData from './indexData'
     import IndexMethod from './indexMethod'

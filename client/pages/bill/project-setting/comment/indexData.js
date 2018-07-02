@@ -25,13 +25,15 @@ export default function (){
                 modal1: false,
                 modal2: false,
                 projectId: this.$route.query.projectId,
+                name: this.$route.query.name,
+                city: this.$route.query.city,
                 photos: "",
                 replyId: null,
                 formItem: {
                     comment: ''
                 },
                 defaultList: [
-    
+  
                 ],
                 imgName: '',
                 uploadList: [],
@@ -42,5 +44,6 @@ export default function (){
                         trigger: 'blur'
                     }]
                 }
-}
-}
+  }
+  }
+  

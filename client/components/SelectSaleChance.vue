@@ -16,12 +16,19 @@
 </style>
 
 
-
 <template>
     <div class="com-select-chance">
         <!-- <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :value="value" :label-in-value='labelinvalue' @on-change="changeContent"> -->
-        <Select v-model="value" filterable :clearable="clearable" :placeholder='placeholder' :loading="loading1" :disabled="disabled" :label-in-value='labelinvalue' @on-change="changeContent">
-            <Option v-for="option in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
+        <Select v-if="show" v-model="showValue" 
+            filterable 
+          
+            :placeholder='placeholder' 
+            :loading="loading1" 
+            :disabled="disabled" 
+            :label-in-value='labelinvalue' 
+            @on-change="changeContent"
+        >
+            <Option v-for="option in salerOptions" :value="''+option.value" :key="''+option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -32,65 +39,92 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
+        type:'',
         defaultValue: 0,
+        showType:{
+            type:Boolean,
+
+        },
         clearable: {
             type: Boolean,
             default: false,
         },
+        disabled:{type:Boolean,default:false},
         placeholder: '请选择',
 
         orderitems: {
             type: Object
         },
-
+        disabled:{
+            type:Boolean,
+            default:true
+        }
     },
     data() {
         return {
             labelinvalue: true,
-            disabled: false,
+            // disabled: false,
             saler: '',
+            showValue:''+this.defaultValue,
             loading1: false,
+            isRender:false,
+
+            show:this.showType,
+
             salerOptions: [
                 {
                     label: '请选择',
                     value: 0
                 },
-                { label: '无需机会', value: -1 }
+                { label: '不绑定机会', value: -1 }
             ]
         };
     },
-    computed: {
-        value: {
-            get() {
-                return this.defaultValue;
-            },
-            set(val) {
+    // computed: {
+    //     value: {
+    //         get() {
+    //             return this.defaultValue;
+    //         },
+    //         set(val) {
+    //            
+    //         }
 
-            }
-
-        },
-    },
+    //     },
+    // },
     watch: {
-
-        salerOptions() {
-            // this.value = Number(this.orderitems.saleChanceId);
-            let chanceid = Number(this.orderitems.saleChanceId);
-            if (chanceid == 0 || !chanceid) {
-                this.disabled = false;
-            } else {
-                this.disabled = true;
-            }
-        },
+        // disabled() {
+         
+        //     if (disabled) {
+        //         this.disabled = false;
+        //     } else {
+        //         this.disabled = true;
+        //     }
+        // },
         orderitems() {
-
             this.getSalerChanceList();
-
-        }
+           
+        },
+        defaultValue(){
+            this.showValue = this.defaultValue;
+             console.log(this.showValue,"-----")
+        },
+        showType(){
+            this.show = this.showType;
+            
+        },
+        // defaultValue(){
+        //   
+        //    
+        //     this.value = this.defaultValue;
+        // }
+    },
+    mounted() {
+       
     },
     methods: {
         changeContent(item) {
             let v;
-            if (item.label === "请选择" || item.label == '无需机会') {
+            if (item.label === "请选择" || item.label == '不绑定机会') {
                 v = '';
             } else {
                 v = item.value
@@ -109,30 +143,30 @@ export default {
             let _this = this;
 
             http.get('get-salechance', parms, r => {
+              
                 r.data.items.data.map(item => {
                     list.push({
                         label: item.name,
                         value: item.id
                     })
                 })
-                list.unshift({ label: '无需机会', value: -1 })
-                _this.salerOptions = list;
+                list.unshift({ label: '不绑定机会', value: -1 })
+                _this.salerOptions = [].concat(list);
 
                 let parms = {
                     count: list.length - 1,
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                // this.$emit('gotChanceList', list.length - 1);
+                if(list.length ==2&&this.type != 'edit'){
+                    this.showValue = ''+list[1].value;
+                }
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({
                     title: error.message
                 });
-            }
-            )
-
-
+            })
         }
 
 

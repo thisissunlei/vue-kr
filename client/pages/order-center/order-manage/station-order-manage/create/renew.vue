@@ -37,9 +37,22 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance 
+                            type='edit' 
+                            :disabled='chanceDisable' 
+                            name="formItem.salerId" 
+                            @onChange="changeChance" 
+                            :showType="showChanceSelector" 
+                            @gotChanceList='handleGotChancelist' 
+                            v-show="showChanceSelector" 
+                            :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'
+                        ></SelectChance>
                     </FormItem>
-
+                    <div v-if='remindinfoNewUser' class="title-container">(
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+                    <div v-if='remindinfo' class="title-container">(如是
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
                 </Row>
@@ -225,6 +238,10 @@ export default {
             }
         };
         return {
+            chanceDisable:false,
+            remindinfoNewUser: false,
+            remindinfo: false,
+            chanceRemindStr: "",
             defaultChanceID: 0,
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
@@ -480,7 +497,7 @@ export default {
             let stationVos = this.selecedStation;
             //选中的工位
             let selectedStation = this.selectedDel;
-            console.log('====>', selectedStation)
+          
             if (!selectedStation.length) {
                 this.$Notice.error({
                     title: '请先选择录入单价的工位'
@@ -671,7 +688,7 @@ export default {
                     station.push(obj)
                 }
                 _this.stationListData = station;
-                console.log('getRenewStation=====', station)
+               
 
             }, e => {
 
@@ -679,15 +696,19 @@ export default {
             })
 
         },
-        changeCustomer: function (value) {
+        changeCustomer(value) {
+         
             if (value) {
                 this.renewForm.customerId = value;
+              
                 this.getStationFn = +new Date()
                 this.clearStation()
             } else {
                 this.renewForm.customerId = '';
             }
+              
             this.validSaleChance();
+            
 
         },
         changeCommunity: function (value) {
@@ -701,32 +722,50 @@ export default {
             this.clearStation()
         },
         changeChance(value) {
-            console.log("changeChance" + value)
+           
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {
                 this.renewForm.saleChanceId = value;
             }
-            console.log(this.renewForm.saleChanceId)
+           
         },
         handleGotChancelist(parms) {
+            // return ;
             if (parms.isNewUser) {
-                if (parms.count >= 1) {
+                this.remindinfo = false
+                if (parms.count == 1) {
+                    this.remindinfoNewUser = false
+                    this.chanceRemindStr = '';
                     this.showChanceSelector = true;
-                    this.defaultChanceID = parms.list[1].value
+                    // this.defaultChanceID = parms.list[1].value
                     // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
                 }
-                else {
+                else if(parms.count >1){
+                    this.remindinfoNewUser = false
+                    this.chanceRemindStr = '';
+                    this.showChanceSelector = true;
+                }
+                else if(parms.count==0){
+                    this.remindinfoNewUser = true
+                    this.chanceRemindStr = '入驻订单必须绑定机会'
                     this.showChanceSelector = false;
                     this.OpportunityRequired = true;
                     this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
                 }
             }
             else {
+                this.remindinfoNewUser = false
+                this.remindinfo = true
+                this.chanceRemindStr = '新入驻客户，须选择机会'
+                this.OpportunityRequired = false;
                 if (parms.count == 0) {
                     this.showChanceSelector = false;
-                    this.OpportunityRequired = false;
                     this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+                else if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    // this.defaultChanceID = parms.list[1].value
                 }
             }
         },
@@ -740,9 +779,12 @@ export default {
         },
         clearStation() {
             // 清除所选的工位
+            console.log('--------------11')
             if (this.selecedStation.length) {
+                console.log(";;;;;;;;;;;;;;;;")
                 this.selecedStation = [];
                 this.selecedArr = [];
+
             }
             if (this.renewForm.items.length) {
                 this.renewForm.items = [];
@@ -1019,7 +1061,7 @@ export default {
             if (!val.length) {
                 return;
             }
-            console.log('submitStation====', this.selecedArr)
+           
             this.selecedArr = this.selecedArr.map(item => {
                 let obj = item;
                 obj.originalPrice = item.oldPrice;
@@ -1031,16 +1073,16 @@ export default {
             let day = 1000 * 60 * 60 * 24;
             let start = date + day;
             this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(start));
-            console.log('========')
+          
             this.getStationAmount()
             this.clearStation()
 
         },
-        clearStation() {
-            this.renewForm.items = [];
-            this.renewForm.saleAmount = 0;
-            this.saleAmount = utils.smalltoBIG(0)
-        },
+        // clearStation() {
+        //     this.renewForm.items = [];
+        //     this.renewForm.saleAmount = 0;
+        //     this.saleAmount = utils.smalltoBIG(0)
+        // },
         getStationAmount() {
 
             let val = this.selecedArr;
@@ -1072,7 +1114,7 @@ export default {
                 seats: JSON.stringify(station)
 
             }
-            console.log('========', station)
+          
             this.selecedStation = station
             if (originalPrice) {
                 return
@@ -1119,7 +1161,7 @@ export default {
             this.openStation = false;
         },
         onStationChange: function (val) {
-            console.log(val, "mmmmm")
+            
             this.selecedArr = val;
         },
         getSaleTactics: function (params) {//获取优惠信息
@@ -1381,5 +1423,15 @@ export default {
 }
 .requiremark .ivu-form-item-label::before {
     content: "";
+}
+.title-container {
+    display: inline;
+    position: absolute;
+    top: 8px;
+    left: 36px;
+    font-size: 12px;
+    .title-remind-info {
+        color: #ed3f14;
+    }
 }
 </style>

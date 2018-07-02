@@ -6,26 +6,37 @@
                 <Row>
                     <Col class="col">
                     <FormItem label="客户名称" style="width:252px">
-                        <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
+                        <selectCustomers :disabled='customerdisabled'  name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem label="所属社区" style="width:252px">
-                        <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                        <selectCommunities :disabled='cummunitydisabled'  test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                     </Col>
                     <Col class="col">
                     <FormItem label="销售员" style="width:252px">
-                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler :disabled='salerdisabled' name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance 
+                            type='edit' 
+                            :disabled='chancedisabled' 
+                            name="formItem.salerId" 
+                            @onChange="changeChance" 
+                            @gotChanceList='handleGotChancelist' 
+                            :showType="showChanceSelector" 
+                            v-show="showChanceSelector" :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
-
+                    <!-- <div v-if='remindinfoNewUser' class="title-container">(
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+                    <div v-if='remindinfo' class="title-container">(如是
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div> -->
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
 
@@ -205,7 +216,7 @@
         </Form>
 
         <Modal v-model="openStation" title="选择工位" ok-text="保存" cancel-text="取消" width="95%" class-name="vertical-center-modal">
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"/>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
@@ -240,6 +251,7 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -258,6 +270,13 @@ export default {
         };
 
         return {
+            chancedisabled:true,
+            salerdisabled:true,
+            cummunitydisabled:true,
+            customerdisabled:true,
+            remindinfoNewUser: false,
+            remindinfo: false,
+            chanceRemindStr: "",
             defaultChanceID: 0,
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
@@ -468,13 +487,14 @@ export default {
         selectCustomers,
         SelectSaler,
         planMap,
-        SelectChance
+        SelectChance,
+        ListAndMap
     },
     mounted() {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
-        // this.getSalerList();
+        
     },
     watch: {
         getFloor() {
@@ -507,21 +527,49 @@ export default {
         },
     },
     methods: {
-        //获取机会列表
-        getSalerList(name) {
-            let params = {
-                phoneOrEmail: ''
+        //获取销售机会列表
+        getSalerChanceList() {
+        let chanceid=this.formItem.saleChanceId;
+        console.log(chanceid,'getSalerChanceList000000')
+            if(chanceid){
+                this.chancedisabled=true
+                return;
             }
-            // this.http.get(name,params,()=>{})
-            //
-            this.http.get('get-saler', params, r => {
-                this.salerOptions = this.salerOptions.concat(r.data);
+            else{
+                    let parms = {
+                    customerId: this.formItem.customerId,
+                    communityId: this.formItem.communityId,
+                    receiveId: this.formItem.salerId
+                }
+                let list = [];
+                let _this = this;
 
-            }, e => {
+                this.$http.get('get-salechance', parms, r => {
+                    if (r.data.items.data.length==0) {                       
+                        _this.remindinfoNewUser = false
+                        _this.remindinfo = true
+                        _this.chanceRemindStr = '新入驻客户，须选择机会'
+                        _this.OpportunityRequired = false;
+                        _this.showChanceSelector = false;
+                        _this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                        return;
+                    }
+                    else{
 
-                console.log('error', e)
-            })
-
+                        _this.chancedisabled=false
+                        _this.remindinfo = false
+                        _this.remindinfoNewUser = false
+                        _this.chanceRemindStr = '';
+                        _this.showChanceSelector = true;
+                        
+                    }
+                    console.log(this.chancedisabled,'chancedisabled')
+                }, error => {
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+            }
         },
         submitPrice() {
             let price = false;
@@ -621,6 +669,9 @@ export default {
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
+                console.log(data.opportunityId,'_this.saleChanceId')
+                _this.defaultChanceID = data.opportunityId;
+
                 _this.communityName = data.communityName;
                 _this.formItem.startDate = new Date(data.startDate);
                 _this.formItem.endDate = new Date(data.endDate);
@@ -661,7 +712,8 @@ export default {
                     _this.formItem.items = data.contractTactics;
                 }, 700)
                 _this.getFloor = +new Date()
-
+                console.log(_this.formItem)
+                _this.getSalerChanceList();
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -743,7 +795,7 @@ export default {
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
             formItem.opportunityId = this.formItem.saleChanceId || '';
-
+            console.log(this.formItem.saleChanceId,'joinFormSubmit-this.formItem.saleChanceId')
             formItem.timeRange = this.formItem.timeRange;
             formItem.rentAmount = this.formItem.rentAmount;
             formItem.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.formItem.firstPayTime));
@@ -1134,7 +1186,9 @@ export default {
                 this.formItem.customerId = '';
             }
             this.getFloor = +new Date()
+            this.clearStation();
             this.validSaleChance();
+            this.clearStation()
         },
         changeSaler: function (value) {
             // 销售员
@@ -1157,24 +1211,44 @@ export default {
             this.orderitems = Object.assign({}, obj);
         },
         handleGotChancelist(parms) {
-            debugger
+
+            console.log('handleGotChancelist');
+            return;
+           
             if (parms.isNewUser) {
-                if (parms.count >= 1) {
+                this.remindinfo = false
+                if (parms.count == 1) {
+                    this.remindinfoNewUser = false
+                    this.chanceRemindStr = '';
                     this.showChanceSelector = true;
                     this.defaultChanceID = parms.list[1].value
                     // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
                 }
-                else {
+                else if(parms.count >1){
+                    this.remindinfoNewUser = false
+                    this.chanceRemindStr = '';
+                    this.showChanceSelector = true;
+                }
+                else if(parms.count==0){
+                    this.remindinfoNewUser = true
+                    this.chanceRemindStr = '入驻订单必须绑定机会'
                     this.showChanceSelector = false;
                     this.OpportunityRequired = true;
                     this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
                 }
             }
             else {
+                this.remindinfoNewUser = false
+                this.remindinfo = true
+                this.chanceRemindStr = '新入驻客户，须选择机会'
+                this.OpportunityRequired = false;
                 if (parms.count == 0) {
                     this.showChanceSelector = false;
-                    this.OpportunityRequired = false;
                     this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+                else if (parms.count >= 1) {
+                    this.showChanceSelector = true;
+                    // this.defaultChanceID = parms.list[1].value
                 }
             }
         },
@@ -1497,7 +1571,7 @@ export default {
 
 
             }).catch(e => {
-                console.log('====>', e)
+              
                 _this.disabled = false;
                 _this.$Notice.error({
                     title: e.message
@@ -1547,5 +1621,15 @@ export default {
 }
 .requiremark .ivu-form-item-label::before {
     content: "";
+}
+.title-container {
+    display: inline;
+    position: absolute;
+    top: 8px;
+    left: 36px;
+    font-size: 12px;
+    .title-remind-info {
+        color: #ed3f14;
+    }
 }
 </style>

@@ -41,9 +41,12 @@
             </FormItem>
             <FormItem label="" class="form-item-search">
             
-                <SearchFormInput 
+                
+                <SearchForm
                     :searchFilter="searchFilter"
-                    @changeSearchFormData = "changeSearchFormData"
+                    :openSearch = true
+                    :notShowSearchIconProps = true
+                    @serachFormDataChanged="changeSearchFormData"
                 /> 
             </FormItem>
             <Button type="primary" icon="ios-search" @click="submitSearchData">搜索</Button>
@@ -54,7 +57,6 @@
 
 <script>
 
-import SearchFormInput from '~/components/SearchFormInput';
 import SearchForm from '~/components/SearchForm';
 import dateUtils from 'vue-dateutils';
 
@@ -82,7 +84,7 @@ export default {
        "meetingStatusOptions"
    ],
    components:{
-       SearchForm,SearchFormInput
+       SearchForm
    },
    mounted(){
       this.getCommunity();
@@ -104,8 +106,10 @@ export default {
        
         changeSearchFormData(searchData){
             
-            var param = {
-                 phone:  searchData.searchValue
+            for(var key in searchData ){
+                var param = {
+                    phone : searchData[key]
+                }
             }
             var newObj = Object.assign({},this.formItem,param);
             this.formItem = newObj;

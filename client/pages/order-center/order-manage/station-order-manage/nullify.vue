@@ -14,7 +14,7 @@
         <Button type="primary" @click="handleSubmit('formItem')">确认</Button>
         <Button type="ghost" style="margin-left: 8px">取消</Button>
       </FormItem> -->
-
+      <p style="color:red">订单生效前，除客户基本信息以外的信息都可进行编辑</p>
       <p class='required-label'>如真的需要作废请选择作废原因：</p>
       <Select v-model="formItem.select">
         <Option :value="item.value" v-for="(item,index ) in optionList" :key="index">{{item.desc}}</Option>

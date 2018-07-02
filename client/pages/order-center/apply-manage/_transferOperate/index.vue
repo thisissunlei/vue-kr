@@ -15,6 +15,17 @@
         <div class="apply-list-table">
             <Table :columns="columns" :data="applyDatas" border class='list-table' />
         </div>
+
+        <Modal title="删除申请" v-model="deleteModal" ok-text='删除' class="vertical-center-modal">
+            <p>删除原因</p>
+            <Input v-model="modalText" type="textarea" :rows="4" maxlength='500' placeholder="删除原因"></Input>
+        </Modal>
+
+        <Modal title="退回申请" v-model="rejectModal" ok-text='退回' class="vertical-center-modal">
+            <p>退回原因</p>
+            <Input v-model="modalText" type="textarea" :rows="4" maxlength='500' placeholder="退回原因"></Input>
+        </Modal>
+
     </div>
 </template>
 
@@ -32,6 +43,9 @@ export default {
     },
     data() {
         return {
+            modalText: '',
+            rejectModal: true,
+            deleteModal: false,
             isFinancialSide: false,
             operateTypeIndex: 0,
             operateTypes: [
@@ -316,16 +330,10 @@ export default {
 
         //退回申请
         handleRejectApply(params) {
-            var viewName = '';
-            if (params.row.orderType == 'CONTINUE') {
-                viewName = 'renewView';
-            } else {
-                viewName = 'joinView';
-            }
-            window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`, '_blank');
+            this.rejectModal = true;
         },
         handleDeleteApply(params) {
-
+            this.deleteModal = true;
         }
     }
     ,
@@ -340,6 +348,15 @@ export default {
         .operate-btn {
             margin-right: 10px;
         }
+    }
+}
+.vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ivu-modal {
+        top: 0;
     }
 }
 </style>

@@ -134,20 +134,20 @@ export default {
                 });
             })
         },
-        getFeeAmount() {           
+        getFeeAmount() {
             let parms = {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: ''
             }
-             if(!parms.communityId||!parms.customerId)
-              return
+            if (!parms.communityId || !parms.customerId)
+                return
             var _this = this
             this.$http.get('get-max-amount', parms).then((r) => {
-                if(r.data.length==0)
-                this.$Notice.info({
-                    title: '无可用转移款项'
-                });
+                if (r.data.length == 0)
+                    this.$Notice.info({
+                        title: '无可用转移款项'
+                    });
                 _this.dataList = [].concat(r.data);
             }).catch((error) => {
                 this.$Notice.error({

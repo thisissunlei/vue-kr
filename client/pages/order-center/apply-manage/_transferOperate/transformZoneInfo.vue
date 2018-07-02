@@ -19,7 +19,7 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers  name="formItem.customerID" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="formItem.customerID" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -32,9 +32,9 @@
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
                     <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>                        -->
-                      <Select v-model="formItem.communityOut" :disabled='UIDisable.cummunityOut' style="width:252px">
+                    <Select v-model="formItem.communityOut" :disabled='UIDisable.cummunityOut' style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>  
+                    </Select>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -51,9 +51,9 @@
 
             <FormItem style="margin-top:40px">
                 <div class="btnContainer">
-                    <Button class='operateBtn'  v-if='UIShowAble.editBtn' :disabled='UIDisable.editBtn' type="primary" @click="handleEdit">编辑</Button>
-                    <Button class='operateBtn'  v-if='UIShowAble.approveBtn' :disabled='UIDisable.approveBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
-                    <Button class='operateBtn'  v-if='UIShowAble.rejectBtn' :disabled='UIDisable.rejectBtn' type="primary" @click="handleReject('formItem')">退回</Button>
+                    <Button class='operateBtn' v-if='UIShowAble.editBtn' :disabled='UIDisable.editBtn' type="primary" @click="handleEdit">编辑</Button>
+                    <Button class='operateBtn' v-if='UIShowAble.approveBtn' :disabled='UIDisable.approveBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
+                    <Button class='operateBtn' v-if='UIShowAble.rejectBtn' :disabled='UIDisable.rejectBtn' type="primary" @click="handleReject('formItem')">退回</Button>
                 </div>
             </FormItem>
 
@@ -100,25 +100,25 @@ export default {
                 callback();
             }
         };
-        
+
         return {
-            UIShowAble:{
-                editBtn:true,//true显示
-                approveBtn:false,
-                rejectBtn:false
+            UIShowAble: {
+                editBtn: true,//true显示
+                approveBtn: false,
+                rejectBtn: false
             },
-            UIDisable:{
-                customer:true,//true 禁用
-                cummunityIn:false,
-                cummunityOut:true,
-                balance:false,
-                remark:false,
-                editBtn:false,
-                approveBtn:false,
-                rejectBtn:false
+            UIDisable: {
+                customer: true,//true 禁用
+                cummunityIn: false,
+                cummunityOut: true,
+                balance: false,
+                remark: false,
+                editBtn: false,
+                approveBtn: false,
+                rejectBtn: false
             },
-            communitiesOut:[],
-            communities:[],
+            communitiesOut: [],
+            communities: [],
             isEdit: false,
             approveBtnText: '同意',
             operateHistoryData: [],
@@ -163,33 +163,33 @@ export default {
             })
         },
         changeCustomer() { },
-        changeCommunity() { 
-            this.$set(this.formItem,'communityIn',commIn)
-            let all=[].concat(this.communities);
-            this.communitiesOut=all.filter(item=>item.value!==commIn)
+        changeCommunity() {
+            this.$set(this.formItem, 'communityIn', commIn)
+            let all = [].concat(this.communities);
+            this.communitiesOut = all.filter(item => item.value !== commIn)
             console.log(this.communitiesOut)
             this.getMaxAmount();
         },
-        onGetCmtsList(){
-            this.communities=[].concat(list);
+        onGetCmtsList() {
+            this.communities = [].concat(list);
         },
         handleEdit() {
-            let obj={
-                customer:false,
-                cummunityIn:false,
-                cummunityOut:false,
-                balance:false,
-                remark:false,
-                editBtn:false,
-                approveBtn:false,
-                rejectBtn:false 
-                };
-                console.log(obj)
-                this.UIDisable=Object.assign({},this.UIDisable,obj)
-                
-         },
+            let obj = {
+                customer: false,
+                cummunityIn: false,
+                cummunityOut: false,
+                balance: false,
+                remark: false,
+                editBtn: false,
+                approveBtn: false,
+                rejectBtn: false
+            };
+            console.log(obj)
+            this.UIDisable = Object.assign({}, this.UIDisable, obj)
+
+        },
         handleReject() { },
-        handleSubmit(formItem) {           
+        handleSubmit(formItem) {
             let parms = {}
             this.$http.post('join-bill-detail', parms).then((response) => {
                 this.basicInfo = response.data;
@@ -222,6 +222,7 @@ export default {
         }
         .col {
             width: 50%;
+            min-width: 250px;
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;

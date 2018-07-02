@@ -23,7 +23,7 @@
                             <li v-for="(item,index) in moneyTypes" :key="item.code" :rowkey="index">
                                 <Row :class="{firstrow:index===0}" class="amount-row">
                                     <Col class='amount-col1 '>
-                                    <Checkbox :label="item.desc" />
+                                    <Checkbox  :label="item.desc" />
                                     </Col>
                                     <Col class='amount-col2 '>
                                     <!-- <Input v-model="formItem.balanceOut" :placeholder="formatBlance(item.code)" style="width: 252px"></Input>
@@ -262,8 +262,8 @@ export default {
             width: 680px;
         }
         .col {
-            width: 340px;
-            min-width: 400px;
+            width: 50%;
+            min-width: 250px;
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;

@@ -75,7 +75,7 @@ export default {
             }
         };
         return {
-            maxAmount: 0,
+            maxAmount: '0',
             communitiesOut: [],
             communities: [],
             formItem: {
@@ -167,8 +167,8 @@ export default {
             width: 680px;
         }
         .col {
-            width: 340px;
-            min-width: 400px;
+            width: 50%;
+            min-width: 250px;
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;

@@ -2,7 +2,6 @@
 dist
 .idea
 build
-.nuxt
 npm-debug.log
 npm-debug.log.*
 

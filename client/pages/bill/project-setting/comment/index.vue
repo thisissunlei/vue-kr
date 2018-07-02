@@ -42,6 +42,7 @@
                         </span>
                         </div>
                         <div v-for="(img1,index) in item.photo" 
+                            :key="index"
                             style="width:130px;height:100px;text-align:center;display:inline-block;float:left;overflow:hidden">
                          <img :src="img1.preUrl" @click='queryImgMethod(item.photo,index)' style="float:left;height:100%;padding:5px;" alt="">
                         </div>
@@ -62,15 +63,15 @@
                     <Col span="8"> &nbsp;</Col>
                 </div>
                 <div>
-                    <Col span="8" v-for=' item in  typeCodeInfo' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  typeCodeInfo' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" v-for=' item in  coreinfoBusiness' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoBusiness' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
-                    <Col span="8" v-for=' item in  coreinfoFinance' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+                    <Col span="8" :key="index" v-for=' (item,index) in  coreinfoFinance' style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
                         <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
                             <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />

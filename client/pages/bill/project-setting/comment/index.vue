@@ -208,7 +208,7 @@
                 totalCount: 0,
                 modal1: false,
                 modal2: false,
-                projectId: 38,
+                projectId: this.$router.query.projectId,
                 photos: "",
                 replyId: null,
                 formItem: {

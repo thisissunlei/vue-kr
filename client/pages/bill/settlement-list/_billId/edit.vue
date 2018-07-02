@@ -246,7 +246,12 @@ export default {
 					if(isNaN(item.payableAmount)){
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
-					}if(!item.feeType || !item.payableAmount){
+					}
+					// if(number(item.payableAmount)<0){
+					// 	_this.error = true;
+					// 	_this.errorMessage = "金额不得填写负数"
+					// }
+					if(!item.feeType || !item.payableAmount){
 						_this.error = true;
 						_this.errorMessage = "结算表单未填写完整"
 					}	

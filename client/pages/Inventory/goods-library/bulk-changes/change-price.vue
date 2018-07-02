@@ -123,12 +123,13 @@ export default {
        },
        areaChange(e){
            let middle=e.target.value.replace(/\n/g,'-');
-           this.numReplace=e.target.value.replace(/\n/g,'-'); 
+           this.numReplace=e.target.value.replace(/\n/g,'-');
            this.changeList=middle.split('-');
            if(this.changeList.length>=this.data.length){
                this.changeList.splice(this.data.length,this.changeList.length-this.data.length);
-           }
-           console.log('list---',this.changeList,this.changeList.length);
+               this.numReplace=([].concat(this.changeList)).join('-');
+               this.numArea=([].concat(this.changeList)).join('\n');
+           }  
        },
        submitPriceFirst(){
            let data={
@@ -197,8 +198,7 @@ export default {
               width:100%;
               text-align:center;
               font-size:14px;
-              //line-height: 26px;
-              //height: 21px;
+              line-height: 26px;
           }
           .goods-title{
             width: 100px;

@@ -3,22 +3,27 @@
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 export default {
     props: {
         data: {
             type: Array,
-            default:()=>[]
+            default: () => []
         },
         columns: {
             type: Array,
-            default:()=> [
+            default: () => [
                 {
                     title: '操作时间',
-                    key: 'operateTime',
-                    align: 'center'
+                    key: 'utime',
+                    align: 'center',
+                    render(tag, params) {
+                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
+                        return tag('div', time)
+                    }
                 }, {
                     title: '操作人员',
-                    key: 'operatePsn',
+                    key: 'operaterUserName',
                     align: 'center'
                 }, {
                     title: '备注',

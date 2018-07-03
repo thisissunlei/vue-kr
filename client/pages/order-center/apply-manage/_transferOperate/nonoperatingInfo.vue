@@ -53,7 +53,7 @@
         <SectionTitle title="操作记录"></SectionTitle>
         <div class="apply-list-table">
             <!-- <Table :columns="operateHistoryTableColums" :data="operateHistoryData" border class='list-table' /> -->
-            <OperateLog :data="operateHistoryData" class='list-table' />
+            <OperateLog :data="logList" class='list-table' />
         </div>
     </div>
 </template>
@@ -115,7 +115,7 @@ export default {
             isFinancialSide: false,//是否财务端查看 
             transferStatus: '',//申请处理状态 
             approveBtnText: '同意',
-            operateHistoryData: [],
+            logList: [],
             formItem: {
                 customerId: 0,
                 communityIn: 0,
@@ -150,8 +150,8 @@ export default {
             this.$http.get('get-apply-info-id', from).then((response) => {
                 let obj = response.data;
                 this.receivedApplyInfo = Object.assign({}, obj)
+                this.logList=this.receivedApplyInfo.logList;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
-                console.log('转移社区', this.formItem.communityIn)
                 this.getFeeAmount();
             }
             ).catch((error) => {

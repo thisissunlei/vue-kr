@@ -137,6 +137,7 @@ export default {
             })
         },
         getFeeAmount() {
+            debugger;
             let parms = {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
@@ -150,7 +151,7 @@ export default {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                let arr = r.data.filter(item => this.targetFeeTypes.includes(item))
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
                 _this.dataList = arr;
             }).catch((error) => {
                 this.$Notice.error({

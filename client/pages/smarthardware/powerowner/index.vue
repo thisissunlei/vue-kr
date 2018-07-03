@@ -23,9 +23,9 @@ export default {
      return{
         loading: true,
         deviceInfo:{
-            deviceCode :"门禁编码",
-            title :"屏幕展示标题",
-            deviceId :"87209cf7084700000000",
+            doorCode :"",
+            title :"",
+            deviceId :"",
         },
         powerOwnerList : [],
         searchData :{
@@ -122,6 +122,7 @@ export default {
                 _this.loading = false;
                 var resData = res.data;
                 _this.powerOwnerList = resData.list;
+                _this.deviceInfo = resData.door || {};
                 
                 
             }).catch((error)=>{
@@ -133,7 +134,8 @@ export default {
 
        show(params){
            var itemData = params.row;
-           window.open(`../#/user/memberdoormanage/${itemData.uid}?deviceId=${itemData.deviceId}&derivedFromGroup=${itemData.derivedFromGroup}`,'_blank');
+           var deviceId = this.deviceInfo.deviceId;
+           window.open(`../#/user/memberdoormanage/${itemData.uid}?deviceId=${deviceId}&derivedFromGroup=${itemData.derivedFromGroup}`,'_blank');
 
        },
        toMemebrDetail(params){

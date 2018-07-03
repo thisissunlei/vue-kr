@@ -485,6 +485,7 @@ export default {
 
                     return item
                 })
+                console.log(this.selectAll,"jjjjjjjj",selectedDel)
                 this.selectedDel = [];
                 this.getStationAmount()
             }
@@ -663,6 +664,7 @@ export default {
                 }
             })
         },
+        //获取选择工位
         getRenewStation() {
             let params = {
                 //假数据
@@ -682,9 +684,14 @@ export default {
                     obj.value = r.data[i].map(item => {
                         let obj = item;
                         obj.oldPrice = item.guidePrice == 0 ? '' : item.guidePrice;
-                        obj.originalPrice = item.guidePrice == 0 ? '' : item.guidePrice;
+                        //毅豪修改
+                        if(!obj.originalPrice){
+                            obj.originalPrice = item.guidePrice == 0 ? '' : item.guidePrice;
+                        }
+                      
                         return obj;
                     });
+                    console.log(obj,"nnnnnn")
                     station.push(obj)
                 }
                 _this.stationListData = station;
@@ -779,9 +786,9 @@ export default {
         },
         clearStation() {
             // 清除所选的工位
-            console.log('--------------11')
+           
             if (this.selecedStation.length) {
-                console.log(";;;;;;;;;;;;;;;;")
+               
                 this.selecedStation = [];
                 this.selecedArr = [];
 
@@ -1058,13 +1065,18 @@ export default {
 
             let val = this.selecedArr || [];
             this.openStation = false
+           
             if (!val.length) {
                 return;
             }
            
             this.selecedArr = this.selecedArr.map(item => {
                 let obj = item;
-                obj.originalPrice = item.oldPrice;
+                //毅豪修改
+                if(!obj.originalPrice){
+                    obj.originalPrice = item.oldPrice;
+                }
+                
                 return obj;
             })
             var date = val[0].begin;
@@ -1116,11 +1128,13 @@ export default {
             }
           
             this.selecedStation = station
+            console.log("99999999--11")
             if (originalPrice) {
                 return
             }
-
+             console.log("99999999--")
             if (val.length) {
+                console.log("99999999")
                 this.$http.post('get-station-amount', params, r => {
                     let money = 0;
                     let list = [];

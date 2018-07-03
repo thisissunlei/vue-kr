@@ -505,7 +505,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),devToolSetting()];
 
         return arr;
     }
@@ -1077,6 +1077,7 @@
                         },
                     ]
                 },
+               
             ]
         }
     }
@@ -1384,5 +1385,29 @@
             ]
         }
     }
+    function devToolSetting(){
+        return  {
+            primaryText: "开发工具",
+            router: 'dev',
+            type: 'vue',
+            menuItems: [
+                {
+                    primaryText: '后端工具',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    type: 'vue',
+                    menuItems: [
+                        {
+                            primaryText: "订单数据监控",
+                            router: 'management-tool/data-monitoring',
+                            type: 'vue',
+                            menuCode: 'order_validate_list'
+                        }
+                    ]
+                }
 
+            ]
+        }
+    }
+    
 })(window);

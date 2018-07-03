@@ -1,10 +1,10 @@
 <template>
     <div class="public-title">
         <div class='title-right'>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button>
-            <Button type="primary" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
+            <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px"  @click="switchDelete">终止该项目</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="openProject" >项目成员</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="watchTask">查看编辑纪录</Button>
+            <Button type="primary" style="margin-left:10px;" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
         </div>
 
         <div class='title-left'>

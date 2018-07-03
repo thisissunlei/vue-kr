@@ -2,42 +2,48 @@
 <div class="g-setting-manager">
         <SectionTitle :title='"全部企业（"+totalCount+"）"' ></SectionTitle>
         <div class="u-search" >
-                <span class="u-search-label">是否已设管理员</span>
-                 <Select 
-                    v-model="Params.manager" 
-                    style="width:200px"
-                    placeholder="请选择" 
-                    clearable
-                    filterable
-                    label-in-value
-                    remote
-                    :label="Params.managerName"
-                    @on-change="changeManager"
-                >
-                    <Option v-for="item in typeList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
-                </Select>
-                <span class="u-search-label">社区</span>
-                <Select 
-                    v-model="Params.cmtId" 
-                    style="width:200px"
-                    placeholder="请选择社区" 
-                    clearable
-                    filterable
-                    remote
-                    label-in-value
-                    :label="Params.communityName"
-                    @on-change="changeCommunity"
-                >
-                    <Option   v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
-                    
-                </Select>
-                <SearchForm 
-                    placeholder="请输入公司名称"
-                    inputName="csrName"
-                    :openSearch="true"
-                    @serachFormDataChanged="changeCompany"
-                    :onSubmit="lowerSubmit"
-                />
+                 <div class="u-search-list" style="margin-left:30px;">
+                    <SearchForm 
+                        placeholder="请输入公司名称"
+                        inputName="csrName"
+                        :openSearch="true"
+                        @serachFormDataChanged="changeCompany"
+                        :onSubmit="lowerSubmit"
+                    />
+                </div>
+                <div class="u-search-list">
+                        <span class="u-search-label">社区</span>
+                        <Select 
+                            v-model="Params.cmtId" 
+                            style="width:200px"
+                            placeholder="请选择社区" 
+                            clearable
+                            filterable
+                            remote
+                            label-in-value
+                            :label="Params.communityName"
+                            @on-change="changeCommunity"
+                        >
+                            <Option   v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+                            
+                        </Select>
+                </div>
+                <div class="u-search-list" >
+                    <span class="u-search-label">是否已设管理员</span>
+                    <Select 
+                        v-model="Params.manager" 
+                        style="width:200px"
+                        placeholder="请选择" 
+                        clearable
+                        filterable
+                        label-in-value
+                        remote
+                        :label="Params.managerName"
+                        @on-change="changeManager"
+                    >
+                        <Option v-for="item in typeList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+                    </Select>
+                 </div>
         </div>
         <div class="u-table">
             <Table  border :columns="tableHeader" :data="tableData" ></Table>
@@ -268,15 +274,12 @@ export default {
             margin:16px 0;
             padding:0 20px;
             box-sizing: border-box;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
-                float:right;
-            }
+            clear: both;
             .u-search-label{
                 padding:0 10px;
+            }
+            .u-search-list{
+                float:right;
             }
     }
     .ivu-table-cell{

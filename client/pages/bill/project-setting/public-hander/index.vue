@@ -1,18 +1,18 @@
 <template>
     <div class="public-title">
         <div class='title-right'>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button> 
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button> 
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button> 
-            <Button type="primary" @click="goProjectDetail">编辑档案</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button>
+            <Button type="primary" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
         </div>
 
         <div class='title-left'>
             <div class='title-name-line'>
-                <span class='title-name' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
+                <span class='title-name' @click="goback" style="cursor:pointer;" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
-                <span style="color:#499DF1;font-size:14px">开业进度总览</span>
-                <span  style="color:#499DF1;font-size:14px">>骏豪-中央公园广场-物业档案</span>
+                <!-- <span style="color:#499DF1;font-size:14px">开业进度总览</span>/ -->
+                <span  style="color:#499DF1;font-size:14px">>{{city}}-{{name}}</span>
             </div>
         </div>
 
@@ -24,22 +24,22 @@
             </div>
             <div>
                 <Row>
-                    <Col 
-                        span="12" 
-                        v-if="memberDetailView" 
-                        v-for="(item,index) in  memberDetail" 
+                    <Col
+                        span="12"
+                        v-if="memberDetailView"
+                        v-for="(item,index) in  memberDetail"
                         :key="index"
                     >
-                        <label 
+                        <label
                             style="width:100px;display:inline-block;text-align:right;padding-right:3px;"
-                        > 
-                            {{item.displayName}} 
-                        </label> 
-                        <KrInput 
-                            :readOrEdit="true" 
-                            :value="item.memberName" 
-                            style="width:160px" 
-                            @okClick="okClick($event,item)" 
+                        >
+                            {{item.displayName}}
+                        </label>
+                        <KrInput
+                            :readOrEdit="true"
+                            :value="item.memberName"
+                            style="width:160px"
+                            @okClick="okClick($event,item)"
                         />
                     </Col>
                 </Row>
@@ -47,22 +47,22 @@
         </Modal>
 
         <Modal
-            
+
             v-model="openWatch"
             title="查看记录"
             width="660"
         >
-                <WatchRecord 
+                <WatchRecord
                     v-if="openWatch"
                     :id="queryData.id"
-                    :watchRecord="watchRecord" 
-                    @searchClick="searchClick" 
+                    :watchRecord="watchRecord"
+                    @searchClick="searchClick"
                     :watchTotalCount="watchTotalCount"
                     :watchPage = "watchPage"
                 />
             <div slot="footer"></div>
         </Modal>
-       
+
 
         <Message
             :type="MessageType"
@@ -76,7 +76,7 @@
             width="440"
             >
             <div class='sure-sign'>确认终止项目?</div>
-            
+
             <div slot="footer">
                 <Button type="primary" @click="deleteProject">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="switchDelete">取消</Button>
@@ -84,7 +84,7 @@
         </Modal>
 
     </div>
-        
+
 </template>
 
 <script>
@@ -93,6 +93,18 @@
     import WatchRecord from "../project-detail/watch-record";
     import Message from '~/components/Message';
     export default {
+        props:{
+          name:{
+            type:String
+          },
+          city:{
+            type:String
+          },
+          isComment:{
+            type:Boolean,
+            default:false,
+          }
+        },
         components:{
             KrInput,
             WatchRecord,
@@ -124,17 +136,20 @@
                 },
                 MessageType:'',
                 warn:'',
-                
+
             };
         },
         created(){
             this.queryData=this.$route.query;
-            
+
         },
         mounted() {
              this.memberDetailList()
         },
         methods:{
+            goback(){
+                this.$emit("goback")
+            },
             //打开项目成员
             openProject(){
                 this.memberDetailList('openProject')
@@ -142,9 +157,7 @@
 
             },
             goProjectDetail(){
-                
-                console.log(this.$router,"pppppp")
-                console.log(this.$route.query,"ppppp")
+
                 // return ;
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
@@ -172,7 +185,7 @@
             },
             //对号被点击
             okClick(val,item){
-               
+
                 let param = {
                     code:item.code,
                     memberName:val.value,
@@ -198,7 +211,7 @@
                     this.watchRecord=response.data.items;
                     this.watchPage = response.data.page;
                     this.watchTotalCount = response.data.totalCount;
-                    
+
                 }).catch((error)=>{
                     this.$Notice.error({
                          title: error.message,
@@ -221,17 +234,17 @@
                 if(!data.startTime || !data.endTime){
                     return data;
                 }
-                
+
                 data.endTime = data.endTime.split(' ')[0] + ' 23:59:59';
                 return data;
             },
 
             //查看记录页面搜索被点击
             searchClick(params){
-            
+
                 this.watchParams = Object.assign({},params);
                 this.getWatchData(this.watchParams);
-            
+
             },
             //终止项目开关
             switchDelete(){
@@ -242,7 +255,7 @@
                 this.$http.delete('delete-project-setting',{
                     id:this.$route.query.id
                 }).then((response)=>{
-                    
+
                 this.switchDelete();
                     window.close();
                     window.opener.location.reload();
@@ -255,7 +268,7 @@
              onChangeOpen(data){
                 this.openMessage=data;
             },
-           
+
         }
 
 
@@ -278,6 +291,6 @@
         float: right;
     }
 }
-    
-   
+
+
 </style>

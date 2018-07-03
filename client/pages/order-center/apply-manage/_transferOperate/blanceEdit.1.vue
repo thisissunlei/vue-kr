@@ -3,7 +3,8 @@
         <ul>
             <li class='blance-row' v-for="(item) in dataList" :key="item.feeType">
                 <div class='col-check '>
-                    <Checkbox :label="item.feeTypeName" :disabled='disables[item.feeTypeName].chk' />
+                    <!-- <Checkbox :label="item.feeTypeName" :disabled='disables[item.feeTypeName].chk' /> -->
+                    <Checkbox :label="item.feeTypeName" :disabled='readOnly' />
                 </div>
                 <div class='col-input '>
                     <Input v-model="models[item.feeTypeName].input" :name='gotRefTag(item.feeTypeName)' :disabled='disables[item.feeTypeName].input' :placeholder="formatBlance(item.maxAmount)" style="width: 252px" @on-change='handleInputChange'>
@@ -57,33 +58,37 @@ export default {
         dataList() {
             this.initStates()
         },
+        readOnly() {
+            console.log('watch_readOnly', this.readOnly)
+        }
     },
     methods: {
         initStates() {
-            if (!this.readOnly) { //可编辑模式
+            if (this.readOnly) { //只读 查看模式
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
-                    this.models[item.feeTypeName] = Object.assign({}, { input: item.amount },{feeType:item.feeType});
-                    this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
-                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
-                    this.errorTexts[item.feeTypeName] = ''
-                })
-            }
-            else{ //只读 查看模式
-                this.dataList.map(item => {
-                    this.maxAmounts[item.feeTypeName] = item.maxAmount
-                    this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});
+                    this.models[item.feeTypeName] = Object.assign({}, { input: '' }, { feeType: item.feeType });
                     this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: true })
                     this.errorTexts[item.feeTypeName] = ''
                 })
+            }
+            else {//可编辑模式
+                this.dataList.map(item => {
+                    this.maxAmounts[item.feeTypeName] = item.maxAmount
+                    this.models[item.feeTypeName] = Object.assign({}, { input: item.amount }, { feeType: item.feeType });
+                    this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
+                    this.errorTexts[item.feeTypeName] = ''
+                })
+
             }
         },
         gotRefTag(type) {
             return '' + type;
         },
         formatBlance(blance) {
-            return '最大' + utils.thousand((blance||0).toFixed(2)) + '元'
+            return '最大' + utils.thousand((blance || 0).toFixed(2)) + '元'
         },
         checkgroupchange() {
             this.dataList.map(item => {

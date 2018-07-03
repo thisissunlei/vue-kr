@@ -239,33 +239,15 @@ export default {
         },
         //搜索
         handleSearch(formItem) {
-            let obj = {};
-            obj.applyNo = formItem.applyNum
-            obj.cityId = Number(formItem.cityId)
-            obj.communityId = Number(formItem.communityId)
-            obj.customerId = Number(formItem.customerID)
-            obj.page = this.params.page
-            obj.pageSize = this.params.pageSize
-            obj.transferStatus = formItem.applyState
-            obj.transferType = formItem.operateType
-            obj.uEndTime = formItem.operateEndDate
-            obj.uStartTime = formItem.operateStartDate
-
-
-            obj.pageSize = 12
-            obj.communityId = 1
-            obj.customerId = 1
-            obj.applyNo = 1
-            obj.transferType = 1
-            obj.cityId = 1
-            obj.transferStatus = 1
-            obj.uEndTime = 1
-            obj.uStartTime = 1
-            obj.page = 1
-
-            this.formItem = obj;
-
-            this.$http.get('get-apply-list', this.formItem, r => {
+            //过滤掉全部
+            for (const key in formItem) {
+                if (formItem.hasOwnProperty(key)) {
+                    if (formItem[key]==-1) {
+                        formItem[key]=''
+                    } ;                   
+                }
+            }
+            this.$http.get('get-apply-list', formItem, r => {
                 this.applyDatas = [].concat(r.data.items);
                 console.log(this.applyDatas)
             }, e => {

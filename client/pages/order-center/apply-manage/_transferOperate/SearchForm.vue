@@ -6,8 +6,8 @@
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;">
-                    <Form-item label="申请编号" class='daily-form' prop="applyNum">
-                        <i-input v-model="formItem.applyNum" placeholder="请输入申请编号" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" />
+                    <Form-item label="申请编号" class='daily-form' prop="applyNo">
+                        <i-input v-model="formItem.applyNo" placeholder="请输入申请编号" style="width: 200px" @keyup.enter.native="onKeyEnter($event)" />
                     </Form-item>
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
@@ -34,23 +34,23 @@
                 <div style="white-space: nowrap;">
                     <div style="width:850px;display:inline-block;">
                         <Form-item label="操作类型" class='daily-form'>
-                            <Select v-model="formItem.operateType" placeholder="请输入操作类型" style="width: 200px" clearable>
+                            <Select v-model="formItem.transferType" placeholder="请输入操作类型" style="width: 200px" clearable>
                                 <Option v-for="item in operateTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
 
                         <Form-item label="操作款项" class='daily-form'>
-                            <Select v-model="formItem.moneyType" placeholder="请输入操作款项" style="width: 200px" clearable>
+                            <Select v-model="formItem.transferFeeType" placeholder="请输入操作款项" style="width: 200px" clearable>
                                 <Option v-for="item in moneyTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="操作日期" class='priceForm' prop="operateStartDate">
-                                <DatePicker v-model="formItem.operateStartDate" placeholder="开始日期" style="width: 90px" />
+                            <Form-item label="操作日期" class='priceForm' prop="uStartTime">
+                                <DatePicker v-model="formItem.uStartTime" placeholder="开始日期" style="width: 90px" />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item class='priceForm' prop="operateEndDate">
-                                <DatePicker v-model="formItem.operateEndDate" placeholder="结束日期" style="width: 90px" />
+                            <Form-item class='priceForm' prop="uEndTime">
+                                <DatePicker v-model="formItem.uEndTime" placeholder="结束日期" style="width: 90px" />
                             </Form-item>
                         </div>
 
@@ -65,8 +65,8 @@
                     <div style="display:inline-block;width:850px;">
                         <span class="attract-font status">状
                             <span style="display:inline-block;width:22px;"></span>态</span>
-                        <Form-item class='daily-form ' prop="applyState">
-                            <Select v-model="formItem.applyState" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
+                        <Form-item class='daily-form ' prop="transferStatus">
+                            <Select v-model="formItem.transferStatus" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
                                 <Option v-for="option in applyStates" :value="option.code" :key="option.code">{{option.desc}}</Option>
                             </Select>
                         </Form-item>
@@ -98,9 +98,9 @@ export default {
         const validateTime = (rule, value, callback) => {
             var start = '';
             var end = '';
-            if (rule.field == 'operateStartDate' || rule.field == 'operateEndDate') {
-                start = this.formItem.operateStartDate;
-                end = this.formItem.operateEndDate;
+            if (rule.field == 'uStartTime' || rule.field == 'uEndTime') {
+                start = this.formItem.uStartTime;
+                end = this.formItem.uEndTime;
             }
             if (rule.field == 'receiveStartDate' || rule.field == 'receiveEndDate') {
                 start = this.formItem.receiveStartDate;
@@ -127,36 +127,37 @@ export default {
             moneyTypes: [],
             applyStates: [],
             formItemOld: {
-                operateEndDate: '',
-                operateStartDate: ''
+                uEndTime: '',
+                uStartTime: ''
             },
             ruleOperation: {
-                applyNum: [
+                applyNo: [
                     { validator: validateName, trigger: 'change' }
                 ],
                 customerID: [
                     { validator: validateName, trigger: 'change' }
                 ],
-                operateEndDate: [
+                uEndTime: [
                     { validator: validateTime, trigger: 'change' }
                 ],
-                operateStartDate: [
+                uStartTime: [
                     { validator: validateTime, trigger: 'change' }
                 ],
-                applyState: [
+                transferStatus: [
                     { validator: validateName, trigger: 'change' }
                 ],
             },
             formItem: {
-                applyNum: '',//申请编号
-                customerID: '',
+                applyNo: '',//申请编号
+                customerId: '',
                 communityId: '',
                 cityId: '', 
-                operateType:'' ,
+                transferType:'' ,
                 moneyType:'',
-                operateEndDate: '',
-                operateStartDate: '',
-                applyState: '',
+                uEndTime: '',
+                uStartTime: '',
+                transferStatus: '',
+                transferFeeType:''
             },
         }
     },
@@ -169,19 +170,19 @@ export default {
         this.params = _this.$route.query;
         _this.$emit('initData', this.formItem);
         let params = Object.assign({}, this.$route.query);
-        if (params.operateStartDate) {
-            params.operateStartDate = new Date(parseInt(params.operateStartDate)).getTime();
+        if (params.uStartTime) {
+            params.uStartTime = new Date(parseInt(params.uStartTime)).getTime();
         }
-        if (params.operateEndDate) {
-            params.operateEndDate = new Date(parseInt(params.operateEndDate)).getTime();
+        if (params.uEndTime) {
+            params.uEndTime = new Date(parseInt(params.uEndTime)).getTime();
         }
         this.formItem = Object.assign({}, this.formItem, params);
         setTimeout(() => {
             if (!_this.formItem.moneyType) {
                 _this.formItem.moneyType = ' ';
             }
-            if (!_this.formItem.operateType) {
-                _this.formItem.operateType = ' ';
+            if (!_this.formItem.transferType) {
+                _this.formItem.transferType = ' ';
             }
         }, 500);
 
@@ -281,7 +282,7 @@ export default {
         },
 
         handleChangeCustomer(item) {
-            this.formItem.customerID = item;
+            this.formItem.customerId = item;
         },
         //城市change事件
         handleChangeCity(param) {

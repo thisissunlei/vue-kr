@@ -47,5 +47,10 @@ export default {
     'get-apply-submit':{
         url: "/ben/transfer/submit",
         method: "post"
-    }
+    },
+    //同意申请
+    'get-apply-approve':{
+        url: "/ben/transfer/agree-apply",
+        method: "post"
+    },
 };

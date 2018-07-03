@@ -116,6 +116,7 @@ export default {
             transferStatus: '',//申请处理状态 
             approveBtnText: '同意',
             logList: [],
+            balanceOut: {},
             formItem: {
                 customerId: 0,
                 communityIn: 0,
@@ -150,7 +151,9 @@ export default {
             this.$http.get('get-apply-info-id', from).then((response) => {
                 let obj = response.data;
                 this.receivedApplyInfo = Object.assign({}, obj)
-                this.logList=this.receivedApplyInfo.logList;
+                this.logList = this.receivedApplyInfo.logList;
+                this.isFinancialSide = this.receivedApplyInfo.financialSide;
+                this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
                 this.getFeeAmount();
             }
@@ -161,7 +164,7 @@ export default {
             })
         },
         //校验查看编辑权限
-        checkRights(status, isFinancialSide) {
+        checkRights(status, isFinancial) {
             //   UIShowAble: {
             //         editBtn: false,//true显示
             //         approveBtn: false,
@@ -177,17 +180,21 @@ export default {
             //         approveBtn: false,
             //         rejectBtn: false
             //     },
-
-            if (status === '待处理') {
+            let transferStatus = status || this.transferStatus;
+            let isFinancialSide = isFinancial || this.isFinancialSide;
+            transferStatus = '待处理'
+            isFinancialSide = true;
+            if (transferStatus === '待处理') {
                 if (isFinancialSide) {
                     this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: true }, { approveBtn: true }, { rejectBtn: true })
                     this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: false }, { approveBtn: false }, { rejectBtn: false })
                 }
-            } else if (status === '已处理') {
+            } else if (transferStatus === '已处理') {
 
-            } else if (status === '已退回') {
+            } else if (transferStatus === '已退回') {
                 this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: true }, { approveBtn: true }, { rejectBtn: false })
                 this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: false }, { approveBtn: false }, { rejectBtn: true })
+                this.approveBtnText = '提交'
             }
 
         },
@@ -204,7 +211,8 @@ export default {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                let arr = r.data.filter(item => this.targetFeeTypes.includes(item))
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                debugger
                 _this.feeTypeArray = arr;
                 var list = [];
                 _this.receivedApplyInfo.detailList.map(item => {
@@ -216,7 +224,7 @@ export default {
                     })
                 })
                 _this.feeTypeArray = [].concat(list);
-
+                debugger;
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -273,41 +281,69 @@ export default {
                 rejectBtn: false
             };
             this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            console.log(this.UIDisable)
+
         },
         handleReject() { },
         handleSubmit(formItem) {
+
+            //    customerId: 0,
+            //     communityIn: 0,
+            //     communityId: '',
+            //     detailList: [],
+            //     remark: ''
+
 
             if (!this.verifyBlance()) {
                 this.$Notice.error({ title: '转移金额填写有误' });
                 return
             }
-            let detailList = []
-            this.checkGroup.map(item => {
-                this.formItem.balanceOut[item]
-                let obj = {
-                    communityIdIn: this.formItem.communityIn,
-                    communityIdOut: this.formItem.communityIn,
-                    transferAmount: this.formItem.balanceOut[item].blance,
-                    transferFeeType: this.formItem.balanceOut[item].blanceType,
-                };
-                detailList.push(obj)
-            })
 
+            debugger;
+            let detailList = []
+            for (const key in this.balanceOut) {
+                if (this.balanceOut.hasOwnProperty(key)) {
+                    let obj = {
+                        communityIdIn: this.formItem.communityIn,
+                        communityIdOut: this.formItem.communityIn,
+                        transferAmount: this.balanceOut[key].input,
+                        transferFeeType: this.balanceOut[key].feeType,
+                    };
+                    detailList.push(obj)
+
+                }
+            }
+            let detailStr = JSON.stringify([].concat(detailList));
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerId,
+                customerId: this.formItem.customerID,
                 id: '',
                 transferType: 'TRANSFER_NONBUSINESS',
-                detailList: [].concat(detailList)
+                detailStr: detailStr
             }
-            this.$http.post('get-apply-submit', parms).then((response) => {
-                this.basicInfo = response.data;
-            }).catch((error) => {
-                this.$Notice.error({
-                    title: error.message
-                });
-            })
+
+            if (this.approveBtnText === '提交') {
+                this.$http.post('get-apply-submit', parms).then((response) => {
+                    this.basicInfo = response.data;
+                }).catch((error) => {
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+            } else if (this.approveBtnText === '同意') {
+                this.$http.post('get-apply-approve', { id: this.receivedApplyInfo.id }).then((response) => {
+                    this.basicInfo = response.data;
+                }).catch((error) => {
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+            }
+
+
+
+
         }
     }
 }

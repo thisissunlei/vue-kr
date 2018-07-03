@@ -11,7 +11,6 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 			:isOk="isOk"  
-			:right="right"
 		>
 			<div class="view-box">
 				
@@ -86,7 +85,7 @@
 <script>
 import PhotoAlbum from '../PhotoAlbum';
 import EditLabel from './EditLabel';
-import utils from '~/plugins/utils';
+import utils from 'utils';
 import KrImg from '../KrImg'
 export default{
 	components:{
@@ -95,9 +94,6 @@ export default{
 		KrImg
 	},
     props:{
-		right:{
-            type:String
-        },
         publicUse:{
             default:false,
 			type:Boolean,

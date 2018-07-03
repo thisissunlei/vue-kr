@@ -3,13 +3,10 @@
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
 			<div v-if="!isEdit && labeType=='label'"  >
-				<div v-if="value" class="label-text" @click="editClick">{{value}}</div>
+				<div v-if="value" class="label-text" :style="!yesOrnoMadal?{minWidth:'150px'}:{}" @click="editClick">{{value}}</div>
 				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
-				<div class="icon-box">	
-					<span  v-if="this.right != 'READONLY'" class="edit-icon" @click="editClick"></span>
-					<span class="record-icon" @click="recordClick"></span>
-				</div>
-				
+				<span class="edit-icon" @click="editClick"></span>
+				<span class="record-icon" v-if="yesOrnoMadal" @click="recordClick"></span>
 				
 				
 			</div>
@@ -61,14 +58,12 @@
 						</div>
 					
 					</div>
-					<div class="icon-box">
-						<span v-if="this.right != 'READONLY'" class="edit-icon" @click="editClick">
-							<!-- <Icon type="ios-compose-outline "></Icon> -->
-						</span>
-						<span class="record-icon" @click="recordClick">
-							<!-- <Icon type="ios-compose-outline "></Icon> -->
-						</span>
-					</div>
+					<span class="edit-icon" @click="editClick">
+						<!-- <Icon type="ios-compose-outline "></Icon> -->
+					</span>
+					<span class="record-icon" @click="recordClick">
+						<!-- <Icon type="ios-compose-outline "></Icon> -->
+					</span>
 				</div>
 			</div>
 
@@ -81,7 +76,7 @@
 				</div>
 				
 				<div class="operation">
-					<span  class="kr-ui-x-icon" @click="cancelClick">
+					<span class="kr-ui-x-icon" @click="cancelClick">
 					
 					</span>
 					
@@ -112,20 +107,21 @@
 </template>
 
 <script>
-import utils from '~/plugins/utils';
+import utils from 'utils';
 import KrImg from '../KrImg'
 export default {
 	components:{
 		KrImg
 	},
     props:{
+				yesOrnoMadal:{
+					type:Boolean,
+          default:true,
+				},
         readOrEdit:{
             type:Boolean,
             default:false,
 		},
-		 right:{
-            type:String
-        },
 		isOk:{
 			type:Boolean,
 		
@@ -170,10 +166,14 @@ export default {
 			this.switchMask();
 		},
 		switchMask(){
-			this.openMessage = !this.openMessage;
+			if(this.yesOrnoMadal){
+				this.openMessage = !this.openMessage;
+			}else{
+				this.cancelClick();
+			}
 		},
 		eyePhotoAlbum(url,type,event){
-			
+			console.log(event,"======")
 			this.$emit('eyePhotoAlbum',url,type,event,(type)=>{
 				if(type == 'view'){
 					this.isEdit = false;
@@ -241,9 +241,6 @@ export default {
 			this.$emit('recordClick',this.value)
 		},
 		editClick(event){
-			if(this.right == 'READONLY'){
-				return ;
-			}
 			this.$emit("editClick",event)
 			// var isclose = this.editClick();
 			// if(isclose){
@@ -314,7 +311,12 @@ export default {
 	.operation-icon{
 		display:none;
 	}
-	
+	&:hover .record-icon{
+		display:inline-block;
+	}
+	&:hover .edit-icon{
+		display:inline-block;
+	}
 	.to-upload{
 		width: 210px;
 		height: 135px;
@@ -326,52 +328,31 @@ export default {
 		border-radius: 4px 4px 0 4px 4px;
 		margin: 30px 30px 10px;
 	}
-
-	.icon-box{
+	.record-icon{
+		background-image: url(./images/record.svg);
+		background-size:100%; 
+		background-repeat: no-repeat;
 		position: absolute;
-		width: 60px;
-		height: 20px;
-		
-		top: 0px;
-		right: 30px;
-		.record-icon{
-			background-image: url(./images/record.svg);
-			background-size:100%; 
-			background-repeat: no-repeat;
-			position: relative;
-			
-			width: 16px;
-			height: 16px;
-			
-			line-height: 32px;
-			display:none;
-			cursor: pointer;
-		}
-
-		.edit-icon{
-			background-image: url(./images/edit.svg);
-			background-size:100%; 
-			position: relative;
-			background-repeat: no-repeat;
-			
-			width: 16px;
-			height: 16px;
-			margin-right: 20px;
-		
-			display:none;
-			cursor: pointer;
-		}
-
-		
+		right: 20px;
+		width: 16px;
+		height: 16px;
+		top: 3px;
+		line-height: 32px;
+		display:none;
+		cursor: pointer;
 	}
-	&:hover .record-icon{
-		display:inline-block;
+	.edit-icon{
+		background-image: url(./images/edit.svg);
+		background-size:100%; 
+		position: absolute;
+		background-repeat: no-repeat;
+		right: 60px;
+		width: 16px;
+		height: 16px;
+		top: 3px;
+		display:none;
+		cursor: pointer;
 	}
-	&:hover .edit-icon{
-		display:inline-block;
-	}
-
-
 	.kr-ui-ok-icon,.kr-ui-x-icon{
 		position: absolute;
 		width: 16px;

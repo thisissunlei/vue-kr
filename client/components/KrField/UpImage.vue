@@ -43,7 +43,7 @@
 <script>
 import PhotoAlbum from '../PhotoAlbum';
 import EditLabel from './EditLabel';
-import utils from '~/plugins/utils';
+import utils from 'utils';
 export default{
 	components:{
 		PhotoAlbum,

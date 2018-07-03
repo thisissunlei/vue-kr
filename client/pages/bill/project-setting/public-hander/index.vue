@@ -4,23 +4,23 @@
             <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px"  @click="switchDelete">终止该项目</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="openProject" >项目成员</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="watchTask">查看编辑纪录</Button>
-            <Button type="primary" style="margin-left:10px;" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
+            <Button type="primary" style="margin-left:10px;margin-right:20px" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
         </div>
 
         <div class='title-left'>
             <div class='title-name-line'>
-                <span class='title-name' @click="goback" style="cursor:pointer;" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
+                <span class='title-name'  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
                 <!-- <span style="color:#499DF1;font-size:14px">开业进度总览</span>/ -->
-                <span  style="color:#499DF1;font-size:14px">>{{city}}-{{name}}</span>
+                <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" >{{city}}-{{name}}</span>
             </div>
         </div>
 
         <!-- 项目成员弹窗 -->
         <Modal v-model="modalProject" title="项目成员" width=700>
             <div slot='footer'>
-                <Button type="default" @click='cancelproject'>取消</Button>
-                <Button type="info" @click='okproject'>确定</Button>
+                <!-- <Button type="default" @click='cancelproject'>取消</Button>
+                <Button type="info" @click='okproject'>确定</Button> -->
             </div>
             <div>
                 <Row>
@@ -113,6 +113,7 @@
         data(){
             return {
                 //编辑记录开关
+                isDeletePermission:false,
                 openWatch:false,
                 modalProject:false,
                 openDelete:false,
@@ -120,7 +121,7 @@
                 memberDetailView:false,
                 modalProject:false,
                 openMessage:false,
-                projectId:38,
+                projectId:this.$route.query.id,
                 watchRecord:[],
                 watchTotalCount:0,
                 watchPage:1,
@@ -144,9 +145,18 @@
 
         },
         mounted() {
-             this.memberDetailList()
+            //  this.memberDetailList();
+             this.getDeletePermission();
         },
         methods:{
+          getDeletePermission(){
+              this.$http.get('get-delete-permission',{id:this.projectId}).then((res)=>{
+                  this.isDeletePermission= res.data
+                  console.log(this.isDeletePermission)
+              }).catch((e)=>{
+
+              })
+          },
             goback(){
                 this.$emit("goback")
             },
@@ -158,7 +168,7 @@
             },
             goProjectDetail(){
 
-                // return ;
+
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
             //获取项目成员
@@ -211,7 +221,6 @@
                     this.watchRecord=response.data.items;
                     this.watchPage = response.data.page;
                     this.watchTotalCount = response.data.totalCount;
-
                 }).catch((error)=>{
                     this.$Notice.error({
                          title: error.message,

@@ -36,6 +36,5 @@ export default {
 <style lang="less">
 .list-table {
     margin: 20px;
-    margin-top: 0px;
 }
 </style>

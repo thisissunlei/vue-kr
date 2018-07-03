@@ -4,26 +4,26 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="申请编号" style="width:180px" prop="customerID">
+                <FormItem label="申请编号" style="width:252px" prop="customerID">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
                     <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.applyNo}}</span>
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="操作类型" style="width:180px" prop="communityId">
+                <FormItem label="操作类型" style="width:252px" prop="communityId">
                     <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.transferTypeName}}</span>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:180px" prop="customerID">
+                <FormItem label="客户名称" style="width:252px" prop="customerID">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
                     <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.customerName}}</span>
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="社区名称" style="width:180px" prop="communityId">
+                <FormItem label="社区名称" style="width:252px" prop="communityId">
                     <selectCommunities :test="formItem" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' :customerId='formItem.customerId'>
                     </selectCommunities>
                 </FormItem>
@@ -108,6 +108,7 @@ export default {
                 approveBtn: true,
                 rejectBtn: true
             },
+            targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             receivedApplyInfo: {},
             feeTypeArray: [],
             communities: [],
@@ -203,8 +204,8 @@ export default {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-
-                _this.feeTypeArray = [].concat(r.data);
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item))
+                _this.feeTypeArray = arr;
                 var list = [];
                 _this.receivedApplyInfo.detailList.map(item => {
                     list.push({
@@ -341,6 +342,7 @@ export default {
                 margin: 0 10px;
             }
         }
+
         .required-label {
             font-size: 14px;
             position: relative;
@@ -354,6 +356,9 @@ export default {
                 top: 14px;
             }
         }
+    }
+    .apply-list-table {
+        width: 720px;
     }
 }
 </style>

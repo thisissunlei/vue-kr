@@ -69,9 +69,11 @@ export default {
                 callback("请选择社区")
             }
         };
+
         return {
             dataList: [],
             communities: [],
+            targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             formItem: {
                 customerID: 12246,
                 communityIn: '',
@@ -148,7 +150,8 @@ export default {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                _this.dataList = [].concat(r.data);
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item))
+                _this.dataList = arr;
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

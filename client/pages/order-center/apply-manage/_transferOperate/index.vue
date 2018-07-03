@@ -17,13 +17,18 @@
         </div>
 
         <Modal title="删除申请" v-model="deleteModal" ok-text='删除' class="vertical-center-modal">
-            <p>删除原因</p>
-            <Input v-model="modalText" type="textarea" :rows="4" maxlength='500' placeholder="删除原因"></Input>
+            <div class='modal-container'>
+                <p class='modal-desc'>删除原因</p>
+                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="删除原因"></Input>
+            </div>
+
         </Modal>
 
         <Modal title="退回申请" v-model="rejectModal" ok-text='退回' class="vertical-center-modal">
-            <p>退回原因</p>
-            <Input v-model="modalText" type="textarea" :rows="4" maxlength='500' placeholder="退回原因"></Input>
+            <div class='modal-container'>
+                <p class='modal-desc'>退回原因</p>
+                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="退回原因"></Input>
+            </div>
         </Modal>
 
     </div>
@@ -44,7 +49,7 @@ export default {
     data() {
         return {
             modalText: '',
-            rejectModal: true,
+            rejectModal: false,
             deleteModal: false,
             isFinancialSide: false,
             operateTypeIndex: 0,
@@ -350,13 +355,13 @@ export default {
         }
     }
 }
-.vertical-center-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .ivu-modal {
-        top: 0;
+.modal-container {
+    padding: 0 15px;
+    .modal-desc {
+        font-size: 16px;
+    }
+    .modal-textarea {
+        margin-top: 20px;
     }
 }
 </style>

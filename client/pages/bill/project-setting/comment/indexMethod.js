@@ -5,6 +5,7 @@ import PhotoAlbum from '~/components/PhotoAlbum'
 import OverFlowLabel from './overFlowLabel'
 import IndexData from './indexData'
 export  default  {
+
   getInfo(event){
 
   },

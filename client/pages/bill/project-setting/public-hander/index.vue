@@ -1,7 +1,7 @@
 <template>
     <div class="public-title">
         <div class='title-right'>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button>
+            <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button>
             <Button type="primary" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
@@ -113,6 +113,7 @@
         data(){
             return {
                 //编辑记录开关
+                isDeletePermission:false,
                 openWatch:false,
                 modalProject:false,
                 openDelete:false,
@@ -120,7 +121,7 @@
                 memberDetailView:false,
                 modalProject:false,
                 openMessage:false,
-                projectId:38,
+                projectId:this.$route.query.id,
                 watchRecord:[],
                 watchTotalCount:0,
                 watchPage:1,
@@ -144,9 +145,18 @@
 
         },
         mounted() {
-             this.memberDetailList()
+            //  this.memberDetailList();
+             this.getDeletePermission();
         },
         methods:{
+          getDeletePermission(){
+              this.$http.get('get-delete-permission',{id:this.projectId}).then((res)=>{
+                  this.isDeletePermission= res.data
+                  console.log(this.isDeletePermission)
+              }).catch((e)=>{
+
+              })
+          },
             goback(){
                 this.$emit("goback")
             },
@@ -158,7 +168,7 @@
             },
             goProjectDetail(){
 
-                // return ;
+
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
             //获取项目成员
@@ -211,7 +221,6 @@
                     this.watchRecord=response.data.items;
                     this.watchPage = response.data.page;
                     this.watchTotalCount = response.data.totalCount;
-
                 }).catch((error)=>{
                     this.$Notice.error({
                          title: error.message,

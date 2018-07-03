@@ -29,7 +29,7 @@
                             </div>
                             <div style="float:right">
                                 <!-- <a v-if="!item.canDel" @click='replyMethod(item.id,item.creator)'>回复</a> -->
-                                <a  @click="confirm(item.id)">删除</a>
+                                <a  @click="confirm(item.id)"  v-if="item.canDel">删除</a>
                             </div>
                             <div style="clear:both;"></div>
                         </div>
@@ -81,10 +81,10 @@
               <div class="row-info-middle" style="float:left;width:100%"><span  style="color：#aaa;display: inline-block;">以下为完整档案 </span></div>
                <div class="row-info-two">
                     <Col span="12"  >
-                        <div  class="info-title" style="color:#4F9EED"><div @click="getInfo">物业档案</div></div>
+                        <div  class="info-title" style="color:#4F9EED"><div @click="getInfo" style="text-align:center">物业档案</div></div>
                     </Col>
                     <Col span="12" class="info-title"  >
-                        <div><div @click="getInfo">产品档案</div></div>
+                        <div><div @click="getInfo" style="text-align:center">产品档案</div></div>
                     </Col>
 
                </div>
@@ -189,7 +189,8 @@
             this.getUpUrl()
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
-            this.memberDetailList()
+            // this.getDeletePermission()
+            // this.memberDetailList()
         },
         methods: IndexMethod
     }

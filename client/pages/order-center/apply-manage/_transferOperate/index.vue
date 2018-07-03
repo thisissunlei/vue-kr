@@ -64,7 +64,7 @@ export default {
                 },
                 {
                     name: '转余额',
-                    component: 'blance'
+                    component: 'balance'
                 },
 
                 {
@@ -211,7 +211,7 @@ export default {
             },
             transformType2UIDic: {
                 TRANSFER_COMMUNITY: 'transformZoneInfo',
-                TRANSFER_BALANCE: 'blanceInfo',
+                TRANSFER_BALANCE: 'balanceInfo',
                 TRANSFER_NONBUSINESS: 'nonoperatingInfo',
                 TRANSFER_RENT: 'depositRentInfo',
                 TRANSFER_LOCK_DEPOSIT: 'releaseDepositInfo'

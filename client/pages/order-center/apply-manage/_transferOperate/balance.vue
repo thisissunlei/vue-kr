@@ -73,7 +73,7 @@ export default {
         return {
             dataList: [],
             communities: [],
-            targetFeeTypes: ['可用服务保证金', '冻结服务保证金'],
+            targetFeeTypes: ['可用服务保证金', '门禁卡押金', '其他保证金'],
             formItem: {
                 customerID: 12246,
                 communityIn: '',
@@ -190,7 +190,7 @@ export default {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: '',
-                transferType: 'TRANSFER_RENT',
+                transferType: 'TRANSFER_BALANCE',
                 detailStr: detailStr
             }
             this.$http.post('get-apply-submit', parms).then((response) => {

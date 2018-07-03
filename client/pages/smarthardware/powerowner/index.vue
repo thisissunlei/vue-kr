@@ -106,7 +106,6 @@ export default {
 
    },
    mounted(){
-    //    this.searchData.deviceId = this.$route.query.deviceId || "";
         GLOBALSIDESWITCH("false");
         this.searchData.id = this.$route.query.id || "";
         this.getListData();
@@ -119,12 +118,9 @@ export default {
            let params = this.searchData;
 
             this.$http.get('get-smart-hardware-power-owner',params).then((res)=>{
-            // this.$http.get('get-open-log-list',params).then((res)=>{
 
                 _this.loading = false;
                 var resData = res.data;
-                console.log("resData",resData)
-                // _this.deviceInfo = resData.deviceInfo;
                 _this.powerOwnerList = resData.list;
                 
                 
@@ -137,7 +133,7 @@ export default {
 
        show(params){
            var itemData = params.row;
-           window.open(`../#/user/memberdoormanage/${itemData.uid}`,'_blank');
+           window.open(`../#/user/memberdoormanage/${itemData.uid}?deviceId=${itemData.deviceId}&derivedFromGroup=${itemData.derivedFromGroup}`,'_blank');
 
        },
        toMemebrDetail(params){

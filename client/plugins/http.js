@@ -15,7 +15,7 @@ axios.defaults.mode = 'cors';
 
 
 axios.interceptors.request.use(config => {
-  if(config.method  == 'post'){
+  if(config.method  == 'post' || config.method  == 'put'){
     let data = Qs.stringify(config.data);
     config.data = data;
   }

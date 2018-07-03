@@ -19,27 +19,27 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerID" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="formItem.customerId" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem.communityIn" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>
+                    <selectCommunities test="formItem.communityIn" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
-                    <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>                        -->
+                    <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>                        -->
                     <Select v-model="formItem.communityOut" :disabled='UIDisable.cummunityOut' style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" :disabled="UIDisable.balance" placeholder='maxbalanceOut' style="width: 252px"></Input>
+                <FormItem label="转移余额" style="width:252px" prop="transferAmount">
+                    <Input v-model="formItem.transferAmount" :disabled="UIDisable.balance" placeholder='maxbalanceOut' style="width: 252px"></Input>
                 </FormItem>
                 </Col>
             </Row>
@@ -124,7 +124,7 @@ export default {
             formItem: {
                 applyNo: '',
                 operateType: '',
-                customerID: '',
+                customerId: '',
                 communityIdOut: '',
                 communityIdIn: '',
                 transferAmount: 0,
@@ -137,7 +137,7 @@ export default {
                 customerId: [
                     { required: true, message: '请选择客户', trigger: 'change' }
                 ],
-                balance: [
+                transferAmount: [
                     { required: true, trigger: 'change', validator: validateFirst }
                 ]
             },
@@ -154,15 +154,24 @@ export default {
             };
             this.$http.get('get-apply-info-id', from).then((response) => {
                 this.basicInfo = response.data;
-                this.formItem=Object.assign(this.formItem,
-                {customerID:this.basicInfo.customerId},
-                {applyNo:this.basicInfo.applyNo},
-                {applyMemo:this.basicInfo.customerId},
-                {communityIdIn:this.basicInfo.detailList[0].communityIdIn},
-                {communityIdOut:this.basicInfo.detailList[0].communityIdOut},
-                {transferAmount:this.basicInfo.detailList[0].transferAmount}
-                )
+                // this.formItem=Object.assign(this.formItem,
+                // {customerId:this.basicInfo.customerId},
+                // {applyNo:this.basicInfo.applyNo},
+                // {applyMemo:this.basicInfo.applyMemo},
+                // {communityIdIn:this.basicInfo.detailList[0].communityIdIn},
+                // {communityIdOut:this.basicInfo.detailList[0].communityIdOut},
+                // {transferAmount:this.basicInfo.detailList[0].transferAmount}
+                // )
+                debugger
                 console.log(this.basicInfo)
+
+                let {customerId,applyNo,applyMemo,detailList,detailList:[{communityIdIn,communityIdOut,transferAmount}]}=this.basicInfo;
+                let obj={customerId,applyNo,applyMemo,communityIdIn,communityIdOut,transferAmount};
+                console.log(obj)
+
+                this.formItem=Object.assign({},this.formItem,obj)
+                console.log(this.formItem)
+            
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

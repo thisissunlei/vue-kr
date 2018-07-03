@@ -193,8 +193,29 @@ export default {
                     align:'center',
                     width:90,
                     render(tag, params){
-                        var ren=params.row.statusName?params.row.statusName:'-'
-                        return <span style={(params.row.statusName=='不可用' || params.row.statusName=='下架') ?'color:red':''}>{ren}</span>
+                        var ren=params.row.statusName?params.row.statusName:'-';
+                        if(!params.row.customerName){
+                            return h('span',{
+                                style:{
+                                    color:(ren=='不可用' || ren=='下架' )?'red':''
+                                }
+                            },ren)
+                        }else{
+                            return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:params.row.customerName
+                                        }
+                                    }, [
+                                    h('div', {
+                                        style:{
+                                            color:(ren=='不可用' || ren=='下架' )?'red':''
+                                        }
+                                    },ren)
+                                ])
+                            ])
+                        }
                     }
                 },
                 {

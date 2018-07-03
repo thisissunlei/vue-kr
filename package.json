@@ -40,17 +40,17 @@
     "nodemon": "1.12.5",
     "react": "^16.2.0",
     "scmp": "2.0.0",
-    "vue": "2.5.13",
+    "vue": "2.5.16",
     "vue-dateutils": "1.0.8",
     "vue-loader": "^13.7.0",
-    "vue-server-renderer": "2.5.13",
-    "vue-template-compiler": "2.5.13"
+    "vue-server-renderer": "2.5.16",
+    "vue-template-compiler": "2.5.16"
   },
   "dependencies": {
     "@nuxtjs/axios": "4.5.0",
     "husky": "^0.14.3",
     "iview": "2.8.0",
-    "nuxt": "1.0.0-rc11",
+    "nuxt": "1.2.1",
     "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
     "source-map-support": "^0.4.15",

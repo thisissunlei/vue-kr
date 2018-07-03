@@ -90,8 +90,16 @@ export default {
     methods:{
 		passDataToFather(){
 			var value={};
-			value[this.filterValue]=this.searchValue
-			this.notShowSearchIconProps && this.$emit("serachFormDataChanged",value)
+			if(this.notShowSearchIconProps){
+				value[this.filterValue]=this.searchValue;
+				this.$emit("serachFormDataChanged",value)
+				return;
+			}
+			if(this.inputName && !this.searchFilter){
+				this.$emit("serachFormDataChanged",this.searchValue)
+			}
+
+			 
 		},
         onSearch(){
             if(!this.flag){

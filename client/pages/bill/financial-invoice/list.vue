@@ -115,8 +115,11 @@
                 }
             },
             //页面切换
-            changePage(){
-
+           //页面切换
+            changePage(page){
+                this.tableParams.page=page;
+                this.page=page;
+                this.getListData();
             },
             //获取列表数据
             getListData(){

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class='edit-left-bar'>
-            <div class='detail-title'>
+            <!-- <div class='detail-title'>
                 <div class='title-left'>
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
@@ -14,7 +14,8 @@
 
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
                 <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
-            </div>
+            </div> -->
+            <PublicHander/>
             <Tabs size="default" @on-click="tabClick" :animated="false">
                 <TabPane label="物业档案" name="property">
                     <ArchivesManagement v-if="activeTab=='property'" code="property"/>
@@ -160,6 +161,7 @@ import publicFn from '../publicFn';
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from './object-detail-title';
 import ArchivesManagement from '../archives-management';
+import PublicHander from '../public-hander'
 var ganttChartScrollTop = 0;
 
 
@@ -173,7 +175,8 @@ export default {
         Message,
         Drawer,
         ObjectDetailTitle,
-        ArchivesManagement
+        ArchivesManagement,
+        PublicHander
     },
     data(){
         return{

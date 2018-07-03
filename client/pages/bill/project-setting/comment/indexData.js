@@ -1,7 +1,5 @@
-
-
-export default function (){
-    return{
+export default function(){
+        return {
                 eyeIndex:1,
                 imgData:[],
                 isPhotoAlbum:false,
@@ -24,7 +22,7 @@ export default function (){
                 totalCount: 0,
                 modal1: false,
                 modal2: false,
-                projectId: this.$route.query.projectId,
+                projectId: this.$route.query.id,
                 photos: "",
                 replyId: null,
                 formItem: {
@@ -42,5 +40,5 @@ export default function (){
                         trigger: 'blur'
                     }]
                 }
-}
+            }
 }

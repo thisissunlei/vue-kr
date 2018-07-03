@@ -16,18 +16,18 @@
             <Table :columns="columns" :data="applyDatas" border class='list-table' />
         </div>
 
-        <Modal title="删除申请" v-model="deleteModal" ok-text='删除' class="vertical-center-modal">
+        <Modal title="删除申请" v-model="deleteModal" ok-text='删除' @on-ok="handeDeleteApply" class="vertical-center-modal">
             <div class='modal-container'>
                 <p class='modal-desc'>删除原因</p>
-                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="删除原因"></Input>
+                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写删除原因"></Input>
             </div>
 
         </Modal>
 
-        <Modal title="退回申请" v-model="rejectModal" ok-text='退回' class="vertical-center-modal">
+        <Modal title="退回申请" v-model="rejectModal" ok-text='退回' @on-ok="handeRejectApply" class="vertical-center-modal">
             <div class='modal-container'>
                 <p class='modal-desc'>退回原因</p>
-                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="退回原因"></Input>
+                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
             </div>
         </Modal>
 
@@ -77,6 +77,7 @@ export default {
                 },
             ],
             applyDatas: [],
+            currentApplyId: '',//当前申请单id
             columns: [
                 {
                     title: '单据编号',
@@ -154,7 +155,6 @@ export default {
                         // 已退回时所有人员查看显示按钮“查看”、“编辑”和“删除”
 
                         let status = params.row.transferStatusName
-
                         var btnRender = [];
                         btnRender.push(tag(Buttons, {
                             props: {
@@ -180,7 +180,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.handleRejectApply(params)
+                                        this.handleShowRejectApply(params)
                                     }
                                 }
                             }))
@@ -195,7 +195,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.handleDeleteApply(params)
+                                        this.handleShowDeleteApply(params)
                                     }
                                 }
                             }))
@@ -242,9 +242,9 @@ export default {
             //过滤掉全部
             for (const key in formItem) {
                 if (formItem.hasOwnProperty(key)) {
-                    if (formItem[key]==-1) {
-                        formItem[key]=''
-                    } ;                   
+                    if (formItem[key] == -1) {
+                        formItem[key] = ''
+                    };
                 }
             }
             this.$http.get('get-apply-list', formItem, r => {
@@ -316,11 +316,51 @@ export default {
         },
 
         //退回申请
-        handleRejectApply(params) {
+        handleShowRejectApply(params) {
+            debugger;
+            this.currentApplyId = params.row.id
             this.rejectModal = true;
         },
-        handleDeleteApply(params) {
+        handleShowDeleteApply(params) {
+            this.currentApplyId = params.row.id
             this.deleteModal = true;
+        },
+        handeRejectApply() {
+            let params = {
+                id: this.currentApplyId,
+                refundMemo: this.modalText
+            }
+            this.$http.post('get-apply-reject', params).then((response) => {
+                this.$Notice.info({
+                    title: '操作成功'
+                });
+                this.rejectModal = false;
+                this.getAllApply();
+                this.modalText = ''
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+                this.$set(this.UIShowAble, 'rejectModal', false)
+            })
+        },
+        handeDeleteApply() {
+            let params = {
+                id: this.currentApplyId,
+                refundMemo: this.modalText
+            }
+            this.$http.delete('get-apply-delete', params).then((response) => {
+                this.$Notice.info({
+                    title: '操作成功'
+                });
+                this.deleteModal = false;
+                this.modalText = ''
+                this.getAllApply();
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
         }
     }
     ,

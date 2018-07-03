@@ -42,11 +42,11 @@
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
             </FormItem>
 
-            <FormItem style="margin-top:40px">
+            <FormItem style="margin-top:40px;width:700px">
                 <div class="btnContainer">
                     <Button class='operateBtn' v-if='UIShowAble.editBtn' :disabled='UIDisable.editBtn' type="primary" @click="handleEdit">编辑</Button>
                     <Button class='operateBtn' v-if='UIShowAble.approveBtn' :disabled='UIDisable.approveBtn' type="primary" @click="handleSubmit('formItem')">{{approveBtnText}}</Button>
-                    <Button class='operateBtn' v-if='UIShowAble.rejectBtn' :disabled='UIDisable.rejectBtn' type="primary" @click="handleReject('formItem')">退回</Button>
+                    <Button class='operateBtn' v-if='UIShowAble.rejectBtn' :disabled='UIDisable.rejectBtn' type="primary" @click="handleShowReject">退回</Button>
                 </div>
             </FormItem>
         </Form>
@@ -55,6 +55,12 @@
             <!-- <Table :columns="operateHistoryTableColums" :data="operateHistoryData" border class='list-table' /> -->
             <OperateLog :data="logList" class='list-table' />
         </div>
+        <Modal title="退回申请" v-model="UIShowAble.rejectModal" ok-text='退回' @on-ok="handeRejectApply" class="vertical-center-modal">
+            <div class='modal-container'>
+                <p class='modal-desc'>退回原因</p>
+                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -96,7 +102,8 @@ export default {
             UIShowAble: {
                 editBtn: false,//true显示
                 approveBtn: false,
-                rejectBtn: false
+                rejectBtn: false,
+                rejectModal: false
             },
             UIDisable: {
                 customer: true,//true 禁用
@@ -108,6 +115,9 @@ export default {
                 approveBtn: true,
                 rejectBtn: true
             },
+            UIDisableBak: {},
+            rejectModal: false,
+            modalText: '',//退回备注
             targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             receivedApplyInfo: {},
             feeTypeArray: [],
@@ -156,6 +166,7 @@ export default {
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
                 this.getFeeAmount();
+                this.UIDisableBak = Object.assign({}, this.UIDisable);
             }
             ).catch((error) => {
                 this.$Notice.error({
@@ -165,29 +176,16 @@ export default {
         },
         //校验查看编辑权限
         checkRights(status, isFinancial) {
-            //   UIShowAble: {
-            //         editBtn: false,//true显示
-            //         approveBtn: false,
-            //         rejectBtn: false
-            //     },
-            //  UIDisable: {
-            //         customer: true,//true 禁用
-            //         cummunityIn: true,
-            //         cummunityOut: true,
-            //         balance: true,
-            //         remark: true,
-            //         editBtn: false,
-            //         approveBtn: false,
-            //         rejectBtn: false
-            //     },
             let transferStatus = status || this.transferStatus;
             let isFinancialSide = isFinancial || this.isFinancialSide;
-            transferStatus = '待处理'
-            isFinancialSide = true;
+            // transferStatus = '已退回'
+            // isFinancialSide = true;
             if (transferStatus === '待处理') {
                 if (isFinancialSide) {
-                    this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: true }, { approveBtn: true }, { rejectBtn: true })
-                    this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: false }, { approveBtn: false }, { rejectBtn: false })
+                    this.UIShowAble = Object.assign({}, this.UIShowAble, { editBtn: false }, { approveBtn: true }, { rejectBtn: true })
+                    this.UIDisable = Object.assign({}, this.UIDisable, { editBtn: true }, { approveBtn: false }, { rejectBtn: false })
+                    this.approveBtnText = '同意'
+                    this.UIDisable = Object.assign({}, this.UIDisable, { balance: true })
                 }
             } else if (transferStatus === '已处理') {
 
@@ -212,7 +210,6 @@ export default {
                         title: '无可用转移款项'
                     });
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
-                debugger
                 _this.feeTypeArray = arr;
                 var list = [];
                 _this.receivedApplyInfo.detailList.map(item => {
@@ -224,7 +221,6 @@ export default {
                     })
                 })
                 _this.feeTypeArray = [].concat(list);
-                debugger;
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -257,16 +253,20 @@ export default {
         },
         //接收勾选的转移款项
         handleBlanceChange(receiveBlance) {
-            console.log(receiveBlance)
-            this.formItem.balanceOut = Object.assign({}, receiveBlance)
+            this.balanceOut = Object.assign({}, receiveBlance)
         },
         //校验必填项
         verifyBlance() {
-            let hasError = true //无错误
-            this.checkGroup.map(item => {
-                hasError = hasError && this.formItem.balanceOut[item].error
-            })
-            return !hasError
+            // let hasError = true //无错误
+            // this.checkGroup.map(item => {
+            //     hasError = hasError && this.formItem.balanceOut[item].error
+            // })
+            // return !hasError
+            if (this.receivedApplyInfo.applyMemo === this.formItem.remark.trim()
+                && Object.keys(this.balanceOut) == 0)
+                return false
+            else
+                return true;
         },
         //开启编辑
         handleEdit() {
@@ -281,51 +281,74 @@ export default {
                 rejectBtn: false
             };
             this.UIDisable = Object.assign({}, this.UIDisable, obj)
-            console.log(this.UIDisable)
-
         },
-        handleReject() { },
+        handleShowReject() {
+            this.$set(this.UIShowAble, 'rejectModal', true)
+        },
+        handeRejectApply() {
+            let params = {
+                id: this.receivedApplyInfo.id,
+                refundMemo: this.modalText
+            }
+            this.$http.post('get-apply-reject', params).then((response) => {
+                this.UIShowAble = Object.assign({}, this.UIShowAble,
+                    { editBtn: false },
+                    { approveBtn: false },
+                    { rejectBtn: false })
+                this.$Notice.info({
+                    title: '操作成功'
+                });
+                this.getInfo();
+                this.checkRights();
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+                this.$set(this.UIShowAble, 'rejectModal', false)
+            })
+        },
         handleSubmit(formItem) {
-
-            //    customerId: 0,
-            //     communityIn: 0,
-            //     communityId: '',
-            //     detailList: [],
-            //     remark: ''
-
-
             if (!this.verifyBlance()) {
-                this.$Notice.error({ title: '转移金额填写有误' });
+                this.$Notice.error({ title: '请编辑后再提交' });
                 return
             }
 
-            debugger;
-            let detailList = []
-            for (const key in this.balanceOut) {
-                if (this.balanceOut.hasOwnProperty(key)) {
-                    let obj = {
-                        communityIdIn: this.formItem.communityIn,
-                        communityIdOut: this.formItem.communityIn,
-                        transferAmount: this.balanceOut[key].input,
-                        transferFeeType: this.balanceOut[key].feeType,
-                    };
-                    detailList.push(obj)
-
-                }
-            }
-            let detailStr = JSON.stringify([].concat(detailList));
-            let parms = {
-                applyMemo: this.formItem.remark,
-                communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID,
-                id: '',
-                transferType: 'TRANSFER_NONBUSINESS',
-                detailStr: detailStr
-            }
-
             if (this.approveBtnText === '提交') {
+                let detailStr = '';
+                let detailList = []
+                for (const key in this.balanceOut) {
+                    if (this.balanceOut.hasOwnProperty(key)) {
+                        let obj = {
+                            communityIdIn: this.formItem.communityIn,
+                            communityIdOut: this.formItem.communityIn,
+                            transferAmount: this.balanceOut[key].input,
+                            transferFeeType: this.balanceOut[key].feeType,
+                        };
+                        detailList.push(obj)
+                    }
+                }
+                // 可能没有经过编辑 直接提交
+                if (detailList.length == 0) {
+                    detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
+                } else {
+                    detailStr = JSON.stringify([].concat(detailList));
+                }
+
+                let parms = {
+                    applyMemo: this.formItem.remark.trim(),
+                    communityId: this.receivedApplyInfo.communityId,
+                    customerId: this.receivedApplyInfo.customerId,
+                    id: this.receivedApplyInfo.id,
+                    transferType: 'TRANSFER_NONBUSINESS',
+                    detailStr: detailStr
+                }
+
                 this.$http.post('get-apply-submit', parms).then((response) => {
-                    this.basicInfo = response.data;
+                    this.$Notice.info({
+                        title: '操作成功'
+                    });
+                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
+                    this.UIDisable = Object.assign({}, this.UIDisableBak);
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message
@@ -333,7 +356,11 @@ export default {
                 })
             } else if (this.approveBtnText === '同意') {
                 this.$http.post('get-apply-approve', { id: this.receivedApplyInfo.id }).then((response) => {
-                    this.basicInfo = response.data;
+                    this.$Notice.info({
+                        title: '操作成功'
+                    });
+                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
+                    this.UIDisable = Object.assign({}, this.UIDisableBak);
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message
@@ -378,7 +405,17 @@ export default {
                 margin: 0 10px;
             }
         }
-
+        .vertical-center-modal {
+            .modal-container {
+                padding: 0 15px;
+                .modal-desc {
+                    font-size: 16px;
+                }
+                .modal-textarea {
+                    margin-top: 20px;
+                }
+            }
+        }
         .required-label {
             font-size: 14px;
             position: relative;

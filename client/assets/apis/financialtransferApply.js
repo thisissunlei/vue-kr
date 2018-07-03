@@ -39,18 +39,28 @@ export default {
         method: "get"
     },
     //获取申请详情
-    'get-apply-info-id':{
+    "get-apply-info-id": {
         url: "/ben/transfer/view",
         method: "get"
     },
     //提交申请
-    'get-apply-submit':{
+    "get-apply-submit": {
         url: "/ben/transfer/submit",
         method: "post"
     },
     //同意申请
-    'get-apply-approve':{
+    "get-apply-approve": {
         url: "/ben/transfer/agree-apply",
         method: "post"
     },
+    //退回申请 /api/krspace-pay-web/transfer/refund-apply
+    "get-apply-reject": {
+        url: "/ben/transfer/refund-apply",
+        method: "post"
+    },
+    //删除申请
+    "get-apply-delete": {
+        url: "/ben/transfer/delete",
+        method: "delete"
+    }
 };

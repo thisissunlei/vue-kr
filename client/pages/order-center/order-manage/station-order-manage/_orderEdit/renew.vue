@@ -37,7 +37,18 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance  type='edit' :disabled='chancedisabled' name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' :showType="showChanceSelector" v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
+                        <SelectChance  
+                            type='edit' 
+                            :disabled='chancedisabled' 
+                            name="formItem.salerId" 
+                            @onChange="changeChance" 
+                            @gotChanceList='handleGotChancelist' 
+                            :showType="showChanceSelector" 
+                            v-show="showChanceSelector" 
+                            :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'
+                            
+                        ></SelectChance>
                     </FormItem>
                     <!-- <div v-if='remindinfoNewUser' class="title-container">(
                         <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -107,9 +118,9 @@
                         </Select>
                         </Col>
                         <Col span="5" class="discount-table-content">
-                        </DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
+                       
+                            <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
+                            <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
                         </Col>
                         <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled></DatePicker>

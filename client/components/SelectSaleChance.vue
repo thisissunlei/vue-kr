@@ -59,6 +59,7 @@ export default {
             type:Boolean,
             default:true
         }
+        
     },
     data() {
         return {
@@ -158,7 +159,7 @@ export default {
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                if(list.length ==2&&this.type != 'edit'){
+                if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
                     this.showValue = ''+list[1].value;
                 }
                 this.$emit('gotChanceList', parms);

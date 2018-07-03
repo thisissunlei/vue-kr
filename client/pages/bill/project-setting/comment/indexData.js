@@ -1,5 +1,8 @@
 export default function(){
         return {
+                isClick:true,
+                propertyData:[],
+                productData:[],
                 name: this.$route.query.name,
                 city: this.$route.query.city,
                 eyeIndex:1,

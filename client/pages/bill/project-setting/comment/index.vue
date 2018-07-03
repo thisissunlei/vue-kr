@@ -19,7 +19,7 @@
                 </div>
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px">项目备注</div>
             </div>
-            <Scroll :on-reach-bottom="getcomments" :height='500'>
+            <Scroll :on-reach-bottom="getcomments" :height='500' style="overflow-y:auto">
                 <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                     <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
                     <div style="margin-left:66px;min-height:60px">
@@ -81,11 +81,46 @@
               <div class="row-info-middle" style="float:left;width:100%"><span  style="color：#aaa;display: inline-block;">以下为完整档案 </span></div>
                <div class="row-info-two">
                     <Col span="12"  >
-                        <div  class="info-title" style="color:#4F9EED"><div @click="getInfo" style="text-align:center">物业档案</div></div>
+                        <div  class="info-title" style="color:#4F9EED"><div @click="getInfo(1)"   :style="isClick?{borderBottom:'2px solid #4F9EED',textAlign:'center', cursor: 'pointer'}:{textAlign:'center'}">物业档案</div></div>
                     </Col>
-                    <Col span="12" class="info-title"  >
-                        <div><div @click="getInfo" style="text-align:center">产品档案</div></div>
+                    <Col span="12">
+                        <div><div @click="getInfo(2)"  class="info-title"   :style="!isClick?{borderBottom:'2px solid #4F9EED' ,textAlign:'center'}:{textAlign:'center', cursor: 'pointer'}">产品档案</div></div>
                     </Col>
+                    <div v-for=" item in  propertyData" :key="item.id">
+                      <div style="float:left;width:100%">
+                          <Col span="8" >
+                          <div  style="padding-left:5px;font-size:16px;padding-bottom:10px">{{item.label}}</div>
+
+                        </Col>
+                        <Col span="8" >
+                            &nbsp;
+                        </Col>
+                        <Col span="8" >
+                            &nbsp;
+                        </Col>
+                        </div>
+                          <div style="float:left;width:100%">
+                            <template v-for="data in item.data" >
+
+                                  <div v-if="data.fieldType =='FILE' && data.fieldValue.length>0 ">
+                                    <Col span="24" :key="data.id">
+                                    <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
+                                         <UpFiles :value="data.fieldValue" :commentColor="true" style="overflow:hidden"></UpFiles>
+                                    </Col>
+                                  </div>
+                                  <div v-else>
+
+                                     <Col span="8" :key="data.id">
+                                      <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
+                                      <div style="padding-left:5px;font-size:12px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
+                                    </Col>
+                                  </div>
+
+                            </template>
+
+                      </div>
+                    </div>
+
 
                </div>
             </Row>
@@ -162,12 +197,14 @@
     import IndexData from './indexData'
     import IndexMethod from './indexMethod'
     import PublicHander from '../public-hander'
+    import UpFiles from "~/components/KrField/UpFiles"
     export default {
         components:{
             KrInput,
             PhotoAlbum,
             OverFlowLabel,
-            PublicHander
+            PublicHander,
+            UpFiles
         },
         data() {
             return  IndexData.call(this)
@@ -189,6 +226,8 @@
             this.getUpUrl()
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
+            this.queryInfoPropertyMethod()
+            this.queryInfoProductMethod()
             // this.getDeletePermission()
             // this.memberDetailList()
         },

@@ -6,7 +6,16 @@ import OverFlowLabel from './overFlowLabel'
 import IndexData from './indexData'
 export  default  {
 
-  getInfo(event){
+  getInfo(params){
+
+
+    if(params ===1){
+      this.isClick = true;
+      this.queryInfoPropertyMethod()
+    }else{
+      this.isClick = false;
+      this.queryInfoProductMethod()
+    }
 
   },
   goback(){
@@ -88,6 +97,37 @@ export  default  {
           console.log(e)
       })
   },
+
+  queryInfoPropertyMethod() {
+    let param = {
+        code: 'property',//property product
+        projectId: this.projectId
+    }
+    this.$http.get('list-type-code', param).then((res) => {
+
+
+      this.propertyData = res.data.items;
+        console.log(this.propertyData ,'property')
+
+    }).catch((e) => {
+        console.log(e)
+    })
+},
+
+queryInfoProductMethod() {
+  let param = {
+      code: 'product',//property product
+      projectId: this.projectId
+  }
+  this.$http.get('list-type-code', param).then((res) => {
+
+    this.productData = res.data.items;
+    console.log(res,'product')
+  }).catch((e) => {
+      console.log(e)
+  })
+},
+
   queryImgMethod(img,param) {
       this.isPhotoAlbum = true;
       this.eyeIndex=param;

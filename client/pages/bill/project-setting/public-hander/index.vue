@@ -1,26 +1,26 @@
 <template>
     <div class="public-title">
         <div class='title-right'>
-            <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff"  @click="switchDelete">终止该项目</Button>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="openProject" >项目成员</Button>
-            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff" @click="watchTask">查看编辑纪录</Button>
-            <Button type="primary" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
+            <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px"  @click="switchDelete">终止该项目</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="openProject" >项目成员</Button>
+            <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="watchTask">查看编辑纪录</Button>
+            <Button type="primary" style="margin-left:10px;margin-right:20px" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
         </div>
 
         <div class='title-left'>
             <div class='title-name-line'>
-                <span class='title-name' @click="goback" style="cursor:pointer;" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
+                <span class='title-name'  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
                 <!-- <span style="color:#499DF1;font-size:14px">开业进度总览</span>/ -->
-                <span  style="color:#499DF1;font-size:14px">>{{city}}-{{name}}</span>
+                <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" >{{city}}-{{name}}</span>
             </div>
         </div>
 
         <!-- 项目成员弹窗 -->
         <Modal v-model="modalProject" title="项目成员" width=700>
             <div slot='footer'>
-                <Button type="default" @click='cancelproject'>取消</Button>
-                <Button type="info" @click='okproject'>确定</Button>
+                <!-- <Button type="default" @click='cancelproject'>取消</Button>
+                <Button type="info" @click='okproject'>确定</Button> -->
             </div>
             <div>
                 <Row>

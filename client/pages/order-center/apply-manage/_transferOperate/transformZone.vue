@@ -37,7 +37,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button  :disabled='submitBtnShow' type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button :disabled='submitBtnShow' type="primary" @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -57,15 +57,13 @@ export default {
     },
 
     data() {
-        let maxbalanceOut = (this.maxbalanceOut / 100).toFixed(2);
         const validateFirst = (rule, value, callback) => {
             var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
 
             if (isNaN(value)) {
-                console.log('isNaN(value)', isNaN(value))
                 callback(new Error('转移金额请填写数字'))
             }
-            if (Number(value) > Number(maxbalanceOut)) {
+            if (Number(value) > Number(this.maxAmount)) {
                 callback(new Error('转移金额不得大于可转金额'));
             }
             if (value === '') {
@@ -75,8 +73,8 @@ export default {
             }
         };
         return {
-            submitBtnShow:false,
-            maxAmount:0,
+            submitBtnShow: false,
+            maxAmount: 0,
             communitiesOut: [],
             communities: [],
             formItem: {
@@ -108,20 +106,20 @@ export default {
             var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
                 if (r.data.length == 0) {
-                    _this.maxAmount=0
-                    this.submitBtnShow=false;
-                    this.$Notice.info({
+                    _this.maxAmount = 0
+                    _this.submitBtnShow = false;
+                    _this.$Notice.info({
                         title: '无可用转移金额'
                     });
                 }
                 else {
-                    this.submitBtnShow=true;
+                    _this.submitBtnShow = true;
                     _this.maxAmount = r.data[0].maxAmount
                 }
 
             }).catch((error) => {
-                this.submitBtnShow=false;
-                _this.maxAmount=0
+                this.submitBtnShow = false;
+                _this.maxAmount = 0
                 this.$Notice.error({
                     title: error.message
                 });
@@ -139,23 +137,22 @@ export default {
         onGetCmtsList(list) {
             this.communities = [].concat(list);
         },
-        getAmountPaleceholder(){
-            if (this.maxAmount==0) {
+        getAmountPaleceholder() {
+            if (this.maxAmount == 0) {
                 return '无可用转移金额'
             }
-            else{
-                return "最大转移金额为" +this.maxAmount+'元'
+            else {
+                return "最大转移金额为" + this.maxAmount + '元'
             }
         },
         handleSubmit(formItem) {
-            debugger;
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: '',
                 transferType: 'TRANSFER_COMMUNITY',
-                detailStr:JSON.stringify([
+                detailStr: JSON.stringify([
                     {
                         communityIdIn: this.formItem.communityIn,
                         communityIdOut: this.formItem.communityOut,

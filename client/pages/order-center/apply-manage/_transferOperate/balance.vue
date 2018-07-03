@@ -29,7 +29,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button type="primary" :disabled='submitBtnShow' @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -71,6 +71,7 @@ export default {
         };
 
         return {
+            submitBtnShow:false,
             dataList: [],
             communities: [],
             targetFeeTypes: ['可用服务保证金', '门禁卡押金', '其他保证金'],

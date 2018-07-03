@@ -293,7 +293,7 @@ export default{
 
 		},
 		downFille(params){
-            return ;
+            // return ;
 			var that=this;
 			
 			this.$http.post('get-station-contract-pdf-url', {

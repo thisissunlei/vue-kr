@@ -6,7 +6,7 @@
                     <div class='title-left'>
                         <div class='title-name-line'><span class='title-name' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
 
-                        <span style="color:#499DF1;font-size:14px">开业进度总览</span><span  style="color:#499DF1;font-size:14px">>骏豪-中央公园广场-物业档案</span>
+                        <span style="color:#499DF1;font-size:14px">开业进度总览</span><span  style="color:#499DF1;font-size:14px">>{{city}}-{{name}}</span>
                         </div>
 
                     </div> -->

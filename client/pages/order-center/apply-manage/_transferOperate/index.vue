@@ -13,6 +13,7 @@
 
         </div>
         <div class="apply-list-table">
+            <Spin size="large" fix v-if="spinShow"></Spin>
             <Table :columns="columns" :data="applyDatas" border class='list-table' />
         </div>
 
@@ -48,6 +49,7 @@ export default {
     },
     data() {
         return {
+            spinShow:false,
             modalText: '',
             rejectModal: false,
             deleteModal: false,
@@ -239,6 +241,7 @@ export default {
         },
         //搜索
         handleSearch(formItem) {
+            this.spinShow=true;
             //过滤掉全部
             for (const key in formItem) {
                 if (formItem.hasOwnProperty(key)) {
@@ -248,9 +251,11 @@ export default {
                 }
             }
             this.$http.get('get-apply-list', formItem, r => {
+                this.spinShow=false;
                 this.applyDatas = [].concat(r.data.items);
                 console.log(this.applyDatas)
             }, e => {
+                this.spinShow=false;
                 this.$Notice.error({
                     title: e.message
                 });
@@ -258,10 +263,13 @@ export default {
 
         },
         getAllApply() {
+            this.spinShow=true;
             this.$http.get('get-apply-list', {}, r => {
+                this.spinShow=false;
                 this.isFinancialSide = r.data.financialSide;
                 this.applyDatas = [].concat(r.data.items);
             }, e => {
+                this.spinShow=false;
                 this.$Notice.error({
                     title: e.message
                 });
@@ -375,6 +383,9 @@ export default {
         .operate-btn {
             margin-right: 10px;
         }
+    }
+    .apply-list-table{
+        position: relative;
     }
 }
 .modal-container {

@@ -24,8 +24,8 @@
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="转移余额" style="width:252px" prop="balance">
-                    <Input v-model="formItem.balanceOut" :placeholder='maxAmount' style="width: 252px"></Input>
+                <FormItem label="转移余额" style="width:252px" prop="balanceOut">
+                    <Input v-model="formItem.balanceOut" :placeholder="getAmountPaleceholder()" style="width: 252px"></Input>
                     <!-- <BlanceInputEdit :defaultValue="item.code" :blanceType="item.desc" @blanceChange='handleBlanceChange' :maxAmount='item.code' :placeholder="formatBlance(item.code)" /> -->
                 </FormItem>
                 </Col>
@@ -37,7 +37,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button  :disabled='submitBtnShow' type="primary" @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -75,7 +75,8 @@ export default {
             }
         };
         return {
-            maxAmount: '0',
+            submitBtnShow:false,
+            maxAmount:0,
             communitiesOut: [],
             communities: [],
             formItem: {
@@ -92,7 +93,7 @@ export default {
                 customerID: [
                     { required: true, message: '请选择客户', trigger: 'change' }
                 ],
-                balance: [
+                balanceOut: [
                     { required: true, trigger: 'change', validator: validateFirst }
                 ]
             },
@@ -100,21 +101,31 @@ export default {
     },
     methods: {
         getMaxAmount() {
-            let maxAmount = 0
             let parms = {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID
             }
             var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
-                _this.maxAmount = r.data
+                if (r.data.length == 0) {
+                    _this.maxAmount=0
+                    this.submitBtnShow=false;
+                    this.$Notice.info({
+                        title: '无可用转移金额'
+                    });
+                }
+                else {
+                    this.submitBtnShow=true;
+                    _this.maxAmount = r.data[0].maxAmount
+                }
+
             }).catch((error) => {
+                this.submitBtnShow=false;
+                _this.maxAmount=0
                 this.$Notice.error({
                     title: error.message
                 });
             })
-
-            this.maxAmount = maxAmount;
         },
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerID: item })
@@ -123,11 +134,18 @@ export default {
             this.$set(this.formItem, 'communityIn', commIn)
             let all = [].concat(this.communities);
             this.communitiesOut = all.filter(item => item.value !== commIn)
-            console.log(this.communitiesOut)
             this.getMaxAmount();
         },
         onGetCmtsList(list) {
             this.communities = [].concat(list);
+        },
+        getAmountPaleceholder(){
+            if (this.maxAmount==0) {
+                return '无可用转移金额'
+            }
+            else{
+                return "最大转移金额为" +this.maxAmount+'元'
+            }
         },
         handleSubmit(formItem) {
             debugger;
@@ -137,17 +155,20 @@ export default {
                 customerId: this.formItem.customerID,
                 id: '',
                 transferType: 'TRANSFER_COMMUNITY',
-                detailList: [
+                detailStr:JSON.stringify([
                     {
                         communityIdIn: this.formItem.communityIn,
                         communityIdOut: this.formItem.communityOut,
                         transferAmount: this.formItem.balanceOut,
-                        transferFeeType: ''
+                        transferFeeType: 'BALANCE'
                     }
-                ]
+                ])
             }
+
             this.$http.post('get-apply-submit', parms).then((response) => {
-                this.basicInfo = response.data;
+                this.$Notice.info({
+                    title: '操作成功'
+                });
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

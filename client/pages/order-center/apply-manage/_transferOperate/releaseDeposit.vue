@@ -1,6 +1,6 @@
 <template>
     <div class='create-apply-sq'>
-        <SectionTitle title="转营业外申请"></SectionTitle>
+        <SectionTitle title="释放服务保证金申请"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">

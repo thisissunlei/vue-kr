@@ -1,6 +1,6 @@
 <template>
     <div class='create-apply-sq'>
-        <SectionTitle title="转营业外申请详情"></SectionTitle>
+        <SectionTitle title="押金转租金申请详情"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">

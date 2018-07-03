@@ -5,14 +5,14 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="申请编号" style="width:252px" prop="customerId">
-                    <!-- <selectCustomers name="formItem.applyNum" :onchange="changeCustomer"></selectCustomers> -->
-                    <span class="noEditFormItem">{{formItem.applyNum}}</span>
+                    <!-- <selectCustomers name="formItem.applyNo" :onchange="changeCustomer"></selectCustomers> -->
+                    <span class="noEditFormItem">{{formItem.applyNo}}</span>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="操作类型" style="width:252px" prop="communityId">
                     <!-- <selectCommunities test="formItem.operateType" :onchange="changeCommunity"></selectCommunities> -->
-                    <span class="noEditFormItem">{{formItem.operateType}}</span>
+                    <span class="noEditFormItem">{{basicInfo.transferTypeName}}</span>
                 </FormItem>
                 </Col>
             </Row>
@@ -45,8 +45,8 @@
             </Row>
 
             <FormItem class="remark" label="备注" style="width:100%;">
-                <Input v-model="formItem.remark" :disabled='UIDisable.remark' :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
-                <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                <Input v-model="formItem.applyMemo" :disabled='UIDisable.remark' :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
+                <div style="text-align:right">{{formItem.applyMemo?formItem.applyMemo.length+"/500":0+"/500"}}</div>
             </FormItem>
 
             <FormItem style="margin-top:40px">
@@ -86,9 +86,7 @@ export default {
         let maxbalanceOut = (this.maxbalanceOut / 100).toFixed(2);
         const validateFirst = (rule, value, callback) => {
             var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-
             if (isNaN(value)) {
-                console.log('isNaN(value)', isNaN(value))
                 callback(new Error('转移金额请填写数字'))
             }
             if (Number(value) > Number(maxbalanceOut)) {
@@ -117,19 +115,20 @@ export default {
                 approveBtn: false,
                 rejectBtn: false
             },
+            basicInfo:{},
             communitiesOut: [],
             communities: [],
             isEdit: false,
             approveBtnText: '同意',
             operateHistoryData: [],
             formItem: {
-                applyNum: 'ZY201805290001',
-                operateType: '转社区',
+                applyNo: '',
+                operateType: '',
                 customerID: '',
-                communityOut: '',
-                communityIn: '',
-                balanceOut: 0,
-                remark: ''
+                communityIdOut: '',
+                communityIdIn: '',
+                transferAmount: 0,
+                applyMemo: ''
             },
             ruleCustom: {
                 communityId: [
@@ -149,13 +148,21 @@ export default {
     },
     methods: {
         getInfo() {
-            console.log('getInfo')
             let { params } = this.$route;
             let from = {
                 id: params.transferOperate
             };
             this.$http.get('get-apply-info-id', from).then((response) => {
                 this.basicInfo = response.data;
+                this.formItem=Object.assign(this.formItem,
+                {customerID:this.basicInfo.customerId},
+                {applyNo:this.basicInfo.applyNo},
+                {applyMemo:this.basicInfo.customerId},
+                {communityIdIn:this.basicInfo.detailList[0].communityIdIn},
+                {communityIdOut:this.basicInfo.detailList[0].communityIdOut},
+                {transferAmount:this.basicInfo.detailList[0].transferAmount}
+                )
+                console.log(this.basicInfo)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -167,10 +174,9 @@ export default {
             this.$set(this.formItem, 'communityIn', commIn)
             let all = [].concat(this.communities);
             this.communitiesOut = all.filter(item => item.value !== commIn)
-            console.log(this.communitiesOut)
             this.getMaxAmount();
         },
-        onGetCmtsList() {
+        onGetCmtsList(list) {
             this.communities = [].concat(list);
         },
         handleEdit() {
@@ -184,7 +190,6 @@ export default {
                 approveBtn: false,
                 rejectBtn: false
             };
-            console.log(obj)
             this.UIDisable = Object.assign({}, this.UIDisable, obj)
 
         },

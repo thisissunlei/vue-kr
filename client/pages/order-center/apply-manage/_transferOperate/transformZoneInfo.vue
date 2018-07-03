@@ -19,7 +19,7 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerId" :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="formItem.customerId" :value='formItem.customerId' :disabled="UIDisable.customer" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -154,24 +154,10 @@ export default {
             };
             this.$http.get('get-apply-info-id', from).then((response) => {
                 this.basicInfo = response.data;
-                // this.formItem=Object.assign(this.formItem,
-                // {customerId:this.basicInfo.customerId},
-                // {applyNo:this.basicInfo.applyNo},
-                // {applyMemo:this.basicInfo.applyMemo},
-                // {communityIdIn:this.basicInfo.detailList[0].communityIdIn},
-                // {communityIdOut:this.basicInfo.detailList[0].communityIdOut},
-                // {transferAmount:this.basicInfo.detailList[0].transferAmount}
-                // )
-                debugger
-                console.log(this.basicInfo)
-
                 let {customerId,applyNo,applyMemo,detailList,detailList:[{communityIdIn,communityIdOut,transferAmount}]}=this.basicInfo;
                 let obj={customerId,applyNo,applyMemo,communityIdIn,communityIdOut,transferAmount};
-                console.log(obj)
-
-                this.formItem=Object.assign({},this.formItem,obj)
-                console.log(this.formItem)
-            
+                this.formItem=Object.assign({},this.formItem,obj)               
+                console.log(this.formItem)           
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

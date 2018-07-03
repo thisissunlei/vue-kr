@@ -52,6 +52,11 @@ import http from '~/plugins/http.js';
          mounted:function(){
             this.remoteCustomer()
         },
+        watch:{
+            value(){
+                this.customer=this.value;
+            }
+        },
         methods: {
             changeContent:function(value){
                 this.onchange(value)

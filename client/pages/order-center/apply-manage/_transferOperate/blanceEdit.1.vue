@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         initStates() {
-            if (!this.editType) {
+            if (!this.readOnly) { //可编辑模式
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount },{feeType:item.feeType});
@@ -69,11 +69,11 @@ export default {
                     this.errorTexts[item.feeTypeName] = ''
                 })
             }
-            else{
+            else{ //只读 查看模式
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: '' },{feeType:item.feeType});
-                    this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: false }, { btn: true })
+                    this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: true })
                     this.errorTexts[item.feeTypeName] = ''
                 })

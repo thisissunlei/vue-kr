@@ -12,7 +12,7 @@
                     </div> -->
           </div>
            <PublicHander :name="name" :city="city" :isComment="true" @goback="goback" />
-        <div class="div-two">
+        <div class="div-two" :id ="divTwoId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">
                     <Button type="primary" size="small" @click="addClickMethod">添加备注</Button>
@@ -48,7 +48,7 @@
                 </div>
             </Scroll>
         </div>
-        <div class="div-one">
+        <div class="div-one" :id="divOneId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
 
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px;text-align:left">项目档案</div>
@@ -222,12 +222,27 @@
             }
         },
         mounted() {
+            let winHeight = document.body.clientHeight;
+            let top = 185;
+            let bottom = 68;
             this.getcomments()
             this.getUpUrl()
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
             this.queryInfoPropertyMethod()
             this.queryInfoProductMethod()
+            this.$nextTick(()=>{
+                let oneDom = document.getElementById(this.divOneId);
+                let twoDom =  document.getElementById(this.divTwoId);
+                console.log(oneDom,winHeight,"PPPP",top,"oooo",bottom)
+                if(oneDom){
+                     oneDom.style.height = winHeight - top -bottom +'px';
+                }
+               if(twoDom){
+                   twoDom.style.height = winHeight - top -bottom +'px';
+               }
+                
+            })
             // this.getDeletePermission()
             // this.memberDetailList()
         },

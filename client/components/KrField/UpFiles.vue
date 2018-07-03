@@ -1,8 +1,8 @@
 <template>
-	
+
 	<div class="up-files">
-		<EditLabel 
-			:readOrEdit="readOrEdit" 
+		<EditLabel
+			:readOrEdit="readOrEdit"
 			:value="fileArr"
 			@okClick="okClick"
 			@cancelClick="cancelClick"
@@ -10,33 +10,32 @@
 			@eyeImg="eyeImg"
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
-			:isOk="isOk"  
-			:right="right"
+			:isOk="isOk"
 		>
-			<div class="view-box">
-				
-			
+			<div class="view-box" :style="commentColor?{backgroundColor:'#fff'}:{}">
+
+
 				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">
 
-					<KrImg 
-						v-if="getIsPhoto(item.fieldUrl)" 
-						@click="eyePhotoAlbum(item.fieldUrl,'edit',$event)" 
-						:src="item.fieldUrl" 
+					<KrImg
+						v-if="getIsPhoto(item.fieldUrl)"
+						@click="eyePhotoAlbum(item.fieldUrl,'edit',$event)"
+						:src="item.fieldUrl"
 						width="210"
 						height="135"
 						type="cover"
 					/>
-					<div 
+					<div
 						v-if="!getIsPhoto(item.fieldUrl)"
 						:class="{
-							'file-type-style':true, 
+							'file-type-style':true,
 							'file-color-other':getExt(item.fieldUrl)=='other',
 							'file-color-word':getExt(item.fieldUrl)=='word',
 							'file-color-excel':getExt(item.fieldUrl)=='excel',
 							'file-color-ppt':getExt(item.fieldUrl)=='ppt',
 						}"
 					>
-						<div 
+						<div
 							:class="{
 								'file-icon':true,
 								'file-icon-other':getExt(item.fieldUrl)=='other',
@@ -46,58 +45,60 @@
 							}"
 						></div>
 					</div>
-					<div 
+					<div
 						v-if="!getIsPhoto(item.fieldUrl)"
 						class="file-name"
 					>
 						{{getFileName(index)}}
 						<div class="down-file" @click="downFile(item.fieldUrl)"></div>
 					</div>
-					 <span 
-	                    class="delete-icon" 
+					 <span
+                      v-if="!commentColor"
+	                    class="delete-icon"
 	                    @click="delFile(index,$event)"
 	                ></span>
 				</div>
 
-				<input 
-					:id="inputId" 
-					type="file" 
-					style="display:none;" 
+				<input
+					:id="inputId"
+					type="file"
+					style="display:none;"
 					@change="fileChange"
-					
+
 				>
-				<button type="button" class="up-icon" @click="addFileClick">
+				<button type="button" class="up-icon" v-if="!commentColor" @click="addFileClick">
 					<div class="add-icon"></div>
 	                <div class="add-text">上传文件</div>
 					<div style="height:30px;line-height:30px;">
 						<Progress v-if="isLoadding" :percent="percent" :stroke-width="3"></Progress>
 					</div>
-					
+
 				</button>
-				
+
 			</div>
 		</EditLabel>
 		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
-	    
+
 	</div>
-	
+
 </template>
 
 <script>
 import PhotoAlbum from '../PhotoAlbum';
 import EditLabel from './EditLabel';
-import utils from '~/plugins/utils';
+import utils from 'utils';
 import KrImg from '../KrImg'
 export default{
 	components:{
+
 		PhotoAlbum,
 		EditLabel,
 		KrImg
 	},
     props:{
-		right:{
-            type:String
-        },
+      commentColor:{
+        default:false
+      },
         publicUse:{
             default:false,
 			type:Boolean,
@@ -117,7 +118,7 @@ export default{
 		name:{
 			type:[String,Number]
 		}
-		
+
     },
     data(){
         return {
@@ -152,7 +153,7 @@ export default{
 			}
 			return [].concat(types);
 		},
-		
+
 		getTyep(type,url){
 			if(type=="other" && this.getExt(url)=="other"){
 				return true;
@@ -176,7 +177,7 @@ export default{
 			}
 		},
 		getFileName(index){
-			
+
 			var fileArr = this.newFileArr[index].fieldUrl.split('?')[0].split('/')
 			var filename  =fileArr[fileArr.length-1];
 			return decodeURI(filename);
@@ -186,7 +187,7 @@ export default{
 			return ;
 		},
 		downFile(url,id){
-			utils.downFile(url);	
+			utils.downFile(url);
 		},
 		getIsPhoto(url){
 			var img="png,jpg,jpeg";
@@ -233,7 +234,7 @@ export default{
                 type:'file',
 
 			}
-		
+
             this.$emit("okClick",params)
 		},
 		getValues(urls){
@@ -264,10 +265,10 @@ export default{
 					urlArr.push(this.newFileArr[i]);
 
 				}
-				
+
 			}
 			for (var i = 0; i < urlArr.length; i++) {
-				
+
 				if(urlArr[i].fieldUrl == url){
 					this.eyeIndex = i;
 				}
@@ -286,7 +287,7 @@ export default{
 		addFileClick(){
 			var inputDom = document.getElementById(this.inputId);
 			// this.isClickLadding = true;
-			
+
 			// this.clickLadding();
 			inputDom.click();
 		},
@@ -302,12 +303,12 @@ export default{
 				that.getUpFileUrl(file);
 			}else{
 				this.isLoadding = false;
-				
+
 			}
 			// return ;
-			
 
-			
+
+
 		},
 		// clickLadding(){
 		// 	if(!this.isClickLadding){
@@ -323,7 +324,7 @@ export default{
 		// },
 		upLoading(){
 			if(!this.upLoading){
-				
+
 				return ;
 			}
 			this.percent +=1;
@@ -336,7 +337,7 @@ export default{
 		},
 		upfile(form,serverUrl){
 			var that  = this;
-			
+
 			this.upLoading();
 			var xhrfile = new XMLHttpRequest();
 			xhrfile.timeout = 600000;
@@ -351,7 +352,7 @@ export default{
 							that.newFileArr.push({fieldUrl:data.url,fieldId:data.id});
 							that.fileTypes.push(that.getExt(data.url));
 						} else {
-						
+
 						}
 					} else{
 						that.$Notice.error({
@@ -373,8 +374,8 @@ export default{
 			let file = event;
 			var fileName= event.name;
 			var form = new FormData();
-		
-			
+
+
 			this.$http.get('get-vue-upload-url', {
 				category:category,
 				isPublic:that.publicUse
@@ -409,19 +410,19 @@ export default{
 		},
     }
 }
-	
+
 </script>
 
 <style lang="less" scoped>
 .up-files{
-	
+
 	display: inline-block;
-	
+
 	.edit-label{
 		width: 100%;
 		padding-right: 50px;
 	}
-	
+
 	.up-icon{
 		display: inline-block;
 		width: 210px;
@@ -431,16 +432,16 @@ export default{
 		cursor: pointer;
 		vertical-align: middle;
 		line-height: 135px;
-		
+
 		background: #fff;
 		border: 1px dashed #dddee1;
 		border-radius: 4px;
-		
-	
+
+
 		position: relative;
 		overflow: hidden;
 		transition: border-color .2s ease;
-		margin: 30px 30px 10px;        
+		margin: 30px 30px 10px;
         .add-icon{
             width: 38px;
             height: 38px;
@@ -467,14 +468,14 @@ export default{
 		background: #f3f3f3;
 	    padding-bottom: 10px;
     }
-    
+
 	.view{
 		display: inline-block;
 		width: auto;
 		height: 135px;
 		text-align: center;
         line-height: 135px;
-		margin: 30px 30px 10px;        
+		margin: 30px 30px 10px;
 		background: #fff;
 		position: relative;
 		margin-right: 4px;
@@ -482,7 +483,7 @@ export default{
         position: relative;
 		margin-right: 20px;
 		border-radius: 4px 4px 4px 4px;
-			
+
 		.file-type-style{
 			display: inline-block;
             height: 100%;
@@ -512,7 +513,7 @@ export default{
 			margin: auto;
 			border-radius:0px;
 			border:0px;
-			
+
 		}
 		.file-name{
 			height: 35px;
@@ -535,12 +536,12 @@ export default{
 				cursor: pointer;
 				background-image: url(./images/down_init.svg);
 				background-size:100%;
-				
+
 				background-repeat: no-repeat;
 			}
 			.down-file:hover{
 				background-image: url(./images/down_active.svg);
-				
+
 			}
 		}
 		.delete-icon{
@@ -553,50 +554,50 @@ export default{
             background-size:100%;
             border-radius: 50%;
             background-repeat: no-repeat;
-            background-color:#fff; 
+            background-color:#fff;
             cursor: pointer;
 
 		}
 		.file-icon-word{
 			background-image: url(./images/icon_word.svg);
-			
+
 		}
 		.file-color-word{
 			background-image: linear-gradient(46deg, #81C8FA 0%, #468CDF 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
-		
+
+
 		}
 		.file-color-excel{
 			background-image: linear-gradient(45deg, #75C9C3 0%, #33AC99 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-excel{
 			background-image: url(./images/icon_excel.svg);
-		
+
 		}
 		.file-color-ppt{
 			background-image: linear-gradient(52deg, #FFAC96 0%, #FF6868 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-ppt{
 			background-image: url(./images/icon_ppt.svg);
-			
+
 		}
 		.file-color-other{
 			background-image: linear-gradient(45deg, #B4ABE5 0%, #7C6FD7 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-other{
 			background-image: url(./images/icon_other.svg);
-			
+
 		}
 		.file-icon{
 			display: inline-block;
@@ -605,7 +606,7 @@ export default{
 			width: 45px;
 			height: 45px;
 		}
-	
+
 
 	}
 	.view:hover .view-mask{

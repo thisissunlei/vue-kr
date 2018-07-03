@@ -1,6 +1,8 @@
 export default function(){
         return {
                 isClick:true,
+                divOneId:'divOneId'+this._uid,
+                divTwoId:'divTwoId'+this._uid,
                 propertyData:[],
                 productData:[],
                 name: this.$route.query.name,

@@ -12,14 +12,14 @@
                     </div> -->
           </div>
            <PublicHander :name="name" :city="city" :isComment="true" @goback="goback" />
-        <div class="div-two">
+        <div class="div-two" :id ="divTwoId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">
                     <Button type="primary" size="small" @click="addClickMethod">添加备注</Button>
                 </div>
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px">项目备注</div>
             </div>
-            <Scroll :on-reach-bottom="getcomments" :height='500' style="overflow-y:auto">
+            <Scroll :on-reach-bottom="getcomments" :height='heightDiv' style="overflow-y:auto">
                 <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                     <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
                     <div style="margin-left:66px;min-height:60px">
@@ -48,7 +48,7 @@
                 </div>
             </Scroll>
         </div>
-        <div class="div-one">
+        <div class="div-one" :id="divOneId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
 
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px;text-align:left">项目档案</div>
@@ -222,12 +222,34 @@
             }
         },
         mounted() {
+            GLOBALSIDESWITCH("false");
+            let winHeight = document.body.clientHeight;
+            let top = 185;
+            let bottom = 68;
             this.getcomments()
             this.getUpUrl()
             this.uploadList = this.$refs.upload.fileList;
             this.queryInfoMethod()
             this.queryInfoPropertyMethod()
             this.queryInfoProductMethod()
+            // this.$nextTick(()=>{
+
+               setTimeout(()=> {
+                 let oneDom = document.getElementById(this.divOneId);
+                 let twoDom =  document.getElementById(this.divTwoId);
+                 console.log(oneDom,winHeight,"PPPP",top,"oooo",bottom)
+                 if(oneDom){
+                   oneDom.style.height = winHeight - top -bottom +'px';
+                 }
+                 if(twoDom){
+                   twoDom.style.height = winHeight - top -bottom +'px';
+
+                   this.heightDiv = winHeight - top -bottom-20;
+                 }
+               },500)
+
+                
+            // })
             // this.getDeletePermission()
             // this.memberDetailList()
         },

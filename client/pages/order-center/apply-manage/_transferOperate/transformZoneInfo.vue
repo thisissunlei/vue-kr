@@ -368,7 +368,7 @@ export default {
             width: 680px;
         }
         .col {
-            width: 50%;
+            width: 340px;
             min-width: 250px;
             display: inline-block;
             padding-right: 10px;
@@ -399,12 +399,12 @@ export default {
             }
         }
         .btnContainer {
+            display: inline-block;
             position: absolute;
             left: 50%;
-            top: -20px;
-            transform: translateX(-50%);
+            transform: translate(-50%, 0);
             .operateBtn {
-                margin: 0 20px;
+                margin: 0 10px;
             }
         }
     }

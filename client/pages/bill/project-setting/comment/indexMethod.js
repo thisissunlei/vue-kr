@@ -4,6 +4,8 @@ import KrInput from './KrInput.vue'
 import PhotoAlbum from '~/components/PhotoAlbum'
 import OverFlowLabel from './overFlowLabel'
 import IndexData from './indexData'
+import { resolve } from "url";
+import utils from '~/plugins/utils'
 export  default  {
 
   getInfo(params){
@@ -19,7 +21,7 @@ export  default  {
 
   },
   goback(){
-   this.$router.push({path:'/bill/project-setting'})
+
   },
   closeOrOpen(){
       this.isPhotoAlbum = false
@@ -166,8 +168,8 @@ queryInfoProductMethod() {
   },
   handleFormatError(file) {
       this.$Notice.warning({
-          title: 'The file format is incorrect',
-          desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+          title: '系统提示',
+          desc: '' + file.name + '文件格式不对，请上传图片'
       });
   },
   handleMaxSize(file) {
@@ -176,14 +178,24 @@ queryInfoProductMethod() {
           desc: 'File  ' + file.name + ' is too large, no more than 2M.'
       });
   },
+  downFile(param1,param2){
+    console.log(param1,param2)
+      utils.downImg(param1,param2)
+  },
   handleBeforeUpload() {
-      const check = this.uploadList.length < 9;
-      if (!check) {
-          this.$Notice.warning({
-              title: '文件数过多'
-          });
-      }
-      return check;
+      new Promise((resolve,reject)=>{
+          this.getUpUrl().then(()=>{
+
+            const check = this.uploadList.length < 9;
+            if (!check) {
+                this.$Notice.warning({
+                    title: '文件数过多'
+                });
+            }
+            return check;
+          })
+      })
+
   },
   ok() {
       if (this.modlalTitle === '回复评论') {
@@ -195,18 +207,25 @@ queryInfoProductMethod() {
   cancel() {
       this.uploadList.splice(0, this.uploadList.length);
       this.imgUplaodId = [];
-      this.formItem.comment = ''
-      this.$Message.info('取消');
+      // this.formItem.comment = ''
+      // this.$Message.info('取消');
       this.modal1 = false;
   },
   confirm(param) {
       this.$Modal.confirm({
           title: '系统提示',
-          content: '<p>确定删除？</p>',
+          content: '<p>确认删除这条评论吗？</p>',
           onOk: () => {
               this.$http.delete('actions-delete', {
                   id: param
               }).then((res) => {
+
+            this.getcomments()
+            this.getUpUrl()
+
+            this.queryInfoMethod()
+            this.queryInfoPropertyMethod()
+            this.queryInfoProductMethod()
                   this.$Message.info('删除成功');
               }).catch(e => {
                   this.$Message.info('删除失败');
@@ -240,28 +259,34 @@ queryInfoProductMethod() {
   getUpUrl() {
       let category = 'pm/file';
       var form = new FormData();
-      this.$http.get('get-vue-upload-url', {
-          category: category,
-          isPublic: false
-      }).then((res) => {
-          var response = res.data;
-          let params = Object.assign({}, res.data);
-          delete params.serverUrl;
-          delete params.sign;
-          delete params.ossAccessKeyId;
-          delete params.maxSizeKb;
-          this.data = params;
-          this.data.signature = res.data.sign;
-          this.data.OSSAccessKeyId = res.data.ossAccessKeyId;
-          this.pathPrefix = params.pathPrefix;
-          this.data.key = res.data.pathPrefix;
-          this.data['x:original_name'] = '7e3e6709c93d70cf312a368af4dcd100bba12b60.jpg';
-          this.getupfileurl = response.serverUrl;
-      }).catch((err) => {
-          this.$Notice.error({
-              title: err.message
-          });
+     return new Promise((resolve,reject)=>{
+
+            this.$http.get('get-vue-upload-url', {
+              category: category,
+              isPublic: false
+          }).then((res) => {
+              var response = res.data;
+              let params = Object.assign({}, res.data);
+              delete params.serverUrl;
+              delete params.sign;
+              delete params.ossAccessKeyId;
+              delete params.maxSizeKb;
+              this.data = params;
+              this.data.signature = res.data.sign;
+              this.data.OSSAccessKeyId = res.data.ossAccessKeyId;
+              this.pathPrefix = params.pathPrefix;
+              this.data.key = res.data.pathPrefix;
+              this.data['x:original_name'] = '7e3e6709c93d70cf312a368af4dcd100bba12b60.jpg';
+              this.getupfileurl = response.serverUrl;
+              resolve()
+          }).catch((err) => {
+              this.$Notice.error({
+                  title: err.message
+              });
+              reject()
+            })
       })
+
   },
   actionsAdd(val) {
       this.photos = this.imgUplaodId.join(',')

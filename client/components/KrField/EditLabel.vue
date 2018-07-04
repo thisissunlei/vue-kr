@@ -1,62 +1,62 @@
 
 <template>
 	<div class="edit-label">
-		<div style="height:100%;" v-if="readOrEdit">        
+		<div style="height:100%;" v-if="readOrEdit">
 			<div v-if="!isEdit && labeType=='label'"  >
 				<div v-if="value" class="label-text" :style="!yesOrnoMadal?{minWidth:'150px'}:{}" @click="editClick">{{value}}</div>
 				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
 				<span class="edit-icon" @click="editClick"></span>
 				<span class="record-icon" v-if="yesOrnoMadal" @click="recordClick"></span>
-				
-				
+
+
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
 				<div class="file-view-box" @click="editClick">
-					
-				
+
+
 					<div v-if="!value || !value.length" class="to-upload">待上传</div>
-				
+
 				<!-- <img :src="item.url" alt="" v-for="(item, index ) in value" :key="item.id" @click="eyeImg(index)"/> -->
 
 					<div v-if="value && value.length" class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-						<KrImg 
-							v-if="getIsPhoto(item.fieldUrl)" 
-							@click="eyePhotoAlbum(item.fieldUrl,'view',$event)" 
-							:src="item.fieldUrl" 
+						<KrImg
+							v-if="getIsPhoto(item.fieldUrl)"
+							@click="eyePhotoAlbum(item.fieldUrl,'view',$event)"
+							:src="item.fieldUrl"
 							width="210"
 							height="135"
 							type="cover"
 						/>
-						<div 
+						<div
 							v-if="!getIsPhoto(item.fieldUrl)"
 							:class="{
-								'file-type-style':true, 
+								'file-type-style':true,
 								'file-color-other':getExt(item.fieldUrl)=='other',
 								'file-color-word':getExt(item.fieldUrl)=='word',
 								'file-color-excel':getExt(item.fieldUrl)=='excel',
 								'file-color-ppt':getExt(item.fieldUrl)=='ppt',
 							}"
 						>
-							<div 
+							<div
 								:class="{
 									'file-icon':true,
 									'file-icon-other':getExt(item.fieldUrl)=='other',
 									'file-icon-word':getExt(item.fieldUrl)=='word',
 									'file-icon-excel':getExt(item.fieldUrl)=='excel',
 									'file-icon-ppt':getExt(item.fieldUrl)=='ppt',
-									
+
 								}"
 							></div>
 						</div>
-						<div 
+						<div
 							v-if="!getIsPhoto(item.fieldUrl)"
 							class="file-name"
 						>
 							{{getFileName(index)}}
 							<div class="down-file" @click="downFile(item.fieldUrl)"></div>
 						</div>
-					
+
 					</div>
 					<span class="edit-icon" @click="editClick">
 						<!-- <Icon type="ios-compose-outline "></Icon> -->
@@ -74,22 +74,22 @@
 				<div class="edit-field-box">
 					<slot></slot>
 				</div>
-				
+
 				<div class="operation">
 					<span class="kr-ui-x-icon" @click="cancelClick">
-					
+
 					</span>
-					
+
 					<span class="kr-ui-ok-icon" @click="okClick">
-						
+
 					</span>
-					
+
 				</div>
 			</div>
 		</div>
 		<div v-if="!readOrEdit">
 			<slot></slot>
-			
+
 		</div>
 		<Modal
             v-model="openMessage"
@@ -102,7 +102,7 @@
                 <Button type="ghost" style="margin-left:8px" @click="closeMask">取消</Button>
             </div>
         </Modal>
-		
+
 	</div>
 </template>
 
@@ -124,7 +124,7 @@ export default {
 		},
 		isOk:{
 			type:Boolean,
-		
+
 		},
 		value:{
 			type:[Number,String,Array,Boolean],
@@ -134,7 +134,7 @@ export default {
 			default:'label',
 			type:String
 		},
-		
+
 
 	},
 	watch:{
@@ -183,7 +183,7 @@ export default {
 			})
 		},
 		getFileArr(){
-			
+
 			if(this.labeType == 'file'&&this.value&&this.value.length){
 				for (var i = 0; i < this.value.length; i++) {
 					let url = this.value[i].fieldUrl;
@@ -191,7 +191,7 @@ export default {
 				}
 				return [].concat(this.value)
 			}
-			
+
 			return [];
 		},
 		getTyep(type,index){
@@ -209,12 +209,12 @@ export default {
 			utils.downFile(url)
 		},
 		getIsPhoto(url){
-			
+
 			var img="png,jpg,jpeg";
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(img.indexOf(ext)>=0){
+			if(img.indexOf(ext.toLowerCase())>=0){
 				return true;
 			}
 			return false;
@@ -226,13 +226,13 @@ export default {
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(word.indexOf(ext)>=0){
+			if(word.indexOf(ext.toLowerCase())>=0){
 				return 'word';
 			}
-			if(excel.indexOf(ext)>=0){
+			if(excel.indexOf(ext.toLowerCase())>=0){
 				return 'excel';
 			}
-			if(ppt.indexOf(ext)>=0){
+			if(ppt.indexOf(ext.toLowerCase())>=0){
 				return 'ppt';
 			}
 			return 'other';
@@ -247,7 +247,7 @@ export default {
 			// }
 			this.isEdit = true;
 
-			
+
 		},
 		cancelClick(){
 			this.$emit('cancelClick',this.value)
@@ -265,7 +265,7 @@ export default {
 			this.$emit('eyeImg',index);
 		}
 	},
-	
+
 }
 </script>
 
@@ -286,7 +286,7 @@ export default {
 		padding: 1px;
 		border-radius: 4px;
 		border: 1px dashed  rgba(79, 158, 237,0.5);
-		
+
 		.img-box{
 			border-radius: 4px;
 		}
@@ -330,7 +330,7 @@ export default {
 	}
 	.record-icon{
 		background-image: url(./images/record.svg);
-		background-size:100%; 
+		background-size:100%;
 		background-repeat: no-repeat;
 		position: absolute;
 		right: 20px;
@@ -343,7 +343,7 @@ export default {
 	}
 	.edit-icon{
 		background-image: url(./images/edit.svg);
-		background-size:100%; 
+		background-size:100%;
 		position: absolute;
 		background-repeat: no-repeat;
 		right: 60px;
@@ -362,8 +362,8 @@ export default {
 	}
 	.kr-ui-ok-icon{
 		background-image: url(./images/ok.svg);
-		background-repeat: no-repeat;		
-		background-size:100%; 
+		background-repeat: no-repeat;
+		background-size:100%;
 		right:50px;
 	}
 	.kr-ui-x-icon{
@@ -412,7 +412,7 @@ export default {
 	// 	margin-right: 4px;
 	// 	vertical-align: middle;
 	// 	position: relative;
-	// 	margin: 30px 30px 10px;		
+	// 	margin: 30px 30px 10px;
 	// }
 	.view{
 		display: inline-block;
@@ -420,7 +420,7 @@ export default {
 		height: 135px;
 		text-align: center;
         line-height: 135px;
-		margin: 30px 30px 10px;        
+		margin: 30px 30px 10px;
 		background: #fff;
 		position: relative;
 		margin-right: 4px;
@@ -457,7 +457,7 @@ export default {
 			margin: auto;
 			border-radius:0px;
 			border:0px;
-			
+
 		}
 		.file-name{
 			height: 35px;
@@ -480,12 +480,12 @@ export default {
 				cursor: pointer;
 				background-image: url(./images/down_init.svg);
 				background-size:100%;
-				
+
 				background-repeat: no-repeat;
 			}
 			.down-file:hover{
 				background-image: url(./images/down_active.svg);
-				
+
 			}
 		}
 		.delete-icon{
@@ -498,50 +498,50 @@ export default {
             background-size:100%;
             border-radius: 50%;
             background-repeat: no-repeat;
-            background-color:#fff; 
+            background-color:#fff;
             cursor: pointer;
 
 		}
 		.file-icon-word{
 			background-image: url(./images/icon_word.svg);
-			
+
 		}
 		.file-color-word{
 			background-image: linear-gradient(46deg, #81C8FA 0%, #468CDF 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
-		
+
+
 		}
 		.file-color-excel{
 			background-image: linear-gradient(45deg, #75C9C3 0%, #33AC99 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-excel{
 			background-image: url(./images/icon_excel.svg);
-		
+
 		}
 		.file-color-ppt{
 			background-image: linear-gradient(52deg, #FFAC96 0%, #FF6868 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-ppt{
 			background-image: url(./images/icon_ppt.svg);
-			
+
 		}
 		.file-color-other{
 			background-image: linear-gradient(45deg, #B4ABE5 0%, #7C6FD7 100%);
 			border: 1px solid #EFEFEF;
 			border-radius: 4px 4px 0px 0px;
-			
+
 		}
 		.file-icon-other{
 			background-image: url(./images/icon_other.svg);
-			
+
 		}
 		.file-icon{
 			display: inline-block;
@@ -550,7 +550,7 @@ export default {
 			width: 45px;
 			height: 45px;
 		}
-	
+
 
 	}
 }

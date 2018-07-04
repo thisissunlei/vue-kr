@@ -1,9 +1,7 @@
 export default function(){
         return {
-                heightDiv:0,
+                heightDiv:300,
                 isClick:true,
-                divOneId:'divOneId'+this._uid,
-                divTwoId:'divTwoId'+this._uid,
                 propertyData:[],
                 productData:[],
                 name: this.$route.query.name,
@@ -44,7 +42,7 @@ export default function(){
                 ruleValidate: {
                     comment: [{
                         required: true,
-                        message: '不能为空',
+                        message: '备注不能为空',
                         trigger: 'blur'
                     }]
                 }

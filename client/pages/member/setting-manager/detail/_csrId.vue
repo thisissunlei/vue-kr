@@ -161,7 +161,9 @@ export default {
 	},
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
-	
+		let {params}=this.$route;
+		this.Params.csrId=params.csrId;
+		this.getCompanyInfo(params);
 	},
 	methods:{
 		getManagerCount(){

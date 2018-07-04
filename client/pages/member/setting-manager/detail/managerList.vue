@@ -149,7 +149,6 @@ export default {
         getInfo(){
 			let {params}=this.$route;
 			this.Params.csrId=params.csrId;
-			//this.getCompanyInfo(params);
 			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;

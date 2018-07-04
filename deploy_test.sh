@@ -1,6 +1,7 @@
 #!/bin/bash
 
-npm run build
+ npm run build
+
 
 buildEnvDir=$1
 target_site=www@10.1.60.201

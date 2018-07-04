@@ -505,7 +505,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),devToolSetting()];
 
         return arr;
     }
@@ -1083,6 +1083,7 @@
                         },
                     ]
                 },
+               
             ]
         }
     }
@@ -1342,6 +1343,24 @@
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
                     },
+                    {
+                        primaryText: "财务端",
+                        router: 'bill/make-invoice',
+                        type: 'vue',
+                        menuCode: 'invoice_finance'
+                    },
+                    {
+                        primaryText: "运营端",
+                        router: 'inventory/make-invoice',
+                        type: 'vue',
+                        menuCode: 'invoice_operation'
+                    },
+                    {
+                        primaryText: "增票资质",
+                        router: 'bill/financial-invoice',
+                        type: 'vue',
+                        menuCode: 'qualification'
+                    },
                     ]
                 },
         ]
@@ -1372,5 +1391,29 @@
             ]
         }
     }
+    function devToolSetting(){
+        return  {
+            primaryText: "开发工具",
+            router: 'dev',
+            type: 'vue',
+            menuItems: [
+                {
+                    primaryText: '后端工具',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    type: 'vue',
+                    menuItems: [
+                        {
+                            primaryText: "订单数据监控",
+                            router: 'management-tool/data-monitoring',
+                            type: 'vue',
+                            menuCode: 'order_validate_list'
+                        }
+                    ]
+                }
 
+            ]
+        }
+    }
+    
 })(window);

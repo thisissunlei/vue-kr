@@ -11,6 +11,7 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 			:isOk="isOk"
+			:right="right"
 		>
 			<div class="view-box" :style="commentColor?{backgroundColor:'#fff'}:{}">
 
@@ -117,7 +118,10 @@ export default{
 		},
 		name:{
 			type:[String,Number]
-		}
+		},
+		right:{
+            type:String,
+        },
 
     },
     data(){

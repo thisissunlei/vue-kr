@@ -177,11 +177,11 @@
                     name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    mobile:[
-                        { required: true, message: '请填写客户联系人电话'},
-                        { required: true, trigger: 'blur' ,validator: validatephone},
+                    // mobile:[
+                    //     { required: true, message: '请填写客户联系人电话'},
+                    //     { required: true, trigger: 'blur' ,validator: validatephone},
 
-                    ],
+                    // ],
                     channelType:[
                         { required: true, message: '请选择客户来源类型'}
                     ],

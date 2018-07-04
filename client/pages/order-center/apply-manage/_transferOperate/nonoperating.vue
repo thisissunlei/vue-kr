@@ -72,6 +72,11 @@ export default {
 
         return {
             dataList: [],
+            defaultList: [
+                { amount: "", maxAmount: "", feeTypeName: "余额", feeType: "BALANCE" },
+                { amount: "", maxAmount: "", feeTypeName: "门禁卡押金", feeType: "GUARDCARDDEPOSIT" },
+                { amount: "", maxAmount: "", feeTypeName: "其他保证金", feeType: "OTHERDEPOSIT" },
+            ],
             communities: [],
             targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             formItem: {
@@ -94,9 +99,12 @@ export default {
         }
     },
     mounted() {
-        // this.getMoneyTypeList();
+        this.initCheckGroup();
     },
     methods: {
+        initCheckGroup() {
+            this.dataList = [].concat(this.defaultList);
+        },
         handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
             this.formItem.balanceOut = Object.assign({}, receiveBlance)
@@ -137,7 +145,6 @@ export default {
             })
         },
         getFeeAmount() {
-            debugger;
             let parms = {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
@@ -151,8 +158,9 @@ export default {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
-                _this.dataList = arr;
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName));//可用的转移项
+                let arr2 = _this.defaultList.filter(item => arr.filter(item2 => (item.feeTypeName == item2.feeTypeName)).length == 0);//不可用的转移项
+                _this.dataList = [].concat(arr, arr2);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

@@ -1,6 +1,6 @@
 <template>
     <div class='create-apply-sq'>
-        <SectionTitle title="转余额申请"></SectionTitle>
+        <SectionTitle :title="title"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
@@ -29,7 +29,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" :disabled='submitBtnShow' @click="handleSubmit('formItem')">提交</Button>
+                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -40,8 +40,8 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import BlanceInputEdit from './blanceEdit.vue'
-import BlanceInputGroup from './blanceEdit.1.vue'
+import BlanceInputEdit from '../blanceEdit.vue'
+import BlanceInputGroup from '../blanceEdit.1.vue'
 
 
 export default {
@@ -51,9 +51,24 @@ export default {
         selectCustomers,
         BlanceInputEdit,
         BlanceInputGroup
-
     },
-
+    props: {
+        //新建的标题
+        title: {
+            type: String,
+            default: '新建'
+        },
+        //要转换的类型
+        defaultList: {
+            required: true,
+            type: Array,
+        },
+        //转换的类型
+        transferType: {
+            required: true,
+            type: String
+        },
+    },
     data() {
         const validateBlance = (rule, value, callback) => {
             callback()
@@ -71,17 +86,10 @@ export default {
         };
 
         return {
-            submitBtnShow: false,
             dataList: [],
-            defaultList:[
-                {amount:"",maxAmount:"",feeTypeName:"可用服务保证金",feeType:"DEPOSIT"},
-                {amount:"",maxAmount:"",feeTypeName:"门禁卡押金",feeType:"GUARDCARDDEPOSIT"},
-                {amount:"",maxAmount:"",feeTypeName:"其他保证金",feeType:"OTHERDEPOSIT"},
-            ],
             communities: [],
-            targetFeeTypes: ['可用服务保证金', '门禁卡押金', '其他保证金'],
             formItem: {
-                customerID: 12246,
+                customerID: 0,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -99,12 +107,16 @@ export default {
             },
         }
     },
+    computed: {
+        targetFeeTypes() {
+            return this.defaultList.reduce((acc, item) => acc.concat(item.feeTypeName), [])
+        }
+    },
     mounted() {
-        // this.getMoneyTypeList();
         this.initCheckGroup();
     },
     methods: {
-        initCheckGroup(){
+        initCheckGroup() {
             this.dataList = [].concat(this.defaultList);
         },
         handleBlanceChange(receiveBlance) {
@@ -131,16 +143,6 @@ export default {
                 { 'amountmax': 20, 'blance': 15, "code": 54, "label": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" },
                 { 'amountmax': 20, 'blance': 16, "code": 57, "label": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" },
                 { 'amountmax': 20, 'blance': 17, "code": 58, "label": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
-
-                [
-                    {amount:-1,maxAmount:-1,feeTypeName:"余额",feeType:"BALANCE"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"可用服务保证金",feeType:"DEPOSIT"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"门禁卡押金",feeType:"GUARDCARDDEPOSIT"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"冻结服务保证金",feeType:"FROZEN_DEPOSIT"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"推柜门钥匙押金",feeType:"KEYDOORDEPOSIT"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"场地租赁押金",feeType:"LEASEHOLDDEPOSIT"},
-                    {amount:-1,maxAmount:-1,feeTypeName:"注册地址押金",feeType:"REGISTEREDEPOSIT"}
-                ]
 
 
             return
@@ -171,11 +173,8 @@ export default {
                         title: '无可用转移款项'
                     });
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName));//可用的转移项
-                let arr2=_this.defaultList.filter(item=>arr.filter(item2=>item.feeTypeName==item2.feeTypeName.length==0));//不可用的转移项
-                _this.dataList = [].concat(arr,arr2);
-                if (arr.length==0) {
-                    _this.submitBtnShow=true;
-                }
+                let arr2 = _this.defaultList.filter(item => arr.filter(item2 => (item.feeTypeName == item2.feeTypeName)).length == 0);//不可用的转移项
+                _this.dataList = [].concat(arr, arr2);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -205,7 +204,6 @@ export default {
                         transferFeeType: this.formItem.balanceOut[key].feeType,
                     };
                     detailList.push(obj)
-
                 }
             }
             let detailStr = JSON.stringify([].concat(detailList));
@@ -214,7 +212,7 @@ export default {
                 communityId: this.formItem.communityIn,
                 customerId: this.formItem.customerID,
                 id: '',
-                transferType: 'TRANSFER_BALANCE',
+                transferType: this.transferType,
                 detailStr: detailStr
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
@@ -243,8 +241,6 @@ export default {
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
-        }
-        .amount {
         }
         .required-label {
             font-size: 14px;

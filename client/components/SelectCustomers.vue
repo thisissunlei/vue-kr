@@ -59,8 +59,7 @@ export default {
     methods: {
         changeContent: function (customer) {
             this.onchange(customer.value)
-
-            this.getCustomerName(customer.label)
+            this.getCustomerName&&this.getCustomerName(customer.label)           
         },
         remoteCustomer(query) {
             this.loading1 = true;

@@ -73,7 +73,6 @@ export default {
             }
         };
         const validateCommunity = (rule, value, callback) => {
-            debugger
             if (!value) {
                 callback(new Error('请选择社区'));
             } else {
@@ -81,7 +80,6 @@ export default {
             }
         };
         const validateCustomerId = (rule, value, callback) => {
-            debugger
             if (!value) {
                 callback(new Error('请选择社区'));
             } else {

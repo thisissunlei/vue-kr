@@ -10,7 +10,7 @@
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="操作类型" style="width:252px" prop="communityId">
+                <FormItem label="操作类型" style="width:252px" prop="customerId">
                     <!-- <selectCommunities test="formItem.operateType" :onchange="changeCommunity"></selectCommunities> -->
                     <span class="noEditFormItem">{{receivedApplyInfo.transferTypeName}}</span>
                 </FormItem>
@@ -24,14 +24,14 @@
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="转入社区名称" style="width:252px" prop="communityId">
+                <FormItem label="转入社区名称" style="width:252px" prop="communityIdIn">
                     <selectCommunities :test="formItem" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="转出社区名称" style="width:252px" prop="communityId">
+                <FormItem label="转出社区名称" style="width:252px" prop="communityIdOut">
                     <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>                        -->
                     <Select v-model="formItem.communityIdOut" :disabled='UIDisable.cummunityOut' style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -104,7 +104,20 @@ export default {
                 callback();
             }
         };
-
+        const validateCommunity = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error('请选择社区'));
+            } else {
+                callback();
+            }
+        };
+        const validateCustomerId = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error('请选择客户'));
+            } else {
+                callback();
+            }
+        };
         return {
             UIShowAble: {
                 editBtn: false,//true显示
@@ -124,7 +137,6 @@ export default {
             },
             maxAmount: 0,
             UIDisableBak: {},
-            rejectModal: false,
             modalText: '',//退回备注
             receivedApplyInfo: {},
             communitiesOut: [],
@@ -144,11 +156,14 @@ export default {
                 applyMemo: ''
             },
             ruleCustom: {
-                communityId: [
-                    { required: true, message: '请选择社区', trigger: 'change' }
+                communityIdIn: [
+                    { required: true, trigger: 'change', validator: validateCommunity }
+                ],
+                communityIdOut: [
+                    { required: true, trigger: 'change', validator: validateCommunity }
                 ],
                 customerId: [
-                    { required: true, message: '请选择客户', trigger: 'change' }
+                    { required: true, trigger: 'change', validator: validateCustomerId }
                 ],
                 transferAmount: [
                     { required: true, trigger: 'change', validator: validateFirst }
@@ -171,13 +186,16 @@ export default {
                 this.logList = this.receivedApplyInfo.logList;
                 this.isFinancialSide = this.receivedApplyInfo.financialSide;
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
-                let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
-                let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
-                this.formItem = Object.assign({}, this.formItem, obj)
-                this.UIDisableBak = Object.assign({}, this.UIDisable);
-                console.log(this.receivedApplyInfo)
-                console.log(this.formItem)
-                this.getMaxAmount();
+                this.formItem.communityIdIn = this.receivedApplyInfo.detailList[0].communityIdIn;
+                this.formItem.customerId = this.receivedApplyInfo.customerId;
+                this.getMaxAmount().then(() => {
+                    let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
+                    let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
+                    this.formItem = Object.assign({}, this.formItem, obj)
+                    this.UIDisableBak = Object.assign({}, this.UIDisable);
+                    console.log(this.receivedApplyInfo)
+                    console.log(this.formItem)
+                });
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -209,27 +227,53 @@ export default {
                 customerId: this.formItem.customerId,
                 id: this.receivedApplyInfo.id
             }
-
-            var _this = this
-            this.$http.post('get-max-amount', parms).then((r) => {
-                let arr = r.data.filter(item => item.feeType == 'BALANCE')
-
-                if (r.data.length == 0 || arr.length == 0) {
+            console.log(parms)
+            return new Promise((resolve, reject) => {
+                var _this = this
+                this.$http.post('get-max-amount', parms).then((r) => {
+                    let arr = r.data.filter(item => item.feeType == 'BALANCE')
+                    if (r.data.length == 0 || arr.length == 0) {
+                        _this.maxAmount = 0
+                        _this.$Notice.info({
+                            title: '无可用转移金额'
+                        });
+                    }
+                    else {
+                        _this.maxAmount = arr[0].maxAmount
+                    }
+                }).then(
+                    () => {
+                        resolve()
+                    }
+                ).catch((error) => {
                     _this.maxAmount = 0
-                    _this.$Notice.info({
-                        title: '无可用转移金额'
+                    this.$Notice.error({
+                        title: error.message
                     });
-                }
-                else {
-                    _this.maxAmount = arr[0].maxAmount
-                }
-
-            }).catch((error) => {
-                _this.maxAmount = 0
-                this.$Notice.error({
-                    title: error.message
-                });
+                })
             })
+            // var _this = this
+            // this.$http.post('get-max-amount', parms).then((r) => {
+            //     let arr = r.data.filter(item => item.feeType == 'BALANCE')
+
+            //     if (r.data.length == 0 || arr.length == 0) {
+            //         _this.maxAmount = 0
+            //         _this.$Notice.info({
+            //             title: '无可用转移金额'
+            //         });
+            //     }
+            //     else {
+            //         _this.maxAmount = arr[0].maxAmount
+            //     }
+
+            // }).catch((error) => {
+            //     _this.maxAmount = 0
+            //     this.$Notice.error({
+            //         title: error.message
+            //     });
+            // })
+
+
         },
         changeCustomer() { },
         changeCommunity(commIn) {
@@ -276,7 +320,8 @@ export default {
                 this.UIShowAble = Object.assign({}, this.UIShowAble,
                     { editBtn: false },
                     { approveBtn: false },
-                    { rejectBtn: false })
+                    { rejectBtn: false },
+                    { rejectModal: false })
                 this.$Notice.info({
                     title: '操作成功'
                 });
@@ -316,7 +361,7 @@ export default {
                     communityId: this.receivedApplyInfo.communityId,
                     customerId: this.receivedApplyInfo.customerId,
                     id: this.receivedApplyInfo.id,
-                    transferType: 'TRANSFER_NONBUSINESS',
+                    transferType: 'TRANSFER_COMMUNITY',
                     detailStr: detailStr
                 }
 
@@ -356,13 +401,12 @@ export default {
 .create-apply-sq {
     width: 60%;
     max-width: 800px;
-
     .creat-order-form {
         padding: 20px;
         .noEditFormItem {
             position: absolute;
-            top: 35px;
-            left: 4px;
+            top: 25px;
+            left: 10px;
         }
         .remark {
             width: 680px;

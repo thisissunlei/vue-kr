@@ -3,8 +3,8 @@
         <ul>
             <li class='blance-row' v-for="(item) in dataList" :key="item.feeType">
                 <div class='col-check '>
-                    <!-- <Checkbox :label="item.feeTypeName" :disabled='disables[item.feeTypeName].chk' /> -->
-                    <Checkbox :label="item.feeTypeName" :disabled='readOnly' />
+                    <Checkbox :label="item.feeTypeName" :disabled='disables[item.feeTypeName].chk' />
+                    <!-- <Checkbox :label="item.feeTypeName" :disabled='readOnly' /> -->
                 </div>
                 <div class='col-input '>
                     <Input v-model="models[item.feeTypeName].input" :name='gotRefTag(item.feeTypeName)' :disabled='disables[item.feeTypeName].input' :placeholder="formatBlance(item.maxAmount)" style="width: 252px" @on-change='handleInputChange'>
@@ -56,6 +56,9 @@ export default {
         },
         readOnly() {
             console.log('watch_readOnly', this.readOnly)
+        },
+        disables(){
+            console.log(this.disables)
         }
     },
     methods: {
@@ -73,12 +76,17 @@ export default {
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount }, { feeType: item.feeType });
-                    this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
+                    if (item.maxAmount=='') {
+                        this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
+                    } else {
+                        this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
+                    }
+                    // this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                     this.errorTexts[item.feeTypeName] = ''
                 })
-
             }
+           
         },
         gotRefTag(type) {
             return '' + type;
@@ -89,16 +97,18 @@ export default {
         checkgroupchange() {
             this.dataList.map(item => {
                 if (this.checkGroupModel.includes(item.feeTypeName)) {
-                    this.disables[item.feeTypeName] = Object.assign({}, { input: false }, { btn: false })
+                    this.disables[item.feeTypeName] = Object.assign(this.disables[item.feeTypeName], { input: false }, { btn: false })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: true }, { btn: true })
                 }
                 else {
-                    this.disables[item.feeTypeName] = Object.assign({}, { input: true }, { btn: true })
+                    this.disables[item.feeTypeName] = Object.assign(this.disables[item.feeTypeName], { input: true },{ input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                 }
             })
+            console.log(this.disables)
             this.$forceUpdate();
             this.$emit("onChange", this.models)
+             console.log(this.disables)
         },
         handleBlanceTransClk(e) {
             let label = e.target.name || e.target.parentNode.name

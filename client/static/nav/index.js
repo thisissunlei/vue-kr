@@ -1342,6 +1342,24 @@
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
                     },
+                    {
+                        primaryText: "财务端",
+                        router: 'bill/make-invoice',
+                        type: 'vue',
+                        menuCode: 'invoice_finance'
+                    },
+                    {
+                        primaryText: "运营端",
+                        router: 'inventory/make-invoice',
+                        type: 'vue',
+                        menuCode: 'invoice_operation'
+                    },
+                    {
+                        primaryText: "增票资质",
+                        router: 'bill/financial-invoice',
+                        type: 'vue',
+                        menuCode: 'qualification'
+                    },
                     ]
                 },
         ]

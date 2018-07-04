@@ -91,7 +91,9 @@ export default {
                             return '-'
                         }
                         let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.uTime));
+
                         return h("div",time);
+
                     }
                 },
                 {
@@ -155,6 +157,9 @@ export default {
     .watch-record{
         .daily-form{
             display: inline-block;
+            .ivu-form-item:after, .ivu-form-item:before{
+                content: none;
+            }
         }
     }
 </style>

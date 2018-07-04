@@ -188,7 +188,8 @@ export default {
                         width:100,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
-                            return time;
+                            
+                            return h('span',{},time);
                         }
                     },
                     {
@@ -217,7 +218,7 @@ export default {
                               'FUNDS_TRANSFER ':'资金转移',
                               
                             }
-                            return payWay[obj.row.payWay]
+                             return h('span',{},payWay[obj.row.payWay]);
                         }
                     },
                     {
@@ -385,6 +386,7 @@ export default {
             },
 
             handleUpload (file) {
+                console.log(file,"kkkk")
                 this.file = file;
                 return false;
             },
@@ -396,8 +398,11 @@ export default {
             },
             importSubmit(){
                 var data=new FormData();
+             
                 this.submitDisabled=true;
                 data.append('file',this.file);
+                data.isPut = true;
+                console.log(data,"===",this.file)
                 this.$http.put('import-bank-flow', data).then((res)=>{
                     this.openMessage=true;
                     this.submitDisabled=false;

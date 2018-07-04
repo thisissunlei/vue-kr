@@ -81,6 +81,7 @@ function lineShow(data) {
 }
 //鼠标滑过气泡的位置
 function poptipOver(event,data,domName) {
+    return;
     let winWidth =  document.body.clientWidth;
     let offsetTop = 130-60;
     var e = event || window.event;

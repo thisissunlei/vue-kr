@@ -1,27 +1,25 @@
-<style lang="less"> 
-   .com-select-customers{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-   }
+<style lang="less">
+.com-select-customers {
+    ::-webkit-input-placeholder {
+        color: #666;
+    }
+    ::-moz-placeholder {
+        color: #666;
+    } /* firefox 19+ */
+    :-ms-input-placeholder {
+        color: #666;
+    } /* ie */
+    input:-moz-placeholder {
+        color: #666;
+    }
+}
 </style>
 
 
 
 <template>
     <div class="com-select-customers">
-         <Select
-            :v-model="customer"
-            filterable
-            remote
-            :placeholder="value"
-            :remote-method="remoteCustomer"
-            :loading="loading1"
-            :disabled="disabled"
-            @on-change="changeContent"
-            :label-in-value="labelInValue"
-            >
+        <Select v-model="customer" filterable remote :placeholder="value" :remote-method="remoteCustomer" :loading="loading1" :disabled="disabled" @on-change="changeContent" :label-in-value="labelInValue">
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -31,26 +29,39 @@
 <script>
 import http from '~/plugins/http.js';
 
-    export default {
-        props:{
-            onchange :Function,
-            value:String,
-            disabled:Boolean,
-            labelInValue:{
-                default:false,
-                type:Boolean
-            },
+export default {
+    props: {
+        onchange: Function,
+        getCustomerName: Function,
+        value: String,
+        disabled: Boolean,
+        labelInValue: {
+            default: true,
+            type: Boolean
         },
-        data () {
-            
-            return {
-                customer:'',
-                loading1:false,
-                customerOptions:[],
-            };
+    },
+    data() {
+
+        return {
+            customer: '',
+            loading1: false,
+            customerOptions: [],
+        };
+    },
+    mounted: function () {
+        this.remoteCustomer()
+    },
+    methods: {
+        changeContent: function (customer) {
+            this.onchange(customer.value)
+
+            this.getCustomerName(customer.label)
         },
-         mounted:function(){
-            this.remoteCustomer()
+        remoteCustomer(query) {
+            this.loading1 = true;
+            setTimeout(() => {
+                this.getCusomerList(query)
+            }, 200);
         },
         watch:{
             value(){
@@ -83,15 +94,15 @@ import http from '~/plugins/http.js';
                     });
                     _this.loading1 = false;
 
-                    _this.customerOptions = list;
-                }, e => {
-                    console.log('error--->',e)
-                })
-                 return list;
+                _this.customerOptions = list;
+            }, e => {
+                console.log('error--->', e)
+            })
+            return list;
 
-            }
-                    
-               
         }
+
+
     }
+}
 </script>

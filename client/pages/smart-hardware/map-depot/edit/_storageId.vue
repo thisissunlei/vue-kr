@@ -169,7 +169,8 @@ export default {
                     align:'center',
                     render(h, obj){
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
-                        return time;
+                        return h('span',{},time)
+                      
                     }
                 },
                 {

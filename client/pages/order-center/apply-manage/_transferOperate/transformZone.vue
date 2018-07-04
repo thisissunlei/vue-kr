@@ -80,7 +80,7 @@ export default {
                 callback();
             }
         };
-        const validateCustomerId= (rule, value, callback) => {
+        const validateCustomerId = (rule, value, callback) => {
             debugger
             if (!value) {
                 callback(new Error('请选择社区'));
@@ -108,7 +108,7 @@ export default {
                     { required: true, trigger: 'change', validator: validateCommunity }
                 ],
                 customerId: [
-                    { required: true, trigger: 'change',validator:  validateCustomerId }
+                    { required: true, trigger: 'change', validator: validateCustomerId }
                 ],
                 balanceOut: [
                     { required: true, trigger: 'change', validator: validateFirst }
@@ -204,7 +204,7 @@ export default {
             width: 680px;
         }
         .col {
-            width: 50%;
+            width: 340px;
             min-width: 250px;
             display: inline-block;
             padding-right: 10px;

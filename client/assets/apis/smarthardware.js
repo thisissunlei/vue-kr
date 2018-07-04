@@ -107,6 +107,11 @@ export default  {
         url: '/api/iot-platform/door-device/detail',
         method: 'get'
     },
+    //刷新设备获取上报信息
+    'get-smart-hardware-report-info':{
+        url: '/api/iot-platform/door-device/admin/actions/refresh-reported-info',
+        method: 'get'
+    },
     
     
 

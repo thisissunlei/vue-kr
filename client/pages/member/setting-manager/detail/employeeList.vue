@@ -1,14 +1,26 @@
 <template>
 <div class="g-member-manager-list">
          <div class="u-search-box">
-					<div style='float:right;'>
-						<Input 
-							v-model="mbrName" 
-							placeholder="请输入员工姓名"
-							style="width: 240px"
-						/>
-						<div class='m-search' @click="lowerSubmit">搜索</div>
-					</div> 
+             <div class="u-search-list" style="margin-left:30px;">
+                  <SearchForm 
+                        placeholder="请输入搜索关键词"
+                        :openSearch="true"
+                        :onSubmit="lowerSubmit"
+                        :searchFilter="searchFilter"
+                    />
+                    <div class="u-status-tip">
+                        <div class="u-tip-txt">
+                            <span class="u-tip-icon"></span>
+                            <span>关于管理员激活状态</span>
+                        </div>
+                        <div class="u-tip-content u-show">
+                            <div class="u-icon-trigon"></div>
+                           <p>1.  若该管理员登录过APP或官网-会员中心，系统认定为其“已激活”；</p> 
+                           <p> 2.  若管理员一直未激活，请注意提醒Ta ，避免无法接收企业账单、管理企业等情况。</p> 
+                        </div>
+                    </div>
+                   
+            </div>
 		</div>
         <Table border :columns="list" :data="listInfo"></Table>
         <div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
@@ -26,9 +38,12 @@
 </template>
 
 <script>
+
+import SearchForm from '~/components/SearchForm';
+
 export default {
     components:{
-
+        SearchForm
     },
     data(){
         return{
@@ -39,7 +54,17 @@ export default {
             Params:{
                 page:1,
                 pageSize:15
-			},
+            },
+            searchFilter:[
+                {
+                    label:'姓名',
+                    value:'mbrName'
+                },
+                {
+                    label:'手机号',
+                    value:''
+                }
+            ],
             list:[
 				{
 				 title: '姓名',
@@ -55,14 +80,14 @@ export default {
 				 title: '邮箱',
                  key: 'mbrEmail',
 				 align:'center',
-				},
+                },
 				{
 				 title: '入驻社区',
                  key: 'enterCmtName',
 				 align:'center',
-				},
+                },
 				{
-				 title: '管理员',
+				 title: '是否为管理员',
                  key: 'isManager',
 				 align:'center',
 				 render(h,obj){
@@ -70,11 +95,7 @@ export default {
 					return manager;
 				  }
 				},
-				{
-				 title: '管理的社区',
-                 key: 'manageCmtName',
-				 align:'center',
-				},
+				
 				{
 				 title: '操作',
                  key: 'operation',
@@ -123,18 +144,83 @@ export default {
 				});
 			})
         },
-        lowerSubmit(){
-			  	this.Params.page=1;
-                this.Params.mbrName=this.mbrName;
-                this.getInfo();
-		},
+        lowerSubmit(form){
+            this.Params.page=1;
+            this.Params.mbrName=form.mbrName;
+            this.getInfo();
+        },
+        setManager(params){
+			this.itemDetail=params;
+			//this.hideTip();
+        },
+        
     }
 }
 </script>
 
 <style lang="less">
 .g-member-manager-list{
-    
+    padding-bottom:30px;
+    .u-search-list{
+        height: 40px;
+        clear: both;
+    }
+    .u-status-tip{
+        width:150px;
+        float:right;
+        line-height:30px;
+        position: relative;
+       
+        span{
+          font-size: 12px;
+          color: #666666;  
+        }
+        .u-tip-icon{
+            width:13px;
+            height:13px;
+            display: inline-block;
+            margin-right:7px;
+            vertical-align: -2px;
+            background: url('./images/question.svg') no-repeat center center;
+            background-size:100% 100%;
+        }
+        .u-tip-content{
+            display: none;
+            width:217px;
+            height:120px;
+            line-height: 20px;
+            background: #575D6A;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #FFFFFF;
+            padding:10px;
+            box-sizing: border-box;
+            position: absolute;
+            left:-102px;
+            top:40px;
+            z-index: 900;
+           
+           .u-icon-trigon{
+                width:0;
+                height:0;
+                border:6px solid transparent;
+                border-bottom-color: #575D6A;
+                position: absolute;
+                top:-12px;
+                left:50%;
+                transform: translateX(-50%);
+                
+           }
+        }
+        .u-tip-txt{
+             white-space: nowrap;
+             &:hover+.u-show{
+                display: inline-block;
+
+            } 
+        }
+       
+    }
 }
 </style>
 

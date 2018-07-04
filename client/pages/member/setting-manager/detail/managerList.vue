@@ -80,26 +80,37 @@ export default {
 				 title: '邮箱',
                  key: 'mbrEmail',
 				 align:'center',
+                },
+                {
+				 title: '成员类型',
+                 key: 'enterCmtName',
+				 align:'center',
 				},
 				{
 				 title: '入驻社区',
                  key: 'enterCmtName',
 				 align:'center',
-				},
-				{
-				 title: '管理员',
-                 key: 'isManager',
-				 align:'center',
-				 render(h,obj){
-					let manager= obj.row.isManager=="1"?'是':'否';
-					return manager;
-				  }
-				},
-				{
+                },
+                {
 				 title: '管理的社区',
                  key: 'manageCmtName',
 				 align:'center',
 				},
+                {
+				 title: '激活状态  ',
+                 key: 'enterCmtName',
+				 align:'center',
+				},
+				// {
+				//  title: '管理员',
+                //  key: 'isManager',
+				//  align:'center',
+				//  render(h,obj){
+				// 	let manager= obj.row.isManager=="1"?'是':'否';
+				// 	return manager;
+				//   }
+				// },
+				
 				{
 				 title: '操作',
                  key: 'operation',
@@ -152,7 +163,12 @@ export default {
             this.Params.page=1;
             this.Params.mbrName=form.mbrName;
             this.getInfo();
-		},
+        },
+        setManager(params){
+			this.itemDetail=params;
+			//this.hideTip();
+        },
+        
     }
 }
 </script>

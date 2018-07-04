@@ -177,11 +177,7 @@ export default {
 		openAddManager(){
 
 		},
-		setManager(params){
-			this.itemDetail=params;
-			this.hideTip();
-		},
-		
+
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
 				csrId:params.csrId

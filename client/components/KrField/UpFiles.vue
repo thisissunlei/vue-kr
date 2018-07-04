@@ -86,7 +86,7 @@
 <script>
 import PhotoAlbum from '../PhotoAlbum';
 import EditLabel from './EditLabel';
-import utils from 'utils';
+import utils from '~/plugins/utils';
 import KrImg from '../KrImg'
 export default{
 	components:{

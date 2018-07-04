@@ -38,7 +38,7 @@ export default {
             this.getCusomerList();
         },
         test() {
-            this.defaultValue = this.test.communityIn
+            this.defaultValue = this.test.communityIn||this.test.communityIdIn
         }
     },
     methods: {

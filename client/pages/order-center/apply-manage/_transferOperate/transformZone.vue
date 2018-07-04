@@ -4,19 +4,19 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:252px" prop="customerID">
-                    <selectCustomers name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
+                <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
-                <FormItem label="转入社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerID'></selectCommunities>
+                <FormItem label="转入社区名称" style="width:252px" prop="communityIn">
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="转出社区名称" style="width:252px" prop="communityId">
+                <FormItem label="转出社区名称" style="width:252px" prop="communityOut">
                     <!-- <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities> -->
                     <Select v-model="formItem.communityOut" style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -72,24 +72,43 @@ export default {
                 callback();
             }
         };
+        const validateCommunity = (rule, value, callback) => {
+            debugger
+            if (!value) {
+                callback(new Error('请选择社区'));
+            } else {
+                callback();
+            }
+        };
+        const validateCustomerId= (rule, value, callback) => {
+            debugger
+            if (!value) {
+                callback(new Error('请选择社区'));
+            } else {
+                callback();
+            }
+        };
         return {
             submitBtnShow: false,
             maxAmount: 0,
             communitiesOut: [],
             communities: [],
             formItem: {
-                customerID: 12246,
+                customerId: -1,
                 communityOut: '',
                 communityIn: '',
                 balanceOut: '',
                 remark: ''
             },
             ruleCustom: {
-                communityId: [
-                    { required: true, message: '请选择社区', trigger: 'change' }
+                communityIn: [
+                    { required: true, trigger: 'change', validator: validateCommunity }
                 ],
-                customerID: [
-                    { required: true, message: '请选择客户', trigger: 'change' }
+                communityOut: [
+                    { required: true, trigger: 'change', validator: validateCommunity }
+                ],
+                customerId: [
+                    { required: true, trigger: 'change',validator:  validateCustomerId }
                 ],
                 balanceOut: [
                     { required: true, trigger: 'change', validator: validateFirst }
@@ -101,20 +120,20 @@ export default {
         getMaxAmount() {
             let parms = {
                 communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID
+                customerId: this.formItem.customerId
             }
             var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
-                if (r.data.length == 0) {
+                let arr = r.data.filter(item => item.feeType == 'BALANCE')
+
+                if (r.data.length == 0 || arr.length == 0) {
                     _this.maxAmount = 0
-                    _this.submitBtnShow = false;
                     _this.$Notice.info({
                         title: '无可用转移金额'
                     });
                 }
                 else {
-                    _this.submitBtnShow = true;
-                    _this.maxAmount = r.data[0].maxAmount
+                    _this.maxAmount = arr[0].maxAmount
                 }
 
             }).catch((error) => {
@@ -126,7 +145,7 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item })
+            this.formItem = Object.assign({}, this.formItem, { customerId: item })
         },
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityIn', commIn)
@@ -149,7 +168,7 @@ export default {
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID,
+                customerId: this.formItem.customerId,
                 id: '',
                 transferType: 'TRANSFER_COMMUNITY',
                 detailStr: JSON.stringify([
@@ -161,7 +180,7 @@ export default {
                     }
                 ])
             }
-
+            debugger;
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.$Notice.info({
                     title: '操作成功'

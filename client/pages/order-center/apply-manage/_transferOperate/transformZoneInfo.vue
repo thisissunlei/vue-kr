@@ -33,7 +33,7 @@
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityId">
                     <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>                        -->
-                    <Select v-model="formItem.communityOut" :disabled='UIDisable.cummunityOut' style="width:252px">
+                    <Select v-model="formItem.communityIdOut" :disabled='UIDisable.cummunityOut' style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
@@ -114,9 +114,9 @@ export default {
             },
             UIDisable: {
                 customer: true,//true 禁用
-                cummunityIn: true,
-                cummunityOut: true,
-                balance: true,
+                cummunityIn: false,
+                cummunityOut: false,
+                balance: false,
                 remark: true,
                 editBtn: true,
                 approveBtn: true,
@@ -175,7 +175,9 @@ export default {
                 let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
                 this.formItem = Object.assign({}, this.formItem, obj)
                 this.UIDisableBak = Object.assign({}, this.UIDisable);
+                console.log(this.receivedApplyInfo)
                 console.log(this.formItem)
+                this.getMaxAmount();
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -203,19 +205,23 @@ export default {
         },
         getMaxAmount() {
             let parms = {
-                communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID
+                communityId: this.formItem.communityIdIn,
+                customerId: this.formItem.customerId,
+                id: this.receivedApplyInfo.id
             }
+
             var _this = this
             this.$http.post('get-max-amount', parms).then((r) => {
-                if (r.data.length == 0) {
+                let arr = r.data.filter(item => item.feeType == 'BALANCE')
+
+                if (r.data.length == 0 || arr.length == 0) {
                     _this.maxAmount = 0
                     _this.$Notice.info({
                         title: '无可用转移金额'
                     });
                 }
                 else {
-                    _this.maxAmount = r.data[0].maxAmount
+                    _this.maxAmount = arr[0].maxAmount
                 }
 
             }).catch((error) => {
@@ -242,6 +248,7 @@ export default {
         },
         onGetCmtsList(list) {
             this.communities = [].concat(list);
+            this.communitiesOut = list.filter(item => item.value !== this.formItem.communityIdIn)
         },
         handleEdit() {
             let obj = {

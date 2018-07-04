@@ -177,14 +177,15 @@ export default {
             params.uEndTime = new Date(parseInt(params.uEndTime)).getTime();
         }
         this.formItem = Object.assign({}, this.formItem, params);
-        setTimeout(() => {
-            if (!_this.formItem.moneyType) {
-                _this.formItem.moneyType = ' ';
-            }
-            if (!_this.formItem.transferType) {
-                _this.formItem.transferType = ' ';
-            }
-        }, 500);
+
+        // setTimeout(() => {
+        //     if (!_this.formItem.moneyType) {
+        //         _this.formItem.moneyType = ' ';
+        //     }
+        //     if (!_this.formItem.transferType) {
+        //         _this.formItem.transferType = ' ';
+        //     }
+        // }, 500);
 
     },
     methods: {
@@ -286,7 +287,6 @@ export default {
         },
         //城市change事件
         handleChangeCity(param) {
-            console.log('changeCIty', param)
             if (this.params.cityId == param) {
                 this.getCommunityList(param)
             } else {

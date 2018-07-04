@@ -118,7 +118,10 @@ export default{
 		},
 		name:{
 			type:[String,Number]
-		}
+		},
+		right:{
+            type:String,
+        },
 
     },
     data(){

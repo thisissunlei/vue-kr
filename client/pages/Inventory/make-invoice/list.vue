@@ -302,8 +302,11 @@
               this.openBack = true;
             },
             //页面切换
-            changePage(){
-
+          //页面切换
+            changePage(page){
+                this.tableParams.page=page;
+                this.page=page;
+                this.getListData();
             },
             //格式转换
             dateSwitch(data){

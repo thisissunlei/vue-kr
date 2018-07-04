@@ -1336,6 +1336,12 @@
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
                     },
+                    {
+                        primaryText: "客户资金转移",
+                        type: 'vue',
+                        router: 'order-center/apply-manage/_transferOperate',
+                        menuCode: 'seat_order_list',
+                    },
                     ]
                 },
         ]

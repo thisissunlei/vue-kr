@@ -19,7 +19,7 @@
                 </div>
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px">项目备注</div>
             </div>
-            <Scroll :on-reach-bottom="getcomments" :height='500' style="overflow-y:auto">
+            <Scroll :on-reach-bottom="getcomments" :height='400' style="overflow-y:auto">
                 <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                     <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
                     <div style="margin-left:66px;min-height:60px">

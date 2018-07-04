@@ -31,10 +31,10 @@
                         <span>当前连接服务器：</span><span>{{deviceVO.loginedServer}}</span>
                     </div>
                     <div class="item-info" v-if="SecondeVersion">
-                        <span>最后连接时间：</span><span>{{deviceVO.loginedUtime}}</span>
+                        <span>最后连接时间：</span><span>{{this.returnDate(deviceVO.loginedUtime)}}</span>
                     </div>
                     <div class="item-info" v-if="SecondeVersion">
-                        <span>最后断开时间：</span><span>{{deviceVO.logoutTime}}</span>
+                        <span>最后断开时间：</span><span>{{this.returnDate(deviceVO.logoutTime)}}</span>
                     </div>
                     <div class="json-str" v-if="SecondeVersion">
                         <div><span>设备上报信息:</span><span><pre id="json-str-report"></pre></span></div>
@@ -122,7 +122,7 @@ export default {
             this.$http.get(url,params).then((res)=>{
                 if(maker == "KRSPACE"){
                     this.deviceDetail = res.data;
-                    this.deviceVO= res.data.deviceVO;
+                    this.deviceVO= res.data.deviceVO || {};
                     if(res.data.deviceVO){
                         document.getElementById('json-str-report').innerHTML= _this.syntaxHighlight(this.deviceVO.reported);
                         document.getElementById('json-str-desired').innerHTML= _this.syntaxHighlight(this.deviceVO.desired);
@@ -176,8 +176,11 @@ export default {
                 });
             })
         },
-        returnDate(Timestamp){
-            dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(Timestamp))
+        returnDate(timestamp){
+            if(!timestamp){
+                return "无"
+            }
+            return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(timestamp))
         }
       
       
@@ -208,7 +211,7 @@ export default {
                 .item-info{
                     margin-top:5px;
                     display: inline-block;
-                    width: 33%;
+                    width: 25%;
                     span{
                         font-size:14px;
                     }

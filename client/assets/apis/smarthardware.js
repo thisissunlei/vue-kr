@@ -102,9 +102,14 @@ export default  {
         method: 'get'
     },
 
-    //获取门禁设备详情
+    //获取门禁设备详情二代
     'get-smart-hardware-door-device-detail':{
         url: '/api/iot-platform/door-device/detail',
+        method: 'get'
+    },
+    //获取一代设备香型
+    'get-smart-hardware-door-device-detail-v1':{
+        url: '/api/iot-platform/door-device/v1/detail',
         method: 'get'
     },
     //刷新设备获取上报信息

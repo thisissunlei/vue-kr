@@ -132,25 +132,23 @@
                         <Select v-model="item.type" label-in-value @on-change="changeType">
                             <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id">{{ types.label }}</Option>
                         </Select>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        </DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
+                    </Col>
+                    <Col span="5" class="discount-table-content" >
+                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
+                    </Col>
+                    <Col span="5" class="discount-table-content">
+                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
+                    </Col>
+                    <Col span="5" class="discount-table-content">
                         <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
-
-                        </Col>
-                    </Row>
-                </FormItem>
-                <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
+                    </Col>  
+            </Row>
+        </FormItem>
+            <Row style="margin-bottom:10px">
+                <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
@@ -377,8 +375,24 @@ export default {
                                 }
                             }
                         }, '44')
+                             
                     }
                 },
+                {
+                    title: '租赁期限',
+                    key: 'address',
+                    render: (h, params) => {
+                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.endDate)))
+                    }
+                },
+                {
+                    title: '小计',
+                    key: 'originalAmount',
+                    render:function(h,params){
+                        return h('span',{},utils.thousand(params.row.originalAmount))
+                        }
+                },
+                
                 {
                     title: '租赁期限',
                     key: 'address',

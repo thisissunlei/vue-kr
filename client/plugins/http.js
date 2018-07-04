@@ -9,35 +9,35 @@ const env = process.env.NODE_ENV;
 
 axios.defaults.withCredentials = true;
 
-axios.defaults.mode = "cors";
+axios.defaults.mode = 'cors';
 
-axios.interceptors.request.use(
-    config => {
-        if (config.method == "post") {
-            let data = Qs.stringify(config.data);
-            config.data = data;
-        }
-        if (config.url.indexOf("mockjs ") !== -1) {
-            config.baseURL = "http://rap.krspace.cn";
-        } else if (config.url.indexOf("/st/") !== -1) {
-            config.url = config.url.split("/st/")[1];
-            config.baseURL = "http://st.krspace.cn";
-        } else {
-            config.baseURL = "/";
-        }
 
-        return config;
-    },
-    error => {
-        return Promise.reject(error);
+axios.interceptors.request.use(config => {
+  if(config.method  == 'post' || config.method  == 'put'){
+    if(!config.data.isPut){
+      let data = Qs.stringify(config.data);
+        config.data = data;
+    }else{
+      delete config.data.isPut;
     }
-);
+  }
+  if(config.url.indexOf('mockjs') !==-1 ){
+    config.baseURL = 'http://rap.krspace.cn';
+  }else if(config.url.indexOf('/st/') !==-1){
+    config.url = config.url.split('/st/')[1]
+    config.baseURL = 'http://st.krspace.cn';
+  }else{
+    config.baseURL = '/';
+  } 
 
-function toType(obj) {
-    return {}.toString
-        .call(obj)
-        .match(/\s([a-zA-Z]+)/)[1]
-        .toLowerCase();
+  return config
+}, error => {
+ return Promise.reject(error)
+})
+
+
+function toType (obj) {
+ return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
 // 参数过滤函数
 function filterNull(o) {

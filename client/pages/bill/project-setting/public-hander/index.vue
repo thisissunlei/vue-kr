@@ -9,10 +9,10 @@
 
         <div class='title-left'>
             <div class='title-name-line'>
-                <span class='title-name'  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目管理系统&nbsp;|</span>
+                <span class='title-name'  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;项目档案&nbsp;|</span>
 
-                <!-- <span style="color:#499DF1;font-size:14px">开业进度总览</span>/ -->
-                <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" >{{city}}-{{name}}</span>
+                <span style="color:#499DF1;font-size:14px;cursor:pointer;"  @click="gobackIndex" >首页</span> >
+                <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" > {{name}}</span>
             </div>
         </div>
 
@@ -149,6 +149,10 @@
              this.getDeletePermission();
         },
         methods:{
+          gobackIndex(){
+            this.$router.push({path:'/bill/project-setting'})
+            // this.$router.push({path:'/'})
+          },
           getDeletePermission(){
               this.$http.get('get-delete-permission',{id:this.projectId}).then((res)=>{
                   this.isDeletePermission= res.data

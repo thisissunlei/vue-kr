@@ -261,11 +261,9 @@ var scrollWidth = 0;
                      
                 // }
                 var contentdom = document.querySelectorAll('.project-view-table-content');
-                if(contentdom){
-                     contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
-                    contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
-                }
                
+                contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
                 
                 // console.log(boxWidth.style.width ,"kkkkkkk")
                 if(wWidth>1500  &&( flag||this.tdType!=='>1500')){

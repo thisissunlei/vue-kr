@@ -19,6 +19,7 @@
                 </div>
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px">项目备注</div>
             </div>
+            <div v-if="comments.length>0">
             <Scroll :on-reach-bottom="getcomments" :height='heightDiv' style="overflow-y:auto">
                 <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                     <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
@@ -34,7 +35,7 @@
                             <div style="clear:both;"></div>
                         </div>
                         <div style="text-align:left">
-                            <div v-if="!item.canDel"><span><span style="color:#ccc"> 回复了&nbsp;&nbsp;</span><span>{{item.replyCreator}}:</span></span>
+                            <div v-if="false"><span><span style="color:#ccc"> 回复了&nbsp;&nbsp;</span><span>{{item.replyCreator}}:</span></span>
                             </div>
                             <span>
                           {{item.comment}}
@@ -47,6 +48,11 @@
                     <div style="clear:both;"></div>
                 </div>
             </Scroll>
+            </div>
+            <div v-else style="height:50px;line-height50px;text-align:center;font-size:20px">
+                暂无备注
+            </div>
+
         </div>
         <div class="div-one" id="divOneId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
@@ -62,16 +68,16 @@
                 </div>
                 <div>
                     <Col span="8" v-for='(item,index) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
-                        <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
-                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+                        <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
+                        <OverFlowLabel style="color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
-                        <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
-                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+                        <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
+                        <OverFlowLabel style="color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
-                        <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
-                        <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
+                        <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
+                        <div style="color:#333;maxHeight:50px;overflow:hidden">
                             <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                         </div>
                     </Col>
@@ -127,7 +133,7 @@
         </div>
         <Modal v-model="modal2" width=600 id='modal2'>
             <div style='width:560px'>
-                <img :src='modal2ImgUrl' style='width:560px;'>
+                <img :src='modal2ImgUrl'  style='width:560px;'>
             </div>
         </Modal>
         <Modal v-model="modal1" :title="modlalTitle">
@@ -159,7 +165,7 @@
         :default-file-list="defaultList"
         :on-success="handleSuccess"
         :format="['jpg','jpeg','png']"
-        :max-size="2048"
+        :max-size="1000000"
         :on-format-error="handleFormatError"
         :on-exceeded-size="handleMaxSize"
         :before-upload="handleBeforeUpload"
@@ -170,6 +176,9 @@
             <Icon type="camera" size="20"></Icon>
         </div>
     </Upload>
+    <div>
+    <span>最多只能上传9张图片</span>
+    </div>
 </Modal>
 <Modal v-model="modalProject" title="项目成员" width=700>
     <div slot='footer'>
@@ -184,7 +193,7 @@
 <div>
 </div>
 </Modal>
-   <PhotoAlbum v-if="isPhotoAlbum" :data='imgData' :eyeIndex="eyeIndex" @close = "closeOrOpen"></PhotoAlbum>
+   <PhotoAlbum v-if="isPhotoAlbum" :data='imgData' @downFile="downFile" :eyeIndex="eyeIndex" @close = "closeOrOpen"></PhotoAlbum>
   </div>
 </template>
 

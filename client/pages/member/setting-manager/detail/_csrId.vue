@@ -63,7 +63,23 @@
 			<Button type="ghost" style="margin-left: 8px" @click="hideTip">取消</Button>
       </div>
     </Modal>
-	
+	 <Modal
+        v-model="isAddManager"
+        title="添加管理员"
+        ok-text="确定"
+        cancel-text="取消"
+        width="600"
+     >
+		<AddManager  
+			v-if="isAddManager"
+			:detail="itemDetail"
+			@checkData="getCheckData"
+		/>
+	  <div slot="footer">
+			<Button type="primary" @click="managerSubmit">确定</Button>
+			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
+      </div>
+    </Modal>
 </div>
 </template>
 <script>
@@ -75,6 +91,7 @@ import dateUtils from 'vue-dateutils';
 import CommunityManage from './communityManage';
 import ManagerList from './managerList';
 import EmployeeList from './employeeList';
+import AddManager from './addManager';
 
 export default {
 	components:{
@@ -83,7 +100,8 @@ export default {
 		LabelText,
 		CommunityManage,
 		ManagerList,
-		EmployeeList
+		EmployeeList,
+		AddManager
 	},
 	data(){
 		return{
@@ -91,6 +109,7 @@ export default {
 			key:'',
 			detail:{},
 			openTip:false,
+			isAddManager:false,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",
@@ -177,9 +196,11 @@ export default {
            sessionStorage.setItem('manageMask',key);
         },
 		openAddManager(){
+			this.isAddManager=!this.isAddManager;
+		},
+		managerSubmit(){
 
 		},
-
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
 				csrId:params.csrId

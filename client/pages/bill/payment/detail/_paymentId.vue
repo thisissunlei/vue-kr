@@ -90,7 +90,8 @@ export default {
 					align:'center'	,
 					render(h, obj){
 						let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
-						return time;
+						return h('span',{},time);
+						// return time;
 					}
 				},
 				{

@@ -210,7 +210,7 @@ import Loading from '~/components/Loading'
                                 return '-'
                             }
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.cTime));
-                            return time;
+                            return h('span',{},time);
                         }
                     },
                     {

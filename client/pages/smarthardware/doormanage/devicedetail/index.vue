@@ -2,45 +2,49 @@
   <div class="g-device-detail-box">
       <SectionTitle title="硬件设备详情"></SectionTitle>
       <div class="g-device-detail">
-            <Button type="primary" icon="ios-refresh-empty" class="fresh-btn">刷新设备上报信息</Button>
+            <Button 
+                type="primary" 
+                icon="ios-refresh-empty" 
+                class="fresh-btn"  
+                @click="freshReportInfo"
+            >
+                刷新设备上报信息
+            </Button>
             <div class="device-detail-info">
                 <div class="connect-info info-box">
-                    <p>连接信息</p>
                     <div class="item-info">
                         <span>硬件ID：</span><span>{{deviceVO.deviceId}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>标记：</span><span>{{deviceVO.name}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>底层固件版本：</span><span>{{deviceVO.driverV}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>APP版本：</span><span>{{deviceVO.v}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>IP地址：</span><span>{{deviceVO.ip}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>当前连接服务器：</span><span>{{deviceVO.loginedServer}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>最后连接时间：</span><span>{{deviceVO.loginedUtime}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" v-if="SecondeVersion">
                         <span>最后断开时间：</span><span>{{deviceVO.logoutTime}}</span>
                     </div>
-                    <div class="json-str">
+                    <div class="json-str" v-if="SecondeVersion">
                         <div><span>设备上报信息:</span><span><pre id="json-str-report"></pre></span></div>
                         <div><span>设备影子信息:</span><span><pre id="json-str-desired"></pre></span></div>
                     </div>
-                </div>
-                <div class="basic-info info-box">
-                    <p>基本信息</p>
+               
                     <div class="item-info">
                         <span>社区名称：</span><span>{{deviceDetail.communityName}}</span>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info" >
                         <span>楼层：</span><span>{{deviceDetail.floor}}</span>
                     </div>
                     <div class="item-info">
@@ -60,13 +64,14 @@
                         <span>厂家：</span><span>{{deviceDetail.makerName}}</span>
                     </div>
                     <div class="item-info">
-                        <span>二维码有效期：</span><span>{{deviceDetail.qrExpireAt}}</span>
+                        <span>二维码有效期：</span><span>{{this.returnDate(deviceDetail.qrExpireAt)}}</span>
                     </div>
                     <div class="block-line">
                         <span>二维码地址：</span><span>{{deviceDetail.qrImgUrl}}</span>
                     </div>
                     <div class="block-line">
-                        <span>二维码：</span><span>{{deviceDetail.qrExpireAt}}</span>
+                        <span>二维码：</span>
+                        <img :src="deviceDetail.qrImgUrl" class="qrStyle"/>
                     </div>
                     <div class="block-line">
                         <span>备注：</span><span>{{deviceDetail.memo}}</span>
@@ -88,13 +93,15 @@ export default {
    data(){
      return{
          deviceDetail : {},
-         deviceVO : {}
+         deviceVO : {},
+         SecondeVersion : true,
      }
    },
    created(){
 
    },
    mounted(){
+       GLOBALSIDESWITCH("false");
        this.getdeviceDetail();
    },
    methods:{
@@ -103,19 +110,32 @@ export default {
 
             let _this =this;
             let params = {id: this.$route.query.id || ''};
-                this.$http.get('get-smart-hardware-door-device-detail',params).then((res)=>{
+            let maker = this.$route.query.maker;
+            var url ;
+            if(maker == "KRSPACE"){
+                this.SecondeVersion = true;
+                url = 'get-smart-hardware-door-device-detail'
+            }else{
+                this.SecondeVersion = false;
+                url = 'get-smart-hardware-door-device-detail-v1'
+            }
+            this.$http.get(url,params).then((res)=>{
+                if(maker == "KRSPACE"){
                     this.deviceDetail = res.data;
                     this.deviceVO= res.data.deviceVO;
                     if(res.data.deviceVO){
                         document.getElementById('json-str-report').innerHTML= _this.syntaxHighlight(this.deviceVO.reported);
                         document.getElementById('json-str-desired').innerHTML= _this.syntaxHighlight(this.deviceVO.desired);
                     }
-                    console.log("res",res);
-                }).catch((error)=>{
-                    _this.$Notice.error({
-                        title:error.message
-                    });
-                })
+                }else{
+                    this.deviceVO= res.data;
+                    this.deviceDetail = res.data;
+                }
+            }).catch((error)=>{
+                _this.$Notice.error({
+                    title:error.message
+                });
+            })
         },
         syntaxHighlight(json){
             if(!json){
@@ -141,6 +161,23 @@ export default {
                 }
                 return '<span class="' + cls + '">' + match + '</span>';
             });
+        },
+
+        freshReportInfo(){
+            let _this =this;
+            let params = {deviceId: this.deviceVO?this.deviceVO.deviceId:''};
+            this.$http.get('get-smart-hardware-report-info',params).then((res)=>{
+                
+                document.getElementById('json-str-report').innerHTML= _this.syntaxHighlight(res.data.reported);
+                   
+            }).catch((error)=>{
+                _this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        returnDate(Timestamp){
+            dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(Timestamp))
         }
       
       
@@ -159,13 +196,11 @@ export default {
             .key { color: red; }
             .fresh-btn{
                 margin-left:5px;
+                
             }
             .info-box{
                 margin: 20px 0 ;
-                border: solid 1px #eee;
-                border-radius: 6px;
                 padding: 10px;
-                box-shadow: 10px 10px 20px #d5d4d4;
                 p{
                     font-size: 18px;
                     font-weight: 500;
@@ -182,6 +217,10 @@ export default {
                     margin-top:5px;
                     span{
                         font-size:14px;
+                    }
+                    .qrStyle{
+                        width:50px;
+                        height:50px;
                     }
                 }
                 .json-str{

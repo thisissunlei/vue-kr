@@ -2,16 +2,12 @@
 <div class="g-setting-detail">
 	<SectionTitle title="设置企业管理员" ></SectionTitle>
 	<div class="m-detail-content">
+		
 		<div class="u-company-info">
-			<Card id="u-step-one">
-				<p slot="title" class="card-title">
-					企业信息
-				</p>
-				<LabelText :inline="false" label="企业名称：" >
-                    {{companyInfo.csrName}}
-                </LabelText>
-                 <Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
-			</Card>
+			<LabelText :inline="false" label="企业名称：" >
+                {{companyInfo.csrName}}
+        	</LabelText>
+		 	<Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
 		</div>
 		<div class="u-company-info">
 			<Card id="u-step-two">
@@ -100,8 +96,18 @@ export default {
 			cmtIds:"",
 			companyColumns:[
 				{
-				 title: '社区名称',
+				 title: '入驻社区',
                  key: 'cmtName',
+				 align:'center',
+				},
+				{
+				 title: '入驻开始日期',
+                 key: 'enterStatusDesc',
+				 align:'center',
+				},
+				{
+				 title: '入驻结束日期',
+                 key: 'enterStatusDesc',
 				 align:'center',
 				},
 				{
@@ -111,6 +117,11 @@ export default {
 				},
 				{
 				 title: '该社区管理员数量',
+                 key: 'managerNum',
+				 align:'center',
+				},
+				{
+				 title: '管理员未激活数量',
                  key: 'managerNum',
 				 align:'center',
                 }

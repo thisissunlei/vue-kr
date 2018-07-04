@@ -12,7 +12,7 @@
                     </div> -->
           </div>
            <PublicHander :name="name" :city="city" :isComment="true" @goback="goback" />
-        <div class="div-two" :id ="divTwoId">
+        <div class="div-two" id ="divTwoId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
                 <div style="float:right">
                     <Button type="primary" size="small" @click="addClickMethod">添加备注</Button>
@@ -48,7 +48,7 @@
                 </div>
             </Scroll>
         </div>
-        <div class="div-one" :id="divOneId">
+        <div class="div-one" id="divOneId">
             <div style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
 
                 <div style="border-left:5px solid #4b9ce4;padding-left:5px;text-align:left">项目档案</div>
@@ -63,11 +63,11 @@
                 <div>
                     <Col span="8" v-for='(item,index) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
-                        <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
+                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
-                        <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
+                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">&nbsp;{{item.displayName}}</div>
@@ -232,14 +232,15 @@
             this.queryInfoMethod()
             this.queryInfoPropertyMethod()
             this.queryInfoProductMethod()
-            // this.$nextTick(()=>{
+            this.$nextTick(()=>{
 
                setTimeout(()=> {
-                 let oneDom = document.getElementById(this.divOneId);
-                 let twoDom =  document.getElementById(this.divTwoId);
+                 let oneDom = document.getElementById("divOneId");
+                 let twoDom =  document.getElementById("divTwoId");
                  console.log(oneDom,winHeight,"PPPP",top,"oooo",bottom)
                  if(oneDom){
                    oneDom.style.height = winHeight - top -bottom +'px';
+                   this.heightDiv = winHeight - top -bottom-20;
                  }
                  if(twoDom){
                    twoDom.style.height = winHeight - top -bottom +'px';
@@ -248,8 +249,8 @@
                  }
                },500)
 
-                
-            // })
+
+            })
             // this.getDeletePermission()
             // this.memberDetailList()
         },

@@ -232,20 +232,24 @@
             this.queryInfoMethod()
             this.queryInfoPropertyMethod()
             this.queryInfoProductMethod()
-            this.$nextTick(()=>{
-                let oneDom = document.getElementById(this.divOneId);
-                let twoDom =  document.getElementById(this.divTwoId);
-                console.log(oneDom,winHeight,"PPPP",top,"oooo",bottom)
-                if(oneDom){
-                     oneDom.style.height = winHeight - top -bottom +'px';
-                }
-               if(twoDom){
+            // this.$nextTick(()=>{
+
+               setTimeout(()=> {
+                 let oneDom = document.getElementById(this.divOneId);
+                 let twoDom =  document.getElementById(this.divTwoId);
+                 console.log(oneDom,winHeight,"PPPP",top,"oooo",bottom)
+                 if(oneDom){
+                   oneDom.style.height = winHeight - top -bottom +'px';
+                 }
+                 if(twoDom){
                    twoDom.style.height = winHeight - top -bottom +'px';
 
                    this.heightDiv = winHeight - top -bottom-20;
-               }
+                 }
+               },500)
+
                 
-            })
+            // })
             // this.getDeletePermission()
             // this.memberDetailList()
         },

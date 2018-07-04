@@ -22,7 +22,7 @@
         <Select v-if="show" v-model="showValue" 
             filterable 
           
-            :placeholder='placeholder' 
+            placeholder="请选择"
             :loading="loading1" 
             :disabled="disabled" 
             :label-in-value='labelinvalue' 
@@ -50,7 +50,7 @@ export default {
             default: false,
         },
         disabled:{type:Boolean,default:false},
-        placeholder: '请选择',
+        // placeholder: '请选择',
 
         orderitems: {
             type: Object
@@ -159,6 +159,8 @@ export default {
                 }
                 if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
                     this.showValue = ''+list[1].value;
+                }else{
+                    this.showValue = '';
                 }
                  
             //   

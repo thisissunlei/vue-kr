@@ -25,32 +25,7 @@
                     
                     <ArchivesManagement v-if="activeTab=='product'" code="product"/>
                 </TabPane>
-                 <!-- <TabPane label="项目进度" name="tab3">
-                        <GanttChart
-                            v-if="!isLoading "
-                            :data="listData"
-                            :treeData="treeData"
-                            type="edit"
-                            :start="startTime"
-                            :end="endTime"
-                            :treeIds="taskIds"
-                            @rightOver="rightOver"
-                            @treeClick="treeClick"
-                            @editClick="editTask"
-                        >
-                            <div class='detail-detail' slot="leftBar">
-                                <DetailTaskList
-                                    :data="listData"
-                                    @addClick="addTask"
-                                    @editClick="editTask"
-                                    @leftOver="leftOver"
-                                    @iconClick="iconClick"
-                                    :scrollWidth="scrollWidth"
-                                />
-                            </div>
-                        </GanttChart>
-
-                </TabPane> -->
+             
             </Tabs>
          
 
@@ -147,13 +122,10 @@
 </template>
 
 <script>
-import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
-import DetailTaskList from './detail-task-list';
-import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -168,8 +140,6 @@ export default {
         AddTask,
         EditTask,
         WatchRecord,
-        DetailTaskList,
-        GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,

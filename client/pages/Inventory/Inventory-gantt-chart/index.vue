@@ -328,11 +328,13 @@ export default {
         },
         getLastTime(n,year,month,day){
             for(var i=0;i<n;i++){
+                 month --;
                 if(month <=0){
+                    
                     month = month+12;
                     year -= 1;
                 }
-                month --;
+               
             }
             day= publicFn.getMonthDayNum(year,month);
             return year+"-"+month+"-"+1;

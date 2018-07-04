@@ -115,13 +115,15 @@ export default {
                  key: 'bizType',
 				 align:'center'	,
 				 render(h, obj){
+					let str = '';
 					if(obj.row.bizType==='MEETING'){
-						return '会议室账单';
+						str =  '会议室账单';
 					}else if(obj.row.bizType==='PRINT'){
-						return '打印服务账单 ';
+						str = '打印服务账单 ';
 					}else if(obj.row.bizType==='CONTRACT'){
-						return '工位服务订单';
+						str =  '工位服务订单';
 					}
+					return h('span',{},str);
 				 }
 				},
 				{
@@ -129,8 +131,9 @@ export default {
                  key: 'billingDate',
 				 align:'center'	,
 				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billingDate));
-					 return time;
+					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billingDate));
+					return h('span',{},time);
+					
 				 }
 				},
 				{
@@ -139,7 +142,8 @@ export default {
 				 align:'center'	,
 				 render(h, obj){
 					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dueDate));
-					 return time;
+					 return h('span',{},time);
+					
 				 }
 				},
 				{
@@ -147,13 +151,28 @@ export default {
                  key: 'payStatus',
 				 align:'center'	,
 				 render(h, obj){
+					 let str = '';
+					 let className = '';
 						if(obj.row.payStatus==='WAIT'){
-							return <span class="u-txt-red">待付款</span>;
+							className = 'u-txt-red';
+							str = '待付款';
+
+
+							
 						}else if(obj.row.payStatus==='PAID'){
-							return <span class="u-txt">已付款</span>;
+							className = 'u-txt';
+							str = '已付款';
+							
 						}else if(obj.row.payStatus==='PAYMENT'){
-							return <span class="u-txt-orange">未付清</span>;
+							className = 'u-txt-orange';
+							str = '未付清';
+						
 						}
+						return h('span',{
+							attrs:{
+								class:className,
+							}
+						},str)
 				 	}
 				}
 			]

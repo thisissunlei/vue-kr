@@ -2,7 +2,7 @@
 <div class="g-order">
     <SectionTitle title="社区优惠配置"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="onCreate">新建社区优惠</Button> 
+        <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button> 
         <span style="padding:0 10px"></span> 
         <div style="display:inline-block;width:400px;">
             选择社区：
@@ -114,7 +114,7 @@ export default {
                 dataItem:[],
                 columns: [
                     {
-                        title: '社区',
+                        title: '社区名称',
                         key: 'cmtName',
                         align:'center'
                     },
@@ -152,32 +152,37 @@ export default {
                             return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                         }
                     },
-                    {
-                        title: '操作',
-                        key: 'operation',
+                      {
+                        title: '创建人',
+                        key: 'username',
                         align:'center',
-                        width:110,
-                        render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showEdit(params.row)
+                    }
+                    // {
+                    //     title: '操作',
+                    //     key: 'operation',
+                    //     align:'center',
+                    //     width:110,
+                    //     render:(h,params)=>{
+                    //        return h('div', [
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'text',
+                    //                     size: 'small'
+                    //                 },
+                    //                 style: {
+                    //                     color:'#2b85e4'
+                    //                 },
+                    //                 on: {
+                    //                     click: () => {
+                    //                         this.showEdit(params.row)
                                                 
-                                        }
-                                    }
-                                }, '编辑')
-                            ]);  
+                    //                     }
+                    //                 }
+                    //             }, '编辑')
+                    //         ]);  
                     
-                    }
-                    }
+                    // }
+                    // }
                 ]
                 
             }

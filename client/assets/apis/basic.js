@@ -23,7 +23,7 @@ export default  {
   },
   // 优惠列表接口
   'get-sale-list': {
-      url: '/st/api/krspace-op-web/cmt-sale-tactics/list',
+      url: '/api/krspace-op-web/cmt-sale-tactics/list',
       method: 'get'
   },
 }

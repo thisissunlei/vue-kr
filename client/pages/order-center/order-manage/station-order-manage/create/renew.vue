@@ -683,7 +683,7 @@ export default {
 
                     obj.value = r.data[i].map(item => {
                         let obj = item;
-                        obj.oldPrice = item.guidePrice == 0 ? '' : item.guidePrice;
+                        obj.oldPrice = obj.originalPrice;
                         //毅豪修改
                         if(!obj.originalPrice){
                             obj.originalPrice = item.guidePrice == 0 ? '' : item.guidePrice;
@@ -1072,11 +1072,7 @@ export default {
            
             this.selecedArr = this.selecedArr.map(item => {
                 let obj = item;
-                //毅豪修改
-                if(!obj.originalPrice){
-                    obj.originalPrice = item.oldPrice;
-                }
-                
+                obj.originalPrice = item.oldPrice;
                 return obj;
             })
             var date = val[0].begin;

@@ -44,16 +44,20 @@
                 <span class="num" v-if="tab=='office'" style="font-size:44px;color: #232428;">{{pageData.allSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #232428;">{{pageData.allFixStationsNum}}</span>
                 <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #232428;">{{pageData.allMoveStationsNum}}</span>
+              </span>      
+              <span class="number rent-special">
+                <Tooltip placement='top'>
+                    <div class="rent-title"><span class="title-text">在租</span><span class="in-rent-pic"></span></div>
+                    <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentSeatsNum}}</span>
+                    <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentSpaceNum}}</span>
+                    <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentFixStationsNum}}</span>
+                    <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
+                    <div slot="content">
+                        <div>当前出租率（出租/总数）</div>
+                        <div style="font-weight:500;font-size:20px;">{{pageData.rentRate}}</div>
+                    </div>
+                </Tooltip>
               </span>
-              <Tooltip :content="pageData.rentRate" placement="top">
-                <span class="number">
-                  <div class="rent-title"><span class="title-text">在租</span><span class="in-rent-pic"></span></div>
-                  <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentSeatsNum}}</span>
-                  <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentSpaceNum}}</span>
-                  <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentFixStationsNum}}</span>
-                  <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentMoveStationsNum}}</span>
-                </span>
-              </Tooltip>
               <span class="number">
                 <span class="title">合同未生效</span>
                 <span class="num"  v-if="tab=='all'" style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSeatsNum}}</span>

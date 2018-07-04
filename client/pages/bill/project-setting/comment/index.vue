@@ -222,6 +222,7 @@
             }
         },
         mounted() {
+            GLOBALSIDESWITCH("false");
             let winHeight = document.body.clientHeight;
             let top = 185;
             let bottom = 68;
@@ -241,7 +242,7 @@
                if(twoDom){
                    twoDom.style.height = winHeight - top -bottom +'px';
 
-                   this.heightDiv = winHeight - top -bottom-20 +'px';
+                   this.heightDiv = winHeight - top -bottom-20;
                }
                 
             })

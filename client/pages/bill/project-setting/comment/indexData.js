@@ -1,5 +1,6 @@
 export default function(){
         return {
+                heightDiv:0,
                 isClick:true,
                 divOneId:'divOneId'+this._uid,
                 divTwoId:'divTwoId'+this._uid,

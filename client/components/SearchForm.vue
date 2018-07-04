@@ -37,8 +37,8 @@
 <script>
  /**
 	 *  @param {String} placeholder  提示文案
-     *  @param {String} inputName  单一搜索框的name名
-     *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填
+     *  @param {String} inputName  单一搜索框的name名 ，单选时必填
+     *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填,单选时不需要
 	 *  @param {Function} onSubmit 提交函数
 	 * @param {Boolean} openSearch 初始时是否打开search
 	 * @param {Function} serachFormDataChanged 当input输入时直接将data传出去
@@ -95,8 +95,14 @@ export default {
 				this.$emit("serachFormDataChanged",value)
 				return;
 			}
+			if(this.searchFilter){
+				value[this.filterValue]=this.searchValue;
+				this.$emit("serachFormDataChanged",value)
+				return;
+			}
 			if(this.inputName && !this.searchFilter){
 				this.$emit("serachFormDataChanged",this.searchValue)
+				return
 			}
 
 			 

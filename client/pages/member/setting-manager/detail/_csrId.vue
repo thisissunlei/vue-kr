@@ -2,7 +2,6 @@
 <div class="g-setting-detail">
 	<SectionTitle title="设置企业管理员" ></SectionTitle>
 	<div class="m-detail-content">
-		
 		<div class="u-company-info">
 			<LabelText :inline="false" label="企业名称：" >
                 {{companyInfo.csrName}}
@@ -12,30 +11,25 @@
 		<div class="u-company-info">
 			<Card id="u-step-two">
 				<p slot="title" class="card-title">
-					员工信息
+					企业成员信息
 				</p>
-				<div class="u-search-box">
-					<div style='float:right;'>
-						<Input 
-							v-model="mbrName" 
-							placeholder="请输入员工姓名"
-							style="width: 240px"
-						/>
-						<div class='m-search' @click="lowerSubmit">搜索</div>
-					</div> 
+				<div class="u-add-manager">
+					<Button type="primary" @click="openAddManager">添加管理员</Button>
 				</div>
-				<Table border :columns="list" :data="listInfo"></Table>
-				<div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
-					<div style="float: right;">
-						<Page   
-							:total="totalCount" 
-							:page-size="pageSize"
-							show-total 
-							show-elevator
-							@on-change="changePage"
-						></Page>
-					</div>
-            	</div>
+				<Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
+					<Tab-pane :label="`管理员(${managerCount})`" name="manager">
+						<ManagerList 
+							:mask="key"
+							:reload="getManagerCount"
+						/>
+					</Tab-pane>
+					<Tab-pane :label="`在职员工(${employeeCount})`" name="employee">   
+						<EmployeeList 
+							:mask="key"
+							:reload="getEmployeeCount"
+						/>
+					</Tab-pane>
+				</Tabs> 
 			</Card>
 		</div>
 	</div>
@@ -66,32 +60,35 @@ import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
 import CommunityManage from './communityManage';
+import ManagerList from './managerList';
+import EmployeeList from './employeeList';
+
 export default {
 	components:{
 		SectionTitle,
 		DetailStyle,
 		LabelText,
-		CommunityManage
+		CommunityManage,
+		ManagerList,
+		EmployeeList
 	},
 	data(){
 		return{
+			activeKey:'manager',
+			key:'',
 			detail:{},
 			openTip:false,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",
             ctime:'',
-			listInfo:[],
-			totalCount:0,
-			pageSize:15,
 			Params:{
                 page:1,
                 pageSize:15
 			},
-			
 			itemDetail:{},
 			managerCount:0,
-			mbrName:'',
+			employeeCount:0,
 			companyInfo:{},
 			cmtIds:"",
 			companyColumns:[
@@ -114,6 +111,22 @@ export default {
 				 title: '当前入驻状态',
                  key: 'enterStatusDesc',
 				 align:'center',
+				 render(h,obj){
+					 let status;
+					 switch (obj.row.enterStatusDesc){
+						 case '':
+						 status=obj.row.enterStatusDesc
+						 return h('span',{
+								style:{
+									color:'#F5A623'
+								}
+						 },status) 
+						 break;
+						 default:
+						 return h('span',{},obj.row.enterStatusDesc);
+					 }
+					
+				 }
 				},
 				{
 				 title: '该社区管理员数量',
@@ -124,94 +137,38 @@ export default {
 				 title: '管理员未激活数量',
                  key: 'managerNum',
 				 align:'center',
+				 render(h,obj){
+
+				 }
                 }
 			],
-			list:[
-				{
-				 title: '姓名',
-                 key: 'mbrName',
-				 align:'center',
-                },
-                {
-				 title: '联系电话',
-                 key: 'mbrPhone',
-				 align:'center',
-                },
-                {
-				 title: '邮箱',
-                 key: 'mbrEmail',
-				 align:'center',
-				},
-				{
-				 title: '入驻社区',
-                 key: 'enterCmtName',
-				 align:'center',
-				},
-				{
-				 title: '管理员',
-                 key: 'isManager',
-				 align:'center',
-				 render(h,obj){
-					let manager= obj.row.isManager=="1"?'是':'否';
-					return manager;
-				  }
-				},
-				{
-				 title: '管理的社区',
-                 key: 'manageCmtName',
-				 align:'center',
-				},
-				{
-				 title: '操作',
-                 key: 'operation',
-				 align:'center',
-				 render:(h,obj)=>{
-					  return h('div', [
-						h('Button', {
-							props: {
-								type: 'text',
-								size: 'small'
-							},
-							style: {
-								color:'#2b85e4'
-							},
-							on: {
-								click: () => {
-									this.setManager(obj.row)
-								}
-							}
-						}, '设置管理员')
-						
-					]);
-				 }
-				},
-			],
+			
 			companyList:[],
 		}
 	},
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
-		this.getInfo();
 	
 	},
 	methods:{
+		getManagerCount(){
+
+		},
+		getEmployeeCount(){
+
+		},
+		tabsClick(key){
+           this.key=key;
+           sessionStorage.setItem('manageMask',key);
+        },
+		openAddManager(){
+
+		},
 		setManager(params){
 			this.itemDetail=params;
 			this.hideTip();
 		},
-		getInfo(){
-			let {params}=this.$route;
-			this.Params.csrId=params.csrId;
-			this.getCompanyInfo(params);
-			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
-				this.listInfo=res.data.items;
-				this.totalCount=res.data.totalCount;
-			}).catch((err)=>{
-				this.$Notice.error({
-					title:err.message
-				});
-			})
-		},
+		
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
 				csrId:params.csrId
@@ -224,10 +181,7 @@ export default {
 				});
 			})
 		},
-		changePage(page){
-			this.Params.page=page;
-			this.getInfo();
-		},
+		
 		hideTip(){
 			this.openTip=!this.openTip;
 		},
@@ -248,11 +202,6 @@ export default {
 					title:err.message
 				});
 			})
-		},
-		lowerSubmit(){
-			  	this.Params.page=1;
-                this.Params.mbrName=this.mbrName;
-                this.getInfo();
 		},
 		getCheckData(form){
 			this.cmtIds=form;
@@ -283,7 +232,9 @@ export default {
 	.ui-labeltext{
         padding-left: 0px;
     }
-	
+	.u-add-manager{
+		margin-bottom:10px;
+	}
 	
 	.u-search-box{
 		height:32px;

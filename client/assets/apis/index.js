@@ -18,6 +18,7 @@ import DoorRelationship from "./doorRelationship.js";
 import KrmeetingRoom from "./krmeetingRoom.js";
 import ProductGoods from './productGoods.js';
 import FinancialtransferApply from "./financialtransferApply.js";
+import DevTool from './devTool';
 
 export default {
     ...OrderApi,
@@ -39,5 +40,6 @@ export default {
     ...DoorRelationship,
     ...KrmeetingRoom,
     ...ProductGoods,
-    ...FinancialtransferApply
+    ...FinancialtransferApply,
+    ...DevTool
 };

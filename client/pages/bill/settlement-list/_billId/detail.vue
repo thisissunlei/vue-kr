@@ -138,7 +138,8 @@ export default {
                  key: 'payableAmount',
                  align:'right',
                  render:function(h,params){
-                 	return utils.thousand(params.row.payableAmount)
+                    return h('span',{},utils.thousand(params.row.payableAmount))
+
                  }	
 				}
 			],

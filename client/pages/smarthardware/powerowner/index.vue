@@ -38,6 +38,7 @@ export default {
                         title: '姓名',
                         key: 'name',
                         align:'center',
+                        className: 'can-click',
                         render: (h, obj) => {
                             return h('div', [
                                 h('span', {
@@ -156,6 +157,9 @@ export default {
     .g-power-owner{
         .page-box{
             padding:10px 20px;
+        }
+        .can-click{
+            cursor: pointer;
         }
     }
 </style>

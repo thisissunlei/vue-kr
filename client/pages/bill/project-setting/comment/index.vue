@@ -69,15 +69,15 @@
                 <div>
                     <Col span="8" v-for='(item,index) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-                        <OverFlowLabel style="color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-                        <OverFlowLabel style="color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+                        <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
                     </Col>
                     <Col span="8" v-for='(item,index) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
                         <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-                        <div style="color:#333;maxHeight:50px;overflow:hidden">
+                        <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
                             <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
                         </div>
                     </Col>
@@ -136,14 +136,14 @@
                 <img :src='modal2ImgUrl'  style='width:560px;'>
             </div>
         </Modal>
-        <Modal v-model="modal1" :title="modlalTitle">
+        <Modal v-model="modal1" :mask-closable="false" :title="modlalTitle">
             <div slot='footer'>
                 <Button type="default" @click='cancel'>取消</Button>
                 <Button type="info" @click='ok'>确定</Button>
             </div>
             <Form :model="formItem" ref="ruleValidate" :rules="ruleValidate">
                 <FormItem prop="comment">
-                    <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="placeholder">
+                    <Input   v-model="formItem.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="placeholder">
                     </Input>
                 </FormItem>
             </Form>

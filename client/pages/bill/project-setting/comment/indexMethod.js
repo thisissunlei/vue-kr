@@ -78,7 +78,7 @@ export  default  {
                   let str = res.data.items[0].data[i].fieldValue.split(',')
                   res.data.items[0].data[i].fieldValue = krCity(str)
               }
-              if (res.data.items[0].data[i].displayName === '产品类型') {
+              if (res.data.items[0].data[i].fieldType === 'SELECT') {
                   this.$http.get('get-enum-all-data', {
                       enmuKey: res.data.items[0].data[i].param
                   }).then((response) => {
@@ -92,6 +92,41 @@ export  default  {
                   })
               }
           }
+
+          for (let i = 0; i < res.data.items[1].data.length; i++) {
+            // cityData
+
+            if (res.data.items[1].data[i].fieldType === 'SELECT') {
+                this.$http.get('get-enum-all-data', {
+                    enmuKey: res.data.items[1].data[i].param
+                }).then((response) => {
+                    for (let item of response.data) {
+                        console.log(item.desc, " console.log( item.desc)")
+                        if (item.value === res.data.items[1].data[i].fieldValue) {
+                            res.data.items[1].data[i].fieldValue = item.desc;
+                        }
+                    }
+                }).catch((error) => {
+                })
+            }
+        }
+
+        for (let i = 0; i < res.data.items[1].data.length; i++) {
+
+          if (res.data.items[1].data[i].fieldType === 'SELECT') {
+              this.$http.get('get-enum-all-data', {
+                  enmuKey: res.data.items[1].data[i].param
+              }).then((response) => {
+                  for (let item of response.data) {
+                      console.log(item.desc, " console.log( item.desc)")
+                      if (item.value === res.data.items[1].data[i].fieldValue) {
+                          res.data.items[1].data[i].fieldValue = item.desc;
+                      }
+                  }
+              }).catch((error) => {
+              })
+          }
+      }
           this.typeCodeInfo = res.data.items[0].data
           this.coreinfoBusiness = res.data.items[1].data
           this.coreinfoFinance = res.data.items[2].data
@@ -158,7 +193,9 @@ queryInfoProductMethod() {
   handleRemove(file) {
       const fileList = this.$refs.upload.fileList;
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-      this.imgUplaodId.splice(this.imgUplaodId.indexOf(file.id), 1);
+
+      this.imgUplaodId.splice(this.imgUplaodId.indexOf(file.response.data.id), 1);
+      console.log(file,this.imgUplaodId)
   },
   handleSuccess(res, file) {
       this.imgUplaodId.push(res.data.id)
@@ -183,19 +220,19 @@ queryInfoProductMethod() {
       utils.downImg(param1,param2)
   },
   handleBeforeUpload() {
-      new Promise((resolve,reject)=>{
-          this.getUpUrl().then(()=>{
-
-            const check = this.uploadList.length < 9;
-            if (!check) {
-                this.$Notice.warning({
-                    title: '文件数过多'
-                });
-            }
-            return check;
+    new Promise((resolve,reject)=>{
+        return  this.getUpUrl().then(()=>{
+              resolve()
           })
       })
 
+      const check = this.uploadList.length < 10;
+      if (!check) {
+          this.$Notice.warning({
+              title: '最多只能上传9张图片'
+          });
+      }
+      return (check)
   },
   ok() {
       if (this.modlalTitle === '回复评论') {
@@ -207,7 +244,8 @@ queryInfoProductMethod() {
   cancel() {
       this.uploadList.splice(0, this.uploadList.length);
       this.imgUplaodId = [];
-      // this.formItem.comment = ''
+      this.formItem.comment = ''
+
       // this.$Message.info('取消');
       this.modal1 = false;
   },

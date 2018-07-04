@@ -10,10 +10,10 @@
 			<div class="content-box">
 				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
-					<div v-if="!disabled" class="img-mask">
+					<div  class="img-mask">
 						<div style="line-height:60px;text-align:center;">
 							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
-							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
+							<div v-if="!disabled" class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
 						</div>
 						
 					</div>
@@ -149,14 +149,15 @@ export default{
 	methods:{
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
+			console.log("000000")
 			this.eyeIndex = index;
 			this.imagesArr = [].concat(this.defaultList);
 			this.close();
 
 			// for()
 		},
-		downImg(){
-
+		downImg(url,id){
+			utils.downImg(url);
 		},
 		close(){
 			this.openPhotoAlbum  = !this.openPhotoAlbum;

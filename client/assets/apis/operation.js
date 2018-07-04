@@ -125,5 +125,64 @@ export default  {
         url: '/api/krspace-finance-web/app/notification/target-count',
         method: 'get'
     },
+    //app管理--会员福利--福利分页
+    'get-coupon-page': {
+        url: '/api/krspace-finance-web/coupon/page',
+        method: 'get'
+    },
+    //app管理--会员福利--福利详情
+    'get-coupon-detail': {
+        url: '/api/krspace-finance-web/coupon/detail',
+        method: 'get'
+    },
+    //app管理--会员福利--新建福利
+    'create-coupon': {
+        url: '/api/krspace-finance-web/coupon/create',
+        method: 'post'
+    },
+    //app管理--会员福利--新建标签
+    'create-tag': {
+        url: '/api/krspace-finance-web/coupon/tag/create',
+        method: 'post'
+    },
+    //app管理--会员福利--入驻城市列表
+    'coupon-city-list': {
+        url: '/api/krspace-finance-web/coupon/city-list',
+        method: 'get'
+    },
+    //app管理--会员福利--下线福利
+    'coupon-offline': {
+        url: '/api/krspace-finance-web/coupon/offline',
+        method: 'post'
+    },
+    //app管理--会员福利--编辑福利
+    'edit-coupon': {
+        url: '/api/krspace-finance-web/coupon/edit',
+        method: 'post'
+    },
+    //app管理--会员福利--获取福利类型和范围
+    'get-city-and-type': {
+        url: '/api/krspace-finance-web/coupon/city-and-type',
+        method: 'get'
+    },
+     //app管理--产品运营主页--app用户活跃情况分页
+     'get-app-operation-online-data': {
+        url: '/api/krspace-op-web/app/operation/online-data',
+        method: 'get'
+    },
+    //app管理--产品运营主页--会员7天线上化率
+    'get-app-operation-use-rate': {
+        url: '/api/krspace-op-web/app/operation/use-rate',
+        method: 'get'
+    },
+    //app管理--产品运营主页--活动情况
+    'get-app-operation-activity-data': {
+        url: '/api/krspace-op-web/app/operation/activity-data',
+        method: 'get'
+    },
+    'get-community-list': {
+        url: '/api/krspace-finance-web/operation/city-cmt-list',
+        method: 'get'
+    },
 }
   

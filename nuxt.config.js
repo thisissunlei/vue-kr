@@ -1,4 +1,4 @@
-var path = require('path');
+// var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
@@ -20,7 +20,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'http://www.krspace.cn/vendors/images/logofav.png' }
+      { rel: 'icon', type: 'image/x-icon', href: 'http://img.krspace.cn/common/favicon_new.ico' }
     ]
   },
 
@@ -33,7 +33,7 @@ module.exports = {
     vendor: ['iview'],
     publicPath: '/',
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      webpackConfig.performance.maxAssetSize = 400000;
+      webpackConfig.performance.maxAssetSize = 600000;
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [

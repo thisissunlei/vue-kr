@@ -1,11 +1,13 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-time">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
+            :right="right"
         >
             <TimePicker 
                 :open="open"
@@ -37,6 +39,9 @@ export default {
         EditLabel,
     },
     props:{
+        right:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',
@@ -63,6 +68,9 @@ export default {
 		}
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         handleClick(){
             this.open = !this.open;
         },
@@ -88,7 +96,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-time{
+      position: relative;
 	.edit-icon{
 		
 		position: absolute;

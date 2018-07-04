@@ -2,7 +2,7 @@ import axios from 'axios'
 import APIS from '../assets/apis/index';
 import Qs from 'qs'; 
 // 超时时间
-axios.defaults.timeout = 6000
+axios.defaults.timeout = 10000
 // http请求拦截器
 
 const env = process.env.NODE_ENV;
@@ -15,11 +15,15 @@ axios.defaults.mode = 'cors';
 
 
 axios.interceptors.request.use(config => {
-  if(config.method  == 'post'){
-    let data = Qs.stringify(config.data);
-    config.data = data;
+  if(config.method  == 'post' || config.method  == 'put'){
+    if(!config.data.isPut){
+      let data = Qs.stringify(config.data);
+        config.data = data;
+    }else{
+      delete config.data.isPut;
+    }
   }
-  if(config.url.indexOf('mockjs ') !==-1 ){
+  if(config.url.indexOf('mockjs') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
   }else if(config.url.indexOf('/st/') !==-1){
     config.url = config.url.split('/st/')[1]

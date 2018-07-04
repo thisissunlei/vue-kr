@@ -1,104 +1,146 @@
 
 <template>
   <div>
-    <FormItem
-        :label="label"
-        :prop="prop"
-        :label-width="labelWidth"
-        :showMessage="showMessage"
-    >
+   
         <KrInput
             v-if="type==='text'"
+            :name="name"
             :value="value"
             :placeholder="placeholder"
             :type='type'
+            :right="right"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
-            @on-change="change"
+            @change="change"
             @on-focus="focus"
             @on-blur="blur"
             @on-keyup="keyup"
             @on-keydown="keydown"
             @on-keypress="keypress"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrSelect
             v-if="type==='select'"
             :value="value"
+            :name="name"
+            :right="right"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
             :disabled='disabled'
+            :selectParam="selectParam"
             :clearable='clearable'
             :filterable='filterable'
-            :selectData="selectData"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrDate
             v-if="type==='date'"
             :value="value"
+            :right="right"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
             :format="format"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTimeDate
             v-if="type==='datetime'"
             :value="value"
+            :right="right"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
             :format="format"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTime
             v-if="type==='time'"
             :value="value"
+            :right="right"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTextarea
             v-if="type==='textarea'"
             :value="value"
+            :right="right"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :maxLength="maxLength"
             :readOrEdit="readOrEdit"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
 
 
         <KrCascader
             v-if="type==='cascader'"
+            :width="width"
+            :right="right"
             :data="data"
+            :name="name"
             :value="value"
             :mask="mask"
             :clearable='clearable'
             :placeholder="placeholder"
             :readOrEdit="readOrEdit"
             @change="change"
+            @recordClick="recordClick"
             @visibleChange="visibleChange"
             @okClick="okClick"
+            :isOk="isOk"
+            :inline="inline"
         />
-
+        
+         <KrCity
+            v-if="type==='city'"
+            :data="data"
+            :right="right"
+            :name="name"
+            :value="value"
+            :mask="mask"
+            :clearable='clearable'
+            :placeholder="placeholder"
+            :readOrEdit="readOrEdit"
+            @change="change"
+            @recordClick="recordClick"
+            @visibleChange="visibleChange"
+            @okClick="okClick"
+            :isOk="isOk"
+        />
 
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
+            :right="right"
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
@@ -107,15 +149,29 @@
         <UpFiles 
             v-if="type==='upFiles'"  
             :readOrEdit="readOrEdit" 
+            :right="right"
             :value = 'value'
+            :name="name"
             @okClick="okClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
         />
-    </FormItem>
+        <UpImage 
+            v-if="type==='upImage'"  
+            :readOrEdit="readOrEdit" 
+            :value = 'value'
+            :right="right"
+            :name="name"
+            @okClick="okClick"
+            @recordClick="recordClick"
+        />
+       
   </div>
 </template>
 
 <script>
 import KrCascader from './KrCascader';
+import KrCity from './KrCity';
 import SelectTree from './SelectTree';
 import KrInput from './KrInput';
 import KrSelect from './KrSelect';
@@ -124,6 +180,7 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
+import UpImage from './UpImage'
 export default {
     components:{
       KrCascader,
@@ -134,11 +191,20 @@ export default {
       KrTime,
       KrTextarea,
       UpFiles,
-      KrTimeDate
+      KrTimeDate,
+      UpImage,
+      KrCity
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         label:{
             default:'',
+            type:String
+        },
+        name:{
             type:String
         },
         value:{
@@ -209,11 +275,24 @@ export default {
             type:Boolean,
             default:false
         },
-        selectData:{
-            type:Array
-        },
         treeIds:{
             default:'',
+            type:String
+        },
+        selectParam:{
+            default:'',
+            type:String
+        },
+        width:{
+            default:250,
+            type:[String,Number]
+        },
+        inline:{
+            default:false,
+            type:Boolean
+        },
+        right:{
+            default:'READWRITE',
             type:String
         }
     },
@@ -222,7 +301,13 @@ export default {
            
         }
     },
+    mounted(){
+       
+    },
     methods:{
+        recordClick(value){
+            this.$emit('recordClick',value,this.name)
+        },
         click(event){
             this.$emit('click',event);
         },
@@ -230,6 +315,7 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
+         
             this.$emit('change',event);
         },
        

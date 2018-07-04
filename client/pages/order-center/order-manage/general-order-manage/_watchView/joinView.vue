@@ -33,6 +33,18 @@
 			<LabelText label="销售日期：">
 				{{saleDate}}
 			</LabelText>
+			<LabelText label="部门：">
+				{{basicInfo.departmentName||'无'}}
+			</LabelText>
+			<LabelText label="服务开始日：" v-if="isWatch">
+				{{startDate}}
+			</LabelText>
+			<LabelText label="服务结束日：" v-if="isWatch">
+				{{endDate}}
+			</LabelText>
+			<LabelText label="加桌数量：" v-if="isWatch">
+				{{basicInfo.deskCount||'无'}}
+			</LabelText>
 			<div class='remak'>
 				<span>备注信息：</span>
 				<span>{{basicInfo.remark}}</span>
@@ -70,6 +82,9 @@ export default {
 			basicInfo:{},
 
 			saleDate:'',
+			startDate:'',
+			endDate:'',
+			isWatch:false,
 
             contract:[
                {
@@ -125,8 +140,12 @@ export default {
 			var _this=this;
 			this.$http.get('general-order-watch', from, r => {
 					_this.basicInfo=r.data;
-						
+					if(r.data.orderType=='ADDDESK'){
+						_this.isWatch=true;
+					}
 					_this.saleDate=r.data.saleDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.saleDate)):'';
+					_this.startDate=r.data.startTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startTime)):'';
+					_this.endDate=r.data.endTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endTime)):'';
 					_this.contractData=r.data.bill?r.data.bill:[];
 				}, e => {
 					_this.$Notice.error({

@@ -142,7 +142,7 @@
                         key: 'totalRefunds',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand(params.row.totalRefunds)
+                            return h('span',{},utils.thousand(params.row.totalRefunds))
                          }
                     },
                     {
@@ -270,6 +270,7 @@
 
         methods:{
             urlUpLoad(detail,col){
+                console.log(col,"ppppp")
                 var _this = this;
                 this.$http.post("post-checklist-list", {
                     checklistId:col.id,

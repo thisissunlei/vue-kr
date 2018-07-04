@@ -18,7 +18,6 @@ app.get('/', function(req, res) {
 
 app.use(nuxt.render);
 
-
 if (config.dev) {
   new Builder(nuxt).build()
   .then(listen)
@@ -28,7 +27,6 @@ if (config.dev) {
 }else {
   listen()
 }
-
 function listen() {
 
   app.listen(port)

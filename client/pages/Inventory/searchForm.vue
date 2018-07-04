@@ -2,7 +2,7 @@
     <div class='daily-search-form'>
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
-                <div>    
+                <div style="white-space: nowrap;">    
                     <div class='header-icon' :style="identify=='daily'?'margin-right:113px;':'margin-right:20px;'">  
                         <Form-item label="库存日期" class='iconForm' v-if="identify=='daily'">
                             <DatePicker 
@@ -51,12 +51,12 @@
                             style="width: 200px"
                             multiple
                         >
-                            <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                        </Select> 
                     </Form-item>
                 </div>
 
-                <div>
+                <div style="white-space: nowrap;">
                     <Form-item class='daily-form community-form'>
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;">社<span style="display:inline-block;width:27px;"></span>区</span>
                         <Select 
@@ -137,7 +137,7 @@
                      <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
 
-                <div>
+                <div style="white-space: nowrap;">
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">价<span style="display:inline-block;width:27px;"></span>格</span>
                         <Form-item class='priceForm'> 
@@ -306,12 +306,7 @@ export default {
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
-                inventoryList:[
-                    {value:'AVAILABLE',label:'未租'},
-                    {value:'NOT_EFFECT',label:'合同未生效'},
-                    {value:'IN_RENT',label:'在租'},
-                    {value:'DISABLE',label:'不可用'}
-                ],
+                inventoryList:[],
                 priceList:[
                     {value:'UNIT_PRICE',label:'工位单价'},
                     {value:'AMOUNT',label:'商品总价'}
@@ -362,8 +357,20 @@ export default {
     },
     mounted(){
         this.getCityList();
+        this.getSelectData();
     },
     methods:{
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.inventory.InventoryStatus'
+            }).then((response)=>{
+               this.inventoryList=response.data;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
@@ -419,6 +426,12 @@ export default {
                             str=str?str+','+item:item;
                     })
                     this.formItem.statusName=str;
+                    if(!this.formItem.startDate&&!this.formItem.endDate){
+                        this.$Notice.error({
+                            title:'至少选择一个时间'
+                        });
+                        return ;
+                    }
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -486,6 +499,9 @@ export default {
                 margin-right:20px;
                 .ivu-form-item-content{
                     display:inline-block;
+                }
+                .ivu-form-item:after, .ivu-form-item:before{
+                    content: none;
                 }
             }
             .community-form{

@@ -1,10 +1,13 @@
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-input">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
+            :isOk="isOk"
+            :right="right"
         >
             <Input
                 :placeholder="placeholder"
@@ -18,6 +21,8 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
+                style="width:252px;"
+
             />
         </EditLabel>
 	</div>
@@ -30,6 +35,13 @@ export default {
         EditLabel,
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
+        right:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',
@@ -42,6 +54,9 @@ export default {
             type:Boolean,
             default:false,
 		},
+        name:{
+            type:String
+        }
 	},
 	data(){
 		return {
@@ -51,9 +66,13 @@ export default {
 		}
 	},
 	methods:{
+         recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },
+      
         enter(event){
             this.$emit('enter',event);
         },
@@ -78,7 +97,13 @@ export default {
         },
         okClick(){
             this.labelValue = this.inputValue;
-            this.$emit("okClick",this.labelValue)
+            var params = {
+                name:this.name,
+                value:this.inputValue,
+                type:'text',
+
+            }
+            this.$emit("okClick",params)
         },
         cancelClick(event){
             this.inputValue = event
@@ -88,7 +113,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-input{
+    position: relative;
+    display: inline-block;
+    .edit-label{
+        height:40px;
+    }
 	.edit-icon{
 		
 		position: absolute;

@@ -137,7 +137,8 @@ export default {
               rightDom.style.background="#fff";
           }
       }
-    }
+    },
+   
 }
 </script>
 

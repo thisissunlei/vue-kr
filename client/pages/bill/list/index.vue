@@ -25,7 +25,6 @@
 <script>
 import PaidList from './paidList';
 import WaitList from './waitList';
-import utils from '~/plugins/utils';
 
 export default {
    name:'billList',
@@ -56,9 +55,8 @@ export default {
         tabsClick(key){
            this.key=key;
            sessionStorage.setItem('billMask',key);
-            utils.addParams({});
         },
-         getBillType(){
+        getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{
                     res.data.enums.map((item)=>{
                          this.billType[item.code]=item.name; 
@@ -71,8 +69,8 @@ export default {
 						title:err.message
 					});
                 })
-         },
-         getCommunity(){
+        },
+        getCommunity(){
               this.$http.get('join-bill-community','').then((res)=>{
                 this.communityList=res.data.items;
                 }).catch((error)=>{
@@ -80,7 +78,7 @@ export default {
                         title:error.message
                     });
                 })
-         }
+        }
     }
  }
 </script>

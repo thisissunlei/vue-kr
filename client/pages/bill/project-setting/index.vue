@@ -1,14 +1,18 @@
 <template>
-  <div class="project-setting">
+  <div class="project-setting" id="projectSetting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
-            <TabPane label="列表视图" name="tab1">
-                <Archives v-if="mask"/>
-
+            <TabPane label="待开业项目" name="PREPARE">
+                <!--项目管理档案列表
+                 <Archives v-if="mask"/> 
+                -->
+                <ProjectView projectStatus="PREPARE"  v-if="tabs=='PREPARE'"/>
             </TabPane>
-            <TabPane label="日历视图" name="tab2">
+            <TabPane label="已开业项目" name="OPENED">
 
-                <ProgressView v-if="!mask"/>
-
+                <!-- 项目总览
+                    <ProgressView v-if="!mask"/> 
+                -->
+               <ProjectView projectStatus="OPENED"  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
   </div>
@@ -18,45 +22,37 @@
 <script>
 
 import Archives from './archives'
-import ProgressView from './progress-view';
+import ProjectView from './project-view';
 export default {
     components:{
         Archives,
-        ProgressView
+        ProjectView
     },
     data(){
         return{
-            mask:true,
-
-            tabs:'tab1'
+         
+            tabs:'PREPARE'
         }
     },
     mounted(){
         GLOBALSIDESWITCH("false");
-        var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
-        this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
-        if(this.tabs=='tab2'){
-            this.mask=false;
-            tabDom.style.overflow = 'visible';
-        }else{
-             tabDom.style.overflow = 'hidden';
-        }
+        // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+       
+        // this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
+        // if(this.tabs=='OPENED'){
+        //     this.mask=false;
+        //     tabDom.style.overflow = 'visible';
+        // }else{
+        //      tabDom.style.overflow = 'hidden';
+        // }
     },
     methods:{
         tabsClick(key){
-            var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+            // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
-            if(key=='tab2'){
-                tabDom.style.overflow = 'visible';
-                this.mask=false;
-
-            }else{
-                tabDom.style.overflow = 'hidden';
-                this.mask=true;
-            }
             this.tabs=key;
-            sessionStorage.setItem('chartSetting',key);
-        }
+            // sessionStorage.setItem('chartSetting',key);
+        },
     }
 }
 
@@ -73,16 +69,19 @@ export default {
         .ivu-tabs-ink-bar{
             top:0px;
             height: 4px;
-            border: 20px solid #fff;
             border-top: 0px;
             border-bottom: 0px;
             box-sizing: border-box;
         }
         .ivu-tabs-nav .ivu-tabs-tab{
-            
+            width: 50%;
             text-align: center;
             line-height: 35px;
             padding: 8px 20px;
+            
+        }
+        .ivu-tabs-no-animation{
+            overflow: visible !important;
         }
         .ivu-tabs-bar{
             margin: 0px;

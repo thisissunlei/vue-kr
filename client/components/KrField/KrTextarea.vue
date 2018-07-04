@@ -1,11 +1,13 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-textarea">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
+            :right="right"
         >
             <Input
                 v-model="areaValue"
@@ -35,6 +37,9 @@ export default {
         EditLabel,
     },
     props:{
+         right:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',
@@ -63,6 +68,9 @@ export default {
 		}
 	},
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },
@@ -100,7 +108,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-textarea{
+      position: relative;
 	.edit-icon{
 		
 		position: absolute;

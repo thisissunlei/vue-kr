@@ -1,6 +1,6 @@
 <template>
 
-<div class="g-order">
+<div class="g-order-payment">
     <div class="u-search" >
         <!-- <span class="u-high-search" @click="showSearch"></span> -->
     </div>
@@ -168,17 +168,17 @@ export default {
                         title: '回款日期',
                         key: 'occurDate',
                         align:'center',
-                        width:130,
+                        width:100,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
-                            return time;
+                            return h('span',{},time);
+                            // return time;
                         }
                     },
                     {
                         title: '回款金额（元）',
                         key: 'amount',
                         align:'center',
-                        width:100,
                     },
 
                     {
@@ -198,9 +198,11 @@ export default {
                               'ALIWEBPAY':'支付宝网银',
                               'BANKONLINE':'网银',
                               'BANLANCE':'余额支付',
+                              'FUNDS_TRANSFER ':'资金转移',
                               
                             }
-                            return payWay[obj.row.payWay]
+                            return h('span',{},payWay[obj.row.payWay]);
+                            // return payWay[obj.row.payWay]
                         }
                     },
                     {
@@ -210,16 +212,22 @@ export default {
 
                     },
                     {
+                        title: '付款方名称',
+                        key: 'payerName',
+                        align:'center',
+                    },
+                    
+                    {
                         title: '收款账户',
                         key: 'receiveAccount',
                         align:'center',
-                        width:120
                     },
+                    
                     {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:110,
+                        width:100,
                         render:(h,params)=>{
                          
                                 return h('div', [
@@ -314,6 +322,7 @@ export default {
             getTableData(params){
                 this.$http.get('get-payment-unbind-list', params).then((res)=>{
                     this.tableData=res.data.items;
+                    this.tableData.remark="将达到减肥坚实的解放军加速度绝地反击";
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
                 }).catch((err)=>{
@@ -421,7 +430,7 @@ export default {
 </script>
 <style lang="less">
 
-.g-order{
+.g-order-payment{
    .u-search{
         height:32px;
         margin:16px 0;
@@ -447,6 +456,11 @@ export default {
     }
     .u-table{
         padding:0 20px;
+        th,td{
+            &:nth-child(8){
+                min-width:120px;
+            }
+        }
     }
     .u-cancel-title{
         width:85%;

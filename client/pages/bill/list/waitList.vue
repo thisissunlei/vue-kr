@@ -155,6 +155,7 @@ import PdfDownload from './pdfDownload';
                 itemDetail:{},
                 pageSize:15,
                 page:1,
+                queryParams:{},
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -217,12 +218,12 @@ import PdfDownload from './pdfDownload';
                         title: '账单日',
                         key: 'billingDate',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             if(!obj.row.billingDate){
                                 return '-'
                             }
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
-                            return time;
+                            return h('span', {}, time);
                         }
                     },
                     {
@@ -231,7 +232,9 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-                            return time;
+                            // let time='tiem';
+                            // return time;
+                              return h('span', {}, time);
                         }
                     },
                     {
@@ -381,22 +384,30 @@ import PdfDownload from './pdfDownload';
                 
             }
         },
-        created(){
+         created(){
              this.getTableData(this.$route.query);
-             if(!this.$route.query.customerName){
-                 this.$route.query.customerName=""
-             }
              this.tabParams=this.$route.query;
-             
+        },
+        mounted(){
+            let mask=this.$route.query.mask;
+            if(!mask||mask=='wait'){
+               sessionStorage.setItem('paramsWait',JSON.stringify(this.$route.query));
+            }
+            let jsonWait=JSON.parse(sessionStorage.getItem('paramsWait'));
+            this.queryParams=Object.assign({},jsonWait,{page:1,pageSize:15});
+            this.getTableData(this.queryParams);
+            this.tabParams=this.queryParams;
         },
          watch: {
             $props: {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='wait'){
-                      this.getTableData(this.params);
+                       this.getTableData(this.queryParams);
+                       this.tabParams=this.tabParams;
+                      
                     }
-                   
+                  
                 }
             }
         },
@@ -440,7 +451,8 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         width:90,
                         render(h, obj){
-                          return bizType[obj.row.bizType];
+                            return h('span', {}, bizType[obj.row.bizType]);
+                        
                         }
                     }
                 if(this.columns.length<13){
@@ -571,8 +583,10 @@ import PdfDownload from './pdfDownload';
             searchSubmit(){
                 this.tabParams=this.searchData;
                 this.page=1;
-                this.tabParams.page=1;
+                this.tabParams.page=1;  
+                this.tabParams.mask='wait';
                 utils.addParams(this.tabParams);
+                
 
             },
             onChangeOpen(data){
@@ -584,9 +598,11 @@ import PdfDownload from './pdfDownload';
                 this.tabParams={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    customerName:customerName,
+                    mask:'wait'
                 }
                 utils.addParams(this.tabParams);
+              
             },
             changePage(page){
                 this.tabParams.page=page;

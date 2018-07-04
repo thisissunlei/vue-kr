@@ -4,6 +4,8 @@ import dataType from './dataType';
 import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
+
+
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -119,9 +121,23 @@ import tableSort from './tableSort';
     function downFile(href, filename) {
         var a = document.createElement('a');
         a.href = href;
+        // a.target = '_blank';
         //a.download = filename;
+        a.download = filename;
+        console.log('a--',a,href,filename);
         a.click();
-     
+        
+    
+    }
+    //不要修改，修改找毅豪
+    function downImg(href, filename) {
+        var a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        //a.download = filename;
+        a.download = filename;
+        a.click();
+      
     }
 
     function getDaysInOneMonth(year, month){  
@@ -131,18 +147,30 @@ import tableSort from './tableSort';
     }  
     //计算天数差
     function dateDiff(sDate1, sDate2) {
-        var aDate, oDate1, oDate2, iDays
+        var aDate, oDate1, oDate2, iDays;
         aDate = sDate1.split("-")
         oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
         aDate = sDate2.split("-")
         oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
-       
+
         iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
         return iDays  
     }
 
     function debounce(delay, atBegin, callback) {
         return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+    };
+    //根据天数差计算日期
+    function dateRange(date1,num){
+        var date = new Date(date1);  
+        var newDate = new Date(date.getFullYear(),date.getMonth(),date.getDate()+num);  
+        var year1 = date.getFullYear();  
+        var month1 = date.getMonth()+1;  
+        var day1 = date.getDate();  
+        var year2 = newDate.getFullYear();  
+        var month2 = newDate.getMonth()+1;  
+        var day2 = newDate.getDate(); 
+        return  year2+'-'+month2+'-'+day2;
     };
     //获取滚动条的宽度
     function getScrollBarSize() {
@@ -183,7 +211,19 @@ import tableSort from './tableSort';
         return cached;
     }
 
-   export default{
+    //时间差
+    function timeRange(sDate1,sDate2){
+        var aDate, oDate1, oDate2, iDays;
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+        
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays  
+    }
+
+export default{
     smalltoBIG,
     clearForm,
     commonExport,
@@ -200,7 +240,10 @@ import tableSort from './tableSort';
     debounce,
     getScrollBarSize,
     dateCompatible,
-    tableSort
-   }
+    tableSort,
+    dateRange,
+    downImg,
+    timeRange
+}
 
 

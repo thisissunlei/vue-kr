@@ -1,18 +1,21 @@
 //公共的api
 module.exports = {
+    //
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
     }, 
-    
+    //获取上传文件的接口
     'get-vue-upload-url': {
         url: '/api/krspace-op-web/sys/upload-policy',
         method: 'get'
     },
+    //所有枚举获取接口
     'get-enum-all-data':{
         url:'/api/krspace-sso-web/sys/enmu',
         method:'get'
     },
+    //下载接口
     'down-file':{
         url:'/api/op/sys/downFile',
         method:'get'
@@ -53,7 +56,7 @@ module.exports = {
         url:'/api/pm/role/action/delete',
         method:'delete'
     },
-    'roleEidtDetail':{//'/api/pm/role/action/detail',
+    'roleEidtDetail':{
         url:'/api/pm/role/action/edit',
         method:'post'
     }

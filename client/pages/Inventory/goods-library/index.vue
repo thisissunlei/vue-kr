@@ -41,7 +41,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :total="totalCount" :current='tabForms.page' :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
             </div>
         </div>
@@ -392,7 +392,7 @@ export default {
             newgoodForm:{},
             tabForms:{
                 page:1,
-                pageSize:100
+                pageSize:200
             },
             theHead:false,
             sideBar:true,

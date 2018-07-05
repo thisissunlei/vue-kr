@@ -105,10 +105,8 @@ export default {
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                 }
             })
-            console.log(this.disables)
             this.$forceUpdate();
             this.$emit("onChange", this.models)
-             console.log(this.disables)
         },
         handleBlanceTransClk(e) {
             let label = e.target.name || e.target.parentNode.name
@@ -151,6 +149,9 @@ export default {
             }
             else if (Number(input) > Number(maxAmount)) {
                 errorText = '转移金额不得大于可转金额';
+            }
+            else if (Number(input) <= 0) {
+                errorText = '转移金额须大于0';
             }
             else if (input === '') {
                 errorText = '请填写转移金额';

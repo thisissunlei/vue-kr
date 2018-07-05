@@ -284,6 +284,9 @@ export default {
             this.operateTypeIndex = 0;
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
+            // window.open(`/order-center/apply-manage/${params.row.id}/${viewName}`, '_blank');
+            // let TRANSFER_BALANCE='TRANSFER_NONBUSINESS'
+            //  window.open(`/order-center/apply-manage/_transferOperate/${TRANSFER_BALANCE}/create`, '_blank');
         },
 
         //转营业外

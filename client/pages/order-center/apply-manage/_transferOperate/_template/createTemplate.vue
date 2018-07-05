@@ -4,13 +4,13 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:252px" prop="customerID">
-                    <selectCustomers name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
+                <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="社区名称" style="width:252px" prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerID'>
+                    <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCusomerList='onGetCusomerList' v-bind:customerId='formItem.customerId'>
                     </selectCommunities>
                 </FormItem>
                 </Col>
@@ -24,8 +24,8 @@
             </div>
 
             <FormItem class="remark" label="备注" style="width:650px;">
-                <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
-                <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                <Input v-model="formItem.applyMemo" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..." />
+                <div style="text-align:right">{{formItem.applyMemo?formItem.applyMemo.length+"/500":0+"/500"}}</div>
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
@@ -75,6 +75,7 @@ export default {
             return;
         };
         const validateCustomer = (rule, value, callback) => {
+            debugger;
             if (!value) {
                 callback("请选择客户")
             }
@@ -89,16 +90,16 @@ export default {
             dataList: [],
             communities: [],
             formItem: {
-                customerID: 0,
-                communityIn: '',
+                customerId: ' ',
+                communityId: '',
                 balanceOut: {},
-                remark: ''
+                applyMemo: ''
             },
             ruleCustom: {
                 communityId: [
                     { required: true, validator: validateCummity, trigger: 'change' }
                 ],
-                customerID: [
+                customerId: [
                     { required: true, validator: validateCustomer, trigger: 'change' }
                 ],
                 balance: [
@@ -116,54 +117,19 @@ export default {
         this.initCheckGroup();
     },
     methods: {
+        //默认的转移款项
         initCheckGroup() {
             this.dataList = [].concat(this.defaultList);
         },
+        //后去勾选的转移款项
         handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
             this.formItem.balanceOut = Object.assign({}, receiveBlance)
         },
-        //获取操作款项枚举
-        getMoneyTypeList() {
-            this.moneyTypes = [{ "code": -1, "desc": "全部" }, { "code": 1, "desc": "余额", "value": "BALANCE" }, { "code": 3, "desc": "可用服务保证金", "value": "DEPOSIT" }, { "code": 14, "desc": "门禁卡押金", "value": "GUARDCARDDEPOSIT" }, { "code": 4, "desc": "冻结服务保证金", "value": "FROZEN_DEPOSIT" }, { "code": 54, "desc": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" }, { "code": 57, "desc": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" }, { "code": 58, "desc": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
-            let canEdit = {};
-            this.moneyTypes.map(item => {
-                canEdit[item.desc] = false
-            })
-            this.initBlanceCanEdit = Object.assign({}, canEdit);
-            this.blanceCanEdit = Object.assign({}, canEdit)
-
-            // [{code label amountmax blance}]
-            this.dataList = [
-                { 'amountmax': 20, 'blance': 10, "code": -1, "label": "全部" },
-                { 'amountmax': 20, 'blance': 11, "code": 1, "label": "余额", "value": "BALANCE" },
-                { 'amountmax': 20, 'blance': 12, "code": 3, "label": "可用服务保证金", "value": "DEPOSIT" },
-                { 'amountmax': 20, 'blance': 13, "code": 14, "label": "门禁卡押金", "value": "GUARDCARDDEPOSIT" },
-                { 'amountmax': 20, 'blance': 14, "code": 4, "label": "冻结服务保证金", "value": "FROZEN_DEPOSIT" },
-                { 'amountmax': 20, 'blance': 15, "code": 54, "label": "推柜门钥匙押金", "value": "KEYDOORDEPOSIT" },
-                { 'amountmax': 20, 'blance': 16, "code": 57, "label": "场地租赁押金", "value": "LEASEHOLDDEPOSIT" },
-                { 'amountmax': 20, 'blance': 17, "code": 58, "label": "注册地址押金", "value": "REGISTEREDEPOSIT" }];
-
-
-            return
-
-            this.$http.get('get-money-type-enum', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
-            }).then((r) => {
-                this.dataList = [].concat(r.data);
-
-            }).catch((e) => {
-                this.$Notice.error({
-                    title: e.message
-                });
-            })
-        },
+        //获取最大的款项值
         getFeeAmount() {
-            let parms = {
-                communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID,
-                id: ''
-            }
+            let { communityId, customerId } = this.formItem
+            let parms = { communityId, customerId, id: '' };
             if (!parms.communityId || !parms.customerId)
                 return
             var _this = this
@@ -182,24 +148,45 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
+            this.formItem = Object.assign({}, this.formItem, { customerId: item }, { communityId: -1 });
             this.getFeeAmount();
         },
         changeCommunity(commIn) {
-            this.$set(this.formItem, 'communityIn', commIn)
+            this.$set(this.formItem, 'communityId', commIn)
             this.getFeeAmount();
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
-
+        validateInput() {
+            let balancesInputs = Object.values(this.formItem.balanceOut);
+            if (balancesInputs.length == 0) {
+                this.$Notice.error({
+                    title: '请勾选转移项并填写转移金额'
+                });
+                return false
+            } else {
+                let hasError = balancesInputs.some(item => item.error)
+                if (hasError) {
+                    this.$Notice.error({
+                        title: '请正确输入转移金额'
+                    });
+                    return false
+                }
+            }
+            return true
+        },
         handleSubmit(formItem) {
+            if (this.validateInput()) {
+                return;
+            }
+
             let detailList = []
             for (const key in this.formItem.balanceOut) {
                 if (this.formItem.balanceOut.hasOwnProperty(key)) {
                     let obj = {
-                        communityIdIn: this.formItem.communityIn,
-                        communityIdOut: this.formItem.communityIn,
+                        communityIdIn: this.formItem.communityId,
+                        communityIdOut: this.formItem.communityId,
                         transferAmount: this.formItem.balanceOut[key].input,
                         transferFeeType: this.formItem.balanceOut[key].feeType,
                     };
@@ -208,9 +195,9 @@ export default {
             }
             let detailStr = JSON.stringify([].concat(detailList));
             let parms = {
-                applyMemo: this.formItem.remark,
-                communityId: this.formItem.communityIn,
-                customerId: this.formItem.customerID,
+                applyMemo: this.formItem.applyMemo,
+                communityId: this.formItem.communityId,
+                customerId: this.formItem.customerId,
                 id: '',
                 transferType: this.transferType,
                 detailStr: detailStr

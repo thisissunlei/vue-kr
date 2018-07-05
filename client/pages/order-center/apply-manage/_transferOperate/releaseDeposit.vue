@@ -210,8 +210,6 @@ export default {
                 left: -134px;
             }
         }
-        .amount {
-        }
         .required-label {
             font-size: 14px;
             position: relative;

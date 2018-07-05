@@ -250,8 +250,6 @@ export default {
             padding-right: 10px;
             vertical-align: top;
         }
-        .amount {
-        }
         .required-label {
             font-size: 14px;
             position: relative;

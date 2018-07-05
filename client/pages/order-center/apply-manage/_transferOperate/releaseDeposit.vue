@@ -105,7 +105,7 @@ export default {
             targetFeeTypes: ['冻结服务保证金'],
             formItem: {
                 transferAmount: '',
-                customerID: -1,
+                customerID:'',
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -168,7 +168,7 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
+            this.formItem = Object.assign(this.formItem, { customerID: item }, { communityId: -1 });
             this.getFeeAmount();
         },
         changeCommunity(commIn) {
@@ -185,7 +185,6 @@ export default {
                     this.$Notice.error({
                         title: '请填写完表单'
                     });
-                    this.formItem.customerID = -2
                     return;
                 }
                 else {

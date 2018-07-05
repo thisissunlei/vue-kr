@@ -79,7 +79,7 @@ export default {
             communities: [],
             targetFeeTypes: ['可用服务保证金', '冻结服务保证金'],
             formItem: {
-                customerID:-1,
+                customerID:'',
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -98,7 +98,7 @@ export default {
         }
     },
     mounted() {
-         GLOBALSIDESWITCH("false");
+        GLOBALSIDESWITCH("false");
         // this.initCheckGroup();
     },
     methods: {
@@ -134,7 +134,7 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
+            this.formItem = Object.assign(this.formItem, { customerID: item }, { communityId: -1 });
             this.getFeeAmount();
         },
         changeCommunity(commIn) {
@@ -145,7 +145,7 @@ export default {
             this.communities = [].concat(list);
         },
 
-        handleSubmit(formItem) {
+        execSubmit(formItem) {
             let detailList = []
             let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
@@ -181,6 +181,22 @@ export default {
                     title: error.message
                 });
             })
+        },
+        handleSubmit(formItem) {
+            // window.close()
+            // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
+            this.$refs[formItem].validate((valid) => {
+                if (!valid) {
+                    this.$Notice.error({
+                        title: '请填写完表单'
+                    });
+                    return;
+                }
+                else {
+                    execSubmit(formItem)
+                }
+            }
+            )
         }
     }
 }

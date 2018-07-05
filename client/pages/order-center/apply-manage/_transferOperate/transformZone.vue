@@ -155,7 +155,7 @@ export default {
         changeCustomer(item) {
             this.communitiesOut = [];
             this.communitiesIn = []
-            this.formItem = Object.assign({}, this.formItem, { customerId: item })
+            this.formItem = Object.assign(this.formItem, { customerId: item })
             this.getCusomerList(item).then(
                 () => {
                     this.communitiesOut = [].concat(this.communities)
@@ -242,7 +242,6 @@ export default {
                     this.$Notice.error({
                         title: '请填写完表单'
                     });
-                    this.formItem.customerID = -2
                     return;
                 }
                 else {

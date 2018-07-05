@@ -71,7 +71,7 @@ export default {
         };
 
         return {
-            blanceInputGroupReadOnly:false,
+            blanceInputGroupReadOnly: false,
             submitBtnShow: false,
             dataList: [],
             defaultList: [
@@ -80,9 +80,9 @@ export default {
                 { amount: "", maxAmount: "", feeTypeName: "其他保证金", feeType: "OTHERDEPOSIT" },
             ],
             communities: [],
-            targetFeeTypes: ['余额', '门禁卡押金', '推柜门钥匙押金','场地租赁押金','注册地址押金'],
+            targetFeeTypes: ['余额', '门禁卡押金', '推柜门钥匙押金', '场地租赁押金', '注册地址押金'],
             formItem: {
-                customerID:-1,
+                customerID:"",
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -101,7 +101,7 @@ export default {
         }
     },
     mounted() {
-         GLOBALSIDESWITCH("false");
+        GLOBALSIDESWITCH("false");
         // this.initCheckGroup();
     },
     methods: {
@@ -172,7 +172,7 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
+            this.formItem = Object.assign(this.formItem, { customerID: item }, { communityId: -1 });
             this.getFeeAmount();
         },
         changeCommunity(commIn) {
@@ -182,10 +182,9 @@ export default {
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
-
-        handleSubmit(formItem) {
+        execSubmit(formItem) {
             let detailList = []
-            let balanceOut=Object.assign({},this.formItem.balanceOut)
+            let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
                 if (balanceOut.hasOwnProperty(key)) {
                     debugger;
@@ -211,7 +210,7 @@ export default {
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.submitBtnShow = true;
-                this.blanceInputGroupReadOnly=true;
+                this.blanceInputGroupReadOnly = true;
                 this.$Notice.info({
                     title: '操作成功'
                 });
@@ -220,6 +219,20 @@ export default {
                     title: error.message
                 });
             })
+        },
+        handleSubmit(formItem) {
+            this.$refs[formItem].validate((valid) => {
+                if (!valid) {
+                    this.$Notice.error({
+                        title: '请填写完表单'
+                    });
+                    return;
+                }
+                else {
+                    execSubmit(formItem)
+                }
+            }
+            )
         }
     }
 }

@@ -79,9 +79,9 @@ export default {
                 { amount: "", maxAmount: "", feeTypeName: "其他保证金", feeType: "OTHERDEPOSIT" },
             ],
             communities: [],
-            targetFeeTypes: ['可用服务保证金', '门禁卡押金', '推柜门钥匙押金','场地租赁押金','注册地址押金'],
+            targetFeeTypes: ['可用服务保证金', '门禁卡押金', '推柜门钥匙押金', '场地租赁押金', '注册地址押金'],
             formItem: {
-                customerID: -1,
+                customerID: '',
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -111,7 +111,7 @@ export default {
             console.log(receiveBlance)
             this.formItem.balanceOut = Object.assign({}, receiveBlance)
         },
- 
+
         getFeeAmount() {
             let parms = {
                 communityId: this.formItem.communityIn,
@@ -140,7 +140,7 @@ export default {
             })
         },
         changeCustomer(item) {
-            this.formItem = Object.assign({}, this.formItem, { customerID: item }, { communityId: -1 });
+            this.formItem = Object.assign(this.formItem, { customerID: item }, { communityId: -1 });
             this.getFeeAmount();
         },
         changeCommunity(commIn) {
@@ -150,8 +150,7 @@ export default {
         onGetCusomerList(list) {
             this.communities = [].concat(list);
         },
-
-        handleSubmit(formItem) {
+        execSubmit(formItem) {
             let detailList = []
             let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
@@ -187,6 +186,22 @@ export default {
                     title: error.message
                 });
             })
+        },
+        handleSubmit(formItem) {
+            // window.close()
+            // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
+            this.$refs[formItem].validate((valid) => {
+                if (!valid) {
+                    this.$Notice.error({
+                        title: '请填写完表单'
+                    });
+                    return;
+                }
+                else {
+                    execSubmit(formItem)
+                }
+            }
+            )
         }
     }
 }

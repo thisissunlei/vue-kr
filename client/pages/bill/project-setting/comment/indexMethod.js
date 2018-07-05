@@ -83,16 +83,17 @@ export  default  {
                       enmuKey: res.data.items[0].data[i].param
                   }).then((response) => {
                       for (let item of response.data) {
-                          console.log(item.desc, " console.log( item.desc)")
+                          console.log(item.desc, " console.log( item.desc2)")
                           if (item.value === res.data.items[0].data[i].fieldValue) {
                               res.data.items[0].data[i].fieldValue = item.desc;
                           }
                       }
                   }).catch((error) => {
+                    throw error
                   })
               }
           }
-
+          this.typeCodeInfo = res.data.items[0].data
           for (let i = 0; i < res.data.items[1].data.length; i++) {
             // cityData
 
@@ -101,34 +102,36 @@ export  default  {
                     enmuKey: res.data.items[1].data[i].param
                 }).then((response) => {
                     for (let item of response.data) {
-                        console.log(item.desc, " console.log( item.desc)")
+                        console.log(item.desc, " console.log( item.desc1)")
                         if (item.value === res.data.items[1].data[i].fieldValue) {
                             res.data.items[1].data[i].fieldValue = item.desc;
                         }
                     }
                 }).catch((error) => {
+                  throw error
                 })
             }
         }
+        this.coreinfoBusiness = res.data.items[1].data
+        for (let i = 0; i < res.data.items[2].data.length; i++) {
 
-        for (let i = 0; i < res.data.items[1].data.length; i++) {
-
-          if (res.data.items[1].data[i].fieldType === 'SELECT') {
+          if (res.data.items[2].data[i].fieldType === 'SELECT') {
               this.$http.get('get-enum-all-data', {
-                  enmuKey: res.data.items[1].data[i].param
+                  enmuKey: res.data.items[2].data[i].param
               }).then((response) => {
                   for (let item of response.data) {
-                      console.log(item.desc, " console.log( item.desc)")
-                      if (item.value === res.data.items[1].data[i].fieldValue) {
-                          res.data.items[1].data[i].fieldValue = item.desc;
+                      console.log(item.desc, " console.log( item.desc123)")
+                      if (item.value === res.data.items[2].data[i].fieldValue) {
+                          res.data.items[2].data[i].fieldValue = item.desc;
                       }
                   }
               }).catch((error) => {
+                throw error
               })
           }
       }
-          this.typeCodeInfo = res.data.items[0].data
-          this.coreinfoBusiness = res.data.items[1].data
+
+
           this.coreinfoFinance = res.data.items[2].data
       }).catch((e) => {
           console.log(e)
@@ -257,7 +260,7 @@ queryInfoProductMethod() {
               this.$http.delete('actions-delete', {
                   id: param
               }).then((res) => {
-
+            this.comments.splice(0, this.comments.length);
             this.getcomments()
             this.getUpUrl()
 
@@ -281,7 +284,9 @@ queryInfoProductMethod() {
           projectId: this.projectId
       }
       this.$http.get('typePage', param).then((res) => {
-
+        if('update'===val){
+          this.comments.splice(0, this.comments.length);
+        }
           if (res.data.items && res.data.items.length > 0) {
               for (let i = 0; i < res.data.items.length; i++) {
                   this.comments.push(res.data.items[i])
@@ -340,7 +345,7 @@ queryInfoProductMethod() {
                   this.uploadList.splice(0, this.uploadList.length);
                   this.imgUplaodId = [];
                   this.formItem.comment = ''
-                  this.comments.splice(0, this.comments.length);
+
                   this.page = 1;
                   this.getcomments('update')
                   this.$Message.info('发布成功');

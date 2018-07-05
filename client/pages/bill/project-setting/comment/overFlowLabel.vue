@@ -47,7 +47,7 @@ export default {
 
           const labelDom = document.getElementById(this.overflowId);
           const labelHeight = labelDom.clientHeight;
-          if(labelHeight>36){
+          if(labelHeight>56){
               this.showTooltip  = true;
               this.overflowLabelName='overflow';
 

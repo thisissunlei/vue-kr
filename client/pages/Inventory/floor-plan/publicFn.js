@@ -66,13 +66,12 @@ function getToolTipContent(thatData,discount) {
     let dateRange='';
     let priceStr='';
     let customerName='';
-    let isName=data.item.customerName;
     let dateEnd=rentEnd?'<div>可租结束日：' + rentEnd + '</div>':'';
     let line='';
     if(status=='IN_RENT'||status=='NOT_EFFECT'){
         signStr=price?'<div>签约价：' + price + '</div>':'';
         dateRange='<div>'+startDate+'至'+endDate+'</div>';
-        customerName=isName?'<div>'+isName+'</div>':'<div>*****</div>';
+        customerName='<div>'+data.item.customerName+'</div>';
         line='<span style="width:100%;height: 1px;display: inline-block;background: #fff;vertical-align: middle;"></span>';
     }
     

@@ -85,8 +85,14 @@ function getToolTipContent(thatData,param,time) {
         var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) :time.startTime;
         var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) :'-';
         var str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
-        str += '<div class="title" style="margin-left:5px;">' + label + '：</div>'; 
-        str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';      
+        if(data.customerName&&data.customerName.length){
+            str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
+            data.customerName.map((item,index)=>{
+                str += '<div>' + item + '</div>';
+            })
+        }else{
+            str += '<div class="title" style="margin-left:5px;">' + label + '</div>';
+        }    
 
     return {
         str: str,

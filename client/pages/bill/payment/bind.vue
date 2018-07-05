@@ -399,6 +399,7 @@ export default {
                 var data=new FormData();
                 this.submitDisabled=true;
                 data.append('file',this.file);
+                data.isPut = true;
                 this.$http.put('import-bank-flow', data).then((res)=>{
                     this.openMessage=true;
                     this.submitDisabled=false;

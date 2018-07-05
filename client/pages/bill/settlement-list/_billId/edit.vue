@@ -247,7 +247,7 @@ export default {
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
 					}
-					if(number(item.payableAmount)<0){
+					if(Number(item.payableAmount)<0){
 						_this.error = true;
 						_this.errorMessage = "金额不得填写负数"
 					}

@@ -13,7 +13,7 @@
 			:isOk="isOk"
 			:right="right"
 		>
-			<div class="view-box" :style="commentColor?{backgroundColor:'#fff'}:{}">
+			<div class="view-box" :style="commentColor?{backgroundColor:'#fff',width:'auto!important'}:{}">
 
 
 				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">

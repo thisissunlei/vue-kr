@@ -127,9 +127,9 @@ export default {
             },
             UIDisable: {
                 customer: true,//true 禁用
-                cummunityIn: false,
-                cummunityOut: false,
-                balance: false,
+                cummunityIn: true,
+                cummunityOut: true,
+                balance: true,
                 remark: true,
                 editBtn: true,
                 approveBtn: true,

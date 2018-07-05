@@ -18,7 +18,7 @@
             <div style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:700px" prop="balance">
-                    <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
+                    <BlanceInputGroup :readOnly="blanceInputGroupReadOnly" :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -71,6 +71,7 @@ export default {
         };
 
         return {
+            blanceInputGroupReadOnly:false,
             submitBtnShow: false,
             dataList: [],
             defaultList: [
@@ -81,7 +82,7 @@ export default {
             communities: [],
             targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             formItem: {
-                customerID: 12246,
+                customerID: 0,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -182,16 +183,19 @@ export default {
 
         handleSubmit(formItem) {
             let detailList = []
-            for (const key in this.formItem.balanceOut) {
-                if (this.formItem.balanceOut.hasOwnProperty(key)) {
-                    let obj = {
-                        communityIdIn: this.formItem.communityIn,
-                        communityIdOut: this.formItem.communityIn,
-                        transferAmount: this.formItem.balanceOut[key].input,
-                        transferFeeType: this.formItem.balanceOut[key].feeType,
-                    };
-                    detailList.push(obj)
-
+            let balanceOut=Object.assign({},this.formItem.balanceOut)
+            for (const key in balanceOut) {
+                if (balanceOut.hasOwnProperty(key)) {
+                    debugger;
+                    if (balanceOut[key].input) {
+                        let obj = {
+                            // communityIdIn: this.formItem.communityIn,
+                            // communityIdOut: this.formItem.communityIn,
+                            transferAmount: balanceOut[key].input,
+                            transferFeeType: balanceOut[key].feeType,
+                        };
+                        detailList.push(obj)
+                    }
                 }
             }
             let detailStr = JSON.stringify([].concat(detailList));
@@ -204,8 +208,8 @@ export default {
                 detailStr: detailStr
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
-                this.basicInfo = response.data;
                 this.submitBtnShow = true;
+                this.blanceInputGroupReadOnly=true;
                 this.$Notice.info({
                     title: '操作成功'
                 });

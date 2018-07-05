@@ -33,8 +33,37 @@ export default {
     },
     methods: {
         getTransType() {
+            // RANSFER_COMMUNITY: 'transformZoneInfo',
+            // TRANSFER_BALANCE: 'balanceInfo',
+            // TRANSFER_NONBUSINESS: 'nonoperatingInfo',
+            // TRANSFER_RENT: 'depositRentInfo',
+            // TRANSFER_LOCK_DEPOSIT: 'releaseDepositInfo'
             let { params } = this.$route;
             this.transferType = params.template
+
+            let list = [];
+            switch (this.transferType) {
+                case 'TRANSFER_NONBUSINESS':
+                    list = ['余额', '门禁卡押金', '其他保证金']
+                    break;
+                case 'TRANSFER_BALANCE':
+                    list = ['可用服务保证金', '门禁卡押金', '其他保证金']
+                    break;
+                case 'TRANSFER_RENT':
+                    list = ['可用服务保证金',  '冻结服务保证金']
+                    break;
+                case 'TRANSFER_LOCK_DEPOSIT':
+                    list = ['冻结服务保证金']
+                    break;
+                default:
+
+                    break;
+            }
+            this.defaultList = this.feeTypes.reduce((acc, item) => {
+                list.includes(item.feeTypeName) && acc.concat(item)
+            }, [])
+
+
         }
     }
 }

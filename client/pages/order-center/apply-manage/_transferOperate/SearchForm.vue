@@ -35,13 +35,13 @@
                     <div style="width:850px;display:inline-block;">
                         <Form-item label="操作类型" class='daily-form'>
                             <Select v-model="formItem.transferType" placeholder="请输入操作类型" style="width: 200px" clearable>
-                                <Option v-for="item in operateTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
+                                <Option v-for="item in operateTypes" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
 
                         <Form-item label="操作款项" class='daily-form'>
                             <Select v-model="formItem.transferFeeType" placeholder="请输入操作款项" style="width: 200px" clearable>
-                                <Option v-for="item in moneyTypes" :value="item.code" :key="item.code">{{ item.desc }}</Option>
+                                <Option v-for="item in moneyTypes" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
                         <div style="display:inline-block">
@@ -67,7 +67,7 @@
                             <span style="display:inline-block;width:22px;"></span>态</span>
                         <Form-item class='daily-form ' prop="transferStatus">
                             <Select v-model="formItem.transferStatus" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
-                                <Option v-for="option in applyStates" :value="option.code" :key="option.code">{{option.desc}}</Option>
+                                <Option v-for="option in applyStates" :value="option.value" :key="option.value">{{option.desc}}</Option>
                             </Select>
                         </Form-item>
 
@@ -202,7 +202,7 @@ export default {
             this.$http.get('get-apply-state-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
             }).then((r) => {
-                this.applyStates = [].concat({ code: -1, desc: '全部' }, r.data);
+                this.applyStates = [].concat({ value: 'ALL', desc: '全部' }, r.data);
 
             }).catch((e) => {
                 this.$Notice.error({
@@ -215,7 +215,7 @@ export default {
             this.$http.get('get-operate-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferType'
             }).then((r) => {
-                this.operateTypes = [].concat({ code: -1, desc: '全部' }, r.data);
+                this.operateTypes = [].concat({ value: 'ALL', desc: '全部' }, r.data);
 
             }).catch((e) => {
                 this.$Notice.error({
@@ -228,7 +228,7 @@ export default {
             this.$http.get('get-money-type-enum', {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.TransferFeeType'
             }).then((r) => {
-                this.moneyTypes = [].concat({ code: -1, desc: '全部' }, r.data);
+                this.moneyTypes = [].concat({ value: 'ALL', desc: '全部' }, r.data);
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message
@@ -301,6 +301,7 @@ export default {
         },
         //搜索
         searchClick() {
+            debugger;
             this.$refs['formItemOperation'].validate((valid) => {
                 if (valid) {
                     this.$emit('searchClick', this.formItem);

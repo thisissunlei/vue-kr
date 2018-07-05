@@ -319,13 +319,15 @@ export default {
                 let detailList = []
                 for (const key in this.balanceOut) {
                     if (this.balanceOut.hasOwnProperty(key)) {
-                        let obj = {
-                            communityIdIn: this.formItem.communityIn,
-                            communityIdOut: this.formItem.communityIn,
-                            transferAmount: this.balanceOut[key].input,
-                            transferFeeType: this.balanceOut[key].feeType,
-                        };
-                        detailList.push(obj)
+                        if (!this.balanceOut[key].input) {
+                            let obj = {
+                                // communityIdIn: this.formItem.communityIn,
+                                // communityIdOut: this.formItem.communityIn,
+                                transferAmount: this.balanceOut[key].input,
+                                transferFeeType: this.balanceOut[key].feeType,
+                            };
+                            detailList.push(obj)
+                        }
                     }
                 }
                 // 可能没有经过编辑 直接提交

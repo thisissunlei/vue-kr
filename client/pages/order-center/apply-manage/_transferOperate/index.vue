@@ -245,7 +245,7 @@ export default {
             //过滤掉全部
             for (const key in formItem) {
                 if (formItem.hasOwnProperty(key)) {
-                    if (formItem[key] == -1) {
+                    if (formItem[key] == 'ALL') {
                         formItem[key] = ''
                     };
                 }

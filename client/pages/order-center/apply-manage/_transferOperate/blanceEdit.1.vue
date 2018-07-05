@@ -56,6 +56,7 @@ export default {
         },
         readOnly() {
             console.log('watch_readOnly', this.readOnly)
+            
         },
         disables(){
             console.log(this.disables)

@@ -33,6 +33,10 @@ export default {
         EditLabel,
     },
     props:{
+        right:{
+            default:'READWRITE',
+            type:String
+        },
         isOk:{
             type:Boolean,
             default:true,

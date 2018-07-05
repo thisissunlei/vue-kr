@@ -118,7 +118,11 @@ export default{
 		},
 		name:{
 			type:[String,Number]
-		}
+		},
+		right:{
+            default:'READWRITE',
+            type:String
+        }
 
     },
     data(){

@@ -68,20 +68,31 @@ export default {
             if (Number(value) > Number(this.maxAmount)) {
                 callback(new Error('转移金额不得大于可转金额'));
             }
+
             if (value === '') {
                 callback(new Error('请填写转移金额'));
-            } else {
+            }
+            if (Number(value) == 0) {
+                callback(new Error('转移金额须大于0'));
+            }
+            else {
                 callback();
             }
         };
         const validateCustomer = (rule, value, callback) => {
-            if (!value) {
+            debugger
+            if (!value || value == '-1') {
                 callback("请选择客户")
+            } else {
+                callback();
             }
         };
         const validateCummity = (rule, value, callback) => {
-            if (!value) {
+
+            if (!value || value == '-2') {
                 callback("请选择社区")
+            } else {
+                callback();
             }
         };
 
@@ -169,10 +180,23 @@ export default {
         },
 
         handleSubmit(formItem) {
+            this.$refs[formItem].validate((valid) => {
+                if (!valid) {
+                    this.$Notice.error({
+                        title: '请填写完表单'
+                    });
+                    this.formItem.customerID = -2
+                    return;
+                }
+                else {
+                    execSubmit(formItem)
+                }
+            }
+            )
+        },
+        execSubmit(formItem) {
             let detailList = []
             let obj = {
-                // communityIdIn: this.formItem.communityIn,
-                // communityIdOut: this.formItem.communityIn,
                 transferAmount: this.formItem.transferAmount,
                 transferFeeType: this.targetFeeType
             }
@@ -187,7 +211,6 @@ export default {
                 transferType: 'TRANSFER_LOCK_DEPOSIT',
                 detailStr: detailStr
             }
-            debugger;
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.submitBtnDisable = true;
                 this.$Notice.info({
@@ -217,17 +240,16 @@ export default {
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
-            .formitem-balance{
-                .ivu-form-item-error-tip{
-                    top:200%
+            .formitem-balance {
+                .ivu-form-item-error-tip {
+                    top: 200%;
                 }
-                 .balance-container {
-                position: relative;
-                top: 36px;
-                left: -134px;
+                .balance-container {
+                    position: relative;
+                    top: 36px;
+                    left: -134px;
+                }
             }
-            }
-           
         }
         .required-label {
             font-size: 14px;

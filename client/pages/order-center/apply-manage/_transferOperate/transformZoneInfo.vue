@@ -25,7 +25,9 @@
                 </Col>
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityIdIn">
-                    <selectCommunities :test="formItem" :disabled='UIDisable.cummunityIn' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>
+                    <Select v-model="formItem.communityIdIn" @on-change='changeCommunityIn' :disabled='UIDisable.cummunityOut' style="width:252px">
+                        <Option v-for="item in communitiesIn" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
                 </FormItem>
                 </Col>
             </Row>
@@ -33,7 +35,7 @@
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityIdOut">
                     <!-- <selectCommunities test="formItem" :disabled='UIDisable.cummunityOut' :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities>                        -->
-                    <Select v-model="formItem.communityIdOut" :disabled='UIDisable.cummunityOut' style="width:252px">
+                    <Select v-model="formItem.communityIdOut" @on-change='changeCommunityOut' :disabled='UIDisable.cummunityOut' style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
@@ -140,6 +142,7 @@ export default {
             modalText: '',//退回备注
             receivedApplyInfo: {},
             communitiesOut: [],
+            communitiesIn: [],
             communities: [],
             isFinancialSide: false,//是否财务端查看 
             transferStatus: '',//申请处理状态 
@@ -172,7 +175,7 @@ export default {
         }
     },
     mounted() {
-         GLOBALSIDESWITCH("false");
+        GLOBALSIDESWITCH("false");
         this.getInfo();
     },
     methods: {
@@ -193,9 +196,14 @@ export default {
                     let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
                     this.formItem = Object.assign({}, this.formItem, obj)
                     this.UIDisableBak = Object.assign({}, this.UIDisable);
-                    console.log(this.receivedApplyInfo)
-                    console.log(this.formItem)
+                    this.getCusomerList(obj.customerId).then(
+                        () => {
+                            this.communitiesOut = [].concat(this.communities)
+                            this.communitiesIn = [].concat(this.communities)
+                        }
+                    )
                 });
+
             }).then(() => {
                 this.checkRights();
             }).catch((error) => {
@@ -278,11 +286,38 @@ export default {
 
         },
         changeCustomer() { },
-        changeCommunity(commIn) {
-            this.$set(this.formItem, 'communityIn', commIn)
-            let all = [].concat(this.communities);
-            this.communitiesOut = all.filter(item => item.value !== commIn)
-            this.getMaxAmount();
+
+        changeCommunityIn(commIn) {
+            this.communitiesOut = [].concat(this.communities).filter(item => item.value != commIn)
+        },
+        changeCommunityOut(commOut) {
+            this.communitiesIn = [].concat(this.communities).filter(item => item.value != commOut)
+        },
+        onGetCmtsList(list) {
+            this.communities = [].concat(list);
+        },
+        getCusomerList(customerId) {
+            let params = {
+                customerId: Number(customerId)
+            }
+            return new Promise((resolve, reject) => {
+                this.$http.get('get-cmts-customerid', params).then((response) => {
+                    let list = [];
+                    let _this = this;
+                    response.data.map((item) => {
+                        let obj = Object.create(null);
+                        obj.label = item.name;
+                        obj.value = item.id;
+                        list.push(obj)
+                    });
+                    this.communities = [].concat(list);
+                    resolve();
+                })
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
         },
         getAmountPaleceholder() {
             if (this.maxAmount == 0) {
@@ -359,7 +394,7 @@ export default {
                 }
 
                 let parms = {
-                    applyMemo: this.formItem.remark.trim(),
+                    applyMemo: this.formItem.applyMemo.trim(),
                     communityId: this.receivedApplyInfo.communityId,
                     customerId: this.receivedApplyInfo.customerId,
                     id: this.receivedApplyInfo.id,

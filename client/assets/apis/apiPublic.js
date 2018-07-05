@@ -63,5 +63,9 @@ module.exports = {
     "typePage":{
         url:'/api/pm/discuss/list/type/page',
         method:'get'
+    },
+    	'list-type-code-detail': {
+        url: 'api/pm/form-field/list/type/detail',
+       method: 'get'
     }
 }

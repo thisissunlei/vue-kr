@@ -11,7 +11,7 @@
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityIn">
                     <!-- <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities> -->
-                    <Select v-model="formItem.communityIn"  @on-change='changeCommunityIn' style="width:252px">
+                    <Select v-model="formItem.communityIn" @on-change='changeCommunityIn' style="width:252px">
                         <Option v-for="item in communitiesIn" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
@@ -109,8 +109,11 @@ export default {
                 communityOut: [
                     { required: true, trigger: 'change', validator: validateCommunity }
                 ],
+                // customerId: [
+                //     { required: true, trigger: 'change', validator: validateCustomerId }
+                // ],
                 customerId: [
-                    { required: true, trigger: 'change', validator: validateCustomerId }
+                    { required: true, message: '请选择客户', trigger: 'change' }
                 ],
                 balanceOut: [
                     { required: true, trigger: 'change', validator: validateFirst }
@@ -124,7 +127,7 @@ export default {
     methods: {
         getMaxAmount() {
             let parms = {
-                communityId: this.formItem.communityIn,
+                communityId: this.formItem.communityOut,
                 customerId: this.formItem.customerId
             }
             var _this = this
@@ -165,6 +168,7 @@ export default {
         },
         changeCommunityOut(commOut) {
             this.communitiesIn = [].concat(this.communities).filter(item => item.value != commOut)
+            this.getMaxAmount()
         },
         onGetCmtsList(list) {
             this.communities = [].concat(list);

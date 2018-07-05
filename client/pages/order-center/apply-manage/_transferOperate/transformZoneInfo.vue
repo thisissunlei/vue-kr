@@ -190,6 +190,7 @@ export default {
                 this.isFinancialSide = this.receivedApplyInfo.financialSide;
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem.communityIdIn = this.receivedApplyInfo.detailList[0].communityIdIn;
+                this.formItem.communityIdOut = this.receivedApplyInfo.detailList[0].communityIdOut;
                 this.formItem.customerId = this.receivedApplyInfo.customerId;
                 this.getMaxAmount().then(() => {
                     let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
@@ -233,7 +234,7 @@ export default {
         },
         getMaxAmount() {
             let parms = {
-                communityId: this.formItem.communityIdIn,
+                communityId: this.formItem.communityIdOut,
                 customerId: this.formItem.customerId,
                 id: this.receivedApplyInfo.id
             }
@@ -282,8 +283,6 @@ export default {
             //         title: error.message
             //     });
             // })
-
-
         },
         changeCustomer() { },
 
@@ -292,6 +291,7 @@ export default {
         },
         changeCommunityOut(commOut) {
             this.communitiesIn = [].concat(this.communities).filter(item => item.value != commOut)
+            this.getMaxAmount();
         },
         onGetCmtsList(list) {
             this.communities = [].concat(list);

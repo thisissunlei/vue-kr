@@ -83,7 +83,7 @@ export  default  {
                       enmuKey: res.data.items[0].data[i].param
                   }).then((response) => {
                       for (let item of response.data) {
-                          console.log(item.desc, " console.log( item.desc2)")
+                          // console.log(item.desc, " console.log( item.desc2)")
                           if (item.value === res.data.items[0].data[i].fieldValue) {
                               res.data.items[0].data[i].fieldValue = item.desc;
                           }
@@ -137,17 +137,78 @@ export  default  {
           console.log(e)
       })
   },
+  queryInfomation(i,j,j1,res){
+            // console.log( res.data.items[i].children[j1].data[j2]," res.data.items[i].children[j1].data[j2]")
+            this.$http.get('get-enum-all-data', {
+              enmuKey: res.data.items[i].children[j].data[j1].param
+          }).then((response) => {
+              for (let item of response.data) {
 
+
+                    if (item.value === res.data.items[i].children[j].data[j1].fieldValue) {
+                      res.data.items[i].children[j].data[j1].fieldValue = item.desc;
+                    }
+
+
+              }
+
+          }).catch((error) => {
+            throw error
+          })
+  },
+  queryInfomationProperty(i,j,res){
+    this.$http.get('get-enum-all-data', {
+      enmuKey: res.data.items[i].data[j].param
+  }).then((response) => {
+      for (let item of response.data) {
+
+          if(res.data.items[i].data.length>0){
+            if (item.value === res.data.items[i].data[j].fieldValue) {
+              res.data.items[i].data[j].fieldValue = item.desc;
+           }
+          }
+
+      }
+  }).catch((error) => {
+    throw error
+  })
+  },
   queryInfoPropertyMethod() {
     let param = {
         code: 'property',//property product
         projectId: this.projectId
     }
-    this.$http.get('list-type-code', param).then((res) => {
+    this.$http.get('list-type-code-detail', param).then((res) => {
 
 
-      this.propertyData = res.data.items;
-        console.log(this.propertyData ,'property')
+      for (let i = 0; i < res.data.items.length; i++) {
+        for(let j = 0; j < res.data.items[i].data.length; j++){
+          if (res.data.items[i].data[j].fieldType === 'SELECT') {
+            this.queryInfomationProperty(i,j,res)
+        }
+      }
+
+        if(res.data.items[i].children){
+          for(let j = 0; j < res.data.items[i].children.length; j++){
+            if (res.data.items[i].children[j].data) {
+            for(let j1 = 0; j1 < res.data.items[i].children[j].data.length; j1++){
+
+
+                  if (res.data.items[i].children[j].data[j1].fieldType === 'SELECT') {
+                    // console.log( res.data.items[i].children[j1].data[j2]," res.data.items[i].children[j1].data[j2]")
+                        this.queryInfomation(i,j,j1,res);
+
+                  }
+                }
+              }
+            }
+        }
+
+
+    }
+
+    this.propertyData = res.data.items;
+
 
     }).catch((e) => {
         console.log(e)
@@ -159,7 +220,35 @@ queryInfoProductMethod() {
       code: 'product',//property product
       projectId: this.projectId
   }
-  this.$http.get('list-type-code', param).then((res) => {
+  this.$http.get('list-type-code-detail', param).then((res) => {
+
+    for (let i = 0; i < res.data.items.length; i++) {
+      for(let j = 0; j < res.data.items[i].data.length; j++){
+        if (res.data.items[i].data[j].fieldType === 'SELECT') {
+          this.queryInfomationProperty(i,j,res)
+      }
+    }
+
+      if(res.data.items[i].children){
+        for(let j = 0; j < res.data.items[i].children.length; j++){
+          if (res.data.items[i].children[j].data) {
+          for(let j1 = 0; j1 < res.data.items[i].children[j].data.length; j1++){
+
+
+                if (res.data.items[i].children[j].data[j1].fieldType === 'SELECT') {
+                  // console.log( res.data.items[i].children[j1].data[j2]," res.data.items[i].children[j1].data[j2]")
+                      this.queryInfomation(i,j,j1,res);
+
+                }
+              }
+            }
+          }
+      }
+
+
+  }
+
+
 
     this.productData = res.data.items;
     console.log(res,'product')

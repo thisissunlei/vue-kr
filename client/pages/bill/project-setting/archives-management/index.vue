@@ -98,7 +98,7 @@ export default {
         },
         setContentHeight(){
            
-          var newHeight = document.body.clientHeight-255;
+          var newHeight = document.body.clientHeight-295;
          
           if(newHeight !== wHeight){
             

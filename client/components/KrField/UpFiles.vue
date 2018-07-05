@@ -120,8 +120,10 @@ export default{
 			type:[String,Number]
 		},
 		right:{
-            type:String,
-        },
+            default:'READWRITE',
+            type:String
+        }
+
 
     },
     data(){

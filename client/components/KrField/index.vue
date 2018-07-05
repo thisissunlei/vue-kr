@@ -8,6 +8,7 @@
             :value="value"
             :placeholder="placeholder"
             :type='type'
+            :right="right"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
@@ -37,6 +38,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrDate
@@ -51,6 +53,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTimeDate
@@ -65,6 +68,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTime
@@ -78,6 +82,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTextarea
@@ -92,6 +97,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
 
@@ -111,6 +117,7 @@
             @okClick="okClick"
             :isOk="isOk"
             :inline="inline"
+            :right="right"
         />
         
          <KrCity
@@ -127,6 +134,7 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <SelectTree 
@@ -137,6 +145,7 @@
             @okClick="okClick"
             :treeIds="treeIds"
             :inputWidth="inputWidth"
+            :right="right"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
@@ -146,6 +155,7 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
         <UpImage 
             v-if="type==='upImage'"  
@@ -154,6 +164,7 @@
             :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
+            :right="right"
         />
        
   </div>
@@ -280,6 +291,10 @@ export default {
         inline:{
             default:false,
             type:Boolean
+        },
+        right:{
+            default:'READWRITE',
+            type:String
         }
     },
     data(){

@@ -36,6 +36,10 @@
 
 export default {
      props:{
+        right:{
+            default:'READWRITE',
+            type:String
+        },
         data:{
             default:()=>[],
             type:Array,

@@ -56,7 +56,7 @@
 				
 			</div>
 		</div>
-		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
+		<PhotoAlbum :downLabel="downLabel" @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	</div>
 </template>
 
@@ -101,7 +101,10 @@ export default{
 		category:{
 			type:String,
 			default:'op/upload'
-		}
+		},
+		downLabel:{
+            type:String,
+        }
 	},
 	data(){
 	

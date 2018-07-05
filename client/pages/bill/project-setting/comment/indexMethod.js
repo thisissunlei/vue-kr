@@ -327,7 +327,7 @@ queryInfoProductMethod() {
           })
       })
 
-      const check = this.uploadList.length < 10;
+      const check = this.uploadList.length < 9;
       if (!check) {
           this.$Notice.warning({
               title: '最多只能上传9张图片'
@@ -359,7 +359,7 @@ queryInfoProductMethod() {
                   id: param
               }).then((res) => {
             this.comments.splice(0, this.comments.length);
-            this.getcomments()
+            this.getcomments("update")
             this.getUpUrl()
 
             this.queryInfoMethod()

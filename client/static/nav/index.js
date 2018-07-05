@@ -505,7 +505,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),devToolSetting()];
 
         return arr;
     }
@@ -989,12 +989,7 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        {
-                            primaryText: '运维工具',
-                            menuCode: 'ops_tool_management',
-                            type: 'vue',
-                            router: 'ops'
-                        },
+                      
                         {
                             primaryText: '项目管理权限',
                             menuCode: 'sso_loginLog_base',
@@ -1077,6 +1072,7 @@
                         },
                     ]
                 },
+               
             ]
         }
     }
@@ -1384,5 +1380,35 @@
             ]
         }
     }
+    function devToolSetting(){
+        return  {
+            primaryText: "开发工具",
+            router: 'dev',
+            type: 'vue',
+            menuItems: [
+                {
+                    primaryText: '后端工具',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    type: 'vue',
+                    menuItems: [
+                        {
+                            primaryText: "订单数据监控",
+                            router: 'management-tool/data-monitoring',
+                            type: 'vue',
+                            menuCode: 'order_validate_list'
+                        },
+                        {
+                            primaryText: '运维工具',
+                            menuCode: 'ops_tool_management',
+                            type: 'vue',
+                            router: 'ops'
+                        },
+                    ]
+                }
 
+            ]
+        }
+    }
+    
 })(window);

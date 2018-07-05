@@ -247,11 +247,11 @@ export default {
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
 					}
-					if(Number(item.payableAmount)<0){
+					if(+item.payableAmount<=0){
 						_this.error = true;
-						_this.errorMessage = "金额不得填写负数"
+						_this.errorMessage = "金额请填写大于零的数字"
 					}
-					if(!item.feeType || !item.payableAmount){
+					if(!item.feeType || (!item.payableAmount&&item.payableAmount!=0)){
 						_this.error = true;
 						_this.errorMessage = "结算表单未填写完整"
 					}	

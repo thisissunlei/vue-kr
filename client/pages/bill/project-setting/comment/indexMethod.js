@@ -181,8 +181,13 @@ export  default  {
     this.$http.get('list-type-code-detail', param).then((res) => {
 
 
+
       for (let i = 0; i < res.data.items.length; i++) {
         for(let j = 0; j < res.data.items[i].data.length; j++){
+          if (res.data.items[i].data[j].displayName === '所属区县') {
+            let str = res.data.items[i].data[j].fieldValue.split(',')
+            res.data.items[i].data[j].fieldValue = krCity(str)
+          }
           if (res.data.items[i].data[j].fieldType === 'SELECT') {
             this.queryInfomationProperty(i,j,res)
         }
@@ -193,7 +198,11 @@ export  default  {
             if (res.data.items[i].children[j].data) {
             for(let j1 = 0; j1 < res.data.items[i].children[j].data.length; j1++){
 
-
+              if (res.data.items[i].children[j].data[j1].displayName === '所属区县') {
+                let str = res.data.items[i].children[j].data[j1].fieldValue.split(',')
+                console.log(krCity(str),"krCity(str)")
+                res.data.items[i].children[j].data[j1].fieldValue = krCity(str)
+              }
                   if (res.data.items[i].children[j].data[j1].fieldType === 'SELECT') {
                     // console.log( res.data.items[i].children[j1].data[j2]," res.data.items[i].children[j1].data[j2]")
                         this.queryInfomation(i,j,j1,res);

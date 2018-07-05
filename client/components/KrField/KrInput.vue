@@ -7,6 +7,7 @@
             @cancelClick="cancelClick"
             @recordClick="recordClick"
             :isOk="isOk"
+:right="right"
         >
             <Input
                 :placeholder="placeholder"

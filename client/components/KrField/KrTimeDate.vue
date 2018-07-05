@@ -7,6 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+   :right="right"
         >
             <DatePicker 
                 :open="open"

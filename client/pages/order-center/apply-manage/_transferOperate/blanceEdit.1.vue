@@ -52,6 +52,7 @@ export default {
     },
     watch: {
         dataList() {
+            console.log("watch_datalist")
             this.initStates()
         },
         readOnly() {
@@ -87,7 +88,7 @@ export default {
                     this.errorTexts[item.feeTypeName] = ''
                 })
             }
-           
+           this.checkGroupModel=[];
         },
         gotRefTag(type) {
             return '' + type;

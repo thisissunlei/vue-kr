@@ -79,7 +79,7 @@ export default {
             communities: [],
             targetFeeTypes: ['可用服务保证金', '冻结服务保证金'],
             formItem: {
-                customerID: 0,
+                customerID:1,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''

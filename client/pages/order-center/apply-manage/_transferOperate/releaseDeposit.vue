@@ -21,7 +21,7 @@
                     <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
                 </FormItem> -->
                 <FormItem label="释放冻结保证金金额" style="width:700px" prop="balance">
-                    <div>
+                    <div class='balance-container'>
                         <Input v-model="formItem.transferAmount" :placeholder="formatBlance(maxAmount)" style="width:252px;" />
                         <Button style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
                     </div>
@@ -83,7 +83,7 @@ export default {
             targetFeeTypes: ['冻结服务保证金'],
             formItem: {
                 transferAmount: '',
-                customerID: 0,
+                customerID:12,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -204,6 +204,11 @@ export default {
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
+            .balance-container {
+                position: relative;
+                top: 36px;
+                left: -134px;
+            }
         }
         .amount {
         }

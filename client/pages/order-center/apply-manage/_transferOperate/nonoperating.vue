@@ -51,7 +51,6 @@ export default {
         selectCustomers,
         BlanceInputEdit,
         BlanceInputGroup
-
     },
 
     data() {
@@ -60,6 +59,7 @@ export default {
             return;
         };
         const validateCustomer = (rule, value, callback) => {
+            debugger;
             if (!value) {
                 callback("请选择客户")
             }
@@ -82,7 +82,7 @@ export default {
             communities: [],
             targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             formItem: {
-                customerID: 0,
+                customerID:1,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''

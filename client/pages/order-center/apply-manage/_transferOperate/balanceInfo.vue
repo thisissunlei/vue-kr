@@ -263,11 +263,17 @@ export default {
             //     hasError = hasError && this.formItem.balanceOut[item].error
             // })
             // return !hasError
-            if (this.receivedApplyInfo.applyMemo === this.formItem.remark.trim()
-                && Object.keys(this.balanceOut) == 0)
-                return false
+            if (this.receivedApplyInfo.applyMemo === this.formItem.remark.trim()) {
+                if (this.approveBtnText === '同意') {
+                    return true
+                }
+                else if (Object.keys(this.balanceOut) == 0) {
+                    return false
+                }
+            }
             else
                 return true;
+            return true;
         },
         //开启编辑
         handleEdit() {

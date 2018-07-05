@@ -156,7 +156,8 @@
                         { required: true, message: '请填写客户联系人'}
                     ],
                     contactTel:[
-                        { required: true, trigger: 'blur' ,validator: validatephone},
+                        { required: true, message: '请填写电话联系人手机号',trigger: 'change'},
+                        { required: true, trigger: 'change' ,validator: validatephone},
                     ],
                     sourceId:[
                         { required: true, message: '请选择客户来源'}

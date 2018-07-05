@@ -196,11 +196,16 @@
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,//数据
                                         columnDetail:params.row||{},
-                                        onUpUrl:this.urlUpLoad//成功后方法
+                                        // onUpUrl:this.urlUpLoad//成功后方法
                                     },
                                     style: {
                                         color:'#2b85e4'
                                     },
+                                    on:{
+                                        upSuccess:(detail,col)=>{
+                                            this.urlUpLoad(detail,col)
+                                        }
+                                    }
                                 },'44'),
                                tag('Button', {
                                     props: {

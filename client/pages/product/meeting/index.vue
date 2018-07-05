@@ -11,6 +11,11 @@
                         style="width:200px"
                         placeholder="请选择"
                         clearable
+                        label-in-value
+                        remote
+                        filterable
+                        :label="formItem.communityName"
+                        @on-change="communityChange"
                     >
                        <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
@@ -22,14 +27,11 @@
                             style="width:100px"
                             placeholder="请选择"
                             clearable
+                            remote
+                            filterable
+                            :label="formItem.appPublishName"
                         >
-                            <Option
-                                v-for="item in statusList"
-                                :value="item.value"
-                                :key="item.value"
-                            >
-                                {{ item.label }}
-                            </Option>
+                            <Option v-for="item in statusList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
                         </Select>
                  </div>
                  <div class="u-select-list">
@@ -39,14 +41,12 @@
                             style="width:100px"
                             placeholder="请选择"
                             clearable
+                            remote
+                            filterable
+                            :label="formItem.kmPublishName"
                         >
-                            <Option
-                                v-for="item in statusList"
-                                :value="item.value"
-                                :key="item.value"
-                            >
-                                {{ item.label }}
-                            </Option>
+                            <Option v-for="item in statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                           
                         </Select>
                  </div>
                 
@@ -120,6 +120,8 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import utils from '~/plugins/utils';
+
 export default {
     components:{
         SectionTitle,
@@ -137,9 +139,16 @@ export default {
             meetingList:[],
             tabParams:{
                 page:1,
-                pageSize:15,
+                pageSize:15
             },
+            
             formItem:{
+                communityId:'',
+                appPublish:'',
+                kmPublish:'',
+                communityName:'',
+                appPublishName:'',
+                kmPublishName:''
 
             },
             roomId:'',
@@ -242,12 +251,35 @@ export default {
            
         }
     },
-    mounted:function(){
-        this.getTableData(this.tabParams);
-        this.getCommunityList(' ');
-	},
+    created(){
+        var _this=this;
+        this.getCommunityList(' ',function(){
+            _this.tabParams=Object.assign({},_this.$route.query);
+            _this.formItem=Object.assign({},_this.$route.query);
+            if(_this.formItem.communityId=="" && _this.formItem.communityName=="全部社区"){
+                _this.formItem.communityId=-1;
+            }
+            if(_this.tabParams.appPublish=='true'){
+                _this.formItem.appPublishName='已上架';
+            }else if(_this.tabParams.appPublish=='false'){
+                _this.formItem.appPublishName='未上架';
+            }
+            if(_this.tabParams.kmPublish=='true'){
+                _this.formItem.kmPublishName='已上架';
+            }else if(_this.tabParams.kmPublish=='false'){
+                _this.formItem.kmPublishName='未上架';
+            }
+        });
+        this.getTableData(this.$route.query);
+        
+        
+      
+    },
     methods:{
-        getCommunityList(name){
+        communityChange(item){
+            this.communityName=item.label;
+        },
+        getCommunityList(name,callback){
             let params = {
                     cmtName:name
                 }
@@ -260,7 +292,7 @@ export default {
                     return obj;
                 });
                 this.communityList = list;
-               
+                callback && callback();
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -272,8 +304,8 @@ export default {
         changePage(page){
             this.tabParams.page=page;
             this.page=page;
-
             this.getTableData(this.tabParams);
+           
         },
         getTableData(params){
                 
@@ -289,14 +321,15 @@ export default {
                 
         },
         lowerSubmit(){
+            let communityId=this.formItem.communityId==-1?"":this.formItem.communityId;
             let params=Object.assign({},this.formItem);
             params.page=1;
             params.pageSize=15;
-            if(params.communityId==-1){
-                params.communityId=""
-            }
+            params.communityId=communityId
+        
+            params.communityName = this.communityName;
             this.tabParams=Object.assign({},params);
-            this.getTableData(params);
+            utils.addParams(this.tabParams);
         },
         jumpCreate(){
              window.open(`/product/meeting/create`,'_blank');

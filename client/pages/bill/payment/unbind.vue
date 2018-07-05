@@ -171,7 +171,8 @@ export default {
                         width:100,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
-                            return time;
+                            return h('span',{},time);
+                            // return time;
                         }
                     },
                     {
@@ -200,7 +201,8 @@ export default {
                               'FUNDS_TRANSFER ':'资金转移',
                               
                             }
-                            return payWay[obj.row.payWay]
+                            return h('span',{},payWay[obj.row.payWay]);
+                            // return payWay[obj.row.payWay]
                         }
                     },
                     {

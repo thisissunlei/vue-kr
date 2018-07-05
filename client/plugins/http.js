@@ -15,9 +15,13 @@ axios.defaults.mode = 'cors';
 
 
 axios.interceptors.request.use(config => {
-  if(config.method  == 'post'){
-    let data = Qs.stringify(config.data);
-    config.data = data;
+  if(config.method  == 'post' || config.method  == 'put'){
+    if(!config.data.isPut){
+      let data = Qs.stringify(config.data);
+        config.data = data;
+    }else{
+      delete config.data.isPut;
+    }
   }
   if(config.url.indexOf('mockjs') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
@@ -53,11 +57,11 @@ function filterNull (o) {
  }
  return o
 }
-
 function check401(res) {
  res = res.data;
    if (res.code ===-4011) {
-     window.location.href = '/new/login.html';
+     const redirectUrl = encodeURIComponent(window.location.href);
+     window.location.href = `/new/login.html?RU=${redirectUrl}`;
    } else if (res.code ===-4033) {
      // console.log('您没有操作权限，请联系管理员')
    }

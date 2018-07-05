@@ -3,7 +3,7 @@ import OrderApi from './order';
 import OrderManageApi from './orderManage';
 import ContractCenter from './contractCenter'
 import apiPublic from './apiPublic'
-import BillApi from './bill.js';
+import BillApi from './bill';
 import MemberApi from './member.js'
 import Settlement from './settlement.js';
 import operationsCenter from './operationsCenter'
@@ -18,6 +18,7 @@ import Krmeeting from './krmeeting.js';
 import DoorRelationship from './doorRelationship.js';
 import KrmeetingRoom from './krmeetingRoom.js';
 import ProductGoods from './productGoods.js';
+import DevTool from './devTool';
 export default {
   ...OrderApi,
   ...OrderManageApi,
@@ -37,5 +38,6 @@ export default {
   ...Krmeeting,
   ...DoorRelationship,
   ...KrmeetingRoom,
-  ...ProductGoods
+  ...ProductGoods,
+  ...DevTool
 }

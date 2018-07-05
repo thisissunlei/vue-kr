@@ -76,6 +76,8 @@
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
                                             :defaultFileList="coverImgList"
+                                            :imgWidth="120"
+                                            :imgHeight="120"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -95,6 +97,8 @@
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
                                             :defaultFileList="detailImgList"
+                                            :imgWidth="120"
+                                            :imgHeight="120"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
@@ -421,7 +425,9 @@ export default {
                     this.form.krmStartTime=data.krmStartTime.substring(0,5);
                     this.form.krmEndTime=data.krmEndTime.substring(0,5);
                     let coverImgList=[];
-                    coverImgList.push({'url':data.coverImg});
+                    if(data.coverImg!=''){
+                        coverImgList.push({'url':data.coverImg});
+                    }
                     this.coverImgList=coverImgList;
                     let detailImgList=[];
                     data.detailImg.map((item)=>{

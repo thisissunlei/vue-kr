@@ -32,7 +32,10 @@ import http from '~/plugins/http.js';
 export default {
     props: {
         onchange: Function,
-        getCustomerName: Function,
+        getCustomerName:{
+            type:Function,
+            default:()=>{}
+        },
         value: String,
         disabled: Boolean,
         labelInValue: {

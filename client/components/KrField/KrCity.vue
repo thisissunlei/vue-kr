@@ -8,6 +8,7 @@
             @recordClick="recordClick"
             @editClick="editClick"
             :isOk="isOk"
+  :right="right"
         >
             <Cascader
                 ref="cityCascader"

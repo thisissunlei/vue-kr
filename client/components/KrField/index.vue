@@ -8,6 +8,7 @@
             :value="value"
             :placeholder="placeholder"
             :type='type'
+    :right="right"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"

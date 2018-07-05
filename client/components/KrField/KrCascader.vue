@@ -6,6 +6,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+  :right="right"
         >
             <Cascader
                 :data="data"

@@ -8,6 +8,7 @@
             @cancelClick="cancelClick"
             @recordClick="recordClick"
             :isOk="isOk"
+  :right="right"
         >
             <DatePicker 
                 v-model="dateValue"

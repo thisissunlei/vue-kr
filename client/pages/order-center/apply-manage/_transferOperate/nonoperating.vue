@@ -29,7 +29,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button type="primary" :disabled='submitBtnShow' @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -71,6 +71,7 @@ export default {
         };
 
         return {
+            submitBtnShow: false,
             dataList: [],
             defaultList: [
                 { amount: "", maxAmount: "", feeTypeName: "余额", feeType: "BALANCE" },
@@ -204,6 +205,10 @@ export default {
             }
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.basicInfo = response.data;
+                this.submitBtnShow = true;
+                this.$Notice.info({
+                    title: '操作成功'
+                });
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

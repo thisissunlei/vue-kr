@@ -180,6 +180,7 @@ export default {
             }
             debugger;
             this.$http.post('get-apply-submit', parms).then((response) => {
+                this.submitBtnShow=true;
                 this.$Notice.info({
                     title: '操作成功'
                 });

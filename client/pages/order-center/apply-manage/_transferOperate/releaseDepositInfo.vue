@@ -149,7 +149,6 @@ export default {
     },
     mounted() {
         this.getInfo();
-        this.checkRights();
     },
     methods: {
         //获取申请单详细信息
@@ -168,7 +167,9 @@ export default {
                 this.getFeeAmount();
                 this.UIDisableBak = Object.assign({}, this.UIDisable);
             }
-            ).catch((error) => {
+            ).then(() => {
+                this.checkRights()
+            }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });

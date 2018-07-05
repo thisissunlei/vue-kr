@@ -173,7 +173,6 @@ export default {
     },
     mounted() {
         this.getInfo();
-        this.checkRights();
     },
     methods: {
         getInfo() {
@@ -196,6 +195,8 @@ export default {
                     console.log(this.receivedApplyInfo)
                     console.log(this.formItem)
                 });
+            }).then(() => {
+                this.checkRights();
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

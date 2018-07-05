@@ -13,7 +13,7 @@
 			:isOk="isOk"
 			:right="right"
 		>
-			<div class="view-box" :style="commentColor?{backgroundColor:'#fff'}:{}">
+			<div class="view-box" :style="commentColor?{backgroundColor:'#fff',width:'auto!important'}:{}">
 
 
 				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">
@@ -195,7 +195,7 @@ export default{
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(img.indexOf(ext)>=0){
+			if(img.indexOf(ext.toLowerCase())>=0){
 				return true;
 			}
 			return false;
@@ -207,13 +207,13 @@ export default{
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(word.indexOf(ext)>=0){
+			if(word.indexOf(ext.toLowerCase())>=0){
 				return 'word';
 			}
-			if(excel.indexOf(ext)>=0){
+			if(excel.indexOf(ext.toLowerCase())>=0){
 				return 'excel';
 			}
-			if(ppt.indexOf(ext)>=0){
+			if(ppt.indexOf(ext.toLowerCase())>=0){
 				return 'ppt';
 			}
 			return 'other';

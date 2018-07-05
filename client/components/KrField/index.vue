@@ -8,7 +8,6 @@
             :value="value"
             :placeholder="placeholder"
             :type='type'
-            :right="right"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
@@ -27,7 +26,6 @@
             v-if="type==='select'"
             :value="value"
             :name="name"
-            :right="right"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -44,7 +42,6 @@
         <KrDate
             v-if="type==='date'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -59,7 +56,6 @@
         <KrTimeDate
             v-if="type==='datetime'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -74,7 +70,6 @@
         <KrTime
             v-if="type==='time'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -88,7 +83,6 @@
         <KrTextarea
             v-if="type==='textarea'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -104,7 +98,6 @@
         <KrCascader
             v-if="type==='cascader'"
             :width="width"
-            :right="right"
             :data="data"
             :name="name"
             :value="value"
@@ -123,7 +116,6 @@
          <KrCity
             v-if="type==='city'"
             :data="data"
-            :right="right"
             :name="name"
             :value="value"
             :mask="mask"
@@ -140,7 +132,7 @@
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
-            :right="right"
+
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
@@ -149,7 +141,6 @@
         <UpFiles 
             v-if="type==='upFiles'"  
             :readOrEdit="readOrEdit" 
-            :right="right"
             :value = 'value'
             :name="name"
             @okClick="okClick"
@@ -160,7 +151,6 @@
             v-if="type==='upImage'"  
             :readOrEdit="readOrEdit" 
             :value = 'value'
-            :right="right"
             :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
@@ -290,10 +280,6 @@ export default {
         inline:{
             default:false,
             type:Boolean
-        },
-        right:{
-            default:'READWRITE',
-            type:String
         }
     },
     data(){

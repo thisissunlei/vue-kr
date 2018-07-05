@@ -56,8 +56,8 @@ export default {
     },
     methods: {
         changeContent: function (customer) {
-            this.onchange(customer.value)
-
+            this.onchange(customer)
+            // console.log(customer)
             this.getCustomerName(customer.label)
         },
         remoteCustomer(query) {

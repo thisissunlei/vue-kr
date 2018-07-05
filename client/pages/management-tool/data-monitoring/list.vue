@@ -8,7 +8,7 @@
             </div>
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
-                <selectCustomers class="selectors" :onchange="changeCustomer" :getCustomerName='getCustomerName'></selectCustomers>
+                <selectCustomers class="selectors" :onchange="changeCustomer" :labelInValue="true"></selectCustomers>
                 <!-- <i-input v-model="params.customName" placeholder="请输入客户名称" style="width: 252px" /> -->
             </div>
             <!-- <div style='display:inline-block;margin:10px 20px;'>
@@ -202,9 +202,11 @@ export default {
     },
 
     methods: {
-        getCustomerName(name) { this.customerName = name },
-        changeCommunity(value) { this.communityId = value },
-        changeCustomer(value) { console.log(value) },
+       
+        changeCustomer(value) { 
+            this.communityId = value.value;
+            this.customerName= value.label;
+        },
 
         handleSearch() {
             let parms = {

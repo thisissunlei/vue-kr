@@ -32,14 +32,10 @@ import http from '~/plugins/http.js';
 export default {
     props: {
         onchange: Function,
-        getCustomerName:{
-            type:Function,
-            default:()=>{}
-        },
         value: String,
         disabled: Boolean,
         labelInValue: {
-            default: true,
+            default: false,
             type: Boolean
         },
     },
@@ -57,8 +53,6 @@ export default {
     methods: {
         changeContent: function (customer) {
             this.onchange(customer)
-            // console.log(customer)
-            this.getCustomerName(customer.label)
         },
         remoteCustomer(query) {
             this.loading1 = true;

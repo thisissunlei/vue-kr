@@ -98,7 +98,8 @@ export default {
         }
     },
     mounted() {
-        this.initCheckGroup();
+         GLOBALSIDESWITCH("false");
+        // this.initCheckGroup();
     },
     methods: {
         initCheckGroup() {
@@ -123,8 +124,9 @@ export default {
                         title: '无可用转移款项'
                     });
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName));//可用的转移项
-                let arr2 = _this.defaultList.filter(item => arr.filter(item2 => (item.feeTypeName == item2.feeTypeName)).length == 0);//不可用的转移项
-                _this.dataList = [].concat(arr, arr2);
+                // let arr2 = _this.defaultList.filter(item => arr.filter(item2 => (item.feeTypeName == item2.feeTypeName)).length == 0);//不可用的转移项
+                // _this.dataList = [].concat(arr, arr2);
+                _this.dataList = [].concat(arr);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

@@ -114,6 +114,9 @@ export default {
             },
         }
     },
+    mounted(){
+        GLOBALSIDESWITCH("false");
+    },
     methods: {
         getMaxAmount() {
             let parms = {
@@ -163,6 +166,7 @@ export default {
             }
         },
         handleSubmit(formItem) {
+            // window.close()
             // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
             let parms = {
                 applyMemo: this.formItem.remark,

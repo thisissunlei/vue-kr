@@ -148,6 +148,7 @@ export default {
         }
     },
     mounted() {
+         GLOBALSIDESWITCH("false");
         this.getInfo();
     },
     methods: {
@@ -305,8 +306,8 @@ export default {
                 this.$Notice.info({
                     title: '操作成功'
                 });
-                this.getInfo();
-                this.checkRights();
+                // this.getInfo();
+                // this.checkRights();
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

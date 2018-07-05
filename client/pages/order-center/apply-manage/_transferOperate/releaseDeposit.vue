@@ -20,7 +20,7 @@
                 <!-- <FormItem label="转移款项" style="width:700px" prop="balance">
                     <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
                 </FormItem> -->
-                <FormItem label="释放冻结保证金金额" style="width:700px" prop="balance">
+                <FormItem class='formitem-balance' label="释放冻结保证金金额" style="width:700px " prop="transferAmount">
                     <div class='balance-container'>
                         <Input v-model="formItem.transferAmount" :placeholder="formatBlance(maxAmount)" style="width:252px;" />
                         <Button style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
@@ -35,7 +35,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button :disabled="submitBtnDisable" type="primary" @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -57,13 +57,22 @@ export default {
         selectCustomers,
         BlanceInputEdit,
         BlanceInputGroup
-
     },
 
     data() {
         const validateBlance = (rule, value, callback) => {
-            callback()
-            return;
+            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            if (isNaN(value)) {
+                callback(new Error('转移金额请填写数字'))
+            }
+            if (Number(value) > Number(this.maxAmount)) {
+                callback(new Error('转移金额不得大于可转金额'));
+            }
+            if (value === '') {
+                callback(new Error('请填写转移金额'));
+            } else {
+                callback();
+            }
         };
         const validateCustomer = (rule, value, callback) => {
             if (!value) {
@@ -77,13 +86,15 @@ export default {
         };
 
         return {
+            submitBtnDisable: false,
             maxAmount: 0,
             dataList: [],
             communities: [],
+            targetFeeType: 'FROZEN_DEPOSIT',
             targetFeeTypes: ['冻结服务保证金'],
             formItem: {
                 transferAmount: '',
-                customerID:-1,
+                customerID: -1,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -95,21 +106,21 @@ export default {
                 customerID: [
                     { required: true, validator: validateCustomer, trigger: 'change' }
                 ],
-                balance: [
+                transferAmount: [
                     { required: true, validator: validateBlance, trigger: 'change' }
                 ]
             },
         }
     },
     mounted() {
-        // this.getMoneyTypeList();
+        GLOBALSIDESWITCH("false");
     },
     methods: {
         formatBlance(blance) {
             return '最大' + utils.thousand((blance || 0).toFixed(2)) + '元'
         },
         handleBlanceTransClk() {
-
+            this.formItem.transferAmount = this.maxAmount
         },
         handleBlanceChange(receiveBlance) {
             console.log(receiveBlance)
@@ -125,12 +136,20 @@ export default {
                 return
             var _this = this
             this.$http.get('get-max-amount', parms).then((r) => {
-                if (r.data.length == 0)
-                    this.$Notice.info({
+
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                if (arr.length == 0) {
+                    _this.maxAmount = 0
+                    _this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
-                _this.dataList = arr;
+                    _this.submitBtnDisable = true;
+                }
+                else {
+                    _this.maxAmount = arr[0].maxAmount
+                    _this.dataList = arr;
+                    _this.submitBtnDisable = false;
+                }
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -151,21 +170,14 @@ export default {
 
         handleSubmit(formItem) {
             let detailList = []
-            let balanceOut = Object.assign({}, this.formItem.balanceOut)
-            for (const key in balanceOut) {
-                if (balanceOut.hasOwnProperty(key)) {
-                    debugger;
-                    if (balanceOut[key].input) {
-                        let obj = {
-                            // communityIdIn: this.formItem.communityIn,
-                            // communityIdOut: this.formItem.communityIn,
-                            transferAmount: balanceOut[key].input,
-                            transferFeeType: balanceOut[key].feeType,
-                        };
-                        detailList.push(obj)
-                    }
-                }
+            let obj = {
+                // communityIdIn: this.formItem.communityIn,
+                // communityIdOut: this.formItem.communityIn,
+                transferAmount: this.formItem.transferAmount,
+                transferFeeType: this.targetFeeType
             }
+            detailList.push(obj)
+
             let detailStr = JSON.stringify([].concat(detailList));
             let parms = {
                 applyMemo: this.formItem.remark,
@@ -175,8 +187,9 @@ export default {
                 transferType: 'TRANSFER_LOCK_DEPOSIT',
                 detailStr: detailStr
             }
+            debugger;
             this.$http.post('get-apply-submit', parms).then((response) => {
-                this.submitBtnShow = true;
+                this.submitBtnDisable = true;
                 this.$Notice.info({
                     title: '操作成功'
                 });
@@ -204,11 +217,17 @@ export default {
             display: inline-block;
             padding-right: 10px;
             vertical-align: top;
-            .balance-container {
+            .formitem-balance{
+                .ivu-form-item-error-tip{
+                    top:200%
+                }
+                 .balance-container {
                 position: relative;
                 top: 36px;
                 left: -134px;
             }
+            }
+           
         }
         .required-label {
             font-size: 14px;

@@ -22,8 +22,9 @@
 
         <Modal title="删除申请" v-model="deleteModal" ok-text='删除' @on-ok="handeDeleteApply" class="vertical-center-modal">
             <div class='modal-container'>
-                <p class='modal-desc'>删除原因</p>
-                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写删除原因"></Input>
+                <!-- <p class='modal-desc'>是否删除次申请？</p> -->
+                <p class='modal-desc' style='font-size: 20px'>是否删除此申请？</p>
+                <!-- <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写删除原因"></Input> -->
             </div>
 
         </Modal>
@@ -245,6 +246,8 @@ export default {
         //搜索
         handleSearch(formItem) {
             this.searchFormItem = Object.assign(formItem)
+            this.searchFormItem.uEndTime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uEndTime))
+            this.searchFormItem.uStartTime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uStartTime))
             this.spinShow = true;
             //过滤掉全部
             for (const key in formItem) {
@@ -337,7 +340,6 @@ export default {
 
         //退回申请
         handleShowRejectApply(params) {
-            debugger;
             this.currentApplyId = params.row.id
             this.rejectModal = true;
         },
@@ -367,7 +369,7 @@ export default {
         handeDeleteApply() {
             let params = {
                 id: this.currentApplyId,
-                refundMemo: this.modalText
+                // refundMemo: this.modalText
             }
             this.$http.delete('get-apply-delete', params).then((response) => {
                 this.$Notice.info({

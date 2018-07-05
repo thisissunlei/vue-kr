@@ -31,8 +31,11 @@
             </Row>
             <div style="margin-bottom:30px">
                 <Col class="col amount">
-                <FormItem label="转移款项" style="width:700px" prop="balance">
-                    <BlanceInputGroup :dataList='feeTypeArray' :readOnly='UIDisable.balance' @onChange="handleBlanceChange"></BlanceInputGroup>
+                <FormItem class='formitem-balance' label="释放冻结保证金金额" style="width:700px " prop="transferAmount">
+                    <div class='balance-container'>
+                        <Input :disabled='UIDisable.balance' v-model="formItem.transferAmount" :placeholder="formatBlance(maxAmount)" style="width:252px;" />
+                        <Button :disabled='UIDisable.balance' style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
+                    </div>
                 </FormItem>
                 </Col>
             </div>
@@ -85,8 +88,18 @@ export default {
 
     data() {
         const validateBlance = (rule, value, callback) => {
-            callback()
-            return;
+            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            if (isNaN(value)) {
+                callback(new Error('转移金额请填写数字'))
+            }
+            if (Number(value) > Number(this.maxAmount)) {
+                callback(new Error('转移金额不得大于可转金额'));
+            }
+            if (value === '') {
+                callback(new Error('请填写转移金额'));
+            } else {
+                callback();
+            }
         };
         const validateCustomer = (rule, value, callback) => {
             if (!value) {
@@ -115,6 +128,7 @@ export default {
                 approveBtn: true,
                 rejectBtn: true
             },
+            maxAmount: 0,
             UIDisableBak: {},
             rejectModal: false,
             modalText: '',//退回备注
@@ -128,6 +142,7 @@ export default {
             logList: [],
             balanceOut: {},
             formItem: {
+                transferAmount: '',
                 customerId: 0,
                 communityIn: 0,
                 communityId: '',
@@ -141,16 +156,23 @@ export default {
                 customerID: [
                     { required: true, message: '请选择客户', trigger: 'change' }
                 ],
-                balance: [
+                transferAmount: [
                     { required: true, trigger: 'change', validator: validateBlance }
                 ]
             },
         }
     },
     mounted() {
+        GLOBALSIDESWITCH("false");
         this.getInfo();
     },
     methods: {
+        handleBlanceTransClk() {
+            this.formItem.transferAmount = this.maxAmount
+        },
+        formatBlance(blance) {
+            return '最大' + utils.thousand((blance || 0).toFixed(2)) + '元'
+        },
         //获取申请单详细信息
         getInfo() {
             let { params } = this.$route;
@@ -163,7 +185,7 @@ export default {
                 this.logList = this.receivedApplyInfo.logList;
                 this.isFinancialSide = this.receivedApplyInfo.financialSide;
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
-                this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
+                this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo })
                 this.getFeeAmount();
                 this.UIDisableBak = Object.assign({}, this.UIDisable);
             }
@@ -199,6 +221,7 @@ export default {
         },
         //获取转移款项
         getFeeAmount() {
+
             let parms = {
                 communityId: this.formItem.communityId,
                 customerId: this.formItem.customerId,
@@ -211,17 +234,9 @@ export default {
                         title: '无可用转移款项'
                     });
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                _this.maxAmount = arr[0].maxAmount
                 _this.feeTypeArray = arr;
-                var list = [];
-                _this.receivedApplyInfo.detailList.map(item => {
-                    list.push({
-                        feeType: item.transferFeeType,
-                        feeTypeName: item.transferFeeTypeName,
-                        amount: item.transferAmount,
-                        maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
-                    })
-                })
-                _this.feeTypeArray = [].concat(list);
+                _this.formItem = Object.assign({}, _this.formItem, { transferAmount: this.receivedApplyInfo.detailList[0].transferAmount })
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -305,8 +320,8 @@ export default {
                 this.$Notice.info({
                     title: '操作成功'
                 });
-                this.getInfo();
-                this.checkRights();
+                // this.getInfo();
+                // this.checkRights();
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -401,6 +416,16 @@ export default {
                 position: relative;
                 top: 30px;
                 left: -62px;
+            }
+            .formitem-balance {
+                .ivu-form-item-error-tip {
+                    top: 200%;
+                }
+                .balance-container {
+                    position: relative;
+                    top: 36px;
+                    left: -134px;
+                }
             }
         }
         .btnContainer {

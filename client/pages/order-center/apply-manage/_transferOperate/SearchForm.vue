@@ -11,7 +11,7 @@
                     </Form-item>
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
-                        <SelectCustomers name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px"></SelectCustomers>
+                        <SelectCustomers name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomers>
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
@@ -82,6 +82,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import SelectCustomers from '~/components/SelectCustomers.vue'
+
 export default {
     name: 'searchform',
     components: {
@@ -309,7 +310,9 @@ export default {
         },
         //清除
         clearClick() {
+            
             this.formItem = Object.assign({}, this.formItemOld);
+            this.kk='  '
             this.$emit('clearClick', this.formItem);
         },
         //回车

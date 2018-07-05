@@ -83,7 +83,7 @@ export default {
             targetFeeTypes: ['冻结服务保证金'],
             formItem: {
                 transferAmount: '',
-                customerID:12,
+                customerID:-1,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''

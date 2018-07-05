@@ -286,7 +286,7 @@ export default {
         },
         //清除
         handleClear() {
-            this.this.searchFormItem = null;
+            this.searchFormItem = null;
         },
         //转社区
         handle2SQ() {

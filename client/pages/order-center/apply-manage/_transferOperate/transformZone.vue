@@ -163,6 +163,7 @@ export default {
             }
         },
         handleSubmit(formItem) {
+            // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
             let parms = {
                 applyMemo: this.formItem.remark,
                 communityId: this.formItem.communityIn,
@@ -178,12 +179,12 @@ export default {
                     }
                 ])
             }
-            debugger;
             this.$http.post('get-apply-submit', parms).then((response) => {
                 this.submitBtnShow=true;
                 this.$Notice.info({
                     title: '操作成功'
                 });
+                
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

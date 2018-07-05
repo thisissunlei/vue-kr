@@ -82,7 +82,7 @@ export default {
             communities: [],
             targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
             formItem: {
-                customerID:1,
+                customerID:-1,
                 communityIn: '',
                 balanceOut: {},
                 remark: ''

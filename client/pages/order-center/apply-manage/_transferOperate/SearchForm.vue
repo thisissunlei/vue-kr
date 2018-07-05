@@ -301,7 +301,6 @@ export default {
         },
         //搜索
         searchClick() {
-            debugger;
             this.$refs['formItemOperation'].validate((valid) => {
                 if (valid) {
                     this.$emit('searchClick', this.formItem);

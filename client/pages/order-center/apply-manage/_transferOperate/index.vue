@@ -15,6 +15,9 @@
         <div class="apply-list-table">
             <Spin size="large" fix v-if="spinShow"></Spin>
             <Table :columns="columns" :data="applyDatas" border class='list-table' />
+            <div style="float: right;margin-right: 20px;margin-top:20px">
+                <Page :current="page" :total="totalCount" :page-size="pageSize" @on-change="onPageChange" show-total show-elevator></Page>
+            </div>
         </div>
 
         <Modal title="删除申请" v-model="deleteModal" ok-text='删除' @on-ok="handeDeleteApply" class="vertical-center-modal">
@@ -49,7 +52,11 @@ export default {
     },
     data() {
         return {
-            spinShow:false,
+            searchFormItem: null,
+            page: 1,
+            totalCount: 0,
+            pageSize: 15,
+            spinShow: false,
             modalText: '',
             rejectModal: false,
             deleteModal: false,
@@ -207,10 +214,6 @@ export default {
                 }
             ],
             formItem: {},
-            params: {
-                page: 1,
-                pageSize: 15,
-            },
             transformType2UIDic: {
                 TRANSFER_COMMUNITY: 'transformZoneInfo',
                 TRANSFER_BALANCE: 'balanceInfo',
@@ -231,8 +234,8 @@ export default {
             obj.cityId = formItem.cityId
             obj.communityId = formItem.communityId
             obj.customerId = formItem.customerID
-            obj.page = this.params.page
-            obj.pageSize = this.params.pageSize
+            obj.page = this.page
+            obj.pageSize = this.pageSize
             obj.transferStatus = formItem.applyState
             obj.transferType = formItem.operateType
             obj.uEndTime = formItem.operateEndDate
@@ -241,7 +244,8 @@ export default {
         },
         //搜索
         handleSearch(formItem) {
-            this.spinShow=true;
+            this.searchFormItem = Object.assign(formItem)
+            this.spinShow = true;
             //过滤掉全部
             for (const key in formItem) {
                 if (formItem.hasOwnProperty(key)) {
@@ -250,12 +254,15 @@ export default {
                     };
                 }
             }
-            this.$http.get('get-apply-list', formItem, r => {
-                this.spinShow=false;
+            let params = Object.assign({}, formItem, { page: this.page, pageSize: this.pageSize })
+            this.$http.get('get-apply-list', params, r => {
+                this.page = r.data.page;
+                this.totalCount = r.data.totalCount
+                this.spinShow = false;
                 this.applyDatas = [].concat(r.data.items);
                 console.log(this.applyDatas)
             }, e => {
-                this.spinShow=false;
+                this.spinShow = false;
                 this.$Notice.error({
                     title: e.message
                 });
@@ -263,13 +270,15 @@ export default {
 
         },
         getAllApply() {
-            this.spinShow=true;
-            this.$http.get('get-apply-list', {}, r => {
-                this.spinShow=false;
+            this.spinShow = true;
+            this.$http.get('get-apply-list', { page: this.page, pageSize: this.pageSize }, r => {
+                this.page = r.data.page;
+                this.totalCount = r.data.totalCount
+                this.spinShow = false;
                 this.isFinancialSide = r.data.financialSide;
                 this.applyDatas = [].concat(r.data.items);
             }, e => {
-                this.spinShow=false;
+                this.spinShow = false;
                 this.$Notice.error({
                     title: e.message
                 });
@@ -277,7 +286,7 @@ export default {
         },
         //清除
         handleClear() {
-
+            this.this.searchFormItem = null;
         },
         //转社区
         handle2SQ() {
@@ -372,7 +381,16 @@ export default {
                     title: error.message
                 });
             })
-        }
+        },
+        onPageChange(index) {
+            this.page = index;
+            if (this.searchFormItem) {
+                this.handleSearch(this.searchFormItem)
+            } else {
+                this.getAllApply();
+            }
+        },
+
     }
     ,
 }
@@ -387,7 +405,7 @@ export default {
             margin-right: 10px;
         }
     }
-    .apply-list-table{
+    .apply-list-table {
         position: relative;
     }
 }

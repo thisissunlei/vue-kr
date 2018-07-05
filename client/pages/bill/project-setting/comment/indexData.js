@@ -1,5 +1,6 @@
 export default function(){
         return {
+                resdata:{},
                 heightDiv:300,
                 isClick:true,
                 propertyData:[],

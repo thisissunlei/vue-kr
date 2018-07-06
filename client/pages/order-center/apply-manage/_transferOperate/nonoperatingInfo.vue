@@ -224,7 +224,6 @@ export default {
                     return;
                 }
                 var list = [];
-
                 if (this.isEdit) {
                     arr.map(item => {
                         let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)

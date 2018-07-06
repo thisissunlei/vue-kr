@@ -163,15 +163,26 @@ export default {
             let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
                 if (balanceOut.hasOwnProperty(key)) {
-                    if (balanceOut[key].input) {
-                        let obj = {
-                            // communityIdIn: this.formItem.communityIn,
-                            // communityIdOut: this.formItem.communityIn,
-                            transferAmount: balanceOut[key].input,
-                            transferFeeType: balanceOut[key].feeType,
-                        };
-                        detailList.push(obj)
+                    if (balanceOut[key].error) {
+                        this.$Notice.error({
+                            title: '输入转移金额有误'
+                        });
+                        return
                     }
+                    if (!balanceOut[key].input) {
+                        this.$Notice.error({
+                            title: '请填写要转移的款项: '+key
+                        });
+                        return;
+                    }
+                    let obj = {
+                        // communityIdIn: this.formItem.communityIn,
+                        // communityIdOut: this.formItem.communityIn,
+                        transferAmount: balanceOut[key].input,
+                        transferFeeType: balanceOut[key].feeType,
+                    };
+                    detailList.push(obj)
+
                 }
             }
             if (detailList.length == 0) {

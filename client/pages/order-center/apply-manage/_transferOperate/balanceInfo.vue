@@ -385,15 +385,21 @@ export default {
                 let detailList = []
                 for (const key in this.balanceOut) {
                     if (this.balanceOut.hasOwnProperty(key) && this.checkBalance.includes(key)) {
+                        if (this.balanceOut[key].error) {
+                            this.$Notice.error({
+                                title: '输入转移金额有误'
+                            });
+                            return
+                        }
                         if (!this.balanceOut[key].input) {
                             this.$Notice.error({
-                                title: '请填写要转移的款项'
+                                title: '请填写要转移的款项: '+key
                             });
                             return;
                         }
                         let obj = {
-                            communityIdIn: this.formItem.communityIn,
-                            communityIdOut: this.formItem.communityIn,
+                            // communityIdIn: this.formItem.communityIn,
+                            // communityIdOut: this.formItem.communityIn,
                             transferAmount: this.balanceOut[key].input,
                             transferFeeType: this.balanceOut[key].feeType,
                         };

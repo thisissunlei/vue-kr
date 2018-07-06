@@ -390,10 +390,17 @@ export default {
                         }
                     }
                 }
-                // 可能没有经过编辑 直接提交
                 if (detailList.length == 0) {
-                    detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
-                } else {
+                    this.$Notice.error({
+                        title: '请选择要转移的款项'
+                    });
+                    return;
+                }
+                // // 可能没有经过编辑 直接提交
+                // if (detailList.length == 0) {
+                //     detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
+                // } 
+                else {
                     detailStr = JSON.stringify([].concat(detailList));
                 }
 

@@ -364,7 +364,7 @@ export default {
                 this.$Notice.error({ title: '请编辑后再提交' });
                 return
             }
-
+            debugger;
             if (this.approveBtnText === '提交') {
                 let detailStr = '';
                 let detailList = []
@@ -379,10 +379,17 @@ export default {
                         detailList.push(obj)
                     }
                 }
-                // 可能没有经过编辑 直接提交
-                if (detailList.length == 0) {
-                    detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
-                } else {
+                if (detailList.length==0) {
+                    this.$Notice.error({
+                        title: '请选择要转移的款项'
+                    });
+                    return;
+                }
+                // // 可能没有经过编辑 直接提交
+                // if (detailList.length == 0) {
+                //     detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
+                // } 
+                else {
                     detailStr = JSON.stringify([].concat(detailList));
                 }
 

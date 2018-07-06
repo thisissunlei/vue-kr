@@ -358,7 +358,7 @@ queryInfoProductMethod() {
               this.$http.delete('actions-delete', {
                   id: param
               }).then((res) => {
-            this.comments.splice(0, this.comments.length);
+            // this.comments.splice(0, this.comments.length);
             this.getcomments("update")
             this.getUpUrl()
 
@@ -376,6 +376,9 @@ queryInfoProductMethod() {
       });
   },
   getcomments(val) {
+    if('update'===val){
+      this.page =0
+    }
       let param = {
           page: this.page,
           pageSize: this.pageSize,
@@ -390,6 +393,8 @@ queryInfoProductMethod() {
                   this.comments.push(res.data.items[i])
               }
               this.page += 1
+          }else{
+
           }
           this.totalCount = res.data.totalCount
           console.log(res)

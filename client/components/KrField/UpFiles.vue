@@ -120,7 +120,7 @@ export default{
 			type:[String,Number]
 		},
 		right:{
-            default:'READWRITE',
+           
             type:String
         }
 

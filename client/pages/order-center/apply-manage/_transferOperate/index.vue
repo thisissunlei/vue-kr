@@ -114,11 +114,10 @@ export default {
                     key: 'detailList',
                     width: 180,
                     align: 'center',
-                    className: 'table-column-special',
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
-                            lines.push(tag('p', item.transferFeeTypeName))
+                            lines.push(tag('div', item.transferFeeTypeName))
                         })
                         return tag('div', lines)
                     }
@@ -128,12 +127,11 @@ export default {
                     key: 'detailList',
                     align: 'center',
                     width: 100,
-                    className: 'table-column-special',
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
                             let amount = utils.thousand((item.transferAmount).toFixed(2))
-                            lines.push(tag('p', '￥' + amount))
+                            lines.push(tag('div', '￥' + amount))
                         })
                         return tag('div', lines)
                     }
@@ -273,7 +271,17 @@ export default {
                 this.page = r.data.page;
                 this.totalCount = r.data.totalCount
                 this.spinShow = false;
-                this.applyDatas = [].concat(r.data.items);
+                let applyDatas = [].concat(r.data.items);
+                debugger;
+                applyDatas.map(item => {
+                    if (item.detailList.length > 1) {
+                        debugger;
+                        item.cellClassName = {
+                            detailList: 'table-column-special',
+                        }
+                    }
+                })
+                this.applyDatas = applyDatas;
             }, e => {
                 this.spinShow = false;
                 this.$Notice.error({
@@ -289,7 +297,18 @@ export default {
                 this.totalCount = r.data.totalCount
                 this.spinShow = false;
                 this.isFinancialSide = r.data.financialSide;
-                this.applyDatas = [].concat(r.data.items);
+                let applyDatas = [].concat(r.data.items);
+
+                debugger;
+                applyDatas.map(item => {
+                    if (item.detailList.length > 1) {
+                        debugger;
+                        item.cellClassName = {
+                            detailList: 'table-column-special',
+                        }
+                    }
+                })
+                this.applyDatas = applyDatas;
             }, e => {
                 this.spinShow = false;
                 this.$Notice.error({
@@ -424,9 +443,11 @@ export default {
             padding-right: 0;
             div {
                 height: 100%;
-                p {
+                display:flex;
+                flex-direction:column;
+                div{
+                    flex:1;
                     display: inline-block;
-                    height: 50%;
                     width: 100%;
                     border-bottom: 1px solid rgb(215, 215, 215);
                 }

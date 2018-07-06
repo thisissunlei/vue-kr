@@ -123,7 +123,7 @@ export default {
             UIShowAbleBak: {},
             rejectModal: false,
             modalText: '',//退回备注
-            targetFeeTypes: ['余额', '门禁卡押金', '其他保证金'],
+            targetFeeTypes: ['余额', '门禁卡押金', '推柜门钥匙押金', '场地租赁押金', '注册地址押金'],
             receivedApplyInfo: {},
             feeTypeArray: [],
             communities: [],
@@ -220,15 +220,28 @@ export default {
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
                 _this.feeTypeArray = arr;
                 var list = [];
-                _this.receivedApplyInfo.detailList.map(item => {
-                    list.push({
-                        feeType: item.transferFeeType,
-                        feeTypeName: item.transferFeeTypeName,
-                        amount: item.transferAmount,
-                        maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
-                    })
+
+                arr.map(item=>{
+                    let res=_this.receivedApplyInfo.detailList.filter(l=>l.transferFeeType==item.feeType)
+                    if (res.length==0) {
+                        item.amount=''
+                    }
+                    else{
+                        item.amount=res[0].transferAmount
+                    }
+                    
                 })
-                _this.feeTypeArray = [].concat(list);
+                _this.feeTypeArray = [].concat(arr);
+                
+                // _this.receivedApplyInfo.detailList.map(item => {
+                //     list.push({
+                //         feeType: item.transferFeeType,
+                //         feeTypeName: item.transferFeeTypeName,
+                //         amount: item.transferAmount,
+                //         maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                //     })
+                // })
+                // _this.feeTypeArray = [].concat(list);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -253,7 +266,7 @@ export default {
         },
         //更改社区后重新获取转移款项
         changeCommunity(commIn) {
-            this.$set(this.formItem, 'communityIn', commIn)
+            this.$set(this.formItem, 'communityId', commIn)
             this.getFeeAmount();
         },
         onGetCusomerList(list) {
@@ -294,7 +307,7 @@ export default {
                 approveBtn: false,
                 rejectBtn: false
             };
-            this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            this.UIDisable = Object.assign({},this.UIDisable, obj)
         },
         handleShowReject() {
             this.$set(this.UIShowAble, 'rejectModal', true)

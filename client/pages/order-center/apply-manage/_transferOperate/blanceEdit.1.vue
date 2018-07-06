@@ -53,11 +53,13 @@ export default {
     watch: {
         dataList() {
             console.log("watch_datalist")
+            console.log(this.dataList)
             this.initStates()
         },
         readOnly() {
             console.log('watch_readOnly', this.readOnly)
-            
+            console.log(this.dataList)
+            this.initStates();
         },
         disables(){
             console.log(this.disables)

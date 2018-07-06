@@ -61,7 +61,7 @@ export default {
             console.log(this.dataList)
             this.initStates();
         },
-        disables(){
+        disables() {
             console.log(this.disables)
         }
     },
@@ -73,14 +73,19 @@ export default {
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount }, { feeType: item.feeType });
                     this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: true })
-                    this.errorTexts[item.feeTypeName] = ''
+                    this.errorTexts[item.feeTypeName] = '';
+                    //转移金额可能大于最大金额
+                    if (item.maxAmount < item.amount) {
+                        this.errorTexts[item.feeTypeName] = '转移金额不得大于可转金额';
+                        this.vifs[item.feeTypeName] = Object.assign({}, { error: true }, { btn: true })
+                    }
                 })
             }
             else {//可编辑模式
                 this.dataList.map(item => {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount }, { feeType: item.feeType });
-                    if (item.maxAmount=='') {
+                    if (item.maxAmount == '') {
                         this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
                     } else {
                         this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
@@ -88,9 +93,14 @@ export default {
                     // this.disables[item.feeTypeName] = Object.assign({}, { chk: false }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                     this.errorTexts[item.feeTypeName] = ''
+                    //转移金额可能大于最大金额
+                    if (item.maxAmount < item.amount) {
+                        this.errorTexts[item.feeTypeName] = '转移金额不得大于可转金额';
+                        this.vifs[item.feeTypeName] = Object.assign({}, { error: true }, { btn: true })
+                    }
                 })
             }
-           this.checkGroupModel=[];
+            this.checkGroupModel = [];
         },
         gotRefTag(type) {
             return '' + type;
@@ -105,13 +115,13 @@ export default {
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: true }, { btn: true })
                 }
                 else {
-                    this.disables[item.feeTypeName] = Object.assign(this.disables[item.feeTypeName], { input: true },{ input: true }, { btn: true })
+                    this.disables[item.feeTypeName] = Object.assign(this.disables[item.feeTypeName], { input: true }, { input: true }, { btn: true })
                     this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                 }
             })
             this.$forceUpdate();
             this.$emit("onChange", this.models)
-            this.$emit('onCheckGroupChange',this.checkGroupModel)
+            this.$emit('onCheckGroupChange', this.checkGroupModel)
         },
         handleBlanceTransClk(e) {
             let label = e.target.name || e.target.parentNode.name

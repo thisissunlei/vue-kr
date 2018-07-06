@@ -119,6 +119,7 @@ export default {
                 approveBtn: true,
                 rejectBtn: true
             },
+            isEdit: false,
             UIDisableBak: {},
             UIShowAbleBak: {},
             rejectModal: false,
@@ -214,35 +215,37 @@ export default {
             }
             var _this = this
             this.$http.get('get-max-amount', parms).then((r) => {
-                if (r.data.length == 0)
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                _this.feeTypeArray = arr;
+                if (arr.length == 0) {
                     this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
-                _this.feeTypeArray = arr;
+                    return;
+                }
                 var list = [];
-
-                // arr.map(item => {
-                //     let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
-                //     if (res.length == 0) {
-                //         item.amount = ''
-                //     }
-                //     else {
-                //         item.amount = res[0].transferAmount
-                //     }
-
-                // })
-                // _this.feeTypeArray = [].concat(arr);
-
-                _this.receivedApplyInfo.detailList.map(item => {
-                    list.push({
-                        feeType: item.transferFeeType,
-                        feeTypeName: item.transferFeeTypeName,
-                        amount: item.transferAmount,
-                        maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                if (this.isEdit) {
+                    arr.map(item => {
+                        let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
+                        if (res.length == 0) {
+                            item.amount = ''
+                        }
+                        else {
+                            item.amount = res[0].transferAmount
+                        }
                     })
-                })
-                _this.feeTypeArray = [].concat(list);
+                    _this.feeTypeArray = [].concat(arr);
+                } else {
+                    _this.receivedApplyInfo.detailList.map(item => {
+                        list.push({
+                            feeType: item.transferFeeType,
+                            feeTypeName: item.transferFeeTypeName,
+                            amount: item.transferAmount,
+                            maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                        })
+                    })
+                    _this.feeTypeArray = [].concat(list);
+                }
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -303,6 +306,7 @@ export default {
         },
         //开启编辑
         handleEdit() {
+            this.isEdit = true;
             let parms = {
                 communityId: this.formItem.communityId,
                 customerId: this.formItem.customerId,
@@ -379,6 +383,12 @@ export default {
                 let detailList = []
                 for (const key in this.balanceOut) {
                     if (this.balanceOut.hasOwnProperty(key) && this.checkBalance.includes(key)) {
+                        if (!this.balanceOut[key].input) {
+                            this.$Notice.error({
+                                title: '请填写要转移的款项'
+                            });
+                            return;
+                        }
                         let obj = {
                             communityIdIn: this.formItem.communityIn,
                             communityIdOut: this.formItem.communityIn,
@@ -398,7 +408,7 @@ export default {
                 // if (detailList.length == 0) {
                 //     detailStr = JSON.stringify(this.receivedApplyInfo.detailList)
                 // }
-                 else {
+                else {
                     detailStr = JSON.stringify([].concat(detailList));
                 }
 

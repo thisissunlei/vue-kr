@@ -18,12 +18,12 @@
                     <Form-item class="daily-form priceForm community-form">
                         <span class="attract-font">社
                             <span style="display:inline-block;width:26px;"></span>区</span>
-                        <Select v-model="formItem.cityId" placeholder="请选择社区" style="width: 90px;margin-right:20px;" @on-change="handleChangeCity">
+                        <Select v-model="formItem.cityId" placeholder="请选择社区" style="width: 108px;margin-right:20px;" @on-change="handleChangeCity">
                             <Option v-for="item in cityList" :value="item.cityId" :key="item.cityId">
                                 {{ item.cityName }}
                             </Option>
                         </Select>
-                        <Select v-model="formItem.communityId" placeholder="请输入社区" style="width: 90px;" @on-change="handleChangeCommunity">
+                        <Select v-model="formItem.communityId" placeholder="请输入社区" style="width: 108px;" @on-change="handleChangeCommunity">
                             <Option v-for="item in communityList" :value="item.id" :key="item.id">
                                 {{ item.name }}
                             </Option>
@@ -33,7 +33,7 @@
 
                 <!-- 第二行-->
                 <div style="white-space: nowrap;">
-                    <div style="width:850px;display:inline-block;">
+                    <div style="width:880px;display:inline-block;">
                         <Form-item label="操作类型" class='daily-form'>
                             <Select v-model="formItem.transferType" placeholder="请输入操作类型" style="width: 200px" clearable>
                                 <Option v-for="item in operateTypes" :value="item.value" :key="item.value">{{ item.desc }}</Option>
@@ -47,11 +47,11 @@
                         </Form-item>
                         <div style="display:inline-block">
                             <Form-item label="操作日期" class='priceForm' prop="uStartTime">
-                                <DatePicker v-model="formItem.uStartTime" placeholder="开始日期" style="width: 90px" />
+                                <DatePicker v-model="formItem.uStartTime" placeholder="开始日期" style="width:110px" />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
                             <Form-item class='priceForm' prop="uEndTime">
-                                <DatePicker v-model="formItem.uEndTime" placeholder="结束日期" style="width: 90px" />
+                                <DatePicker v-model="formItem.uEndTime" placeholder="结束日期" style="width:110px" />
                             </Form-item>
                         </div>
 
@@ -63,11 +63,11 @@
                 <!-- 第三行-->
 
                 <div style="white-space: nowrap;">
-                    <div style="display:inline-block;width:850px;">
+                    <div style="display:inline-block;width:880px;">
                         <span class="attract-font status">状
                             <span style="display:inline-block;width:22px;"></span>态</span>
                         <Form-item class='daily-form ' prop="transferStatus">
-                            <Select v-model="formItem.transferStatus" placeholder="请选择状态" filterable remote :label-in-value="labelValue" style="width: 200px">
+                            <Select v-model="formItem.transferStatus" placeholder="请选择状态" filterable clearable remote :label-in-value="labelValue" style="width: 200px">
                                 <Option v-for="option in applyStates" :value="option.value" :key="option.value">{{option.desc}}</Option>
                             </Select>
                         </Form-item>

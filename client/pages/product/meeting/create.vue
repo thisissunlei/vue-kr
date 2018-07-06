@@ -68,6 +68,8 @@
                                             :onRemove="coverImgRemove"
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
+                                            :imgWidth="120"
+                                            :imgHeight="120"
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
                                         </UploadFile>
@@ -85,6 +87,8 @@
                                             :onRemove="detailImgsRemove"
                                             :onExceededSize="imgSize"
                                             :onFormatError="imgSizeFormat"
+                                            :imgWidth="120"
+                                            :imgHeight="120"
                                             
                                         >
                                             <div slot="tip" class="u-unload-tip">图片小于2M，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>

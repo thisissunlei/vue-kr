@@ -990,12 +990,7 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        {
-                            primaryText: '运维工具',
-                            menuCode: 'ops_tool_management',
-                            type: 'vue',
-                            router: 'ops'
-                        },
+                      
                         {
                             primaryText: '项目管理权限',
                             menuCode: 'pm_manage_role',
@@ -1403,7 +1398,13 @@
                             router: 'management-tool/data-monitoring',
                             type: 'vue',
                             menuCode: 'order_validate_list'
-                        }
+                        },
+                        {
+                            primaryText: '运维工具',
+                            menuCode: 'ops_tool_management',
+                            type: 'vue',
+                            router: 'ops'
+                        },
                     ]
                 }
 

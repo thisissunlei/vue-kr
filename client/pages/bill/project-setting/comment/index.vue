@@ -87,6 +87,7 @@
         </div>
         <div class="row-info-middle" style="float:left;width:100%"><span style="color：#aaa;display: inline-block;">以下为完整档案 </span></div>
         <div class="row-info-two">
+          <div class="tab-box"  >
           <Col span="12">
           <div class="info-title" style="color:#4F9EED">
             <div @click="getInfo(1)" :style="isClick?{borderBottom:'2px solid #4F9EED',textAlign:'center', cursor: 'pointer'}:{textAlign:'center'}">物业档案</div>
@@ -97,11 +98,12 @@
             <div @click="getInfo(2)" class="info-title" :style="!isClick?{borderBottom:'2px solid #4F9EED' ,textAlign:'center'}:{textAlign:'center', cursor: 'pointer'}">产品档案</div>
           </div>
           </Col>
-          <div v-if="isClick">
+          </div>
+          <div v-if="isClick" style="    padding-left: 5px;">
           <div v-for=" item in  propertyData" :key="item.id">
             <div style="float:left;width:100%">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{item.label}}</div>
+              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;text-decoration:underline">{{item.label}}</div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -109,7 +111,7 @@
               <Col span="8"> &nbsp;
               </Col>
             </div>
-            <div style="float:left;width:100%">
+            <div style="float:left;width:100%;">
               <template v-for="data in item.data">
 
                                     <div v-if="data.fieldType =='FILE' && data.fieldValue.length>0 ">
@@ -128,9 +130,9 @@
                           </template>
 
                           </div>
-                            <div style="float:left;width:100%">
+                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
                             <template v-for="datas in item.children">
-                              <div style="float:left;width:100%">
+                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
                                 <Col span="8">
                                 <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
 
@@ -163,11 +165,11 @@
                       </div>
                     </div>
 
-                    <div v-else>
+                    <div v-else style="padding-left: 5px;padding-right: 5px;">
                         <div v-for=" item in  productData" :key="item.id">
-            <div style="float:left;width:100%">
+            <div style="float:left;width:100%;">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{item.label}}</div>
+              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;text-decoration:underline">{{item.label}}</div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -175,7 +177,7 @@
               <Col span="8"> &nbsp;
               </Col>
             </div>
-            <div style="float:left;width:100%">
+            <div style="float:left;width:100%;">
               <template v-for="data in item.data">
 
                                     <div v-if="data.fieldType =='FILE' && data.fieldValue.length>0 ">
@@ -194,9 +196,9 @@
                           </template>
 
                           </div>
-                            <div style="float:left;width:100%">
+                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
                             <template v-for="datas in item.children">
-                              <div style="float:left;width:100%">
+                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
                                 <Col span="8">
                                 <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
 
@@ -300,6 +302,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import "./index.less"
   import krCity from './krCity.js';
   import KrInput from './KrInput.vue'
@@ -333,6 +336,17 @@
       }
     },
     mounted() {
+
+
+
+
+
+
+
+
+
+
+
       GLOBALSIDESWITCH("false");
       let winHeight = document.body.clientHeight;
       let top = 185;
@@ -343,7 +357,57 @@
       this.queryInfoMethod()
       this.queryInfoPropertyMethod()
       this.queryInfoProductMethod()
+
+
+         let tab;
+        let i = 1;
       this.$nextTick(() => {
+
+
+      setTimeout(()=>{
+
+
+        (document.getElementsByClassName('div-one')[0]).onscroll= function(){
+
+
+          if(i==1){
+            tab =  document.getElementsByClassName('tab-box')[0].offsetTop;
+            i+=1
+          }
+         let divOne =  document.getElementsByClassName('div-one')[0].scrollTop;
+
+
+        let tabdom =  document.getElementsByClassName('tab-box')[0]
+        let divinfoOne =   document.getElementsByClassName('row-info-one')[0].clientWidth;//row-info-one
+        let divinfoOneheight =    document.getElementsByClassName('div-one')[0].offsetTop;
+
+              console.log(tab,document.getElementsByClassName('div-one')[0].scrollTop)
+              if(tab<document.getElementsByClassName('div-one')[0].scrollTop){
+
+
+
+                      tabdom.style.position='fixed'
+                      tabdom.style.top=divinfoOneheight+'px'
+                      tabdom.style.width=divinfoOne+'px'
+                      tabdom.style.backgroundColor="#fff"
+                      tabdom.style.zIndex=900
+
+
+                    }else{
+
+                      tabdom.style.position=''
+                      tabdom.style.top=divinfoOneheight+'px'
+                      tabdom.style.width=divinfoOne+'px'
+                      tabdom.style.backgroundColor="#fff"
+                      tabdom.style.zIndex=900
+                    }
+                    // console.log(this.tabBox,"-")
+              }
+      })
+
+
+
+
 
         setTimeout(() => {
           let oneDom = document.getElementById("divOneId");

@@ -293,7 +293,6 @@ export default {
             type:Boolean
         },
         right:{
-            default:'READWRITE',
             type:String
         }
     },

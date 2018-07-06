@@ -103,7 +103,7 @@
           <div v-for=" item in  propertyData" :key="item.id">
             <div style="float:left;width:100%">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;text-decoration:underline">{{item.label}}</div>
+              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color:#009DDF;color:#fff;display: inline-block;padding:5px 20px">{{item.label}}</span></div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -124,17 +124,17 @@
 
                                        <Col span="8" :key="data.id">
                                         <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
-                                        <div style="padding-left:5px;font-size:12px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
+                                        <div style="padding-left:5px;font-size:16px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
                                       </Col>
                                     </div>
                           </template>
 
                           </div>
                             <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
-                            <template v-for="datas in item.children">
-                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
+                            <template v-for="(datas,index) in item.children">
+                              <div :style="index==0?{float:'left',width:'100%',marginButtom:'20px',marginTop:'20px'}:{float:'left',width:'100%',marginButtom:'20px',marginTop:'20px',borderTop:'1px solid #eee'}">
                                 <Col span="8">
-                                <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
+                                <div style="padding-left:5px;font-size:16px;padding-bottom:10px;text-decoration:underline">{{datas.label}}</div>
 
                                 </Col>
                                 <Col span="8"> &nbsp;
@@ -155,7 +155,7 @@
 
                                           <Col span="8" :key="data.id">
                                             <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
-                                            <div style="padding-left:5px;font-size:12px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
+                                            <div style="padding-left:5px;font-size:16px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
                                           </Col>
                                         </div>
                                   </template>
@@ -169,7 +169,7 @@
                         <div v-for=" item in  productData" :key="item.id">
             <div style="float:left;width:100%;">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;text-decoration:underline">{{item.label}}</div>
+              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color:#009DDF;color:#fff;display: inline-block;padding:5px 20px">{{item.label}}</span></div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -190,17 +190,17 @@
 
                                        <Col span="8" :key="data.id">
                                         <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
-                                        <div style="padding-left:5px;font-size:12px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
+                                        <div style="padding-left:5px;font-size:16px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
                                       </Col>
                                     </div>
                           </template>
 
                           </div>
                             <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
-                            <template v-for="datas in item.children">
-                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
+                            <template v-for="(datas,index) in item.children">
+                              <div :style="index==0?{float:'left',width:'100%',marginButtom:'20px',marginTop:'20px'}:{float:'left',width:'100%',marginButtom:'20px',marginTop:'20px',borderTop:'1px solid #eee'}">
                                 <Col span="8">
-                                <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
+                                <div style="padding-left:5px;font-size:16px;padding-bottom:10px;text-decoration:underline">{{datas.label}}</div>
 
                                 </Col>
                                 <Col span="8"> &nbsp;
@@ -221,7 +221,7 @@
 
                                           <Col span="8" :key="data.id">
                                             <div style="padding-left:5px;color:#aaa;font-size:12px;margin:5px 0">{{data.displayName||'-'}}</div>
-                                            <div style="padding-left:5px;font-size:12px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
+                                            <div style="padding-left:5px;font-size:16px;;margin:5px 0">{{data.fieldValue && !Array.isArray(data.fieldValue) ?data.fieldValue : "-"}}</div>
                                           </Col>
                                         </div>
                                   </template>

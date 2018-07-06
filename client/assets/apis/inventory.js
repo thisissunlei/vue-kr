@@ -2,7 +2,7 @@
 export default  {
     //每日库存列表+查询
     'getDailyInventory': {
-        url: '/song/api/krspace-op-web/inventory/list',
+        url: '/api/krspace-op-web/inventory/list',
         method: 'get'
     },
     //每日库存列表-社区接口
@@ -37,7 +37,7 @@ export default  {
     },
     //每日库存-时间轴
     'getDailyTimeLine': {
-        url: '/song/api/krspace-finance-web/inventory/list/timeline',
+        url: '/api/krspace-finance-web/inventory/list/timeline',
         method: 'get'
     },
     //可租库存-时间轴
@@ -154,7 +154,7 @@ export default  {
     },
     //新增商品添加设备
     'goods-ceshi': {
-        url: '/song/api/krspace-order-web/goods/test/text',
+        url: '/api/krspace-order-web/goods/test/text',
         method: 'get'
     },
   }

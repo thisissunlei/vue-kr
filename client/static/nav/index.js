@@ -628,16 +628,16 @@
                             menuCode: 'oper_cmt_communityList_base',
                             router: 'product/communityAllocation/communityList'
                         },
-                        {
-                            primaryText: '空间',
-                            menuCode: 'oper_cmt_spaceList_base',
-                            router: 'product/communityAllocation/CommunityMeetingRoom'
-                        },
-                        {
-                            primaryText: '工位',
-                            menuCode: 'oper_cmt_stationList_base',
-                            router: 'product/communityAllocation/communityStation'
-                        },
+                        // {
+                        //     primaryText: '空间',
+                        //     menuCode: 'oper_cmt_spaceList_base',
+                        //     router: 'product/communityAllocation/CommunityMeetingRoom'
+                        // },
+                        // {
+                        //     primaryText: '工位',
+                        //     menuCode: 'oper_cmt_stationList_base',
+                        //     router: 'product/communityAllocation/communityStation'
+                        // },
                         {
                             primaryText: "商品库",
                             router: 'inventory/goods-library',

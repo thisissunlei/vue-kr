@@ -39,7 +39,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import BlanceInputEdit from './blanceEdit.vue'
 import BlanceInputGroup from './blanceEdit.1.vue'
 
@@ -218,6 +218,10 @@ export default {
                 this.$Notice.info({
                     title: '操作成功'
                 });
+                setTimeout(() => {
+                    window.close()
+                    window.opener.location.reload()
+                }, 1000)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

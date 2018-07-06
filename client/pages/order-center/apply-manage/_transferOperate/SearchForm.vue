@@ -82,7 +82,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
-import SelectCustomers from '~/components/SelectCustomers.vue'
+import SelectCustomers from '~/components/SelectCustomersFinancial.vue'
 import SelectCustomersCopy from './SelectCustomers.vue'
 
 export default {

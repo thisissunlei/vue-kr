@@ -78,7 +78,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import OperateLog from './operateLog.vue'
 
 export default {
@@ -138,7 +138,6 @@ export default {
                 rejectBtn: true
             },
             maxAmount: 0,
-            UIDisableBak: {},
             modalText: '',//退回备注
             receivedApplyInfo: {},
             communitiesOut: [],
@@ -149,6 +148,7 @@ export default {
             approveBtnText: '同意',
             logList: [],
             UIDisableBak: {},
+            UIShowAbleBak: {},
             formItem: {
                 applyNo: '',
                 operateType: '',
@@ -180,6 +180,8 @@ export default {
     },
     methods: {
         getInfo() {
+            this.UIShowAbleBak = Object.assign({}, this.UIShowAble)
+            this.UIDisableBak = Object.assign({}, this.UIDisable);
             let { params } = this.$route;
             let from = {
                 id: params.transferOperate
@@ -196,7 +198,8 @@ export default {
                     let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
                     let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
                     this.formItem = Object.assign({}, this.formItem, obj)
-                    this.UIDisableBak = Object.assign({}, this.UIDisable);
+
+
                     this.getCusomerList(obj.customerId).then(
                         () => {
                             this.communitiesOut = [].concat(this.communities)
@@ -354,14 +357,14 @@ export default {
                 refundMemo: this.modalText
             }
             this.$http.post('get-apply-reject', params).then((response) => {
-                this.UIShowAble = Object.assign({}, this.UIShowAble,
-                    { editBtn: false },
-                    { approveBtn: false },
-                    { rejectBtn: false },
-                    { rejectModal: false })
+                this.UIShowAble = Object.assign({}, this.UIShowAbleBak)
                 this.$Notice.info({
                     title: '操作成功'
                 });
+                setTimeout(() => {
+                    window.close()
+                    window.opener.location.reload()
+                }, 1000)
                 // this.getInfo();
                 // this.checkRights();
             }).catch((error) => {
@@ -406,8 +409,12 @@ export default {
                     this.$Notice.info({
                         title: '操作成功'
                     });
-                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
+                    this.UIShowAble = Object.assign({}, this.UIShowAbleBak)
                     this.UIDisable = Object.assign({}, this.UIDisableBak);
+                    setTimeout(() => {
+                        window.close()
+                        window.opener.location.reload()
+                    }, 1000)
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message
@@ -419,8 +426,11 @@ export default {
                     this.$Notice.info({
                         title: '操作成功'
                     });
-                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
-                    this.UIDisable = Object.assign({}, this.UIDisableBak);
+                    this.UIShowAble = Object.assign({}, this.UIShowAbleBak);
+                    setTimeout(() => {
+                        window.close()
+                        window.opener.location.reload()
+                    }, 1000)
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message

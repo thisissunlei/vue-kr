@@ -31,6 +31,7 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
+        onchange: Function,
         value: String,
         disabled: Boolean,
         labelInValue: {
@@ -52,12 +53,11 @@ export default {
     watch: {
         value() {
             this.customer = this.value;
-
         }
     },
     methods: {
         changeContent: function (customer) {
-            this.$emit('onchange',customer)    
+            this.onchange(customer)      
         },
         remoteCustomer(query) {
             this.loading1 = true;

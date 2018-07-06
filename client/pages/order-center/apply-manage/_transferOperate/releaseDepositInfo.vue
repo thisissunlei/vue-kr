@@ -70,7 +70,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import utils from '~/plugins/utils';
 import BlanceInputEdit from './blanceEdit.vue'
 import OperateLog from './operateLog.vue'
@@ -104,14 +104,14 @@ export default {
         const validateCustomer = (rule, value, callback) => {
             if (!value) {
                 callback("请选择客户")
-            }  else {
+            } else {
                 callback()
             }
         };
         const validateCummity = (rule, value, callback) => {
             if (!value) {
                 callback("请选择社区")
-            }  else {
+            } else {
                 callback()
             }
         };
@@ -134,6 +134,7 @@ export default {
             },
             maxAmount: 0,
             UIDisableBak: {},
+            UIShowAbleBak: {},
             rejectModal: false,
             modalText: '',//退回备注
             targetFeeTypes: ['冻结服务保证金'],
@@ -179,6 +180,8 @@ export default {
         },
         //获取申请单详细信息
         getInfo() {
+            this.UIDisableBak = Object.assign({}, this.UIDisable);
+            this.UIShowAbleBak = Object.assign({}, this.UIShowAble);
             let { params } = this.$route;
             let from = {
                 id: params.transferOperate
@@ -191,7 +194,6 @@ export default {
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo })
                 this.getFeeAmount();
-                this.UIDisableBak = Object.assign({}, this.UIDisable);
             }
             ).then(() => {
                 this.checkRights()
@@ -317,13 +319,14 @@ export default {
                 refundMemo: this.modalText
             }
             this.$http.post('get-apply-reject', params).then((response) => {
-                this.UIShowAble = Object.assign({}, this.UIShowAble,
-                    { editBtn: false },
-                    { approveBtn: false },
-                    { rejectBtn: false })
+                this.UIShowAble = Object.assign({}, this.UIShowAbleBak);
                 this.$Notice.info({
                     title: '操作成功'
                 });
+                setTimeout(() => {
+                    window.close()
+                    window.opener.location.reload()
+                }, 1000)
                 // this.getInfo();
                 // this.checkRights();
             }).catch((error) => {
@@ -373,8 +376,12 @@ export default {
                     this.$Notice.info({
                         title: '操作成功'
                     });
-                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
+                    this.UIShowAble = Object.assign({}, this.UIShowAbleBak);
                     this.UIDisable = Object.assign({}, this.UIDisableBak);
+                    setTimeout(() => {
+                        window.close()
+                        window.opener.location.reload()
+                    }, 1000)
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message
@@ -385,8 +392,11 @@ export default {
                     this.$Notice.info({
                         title: '操作成功'
                     });
-                    this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
-                    this.UIDisable = Object.assign({}, this.UIDisableBak);
+                    this.UIShowAble = Object.assign({}, this.UIShowAbleBak);
+                    setTimeout(() => {
+                        window.close()
+                        window.opener.location.reload()
+                    }, 1000)
                 }).catch((error) => {
                     this.$Notice.error({
                         title: error.message

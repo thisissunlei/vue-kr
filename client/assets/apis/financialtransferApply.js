@@ -17,7 +17,6 @@ export default {
         method: "get"
     },
 
-
     //获取申请列表
     "get-apply-list": {
         // url: "/ben/transfer/list?",
@@ -54,7 +53,7 @@ export default {
         url: "/api/krspace-pay/transfer/agree-apply",
         method: "post"
     },
-    //退回申请 
+    //退回申请
     "get-apply-reject": {
         // url: "/ben/transfer/refund-apply",
         url: "/api/krspace-pay/transfer/refund-apply",
@@ -65,5 +64,10 @@ export default {
         // url: "/ben/transfer/delete",
         url: "/api/krspace-pay/transfer/delete",
         method: "delete"
+    },
+    //获取客户
+    "get-customer-financialtransfer": {
+        url: "api/krspace-op-web/customer/v/my-customers?",
+        method: "get"
     }
 };

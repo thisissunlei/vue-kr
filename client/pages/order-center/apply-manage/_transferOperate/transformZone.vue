@@ -11,7 +11,7 @@
                 <Col class="col">
                 <FormItem label="转入社区名称" style="width:252px" prop="communityIn">
                     <!-- <selectCommunities test="formItem" :onchange="changeCommunity" @onGetCmtsList='onGetCmtsList' v-bind:customerId='formItem.customerId'></selectCommunities> -->
-                    <Select v-model="formItem.communityIn" @on-change='changeCommunityIn' style="width:252px">
+                    <Select v-model="formItem.communityIn" @on-change='changeCommunityIn' clearable style="width:252px">
                         <Option v-for="item in communitiesIn" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
@@ -21,7 +21,7 @@
                 <Col class="col">
                 <FormItem label="转出社区名称" style="width:252px" prop="communityOut">
                     <!-- <selectCommunities test="formItem.communityIn" :onchange="changeCommunity"></selectCommunities> -->
-                    <Select v-model="formItem.communityOut" @on-change='changeCommunityOut' style="width:252px">
+                    <Select v-model="formItem.communityOut" @on-change='changeCommunityOut' clearable style="width:252px">
                         <Option v-for="item in communitiesOut" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
@@ -50,7 +50,8 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from '~/components/SelectCustomersFinancial.vue'
+// import selectCustomers from '~/components/SelectCustomers.vue'
 import BlanceInputEdit from './blanceEdit.vue'
 export default {
     components: {
@@ -231,7 +232,10 @@ export default {
                 this.$Notice.info({
                     title: '操作成功'
                 });
-
+                setTimeout(() => {
+                    window.close()
+                    window.opener.location.reload()
+                }, 1000)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

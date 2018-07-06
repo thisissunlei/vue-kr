@@ -72,7 +72,7 @@ export default {
 
         return {
             blanceInputGroupReadOnly: false,
-            submitBtnShow: false,
+            submitBtnShow: true,
             dataList: [],
             defaultList: [
                 { amount: "", maxAmount: "", feeTypeName: "余额", feeType: "BALANCE" },
@@ -165,10 +165,10 @@ export default {
                     this.$Notice.error({
                         title: '无可用转移款项'
                     });
-                    _this.submitBtnDisable = true;
+                    _this.submitBtnShow = true;
                 }
                 else {
-                    _this.submitBtnDisable = false;
+                    _this.submitBtnShow = false;
                 }
             }).catch((error) => {
                 this.$Notice.error({
@@ -230,7 +230,6 @@ export default {
         },
         handleSubmit(formItem) {
             this.$refs[formItem].validate((valid) => {
-                debugger;
                 if (!valid) {
                     this.$Notice.error({
                         title: '请填写完表单'

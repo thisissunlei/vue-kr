@@ -94,7 +94,7 @@ export default {
             }
         };
         return {
-            submitBtnShow: false,
+            submitBtnShow: true,
             maxAmount: 0,
             communitiesIn: [],
             communitiesOut: [],
@@ -143,9 +143,11 @@ export default {
                     _this.$Notice.info({
                         title: '无可用转移金额'
                     });
+                    _this.submitBtnShow = true;
                     _this.formItem.balanceOut = ''
                 }
                 else {
+                    _this.submitBtnShow = false;
                     _this.maxAmount = arr[0].maxAmount
                 }
 
@@ -214,7 +216,7 @@ export default {
             // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
             let parms = {
                 applyMemo: this.formItem.remark,
-                communityId: this.formItem.communityIn,
+                communityId: this.formItem.communityOut,
                 customerId: this.formItem.customerId,
                 id: '',
                 transferType: 'TRANSFER_COMMUNITY',

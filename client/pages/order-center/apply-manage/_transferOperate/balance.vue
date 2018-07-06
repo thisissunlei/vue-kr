@@ -75,7 +75,7 @@ export default {
         };
 
         return {
-            submitBtnShow: false,
+            submitBtnShow: true,
             dataList: [],
             defaultList: [
                 { amount: "", maxAmount: "", feeTypeName: "可用服务保证金", feeType: "DEPOSIT" },
@@ -136,10 +136,10 @@ export default {
                     this.$Notice.error({
                         title: '无可用转移款项'
                     });
-                    _this.submitBtnDisable = true;
-                }
+                    _this.submitBtnShow = true;
+                } 
                 else {
-                    _this.submitBtnDisable = false;
+                    _this.submitBtnShow = false;
                 }
             }).catch((error) => {
                 this.$Notice.error({

@@ -35,7 +35,7 @@
             </FormItem>
 
             <FormItem style="padding-left:270px;margin-top:40px">
-                <Button :disabled="submitBtnDisable" type="primary" @click="handleSubmit('formItem')">提交</Button>
+                <Button :disabled='submitBtnShow' type="primary" @click="handleSubmit('formItem')">提交</Button>
             </FormItem>
         </Form>
 
@@ -97,7 +97,7 @@ export default {
         };
 
         return {
-            submitBtnDisable: false,
+            submitBtnShow: true,
             maxAmount: 0,
             dataList: [],
             communities: [],
@@ -154,12 +154,12 @@ export default {
                     _this.$Notice.info({
                         title: '无可用转移款项'
                     });
-                    _this.submitBtnDisable = true;
+                    _this.submitBtnShow = true;
                 }
                 else {
                     _this.maxAmount = arr[0].maxAmount
                     _this.dataList = arr;
-                    _this.submitBtnDisable = false;
+                    _this.submitBtnShow = false;
                 }
             }).catch((error) => {
                 this.$Notice.error({

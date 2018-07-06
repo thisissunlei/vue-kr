@@ -381,10 +381,10 @@ export default {
                 for (const key in this.balanceOut) {
                     if (this.balanceOut.hasOwnProperty(key)) {
                         let obj = {
-                            communityIdIn: this.formItem.communityIn,
-                            communityIdOut: this.formItem.communityIn,
-                            transferAmount: this.balanceOut[key].input,
-                            transferFeeType: this.balanceOut[key].feeType,
+                            communityIdIn: this.formItem.communityIdIn,
+                            communityIdOut: this.formItem.communityIdOut,
+                            transferAmount: this.formItem.transferAmount,
+                            transferFeeType: 'BALANCE',
                         };
                         detailList.push(obj)
                     }
@@ -398,7 +398,7 @@ export default {
 
                 let parms = {
                     applyMemo: this.formItem.applyMemo.trim(),
-                    communityId: this.receivedApplyInfo.communityId,
+                    communityId: this.formItem.communityIdOut,
                     customerId: this.receivedApplyInfo.customerId,
                     id: this.receivedApplyInfo.id,
                     transferType: 'TRANSFER_COMMUNITY',

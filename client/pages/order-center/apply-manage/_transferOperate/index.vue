@@ -14,7 +14,7 @@
         </div>
         <div class="apply-list-table">
             <Spin size="large" fix v-if="spinShow"></Spin>
-            <Table :columns="columns" :data="applyDatas" border class='list-table' />
+            <Table :row-class-name="rowClassName" :columns="columns" :data="applyDatas" border class='list-table' />
             <div style="float: right;margin-right: 20px;margin-top:20px">
                 <Page :current="page" :total="totalCount" :page-size="pageSize" @on-change="onPageChange" show-total show-elevator></Page>
             </div>
@@ -112,7 +112,9 @@ export default {
                 {
                     title: '操作款项',
                     key: 'detailList',
+                    width: 180,
                     align: 'center',
+                    className: 'table-column-special',
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -125,6 +127,8 @@ export default {
                     title: '转移金额',
                     key: 'detailList',
                     align: 'center',
+                    width: 100,
+                    className: 'table-column-special',
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -144,7 +148,7 @@ export default {
                     key: 'utime',
                     align: 'center',
                     render(tag, params) {
-                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
+                        let time = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(params.row.utime));
                         return tag('div', time)
                     }
                 },
@@ -228,7 +232,14 @@ export default {
         this.getAllApply();
     },
     methods: {
-
+        rowClassName(row, index) {
+            if ((index & 1) === 0) {
+                return 'demo-table-even-row';
+            } else {
+                return 'demo-table-odd-row';
+            }
+            return '';
+        },
         initData(formItem) {
             let obj = {};
             obj.applyNo = formItem.applyNum
@@ -246,8 +257,8 @@ export default {
         //搜索
         handleSearch(formItem) {
             this.searchFormItem = Object.assign(formItem)
-            this.searchFormItem.uEndTime =this.searchFormItem.uEndTime ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uEndTime)):''
-            this.searchFormItem.uStartTime =this.searchFormItem.uStartTime ?  dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uStartTime)):''
+            this.searchFormItem.uEndTime = this.searchFormItem.uEndTime ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uEndTime)) : ''
+            this.searchFormItem.uStartTime = this.searchFormItem.uStartTime ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uStartTime)) : ''
             this.spinShow = true;
             //过滤掉全部
             for (const key in formItem) {
@@ -263,7 +274,6 @@ export default {
                 this.totalCount = r.data.totalCount
                 this.spinShow = false;
                 this.applyDatas = [].concat(r.data.items);
-                console.log(this.applyDatas)
             }, e => {
                 this.spinShow = false;
                 this.$Notice.error({
@@ -401,6 +411,29 @@ export default {
 
 <style lang="less">
 .apply-manage-container {
+    .ivu-table .demo-table-even-row td {
+        background-color: #f0f0f0;
+    }
+    .ivu-table .demo-table-odd-row td {
+        background-color: #ffffff;
+    }
+    .table-column-special {
+        .ivu-table-cell {
+            height: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            div {
+                height: 100%;
+                p {
+                    text-align: center;
+                    display: inline-block;
+                    height: 50%;
+                    width: 100%;
+                    border-bottom: 1px solid rgb(215, 215, 215);
+                }
+            }
+        }
+    }
     .business-operation-btns {
         margin: 0 0 20px 10px;
         .operate-btn {

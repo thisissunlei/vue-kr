@@ -68,17 +68,17 @@
             <Col span="8"> &nbsp;</Col>
           </div>
           <div>
-            <Col span="8" v-for='(item,index) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+            <Col span="8" v-for='(item) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-            <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
             </Col>
-            <Col span="8" v-for='(item,index) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+            <Col span="8" v-for='(item) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-            <OverFlowLabel style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
             </Col>
-            <Col span="8" v-for='(item,index) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
+            <Col span="8" v-for='(item) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#aaa">{{item.displayName}}</div>
-            <div style="font-size:16px;color:#333;maxHeight:50px;overflow:hidden">
+            <div style="font-size:16px;color:#333;height:50px;overflow:hidden">
               <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
             </div>
             </Col>
@@ -130,9 +130,9 @@
                           </template>
 
                           </div>
-                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
+                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
                             <template v-for="datas in item.children">
-                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
+                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
                                 <Col span="8">
                                 <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
 
@@ -196,9 +196,9 @@
                           </template>
 
                           </div>
-                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
+                            <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
                             <template v-for="datas in item.children">
-                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px">
+                              <div style="float:left;width:100%;margin-buttom:20px;margin-top:20px;border-bottom:1px solid #eee">
                                 <Col span="8">
                                 <div style="padding-left:5px;font-size:16px;padding-bottom:10px">{{datas.label}}</div>
 
@@ -381,7 +381,7 @@
         let divinfoOne =   document.getElementsByClassName('row-info-one')[0].clientWidth;//row-info-one
         let divinfoOneheight =    document.getElementsByClassName('div-one')[0].offsetTop;
 
-              console.log(tab,document.getElementsByClassName('div-one')[0].scrollTop)
+              // console.log(tab,document.getElementsByClassName('div-one')[0].scrollTop)
               if(tab<document.getElementsByClassName('div-one')[0].scrollTop){
 
 

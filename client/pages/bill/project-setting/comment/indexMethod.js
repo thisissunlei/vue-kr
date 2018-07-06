@@ -327,7 +327,7 @@ queryInfoProductMethod() {
           })
       })
 
-      const check = this.uploadList.length < 10;
+      const check = this.uploadList.length < 9;
       if (!check) {
           this.$Notice.warning({
               title: '最多只能上传9张图片'
@@ -358,8 +358,8 @@ queryInfoProductMethod() {
               this.$http.delete('actions-delete', {
                   id: param
               }).then((res) => {
-            this.comments.splice(0, this.comments.length);
-            this.getcomments()
+            // this.comments.splice(0, this.comments.length);
+            this.getcomments("update")
             this.getUpUrl()
 
             this.queryInfoMethod()
@@ -376,6 +376,9 @@ queryInfoProductMethod() {
       });
   },
   getcomments(val) {
+    if('update'===val){
+      this.page =0
+    }
       let param = {
           page: this.page,
           pageSize: this.pageSize,
@@ -390,6 +393,8 @@ queryInfoProductMethod() {
                   this.comments.push(res.data.items[i])
               }
               this.page += 1
+          }else{
+
           }
           this.totalCount = res.data.totalCount
           console.log(res)

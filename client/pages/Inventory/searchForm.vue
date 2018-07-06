@@ -37,7 +37,7 @@
                     <Form-item label="商品名称" class='daily-form' prop="name">
                         <i-input 
                             v-model="formItem.name" 
-                            placeholder="请输入商品名称"
+                            placeholder="房间号/工位编号"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
@@ -125,10 +125,10 @@
 
                     <Form-item label="商品类型" class='daily-form'> 
                         <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
+                            v-model="formItem.goodsTypeList"
+                            placeholder="全部"
                             style="width: 200px"
-                            clearable
+                            multiple
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
@@ -286,6 +286,7 @@ export default {
                     floor:' ',
                     stationsMax:'',
                     stationsMin:'',
+                    goodsTypeList: [],
                     goodsType:' ',
                     priceType:'UNIT_PRICE',
                     priceMin:'',
@@ -301,7 +302,6 @@ export default {
                 cityList:[],
                 floorList:[],
                 productList:[
-                    {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
@@ -425,6 +425,11 @@ export default {
                     this.formItem.status.map((item,index)=>{
                             str=str?str+','+item:item;
                     })
+                    let typeStr = '';
+                    this.formItem.goodsTypeList.map((item, index) => {
+                      typeStr = typeStr? `${typeStr},${item}` : `${item}`
+                    });
+                    this.formItem.goodsType = typeStr;
                     this.formItem.statusName=str;
                     if(!this.formItem.startDate&&!this.formItem.endDate){
                         this.$Notice.error({
@@ -440,6 +445,7 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.formItem.status=[];
+            this.formItem.goodsTypeList = [];
             this.$emit('clearClick',this.formItem);
         },
         //回车

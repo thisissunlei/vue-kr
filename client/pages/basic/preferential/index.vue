@@ -156,6 +156,17 @@ export default {
                         title: '创建人',
                         key: 'username',
                         align:'center',
+                    },
+                     {
+                        title: '状态',
+                        key: 'validEnd',
+                        align:'center',
+                         render: (h, params) => {
+                            let today = new Date().getTime();
+                            let result;
+                            result = today > (params && params.row.validEnd) ?'失效':'有效'; 
+                            return h('span',{},result)
+                        }
                     }
                     // {
                     //     title: '操作',

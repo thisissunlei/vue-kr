@@ -137,7 +137,7 @@ export default {
                         title: '无可用转移款项'
                     });
                     _this.submitBtnShow = true;
-                } 
+                }
                 else {
                     _this.submitBtnShow = false;
                 }
@@ -173,6 +173,12 @@ export default {
                         detailList.push(obj)
                     }
                 }
+            }
+            if (detailList.length == 0) {
+                this.$Notice.error({
+                    title: '请填写转移款项'
+                });
+                return
             }
             let detailStr = JSON.stringify([].concat(detailList));
             let parms = {

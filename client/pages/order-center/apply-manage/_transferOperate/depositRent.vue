@@ -173,6 +173,12 @@ export default {
                     }
                 }
             }
+            if (detailList.length == 0) {
+                this.$Notice.error({
+                    title: '请填写转移款项'
+                });
+                return
+            }
             let detailStr = JSON.stringify([].concat(detailList));
             let parms = {
                 applyMemo: this.formItem.remark,

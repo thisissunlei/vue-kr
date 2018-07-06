@@ -132,7 +132,7 @@ export default {
             approveBtnText: '同意',
             logList: [],
             balanceOut: {},
-                        checkBalance: [],
+            checkBalance: [],
             formItem: {
                 customerId: 12,
                 communityIn: 0,
@@ -222,27 +222,27 @@ export default {
                 _this.feeTypeArray = arr;
                 var list = [];
 
-                arr.map(item=>{
-                    let res=_this.receivedApplyInfo.detailList.filter(l=>l.transferFeeType==item.feeType)
-                    if (res.length==0) {
-                        item.amount=''
-                    }
-                    else{
-                        item.amount=res[0].transferAmount
-                    }
-                    
-                })
-                _this.feeTypeArray = [].concat(arr);
-                
-                // _this.receivedApplyInfo.detailList.map(item => {
-                //     list.push({
-                //         feeType: item.transferFeeType,
-                //         feeTypeName: item.transferFeeTypeName,
-                //         amount: item.transferAmount,
-                //         maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
-                //     })
+                // arr.map(item => {
+                //     let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
+                //     if (res.length == 0) {
+                //         item.amount = ''
+                //     }
+                //     else {
+                //         item.amount = res[0].transferAmount
+                //     }
+
                 // })
-                // _this.feeTypeArray = [].concat(list);
+                // _this.feeTypeArray = [].concat(arr);
+
+                _this.receivedApplyInfo.detailList.map(item => {
+                    list.push({
+                        feeType: item.transferFeeType,
+                        feeTypeName: item.transferFeeTypeName,
+                        amount: item.transferAmount,
+                        maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                    })
+                })
+                _this.feeTypeArray = [].concat(list);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -264,13 +264,13 @@ export default {
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerId: item }, { communityId: -1 });
             this.getFeeAmount();
-                        this.checkBalance = []
+            this.checkBalance = []
         },
         //更改社区后重新获取转移款项
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityId', commIn)
             this.getFeeAmount();
-                        this.checkBalance = []
+            this.checkBalance = []
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
@@ -279,7 +279,7 @@ export default {
         handleBlanceChange(receiveBlance) {
             this.balanceOut = Object.assign({}, receiveBlance)
         },
-                handleCheckGroupChange(checkItems) {
+        handleCheckGroupChange(checkItems) {
             this.checkBalance = [].concat(checkItems)
         },
         //校验必填项
@@ -303,17 +303,44 @@ export default {
         },
         //开启编辑
         handleEdit() {
-            let obj = {
-                customer: false,
-                cummunityIn: false,
-                cummunityOut: false,
-                balance: false,
-                remark: false,
-                editBtn: false,
-                approveBtn: false,
-                rejectBtn: false
-            };
-            this.UIDisable = Object.assign({},this.UIDisable, obj)
+            let parms = {
+                communityId: this.formItem.communityId,
+                customerId: this.formItem.customerId,
+                id: this.receivedApplyInfo.id
+            }
+            var _this = this
+            this.$http.get('get-max-amount', parms).then((r) => {
+                if (r.data.length == 0)
+                    this.$Notice.info({
+                        title: '无可用转移款项'
+                    });
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                _this.feeTypeArray = arr;
+                var list = [];
+
+                arr.map(item => {
+                    let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
+                    if (res.length == 0) {
+                        item.amount = ''
+                    }
+                    else {
+                        item.amount = res[0].transferAmount
+                    }
+
+                })
+                _this.feeTypeArray = [].concat(arr);
+                let obj = {
+                    customer: false,
+                    cummunityIn: false,
+                    cummunityOut: false,
+                    balance: false,
+                    remark: false,
+                    editBtn: false,
+                    approveBtn: false,
+                    rejectBtn: false
+                };
+                this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            })
         },
         handleShowReject() {
             this.$set(this.UIShowAble, 'rejectModal', true)

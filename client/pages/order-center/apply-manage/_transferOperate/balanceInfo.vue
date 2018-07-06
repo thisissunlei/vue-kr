@@ -224,27 +224,15 @@ export default {
                 _this.feeTypeArray = arr;
                 var list = [];
 
-                arr.map(item => {
-                    let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
-                    if (res.length == 0) {
-                        item.amount = ''
-                    }
-                    else {
-                        item.amount = res[0].transferAmount
-                    }
-
+                _this.receivedApplyInfo.detailList.map(item => {
+                    list.push({
+                        feeType: item.transferFeeType,
+                        feeTypeName: item.transferFeeTypeName,
+                        amount: item.transferAmount,
+                        maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                    })
                 })
-                _this.feeTypeArray = [].concat(arr);
-
-                // _this.receivedApplyInfo.detailList.map(item => {
-                //     list.push({
-                //         feeType: item.transferFeeType,
-                //         feeTypeName: item.transferFeeTypeName,
-                //         amount: item.transferAmount,
-                //         maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
-                //     })
-                // })
-                // _this.feeTypeArray = [].concat(list);
+                _this.feeTypeArray = [].concat(list);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -305,17 +293,45 @@ export default {
         },
         //开启编辑
         handleEdit() {
-            let obj = {
-                customer: false,
-                cummunityIn: false,
-                cummunityOut: false,
-                balance: false,
-                remark: false,
-                editBtn: false,
-                approveBtn: false,
-                rejectBtn: false
-            };
-            this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            let parms = {
+                communityId: this.formItem.communityId,
+                customerId: this.formItem.customerId,
+                id: this.receivedApplyInfo.id
+            }
+            var _this = this
+            this.$http.get('get-max-amount', parms).then((r) => {
+                if (r.data.length == 0)
+                    this.$Notice.info({
+                        title: '无可用转移款项'
+                    });
+                let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
+                _this.feeTypeArray = arr;
+                var list = [];
+
+                arr.map(item => {
+                    let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
+                    if (res.length == 0) {
+                        item.amount = ''
+                    }
+                    else {
+                        item.amount = res[0].transferAmount
+                    }
+
+                })
+                _this.feeTypeArray = [].concat(arr);
+
+                let obj = {
+                    customer: false,
+                    cummunityIn: false,
+                    cummunityOut: false,
+                    balance: false,
+                    remark: false,
+                    editBtn: false,
+                    approveBtn: false,
+                    rejectBtn: false
+                };
+                this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            })
         },
         handleShowReject() {
             this.$set(this.UIShowAble, 'rejectModal', true)

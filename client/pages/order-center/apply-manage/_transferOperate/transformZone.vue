@@ -69,8 +69,11 @@ export default {
             if (Number(value) > Number(this.maxAmount)) {
                 callback(new Error('转移金额不得大于可转金额'));
             }
+
             if (value === '') {
                 callback(new Error('请填写转移金额'));
+            } if (Number(value) == 0) {
+                callback(new Error('转移金额须大于0'));
             } else {
                 callback();
             }
@@ -139,6 +142,7 @@ export default {
                     _this.$Notice.info({
                         title: '无可用转移金额'
                     });
+                    _this.formItem.balanceOut = ''
                 }
                 else {
                     _this.maxAmount = arr[0].maxAmount
@@ -204,7 +208,7 @@ export default {
                 return "最大转移金额为" + this.maxAmount + '元'
             }
         },
-        execSunmit(formItem) {
+        execSubmit(formItem) {
             // window.close()
             // window.open(`/order-center/apply-manage/_transferOperate`,'_self');
             let parms = {
@@ -245,7 +249,7 @@ export default {
                     return;
                 }
                 else {
-                    execSubmit(formItem)
+                    this.execSubmit(formItem)
                 }
             }
             )

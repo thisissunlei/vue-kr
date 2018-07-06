@@ -63,11 +63,15 @@ export default {
             if (!value) {
                 callback("请选择客户")
             }
+            else
+                callback()
         };
         const validateCummity = (rule, value, callback) => {
             if (!value) {
                 callback("请选择社区")
             }
+            else
+                callback()
         };
 
         return {
@@ -79,7 +83,7 @@ export default {
             communities: [],
             targetFeeTypes: ['可用服务保证金', '冻结服务保证金'],
             formItem: {
-                customerID:'',
+                customerID: '',
                 communityIn: '',
                 balanceOut: {},
                 remark: ''
@@ -119,14 +123,20 @@ export default {
                 return
             var _this = this
             this.$http.get('get-max-amount', parms).then((r) => {
-                if (r.data.length == 0)
-                    this.$Notice.info({
-                        title: '无可用转移款项'
-                    });
+
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName));//可用的转移项
                 // let arr2 = _this.defaultList.filter(item => arr.filter(item2 => (item.feeTypeName == item2.feeTypeName)).length == 0);//不可用的转移项
                 // _this.dataList = [].concat(arr, arr2);
                 _this.dataList = [].concat(arr);
+                if (arr.length == 0) {
+                    this.$Notice.error({
+                        title: '无可用转移款项'
+                    });
+                    _this.submitBtnDisable = true;
+                }
+                else {
+                    _this.submitBtnDisable = false;
+                }
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -193,7 +203,7 @@ export default {
                     return;
                 }
                 else {
-                    execSubmit(formItem)
+                    this.execSubmit(formItem)
                 }
             }
             )

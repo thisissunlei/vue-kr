@@ -176,7 +176,7 @@
                 item.menuItems.map(function (child) {
                     var href = ""
                     href = setHref(child.type, child.router);
-                    console.log("href",href,"router",router);
+                    // console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';

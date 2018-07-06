@@ -246,8 +246,8 @@ export default {
         //搜索
         handleSearch(formItem) {
             this.searchFormItem = Object.assign(formItem)
-            this.searchFormItem.uEndTime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uEndTime))
-            this.searchFormItem.uStartTime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uStartTime))
+            this.searchFormItem.uEndTime =this.searchFormItem.uEndTime ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uEndTime)):''
+            this.searchFormItem.uStartTime =this.searchFormItem.uStartTime ?  dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(this.searchFormItem.uStartTime)):''
             this.spinShow = true;
             //过滤掉全部
             for (const key in formItem) {

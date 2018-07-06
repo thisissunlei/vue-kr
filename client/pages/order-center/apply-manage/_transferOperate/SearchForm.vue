@@ -11,7 +11,8 @@
                     </Form-item>
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
-                        <SelectCustomers name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomers>
+                        <SelectCustomers  v-if='cshow' name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomers>
+                        <SelectCustomersCopy v-if='!cshow' name="formItem.customerID" @onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomersCopy>
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
@@ -82,11 +83,13 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import SelectCustomers from '~/components/SelectCustomers.vue'
+import SelectCustomersCopy from './SelectCustomers.vue'
 
 export default {
     name: 'searchform',
     components: {
-        SelectCustomers
+        SelectCustomers,
+        SelectCustomersCopy
     },
     data() {
         const validateName = (rule, value, callback) => {
@@ -119,6 +122,7 @@ export default {
         };
 
         return {
+            cshow:false,
             labelValue: true,
             loading: false,
             params: {},
@@ -309,10 +313,9 @@ export default {
             })
         },
         //清除
-        clearClick() {
-            
+        clearClick() {       
+            this.cshow=!this.cshow     
             this.formItem = Object.assign({}, this.formItemOld);
-            this.kk='  '
             this.$emit('clearClick', this.formItem);
         },
         //回车

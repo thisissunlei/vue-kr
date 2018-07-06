@@ -104,11 +104,15 @@ export default {
         const validateCustomer = (rule, value, callback) => {
             if (!value) {
                 callback("请选择客户")
+            }  else {
+                callback()
             }
         };
         const validateCummity = (rule, value, callback) => {
             if (!value) {
                 callback("请选择社区")
+            }  else {
+                callback()
             }
         };
         return {

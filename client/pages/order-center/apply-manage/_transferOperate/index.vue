@@ -425,7 +425,6 @@ export default {
             div {
                 height: 100%;
                 p {
-                    text-align: center;
                     display: inline-block;
                     height: 50%;
                     width: 100%;

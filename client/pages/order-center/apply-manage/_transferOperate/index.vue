@@ -92,6 +92,7 @@ export default {
                 {
                     title: '单据编号',
                     key: 'applyNo',
+                    width: 140,
                     align: 'center'
                 },
                 {
@@ -117,7 +118,8 @@ export default {
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
-                            lines.push(tag('div', item.transferFeeTypeName))
+                            // lines.push(tag('div',(tag=> tag('span',item.transferFeeTypeName))))
+                            lines.push(tag('div',item.transferFeeTypeName))
                         })
                         return tag('div', lines)
                     }
@@ -126,12 +128,13 @@ export default {
                     title: '转移金额',
                     key: 'detailList',
                     align: 'center',
-                    width: 100,
+                    width: 180,
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
                             let amount = utils.thousand((item.transferAmount).toFixed(2))
-                            lines.push(tag('div', '￥' + amount))
+                            // lines.push(tag('div', (tag=> tag('span','￥' + amount))))
+                            lines.push(tag('div','￥' + amount))
                         })
                         return tag('div', lines)
                     }
@@ -153,6 +156,7 @@ export default {
                 {
                     title: '状态',
                     key: 'transferStatusName',
+                     width: 90,
                     align: 'center'
                 },
                 {
@@ -446,6 +450,8 @@ export default {
                 display:flex;
                 flex-direction:column;
                 div{
+                    height: 30px;
+                    line-height: 30px;
                     flex:1;
                     display: inline-block;
                     width: 100%;

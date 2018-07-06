@@ -111,6 +111,7 @@ export default {
             })
             this.$forceUpdate();
             this.$emit("onChange", this.models)
+            this.$emit('onCheckGroupChange',this.checkGroupModel)
         },
         handleBlanceTransClk(e) {
             let label = e.target.name || e.target.parentNode.name

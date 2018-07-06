@@ -32,7 +32,7 @@
             <div style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:700px" prop="balance">
-                    <BlanceInputGroup :dataList='feeTypeArray' :readOnly='UIDisable.balance' @onChange="handleBlanceChange"></BlanceInputGroup>
+                    <BlanceInputGroup :dataList='feeTypeArray' :readOnly='UIDisable.balance' @onChange="handleBlanceChange" @onCheckGroupChange='handleCheckGroupChange'></BlanceInputGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -134,6 +134,7 @@ export default {
             approveBtnText: '同意',
             logList: [],
             balanceOut: {},
+            checkBalance: [],
             formItem: {
                 customerId: 0,
                 communityIn: 0,
@@ -223,15 +224,15 @@ export default {
                 _this.feeTypeArray = arr;
                 var list = [];
 
-                arr.map(item=>{
-                    let res=_this.receivedApplyInfo.detailList.filter(l=>l.transferFeeType==item.feeType)
-                    if (res.length==0) {
-                        item.amount=''
+                arr.map(item => {
+                    let res = _this.receivedApplyInfo.detailList.filter(l => l.transferFeeType == item.feeType)
+                    if (res.length == 0) {
+                        item.amount = ''
                     }
-                    else{
-                        item.amount=res[0].transferAmount
+                    else {
+                        item.amount = res[0].transferAmount
                     }
-                    
+
                 })
                 _this.feeTypeArray = [].concat(arr);
 
@@ -265,11 +266,13 @@ export default {
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerId: item }, { communityId: -1 });
             this.getFeeAmount();
+            this.checkBalance = []
         },
         //更改社区后重新获取转移款项
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityId', commIn)
             this.getFeeAmount();
+            this.checkBalance = []
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
@@ -277,6 +280,9 @@ export default {
         //接收勾选的转移款项
         handleBlanceChange(receiveBlance) {
             this.balanceOut = Object.assign({}, receiveBlance)
+        },
+        handleCheckGroupChange(checkItems) {
+            this.checkBalance = [].concat(checkItems)
         },
         //校验必填项
         verifyBlance() {
@@ -347,7 +353,7 @@ export default {
                 let detailStr = '';
                 let detailList = []
                 for (const key in this.balanceOut) {
-                    if (this.balanceOut.hasOwnProperty(key)) {
+                    if (this.balanceOut.hasOwnProperty(key) && this.checkBalance.includes(key)) {
                         let obj = {
                             communityIdIn: this.formItem.communityIn,
                             communityIdOut: this.formItem.communityIn,
@@ -379,6 +385,7 @@ export default {
                     });
                     this.UIShowAble = Object.assign({}, this.UIShowAble, { approveBtn: false }, { editBtn: false })
                     this.UIDisable = Object.assign({}, this.UIDisableBak);
+                    this.checkBalance = []
                     setTimeout(() => {
                         window.close()
                         window.opener.location.reload()

@@ -108,9 +108,9 @@
         },
         data (){
             const validatephone = (rule, value, callback) => {
-                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                if (!phone.test(value)) {
-                    callback(new Error('请填写正确的联系方式'));
+               
+                if (value.length>20) {
+                    callback(new Error('联系方式的最大长度为20字符'));
                 }else{
                     callback()
 
@@ -177,10 +177,9 @@
                     name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    mobile:[
-                        { required: true, message: '请填写客户联系人电话'},
-                        { required: true, trigger: 'blur' ,validator: validatephone},
-
+                    contactTel:[
+                        { required: true, message: '请填写电话联系人手机号',trigger: 'change'},
+                        { required: true, trigger: 'change' ,validator: validatephone},
                     ],
                     channelType:[
                         { required: true, message: '请选择客户来源类型'}

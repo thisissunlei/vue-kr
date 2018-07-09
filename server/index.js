@@ -27,7 +27,6 @@ if (config.dev) {
 }else {
   listen()
 }
-
 function listen() {
 
   app.listen(port)

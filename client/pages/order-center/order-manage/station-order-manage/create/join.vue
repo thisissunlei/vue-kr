@@ -6,13 +6,20 @@
                 <Row style="margin-bottom:30px">
                     <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                        <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                        <selectCustomers 
+                            name="formItem.customerId" 
+                            :onchange="changeCustomer"
+                        />
                     </FormItem>
-                    </Col>
-
-                    <Col class="col">
-                    <FormItem label="所属社区" style="width:252px" prop="communityId">
-                        <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                </Col>
+                
+                <Col class="col">
+                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                        <selectCommunities 
+                            test="formItem" 
+                            :onchange="changeCommunity"
+                        />
+                            
                     </FormItem>
                     </Col>
                     <Col class="col">
@@ -132,25 +139,23 @@
                         <Select v-model="item.type" label-in-value @on-change="changeType">
                             <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id">{{ types.label }}</Option>
                         </Select>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        </DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
+                    </Col>
+                    <Col span="5" class="discount-table-content" >
+                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
+                    </Col>
+                    <Col span="5" class="discount-table-content">
+                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
+                    </Col>
+                    <Col span="5" class="discount-table-content">
                         <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
-
-                        </Col>
-                    </Row>
-                </FormItem>
-                <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
+                    </Col>  
+            </Row>
+        </FormItem>
+            <Row style="margin-bottom:10px">
+                <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
@@ -339,46 +344,48 @@ export default {
                     title: '定价',
                     key: 'guidePrice'
                 },
+                
                 {
                     title: '标准单价（元/月）',
                     key: 'guidePrice',
                     render: (h, params) => {
                         let price = params.row.originalPrice;
-
+                        
                         return h('Input', {
                             props: {
-                                min: params.row.guidePrice,
-                                value: params.row.originalPrice,
+                                min:params.row.guidePrice,
+                                value:params.row.originalPrice,
                             },
-                            on: {
-                                'on-change': (event) => {
+                            on:{
+                                'on-change':(event)=>{
                                     let e = event.target.value;
-                                    if (isNaN(e)) {
+                                    if(isNaN(e)){
                                         e = params.row.guidePrice
                                     }
                                     price = e;
                                 },
-                                'on-blur': () => {
-                                    var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-                                    if (price && !pattern.test(price)) {
+                                'on-blur':()=>{
+                                    var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                                    if(price && !pattern.test(price)){
                                         this.$Notice.error({
-                                            title: '单价不得多余小数点后两位'
+                                            title:'单价不得多余小数点后两位'
                                         })
-                                        var num2 = Number(price).toFixed(3);
-                                        price = num2.substring(0, num2.lastIndexOf('.') + 3)
+                                        var num2=Number(price).toFixed(3);
+                                        price = num2.substring(0,num2.lastIndexOf('.')+3) 
                                     }
-                                    if (price < params.row.guidePrice) {
+                                    if(price<params.row.guidePrice){
                                         price = params.row.guidePrice
                                         this.$Notice.error({
-                                            title: '单价不得小于' + params.row.guidePrice
+                                            title:'单价不得小于'+params.row.guidePrice
                                         })
                                     }
-                                    this.changePrice(params.index, price)
+                                    this.changePrice(params.index,price)
                                 }
                             }
-                        }, '44')
+                        },'44')
                     }
                 },
+
                 {
                     title: '租赁期限',
                     key: 'address',

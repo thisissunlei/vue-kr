@@ -387,15 +387,27 @@ queryInfoProductMethod() {
       this.$http.get('typePage', param).then((res) => {
         if('update'===val){
           this.comments.splice(0, this.comments.length);
-        }
-          if (res.data.items && res.data.items.length > 0) {
+          setTimeout(()=>{
+            if (res.data.items && res.data.items.length > 0) {
               for (let i = 0; i < res.data.items.length; i++) {
                   this.comments.push(res.data.items[i])
               }
               this.page += 1
-          }else{
+            }else{
 
-          }
+            }
+          })
+        }else{
+            if (res.data.items && res.data.items.length > 0) {
+              for (let i = 0; i < res.data.items.length; i++) {
+                  this.comments.push(res.data.items[i])
+              }
+              this.page += 1
+            }else{
+
+            }
+        }
+
           this.totalCount = res.data.totalCount
           console.log(res)
       }).catch((e) => {

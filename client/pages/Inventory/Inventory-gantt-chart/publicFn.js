@@ -88,7 +88,7 @@ function getToolTipContent(thatData,param,time) {
         if(data.customerVOs&&data.customerVOs.length){
             str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
             data.customerVOs.map((item,index)=>{
-                str += '<div>' + item.customerName + '</div>';
+                str += '<div style="font-size:14px;">' + item.customerName + '</div>';
             })
         }else{
             str += '<div class="title" style="margin-left:5px;">' + label + '</div>';

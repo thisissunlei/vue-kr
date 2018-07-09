@@ -176,7 +176,6 @@ export default {
             let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
                 if (balanceOut.hasOwnProperty(key)) {
-                    debugger;
                     if (balanceOut[key].input) {
                         let obj = {
                             // communityIdIn: this.formItem.communityIn,

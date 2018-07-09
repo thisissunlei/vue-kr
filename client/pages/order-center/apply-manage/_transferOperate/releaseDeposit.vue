@@ -80,7 +80,6 @@ export default {
             }
         };
         const validateCustomer = (rule, value, callback) => {
-            debugger
             if (!value || value == '-1') {
                 callback("请选择客户")
             } else {

@@ -98,7 +98,25 @@ export default {
                 {
                     title: '客户名称',
                     key: 'customerName',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'text',
+                                    size: 'small'
+                                },
+                                style: {
+                                    color: '#2b85e4'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showCustomerAccount(params.row.customerId)
+                                    }
+                                }
+                            }, params.row.customerName),
+                        ]);
+                    }
                 },
                 {
                     title: '社区名称',
@@ -119,7 +137,7 @@ export default {
                         let lines = [];
                         params.row.detailList.map(item => {
                             // lines.push(tag('div',(tag=> tag('span',item.transferFeeTypeName))))
-                            lines.push(tag('div',item.transferFeeTypeName))
+                            lines.push(tag('div', item.transferFeeTypeName))
                         })
                         return tag('div', lines)
                     }
@@ -134,7 +152,7 @@ export default {
                         params.row.detailList.map(item => {
                             let amount = utils.thousand((item.transferAmount).toFixed(2))
                             // lines.push(tag('div', (tag=> tag('span','￥' + amount))))
-                            lines.push(tag('div','￥' + amount))
+                            lines.push(tag('div', '￥' + amount))
                         })
                         return tag('div', lines)
                     }
@@ -156,7 +174,7 @@ export default {
                 {
                     title: '状态',
                     key: 'transferStatusName',
-                     width: 90,
+                    width: 90,
                     align: 'center'
                 },
                 {
@@ -276,10 +294,9 @@ export default {
                 this.totalCount = r.data.totalCount
                 this.spinShow = false;
                 let applyDatas = [].concat(r.data.items);
-                debugger;
                 applyDatas.map(item => {
                     if (item.detailList.length > 1) {
-                        debugger;
+
                         item.cellClassName = {
                             detailList: 'table-column-special',
                         }
@@ -302,11 +319,8 @@ export default {
                 this.spinShow = false;
                 this.isFinancialSide = r.data.financialSide;
                 let applyDatas = [].concat(r.data.items);
-
-                debugger;
                 applyDatas.map(item => {
                     if (item.detailList.length > 1) {
-                        debugger;
                         item.cellClassName = {
                             detailList: 'table-column-special',
                         }
@@ -362,7 +376,11 @@ export default {
             let ui = this.operateTypes[this.operateTypeIndex].component;
             window.open(`/order-center/apply-manage/create/${ui}`, '_blank');
         },
-
+        //查看账户中心
+        showCustomerAccount(id) {
+            let url = '/bill/customerAssets/' + id + '/view#account'
+            window.open(url, '_blank');
+        },
         //查看申请
         handleCheckApplyInfo(params) {
             let transformtype = params.row.transferType;
@@ -447,12 +465,12 @@ export default {
             padding-right: 0;
             div {
                 height: 100%;
-                display:flex;
-                flex-direction:column;
-                div{
+                display: flex;
+                flex-direction: column;
+                div {
                     height: 30px;
                     line-height: 30px;
-                    flex:1;
+                    flex: 1;
                     display: inline-block;
                     width: 100%;
                     border-bottom: 1px solid rgb(215, 215, 215);

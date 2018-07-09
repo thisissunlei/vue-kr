@@ -75,7 +75,6 @@ export default {
             return;
         };
         const validateCustomer = (rule, value, callback) => {
-            debugger;
             if (!value) {
                 callback("请选择客户")
             }

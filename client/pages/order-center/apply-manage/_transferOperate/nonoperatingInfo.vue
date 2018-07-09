@@ -379,7 +379,6 @@ export default {
             }
 
             if (this.approveBtnText === '提交') {
-                debugger;
                 let detailStr = '';
                 let detailList = []
                 for (const key in this.balanceOut) {
@@ -405,7 +404,6 @@ export default {
                         detailList.push(obj)
                     }
                 }
-                debugger
                 if (detailList.length == 0) {
                     this.$Notice.error({
                         title: '请选择要转移的款项'

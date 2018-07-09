@@ -379,7 +379,6 @@ export default {
                 this.$Notice.error({ title: '请编辑后再提交' });
                 return
             }
-            debugger;
             if (this.approveBtnText === '提交') {
                 let detailStr = '';
                 let detailList = []

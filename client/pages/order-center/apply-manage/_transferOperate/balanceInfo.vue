@@ -493,6 +493,7 @@ export default {
             display: inline-block;
             position: absolute;
             left: 50%;
+            z-index: 99;
             transform: translate(-50%, 0);
             .operateBtn {
                 margin: 0 10px;

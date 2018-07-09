@@ -7,7 +7,7 @@
 				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
 				<div class="icon-box">	
 					<span  v-if="this.right != 'READONLY'" class="edit-icon" @click="editClick"></span>
-					<span class="record-icon"  @click="recordClick"></span>
+					<span class="record-icon" v-if="yesOrnoMadal" @click="recordClick"></span>
 				</div>
 				
 				

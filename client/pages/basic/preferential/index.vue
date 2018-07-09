@@ -169,8 +169,12 @@ export default {
                          render: (h, params) => {
                             let today = new Date().getTime();
                             let result;
+                            let style;
                             result = today > (params && params.row.validEnd) ?'失效':'有效'; 
-                            return h('span',{},result)
+                            if(result ==='失效'){
+                                style = 'color: red'
+                            }
+                            return h('span',{style:style},result)
                         }
                     }
                     // {

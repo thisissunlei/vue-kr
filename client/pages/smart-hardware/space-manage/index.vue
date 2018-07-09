@@ -4,10 +4,20 @@
         <div class="u-search" >
             <Button type="primary" @click="showCreate">新建空间</Button>
             <div class="u-select-content">
+                <div class="u-select-first">
+                    <RadioGroup v-model="hasParent"
+                        @on-change="hasParentChanged"
+                    >
+                        <Radio label="所有"></Radio>
+                        <Radio label="有父空间"></Radio>
+                        <Radio label="无父空间"></Radio>
+                    </RadioGroup>
+
+                </div>
                 <div class="u-select">
                     <Select
                             v-model="formItem.communityId"
-                            style="width:200px"
+                            style="width:150px"
                             placeholder="请选择社区"
                             filterable
                             clearable
@@ -19,7 +29,7 @@
                  <div class="u-select">
                      <Select
                             v-model="formItem.floor"
-                            style="width:200px"
+                            style="width:150px"
                             placeholder="请选择楼层"
                             clearable
                             @on-change="floorChange"
@@ -30,7 +40,7 @@
                 <div class="u-select">
                     <Select
                         v-model="formItem.type"
-                        style="width:200px"
+                        style="width:150px"
                         placeholder="请选择空间类型"
                         clearable
                         @on-change="typeChange"
@@ -117,12 +127,14 @@ export default {
    },
     data(){
         return{
+            hasParent :'所有',
             page:1,
             pageSize:15,
             totalCount:0,
             tabParams:{
                 page:1,
                 pageSize:15,
+                hasParent : "",
             },
             formData:"",
             openCreate:false,
@@ -201,6 +213,18 @@ export default {
                   }
                 },
                 {
+                  title: '父空间名称',
+                  key: 'parentName',
+                  align:'center',
+                  render(h, obj){
+                    if(obj.row.parentName){
+                        return obj.row.parentName;
+                    }
+                    return "/";
+
+                  }
+                },
+                {
                   title: '创建人',
                   key: 'creatorName',
                   align:'center',
@@ -212,7 +236,7 @@ export default {
                   render(h, obj){
                     if(obj.row.ctime){
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
-                        return time;
+                        return h('span',{},time)
                     }
 
                   }
@@ -439,6 +463,18 @@ export default {
         },
         jumpEdit(param){
             window.open(`/smart-hardware/space-manage/${param.id}/son-space?name=${param.name}&communityId=${param.communityId}`)
+        },
+        hasParentChanged(param){
+            console.log("param",param);
+            if(param == "有父空间"){
+                this.tabParams.hasParent = true;
+            }else if(param == "无父空间"){
+                this.tabParams.hasParent = false;
+            }else{
+                this.tabParams.hasParent = "";
+            }
+            this.getTableData(this.tabParams);
+
         }
     }
 }
@@ -459,11 +495,20 @@ export default {
     }
     .u-select-content{
         float:right;
-        width:650px;
+        width:710px;
         .u-select{
            float:left;
-           width:200px;
+           width:150px;
            margin-left:10px;
+        }
+        .u-select-first{
+            float: left;
+            width: 225px;
+            padding: 0 10px;
+            height: 32px;
+            line-height: 30px;
+            border: 1px solid #dddee1;
+            border-radius: 4px;
         }
     }
 }

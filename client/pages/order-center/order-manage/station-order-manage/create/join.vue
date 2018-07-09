@@ -6,18 +6,30 @@
             <Row style="margin-bottom:30px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                        <selectCustomers 
+                            name="formItem.customerId" 
+                            :onchange="changeCustomer"
+                        />
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                        <selectCommunities 
+                            test="formItem" 
+                            :onchange="changeCommunity"
+                        />
+                            
                     </FormItem>
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler 
+                            name="formItem.salerId" 
+                            :onchange="changeSaler" 
+                            :value="salerName" 
+                        />
+                           
                     </FormItem>
                 </Col>
             </Row>
@@ -58,7 +70,7 @@
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">添加房间/工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
@@ -119,7 +131,7 @@
                             <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="5" class="discount-table-content" ></DatePicker>
+                    <Col span="5" class="discount-table-content" >
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
                     </Col>
@@ -130,8 +142,6 @@
                         <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
-
-                        
                     </Col>  
             </Row>
         </FormItem>
@@ -188,15 +198,16 @@
     
     <Modal
         v-model="openStation"
-        title="选择工位"
+        title="选择商品"
         ok-text="保存"
         cancel-text="取消"
         width="90%"
-         class-name="vertical-center-modal"
+        class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
-        <div slot="footer">
-            <Button type="primary" @click="submitStation">确定</Button>
+        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
+        <div slot="footer">  
+            <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+            <Button  @click="cancelStation">取消</Button>
         </div>
     </Modal>
 
@@ -232,10 +243,10 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -375,7 +386,7 @@ import utils from '~/plugins/utils';
                         title: '小计',
                         key: 'originalAmount',
                         render:function(h,params){
-                            return utils.thousand(params.row.originalAmount)
+                            return h('span',{},utils.thousand(params.row.originalAmount))
                          }
                     }
                 ],
@@ -439,7 +450,7 @@ import utils from '~/plugins/utils';
                 price:'',
                 priceError:false,
                 //录入单价的数组
-                priceToStation:[]
+                priceToStation:[],
 
             }
         },
@@ -454,7 +465,7 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -1153,7 +1164,7 @@ import utils from '~/plugins/utils';
             onResultChange:function(val){//组件互通数据的触发事件
                 console.log('onResultChange',val)
                 this.stationData = val;
-                
+                 
             },
             cancelStation:function(){//工位弹窗的取消
                 this.stationData = {
@@ -1402,6 +1413,5 @@ import utils from '~/plugins/utils';
             top: 0;
         }
     }
-   
    
 </style>

@@ -97,7 +97,6 @@ export default{
 	},
     props:{
 			  right:{
-            default:'READWRITE',
             type:String
         },
       commentColor:{

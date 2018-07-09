@@ -1,11 +1,6 @@
 //公共的api
-<<<<<<< HEAD
 
 export default  {
-=======
-module.exports = {
-    //
->>>>>>> master
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'

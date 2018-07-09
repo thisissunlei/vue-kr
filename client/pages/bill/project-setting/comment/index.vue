@@ -87,15 +87,15 @@
         </div>
         <div class="row-info-middle" style="float:left;width:100%"><span style="color：#aaa;display: inline-block;">以下为完整档案 </span></div>
         <div class="row-info-two">
-          <div class="tab-box"  >
+          <div class="tab-box"  style="box-shadow:rgba(0, 0, 0, 0.1) 0px 3px 5px -1px;">
           <Col span="12">
           <div class="info-title" style="color:#4F9EED">
-            <div @click="getInfo(1)" :style="isClick?{borderBottom:'2px solid #4F9EED',textAlign:'center', cursor: 'pointer'}:{textAlign:'center'}">物业档案</div>
+            <div @click="getInfo(1)" :style="isClick?{borderBottom:'2px solid #4F9EED',textAlign:'center', cursor: 'pointer'}:{textAlign:'center',cursor: 'pointer'}">物业档案</div>
           </div>
           </Col>
           <Col span="12">
           <div>
-            <div @click="getInfo(2)" class="info-title" :style="!isClick?{borderBottom:'2px solid #4F9EED' ,textAlign:'center'}:{textAlign:'center', cursor: 'pointer'}">产品档案</div>
+            <div @click="getInfo(2)" class="info-title" :style="!isClick?{borderBottom:'2px solid #4F9EED' ,textAlign:'center',cursor: 'pointer'}:{textAlign:'center', cursor: 'pointer'}">产品档案</div>
           </div>
           </Col>
           </div>
@@ -103,7 +103,7 @@
           <div v-for=" item in  propertyData" :key="item.id">
             <div style="float:left;width:100%">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color:#009DDF;color:#fff;display: inline-block;padding:5px 20px">{{item.label}}</span></div>
+              <div style="margin-left:-5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color: #468cdf; color: rgb(255, 255, 255); display: inline-block;padding: 5px 20px;width: 220px; background: linear-gradient(to right, #468cdf 0%,#ffffff 100%);">{{item.label}}</span></div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -169,7 +169,7 @@
                         <div v-for=" item in  productData" :key="item.id">
             <div style="float:left;width:100%;">
               <Col span="8">
-              <div style="padding-left:5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color:#009DDF;color:#fff;display: inline-block;padding:5px 20px">{{item.label}}</span></div>
+              <div style="margin-left:-5px;font-size:16px;padding-bottom:10px;padding-top:10px;"><span style="background-color: #468cdf; color: rgb(255, 255, 255); display: inline-block;padding: 5px 20px;width: 220px; background: linear-gradient(to right, #468cdf 0%,#ffffff 100%);">{{item.label}}</span></div>
 
               </Col>
               <Col span="8"> &nbsp;
@@ -246,7 +246,7 @@
             </div>
             <Form :model="formItem" ref="ruleValidate" :rules="ruleValidate">
                 <FormItem prop="comment">
-                    <Input   v-model="formItem.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="placeholder">
+                    <Input   v-model="formItem.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :maxlength="500" :placeholder="placeholder">
                     </Input>
                 </FormItem>
             </Form>

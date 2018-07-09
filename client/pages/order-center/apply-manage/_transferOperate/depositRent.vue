@@ -18,7 +18,7 @@
             <div style="margin-bottom:30px">
                 <Col class="col amount">
                 <FormItem label="转移款项" style="width:700px" prop="balance">
-                    <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange"></BlanceInputGroup>
+                    <BlanceInputGroup :dataList='dataList' @onChange="handleBlanceChange" @onCheckGroupChange='handleCheckGroupChange'></BlanceInputGroup>
                 </FormItem>
                 </Col>
             </div>
@@ -75,6 +75,7 @@ export default {
         };
 
         return {
+            checkBalance:[],
             submitBtnShow: true,
             dataList: [],
             defaultList: [
@@ -114,6 +115,9 @@ export default {
             console.log(receiveBlance)
             this.formItem.balanceOut = Object.assign({}, receiveBlance)
         },
+        handleCheckGroupChange(checkItems) {
+            this.checkBalance = [].concat(checkItems)
+        },
         getFeeAmount() {
             let parms = {
                 communityId: this.formItem.communityIn,
@@ -147,20 +151,23 @@ export default {
         changeCustomer(item) {
             this.formItem = Object.assign(this.formItem, { customerID: item }, { communityId: -1 });
             this.getFeeAmount();
+            this.checkBalance = []
         },
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityIn', commIn)
             this.getFeeAmount();
+            this.checkBalance = []
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
+
         },
 
         execSubmit(formItem) {
             let detailList = []
             let balanceOut = Object.assign({}, this.formItem.balanceOut)
             for (const key in balanceOut) {
-                if (balanceOut.hasOwnProperty(key)) {
+                if (balanceOut.hasOwnProperty(key)&& this.checkBalance.includes(key)) {
                     if (balanceOut[key].error) {
                         this.$Notice.error({
                             title: '输入转移金额有误'
@@ -169,7 +176,7 @@ export default {
                     }
                     if (!balanceOut[key].input) {
                         this.$Notice.error({
-                            title: '请填写要转移的款项: '+key
+                            title: '请填写要转移的款项: ' + key
                         });
                         return;
                     }

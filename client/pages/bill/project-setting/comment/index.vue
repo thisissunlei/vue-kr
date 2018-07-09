@@ -22,7 +22,7 @@
       <div v-if="comments.length>0">
         <Scroll :on-reach-bottom="getcomments" :height='heightDiv' style="overflow-y:auto">
           <div dis-hover v-for="(item, index) in comments" :key="index" style="padding:10px 10px 10px 10px;border-bottom:1px solid #f8f8f8">
-            <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
+            <div :style="{float:'left',borderRadius:'50%',backgroundColor:'rgb(68, 187, 243)',width:'50px',height:'50px',lineHeight:'50px',textAlign:'center',color:'#fff',fontSize:'16px'}">{{item.creator.length>2?item.creator.slice(item.creator.length-2,3):item.creator}}</div>
             <div style="margin-left:66px;min-height:60px">
               <div style="height:25px">
                 <div style="float:left">
@@ -37,7 +37,7 @@
               <div style="text-align:left">
                 <div v-if="false"><span><span style="color:#ccc"> 回复了&nbsp;&nbsp;</span><span>{{item.replyCreator}}:</span></span>
                 </div>
-                <span>
+                <span style="font-size:14px">
                             {{item.comment}}
                           </span>
               </div>

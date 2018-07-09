@@ -109,7 +109,7 @@ export default {
 			key:'',
 			detail:{},
 			openTip:false,
-			isAddManager:false,
+			isAddManager:true,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",

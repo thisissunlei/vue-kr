@@ -50,7 +50,7 @@
 
             v-model="openWatch"
             title="查看记录"
-            width="660"
+            width="700"
         >
                 <WatchRecord
                     v-if="openWatch"

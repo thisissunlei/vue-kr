@@ -96,6 +96,10 @@ export default{
 		KrImg
 	},
     props:{
+			  right:{
+            default:'READWRITE',
+            type:String
+        },
       commentColor:{
         default:false
       },

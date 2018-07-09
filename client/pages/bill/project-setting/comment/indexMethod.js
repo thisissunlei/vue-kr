@@ -377,7 +377,7 @@ queryInfoProductMethod() {
   },
   getcomments(val) {
     if('update'===val){
-      this.page =0
+      this.page =1
     }
       let param = {
           page: this.page,

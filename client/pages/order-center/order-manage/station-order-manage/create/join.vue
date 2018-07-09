@@ -22,7 +22,7 @@
                     </Col>
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" 
+                        <SelectChance name="formItem.opportunityId" 
                             @onChange="changeChance" 
                             @gotChanceList='handleGotChancelist' 
                             v-show="showChanceSelector" 

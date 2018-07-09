@@ -27,7 +27,6 @@
             v-if="type==='select'"
             :value="value"
             :name="name"
-            :right="right"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -39,12 +38,12 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrDate
             v-if="type==='date'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -54,12 +53,12 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTimeDate
             v-if="type==='datetime'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -69,12 +68,12 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTime
             v-if="type==='time'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -83,12 +82,12 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <KrTextarea
             v-if="type==='textarea'"
             :value="value"
-            :right="right"
             :name="name"
             :placeholder="placeholder"
             :type='type'
@@ -98,13 +97,13 @@
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
 
 
         <KrCascader
             v-if="type==='cascader'"
             :width="width"
-            :right="right"
             :data="data"
             :name="name"
             :value="value"
@@ -118,12 +117,12 @@
             @okClick="okClick"
             :isOk="isOk"
             :inline="inline"
+            :right="right"
         />
         
          <KrCity
             v-if="type==='city'"
             :data="data"
-            :right="right"
             :name="name"
             :value="value"
             :mask="mask"
@@ -135,35 +134,37 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
+            :right="right"
         />
 
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
-            :right="right"
+
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
             :inputWidth="inputWidth"
+            :right="right"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
             :readOrEdit="readOrEdit" 
-            :right="right"
             :value = 'value'
             :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         />
         <UpImage 
             v-if="type==='upImage'"  
             :readOrEdit="readOrEdit" 
             :value = 'value'
-            :right="right"
             :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
+            :right="right"
         />
        
   </div>
@@ -292,7 +293,6 @@ export default {
             type:Boolean
         },
         right:{
-            default:'READWRITE',
             type:String
         }
     },

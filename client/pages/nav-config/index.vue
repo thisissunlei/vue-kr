@@ -349,6 +349,7 @@ export default {
             this.title = "新建";
             this.formTop.name='';
             this.formTop.code='';
+            this.editRoleId ='';
             this.getRoleEdit()
             this.openEdit = true;
          },

@@ -11,9 +11,8 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 			:isOk="isOk"
-			:right="right"
 		>
-			<div class="view-box" :style="commentColor?{backgroundColor:'#fff',width:'auto!important'}:{}">
+			<div class="view-box" :style="commentColor?{backgroundColor:'#eee',marginRight: '20px',border:'1px dashed #ccc',width:'auto!important'}:{}">
 
 
 				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">
@@ -118,11 +117,7 @@ export default{
 		},
 		name:{
 			type:[String,Number]
-		},
-		right:{
-           			 type:String
-        }
-
+		}
 
     },
     data(){

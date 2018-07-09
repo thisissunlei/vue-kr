@@ -378,8 +378,8 @@ export default {
             if (this.approveBtnText === '提交') {
                 let detailStr = '';
                 let detailList = []
-                for (const key in this.balanceOut) {
-                    if (this.balanceOut.hasOwnProperty(key)) {
+                // for (const key in this.balanceOut) {
+                    // if (this.balanceOut.hasOwnProperty(key)) {
                         let obj = {
                             communityIdIn: this.formItem.communityIdIn,
                             communityIdOut: this.formItem.communityIdOut,
@@ -387,8 +387,9 @@ export default {
                             transferFeeType: 'BALANCE',
                         };
                         detailList.push(obj)
-                    }
-                }
+                    // }
+                // }
+                debugger;
                 // 可能没有经过编辑 直接提交
                 if (detailList.length == 0) {
                     detailStr = JSON.stringify(this.receivedApplyInfo.detailList)

@@ -22,6 +22,11 @@
                 <span class="name">客户退款</span>
                 <span class="money">￥{{(refunds/100).toFixed(2)|thousand}}</span>
             </div>
+            <div class="between">-</div>
+            <div class="money-div">
+                <span class="name">申请中的余额</span>
+                <span class="money">￥{{(applying/100).toFixed(2)|thousand}}</span>
+            </div>
         </div>
 
         <div class="asset-content">
@@ -77,6 +82,7 @@
                 refunds:3421.22,//客户退款
                 spending:22.11,//客户消费
                 play:342423423.32,//客户打款
+                applying:0, //申请中的余额
 				
 			}
 		},
@@ -95,6 +101,7 @@
                     this.refunds = res.data.refund;
                     this.spending = res.data.consumption;
                     this.play = res.data.payment;
+                    this.applying=res.data.applying;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

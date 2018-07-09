@@ -40,7 +40,7 @@ import Message from '~/components/Message';
 import Buttons from '~/components/Buttons';
 
 import selectCommunities from '~/components/SelectCommunities.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from './SelectCustomers.vue'
 
 export default {
     components: {
@@ -202,7 +202,7 @@ export default {
     },
 
     methods: {
-        changeCustomer(name) { this.customerName = name.label },
+        changeCustomer(name) { this.customerName = name.value },
         changeCommunity(value) {
             this.communityId = value;
 
@@ -212,7 +212,7 @@ export default {
         handleSearch() {
             let parms = {
                 validateType: this.priceTypes[this.type].validateType,
-                customerName: this.customerName,
+                customerId: this.customerName,
                 communityId: this.communityId,
             };
 

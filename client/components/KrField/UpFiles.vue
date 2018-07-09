@@ -11,6 +11,7 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 			:isOk="isOk"
+			:right="right"
 		>
 			<div class="view-box" :style="commentColor?{backgroundColor:'#eee',marginRight: '20px',border:'1px dashed #ccc',width:'auto!important'}:{}">
 

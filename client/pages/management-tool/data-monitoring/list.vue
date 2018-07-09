@@ -4,11 +4,12 @@
             <div class='ccc' style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>社区名称</span>
                 <!-- <i-input v-model="params.customName" placeholder="请输入社区名称" style="width: 252px" /> -->
-                <selectCommunities class="selectors" test="formItem" :onchange="changeCommunity" 	></selectCommunities>
+                <selectCommunities class="selectors" test="formItem" :onchange="changeCommunity"></selectCommunities>
             </div>
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
-                <selectCustomers class="selectors" :onchange="changeCustomer" :labelInValue="true" ></selectCustomers>
+                <!-- <selectCustomers class="selectors" :onchange="changeCustomer" :labelInValue="true"></selectCustomers> -->
+                <Input v-model="customerName" placeholder="请输入客户名称" ></Input>
                 <!-- <i-input v-model="params.customName" placeholder="请输入客户名称" style="width: 252px" /> -->
             </div>
             <!-- <div style='display:inline-block;margin:10px 20px;'>
@@ -23,7 +24,7 @@
         <div style="margin: 10px 20px;overflow: hidden">
 
             <div style="float: right;">
-                <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
+                <Page :current="params.page" :total="totalCount" :page-size='params.pageSize' @on-change="onPageChange" show-total show-elevator/>
             </div>
         </div>
     </div>
@@ -187,7 +188,6 @@ export default {
                     }
                 },
             ],
-            detail: []
         }
     },
     created() {
@@ -203,11 +203,11 @@ export default {
 
     methods: {
         changeCustomer(name) { this.customerName = name.label },
-        changeCommunity(value) { 
+        changeCommunity(value) {
             this.communityId = value;
-            
+
         },
-      
+
 
         handleSearch() {
             let parms = {
@@ -215,39 +215,22 @@ export default {
                 customerName: this.customerName,
                 communityId: this.communityId,
             };
-            // debugger;
+
             this.$http.get('get-validate-list', parms, r => {
                 let detail = [];
-                // debugger;
                 let attName = this.priceTypes[this.type].resAttName
                 r.data.items.map(item => detail.push(item[attName]))
-                this.detail = detail;
+                this.detail = [].concat(detail);
+                this.totalCount = r.data.totalCount
                 this.$Spin.hide();
             }, e => {
-                // debugger;
                 this.$Notice.error({
                     title: e.message
                 });
             })
-
-            // this.$Spin.show({
-            //     render: (h) => {
-            //         return h('div', [
-            //             h('Icon', {
-            //                 'class': 'demo-spin-icon-load',
-            //                 props: {
-            //                     type: 'load-c',
-            //                     size: 30
-            //                 }
-            //             }),
-            //             h('div', '拼命加载中')
-            //         ])
-            //     }
-            // });
-
         },
 
-        config: function () {
+        config() {
             this.$Notice.config({
                 top: 80,
                 duration: 3
@@ -261,11 +244,24 @@ export default {
 
         getListData(params) {
             this.config()
-            this.$http.get('get-validate-list', params, r => {
-                this.totalCount = r.data.totalCount;
-                this.detail = r.data.items;
-                this.openSearch = false;
-                this.loadingStatus = false;
+            let parms = {
+                validateType: this.priceTypes[this.type].validateType,
+                customerName: this.customerName,
+                communityId: this.communityId,
+                page: params.page,
+                pageSize: params.pageSize
+            };
+            var _this = this
+            this.$http.get('get-validate-list', parms, r => {
+
+                let detail = [];
+                let attName = _this.priceTypes[_this.type].resAttName
+                r.data.items.map(item => detail.push(item[attName]))
+                _this.detail = [].concat(detail);
+
+                _this.totalCount = r.data.totalCount;
+                _this.openSearch = false;
+                _this.loadingStatus = false;
             }, e => {
                 this.$Notice.error({
                     title: e.message

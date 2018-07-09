@@ -31,7 +31,7 @@
                         :key="index"
                     >
                         <label
-                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;"
+                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;float:left;padding-top:2px"
                         >
                             {{item.displayName}}
                         </label>

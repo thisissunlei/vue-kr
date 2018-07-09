@@ -6,7 +6,7 @@
                     <div class="u-part-number">1</div>
                     <div class="u-part-title">确认会员信息</div>
                     <div class="u-part-tip">温馨提示：您可以添加非本企业员工作为管理员，此类管理员不占用会员名额</div>
-                    <div class="u-part-line"></div>
+                    <div class="u-part-line" ></div>
                     <div class="u-part-content">
                          <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="iconName">
                             <Input 
@@ -178,7 +178,6 @@ export default {
             position: absolute;
             left:14px;
             top:30px;
-            display: none;
         }
         .u-part-content{
             padding-left:44px;

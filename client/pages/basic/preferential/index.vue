@@ -6,7 +6,12 @@
         <span style="padding:0 10px"></span> 
         <div style="display:inline-block;width:400px;">
             选择社区：
-            <Select :v-model="cmtId" @on-change="changeContent" style="width:300px">
+            <Select 
+                        :v-model="cmtId"
+                        @on-change="changeContent" 
+                        filterable
+                        clearable 
+                        style="width:300px">
                 <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
             </Select>
         </div>

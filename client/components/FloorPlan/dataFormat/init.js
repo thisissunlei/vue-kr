@@ -78,7 +78,7 @@ function init(data,picProperty,dataUrl){
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
             list.bgsrc=bgsrc;
-            list.status=true;
+            //list.status=true;
         })
     }
 

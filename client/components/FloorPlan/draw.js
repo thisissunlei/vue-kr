@@ -29,11 +29,11 @@ function draw (go,content,data,clickFn,enterFn,leaveFn,btnFn) {
     function textStyle() {
         return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
     }
-
-    function linkProblemConverter(msg) {
+   
+    /*function linkProblemConverter(msg) {
         if (msg) return "red";
         return null;
-    }
+    }*/
     
     //背景图
     if(data.pic){
@@ -51,8 +51,9 @@ function draw (go,content,data,clickFn,enterFn,leaveFn,btnFn) {
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
-            new go.Binding("fill","color"),
-            new go.Binding("stroke",'status',linkProblemConverter)),
+            new go.Binding("fill","color"),{ stroke: null }),
+            /*点击产生同一状态*/
+            /*new go.Binding("stroke",'status',linkProblemConverter)),*/
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置

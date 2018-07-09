@@ -68,7 +68,7 @@
         title="添加管理员"
         ok-text="确定"
         cancel-text="取消"
-        width="600"
+        width="665"
      >
 		<AddManager  
 			v-if="isAddManager"

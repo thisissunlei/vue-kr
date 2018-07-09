@@ -102,7 +102,7 @@ export default {
     }
     .u-community-check-list{
         margin-top:16px;
-        padding:0 26px;
+        padding:0 44px;
         .u-all-check{
             margin-bottom:12px;
         }

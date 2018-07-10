@@ -142,20 +142,21 @@ export default {
         }
         return -1;
     },
-    mouseEnter(event,every,all,canvas,scroll){
-         var index=this.findEle(clickNone,'id',every.item.id);
+    mouseEnter(event,every,all,canvas,scroll,isIcon){
+         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+         var index=this.findEle(clickNone,'id',selectId);
          if(index!=-1){
             return ;
          } 
-         this.createDom(every);
+         this.createDom(every,isIcon);
          //监听click事件
          document.body.addEventListener('click',this.bodyClick);
          //显示
-         var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
-         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+every.item.id);
+         var tirDom = document.getElementById('gantt-chart-tool-tip'+selectId);
+         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+selectId);
          tirDom.style.display = 'block';
          angleDom.style.display = 'block';
-         publicFn.poptipOver(every,all,canvas,scroll,this.discount)
+         publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
     },
     bodyClick(event){
         var id=event.target.getAttribute('data-titleId');
@@ -164,12 +165,13 @@ export default {
             this.titleClose(parentNode,id);
         }
     },
-    mouseLeave(event,every,all){
-        var index=this.findEle(clickNone,'id',every.item.id);
+    mouseLeave(event,every,all,isIcon){
+        let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+        var index=this.findEle(clickNone,'id',selectId);
         if(index!=-1){
             return ;
         }     
-        var parentNode=document.getElementById('gantt-chart-tool-tip'+every.item.id).parentNode;
+        var parentNode=document.getElementById('gantt-chart-tool-tip'+selectId).parentNode;
         this.closeCommon(parentNode);
     },
     scroll(all,canvas,scroll){
@@ -190,13 +192,14 @@ export default {
         this.closeCommon(parentNode);    
     },
     //生成dom
-    createDom(every){
+    createDom(every,isIcon){
+         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
          var productDom=
-            '<div id="gantt-chart-tool-tip'+every.item.id+'" class="gantt-chart-tool-tip">'+
-                '<div class="title" data-titleId='+every.item.id+'></div>'+
-                '<div id="gantt-chart-tool-tip-content'+every.item.id+'" class="gantt-chart-tool-tip-content"></div>'+
+            '<div id="gantt-chart-tool-tip'+selectId+'" class="gantt-chart-tool-tip">'+
+                '<div class="title" data-titleId='+selectId+'></div>'+
+                '<div id="gantt-chart-tool-tip-content'+selectId+'" class="gantt-chart-tool-tip-content"></div>'+
             '</div>'+
-            '<div id="gantt-chart-tool-tip-triangle'+every.item.id+'" class="top-triangle gantt-chart-tool-tip-triangle" />';
+            '<div id="gantt-chart-tool-tip-triangle'+selectId+'" class="top-triangle gantt-chart-tool-tip-triangle" />';
          var el = document.createElement('div');
          el.innerHTML = productDom;
          wrapDom.appendChild(el);

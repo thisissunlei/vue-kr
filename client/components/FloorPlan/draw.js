@@ -20,7 +20,6 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     let isElementHover=false;
     let isIconHover=false;
     let enterData={};
-    let leaveData={};
     
     
     //点击事件
@@ -75,28 +74,40 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel,
                 {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:16, height: 16,padding:5,cursor:'pointer'},
+                {width:16, height: 16,margin:5,cursor:'pointer'},
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
-                    mouseEnter: function (e, node) { 
-                        console.log('123');
+                    mouseEnter: function (e, node) {
+                        isIconHover=true;
+                        enterFn(enterData.e,enterData.node,'icon');
+                        if(isElementHover){
+                            leaveFn(enterData.e,enterData.node);
+                        }
                     },
-                    mouseLeave: function (e, node) { 
-                        console.log('345');
+                    mouseLeave: function (e, node) {
+                        isIconHover=false;
+                        leaveFn(enterData.e,enterData.node,'icon')
+                        if(isElementHover){
+                            enterFn(enterData.e,enterData.node);
+                        }
                     }
                 }
             ),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
                     isElementHover=true;
-                    console.log('1');
                     enterData={e,node};
                     enterFn(e,node)
+                    if(isIconHover){
+                        leaveFn(enterData.e,enterData.node,'icon');
+                    }
                 },
                 mouseLeave: function (e, node) { 
-                    console.log('2');
-                    leaveData={e,node};
-                    leaveFn(e,node)
+                    isElementHover=false;
+                    leaveFn(e,node);
+                    if(isIconHover){
+                        enterFn(enterData.e,enterData.node,'icon');
+                    }
                 }
             }
         );

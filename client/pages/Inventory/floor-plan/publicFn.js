@@ -1,33 +1,46 @@
 import dateUtils from 'vue-dateutils';
 //鼠标滑过气泡的位置
-function poptipOver(every,all,canvas,scroll,discount) {
+function poptipOver(every,all,canvas,scroll,discount,isIcon) {
+    let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
     var mainDom=document.getElementById('layout-content-main');
-    var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
-    var contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
-    var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+every.item.id);
+    var tirDom = document.getElementById('gantt-chart-tool-tip'+selectId);
+    var contentDom=document.getElementById('gantt-chart-tool-tip-content'+selectId);
+    var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+selectId);
     var canvasDom= document.querySelectorAll('#'+canvas+' canvas')[0];
     var tirDetail=tirDom.getBoundingClientRect();
     var canvasDetail=canvasDom.getBoundingClientRect();
     
     
-    var obj = getToolTipContent(every,discount); 
+    var obj = {};
+    if(isIcon=='icon'){
+        obj=getIconToolTipContent(every,discount);
+    }else{
+        obj=getToolTipContent(every,discount);
+    } 
     
     contentDom.innerHTML = obj.str;
     tirDetail=tirDom.getBoundingClientRect();
-    contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
+    contentDom=document.getElementById('gantt-chart-tool-tip-content'+selectId);
     
     var toolLocation={
         left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
-   
+    
+    if(isIcon=='icon'){
+        toolLocation.left=Number(every.cellCoordX)+6+Number(every.cellWidth)-Number(tirDetail.width)-scroll.left;
+    }
+    
+    
     //临近边界偏移
     var bodyWidth=document.body.clientWidth;
     var boundTip=toolLocation.left+canvasDetail.left;
     var offset=0;
-    if(Number(bodyWidth)-Number(boundTip)<230){
-        toolLocation.left=canvasDetail.width-tirDetail.width;
-        offset=tirDetail.width/2-10;
+    if(isIcon!='icon'){
+        if(Number(bodyWidth)-Number(boundTip)<230){
+            toolLocation.left=canvasDetail.width-tirDetail.width;
+            offset=tirDetail.width/2-10;
+        }
     }
     if(toolLocation.left<0){
         offset=toolLocation.left;
@@ -38,10 +51,26 @@ function poptipOver(every,all,canvas,scroll,discount) {
     tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
-    angleDom.style.left = toolLocation.left+tirDetail.width/2-5+offset+ 'px';
+    if(isIcon=='icon'){
+        angleDom.style.left = toolLocation.left+tirDetail.width-18+offset+ 'px';  
+    }else{
+        angleDom.style.left = toolLocation.left+tirDetail.width/2-5+offset+ 'px';
+    }
     angleDom.style.top = toolLocation.top+tirDetail.height+ 'px';
 }
 
+//图标浮框内容
+function getIconToolTipContent(thatData,discount){
+    var data = Object.assign({}, thatData);
+    var width = 225;
+    var str = '<div class="content">'+
+                123
+          '</div>'
+    return {
+        str: str,
+        width: width
+    };
+}
 
 //气泡的具体内容
 function getToolTipContent(thatData,discount) {

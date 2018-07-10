@@ -165,15 +165,15 @@ let initData='';
             }
             this.$emit('scroll',canvasData,this.drawingBoard,this.scroll);
         },
-        mouseEnter(event,node){
+        mouseEnter(event,node,isIcon){
              var every=node.data;
              var everyData =every?every:{};
-             this.$emit('enter',event,everyData,canvasData,this.drawingBoard,this.scroll);
+             this.$emit('enter',event,everyData,canvasData,this.drawingBoard,this.scroll,isIcon);
         },
-        mouseLeave(event,node){
+        mouseLeave(event,node,isIcon){
              var every=node.data;
              var everyData =every?every:{};
-             this.$emit('leave',event,everyData,canvasData);
+             this.$emit('leave',event,everyData,canvasData,isIcon);
         },
         mouseClick(event){
             var every=event.subject.part.data;

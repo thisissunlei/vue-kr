@@ -16,8 +16,12 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以移动对象
             allowMove: false
         });
+    //库存平面图
+    let isElementHover=false;
+    let isIconHover=false;
+    let enterData={};
+    let leaveData={};
     
-
     
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
@@ -71,7 +75,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel,
                 {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:16, height: 16,margin:5,cursor:'pointer'},
+                {width:16, height: 16,padding:5,cursor:'pointer'},
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
                     mouseEnter: function (e, node) { 
@@ -84,11 +88,14 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             ),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
+                    isElementHover=true;
                     console.log('1');
+                    enterData={e,node};
                     enterFn(e,node)
                 },
                 mouseLeave: function (e, node) { 
                     console.log('2');
+                    leaveData={e,node};
                     leaveFn(e,node)
                 }
             }

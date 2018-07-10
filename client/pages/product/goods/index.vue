@@ -160,12 +160,12 @@ export default {
             columns:[
                  {
                     title: '社区编码',
-                    key: 'communitCode',
+                    key: 'communityCode',
                     align:'center',
                 },
                 {
                     title: '社区名称',
-                    key: 'communitName',
+                    key: 'communityName',
                     align:'center',
                 },
                 {

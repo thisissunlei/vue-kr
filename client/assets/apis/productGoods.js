@@ -31,6 +31,21 @@ export default  {
         url: '/api/krspace-finance-web/krmting/room/detail',
         method: 'get'
     },
+    //社区商品配置--社区列表
+    'get-krmting-mobile-community-list': {
+        url: '/api/krspace-op-web/krmting/mobile/community/list',
+        method: 'get'
+    },
+    //社区商品配置--社区详情
+    'get-krmting-mobile-community-detail': {
+        url: '/api/krspace-op-web/krmting/mobile/community/detail',
+        method: 'get'
+    },
+    //社区商品配置--编辑社区
+    'edit-krmting-mobile-community': {
+        url: '/api/krspace-op-web/krmting/mobile/community/edit',
+        method: 'post'
+    },
     
   }
   

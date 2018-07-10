@@ -18,7 +18,7 @@ export default {
                     key: 'utime',
                     align: 'center',
                     render(tag, params) {
-                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.utime));
+                        let time = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS", new Date(params.row.utime));
                         return tag('div', time)
                     }
                 }, {

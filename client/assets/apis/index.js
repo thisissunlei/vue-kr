@@ -17,29 +17,32 @@ import Krmeeting from "./krmeeting.js";
 import DoorRelationship from "./doorRelationship.js";
 import KrmeetingRoom from "./krmeetingRoom.js";
 import ProductGoods from './productGoods.js';
-import FinancialtransferApply from "./financialtransferApply.js";
+import comment from './comment';
 import DevTool from './devTool';
+import FinancialtransferApply from "./financialtransferApply.js";
 
 export default {
-    ...OrderApi,
-    ...OrderManageApi,
-    ...ContractCenter,
-    ...apiPublic,
-    ...BillApi,
-    ...MemberApi,
-    ...Settlement,
-    ...operationsCenter,
-    ...OperationApi,
-    ...NewMain,
-    ...Basic,
-    ...Calculator,
-    ...projectSetting,
-    ...Inventory,
-    ...Smarthardware,
-    ...Krmeeting,
-    ...DoorRelationship,
-    ...KrmeetingRoom,
-    ...ProductGoods,
-    ...FinancialtransferApply,
-    ...DevTool
-};
+  ...OrderApi,
+  ...OrderManageApi,
+  ...ContractCenter,
+  ...apiPublic,
+  ...BillApi,
+  ...MemberApi,
+  ...Settlement,
+  ...operationsCenter,
+  ...OperationApi,
+  ...NewMain,
+  ...Basic,
+  ...Calculator,
+  ...projectSetting,
+  ...Inventory,
+  ...Smarthardware,
+  ...Krmeeting,
+  ...DoorRelationship,
+  ...KrmeetingRoom,
+  ...ProductGoods,
+  ...comment,
+  ...ProductGoods,
+  ...DevTool,
+  ...FinancialtransferApply
+}

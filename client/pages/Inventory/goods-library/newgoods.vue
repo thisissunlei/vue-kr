@@ -2,14 +2,14 @@
      <Form ref="formItem" :model="formItem" style="text-align:left;padding-left:30px;" placeholder="请选择楼层" :rules="ruleInvestment"  label-position="top">
 
             
-                  <Form-item label="所在楼层" style="text-align:left" class='daily-form'> 
+                  <Form-item label="所在楼层" style="text-align:left" class='daily-form' prop="floor"> 
                         <Select 
                             v-model="formItem.floor" 
                             placeholder="请选择楼层" 
                             style="width: 200px"
                             clearable
                         >
-                            <Option v-for="item in newFloorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
+                            <Option v-for="item in newFloorList" :value="''+item.floor" :key="item.floor">{{ item.floorName }}</Option>
                         </Select> 
                     </Form-item>
                     <Form-item label="商品名称"  style="text-align:left"  class='daily-form' prop="name" >
@@ -20,7 +20,7 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                      </Form-item>
-                    <Form-item label="商品类型"     style="text-align:left"   class='daily-form'> 
+                    <Form-item label="商品类型"     style="text-align:left"   class='daily-form' prop="goodsType"> 
                           <Select 
                             v-model="formItem.goodsType"
                             placeholder="请选择商品类型" 
@@ -30,14 +30,16 @@
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select> 
                     </Form-item>
-                    <Form-item v-if="formItem.goodsType=='SPACE'" style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
+                    <div style="display:inline-block;" v-if="formItem.goodsType=='SPACE'">
+                        <Form-item   style="text-align:left"  prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
-                                v-model="formItem.capacity" 
+                               v-model="formItem.capacity" 
                                placeholder="请输入工位数" 
-                                style="width: 200px"
-                                @keyup.enter.native="onKeyEnter($event)"
+                               style="width: 200px"
+                               @keyup.enter.native="onKeyEnter($event)"
                             />	
-                    </Form-item>
+                        </Form-item>
+                    </div>
                      <Form-item label="面积" class='daily-form' style="text-align:left;padding-left:10px;margin-left:-10px;"  prop="area" > 
                             <i-input 
                                 v-model="formItem.area" 
@@ -78,13 +80,14 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-                        <Form-item label="补充描述" prop="descr"  style="text-align:left"  class='daily-form'>
+                        <Form-item label="补充描述"  style="text-align:left"  class='daily-form'>
                             
                             <Input
                                  type="textarea"
                                 v-model="formItem.descr" 
                                 style="width: 200px"
                                 placeholder="请输入描述"
+                                :maxlength="50"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
@@ -95,27 +98,17 @@ import dateUtils from 'vue-dateutils';
     export default{
          name:'HeighSearch',
         props: {
-             data:{
-                 type:Array,
-                 default:()=>[],   
-             },
-             newgooddata:{
-                 type:Array,
-                 default:()=>[],   
-             },
              floorList:{
                  type:Array,
                  default:()=>[],
-             },
-             seacchValue:{
-                  type:Object,
-                 default:{},
              }
         },
         data (){
            //商品名称
             const validateName = (rule, value, callback) => {
-                if(value&&value.length>20){
+                if(!value){
+                    callback('请填写名称');
+                }else if(value.length>20){
                     callback('名称最多20个字节');
                 }else{
                     callback();
@@ -146,9 +139,11 @@ import dateUtils from 'vue-dateutils';
             //工位数
             const validateStation = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
+                if(!value){
+                    callback('请填写工位数');
+                }else if(!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>999){
+                }else if(value>999){
                     callback('最大999个工位');
                 }else{
                     callback();
@@ -159,7 +154,7 @@ import dateUtils from 'vue-dateutils';
                  enmuKey:'',
                 formItem:
                         {   
-                            floor:this.floorValue,//所在楼层
+                            floor:'',//所在楼层
                             name:'',//商品名称
                             goodsType:'',//商品类型
                             capacity:'',//工位数
@@ -189,23 +184,25 @@ import dateUtils from 'vue-dateutils';
                 ],
                 newFloorList:[], 
             ruleInvestment: {
-                    name:[
-                        { validator: validateName, trigger: 'change' }
+                    floor:[
+                        { message: '请选择楼层', trigger: 'change',required: true }
                     ],
-                     area: [
+                    name:[
+                        { validator: validateName, trigger: 'change',required: true }
+                    ],
+                    goodsType:[
+                        { message: '请选择商品类型', trigger: 'change',required: true }
+                    ],
+                    area: [
                         { validator: validarea, trigger: 'change' }
                     ],
                     quotedPrice: [
                         { validator: validateOrder, trigger: 'change' }
                     ],
-                    descr: [
-                        { validator: validateName, trigger: 'change' }
-                    ],
                     capacity: [
-                        { validator: validateStation, trigger: 'change' }
-                    ],
-                    
-                         }
+                        { validator: validateStation, trigger: 'change' ,required: true }
+                    ]   
+                }
             }
         },
         mounted(){

@@ -26,7 +26,7 @@ axios.interceptors.request.use(config => {
    
    
   }
-  if(config.url.indexOf('mockjs') !==-1 ){
+  if(config.url.indexOf('mockjs ') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
   }else if(config.url.indexOf('/st/') !==-1){
     config.url = config.url.split('/st/')[1]
@@ -60,11 +60,11 @@ function filterNull (o) {
  }
  return o
 }
-
 function check401(res) {
  res = res.data;
    if (res.code ===-4011) {
-     window.location.href = '/new/login.html';
+     const redirectUrl = encodeURIComponent(window.location.href);
+     window.location.href = `/new/login.html?RU=${redirectUrl}`;
    } else if (res.code ===-4033) {
      // console.log('您没有操作权限，请联系管理员')
    }

@@ -200,18 +200,18 @@
             class-name="vertical-center-modal"
             style="text-align:left;">
             <Form>
-    <div>
-    <Form-item  label='移动办公室：' style="text-align:left;"    >
-        <span>{{resect.moveStations}}</span>
-     </Form-item >
-            <Form-item  label='独立办公室：' style="text-align:left;"  >
-                <span>{{resect.openStations}}</span>
-            </Form-item >
-            <Form-item  label='固定办公室：' style="text-align:left;"  >
-                <span>{{resect.spaces}}</span>
-            </Form-item > 
-        </div>
-</Form> 
+                <div>
+                    <Form-item  v-if="resect.moveStations" label='移动办公桌：' style="text-align:left;"    >
+                        <span>{{resect.moveStations}}</span>
+                    </Form-item >
+                    <Form-item  v-if="resect.openStations" label='独立办公室：' style="text-align:left;"  >
+                        <span>{{resect.openStations}}</span>
+                    </Form-item >
+                    <Form-item  v-if="resect.spaces" label='固定办公桌：' style="text-align:left;"  >
+                        <span>{{resect.spaces}}</span>
+                    </Form-item > 
+            </div>
+ </Form> 
   <div slot="footer" style="text-align:center;">
                  <Button type="primary" @click="continu">继续</Button>
             </div>

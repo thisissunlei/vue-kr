@@ -158,33 +158,38 @@
                         title: '商品名称',
                         key: 'seatNames',
                         align:'center',
-                        width:200,
+                        width:150,
                         render:(h,params)=>{
                             let setnames=params.row.seatNames;
-                            setnames='33、78、9898、434、34、23、5、4、65763、3436、67、we2、12、3、434346、76、812、12、43、5、7687、78、、655、443、23、234、65、76、8'
+                            if (!setnames) {
+                                return
+                            }
                             let setArray=setnames.split('、');
                             let lines=[] 
                             let copyNames=Array.from(setArray)
-                            console.log(copyNames)
                             while(copyNames.length>0){
                                 lines.push( h('p',copyNames.splice(0,5).join('、'))) 
                             }
                             return h('div', [
                                         h('Tooltip', {
                                             props: {
-                                                placement: 'top',
-                                                content: setnames
-                                            },
-                                            style:{
+                                                placement: 'top'
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
-                                                    overflow: 'hidden'
+                                                    overflow: 'hidden',
+                                                    width:'180px'
                                                 }
-                                        }, [h('div',lines)]
-                                        )
-                                      ]
-                                    )
-                        }
+                                            },setnames)
+                                        ]),
+                                        h('div', {slot:'content'},lines),
+                                    ])
+                                ])
+                        }                                    
                     },                    
                     {
                         title: '服务费总额',

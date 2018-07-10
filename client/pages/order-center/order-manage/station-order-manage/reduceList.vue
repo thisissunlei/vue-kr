@@ -131,7 +131,8 @@
                     {
                         title: '订单编号',
                         key: 'orderNum',
-                        align:'center'
+                        align:'center',
+                        width:116
                     },
                     {
                         title: '客户名称',
@@ -141,8 +142,52 @@
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var communityName=params.row.communityName;
+                              if (communityName.lastIndexOf('社区')==communityName.length-2) {
+                                 communityName=communityName.slice(0,communityName.length-2)
+                              }           
+                          return <span class="u-txt">{communityName}</span>;
+                        }
                     },
+                    {
+                        title: '商品名称',
+                        key: 'seatNames',
+                        align:'center',
+                        width:150,
+                        render:(h,params)=>{
+                            let setnames=params.row.seatNames;
+                            if (!setnames) {
+                                return
+                            }
+                            let setArray=setnames.split('、');
+                            let lines=[] 
+                            let copyNames=Array.from(setArray)
+                            while(copyNames.length>0){
+                                lines.push( h('p',copyNames.splice(0,5).join('、'))) 
+                            }
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top'
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden',
+                                                    width:'180px'
+                                                }
+                                            },setnames)
+                                        ]),
+                                        h('div', {slot:'content'},lines),
+                                    ])
+                                ])
+                        }                                    
+                    }, 
                     {
                         title: '减租开始日期',
                         key: 'startDate',
@@ -191,6 +236,14 @@
                         align:'center',
                         render(tag, params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                            if (time.split('  ').length==2) {
+                              let t1=time.split('  ')[0]
+                              let t2=time.split('  ')[1]
+                              let lines=[];
+                              lines.push(tag('p',t1))
+                              lines.push(tag('p',t2))
+                              return tag('div',lines);  
+                            }
                             return time;
                         }
                     },
@@ -200,6 +253,14 @@
                         align:'center',
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
+                            if (time.split('  ').length==2) {
+                              let t1=time.split('  ')[0]
+                              let t2=time.split('  ')[1]
+                              let lines=[];
+                              lines.push(tag('p',t1))
+                              lines.push(tag('p',t2))
+                              return tag('div',lines);  
+                            }
                             return time;
                         }
                     },

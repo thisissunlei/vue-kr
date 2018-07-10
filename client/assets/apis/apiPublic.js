@@ -27,13 +27,6 @@ export default  {
         url:'/api/krspace-op-web/customer/my-customers/order-currency',
         method:'get'
     },
-    
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> feature/客户来源删除二级菜单
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',

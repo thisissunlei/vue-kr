@@ -20,7 +20,7 @@ export default {
         labelInValue: {
             default: false,
             type: Boolean
-        },
+        }
     },
     data() {
 
@@ -61,18 +61,19 @@ export default {
             }, e => {
                 console.log('error--->', e)
             })
-            return list;
+           
 
         }
     }
+}
 </script>
 
 <style lang="less"> 
-   .com-select-community{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
+    .com-select-community{
+            ::-webkit-input-placeholder { color:#666; }
+            ::-moz-placeholder { color:#666; } /* firefox 19+ */
+            :-ms-input-placeholder { color:#666; } /* ie */
+            input:-moz-placeholder { color:#666; }
 
-   }
+    }
 </style>

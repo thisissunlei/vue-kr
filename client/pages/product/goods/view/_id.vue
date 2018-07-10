@@ -10,49 +10,49 @@
                     {{goodsInfo.buildingName}}
                 </LabelText>
                 <LabelText label="正式开业状态：">
-                   {{goodsInfo.area}}
+                   {{goodsInfo.communityStatus}}
                 </LabelText>
                 <LabelText label="正式开业时间：">
-                    {{goodsInfo.openTime}}
+                    {{goodsInfo.openDate}}
                 </LabelText>
                  <LabelText label="详细地址：">
-                    {{goodsInfo.openTime}}
+                    {{goodsInfo.communityAddress}}
                 </LabelText>
                 <div class="u-img-content">
                     <div class="u-img-title">大厦外景图：</div>
-                    <div><img :src="basicInfo.imgUrl" class="u-img-url">{{basicInfo.imgUrl?'':'无'}}</div>
+                    <div><img :src="goodsInfo.buildingImg" class="u-img-url">{{goodsInfo.buildingImg?'':'无'}}</div>
                 </div>
                 <div class="u-img-content">
                     <div class="u-img-title">社区展示图册：</div>
-                    <div><img :src="basicInfo.imgUrl" class="u-img-url">{{basicInfo.imgUrl?'':'无'}}</div>
+                    <div><img :src="goodsInfo.imgUrl" class="u-img-url">{{goodsInfo.imgUrl?'':'无'}}</div>
                 </div>
             </DetailStyle>
             <DetailStyle info="APP社区商品信息">
                 <LabelText label="上架状态：">
-                   {{goodsInfo.appMeeting}}
+                   {{goodsInfo.appPublished}}
                 </LabelText>
                 <LabelText label="已上架会议室商品数量：">
-                    {{goodsInfo.appMeeting}}
+                    {{goodsInfo.appRoomNum}}
                 </LabelText>
                 <LabelText label="已上架散座商品数量：">
-                    {{goodsInfo.appMeeting}}
+                    {{goodsInfo.appSeatNum}}
                 </LabelText>
             </DetailStyle>
             <DetailStyle info="小程序社区商品信息">
                 <LabelText label="上架状态：">
-                    {{goodsInfo.appMeeting}}
+                    {{goodsInfo.kmPublished}}
                 </LabelText>
                 <LabelText label="社区折扣策略：">
-                    {{goodsInfo.appMeeting}}
+                    {{goodsInfo.promotionDesc}}
                 </LabelText>
                 <LabelText label="已上架会议室商品数量：">
-                   {{goodsInfo.meetingCount}}
+                   {{goodsInfo.kmRoomNum}}
                 </LabelText>
                  <LabelText label="已上架散座商品数量：">
-                   {{goodsInfo.kmMeeting}}
+                   {{goodsInfo.kmSeatNum}}
                 </LabelText>
                 <LabelText label="散座营业时段：">
-                    {{goodsInfo.kmMeeting}}
+                    {{goodsInfo.kmStartTime}}-{{goodsInfo.kmEndTime}}
                 </LabelText>
                 <!-- <LabelText label="不可预订日期策略：">
                     {{goodsInfo.kmMeeting}}

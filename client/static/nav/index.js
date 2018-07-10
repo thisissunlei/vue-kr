@@ -191,7 +191,9 @@
 
         '</div>';
         // document.body.innerHTML = html;
-       
+        if(!navUtils.bodyDom){
+            return ;
+        }
         navUtils.bodyDom.innerHTML = html;
         var moreDom = document.getElementById(moreId);
         var navDom = document.getElementById(navId)

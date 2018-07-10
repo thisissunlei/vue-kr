@@ -229,7 +229,8 @@
                         align:'center',
                          width:100,
                         render(h, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            return h('span',time)
                         }
                     },
                     {

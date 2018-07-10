@@ -194,7 +194,7 @@
                         align:'center',
                         render(tag,params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate));
-                            return time;
+                            return tag('span',time);
                         }
                     },
                     {

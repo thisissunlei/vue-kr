@@ -7,6 +7,7 @@
             @cancelClick="cancelClick"
             @recordClick="recordClick"
             :isOk="isOk"
+            :right="right"
         >
             <Input
                 :placeholder="placeholder"
@@ -34,6 +35,9 @@ export default {
         EditLabel,
     },
     props:{
+         right:{
+            type:String
+        },
         isOk:{
             type:Boolean,
             default:true,

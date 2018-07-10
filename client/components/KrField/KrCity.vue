@@ -8,6 +8,7 @@
             @recordClick="recordClick"
             @editClick="editClick"
             :isOk="isOk"
+  :right="right"
         >
             <Cascader
                 ref="cityCascader"
@@ -32,6 +33,10 @@ export default {
         EditLabel,
     },
     props:{
+        right:{
+          
+            type:String
+        },
         isOk:{
             type:Boolean,
             default:true,

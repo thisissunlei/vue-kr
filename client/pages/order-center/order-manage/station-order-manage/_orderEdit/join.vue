@@ -1118,43 +1118,6 @@ import ListAndMap from '../listAndMap';
                 this.formItem.salerId = value;
                  this.validSaleChance();
             },
-            changeChance: function (value) {
-            if (!value || value === 0 || value == -1) {
-                this.formItem.saleChanceId = '';
-            } else {
-                this.formItem.saleChanceId = value;
-            }
-             },
-            validSaleChance() {
-                // this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
-                let obj = {};
-                obj.customerId = this.formItem.customerId;
-                obj.communityId = this.formItem.communityId;
-                obj.salerId = this.formItem.salerId;
-                this.orderitems = Object.assign({}, obj);
-            },
-            handleGotChancelist(parms) {
-                debugger
-                if (parms.isNewUser) {
-                    if (parms.count >= 1) {
-                        this.showChanceSelector = true;
-                        this.defaultChanceID = parms.list[1].value
-                        // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
-                    }
-                    else {
-                        this.showChanceSelector = false;
-                        this.OpportunityRequired = true;
-                        this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
-                    }
-                }
-                else {
-                    if (parms.count == 0) {
-                        this.showChanceSelector = false;
-                        this.OpportunityRequired = false;
-                        this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
-                    }
-                }
-            },
             deleteStation(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;

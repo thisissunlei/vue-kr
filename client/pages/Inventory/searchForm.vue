@@ -500,6 +500,9 @@ export default {
                 .ivu-form-item-content{
                     display:inline-block;
                 }
+                .ivu-form-item:after, .ivu-form-item:before{
+                    content: none;
+                }
             }
             .community-form{
                 min-width: 374px;

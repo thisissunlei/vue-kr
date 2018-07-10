@@ -367,7 +367,7 @@ import utils from '~/plugins/utils';
                         title: '小计',
                         key: 'originalAmount',
                         render:function(h,params){
-                            return utils.thousand(params.row.originalAmount)
+                            return h('span',{},utils.thousand(params.row.originalAmount))
                          }
                     }
                 ],
@@ -992,7 +992,6 @@ import utils from '~/plugins/utils';
                 let day = 1000 * 60* 60*24;
                 let start = date + day;
                 this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
-               console.log('========')
                 this.getStationAmount()
                 this.clearStation()
                 
@@ -1033,7 +1032,6 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(station)
 
                 }
-                console.log('========',station)
                 this.selecedStation = station
                 if(originalPrice){
                     return

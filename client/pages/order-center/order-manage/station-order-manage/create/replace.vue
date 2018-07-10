@@ -139,7 +139,7 @@
                     </Row>
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
-                        <Button type="primary" @click="openPlanMap">选择工位</Button>
+                        <Button type="primary" @click="openPlanMap">添加房间/工位</Button>
                         <span style="padding:0 5px"> </span>
                         <Button type="primary" @click="entryPrice">录入单价</Button>
                     </Row>
@@ -319,15 +319,16 @@
 
         <Modal
             v-model="showMap"
-            title="选择工位"
+            title="选择商品"
             ok-text="保存"
             cancel-text="取消"
             width="90%"
             class-name="vertical-center-modal"
          >
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap"></planMap>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap"/>
             <div slot="footer">
-                <Button type="primary" @click="submitStation">确定</Button>
+                <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+                <Button  @click="cancelStation">取消</Button>
             </div>
         </Modal>
 
@@ -368,6 +369,7 @@
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
     import utils from '~/plugins/utils';
+    import ListAndMap from '../listAndMap';
     // 新建换租订单步骤说明
     // step：1
     // 选择客户名称->根据客户带出相对应的社区；其他为必填项；
@@ -813,7 +815,8 @@
             SelectSaler,
             selectCustomers,
             ReplaceView,
-            planMap
+            planMap,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -1143,9 +1146,7 @@
                 var toString = Object.prototype.toString;
                 
                 var typeStr = toString.call([]); 
-                console.log(this.selecedStationList,">>>>>>>>>",typeStr)
                 if(this.selecedStationList && typeStr == '[object Array]' &&  this.selecedStationList.length){
-                    console.log(this.selecedStationList,"============")
                     this.clearFormThree();
                 }
             },
@@ -1484,7 +1485,6 @@
                     deleteData:[],
                 };
                 this.showMap = false
-
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;

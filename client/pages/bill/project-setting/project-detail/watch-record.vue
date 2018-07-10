@@ -1,18 +1,18 @@
 <template>
     <div class="watch-record">
-         
+
         <Form ref="params" :model="params" >
             <Form-item label="" class='daily-form'>
-                <DatePicker 
-                    v-model="params.startTime" 
+                <DatePicker
+                    v-model="params.startTime"
                     placeholder="开始日期"
                     style="width: 120px"
                 />
             </Form-item>
             <span style="padding:0px 10px;display:inline-block;line-height:32px;">至</span>
             <Form-item label="" class='daily-form'>
-                <DatePicker 
-                    v-model="params.endTime" 
+                <DatePicker
+                    v-model="params.endTime"
                     placeholder="结束日期"
                     style="width: 120px"
                 />
@@ -26,18 +26,18 @@
         <Table :columns="columns" :data="watchRecord"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page 
+                <Page
                     v-if="watchRecord && watchRecord.length"
                     :current="page"
                     :total="totalCount"
-                    :page-size="pageSize" 
-                    show-total 
+                    :page-size="pageSize"
+                    show-total
                     show-elevator
                     @on-change="changePage"
                 ></Page>
             </div>
         </div>
-      
+
     </div>
 </template>
 
@@ -69,7 +69,7 @@ export default {
     data(){
         return{
             totalCount:this.watchTotalCount,
-            pageSize:15,
+            pageSize:10,
             page:1,
             params:{
                 startTime:'',
@@ -91,7 +91,7 @@ export default {
                             return '-'
                         }
                         let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.uTime));
-                        return time;
+                        return h('span',{},time);
                     }
                 },
                 {
@@ -110,7 +110,7 @@ export default {
                     align:'center',
                     key:'detail'
                 }
-                
+
             ]
         }
     },
@@ -128,25 +128,25 @@ export default {
             var data = Object.assign({},this.params);
             data.startTime = publicFn.timeToStr(data.startTime);
             data.endTime = publicFn.timeToStr(data.endTime);
-            
+
             this.$emit('searchClick',data)
-          
+
         },
         seachClick(){
-            
+
             var data = Object.assign({},this.params);
             data.startTime = publicFn.timeToStr(data.startTime);
             data.endTime = publicFn.timeToStr(data.endTime);
-           
+
             // return;
             this.$emit('searchClick',data)
         },
-     
+
         changeSaler(value){
                 // 销售员
             this.params.updator = value;
         },
-       
+
     }
 }
 </script>
@@ -155,6 +155,9 @@ export default {
     .watch-record{
         .daily-form{
             display: inline-block;
+            .ivu-form-item:after, .ivu-form-item:before{
+                content: none;
+            }
         }
     }
 </style>

@@ -6,6 +6,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+  :right="right"
         >
             <Cascader
                 :data="data"
@@ -28,6 +29,10 @@ export default {
         EditLabel,
     },
     props:{
+        right:{
+         
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',

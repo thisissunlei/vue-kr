@@ -1,6 +1,7 @@
 #!/bin/bash
 
-npm run build
+ npm run build
+
 
 buildEnvDir=$1
 target_site=www@10.1.60.201
@@ -48,6 +49,6 @@ esac
 echo $1
 echo $target_site
 
-rsync -cza    -e "ssh -p ${target_site_port}"  ./ ${target_site}:/data/work/frontend/kr-vue >/dev/null
+rsync -cza   -e "ssh -p ${target_site_port}"  ./ ${target_site}:/data/work/frontend/kr-vue >/dev/null
 
 echo done!

@@ -117,6 +117,12 @@ export default  {
         url: '/api/iot-platform/door-device/admin/actions/refresh-reported-info',
         method: 'get'
     },
+
+     //温湿度变化
+     'temperaturehumiditymaplist':{
+        url: '/api/iot-platform/device-status-log/list',
+        method: 'get'
+    },
     
     
 

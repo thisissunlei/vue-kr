@@ -168,7 +168,8 @@
                             let lines=[] 
                             let copyNames=Array.from(setArray)
                             while(copyNames.length>0){
-                                lines.push( h('p',copyNames.splice(0,5).join('、'))) 
+                                let strs=copyNames.splice(0,5)
+                                lines.push(h('p',{},strs.join('、'))) 
                             }
                             return h('div', [
                                         h('Tooltip', {
@@ -182,7 +183,7 @@
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden',
-                                                    width:'180px'
+                                                    width:'130px'
                                                 }
                                             },setnames)
                                         ]),

@@ -184,7 +184,7 @@
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden',
-                                                    width:'180px'
+                                                    width:'130px'
                                                 }
                                             },setnames)
                                         ]),

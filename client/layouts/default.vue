@@ -2,17 +2,15 @@
 <template>
     <div class="layout"  :class="{'layout-hide-text': spanLeft < 5}">
         <div id="_layout_box_hander" ></div>
-            <Row type="flex">
-                <Col :span="spanRight">
-                    <div id="layout-content_id" class="layout-content">
-                        <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
-                            <body>
-                                <nuxt/>
-                            </body>
-                        </div>
+        <Row type="flex">
+            <Col :span="spanRight">
+                <div id="layout-content_id" class="layout-content">
+                    <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
+                        <nuxt/>   
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </Col>
+        </Row>
         <div class="layout-copy">
              &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
         </div>
@@ -37,7 +35,7 @@
         },
         mounted(){
             //  console.log(document.getElementById('_layout_box_hander'),this.layoutId)
-            vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
+            // vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
             
             this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;

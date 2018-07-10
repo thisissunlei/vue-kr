@@ -2,110 +2,121 @@
     <div class="g-goods-detail">
         <SectionTitle title="编辑社区商品"></SectionTitle>   
         <div class="m-goods-content">
-            <DetailStyle info="社区基本信息">
-                <LabelText label="社区名称：">
-                    {{goodsInfo.comName}}
-                </LabelText>
-                <LabelText label="社区编码：">
-                   {{goodsInfo.comNumber}}
-                </LabelText>
-                <LabelText label="所在地区：">
-                    {{goodsInfo.area}}
-                </LabelText>
-                <LabelText label="开业状态：">
-                    {{goodsInfo.openStatus}}
-                </LabelText>
-                <LabelText label="开业时间：">
-                    {{goodsInfo.openTime}}
-                </LabelText>
-            </DetailStyle>
             <Form ref="goodsFormValidate" :model="goodsInfo" :rules="ruleValidate" :label-width="100">
-                <DetailStyle info="社区基本运营信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="大厦名称：" prop="buildname">
-                                <Input v-model="goodsInfo.buildname" class="input"/>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="地址描述：" prop="address">
-                                <Input v-model="goodsInfo.address" class="input"/>
-                            </FormItem>
-                         </Col>
-                    </Row>
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="社区坐标：" prop="coordinate">
-                                <Input v-model="goodsInfo.coordinate" class="input"/>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="大厦外景：" prop="fileList" require>
-                                <UploadFile></UploadFile>
-                            </FormItem>
-                        </Col>
-                    </Row>
+                <DetailStyle info="社区基本信息">
+                    <LabelText label="社区名称：">
+                        {{goodsInfo.communityName}}
+                    </LabelText>
+                    <LabelText label="大厦名称：">
+                        {{goodsInfo.buildingName}}
+                    </LabelText>
+                    <LabelText label="正式开业状态：">
+                    {{goodsInfo.communityStatus}}
+                    </LabelText>
+                    <LabelText label="正式开业时间：">
+                        {{goodsInfo.openDate}}
+                    </LabelText>
+                    <FormItem label="详细地址"  style="width:294px" prop="name">
+                        <Input 
+                            v-model="formItem.title" 
+                            placeholder="详细地址"
+                        />
+                    </FormItem>
+                    <div class="u-upload">
+                        <FormItem label="封面图片" class="u-input" prop="name" style="width:100%">
+                                <UploadFile 
+                                    v-model="formItem.coverImg"
+                                    :category="category"
+                                    withCredentials
+                                    :format="['jpg','png','gif']"
+                                    :maxSize="2048"
+                                    :maxLen="1"
+                                    :onSuccess="coverImgSuccess"
+                                    :onRemove="coverImgRemove"
+                                    :onExceededSize="imgSize"
+                                    :onFormatError="imgSizeFormat"
+                                    :defaultFileList="coverImgList"
+                                    :imgWidth="120"
+                                    :imgHeight="120"
+                                >
+                                    <div slot="tip" class="u-unload-tip">图片小于1MB，格式为JPG，PNG，GIF，建议图片比例为3:4</div>
+                                </UploadFile>
+                        </FormItem>
+                    </div>
+                    <div class="u-upload">
+                        <FormItem label="会议室图片" class="u-input" prop="name" style="width:100%">
+                            <UploadFile 
+                                v-model="formItem.detailImgs"
+                                multiple
+                                :category="category"
+                                withCredentials
+                                :format="['jpg','png','gif']"
+                                :maxSize="2048"
+                                :onSuccess="detailImgsSuccess"
+                                :onRemove="detailImgsRemove"
+                                :onExceededSize="imgSize"
+                                :onFormatError="imgSizeFormat"
+                                :defaultFileList="detailImgList"
+                                :imgWidth="120"
+                                :imgHeight="120"
+                                
+                            >
+                                <div slot="tip" class="u-unload-tip">图片小于1MB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                            </UploadFile>
+                        </FormItem>
+                    </div>
                 </DetailStyle>
-                <DetailStyle info="APP商品信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="上架状态：" prop="appStatus">
-                                <RadioGroup v-model="goodsInfo.appStatus">
-                                    <Radio label="已上架">已上架</Radio>
-                                    <Radio label="未上架">未上架</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <LabelText label="APP可用会议室楼层：">
-                                {{goodsInfo.appMeeting}}
-                            </LabelText>
-                        </Col>
-                    </Row>
+                <DetailStyle info="APP社区商品信息">
+                   <div>
+                       <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublish">
+                            <RadioGroup v-model="formItem.appPublish" style="width:250px">
+                                <Radio label="true">
+                                    已上架
+                                </Radio>
+                                <Radio label="false">
+                                    未上架
+                                </Radio>
+                            </RadioGroup> 
+                        </FormItem>
+                   </div>
+                    <LabelText label="已上架会议室商品数量">
+                        {{goodsInfo.meetingCount}}
+                    </LabelText>
+                    <LabelText label="已上架散座商品数量">
+                        {{goodsInfo.meetingCount}}
+                    </LabelText>
+                    
                 </DetailStyle>
-                <DetailStyle info="KM会议室商品信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="上架状态：" prop="KMStatus">
-                                <RadioGroup v-model="goodsInfo.KMStatus">
-                                    <Radio label="已上架">已上架</Radio>
-                                    <Radio label="待上架">待上架</Radio>
-                                    <Radio label="未上架">未上架</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="社区折扣策略：" prop="discountMsg"  :label-width="120">
-                                <Input v-model="goodsInfo.discountMsg" class="input"/>
-                            </FormItem>
-                        </Col>
-                    </Row>
+                <DetailStyle info="小程序社区商品信息">
+                    
                     <LabelText label="KM可预定会议室数量（个）：">
                         {{goodsInfo.meetingCount}}
                     </LabelText>
                     <LabelText label="KM可用会议室楼层：">
                         {{goodsInfo.kmMeeting}}
                     </LabelText>
-
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="KM不可预订日期策略：" prop="dateSelect" :label-width="180">
-                                <Select
-                        v-model="goodsInfo.dateSelect"
-                        style="width:100px"
-                        placeholder="请选择"
-                        clearable
-                    >
-                        <Option
-                            v-for="item in statusList"
-                            :value="item.value"
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                    </Select>
-                            </FormItem>
-                        </Col>
+                    <FormItem label="可预订时段" class="u-input ivu-form-item-required"  style="width:350px"   >
+                           <div style="width:350px;float:left;">
+                               <TimePicker 
+                                    format="HH:mm" 
+                                    style="width: 122px" 
+                                    v-model="form.appStartTime"
+                                    @on-change="changeAppStartTime"
+                                    :steps="[1,30]"
+                                />
+                                <span style="padding:0 10px;">至</span>
+                                <TimePicker 
+                                    format="HH:mm"  
+                                    style="width: 122px" 
+                                    v-model="form.appEndTime"
+                                    @on-change="changeAppEndTime"
+                                    :steps="[1,30]"
+                                />
+                                 <div v-if="isAppError" class="u-error">请选择可预订时段</div>
+                           </div>
+                    </FormItem>
+                    <!-- <Row>
+                       
                         <Col span="13" style="position:relative">
                             <FormItem label="KM不可预订日期：" prop="date" :label-width="140">
                                 <span v-on:mouseover="tipsShow" v-on:mouseout="tipsHide" class="help-circled">
@@ -123,7 +134,7 @@
                         </Col>
                        
                     </Row>
-                    
+                     -->
                 </DetailStyle>
                 
                  
@@ -169,6 +180,9 @@ export default {
                  value:'false'   
                 },
             ],
+            formItem:{
+
+            },
              goodsInfo:{
                 comName:"慈云社社区",
                 comNumber:"BZJB",

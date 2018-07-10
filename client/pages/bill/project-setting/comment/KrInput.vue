@@ -6,8 +6,8 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :yesOrnoMadal="false"
             :isOk="isOk"
-            :right="right"
         >
             <Input
                 :placeholder="placeholder"
@@ -21,7 +21,7 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
-                style="width:252px;"
+    
 
             />
         </EditLabel>
@@ -29,15 +29,12 @@
 </template>
 
 <script>
-import EditLabel from './EditLabel';
+import EditLabel from '~/components/KrField/EditLabel';
 export default {
     components:{
         EditLabel,
     },
     props:{
-         right:{
-            type:String
-        },
         isOk:{
             type:Boolean,
             default:true,

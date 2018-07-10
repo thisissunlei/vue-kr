@@ -1,6 +1,7 @@
 import colorStatus from './colorStatus';
 import utils from '~/plugins/utils';
-import bgsrc from '../img/warning.png';
+import homePic from '../img/can.svg';
+import occupyPic from '../img/use.svg';
 function init(data,picProperty,dataUrl){
     var dataRender=[];
     var scale=1;
@@ -13,6 +14,7 @@ function init(data,picProperty,dataUrl){
             if(item.belongType=='SPACE'){
                 var name=utils.getStrWidth(dom,item.cellName);
                 var opacity=utils.getStrWidth(dom,item.capacity+'工位');
+                let icon=item.futureStatus?21:0;
                 parentMin=name>opacity?name:opacity;
                 item.parentMin=parentMin;
                 spaceArr.push(item);
@@ -77,11 +79,11 @@ function init(data,picProperty,dataUrl){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
-            list.bgsrc=bgsrc;
+            list.bgsrc=occupyPic; //list.futureStatus?(list.futureStatus=='123'?homePic:occupyPic):'';
             //list.status=true;
         })
     }
-
+    
     
     //pic尺寸
     var pic={

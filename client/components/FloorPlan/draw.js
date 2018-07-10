@@ -1,5 +1,5 @@
 
-function draw (go,content,data,clickFn,enterFn,leaveFn,btnFn) {
+function draw (go,content,data,clickFn,enterFn,leaveFn) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -68,19 +68,27 @@ function draw (go,content,data,clickFn,enterFn,leaveFn,btnFn) {
                 { row: 1, column: 0},
                 new go.Binding("text", "property")),
             ),
-            $("Button",
-                {  
-                    alignment: go.Spot.TopRight,
-                    click: btnFn      
-                },
+            $(go.Panel,
+                {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:20, height: 20,cursor:'pointer'},
-                new go.Binding('source','bgsrc'))),
+                {width:16, height: 16,margin:5,cursor:'pointer'},
+                new go.Binding('source','bgsrc')),
+                { //鼠标hover事件
+                    mouseEnter: function (e, node) { 
+                        console.log('123');
+                    },
+                    mouseLeave: function (e, node) { 
+                        console.log('345');
+                    }
+                }
+            ),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
+                    console.log('1');
                     enterFn(e,node)
                 },
                 mouseLeave: function (e, node) { 
+                    console.log('2');
                     leaveFn(e,node)
                 }
             }

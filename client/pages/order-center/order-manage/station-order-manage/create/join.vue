@@ -32,13 +32,6 @@
                            
                     </FormItem>
                 </Col>
-                <Col class="col">
-                    <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
-                    </FormItem>
-
-                    <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
-                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -254,7 +247,7 @@ import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
-import SelectChance from '~/components/SelectSaleChance.vue';
+
 
 
 
@@ -272,13 +265,6 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                 }
             };
             return {
-                defaultChanceID: 0,
-                opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
-                OpportunityRequired: true,
-                showChanceSelector: true,
-                orderitems: {},
-                test: "test",
-                showSaleChance: false,
                 showFree:false,
                 openStation:false,
                 inputNumberType:true,
@@ -421,7 +407,6 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                     rentAmount:'',
                     items:[],
                     stationAmount:0,
-                    saleChanceId: ''
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
@@ -480,8 +465,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            ListAndMap,
-            SelectChance
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -503,7 +487,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                     if(!_this.formItem.salerId){
                         _this.formItem.salerId = JSON.stringify(r.data.ssoId);
                         _this.salerName = r.data.ssoName
-                        _this.validSaleChance()
+
                     }
 
                 }, e => {
@@ -659,7 +643,6 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
-                formItem.opportunityId = this.formItem.saleChanceId;//销售机会ID
                 formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
 
@@ -1033,7 +1016,7 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                 }
                 this.clearStation()
                 this.getFloor = +new Date()
-                this.validSaleChance();
+                
             },
             clearStation:function(){
                 // 清除所选的工位
@@ -1066,56 +1049,12 @@ import SelectChance from '~/components/SelectSaleChance.vue';
                     this.formItem.customerId = '';
                 }
                 this.getFloor = +new Date()
-                this.validSaleChance();
+
             },
             changeSaler:function(value){
                 // 销售员
                 this.formItem.salerId = value;
-                this.validSaleChance();
             },
-            changeChance(value) {
-                if (!value || value === 0 || value == -1) {
-                    this.formItem.saleChanceId = '';
-                } else {
-                    this.formItem.saleChanceId = value;
-                }
-                console.log(this.formItem.saleChanceId)
-        },
-        handleGotChancelist(parms) {
-
-            if (parms.isNewUser) {
-                if (parms.count >= 1) {
-                    this.showChanceSelector = true;
-                    this.defaultChanceID = parms.list[1].value
-                    // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
-                }
-                else {
-                    this.showChanceSelector = false;
-                    this.OpportunityRequired = true;
-                    this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
-                }
-            }
-            else {
-                if (parms.count == 0) {
-                    this.showChanceSelector = false;
-                    this.OpportunityRequired = false;
-                    this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
-                }
-                else if (parms.count >= 1) {
-                    this.showChanceSelector = true;
-                    this.defaultChanceID = parms.list[1].value
-                }
-            }
-        },
-        validSaleChance() {
-            this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
-            let obj = {};
-            obj.customerId = this.formItem.customerId;
-            obj.communityId = this.formItem.communityId;
-            obj.salerId = this.formItem.salerId;
-            // this.defaultChanceID = -1;
-            this.orderitems = Object.assign({}, obj);
-        },
             deleteStation:function(){
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
@@ -1474,15 +1413,5 @@ import SelectChance from '~/components/SelectSaleChance.vue';
             top: 0;
         }
     }
-   #chancemsg {
-    position: absolute;
-    bottom: 2px;
-    display: block;
-}
-.OpportunityRequired {
-    color: #ed3f14;
-}
-.requiremark .ivu-form-item-label::before {
-    content: "";
-}
+   
 </style>

@@ -20,13 +20,7 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
-                <Col class="col">
-                    <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.salerId" @onChange="changeChance" @gotChanceList='handleGotChancelist' v-show="showChanceSelector" :orderitems='orderitems' :defaultValue='defaultChanceID'></SelectChance>
-                    </FormItem>
-
-                    <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
-                </Col>
+                
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -236,7 +230,7 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import SelectChance from '~/components/SelectSaleChance.vue';
+
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
 
@@ -263,18 +257,10 @@ import ListAndMap from '../listAndMap';
             };
             
             return {
-                defaultChanceID: 0,
-                opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
-                OpportunityRequired: true,
-                showChanceSelector: true,
-                orderitems: {},
-                showSaleChance: true,
                 showFree:false,
                 openStation:false,
                 customerName:'',
                 communityName:'',
-                //销售机会list
-                salerOptions: [{ value: ' ', label: '请选择' }],
                 selectAll:false,
                 discountError:false,
                 index:0,
@@ -420,7 +406,6 @@ import ListAndMap from '../listAndMap';
                     items:[],
                     signDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     stationAmount:0,
-                    saleChanceId: ''
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
@@ -594,10 +579,6 @@ import ListAndMap from '../listAndMap';
                     _this.formItem.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
                     _this.formItem.salerId = JSON.stringify(data.salerId);
-
-                    _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-                    _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-
                     _this.communityName = data.communityName;
                     _this.formItem.startDate = new Date(data.startDate);
                     _this.formItem.endDate = new Date(data.endDate);
@@ -719,8 +700,6 @@ import ListAndMap from '../listAndMap';
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
-                formItem.opportunityId = this.formItem.saleChanceId || '';
-
                 formItem.timeRange=this.formItem.timeRange;
                 formItem.rentAmount=this.formItem.rentAmount;
                 formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.firstPayTime));
@@ -1078,7 +1057,6 @@ import ListAndMap from '../listAndMap';
                     this.formItem.communityId = '';
                 }
                 this.clearStation()
-                this.validSaleChance();
                 this.getFloor = +new Date()
                 
             },
@@ -1111,12 +1089,11 @@ import ListAndMap from '../listAndMap';
                     this.formItem.customerId = '';
                 }
                 this.getFloor = +new Date()
-                 this.validSaleChance();
+
             },
             changeSaler(value){
                 // 销售员
                 this.formItem.salerId = value;
-                 this.validSaleChance();
             },
             deleteStation(){
                 // 工位表单的删除按钮
@@ -1477,16 +1454,6 @@ import ListAndMap from '../listAndMap';
             top: 0;
         }
     }
-   #chancemsg {
-    position: absolute;
-    bottom: 2px;
-    display: block;
-}
-.OpportunityRequired {
-    color: #ed3f14;
-}
-.requiremark .ivu-form-item-label::before {
-    content: "";
-}
+   
    
 </style>

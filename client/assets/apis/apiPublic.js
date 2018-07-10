@@ -19,7 +19,6 @@ export default  {
         url:'/api/op/sys/downFile',
         method:'get'
     },
-<<<<<<< HEAD
     'down-file':{
         url:'/api/op/sys/downFile',
         method:'get'
@@ -29,10 +28,6 @@ export default  {
         method:'get'
     },
     
-=======
-
-
-
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',
@@ -78,5 +73,4 @@ export default  {
         url: 'api/pm/form-field/list/type/detail',
        method: 'get'
     }
->>>>>>> master
 }

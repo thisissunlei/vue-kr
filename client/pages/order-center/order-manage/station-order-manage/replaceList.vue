@@ -227,7 +227,7 @@
                         title: '服务期限',
                         key: 'startDate',
                         align:'center',
-                         width:100,
+                        width:192,
                         render(h, params){
                             let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
                             return h('span',time)

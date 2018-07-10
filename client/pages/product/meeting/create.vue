@@ -264,9 +264,9 @@ export default {
                 name:'',
                 appBusyPrice:'',
                 appIdlePrice:'',
-                appEndTime:'23:30',
+                appEndTime:'23:30:00',
                 appPublish:'',
-                appStartTime:'00:00',
+                appStartTime:'00:00:00',
                 area:'',
                 capacity:'',
                 communityId:'',
@@ -276,8 +276,8 @@ export default {
                 floor:'',
                 kmPromotionUnitPrice:'',
                 kmUnitPrice:'',
-                krmStartTime:'09:00',
-                krmEndTime:'19:00',
+                krmStartTime:'09:00:00',
+                krmEndTime:'19:00:00',
                 krmPublish:'',
                 lockBeginTime:'',
                 lockEndTime:'',
@@ -286,10 +286,10 @@ export default {
             form:{
                startHour:'', 
                endHour:'',
-               appStartTime:'00:00',
-               appEndTime:'23:30',
-               krmStartTime:'09:00',
-               krmEndTime:'19:00',
+               appStartTime:'00:00:00',
+               appEndTime:'23:30:00',
+               krmStartTime:'09:00:00',
+               krmEndTime:'19:00:00',
 
             },
             isKrmError:false,
@@ -383,7 +383,7 @@ export default {
             this.formItem.meetingDevices=this.checkList;
         },
         changeAppStartTime(data){
-             this.formItem.appStartTime=data;
+             this.formItem.appStartTime=`${data}:00`;
             if(this.formItem.appStartTime && this.formItem.appEndTime){
                 this.isAppError=false;
             }else{
@@ -391,7 +391,7 @@ export default {
             }
         },
         changeAppEndTime(data){
-            this.formItem.appEndTime=data;
+            this.formItem.appEndTime=`${data}:00`;
             if(this.formItem.appStartTime && this.formItem.appEndTime){
                 this.isAppError=false;
             }else{
@@ -399,7 +399,7 @@ export default {
             }
         },
         changeKrmStartTime(data){
-             this.formItem.krmStartTime=data;
+             this.formItem.krmStartTime=`${data}:00`;
             if(this.formItem.krmStartTime && this.formItem.krmEndTime){
                 this.isKrmError=false;
             }else{
@@ -407,8 +407,8 @@ export default {
             }
         },
         changeKrmEndTime(data){
-             this.formItem.krmEndTime=data;
-            if(this.formItem.appStartTime && this.formItem.krmEndTime){
+             this.formItem.krmEndTime=`${data}:00`;
+            if(this.formItem.krmStartTime && this.formItem.krmEndTime){
                 this.isKrmError=false;
             }else{
                 this.isKrmError=true;
@@ -493,7 +493,7 @@ export default {
                }else{
                     this.formItem.lockEndTime=""
                }
-              
+             
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();

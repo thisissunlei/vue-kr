@@ -14,6 +14,7 @@ node_modules
 yarn.lock
 npm-debug.log
 package.json
+<<<<<<< HEAD
 
 .idea/inspectionProfiles/Project_Default.xml
 .idea/kr-vue.iml
@@ -21,3 +22,6 @@ package.json
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+=======
+.idea
+>>>>>>> feature/客户来源删除二级菜单

@@ -789,11 +789,22 @@ export default {
            
             if (this.selecedStation.length) {
                
+<<<<<<< HEAD
                 this.selecedStation = [];
                 this.selecedArr = [];
 
             }
             if (this.renewForm.items.length) {
+=======
+                let day = 1000 * 60* 60*24;
+                let start = date + day;
+                this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+                this.getStationAmount()
+                this.clearStation()
+                
+            },
+            clearStation(){
+>>>>>>> feature/客户来源删除二级菜单
                 this.renewForm.items = [];
                 this.saleAmount = 0;
                 this.saleAmounts = utils.smalltoBIG(0)
@@ -853,6 +864,36 @@ export default {
                     return obj;
                 })
 
+<<<<<<< HEAD
+=======
+                }
+                this.selecedStation = station
+                if(originalPrice){
+                    return
+                }
+               
+                if(val.length){
+                     this.$http.post('get-station-amount', params, r => {
+                        let money = 0;
+                        let list = [];
+                        _this.selecedStation = r.data.seats.map(item=>{
+                            let obj = item;
+                            money+=item.amount;
+                            //TODO
+                            obj.guidePrice = item.guidePrice || 0;
+                            obj.start = item.startDate
+                            obj.end = item.endDate
+                            return obj;
+                        })
+                        _this.disabled = false;
+                        _this.selectedDel = [];
+                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        if(_this.showSaleDiv){
+                            _this.dealSaleInfo(false)
+                        }
+>>>>>>> feature/客户来源删除二级菜单
 
             }, 200)
         },

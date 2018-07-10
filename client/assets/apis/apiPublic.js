@@ -1,8 +1,5 @@
 //公共的api
-
-
 export default  {
-
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
@@ -31,9 +28,12 @@ export default  {
         method:'get'
     },
     
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> feature/客户来源删除二级菜单
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',
@@ -74,5 +74,9 @@ export default  {
     "typePage":{
         url:'/api/pm/discuss/list/type/page',
         method:'get'
+    },
+    	'list-type-code-detail': {
+        url: 'api/pm/form-field/list/type/detail',
+       method: 'get'
     }
 }

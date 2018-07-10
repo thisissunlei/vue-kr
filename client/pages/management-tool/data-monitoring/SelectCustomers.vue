@@ -1,3 +1,22 @@
+<style lang="less">
+.com-select-customers {
+    ::-webkit-input-placeholder {
+        color: #666;
+    }
+    ::-moz-placeholder {
+        color: #666;
+    } /* firefox 19+ */
+    :-ms-input-placeholder {
+        color: #666;
+    } /* ie */
+    input:-moz-placeholder {
+        color: #666;
+    }
+}
+</style>
+
+
+
 <template>
     <div class="com-select-customers">
         <Select v-model="customer" clearable  filterable remote :placeholder="value" :remote-method="remoteCustomer" :loading="loading1" :disabled="disabled" @on-change="changeContent" :label-in-value="labelInValue">
@@ -8,8 +27,6 @@
 
 
 <script>
-
-
 import http from '~/plugins/http.js';
 
 export default {
@@ -37,22 +54,24 @@ export default {
         changeContent: function (customer) {
             this.onchange(customer)
         },
-
-        mounted:function(){
-            this.getCusomerList(' ')
+        remoteCustomer(query) {
+            this.loading1 = true;
+            setTimeout(() => {
+                this.getCusomerList(query)
+            }, 200);
         },
         getCusomerList: function (name) {
             let params = {
-                company: name || ''
+                companyName: name || ''
             }
             let list = [];
             let _this = this;
-            http.get('get-customer', params, r => {
-                list = r.data.customerList;
+            http.get('get-customer-manage', params, r => {
+                list = r.data;
                 list.map((item) => {
                     let obj = item;
-                    obj.label = item.company;
-                    obj.value = item.id + '';
+                    obj.label = item.companyName;
+                    obj.value = item.csrId + '';
                     return obj;
                 });
                 _this.loading1 = false;
@@ -64,15 +83,8 @@ export default {
             return list;
 
         }
+
+
     }
+}
 </script>
-
-<style lang="less"> 
-   .com-select-community{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-
-   }
-</style>

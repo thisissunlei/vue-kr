@@ -44,8 +44,8 @@
                         <span>最后断开时间：</span><span>{{this.returnDate(deviceVO.logoutTime)}}</span>
                     </div>
                     <div class="json-str" v-if="SecondeVersion">
-                        <div><span>设备上报信息:</span><span><pre id="json-str-report"></pre></span></div>
-                        <div><span>设备影子信息:</span><span><pre id="json-str-desired"></pre></span></div>
+                        <div class="half-div"><span>设备上报信息:</span><span><pre id="json-str-report"></pre></span></div>
+                        <div class="half-div"><span>设备影子信息:</span><span><pre id="json-str-desired"></pre></span></div>
                     </div>
                
                     <div class="item-info">
@@ -237,6 +237,11 @@ export default {
                     margin-top:5px;
                     span{
                        font-size:14px; 
+                    }
+                    .half-div{
+                        display: inline-block;
+                        width:50%;
+                        vertical-align:top;
                     }
                 }
             }

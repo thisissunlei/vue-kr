@@ -28,7 +28,7 @@
         }
         if(type && type == "member"){
             alias = '/';
-            hostname =  'memberadmin.krspace.cn';
+            hostname =  'memberadmintest.krspace.cn';
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;
@@ -645,6 +645,12 @@
                             menuCode: 'goods_list',
                         },
                         {
+                            primaryText: "折扣配置",
+                            router: 'basic/preferential',
+                            type: 'vue',
+                            menuCode: 'zhekou',
+                        },
+                        {
                             primaryText: '平面图配置',
                             menuCode: 'oper_cmt_graph_base',
                             router: 'product/communityAllocation/communityPlanList'
@@ -872,20 +878,9 @@
                             primaryText: '版本更新通知',
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
-                        },
-                       
-                        {
-                            primaryText: '项目管理权限',
-                            menuCode: 'pm_manage_role',
-                            type: 'vue',
-                            router: 'nav-config'
-                        },
-                        {
-                            primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
-                            type: 'vue',
-                            router: 'comment'
                         }
+                       
+                       
                     ]
                 },
                 {
@@ -995,15 +990,10 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        {
-                            primaryText: '运维工具',
-                            menuCode: 'ops_tool_management',
-                            type: 'vue',
-                            router: 'ops'
-                        },
+                      
                         {
                             primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
+                            menuCode: 'pm_manage_role',
                             type: 'vue',
                             router: 'nav-config'
                         },
@@ -1408,7 +1398,13 @@
                             router: 'management-tool/data-monitoring',
                             type: 'vue',
                             menuCode: 'order_validate_list'
-                        }
+                        },
+                        {
+                            primaryText: '运维工具',
+                            menuCode: 'ops_tool_management',
+                            type: 'vue',
+                            router: 'ops'
+                        },
                     ]
                 }
 

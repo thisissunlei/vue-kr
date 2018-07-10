@@ -111,6 +111,7 @@
                             @upSuccess="(detail)=>{
                                 upChange(detail,'businessUrlName')
                             }"
+                            downLabel="查看原图"
                         />
                        <!-- <span 
                         v-for="(item,index) in businessUrlName"
@@ -138,6 +139,7 @@
                             }"
                             :multiple="true"
                             :disabled="isReady"
+                            downLabel="查看原图"
                         />
                        <!-- <span 
                         v-for="item in taxUrlName"

@@ -5,11 +5,12 @@
     <div class="item">
         <span>智能硬件ID：</span><span>{{data.deviceId}}</span>
     </div>
-    <div class="item">
-        <span>屏幕展示编号：</span><span>{{data.doorCode}}</span>
-    </div>
+    
     <div class="item">
         <span>屏幕展示标题：</span><span>{{data.title}}</span>
+    </div>
+    <div class="item">
+        <span>屏幕展示编号：</span><span>{{data.doorCode}}</span>
     </div>
 
 </div>

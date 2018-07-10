@@ -1,4 +1,12 @@
-export default () =>({
+export default function(){
+        return {
+                resdata:{},
+                heightDiv:300,
+                isClick:true,
+                propertyData:[],
+                productData:[],
+                name: this.$route.query.name,
+                city: this.$route.query.city,
                 eyeIndex:1,
                 imgData:[],
                 isPhotoAlbum:false,
@@ -21,22 +29,23 @@ export default () =>({
                 totalCount: 0,
                 modal1: false,
                 modal2: false,
-                projectId: this.$route.query.projectId,
+                projectId: this.$route.query.id,
                 photos: "",
                 replyId: null,
                 formItem: {
                     comment: ''
                 },
                 defaultList: [
-    
+
                 ],
                 imgName: '',
                 uploadList: [],
                 ruleValidate: {
                     comment: [{
                         required: true,
-                        message: '不能为空',
+                        message: '备注不能为空',
                         trigger: 'blur'
                     }]
                 }
-})
+            }
+}

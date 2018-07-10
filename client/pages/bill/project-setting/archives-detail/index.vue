@@ -24,7 +24,7 @@
                             label="含税" 
                             :selectParam="everyData.param"
                             :value="getValue(everyData)"
-                            :right="everyData.right"
+                            :right="everyData.right||'READWRITE'"
                             placeholder="请输入..." 
                             @recordClick="recordClick"
                             @okClick="okClick"

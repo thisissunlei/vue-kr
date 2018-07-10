@@ -426,7 +426,8 @@ var scrollWidth = 0;
             },
             //跳转查看页面
             goView(params){
-                 window.open(`./project-setting/project-detail/comment?name=${params.name}&projectId=${params.id}&city=${params.city}&status=1`);                 
+                this.$router.push(`/bill/project-setting/comment?name=${params.name}&id=${params.id}&city=${params.city}&status=1`)
+                //  window.open(`#/project-setting/comment?name=${params.name}&id=${params.id}&city=${params.city}&status=1`);                 
                 return ;
                 window.open(`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`); //${params.status}
             },

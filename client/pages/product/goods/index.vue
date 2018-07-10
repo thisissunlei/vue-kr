@@ -5,7 +5,12 @@
             <div class="u-select">
                 <div class="u-select-list">
                     <span class="u-select-label">所属地区</span>
-                    <Cascader :data="areaList" v-model="area" class="Cascader"></Cascader>
+                    <Cascader 
+                        :data="areaList"
+                         v-model="area" 
+                         class="Cascader"
+                         @on-change="changeCity"
+                ></Cascader>
                 </div>
                 <div class="u-select-list">
                     <span  class="u-select-label">社区开业状态</span>
@@ -43,7 +48,7 @@
                 </div>
                 <div class="u-search">
                     <div class="u-select-list">
-                        <span  class="u-select-label">KM上架状态</span>
+                        <span  class="u-select-label">小程序上架状态</span>
                         <Select
                             v-model="formItem.KMPublish"
                             style="width:100px"
@@ -63,14 +68,6 @@
                         <span class="u-select-label">社区名称</span>
                         <Input
                             v-model="formItem.roomName"
-                            placeholder="请输入搜索关键词"
-                            style="width: 150px"
-                        />
-                  </div>
-                  <div class="u-select-list">
-                        <span class="u-select-label">社区编号</span>
-                        <Input
-                            v-model="formItem.roomCode"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -163,44 +160,44 @@ export default {
             columns:[
                  {
                     title: '社区编码',
-                    key: 'id',
+                    key: 'communitCode',
                     align:'center',
                 },
                 {
                     title: '社区名称',
-                    key: 'name',
+                    key: 'communitName',
                     align:'center',
                 },
                 {
                     title: '所属城市',
-                    key: 'communityName',
+                    key: 'cityName',
                     align:'center',
                 },
                 {
                     title: '社区开业状态',
-                    key: 'comPublish',
+                    key: 'communityStatus',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.comPublish?'已开业':'未开业'
-                        return status
+                        let status=params.row.communityStatus=='1'?'已开业':'未开业'
+                        return h('span',{},status)
                     }
                 },
                 {
                     title: 'APP上架状态',
-                    key: 'appPublish',
+                    key: 'appPublished',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.appPublish?'已上架':'未上架'
-                        return status
+                        let status=params.row.appPublished=='1'?'已上架':'未上架'
+                         return h('span',{},status)
                     }
                 },
                 {
-                    title: 'KM上架状态',
-                    key: 'KMPublish',
+                    title: '小程序上架状态',
+                    key: 'kmPublished',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.KMPublish?'已上架':'未上架'
-                        return status
+                        let status=params.row.kmPublished=='1'?'已上架':'未上架'
+                        return h('span',{},status)
                     }
                 },
                 {
@@ -248,6 +245,9 @@ export default {
 		this.getTableData(this.tabParams)
     },
     methods:{
+        changeCity(value){
+            console.log('value---',value)
+        },
         changePage(){
             this.tabParams.page=page;
             this.page=page;
@@ -255,10 +255,9 @@ export default {
         },
         getTableData(params){
                 
-            this.$http.get('get-krmting-room-list', params).then((res)=>{
+            this.$http.get('get-krmting-mobile-community-list', params).then((res)=>{
                 this.meetingList=res.data.items;
                 this.totalCount=res.data.totalCount;
-                this.openSearch=false;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

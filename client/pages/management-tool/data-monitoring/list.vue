@@ -210,10 +210,13 @@ export default {
 
 
         handleSearch() {
+            this.params.page=1;
             let parms = {
                 validateType: this.priceTypes[this.type].validateType,
                 customerId: this.customerName,
                 communityId: this.communityId,
+                page: this.params.page,
+                pageSize: this.params.pageSize
             };
 
             this.$http.get('get-validate-list', parms, r => {

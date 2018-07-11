@@ -3,11 +3,11 @@
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
 			<div v-if="!isEdit && labeType=='label'"  >
-				<div v-if="value" class="label-text" @click="editClick">{{value}}</div>
+				<div v-if="value" class="label-text" :style="!yesOrnoMadal?{minWidth:'150px'}:{}"  @click="editClick">{{value}}</div>
 				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
 				<div class="icon-box">	
 					<span  v-if="this.right != 'READONLY'" class="edit-icon" @click="editClick"></span>
-					<span class="record-icon" @click="recordClick"></span>
+					<span class="record-icon" v-if="yesOrnoMadal" @click="recordClick"></span>
 				</div>
 				
 				
@@ -118,12 +118,15 @@ export default {
 	components:{
 		KrImg
 	},
-    props:{
+    props:{	yesOrnoMadal:{
+					type:Boolean,
+          default:true,
+				},
         readOrEdit:{
             type:Boolean,
             default:false,
 		},
-		 right:{
+		right:{
             type:String
         },
 		isOk:{

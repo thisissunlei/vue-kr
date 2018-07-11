@@ -4,22 +4,25 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="申请编号" style="width:252px" prop="customerID">
+                <FormItem label="申请编号" style="width:252px" prop="communityId">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.applyNo}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.applyNo}}</span> -->
+                    <Input v-model="receivedApplyInfo.applyNo" disabled></Input>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="操作类型" style="width:252px" prop="communityId">
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.transferTypeName}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.transferTypeName}}</span> -->
+                    <Input v-model="receivedApplyInfo.transferTypeName" disabled></Input>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:252px" prop="customerID">
+                <FormItem label="客户名称" style="width:252px" prop="communityId">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.customerName}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.customerName}}</span> -->
+                    <Input v-model="receivedApplyInfo.customerName" disabled></Input>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -56,9 +59,9 @@
             <OperateLog :data="logList" class='list-table' />
         </div>
         <Modal title="退回申请" v-model="UIShowAble.rejectModal" ok-text='退回' @on-ok="handeRejectApply" class="vertical-center-modal">
-            <div class='modal-container'>
-                <p class='modal-desc'>退回原因</p>
-                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
+            <div class='modal-container' style='padding: 0 15px'>
+                <p class='modal-desc' style='font-size: 16px'>退回原因:</p>
+                <Input class='modal-textarea' style='margin-top: 20px' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
             </div>
         </Modal>
     </div>
@@ -217,12 +220,12 @@ export default {
             this.$http.get('get-max-amount', parms).then((r) => {
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
                 _this.feeTypeArray = arr;
-                if (arr.length == 0) {
-                    this.$Notice.info({
-                        title: '无可用转移款项'
-                    });
-                    return;
-                }
+                // if (arr.length == 0) {
+                //     this.$Notice.info({
+                //         title: '无可用转移款项'
+                //     });
+                //     return;
+                // }
                 var list = [];
                 if (this.isEdit) {
                     arr.map(item => {
@@ -241,7 +244,7 @@ export default {
                             feeType: item.transferFeeType,
                             feeTypeName: item.transferFeeTypeName,
                             amount: item.transferAmount,
-                            maxAmount: _this.getMaxFeeMonut(item.transferFeeType)
+                            maxAmount: _this.getMaxFeeMonut(item.transferFeeType),
                         })
                     })
                     _this.feeTypeArray = [].concat(list);
@@ -266,13 +269,13 @@ export default {
         //更改客户后重新获取转移款项
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerId: item }, { communityId: -1 });
-            this.getFeeAmount();
+            this.isEdit&&this.getFeeAmount();
             this.checkBalance = []
         },
         //更改社区后重新获取转移款项
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityId', commIn)
-            this.getFeeAmount();
+            this.isEdit&&this.getFeeAmount();
             this.checkBalance = []
         },
         onGetCusomerList(list) {

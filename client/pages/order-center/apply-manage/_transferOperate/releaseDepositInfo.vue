@@ -4,22 +4,25 @@
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="申请编号" style="width:252px" prop="customerID">
+                <FormItem label="申请编号" style="width:252px" prop="communityId">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.applyNo}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.applyNo}}</span> -->
+                    <Input v-model="receivedApplyInfo.applyNo" disabled></Input>
                 </FormItem>
                 </Col>
                 <Col class="col">
                 <FormItem label="操作类型" style="width:252px" prop="communityId">
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.transferTypeName}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.transferTypeName}}</span> -->
+                    <Input v-model="receivedApplyInfo.transferTypeName" disabled></Input>
                 </FormItem>
                 </Col>
             </Row>
             <Row style="margin-bottom:30px">
                 <Col class="col">
-                <FormItem label="客户名称" style="width:252px" prop="customerID">
+                <FormItem label="客户名称" style="width:252px" prop="communityId">
                     <!-- <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers> -->
-                    <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.customerName}}</span>
+                    <!-- <span class="noEditFormItem no-edit-customer">{{receivedApplyInfo.customerName}}</span> -->
+                    <Input v-model="receivedApplyInfo.customerName" disabled></Input>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -34,7 +37,7 @@
                 <FormItem class='formitem-balance' label="释放冻结保证金金额" style="width:700px " prop="transferAmount">
                     <div class='balance-container'>
                         <Input :disabled='UIDisable.balance' v-model="formItem.transferAmount" :placeholder="formatBlance(maxAmount)" style="width:252px;" />
-                        <Button :disabled='UIDisable.balance' style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
+                        <Button v-if='UIShowAble.transferBtn' :disabled='UIDisable.balance' style='display:inline' type="text" @click='handleBlanceTransClk'>全部转移</Button>
                     </div>
                 </FormItem>
                 </Col>
@@ -59,9 +62,9 @@
             <OperateLog :data="logList" class='list-table' />
         </div>
         <Modal title="退回申请" v-model="UIShowAble.rejectModal" ok-text='退回' @on-ok="handeRejectApply" class="vertical-center-modal">
-            <div class='modal-container'>
-                <p class='modal-desc'>退回原因</p>
-                <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
+            <div class='modal-container' style='padding: 0 15px'>
+                <p class='modal-desc' style='font-size: 16px'>退回原因:</p>
+                <Input class='modal-textarea' style='margin-top: 20px' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
             </div>
         </Modal>
     </div>
@@ -120,7 +123,8 @@ export default {
                 editBtn: false,//true显示
                 approveBtn: false,
                 rejectBtn: false,
-                rejectModal: false
+                rejectModal: false,
+                transferBtn:false
             },
             UIDisable: {
                 customer: true,//true 禁用
@@ -132,13 +136,16 @@ export default {
                 approveBtn: true,
                 rejectBtn: true
             },
+            isEdit: false,
             maxAmount: 0,
             UIDisableBak: {},
             UIShowAbleBak: {},
             rejectModal: false,
             modalText: '',//退回备注
             targetFeeTypes: ['冻结服务保证金'],
-            receivedApplyInfo: {},
+            receivedApplyInfo: {
+                // applyNo:' ',
+            },
             feeTypeArray: [],
             communities: [],
             isFinancialSide: false,//是否财务端查看 
@@ -192,8 +199,9 @@ export default {
                 this.logList = this.receivedApplyInfo.logList;
                 this.isFinancialSide = this.receivedApplyInfo.financialSide;
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
-                this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo })
-                this.getFeeAmount();
+                this.maxAmount=this.receivedApplyInfo.detailList[0].transferAmount
+                this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo },{transferAmount:obj.detailList[0].transferAmount})
+                // this.getFeeAmount();
             }
             ).then(() => {
                 this.checkRights()
@@ -240,7 +248,12 @@ export default {
                         title: '无可用转移款项'
                     });
                 let arr = r.data.filter(item => this.targetFeeTypes.includes(item.feeTypeName))
-                _this.maxAmount = arr[0].maxAmount
+                if (arr.length==0) {
+                    _this.maxAmount =0
+                } else {
+                    _this.maxAmount = arr[0].maxAmount
+                }
+                // _this.maxAmount = arr[0].maxAmount //! arr.length==0
                 _this.feeTypeArray = arr;
                 _this.formItem = Object.assign({}, _this.formItem, { transferAmount: this.receivedApplyInfo.detailList[0].transferAmount })
             }).catch((error) => {
@@ -263,12 +276,12 @@ export default {
         //更改客户后重新获取转移款项
         changeCustomer(item) {
             this.formItem = Object.assign({}, this.formItem, { customerId: item }, { communityId: -1 });
-            this.getFeeAmount();
+            this.isEdit&&this.getFeeAmount();
         },
         //更改社区后重新获取转移款项
         changeCommunity(commIn) {
             this.$set(this.formItem, 'communityIn', commIn)
-            this.getFeeAmount();
+            this.isEdit&&this.getFeeAmount();
         },
         onGetCusomerList(list) {
             this.communities = [].concat(list);
@@ -298,6 +311,8 @@ export default {
         },
         //开启编辑
         handleEdit() {
+            this.isEdit=true
+            this.getFeeAmount();
             let obj = {
                 customer: false,
                 cummunityIn: false,
@@ -309,6 +324,7 @@ export default {
                 rejectBtn: false
             };
             this.UIDisable = Object.assign({}, this.UIDisable, obj)
+            this.UIShowAble=Object.assign(this.UIShowAble,{transferBtn:true})
         },
         handleShowReject() {
             this.$set(this.UIShowAble, 'rejectModal', true)

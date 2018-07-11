@@ -31,7 +31,7 @@
 
         <Modal title="退回申请" v-model="rejectModal" ok-text='退回' @on-ok="handeRejectApply" class="vertical-center-modal">
             <div class='modal-container'>
-                <p class='modal-desc'>退回原因</p>
+                <p class='modal-desc'>退回原因:</p>
                 <Input class='modal-textarea' v-model="modalText" type="textarea" :rows="4" :maxlength='500' placeholder="请填写退回原因"></Input>
             </div>
         </Modal>
@@ -127,7 +127,7 @@ export default {
                 {
                     title: '操作类型',
                     key: 'transferTypeName',
-                    align: 'center'
+                    align: 'center',
                 },
                 {
                     title: '操作款项',
@@ -168,6 +168,7 @@ export default {
                     title: '操作时间',
                     key: 'utime',
                     align: 'center',
+                    width:110,
                     render(tag, params) {
                         let time = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(params.row.utime));
                         return tag('div', time)

@@ -72,7 +72,7 @@ export default {
                     this.maxAmounts[item.feeTypeName] = item.maxAmount
                     this.models[item.feeTypeName] = Object.assign({}, { input: item.amount }, { feeType: item.feeType });
                     this.disables[item.feeTypeName] = Object.assign({}, { chk: true }, { input: true }, { btn: true })
-                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: true })
+                    this.vifs[item.feeTypeName] = Object.assign({}, { error: false }, { btn: false })
                     this.errorTexts[item.feeTypeName] = '';
                     //转移金额可能大于最大金额
                     if (item.maxAmount < item.amount) {

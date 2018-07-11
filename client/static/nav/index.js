@@ -28,7 +28,7 @@
         }
         if(type && type == "member"){
             alias = '/';
-            hostname =  'memberadmintest.krspace.cn';
+            hostname =  'memberadmin.krspace.cn';
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;
@@ -176,7 +176,6 @@
                 item.menuItems.map(function (child) {
                     var href = ""
                     href = setHref(child.type, child.router);
-                    console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -194,7 +193,7 @@
         if (!callback){
             return;
         }
-        console.log(this,"pppppppp")
+       
         globalNav.menuBtnBacks.push(callback);
     }
     //用户名
@@ -297,7 +296,7 @@
             //===按钮被点击
             j_menu_btn.addEventListener('click', function () {
                 if (!navUtils.isHome) {
-                    console.log(j_menu_btn.className)
+                   
                     var open = true;
                     if (j_menu_btn.className.indexOf('menu-btn-open')>0){
                         open = false;
@@ -628,16 +627,16 @@
                             menuCode: 'oper_cmt_communityList_base',
                             router: 'product/communityAllocation/communityList'
                         },
-                        {
-                            primaryText: '空间',
-                            menuCode: 'oper_cmt_spaceList_base',
-                            router: 'product/communityAllocation/CommunityMeetingRoom'
-                        },
-                        {
-                            primaryText: '工位',
-                            menuCode: 'oper_cmt_stationList_base',
-                            router: 'product/communityAllocation/communityStation'
-                        },
+                        // {
+                        //     primaryText: '空间',
+                        //     menuCode: 'oper_cmt_spaceList_base',
+                        //     router: 'product/communityAllocation/CommunityMeetingRoom'
+                        // },
+                        // {
+                        //     primaryText: '工位',
+                        //     menuCode: 'oper_cmt_stationList_base',
+                        //     router: 'product/communityAllocation/communityStation'
+                        // },
                         {
                             primaryText: "商品库",
                             router: 'inventory/goods-library',

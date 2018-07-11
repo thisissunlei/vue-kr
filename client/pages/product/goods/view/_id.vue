@@ -16,7 +16,7 @@
                     {{goodsInfo.openDate}}
                 </LabelText>
                  <LabelText label="详细地址：">
-                    {{goodsInfo.communityAddress}}
+                    {{goodsInfo.communityAddress?goodsInfo.communityAddress:'-'}}
                 </LabelText>
                 <div class="u-img-content">
                     <div class="u-img-title">大厦外景图：</div><span>{{goodsInfo.buildingImg?'':'无'}}</span>
@@ -39,7 +39,7 @@
             </DetailStyle>
             <DetailStyle info="APP社区商品信息">
                 <LabelText label="上架状态：">
-                   {{goodsInfo.appPublished}}
+                   {{goodsInfo.appPublished?goodsInfo.appPublished:'未上架'}}
                 </LabelText>
                 <LabelText label="已上架会议室商品数量：">
                     {{goodsInfo.appRoomNum}}
@@ -50,10 +50,10 @@
             </DetailStyle>
             <DetailStyle info="小程序社区商品信息">
                 <LabelText label="上架状态：">
-                    {{goodsInfo.kmPublished}}
+                    {{goodsInfo.kmPublished?goodsInfo.kmPublished:'未上架'}}
                 </LabelText>
                 <LabelText label="社区折扣策略：">
-                    {{goodsInfo.promotionDesc}}
+                    {{goodsInfo.promotionDesc?goodsInfo.promotionDesc:'-'}}
                 </LabelText>
                 <LabelText label="已上架会议室商品数量：">
                    {{goodsInfo.kmRoomNum}}
@@ -130,8 +130,11 @@ export default {
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
                 let data=Object.assign({},res.data)
-                data.appPublished=appPublish[res.data.appPublished];
-                data.kmPublished=kmPublished[res.data.kmPublished];
+                let appPublished=toString(res.data.appPublished)
+                let kmPublished=toString(res.data.kmPublished);
+                data.appPublished=appPublish[appPublished];
+                data.kmPublished=kmPublished[kmPublished];
+                
                 data.communityStatus=communityStatus[res.data.communityStatus];
                 this.goodsInfo = data;
                 

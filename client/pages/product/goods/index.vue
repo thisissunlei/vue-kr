@@ -159,16 +159,16 @@ export default {
             ],
             kmStatusList:[
                 {
-                 label:'未上架',
-                 value:'0'   
-                },
-                {
                  label:'已上架',
                  value:'1'   
                 },
                 {
                  label:'待上架',
                  value:'2'   
+                },
+                {
+                 label:'未上架',
+                 value:'0'   
                 }
             ],
             columns:[

@@ -2,7 +2,7 @@
     <div class="g-goods-detail">
         <SectionTitle title="编辑社区商品"></SectionTitle>   
         <div class="m-goods-content">
-            <Form ref="goodsFormValidate" :model="goodsInfo" :rules="ruleValidate" :label-width="100">
+            <Form ref="formItems" :model="formItem" :rules="ruleValidate">
                 <DetailStyle info="社区基本信息">
                     <LabelText label="社区名称：">
                         {{goodsInfo.communityName}}
@@ -11,21 +11,21 @@
                         {{goodsInfo.buildingName}}
                     </LabelText>
                     <LabelText label="正式开业状态：">
-                    {{goodsInfo.communityStatus}}
+                        {{goodsInfo.communityStatus}}
                     </LabelText>
                     <LabelText label="正式开业时间：">
                         {{goodsInfo.openDate}}
                     </LabelText>
-                    <FormItem label="详细地址"  style="width:294px" prop="name">
+                    <FormItem label="详细地址"  style="width:252px" prop="communityAddress">
                         <Input 
-                            v-model="formItem.title" 
+                            v-model="formItem.communityAddress" 
                             placeholder="详细地址"
                         />
                     </FormItem>
                     <div class="u-upload">
-                        <FormItem label="封面图片" class="u-input" prop="name" style="width:100%">
+                        <FormItem label="大厦外景图" class="u-input" prop="buildingImg" style="width:100%">
                                 <UploadFile 
-                                    v-model="formItem.coverImg"
+                                    v-model="formItem.buildingImg"
                                     :category="category"
                                     withCredentials
                                     :format="['jpg','png','gif']"
@@ -35,7 +35,7 @@
                                     :onRemove="coverImgRemove"
                                     :onExceededSize="imgSize"
                                     :onFormatError="imgSizeFormat"
-                                    :defaultFileList="coverImgList"
+                                    :defaultFileList="buildingImgList"
                                     :imgWidth="120"
                                     :imgHeight="120"
                                 >
@@ -44,9 +44,9 @@
                         </FormItem>
                     </div>
                     <div class="u-upload">
-                        <FormItem label="会议室图片" class="u-input" prop="name" style="width:100%">
+                        <FormItem label="社区展示图册" class="u-input" prop="communityImgs" style="width:100%">
                             <UploadFile 
-                                v-model="formItem.detailImgs"
+                                v-model="formItem.communityImgs"
                                 multiple
                                 :category="category"
                                 withCredentials
@@ -68,8 +68,8 @@
                 </DetailStyle>
                 <DetailStyle info="APP社区商品信息">
                    <div>
-                       <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublish">
-                            <RadioGroup v-model="formItem.appPublish" style="width:250px">
+                       <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublished">
+                            <RadioGroup v-model="formItem.appPublished" style="width:250px">
                                 <Radio label="true">
                                     已上架
                                 </Radio>
@@ -79,21 +79,38 @@
                             </RadioGroup> 
                         </FormItem>
                    </div>
-                    <LabelText label="已上架会议室商品数量">
-                        {{goodsInfo.meetingCount}}
+                    <LabelText label="已上架会议室商品数量：">
+                        {{goodsInfo.appRoomNum}}
                     </LabelText>
-                    <LabelText label="已上架散座商品数量">
-                        {{goodsInfo.meetingCount}}
+                    <LabelText label="已上架散座商品数量：">
+                        {{goodsInfo.appSeatNum}}
                     </LabelText>
-                    
                 </DetailStyle>
                 <DetailStyle info="小程序社区商品信息">
-                    
-                    <LabelText label="KM可预定会议室数量（个）：">
-                        {{goodsInfo.meetingCount}}
+                     <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublished">
+                            <RadioGroup v-model="formItem.appPublished" style="width:250px">
+                                <Radio label="true">
+                                    已上架
+                                </Radio>
+                                 <Radio label="false">
+                                    待上架
+                                </Radio>
+                                <Radio label="false">
+                                    未上架
+                                </Radio>
+                            </RadioGroup> 
+                    </FormItem>
+                    <FormItem label="社区折扣策略"  style="width:252px" prop="communityAddress">
+                        <Input 
+                            v-model="formItem.communityAddress" 
+                            placeholder="社区折扣策略"
+                        />
+                    </FormItem>
+                    <LabelText label="已上架会议室商品数量：">
+                        {{goodsInfo.kmRoomNum}}
                     </LabelText>
-                    <LabelText label="KM可用会议室楼层：">
-                        {{goodsInfo.kmMeeting}}
+                    <LabelText label="已上架散座商品数量：">
+                        {{goodsInfo.kmSeatNum}}
                     </LabelText>
                     <FormItem label="可预订时段" class="u-input ivu-form-item-required"  style="width:350px"   >
                            <div style="width:350px;float:left;">
@@ -169,94 +186,151 @@ export default {
     },
     data(){
         return{
-            isShow:false,
-            statusList:[
-                {
-                 label:'周末及节假日',
-                 value:'true'   
-                },
-                {
-                 label:'无',
-                 value:'false'   
-                },
-            ],
-            formItem:{
-
+            category:'app/upgrade',
+            isAppError:false,
+            formItem:{},
+            form:{
+               startHour:'', 
+               endHour:'',
+               appStartTime:'00:00:00',
+               appEndTime:'23:30:00',
+               krmStartTime:'09:00:00',
+               krmEndTime:'19:00:00',
             },
-             goodsInfo:{
-                comName:"慈云社社区",
-                comNumber:"BZJB",
-                area:"北京市/北京市/朝阳区",
-                openStatus:"已开业",
-                openTime:"2017-3-3",
-                buildname:"住邦2000",
-                address:"北京市朝阳区八里庄西里100号住邦2000",
-                coordinate:"116.501734，39.921302",
-                appMeeting:"5层 6层",
-                appStatus:"未上架",
-                KMStatus:"未上架",
-                discountMsg:"限时5折优惠",
-                meetingCount:"5",
-                kmMeeting:"5层 6层",
-                dateSelect:"false"
-            },
+            goodsInfo:{},
             ruleValidate: {
-                name: [
-                    { required: true, message: '大厦名称不能为空', trigger: 'blur' }
+                communityAddress: [
+                    { required: true, message: '地址不能为空', trigger: 'blur' }
                 ],
-                addressMsg: [
-                    { required: true, message: '地址描述不能为空', trigger: 'blur' }
-                ],
-                comMsg: [
-                    { required: true, message: '社区坐标不能为空', trigger: 'blur' }
-                ],
-                fileList: [
+                buildingImg: [
                     { required: true, message: '请选择图片上传', trigger: 'blur' }
                 ],
-                // fileList:fileListRule,
-                appStatus: [
+                communityImgs: [
+                    { required: true, message: '请选择图片上传', trigger: 'blur' }
+                ],
+                appPublished: [
                     { required: true, message: 'APP商品上架状态不能为空', trigger: 'blur' }
                 ],
-                kmStatus: [
+                kmPublished: [
                     { required: true, message: 'KM商品上架状态不能为空', trigger: 'blur' }
-                ],
-                discountMsg: [
-                    { type: 'string', max: 10, message: '最多10个字符', trigger: 'change' }
-                ],
-                dateSelect: [
-                    { required: true, message: '请选择KM不可预订日期策略', trigger: 'blur' }
                 ],
                 // date: [
                 //     { required: true, message: '不可预订日期选择', trigger: 'blur' }
                 // ],
             },
+            buildingImgList:[],
+            detailImgList:[],
+            // statusList:[
+            //     {
+            //      label:'周末及节假日',
+            //      value:'true'   
+            //     },
+            //     {
+            //      label:'无',
+            //      value:'false'   
+            //     },
+            // ],
         }
     },
     mounted:function(){
-		GLOBALSIDESWITCH("false")
+        GLOBALSIDESWITCH("false")
+        this.getGoodsInfo();
     },
     methods: {
         handleSubmit (name) {
-           
             this.$refs[name].validate((valid) => {
                 
-                if (valid) {
-                    this.$Message.success('Success!');
-                    // let para = Object.assign({}, this.goodsInfo);
-                } else {
-                    this.$Message.error('Fail!');
-                }
+                
             })
         },
         handleReset (name) {
             this.$refs[name].resetFields();
         },
-    	tipsShow(){
-            this.isShow = true
+        changeAppStartTime(data){
+             this.formItem.appStartTime=`${data}:00`;;
+            if(this.formItem.appStartTime && this.formItem.appEndTime){
+                this.isAppError=false;
+            }else{
+                this.isAppError=true;
+            }
         },
-        tipsHide(){
-            this.isShow = false;
-        }
+        changeAppEndTime(data){
+            this.formItem.appEndTime=`${data}:00`;
+            if(this.formItem.appStartTime && this.formItem.appEndTime){
+                this.isAppError=false;
+            }else{
+                this.isAppError=true;
+            }
+        },
+        getGoodsInfo(){
+            let {params}=this.$route;
+            let form={
+                communityId: params.id
+             }
+            let appPublish={
+                '1':'已上架',
+                '0':'未上架'
+            }
+            let kmPublished={
+                '1':'已上架',
+                '0':'未上架',
+                '2':'待上架'
+            }
+            let communityStatus={
+                '1':'已开业',
+                '0':'未开业'
+            }
+            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
+                let data=Object.assign({},res.data)
+                let appPublished=toString(res.data.appPublished)
+                let kmPublished=toString(res.data.kmPublished);
+                data.appPublished=appPublish[appPublished];
+                data.kmPublished=kmPublished[kmPublished];
+                
+                data.communityStatus=communityStatus[res.data.communityStatus];
+                this.goodsInfo = data;
+                
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        coverImgRemove(){
+            this.formItem.coverImg="";
+        },
+        coverImgSuccess(file){
+            this.formItem.coverImg=file.data.url;
+            this.$refs.formItems.validateField('coverImg') 
+        },
+        detailImgsRemove(fileList){
+            let imglist=[];
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let detailImgs=imglist.join(',');
+            this.formItem.detailImgs=detailImgs;
+        },
+        detailImgsSuccess(response, file, fileList){
+            let imglist=[].concat(this.imglist);
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let detailImgs=imglist.join(',');
+            this.formItem.detailImgs=detailImgs;
+            this.$refs.formItems.validateField('detailImgs');
+        },
+    	 imgSizeFormat(){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+        },
+        imgSize(){
+           this.$Notice.error({
+                title:'图片大小超出限制'
+            });
+        },
+
 
     }
 }
@@ -264,46 +338,69 @@ export default {
 
 <style lang="less">
     .g-goods-detail{
-		.m-goods-content{
+        .u-input{
+            display: inline-block;
+            width: 252px;
+            max-width: 450px;
+            margin-right:120px;
+            vertical-align:top;
+        }
+        .u-error{
+            color: #ed3f14;
+            font-size: 12px;
+        }
+        .u-upload{
+            width:100%;
+        .ivu-form-item-label{
+            width:100%;
+            text-align: left;
+        } 
+        }
+        .u-unload-label{
+            font-size: 12px;
+            line-height:30px;
+            color:#495060;
+        }
+        .u-unload-tip{
+            line-height:30px;
+            text-indent: 12px;
+            color:#495060;
+            font-size: 12px;
+
+        }
+	    .m-goods-content{
             padding:30px 24px;
-            .ivu-form .ivu-form-item-label{
-                font-size: 14px;
-                color: #333;
-                font-weight: 700;
-            }
-            .help-circled{
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                margin-left: -18px;
-                margin-top: 4px;
+            // .help-circled{
+            //     width: 20px;
+            //     height: 20px;
+            //     display: inline-block;
+            //     margin-left: -18px;
+            //     margin-top: 4px;
                 
-            }
-            .input{
-                width: 300px;
-            }
-            .tips{
-                position: absolute;
-                padding:20px;
-                background: #ccc;
-                font-size: 18px;
-                line-height: 30px;
-                color: #666;
-                z-index: 99;
-                left: 60px;
-                top: 40px;
-            }
-            .tips:after{
-                border-left: 13px solid transparent;  
-                border-right: 13px solid transparent;  
-                border-bottom: 15px solid #ccc;  
-                content: "";  
-                position: absolute;      
-                width: 0; 
-                left: 50px;
-                top: -15px;
-            }
-		}
+            // }
+           
+            // .tips{
+            //     position: absolute;
+            //     padding:20px;
+            //     background: #ccc;
+            //     font-size: 18px;
+            //     line-height: 30px;
+            //     color: #666;
+            //     z-index: 99;
+            //     left: 60px;
+            //     top: 40px;
+            // }
+            // .tips:after{
+            //     border-left: 13px solid transparent;  
+            //     border-right: 13px solid transparent;  
+            //     border-bottom: 15px solid #ccc;  
+            //     content: "";  
+            //     position: absolute;      
+            //     width: 0; 
+            //     left: 50px;
+            //     top: -15px;
+            // }
+        }
 		
 	}
 </style>

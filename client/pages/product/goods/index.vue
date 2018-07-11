@@ -314,7 +314,6 @@ export default {
           
         },
         openView(params){
-           
             window.open(`/product/goods/view/${params.communityId}`,'_blank');
           
         },

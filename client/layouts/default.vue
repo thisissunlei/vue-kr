@@ -4,7 +4,7 @@
         <div id="_layout_box_hander" ></div>
             <Row type="flex">
                 <Col :span="spanRight">
-                    <div id="layout-content_id" class="layout-content">
+                    <div id="layout-content_id" class="layout-content" style="paddingLeft:180px;">
                         <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
                            
                             <nuxt/>
@@ -29,7 +29,8 @@
                 spanLeft:'',
                 bodyStyle:{
                     height:"200px",
-                    overflow:'auto'
+                    overflow:'auto',
+                   
                 }
 
             }

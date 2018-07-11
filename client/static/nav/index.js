@@ -30,11 +30,17 @@
         closeRoutrs:[],
     
     }
+    //侧栏按钮
     var menuId = 'j_menu_btn' + Math.round(Math.random()*10);
+    //loading
     var navId = 'j_nav_loading'+ Math.round(Math.random()*10);
+    //等多按钮
     var moreId = 'j_more' + Math.round(Math.random()*10);
+    //侧栏
     var sidebarId = 'j_sidebar'+ Math.round(Math.random()*10);
+    //用户更多信息
     var accountBtnId =  'j_account_btn'+ Math.round(Math.random()*10);
+    //
     var accountBoxId =  'j_account_box'+ Math.round(Math.random()*10);
     var exitBtnId = 'j_exit_btn'+ Math.round(Math.random()*10);
     var maskId = 'j_detail_mask'+ Math.round(Math.random()*10);
@@ -49,10 +55,22 @@
         var alias = '/new/#';
         var hostname = location.hostname;
         var port = location.port || '';
+        
+        var nowType = getNowType(getRouter());
+       
         if (port) {
             port = ":" + port;
         }
+        if(type && type == 'admin'){
+            if(nowType == 'admin'){
+                return router;
+            }
+            alias = '/new/#'
+        }
         if (type && type == "vue") {
+            if(nowType == 'vue'){
+                return router;
+            }
             alias = '';
         }
         if(type && type == "member"){
@@ -61,6 +79,14 @@
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;
+    }
+    //判断当前所处的项目
+    function getNowType(router){
+        if(router.indexOf('new/#/') !=-1){
+            return 'admin'
+        }else {
+            return 'vue';
+        }
     }
     //获取侧边栏里的数据
     function getClickNav(arr, str) {
@@ -199,7 +225,7 @@
             '</div>' +
 
         '</div>';
-        // document.body.innerHTML = html;
+        // document.body.innerHTML += html;
         if(!navUtils.bodyDom){
             return ;
         }
@@ -238,7 +264,7 @@
                 };
                 xhr.send();
         }
-        sidebarDom.onclick = menuClick;
+        // sidebarDom.onclick = menuClick;
         if(sidebarDom.style.display=='none'){
             navUtils.contentDom.style.paddingLeft = '0px'
         }else{
@@ -314,13 +340,13 @@
                     href = setHref(child.projectType, child.url);
                     if(href == router){
                         if(child.sideFoldFlag=="YES"){
-                            showSidebar = 'block';
-                        }else{
                             showSidebar = 'none';
+                        }else{
+                            showSidebar = 'block';
                         }
                     }
 
-                    html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
+                    html += '<li class=' + (router.indexOf(href)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
                 })
                 html += '</ul>';
             }
@@ -391,6 +417,10 @@
            
         })
     }
+    window.addEventListener('load',function(){
+
+    })
+   
     global.GLOBALSIDESWITCH = pushCloseRoutrs;
     // // global.GLOBALHEADERSET = Router.setDefaultHeader;
     // // global.listenSidebarOpen = Router.listenSidebarOpen;

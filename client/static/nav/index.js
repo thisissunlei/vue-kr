@@ -23,7 +23,7 @@
             topFoldFlag: "YES",
             url: "/"
         }],
-        navNum: 7,
+        navNum: 8,
         bodyDom:'',
         contentDom:'',
         menuBtnBacks:[],

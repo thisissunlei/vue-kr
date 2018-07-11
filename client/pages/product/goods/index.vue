@@ -15,7 +15,7 @@
                 <div class="u-select-list">
                     <span  class="u-select-label">社区开业状态</span>
                     <Select
-                        v-model="formItem.comPublish"
+                        v-model="tabParams.communityStatus"
                         style="width:100px"
                         placeholder="请选择"
                         clearable
@@ -32,7 +32,7 @@
                 <div class="u-select-list">
                     <span  class="u-select-label">APP上架状态</span>
                     <Select
-                        v-model="formItem.appPublish"
+                        v-model="tabParams.appPublished"
                         style="width:100px"
                         placeholder="请选择"
                         clearable
@@ -50,7 +50,7 @@
                     <div class="u-select-list">
                         <span  class="u-select-label">小程序上架状态</span>
                         <Select
-                            v-model="formItem.KMPublish"
+                            v-model="tabParams.kmPublished"
                             style="width:100px"
                             placeholder="请选择"
                             clearable
@@ -67,7 +67,7 @@
                     <div class="u-select-list">
                         <span class="u-select-label">社区名称</span>
                         <Input
-                            v-model="formItem.roomName"
+                            v-model="tabParams.communityName"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -117,7 +117,6 @@ export default {
                 pageSize:15,
             },
             area: [],
-            formItem:{},
             areaList: [{
                 value: 'beijing',
                 label: '北京',
@@ -305,7 +304,7 @@ export default {
                 
         },
         lowerSubmit(){
-            let params=Object.assign({},this.formItem);
+            let params=Object.assign({},this.tabParams);
             params.page=1;
             params.pageSize=15;
             this.getTableData(params);

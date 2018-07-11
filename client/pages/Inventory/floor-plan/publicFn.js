@@ -63,8 +63,11 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
 function getIconToolTipContent(thatData,discount){
     var data = Object.assign({}, thatData);
     var width = 225;
+    let status=data.item.futureStatus;
+    let startTime = data.item.futureStart ? dateUtils.dateToStr('YYYY-MM-DD',new Date(data.item.futureStart)) : '';
+    let statusName=status?(status=='FUTURE_AVAILABLE'?'<div>可预租：' + startTime + '</div>':'<div>未来被占用：' + startTime + '</div>'):'';
     var str = '<div class="content">'+
-                123
+                statusName+
           '</div>'
     return {
         str: str,

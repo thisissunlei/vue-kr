@@ -50,7 +50,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Picture,'http://optest03.krspace.cn'+data.pic.pos,{width:data.pic.width,height:data.pic.height})
         ));
     }
-
+    
     
     //绘制
     myDiagram.nodeTemplate =
@@ -126,11 +126,6 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                     isElementLeave=true;
                     isElementEnter=false;
                     leaveFn(e,node);
-                    if(isIconLeave){
-                        isIconEnter=true;
-                        isIconLeave=false;
-                        enterFn(iconData.e,iconData.nods,'icon');
-                    }
                 }
             }
         );

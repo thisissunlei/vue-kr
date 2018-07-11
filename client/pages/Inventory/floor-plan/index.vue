@@ -124,6 +124,9 @@ export default {
     getMapData(values){
         this.isLoading=false;
         values.currentDate=utils.dateCompatible(values.currentDate);
+        values.futureAvlDays=60;
+        values.futureAvlEndDays=30;
+        values.futureOccDays=60;
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
            this.canvasData.map((item,index)=>{

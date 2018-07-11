@@ -64,5 +64,9 @@ module.exports = {
     	'list-type-code-detail': {
         url: 'api/pm/form-field/list/type/detail',
        method: 'get'
+    },
+    'roleActionCheck':{
+        url:'api/pm/role/action/check',
+        method: 'get'
     }
 }

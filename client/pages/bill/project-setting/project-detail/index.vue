@@ -16,42 +16,15 @@
                 <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
             </div> -->
             <PublicHander :name="name" :city="city" @goback="goback" />
-            <Tabs size="default" @on-click="tabClick" :animated="false">
-                <TabPane label="物业档案" name="property">
-                    <ArchivesManagement v-if="activeTab=='property'" code="property"/>
+            <Tabs size="default" @on-click="tabClick" :animated="false" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                <TabPane label="物业档案" v-if="propertyShow" name="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='property'" code="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
 
                 </TabPane>
-                <TabPane label="产品档案"  name="product">
-
-
-                    <ArchivesManagement v-if="activeTab=='product'" code="product"/>
+                <TabPane label="产品档案" v-if="productShow"  name="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='product'" code="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
                 </TabPane>
-                 <!-- <TabPane label="项目进度" name="tab3">
-                        <GanttChart
-                            v-if="!isLoading "
-                            :data="listData"
-                            :treeData="treeData"
-                            type="edit"
-                            :start="startTime"
-                            :end="endTime"
-                            :treeIds="taskIds"
-                            @rightOver="rightOver"
-                            @treeClick="treeClick"
-                            @editClick="editTask"
-                        >
-                            <div class='detail-detail' slot="leftBar">
-                                <DetailTaskList
-                                    :data="listData"
-                                    @addClick="addTask"
-                                    @editClick="editTask"
-                                    @leftOver="leftOver"
-                                    @iconClick="iconClick"
-                                    :scrollWidth="scrollWidth"
-                                />
-                            </div>
-                        </GanttChart>
 
-                </TabPane> -->
             </Tabs>
 
 
@@ -180,6 +153,8 @@ export default {
     },
     data(){
         return{
+          propertyShow:this.$route.query.propertyShow==="false" ? false : true,
+          productShow:this.$route.query.productShow==="false" ? false : true,
             projectid:this.$route.query.id,
             name: this.$route.query.name,
             city: this.$route.query.city,
@@ -213,7 +188,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:'property',
+            activeTab:(this.$route.query.propertyShow==="false" ? false : true)?"property":"product",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -250,6 +225,23 @@ export default {
 
          GLOBALSIDESWITCH("false");
         this.getDeletePermission();
+
+        this.$nextTick(()=>{
+          //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
+          let div1 = document.getElementsByClassName("ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused")[0]
+          let div2 = document.getElementsByClassName("ivu-tabs-ink-bar")[0]
+
+        if(!this.propertyShow || !this.productShow){
+
+          div1.style.width ='100%'
+          div2.style.width ='100%'
+        }else{
+
+        }
+
+
+
+        })
 
     },
     methods:{
@@ -732,7 +724,7 @@ export default {
 </script>
 
 <style lang="less">
-   .edit-left-bar{
+  .edit-left-bar{
 
        width:100%;
        background: #fff;

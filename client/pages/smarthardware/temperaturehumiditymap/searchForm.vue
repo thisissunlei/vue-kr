@@ -79,6 +79,6 @@ export default{
 </script>
 <style lang="less" >
 .temp-humidity-searchform{
-    padding: 10px 0 0 20px;
+    padding: 10px 0 0 40px;
 }
 </style>

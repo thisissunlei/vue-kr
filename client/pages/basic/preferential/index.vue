@@ -6,7 +6,12 @@
         <span style="padding:0 10px"></span> 
         <div style="display:inline-block;width:400px;">
             选择社区：
-            <Select :v-model="cmtId" @on-change="changeContent" style="width:300px">
+            <Select 
+                        :v-model="cmtId"
+                        @on-change="changeContent" 
+                        filterable
+                        clearable 
+                        style="width:300px">
                 <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
             </Select>
         </div>
@@ -164,8 +169,12 @@ export default {
                          render: (h, params) => {
                             let today = new Date().getTime();
                             let result;
+                            let style;
                             result = today > (params && params.row.validEnd) ?'失效':'有效'; 
-                            return h('span',{},result)
+                            if(result ==='失效'){
+                                style = 'color: red'
+                            }
+                            return h('span',{style:style},result)
                         }
                     }
                     // {

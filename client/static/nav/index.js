@@ -28,7 +28,7 @@
         }
         if(type && type == "member"){
             alias = '/';
-            hostname =  'memberadmin.krspace.cn';
+            hostname =  'memberadmintest.krspace.cn';
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;
@@ -878,14 +878,9 @@
                             primaryText: '版本更新通知',
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
-                        },
+                        }
                        
-                        {
-                            primaryText: '项目管理权限',
-                            menuCode: 'pm_manage_role',
-                            type: 'vue',
-                            router: 'nav-config'
-                        },
+                       
                     ]
                 },
                 {
@@ -998,7 +993,7 @@
                       
                         {
                             primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
+                            menuCode: 'pm_manage_role',
                             type: 'vue',
                             router: 'nav-config'
                         },

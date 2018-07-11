@@ -19,15 +19,15 @@
                     {{goodsInfo.communityAddress}}
                 </LabelText>
                 <div class="u-img-content">
-                    <div class="u-img-title">大厦外景图：</div>
-                    <div ><img :src="goodsInfo.buildingImg" class="u-img-url">{{goodsInfo.buildingImg?'':'无'}}</div>
+                    <div class="u-img-title">大厦外景图：</div><span>{{goodsInfo.buildingImg?'':'无'}}</span>
+                    <div v-if="goodsInfo.buildingImg">
+                        <img :src="goodsInfo.buildingImg" class="u-img-url">
+                    </div>
+                    
                 </div>
                 <div class="u-img-content">
-                    <div class="u-img-title">社区展示图册：</div>
-                    <div v-if="!goodsInfo.communityImgs">
-                       无
-                    </div>
-                    <div v-if="goodsInfo.communityImgs">
+                    <div class="u-img-title">社区展示图册：</div><span v-if="!goodsInfo.communityImgs">无</span>
+                    <div style="display:block;width:100%;" v-if="goodsInfo.communityImgs">
                         <img 
                             :src="item" 
                             :key="index"
@@ -156,16 +156,17 @@ export default {
          .u-img-content{
             width:100%;
             display: inline-block;
+             margin-bottom:24px;
             .u-img-title{
-                font-weight: 500;
-                color: #666666;
+                color: #333333;
                 margin-left:14px;
+                display: inline-block;
+                font-weight: bold;
             }
             .u-img-url{
                 max-width: 132px;
                 max-width: 132px;
                 float: left;
-                margin-bottom:30px;
                 margin-right:20px;
             }
         }

@@ -248,7 +248,7 @@ export default {
         changeCity(value){
             console.log('value---',value)
         },
-        changePage(){
+        changePage(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);

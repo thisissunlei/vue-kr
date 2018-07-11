@@ -38,7 +38,7 @@
                         clearable
                     >
                         <Option
-                            v-for="item in statusList"
+                            v-for="item in appStatusList"
                             :value="item.value"
                             :key="item.value"
                         >
@@ -56,7 +56,7 @@
                             clearable
                         >
                             <Option
-                                v-for="item in statusList"
+                                v-for="item in kmStatusList"
                                 :value="item.value"
                                 :key="item.value"
                             >
@@ -140,22 +140,36 @@ export default {
             comStatusList:[
                 {
                  label:'已开业',
-                 value:'true'   
+                 value:'1'   
                 },
                 {
                  label:'未开业',
-                 value:'false'   
-                },
+                 value:'0'   
+                }
             ],
-            statusList:[
+            appStatusList:[
                 {
                  label:'已上架',
-                 value:'true'   
+                 value:'1'   
                 },
                 {
                  label:'未上架',
-                 value:'false'   
+                 value:'0'   
+                }
+            ],
+            kmStatusList:[
+                {
+                 label:'未上架',
+                 value:'0'   
                 },
+                {
+                 label:'已上架',
+                 value:'1'   
+                },
+                {
+                 label:'待上架',
+                 value:'2'   
+                }
             ],
             columns:[
                  {

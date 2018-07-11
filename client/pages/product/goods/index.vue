@@ -310,11 +310,12 @@ export default {
             this.getTableData(params);
         },
         jumpEdit(params){
-            window.open(`/product/goods/edit/${params.id}`,'_blank');
+            window.open(`/product/goods/edit/${params.communityId}`,'_blank');
           
         },
         openView(params){
-            window.open(`/product/goods/view/${params.id}`,'_blank');
+           
+            window.open(`/product/goods/view/${params.communityId}`,'_blank');
           
         },
     }

@@ -20,11 +20,21 @@
                 </LabelText>
                 <div class="u-img-content">
                     <div class="u-img-title">大厦外景图：</div>
-                    <div><img :src="goodsInfo.buildingImg" class="u-img-url">{{goodsInfo.buildingImg?'':'无'}}</div>
+                    <div ><img :src="goodsInfo.buildingImg" class="u-img-url">{{goodsInfo.buildingImg?'':'无'}}</div>
                 </div>
                 <div class="u-img-content">
                     <div class="u-img-title">社区展示图册：</div>
-                    <div><img :src="goodsInfo.imgUrl" class="u-img-url">{{goodsInfo.imgUrl?'':'无'}}</div>
+                    <div v-if="goodsInfo.communityImgs.length==0">
+                       无
+                    </div>
+                    <div v-if="goodsInfo.communityImgs.length>0">
+                        <img 
+                            :src="item" 
+                            :key="index"
+                            class="u-img-url"
+                            v-for="(item,index)in goodsInfo.communityImgs"
+                         >
+                    </div>
                 </div>
             </DetailStyle>
             <DetailStyle info="APP社区商品信息">
@@ -92,32 +102,21 @@ export default {
                  value:'false'   
                 },
             ],
-            goodsInfo:{
-                comName:"慈云社社区",
-                comNumber:"BZJB",
-                area:"北京市/北京市/朝阳区",
-                openStatus:"已开业",
-                openTime:"2017-3-3",
-                buildname:"住邦2000",
-                address:"北京市朝阳区八里庄西里100号住邦2000",
-                coordinate:"116.501734，39.921302",
-                appMeeting:"5层 6层",
-                appStatus:"未上架",
-                KMStatus:"未上架",
-                discountMsg:"限时5折优惠",
-                meetingCount:"5",
-                kmMeeting:"5层 6层",
-                dateSelect:"false"
-            },
+            goodsInfo:{},
         }
     },
     mounted:function(){
-		GLOBALSIDESWITCH("false")
+        GLOBALSIDESWITCH("false")
+        this.getGoodsInfo();
     },
     methods:{
         getGoodsInfo(){
-            var params = {communityId :this.$route.query.id };
-            this.$http.get('get-krmting-mobile-community-detail', params).then((res)=>{
+            let {params}=this.$route;
+            let form={
+                communityId: params.id
+             }
+           
+            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
                 this.goodsInfo = res.data
                 
             }).catch((err)=>{

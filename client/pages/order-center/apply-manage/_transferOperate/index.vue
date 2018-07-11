@@ -101,13 +101,14 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                            h('Button', {
+                            h('span', {
                                 props: {
                                     type: 'text',
                                     size: 'small'
                                 },
                                 style: {
-                                    color: '#2b85e4'
+                                    color: '#2b85e4',
+                                    cursor:'pointer'
                                 },
                                 on: {
                                     click: () => {
@@ -131,7 +132,7 @@ export default {
                 {
                     title: '操作款项',
                     key: 'detailList',
-                    width: 180,
+                    width: 130,
                     align: 'center',
                     render: (tag, params) => {
                         let lines = [];
@@ -146,7 +147,7 @@ export default {
                     title: '转移金额',
                     key: 'detailList',
                     align: 'center',
-                    width: 180,
+                    width: 120,
                     render: (tag, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -160,7 +161,8 @@ export default {
                 {
                     title: '操作人员',
                     key: 'operaterUserName',
-                    align: 'center'
+                    align: 'center',
+                    width: 90,
                 },
                 {
                     title: '操作时间',
@@ -181,7 +183,7 @@ export default {
                     title: '操作',
                     key: 'id',
                     align: 'center',
-                    width: 150,
+                    width: 120,
                     render: (tag, params) => {
 
                         // 待处理时财务人员查看显示按钮“查看”和“退回”，非财务人员查看时显示“查看”；

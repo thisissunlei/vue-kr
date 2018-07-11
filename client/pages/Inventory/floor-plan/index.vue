@@ -28,11 +28,31 @@
                     <span class="map-color-tip" :style="'background:'+item.color"></span>
                 </div>
 
-                <span class="warning-tip"></span>
-                <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span> 
+                <!-- <span class="warning-tip"></span>
+                <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
+                <div style="display:inline-block;margin-right:26px;">
+                    <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
+                    <Select v-model="show" placeholder="请输入显示项" style="width:150px;" clearable @on-change="typeChange">
+                        <Option v-for="item in showList" :value="item.value" :key="item.value">
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                </div>
+                
+                <div style="display:inline-block;margin-right:26px;">
+                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">未来被占用</span>
+                    <span class='m-use'></span>
+                </div>
+                <div style="display:inline-block;margin-right:26px;">
+                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">可预租</span>
+                    <span class='m-can'></span>
+                </div>
+
+
             </div>
             <template slot="export" slot-scope="props" style="display:inline-block;">
                 <div class="export" :id="props.id">导出高清图</div>
+                <div class="export" style="width:60px;">配置</div>
             </template>    
       </FloorPlan>
       
@@ -72,7 +92,12 @@ export default {
        isLoading:false,
        discount:"",
        isFirstClick:false,
-       scrollTop:0   
+       scrollTop:0,
+       showList:[
+           {value:'FUTURE_OCCUPIED',label:'未来被占用'},
+           {value:'FUTURE_AVAILABLE',label:'可预租'}
+       ],
+       show:''   
     }
   },
   mounted(){
@@ -85,6 +110,9 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
+    typeChange(val){
+
+    },
     mainScroll(event){  
         this.scrollTop=event.target.scrollTop;
         if(this.scrollTop==0){
@@ -224,7 +252,7 @@ export default {
         display:inline-block;
         .toolbar-inner{
              display:inline-block;
-             margin-right:30px;
+             margin-right:26px;
             .map-font-tip{
                 display:inline-block;
                 vertical-align: middle;
@@ -234,7 +262,7 @@ export default {
             }
             .map-color-tip{
                 display:inline-block;
-                width:33px;
+                width:20px;
                 height:15px;
                 margin-left:10px;
                 border-radius: 4px;  
@@ -323,6 +351,22 @@ export default {
       .bar{
           position: relative;
           margin-bottom:5px;
+      }
+      .m-use{
+         display:inline-block;
+         width:20px;
+         height:20px;
+         background:url('~/assets/images/use.svg') no-repeat center;
+         background-size:100%;
+         vertical-align: middle;
+      }
+      .m-can{
+         display:inline-block;
+         width:20px;
+         height:20px;
+         background:url('~/assets/images/can.svg') no-repeat center;
+         background-size:100%;
+         vertical-align: middle;
       }
   }
 </style>

@@ -1,7 +1,7 @@
 import colorStatus from './colorStatus';
 import utils from '~/plugins/utils';
-import homePic from '../img/can.svg';
-import occupyPic from '../img/use.svg';
+import homePic from '~/assets/images/can.svg';
+import occupyPic from '~/assets/images/use.svg';
 function init(data,picProperty,dataUrl){
     let dataRender=[];
     let scale=1;

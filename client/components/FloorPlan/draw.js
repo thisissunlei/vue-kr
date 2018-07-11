@@ -17,9 +17,12 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
     //库存平面图
-    let isElementHover=false;
-    let isIconHover=false;
-    let enterData={};
+    let isElementEnter=false;
+    let isIconEnter=false;
+    let isElementLeave=false;
+    let isIconLeave=false;
+    let elData={};
+    let iconData={};
     
     
     //点击事件
@@ -78,35 +81,45 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
                     mouseEnter: function (e, node) {
-                        isIconHover=true;
-                        enterFn(enterData.e,enterData.node,'icon');
-                        if(isElementHover){
-                            leaveFn(enterData.e,enterData.node);
+                        let nods={data:node.part.Sd};
+                        iconData={e,nods};
+                        isIconEnter=true;
+                        console.log('icon1',e,iconData.nods);
+                        enterFn(e,iconData.nods,'icon');
+                        if(isElementEnter){
+                            console.log('icon2',elData);
+                            leaveFn(elData.e,elData.node);
                         }
                     },
                     mouseLeave: function (e, node) {
                         isIconHover=false;
-                        leaveFn(enterData.e,enterData.node,'icon')
+                        console.log('icon3',e,iconData.nods);
+                        leaveFn(e,iconData.nods,'icon')
                         if(isElementHover){
-                            enterFn(enterData.e,enterData.node);
+                            console.log('icon4',elData);
+                            enterFn(elData.e,elData.node);
                         }
                     }
                 }
             ),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
-                    isElementHover=true;
-                    enterData={e,node};
+                    isElementEnter=true;
+                    elData={e,node};
+                    console.log('el1',e,node);
                     enterFn(e,node)
-                    if(isIconHover){
-                        leaveFn(enterData.e,enterData.node,'icon');
+                    if(isIconEnter){
+                        console.log('el2',iconData);
+                        leaveFn(iconData.e,iconData.nods,'icon');
                     }
                 },
                 mouseLeave: function (e, node) { 
                     isElementHover=false;
+                    console.log('el3',e,node);
                     leaveFn(e,node);
                     if(isIconHover){
-                        enterFn(enterData.e,enterData.node,'icon');
+                        console.log('el4',iconData);
+                        enterFn(iconData.e,iconData.nods,'icon');
                     }
                 }
             }

@@ -1331,9 +1331,8 @@
                         primaryText: "账款数据",
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
-                    },
-                    {
-                        primaryText: "财务端",
+                    },                    
+                    {primaryText: "财务端",
                         router: 'bill/make-invoice',
                         type: 'vue',
                         menuCode: 'invoice_finance'
@@ -1349,7 +1348,13 @@
                         router: 'bill/financial-invoice',
                         type: 'vue',
                         menuCode: 'qualification'
-                    },
+                    }, 
+                    // {
+                    //     primaryText: "客户资金转移",
+                    //     type: 'vue',
+                    //     router: 'order-center/apply-manage/_transferOperate',
+                    //     menuCode: 'wallet_transfer',
+                    // }
                     ]
                 },
         ]

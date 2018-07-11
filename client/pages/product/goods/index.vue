@@ -256,11 +256,37 @@ export default {
         }
     },
     mounted:function(){
-		this.getTableData(this.tabParams)
+        this.getTableData(this.tabParams);
+        this.getCityinfo()
     },
     methods:{
+        getCityinfo(params){
+            this.$http.get('get-krmting-mobile-community-city-list').then((res)=>{
+               let provinceList=res.data.provinceList.map((item)=>{
+                   item.label=item.name;
+                   item.value=item.id;
+                   if(item.subAreaList){
+                       item.children=item.subAreaList.map((childrenItem)=>{
+                            childrenItem.label=childrenItem.name;
+                            childrenItem.value=childrenItem.id;
+                            return childrenItem;
+                        })
+                   }
+                     
+                   return item;
+               }) 
+                this.areaList=provinceList;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+                
+        },
         changeCity(value){
-            console.log('value---',value)
+            if(value[1]){
+                this.tabParams.cityId=value[1]
+            }
         },
         changePage(page){
             this.tabParams.page=page;
@@ -268,7 +294,6 @@ export default {
             this.getTableData(this.tabParams);
         },
         getTableData(params){
-                
             this.$http.get('get-krmting-mobile-community-list', params).then((res)=>{
                 this.meetingList=res.data.items;
                 this.totalCount=res.data.totalCount;

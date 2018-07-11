@@ -46,6 +46,11 @@ export default  {
         url: '/api/krspace-op-web/krmting/mobile/community/edit',
         method: 'post'
     },
+    //社区商品配置--查询省&城市列表
+    'get-krmting-mobile-community-city-list': {
+        url: '/api/krspace-op-web/krmting/mobile/community/city/list',
+        method: 'get'
+    },
     
   }
   

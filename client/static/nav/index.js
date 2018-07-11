@@ -23,7 +23,7 @@
             topFoldFlag: "YES",
             url: "/"
         }],
-        navNum: 8,
+        navNum: 7,
         bodyDom:'',
         contentDom:'',
         menuBtnBacks:[],
@@ -193,9 +193,7 @@
             '<div class = "j_account_detail_mask" id="'+maskId+'"></div>' +
             '</div>' +
             '</div>' +
-            '</div> ' +
-
-            '<div id="'+sidebarId+'" class="sidebar" style="display:'+showSidebar+';"> '+renderSidebar(navUtils.activeData)+' </div> ' +
+            '</div> ' +renderSidebar(navUtils.activeData,showSidebar)+
             '<div id="'+navId+'" class="nav-loading" style="display:none;">' +
             '</div>' +
             '</div>' +
@@ -208,19 +206,23 @@
         navUtils.bodyDom.innerHTML = html;
         var moreDom = document.getElementById(moreId);
         var navDom = document.getElementById(navId)
+        var sidebarDom =  document.getElementById(sidebarId);
         if(moreDom){
             moreDom.onclick = moreClick
         }
         if(navDom){
             navDom.onclick = navLoadingClick
         }
-            document.getElementById(navId).onclick = navLoadingClick;
-            document.getElementById(menuId).onclick = menuClick;
-            document.getElementById(accountBtnId).onclick = accountBtnClick;
-            document.getElementById(maskId).onclick = maskClick;
-            document.getElementById(accountBoxId).onclick = function(){
+        
+        document.getElementById(navId).onclick = navLoadingClick;
+        document.getElementById(menuId).onclick = menuClick;
+        document.getElementById(accountBtnId).onclick = accountBtnClick;
+        document.getElementById(maskId).onclick = maskClick;
+        document.getElementById(accountBoxId).onclick = function(){
 
         }
+        
+        
         document.getElementById(exitBtnId).onclick = function(){
             var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
                 xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
@@ -236,7 +238,13 @@
                 };
                 xhr.send();
         }
-        document.getElementById(sidebarId).onclick = menuClick
+        sidebarDom.onclick = menuClick;
+        if(sidebarDom.style.display=='none'){
+            navUtils.contentDom.style.paddingLeft = '0px'
+        }else{
+            navUtils.contentDom.style.paddingLeft = '180px'
+
+        }
     }
     //渲染头部
     function renderHander(navs){
@@ -283,20 +291,20 @@
         return html;
     }
     //渲染侧栏
-    function renderSidebar(sidebarData){
+    function renderSidebar(sidebarData,showSidebar){
         var sidebarNavs = Object.assign(sidebarData);
        
         var html = '';
 
         var router = getRouter();
         if (!sidebarNavs) {
-            return html;
+            return '<div id="'+sidebarId+'" class="sidebar" style="display:'+showSidebar+';"> '+html+' </div> ' ;
         }
         if (!(sidebarNavs && sidebarNavs.hasOwnProperty('childList') && sidebarNavs.childList.length)) {
-            return html;
+            return '<div id="'+sidebarId+'" class="sidebar" style="display:'+showSidebar+';"> '+html+' </div> ' ;
         }
         sidebarNavs.childList.map(function (item) {
-            let iconName = item.iconName ? item.iconName : '';
+            let iconName = item.iconUrl ? item.iconUrl : '';
             if (item.hasOwnProperty('childList') && item.childList.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.name + '</span></div>';
 
@@ -304,6 +312,13 @@
                 item.childList.map(function (child) {
                     var href = ""
                     href = setHref(child.projectType, child.url);
+                    if(href == router){
+                        if(child.sideFoldFlag=="YES"){
+                            showSidebar = 'block';
+                        }else{
+                            showSidebar = 'none';
+                        }
+                    }
 
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
                 })
@@ -314,7 +329,7 @@
 
         });
 
-        return html;
+        return '<div id="'+sidebarId+'" class="sidebar" style="display:'+showSidebar+';"> '+html+' </div> ' ;
     }
 
     //路由发生变化
@@ -364,8 +379,6 @@
         // console.log("pppppp------",dom)
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
-            
-            console.log("pppppp00000")
           
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 

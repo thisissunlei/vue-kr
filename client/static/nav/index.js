@@ -176,7 +176,6 @@
                 item.menuItems.map(function (child) {
                     var href = ""
                     href = setHref(child.type, child.router);
-                    console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -194,7 +193,7 @@
         if (!callback){
             return;
         }
-        console.log(this,"pppppppp")
+       
         globalNav.menuBtnBacks.push(callback);
     }
     //用户名
@@ -297,7 +296,7 @@
             //===按钮被点击
             j_menu_btn.addEventListener('click', function () {
                 if (!navUtils.isHome) {
-                    console.log(j_menu_btn.className)
+                   
                     var open = true;
                     if (j_menu_btn.className.indexOf('menu-btn-open')>0){
                         open = false;

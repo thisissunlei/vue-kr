@@ -32,7 +32,7 @@
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
                 <div style="display:inline-block;margin-right:26px;">
                     <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
-                    <Select v-model="show" placeholder="请输入显示项" style="width:150px;" clearable @on-change="typeChange">
+                    <Select v-model="show" multiple placeholder="请输入显示项" style="width:150px;" clearable>
                         <Option v-for="item in showList" :value="item.value" :key="item.value">
                             {{ item.label }}
                         </Option>
@@ -97,7 +97,7 @@ export default {
            {value:'FUTURE_OCCUPIED',label:'未来被占用'},
            {value:'FUTURE_AVAILABLE',label:'可预租'}
        ],
-       show:''   
+       show:[]   
     }
   },
   mounted(){
@@ -110,9 +110,6 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
-    typeChange(val){
-
-    },
     mainScroll(event){  
         this.scrollTop=event.target.scrollTop;
         if(this.scrollTop==0){

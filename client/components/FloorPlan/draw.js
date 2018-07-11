@@ -84,19 +84,24 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                         let nods={data:node.part.Sd};
                         iconData={e,nods};
                         isIconEnter=true;
-                        console.log('icon1',e,iconData.nods);
+                        isIconLeave=false;
                         enterFn(e,iconData.nods,'icon');
                         if(isElementEnter){
-                            console.log('icon2',elData);
+                            isElementLeave=true;
+                            isElementEnter=false;
                             leaveFn(elData.e,elData.node);
                         }
                     },
                     mouseLeave: function (e, node) {
-                        isIconHover=false;
-                        console.log('icon3',e,iconData.nods);
+                        if(isIconLeave){
+                            return ;
+                        }
+                        isIconLeave=true;
+                        isIconEnter=false;
                         leaveFn(e,iconData.nods,'icon')
-                        if(isElementHover){
-                            console.log('icon4',elData);
+                        if(isElementLeave){
+                            isElementEnter=true;
+                            isElementLeave=false;
                             enterFn(elData.e,elData.node);
                         }
                     }
@@ -105,20 +110,25 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
                     isElementEnter=true;
+                    isElementLeave=false;
                     elData={e,node};
-                    console.log('el1',e,node);
                     enterFn(e,node)
                     if(isIconEnter){
-                        console.log('el2',iconData);
+                        isIconLeave=true;
+                        isIconEnter=false;
                         leaveFn(iconData.e,iconData.nods,'icon');
                     }
                 },
                 mouseLeave: function (e, node) { 
-                    isElementHover=false;
-                    console.log('el3',e,node);
+                    if(isElementLeave){
+                        return ;
+                    }
+                    isElementLeave=true;
+                    isElementEnter=false;
                     leaveFn(e,node);
-                    if(isIconHover){
-                        console.log('el4',iconData);
+                    if(isIconLeave){
+                        isIconEnter=true;
+                        isIconLeave=false;
                         enterFn(iconData.e,iconData.nods,'icon');
                     }
                 }

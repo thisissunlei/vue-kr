@@ -8,10 +8,21 @@
         closeRoutrs: [''],
         strDelNum: function (str) {
 
+
         },
         
         user:{},
-        navs:[],
+        navs:[{
+            iconUrl: "icon-card",
+          
+            name: "首页",
+         
+            showFlag: "YES",
+            sideFoldFlag: "YES",
+           
+            topFoldFlag: "YES",
+            url: "/"
+        }],
         navNum: 8,
         bodyDom:'',
         contentDom:'',
@@ -349,16 +360,18 @@
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
+        renderHanderAndSidebar();
         // console.log("pppppp------",dom)
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
+            
             console.log("pppppp00000")
           
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;
                
-                navUtils.navs = [].concat(navs);
+                navUtils.navs = [].concat(navUtils.navs,navs);
                 navUtils.user = Object.assign(user);
                 routerRefresh();
             })

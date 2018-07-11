@@ -24,15 +24,15 @@
                 </div>
                 <div class="u-img-content">
                     <div class="u-img-title">社区展示图册：</div>
-                    <div v-if="goodsInfo.communityImgs.length==0">
+                    <div v-if="!goodsInfo.communityImgs">
                        无
                     </div>
-                    <div v-if="goodsInfo.communityImgs.length>0">
+                    <div v-if="goodsInfo.communityImgs">
                         <img 
                             :src="item" 
                             :key="index"
                             class="u-img-url"
-                            v-for="(item,index)in goodsInfo.communityImgs"
+                            v-for="(item,index) in goodsInfo.communityImgs"
                          >
                     </div>
                 </div>
@@ -115,9 +115,25 @@ export default {
             let form={
                 communityId: params.id
              }
-           
+            let appPublish={
+                '1':'已上架',
+                '0':'未上架'
+            }
+            let kmPublished={
+                '1':'已上架',
+                '0':'未上架',
+                '2':'待上架'
+            }
+            let communityStatus={
+                '1':'已开业',
+                '0':'未开业'
+            }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
-                this.goodsInfo = res.data
+                let data=Object.assign({},res.data)
+                data.appPublished=appPublish[res.data.appPublished];
+                data.kmPublished=kmPublished[res.data.kmPublished];
+                data.communityStatus=communityStatus[res.data.communityStatus];
+                this.goodsInfo = data;
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -141,7 +157,6 @@ export default {
             width:100%;
             display: inline-block;
             .u-img-title{
-                float:left;
                 font-weight: 500;
                 color: #666666;
                 margin-left:14px;
@@ -151,6 +166,7 @@ export default {
                 max-width: 132px;
                 float: left;
                 margin-bottom:30px;
+                margin-right:20px;
             }
         }
 	}

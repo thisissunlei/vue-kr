@@ -2,8 +2,8 @@
 export default {
   //入驻订单列表
   'join-bill-list': {
-    url: '/api/krspace-op-web/order-seat-add/list',
-    // url: '/ben/api/krspace-op-web/order-seat-add/list',
+    // url: '/api/krspace-op-web/order-seat-add/list',
+    url: '/ben/api/krspace-op-web/order-seat-add/list',
     method: 'get'
   },
   //入驻减租订单列表-获取社区

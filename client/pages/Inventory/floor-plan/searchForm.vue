@@ -6,20 +6,16 @@
                     v-model="formItem.cityId" 
                     placeholder="请输入城市" 
                     style="width: 90px;margin-right:10px;"
+                    filterable
                     @on-change="cityChange"
                 >
-                    <Option 
-                        v-for="item in cityList" 
-                        :value="item.cityId" 
-                        :key="item.cityId"
-                    >
-                        {{ item.cityName }}
-                    </Option>
+                    <Option v-for="item in cityList" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
                 </Select>
                 <Select 
                         v-model="formItem.communityId" 
                         placeholder="请输入社区" 
                         style="width:150px;margin-right:10px;"
+                        filterable
                         @on-change="communityChange"
                     >
                         <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -29,6 +25,7 @@
                         v-model="formItem.floor" 
                         placeholder="请输入楼层" 
                         style="width: 90px;margin-right:54px;"
+                        filterable
                         @on-change="floorChange"
                     >
                         <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>

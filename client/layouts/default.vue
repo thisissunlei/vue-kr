@@ -1,12 +1,14 @@
 
 <template>
-    <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
-       
+    <div class="layout"  :class="{'layout-hide-text': spanLeft < 5}">
+        <div id="_layout_box_hander" ></div>
             <Row type="flex">
                 <Col :span="spanRight">
-                    <div class="layout-content">
+                    <div id="layout-content_id" class="layout-content">
                         <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
+                           
                             <nuxt/>
+                            
                         </div>
                     </div>
                 </Col>
@@ -33,7 +35,7 @@
             }
         },
         mounted(){
-           
+            vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
             this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;
             window.onresize=function(){

@@ -53,7 +53,6 @@
 
 <style lang="less">
   body{
-        padding-left:180px;
         min-height:100%;
         
         margin: 0px;

@@ -31,8 +31,8 @@
                                     :format="['jpg','png','gif']"
                                     :maxSize="2048"
                                     :maxLen="1"
-                                    :onSuccess="coverImgSuccess"
-                                    :onRemove="coverImgRemove"
+                                    :onSuccess="buildingImgSuccess"
+                                    :onRemove="buildingImgRemove"
                                     :onExceededSize="imgSize"
                                     :onFormatError="imgSizeFormat"
                                     :defaultFileList="buildingImgList"
@@ -70,10 +70,10 @@
                    <div>
                        <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublished">
                             <RadioGroup v-model="formItem.appPublished" style="width:250px">
-                                <Radio label="true">
+                                <Radio label="1">
                                     已上架
                                 </Radio>
-                                <Radio label="false">
+                                <Radio label="0">
                                     未上架
                                 </Radio>
                             </RadioGroup> 
@@ -87,15 +87,15 @@
                     </LabelText>
                 </DetailStyle>
                 <DetailStyle info="小程序社区商品信息">
-                     <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublished">
-                            <RadioGroup v-model="formItem.appPublished" style="width:250px">
-                                <Radio label="true">
+                     <FormItem label="上架状态" class="u-input" style="width:250px" prop="kmPublished">
+                            <RadioGroup v-model="formItem.kmPublished" style="width:250px">
+                                <Radio label="1">
                                     已上架
                                 </Radio>
-                                 <Radio label="false">
+                                 <Radio label="2">
                                     待上架
                                 </Radio>
-                                <Radio label="false">
+                                <Radio label="0">
                                     未上架
                                 </Radio>
                             </RadioGroup> 
@@ -117,7 +117,7 @@
                                <TimePicker 
                                     format="HH:mm" 
                                     style="width: 122px" 
-                                    v-model="form.appStartTime"
+                                    v-model="form.kmStartTime"
                                     @on-change="changeAppStartTime"
                                     :steps="[1,30]"
                                 />
@@ -125,7 +125,7 @@
                                 <TimePicker 
                                     format="HH:mm"  
                                     style="width: 122px" 
-                                    v-model="form.appEndTime"
+                                    v-model="form.kmEndTime"
                                     @on-change="changeAppEndTime"
                                     :steps="[1,30]"
                                 />
@@ -157,8 +157,8 @@
                  
             </Form>
             <div style="text-align:center">
-                <Button type="primary" @click="handleSubmit('goodsInfo')">确定</Button>
-                <Button type="ghost" @click="handleReset('goodsInfo')" style="margin-left: 8px">取消</Button>
+                <Button type="primary" @click="handleSubmit('formItems')">确定</Button>
+                <Button type="ghost" @click="handleReset('formItems')" style="margin-left: 8px">取消</Button>
             </div>
         </div>
     </div>
@@ -190,12 +190,8 @@ export default {
             isAppError:false,
             formItem:{},
             form:{
-               startHour:'', 
-               endHour:'',
-               appStartTime:'00:00:00',
-               appEndTime:'23:30:00',
-               krmStartTime:'09:00:00',
-               krmEndTime:'19:00:00',
+               kmStartTime:'09:00:00',
+               kmEndTime:'19:00:00',
             },
             goodsInfo:{},
             ruleValidate: {
@@ -214,9 +210,7 @@ export default {
                 kmPublished: [
                     { required: true, message: 'KM商品上架状态不能为空', trigger: 'blur' }
                 ],
-                // date: [
-                //     { required: true, message: '不可预订日期选择', trigger: 'blur' }
-                // ],
+               
             },
             buildingImgList:[],
             detailImgList:[],
@@ -239,7 +233,13 @@ export default {
     methods: {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
-                
+                if (valid) {
+                        _this.submitCreate();
+                    } else {
+                        _this.$Notice.error({
+                            title:message
+                        });
+                }
                 
             })
         },
@@ -247,16 +247,16 @@ export default {
             this.$refs[name].resetFields();
         },
         changeAppStartTime(data){
-             this.formItem.appStartTime=`${data}:00`;;
-            if(this.formItem.appStartTime && this.formItem.appEndTime){
+             this.formItem.kmStartTime=data;
+            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
                 this.isAppError=false;
             }else{
                 this.isAppError=true;
             }
         },
         changeAppEndTime(data){
-            this.formItem.appEndTime=`${data}:00`;
-            if(this.formItem.appStartTime && this.formItem.appEndTime){
+            this.formItem.kmEndTime=data;
+            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
                 this.isAppError=false;
             }else{
                 this.isAppError=true;
@@ -267,28 +267,26 @@ export default {
             let form={
                 communityId: params.id
              }
-            let appPublish={
-                '1':'已上架',
-                '0':'未上架'
-            }
-            let kmPublished={
-                '1':'已上架',
-                '0':'未上架',
-                '2':'待上架'
-            }
             let communityStatus={
                 '1':'已开业',
                 '0':'未开业'
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
                 let data=Object.assign({},res.data)
-                let appPublished=toString(res.data.appPublished)
-                let kmPublished=toString(res.data.kmPublished);
-                data.appPublished=appPublish[appPublished];
-                data.kmPublished=kmPublished[kmPublished];
-                
+                let appPublished=String(res.data.appPublished)
+                let kmPublished=String(res.data.kmPublished);
+                data.appPublished=appPublished;
+                data.kmPublished=kmPublished;
                 data.communityStatus=communityStatus[res.data.communityStatus];
                 this.goodsInfo = data;
+                if(data.kmStartTime){
+                    this.form.kmStartTime=data.kmStartTime.substring(0,5);
+                }
+                if(data.kmEndTime){
+                    this.form.kmEndTime=data.kmEndTime.substring(0,5);
+                }
+                
+                this.formItem=data;
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -296,12 +294,13 @@ export default {
                 });
             })
         },
-        coverImgRemove(){
-            this.formItem.coverImg="";
+       
+        buildingImgRemove(){
+            this.formItem.buildingImg="";
         },
-        coverImgSuccess(file){
-            this.formItem.coverImg=file.data.url;
-            this.$refs.formItems.validateField('coverImg') 
+        buildingImgSuccess(file){
+            this.formItem.buildingImg=file.data.url;
+            this.$refs.formItems.validateField('buildingImg') 
         },
         detailImgsRemove(fileList){
             let imglist=[];

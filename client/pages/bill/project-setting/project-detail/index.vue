@@ -24,7 +24,7 @@
                 <TabPane label="产品档案" v-if="productShow"  name="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
                     <ArchivesManagement v-if="activeTab=='product'" code="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
                 </TabPane>
-
+             
             </Tabs>
 
 
@@ -121,13 +121,10 @@
 </template>
 
 <script>
-import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
-import DetailTaskList from './detail-task-list';
-import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -143,8 +140,6 @@ export default {
         AddTask,
         EditTask,
         WatchRecord,
-        DetailTaskList,
-        GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,

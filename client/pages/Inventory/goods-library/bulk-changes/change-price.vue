@@ -32,6 +32,7 @@
                     type="textarea"
                     v-model="numArea" 
                     id="goodsAreaScrollFuck"
+                    placeholder="在此输入换行隔开"
                     @on-change="areaChange"
                     @on-keydown="keyDown"
                 />

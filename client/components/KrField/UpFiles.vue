@@ -97,7 +97,7 @@ export default{
 		KrImg
 	},
     props:{
-			  right:{
+		right:{
             type:String
         },
       commentColor:{

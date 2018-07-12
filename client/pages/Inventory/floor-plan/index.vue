@@ -4,6 +4,7 @@
       <div class="bar">
           <SearchForm 
            @searchForm="searchForm"
+           @initData="initData"
           />
           <Discount 
            @countChange="countChange"
@@ -194,7 +195,7 @@ export default {
             });
         })        
     },
-    searchForm(formItem){
+    initData(formItem){
         this.tabForms=Object.assign({},formItem);
         if(clickNone.length){
             clickNone.map((item,index)=>{
@@ -203,8 +204,21 @@ export default {
             })
             clickNone=[];
         }
-        this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});
+        this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});   
         this.getMapData(this.tabForms);
+    },
+    searchForm(formItem){
+        this.tabForms=Object.assign({},formItem);
+        // if(clickNone.length){
+        //     clickNone.map((item,index)=>{
+        //       var parentNode=document.getElementById('gantt-chart-tool-tip'+item.id).parentNode;
+        //       this.closeCommon(parentNode);  
+        //     })
+        //     clickNone=[];
+        // }
+        this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});
+        utils.addParams(this.tabForms);
+        //this.getMapData(this.tabForms);
     },
     countChange(param,countRadio){
         this.discount=countRadio==1?'':param;

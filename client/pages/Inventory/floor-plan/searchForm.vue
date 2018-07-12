@@ -61,18 +61,39 @@ export default {
           communityId:'',
           floor:'',
           currentDate:publicFn.getToDay()
-       }
+       },
+       cityNum:0,
+       communityNum:0,
+       floorNum:0
     }
   },
   mounted(){
-      this.getCityList();
+      this.cityNum=0;
+      this.communityNum=0;
+      this.floorNum=0;
+      let _this=this;
+      let route=this.$route.query;
+      this.getCityList(route,function(){
+          _this.getCommunityList(route,_this.formItem.cityId,function(){
+              _this.getFloorList(route,_this.formItem.communityId,function(){
+                   _this.$emit('initData',_this.formItem);
+              });
+          });
+      });
   },
   methods:{
     //城市接口
-    getCityList(){
+    getCityList(route,callback){
         this.$http.get('getDailyCity').then((res)=>{
             this.cityList=res.data;
-            this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+            if(res.data.length){
+                if(route&&route.cityId){
+                    this.formItem.cityId=route.cityId;
+                }else{
+                    this.formItem.cityId=res.data[0].cityId;
+                }
+            }
+            callback && callback();
         }).catch((error)=>{
             this.$Notice.error({
                 title:error.message
@@ -80,13 +101,20 @@ export default {
         })
     },
      //社区接口
-    getCommunityList(id){
+    getCommunityList(route,id,callback){
         var params={
             cityId:id?id:''
         }
         this.$http.get('getDailyCommunity',params).then((res)=>{
             this.communityList=res.data;
-            this.formItem.communityId=res.data?res.data[0].id:'';
+            if(res.data.length){
+                if(route&&route.communityId){
+                    this.formItem.communityId=route.communityId;
+                }else{
+                    this.formItem.communityId=res.data[0].id;
+                }
+            }
+            callback && callback();
         }).catch((error)=>{
             this.$Notice.error({
                 title:error.message
@@ -94,13 +122,17 @@ export default {
         })
     },
     //楼层接口
-    getFloorList(param){
+    getFloorList(route,param,callback){
         this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
             this.floorList=res.data;
             var len=res.data.length;
             if(len){
                 var floor=this.floorList[0].floor;
-                this.formItem.floor=this.floorList.length?floor:''; 
+                if(route&&route.floor){
+                    this.formItem.floor=route.floor;
+                }else{
+                    this.formItem.floor=floor;
+                }
                 if(oldFloor==floor){
                     this.floorChange(floor);
                 }
@@ -109,6 +141,7 @@ export default {
                     this.floorList.push({floor:' ',floorName:"全部楼层"})  
                 }
             }
+            callback && callback();
         }).catch((error)=>{
             this.$Notice.error({
                 title:error.message
@@ -116,12 +149,28 @@ export default {
         })
     },
     cityChange(param){
-        this.getCommunityList(param);
+        this.cityNum++;
+        if(this.cityNum==1){
+            return;
+        }
+        console.log('1',this.cityNum);
+        this.getCommunityList('',param);
     },
     communityChange(param){
-        this.getFloorList(param); 
+        this.communityNum++;
+        if(this.communityNum==1){
+            return;
+        }
+        console.log('2',this.communityNum);
+        this.getFloorList('',param); 
     },
     floorChange(param){
+        console.log('3');
+        this.floorNum++;
+        if(this.floorNum==1){
+            return;
+        }
+        console.log('4',this.floorNum);
         this.$emit('searchForm',this.formItem);
     },
     dateChange(param){

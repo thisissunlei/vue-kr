@@ -56,7 +56,7 @@
                                 :onRemove="detailImgsRemove"
                                 :onExceededSize="imgSize"
                                 :onFormatError="imgSizeFormat"
-                                :defaultFileList="detailImgList"
+                                :defaultFileList="communityImgsList"
                                 :imgWidth="120"
                                 :imgHeight="120"
                                 
@@ -102,7 +102,7 @@
                     </FormItem>
                     <FormItem label="社区折扣策略"  style="width:252px" prop="communityAddress">
                         <Input 
-                            v-model="formItem.communityAddress" 
+                            v-model="formItem.promotionDesc" 
                             placeholder="社区折扣策略"
                         />
                     </FormItem>
@@ -213,7 +213,7 @@ export default {
                
             },
             buildingImgList:[],
-            detailImgList:[],
+            communityImgsList:[],
             // statusList:[
             //     {
             //      label:'周末及节假日',
@@ -232,6 +232,15 @@ export default {
     },
     methods: {
         handleSubmit (name) {
+            let {params}=this.$route;
+            let message = '请填写完表单';
+            this.$Notice.config({
+                top: 80,
+                duration: 3
+            });
+            let _this = this;
+            this.formItem.communityId=params.id;
+            console.log('this.formItem',this.formItem)
             this.$refs[name].validate((valid) => {
                 if (valid) {
                         _this.submitCreate();
@@ -243,6 +252,22 @@ export default {
                 
             })
         },
+        submitCreate(){
+           
+            this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
+                this.$Notice.success({
+                        title:'编辑成功'
+                    });
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
+        }, 
         handleReset (name) {
             this.$refs[name].resetFields();
         },
@@ -272,21 +297,47 @@ export default {
                 '0':'未开业'
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
-                let data=Object.assign({},res.data)
+                let data=Object.assign({},res.data);
                 let appPublished=String(res.data.appPublished)
                 let kmPublished=String(res.data.kmPublished);
+                res.data.communityStatus=communityStatus[res.data.communityStatus];
                 data.appPublished=appPublished;
                 data.kmPublished=kmPublished;
-                data.communityStatus=communityStatus[res.data.communityStatus];
-                this.goodsInfo = data;
+               
+                let buildingImgList=[];
+                if(data.buildingImg && data.buildingImg!=''){
+                    buildingImgList.push({'url':data.buildingImg});
+                }
+                this.buildingImgList=buildingImgList;
+
+                let communityImgsList=[];
+                data.communityImgs && data.communityImgs.map((item)=>{
+                    let obj={};
+                    obj.url=item;
+                    communityImgsList.push(obj)
+                })
+                this.communityImgsList=communityImgsList;
+
+                this.goodsInfo = res.data;
+
+                delete data.appRoomNum;
+                delete data.appSeatNum;
+                delete data.buildingName;
+                delete data.communityName;
+                delete data.kmRoomNum;
+                delete data.kmSeatNum;
+                delete data.openDate;
+                delete data.communityStatus;
+                this.formItem=data;
                 if(data.kmStartTime){
                     this.form.kmStartTime=data.kmStartTime.substring(0,5);
                 }
                 if(data.kmEndTime){
                     this.form.kmEndTime=data.kmEndTime.substring(0,5);
                 }
-                
-                this.formItem=data;
+                if(data.communityImgs){
+                    this.formItem.communityImgs=data.communityImgs.join(',');
+                }
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -307,8 +358,8 @@ export default {
             fileList.map((item)=>{
                 imglist.push(item.url)
             })
-            let detailImgs=imglist.join(',');
-            this.formItem.detailImgs=detailImgs;
+            let communityImgs=imglist.join(',');
+            this.formItem.communityImgs=communityImgs;
         },
         detailImgsSuccess(response, file, fileList){
             let imglist=[].concat(this.imglist);
@@ -316,8 +367,8 @@ export default {
                 imglist.push(item.url)
             })
             let detailImgs=imglist.join(',');
-            this.formItem.detailImgs=detailImgs;
-            this.$refs.formItems.validateField('detailImgs');
+            this.formItem.communityImgs=communityImgs;
+            this.$refs.formItems.validateField('communityImgs');
         },
     	 imgSizeFormat(){
             this.$Notice.error({

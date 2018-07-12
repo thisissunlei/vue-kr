@@ -1427,6 +1427,7 @@ export default {
     position: absolute;
     bottom: 2px;
     display: block;
+    top: 40px;
 }
 .OpportunityRequired {
     color: #ed3f14;

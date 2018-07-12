@@ -256,7 +256,9 @@
                 xhr.withCredentials = true;
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                        window.location.href = "/new/login.html";
+                        let redirectUrl = encodeURIComponent(window.location.href);
+                        window.location.href = `/new/login.html?RU=${redirectUrl}`;
+                        // window.location.href = "/new/login.html";
                         if (j_account_box.style.display == 'block') {
                             j_account_box.style.display = 'none';
                         }

@@ -56,4 +56,62 @@
     "source-map-support": "^0.4.15",
     "validate-commit-msg": "^2.14.0"
   }
+}{
+  "name": "kr-vue",
+  "version": "1.0.0",
+  "description": "kr-vue",
+  "author": "张屈 <joneyphair@qq.com>",
+  "private": true,
+  "scripts": {
+    "nuxt":"nuxt",
+    "dev": "cross-env NODE_ENV=development node  server/index.js",
+    "dev:test": "cross-env NODE_ENV=test node  server/index.js",
+    "dev:test01": "cross-env NODE_ENV=test01 node  server/index.js",
+    "dev:test02": "cross-env NODE_ENV=test02 node  server/index.js",
+    "dev:test03": "cross-env NODE_ENV=test03 node  server/index.js",
+    "dev:test04": "cross-env NODE_ENV=test04 node  server/index.js",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node  server/index.js",
+    "template": "cross-env NODE_ENV=producation node task/loadTemplate.js",
+    "template:test": "cross-env NODE_ENV=test  node task/loadTemplate.js",
+    "template:test01": "cross-env NODE_ENV=test01  node task/loadTemplate.js",
+    "template:test02": "cross-env NODE_ENV=test02  node task/loadTemplate.js",
+    "template:test03": "cross-env NODE_ENV=test03  node task/loadTemplate.js",
+    "template:test04": "cross-env NODE_ENV=test04  node task/loadTemplate.js"
+  },
+  "devDependencies": {
+    "axios": "0.17.1",
+    "babel-eslint": "7.1.1",
+    "backpack-core": "0.3.0",
+    "cross-env": "5.1.1",
+    "eslint": "3.13.1",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-html": "2.0.3",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-node": "4.2.2",
+    "eslint-plugin-promise": "3.4.0",
+    "eslint-plugin-standard": "3.0.1",
+    "express": "4.16.2",
+    "extract-text-webpack-plugin": "3.0.2",
+    "less": "2.7.3",
+    "less-loader": "4.0.5",
+    "nodemon": "1.12.5",
+    "react": "^16.2.0",
+    "scmp": "2.0.0",
+    "vue": "2.5.13",
+    "vue-dateutils": "1.0.8",
+    "vue-loader": "^13.7.0",
+    "vue-server-renderer": "2.5.13",
+    "vue-template-compiler": "2.5.13"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "4.5.0",
+    "husky": "^0.14.3",
+    "iview": "2.8.0",
+    "nuxt": "1.0.0-rc11",
+    "pdfjs-dist": "^2.0.281",
+    "promise-polyfill": "7.0.0",
+    "source-map-support": "^0.4.15",
+    "validate-commit-msg": "^2.14.0"
+  }
 }

@@ -302,6 +302,9 @@ export default {
             if(value[1]){
                 this.tabParams.id=value[0]
                 this.tabParams.cityId=value[1]
+            }else{
+                this.tabParams.id=''
+                this.tabParams.cityId=''
             }
         },
         changePage(page){

@@ -172,8 +172,8 @@
                   this.isshowButton= res.data.ifShow
                   // this.productShow= res.data.productShow
                   // this.propertyShow= res.data.propertyShow
-                  this.$route.query.productShow =res.data.productShow+''
-                  this.$route.query.propertyShow =res.data.productShow+''
+                  // this.$route.query.productShow =res.data.productShow+''
+                  // this.$route.query.propertyShow =res.data.productShow+''
                   // console.log(this.isshowButton,'actioncheck')
               }).catch((e)=>{
                 console.log(e,"actioncheck")

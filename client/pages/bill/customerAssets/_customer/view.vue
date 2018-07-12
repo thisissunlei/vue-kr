@@ -38,11 +38,12 @@
 
             		<a href="javascript:void(0);" @click="openBill">点击查看账单列表</a> 
             	</div>
-            	<div v-if="selectedTab=='order'" class="tab-texts">
+            	<!-- <div v-if="selectedTab=='order'" class="tab-texts">
             		<img src="./images/bill.svg" alt="">
 
             		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
-            	</div>
+            	</div> -->
+				<OrderManagement v-if="selectedTab=='order'" class="tab-texts"/>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
         </div>
@@ -59,6 +60,7 @@
     import Waiting from './waiting.vue'; 
 	import Basic from './basic/index.vue'; 
 	import JoinInfo from './joinInfo.vue'; 
+	import OrderManagement from './orderManagement'
 
 	export default {
 		name:'customerAssetsDetail',
@@ -68,7 +70,8 @@
 			Assets,
 			Waiting,
 			Basic,
-			JoinInfo
+			JoinInfo,
+			OrderManagement
 		},
 		data (){
 
@@ -121,9 +124,9 @@
 		methods:{
 			selectTab(name){
 				console.log('selectTab',name);
-				if(name=='order'){
-					window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
-				}
+				// if(name=='order'){
+				// 	window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+				// }
 				this.selectedTab = name
 			},
 			getBasicInfo(){

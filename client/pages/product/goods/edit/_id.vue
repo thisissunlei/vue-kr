@@ -190,8 +190,8 @@ export default {
             isAppError:false,
             formItem:{},
             form:{
-               kmStartTime:'09:00:00',
-               kmEndTime:'19:00:00',
+               kmStartTime:'09:00',
+               kmEndTime:'19:00',
             },
             goodsInfo:{},
             ruleValidate: {
@@ -212,6 +212,7 @@ export default {
                 ],
                
             },
+            imglist:[],
             buildingImgList:[],
             communityImgsList:[],
             // statusList:[
@@ -240,6 +241,12 @@ export default {
             });
             let _this = this;
             this.formItem.communityId=params.id;
+            if(!this.formItem.kmStartTime){
+                this.formItem.kmStartTime="09:00"
+            }
+            if(!this.formItem.kmEndTime){
+                this.formItem.kmEndTime="19:00"
+            }
             console.log('this.formItem',this.formItem)
             this.$refs[name].validate((valid) => {
                 if (valid) {
@@ -258,10 +265,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    // setTimeout(function(){
-                    //     window.close();
-                    //     window.opener.location.reload();
-                    // },1000) 
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message
@@ -363,10 +370,11 @@ export default {
         },
         detailImgsSuccess(response, file, fileList){
             let imglist=[].concat(this.imglist);
+
             fileList.map((item)=>{
                 imglist.push(item.url)
             })
-            let detailImgs=imglist.join(',');
+            let communityImgs=imglist.join(',');
             this.formItem.communityImgs=communityImgs;
             this.$refs.formItems.validateField('communityImgs');
         },

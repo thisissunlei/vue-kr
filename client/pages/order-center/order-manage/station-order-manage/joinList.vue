@@ -29,6 +29,7 @@
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
+                    <Buttons  v-if='hasSeatDataExportRight' label='导出工位数据'  type='primary' @click='submitExportSeat' checkAction='seat_order_in_export' style='margin-left:20px'/>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>
@@ -113,7 +114,7 @@
                     pageSize:15,
                     customerName:"",
                 },
-
+                hasSeatDataExportRight:false,
                 switchParams:{},
                 openMessage:false,
                 nullDisabled:false,
@@ -441,9 +442,13 @@
 
             submitExport (){
                 this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');              
             },
-
+            //导出工位数据
+            submitExportSeat(){
+                this.props=Object.assign({},this.props,this.params);
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export-all');
+            },
             submitUpperSearch(){
                 if(this.upperError){
                     return ;
@@ -469,6 +474,7 @@
                      this.totalCount=response.data.totalCount;
                      this.joinData=response.data.items;
                      this.openSearch=false;
+                     this.hasSeatDataExportRight=response.data.hasSeatExportRight;//是否具有工位数据导出权限
                  }).catch((error)=>{
                      this.openMessage=true;
                      this.MessageType="error";

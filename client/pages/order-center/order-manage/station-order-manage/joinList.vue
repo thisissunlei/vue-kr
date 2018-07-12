@@ -29,6 +29,7 @@
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
+                    <Buttons  v-if='hasSeatDataExportRight' label='导出工位数据'  type='primary' @click='submitExportSeat' checkAction='seat_order_in_export' style='margin-left:20px'/>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>
@@ -90,7 +91,7 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    
+    import ToolTip from '~/components/ToolTip';
 
     export default {
         name:'Join',
@@ -99,7 +100,8 @@
             Nullify,
             Message,
             Buttons,
-            ApplyContract
+            ApplyContract,
+            ToolTip
         },
         props:{
             mask:String
@@ -112,7 +114,7 @@
                     pageSize:15,
                     customerName:"",
                 },
-
+                hasSeatDataExportRight:false,
                 switchParams:{},
                 openMessage:false,
                 nullDisabled:false,
@@ -133,7 +135,8 @@
                     {
                         title: '订单编号',
                         key: 'orderNum',
-                        align:'center'
+                        align:'center',
+                        width:116
                     },
                     {
                         title: '客户名称',
@@ -143,8 +146,53 @@
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var communityName=params.row.communityName;
+                              if (communityName.lastIndexOf('社区')==communityName.length-2) {
+                                 communityName=communityName.slice(0,communityName.length-2)
+                              }           
+                          return <span class="u-txt">{communityName}</span>;
+                        }
                     },
+                    {
+                        title: '商品名称',
+                        key: 'seatNames',
+                        align:'center',
+                        width:150,
+                        render:(h,params)=>{
+                            let setnames=params.row.seatNames;
+                            if (!setnames) {
+                                return
+                            }
+                            let setArray=setnames.split('、');
+                            let lines=[] 
+                            let copyNames=Array.from(setArray)
+                            while(copyNames.length>0){
+                                let strs=copyNames.splice(0,5)
+                                lines.push(h('p',{},strs.join('、'))) 
+                            }
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top'
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden',
+                                                    width:'130px'
+                                                }
+                                            },setnames)
+                                        ]),
+                                        h('div', {slot:'content'},lines),
+                                    ])
+                                ])
+                        }                                    
+                    },                    
                     {
                         title: '服务费总额',
                         key: 'rentAmount',
@@ -167,6 +215,7 @@
                         title: '订单类型',
                         key: 'orderType',
                         align:'center',
+                        width:90,
                         render(tag,params){
                             var orderType={
                                'IN':'入驻服务订单',
@@ -174,8 +223,13 @@
                                'CONTINUE':'续租服务订单'
                             }
                             for(var item in orderType){
+                                 let typeName=orderType[item]
                                 if(item==params.row.orderType){
-                                    return <span class="u-txt">{orderType[item]}</span>;
+                                    let typeName=orderType[item]
+                                          if (typeName.lastIndexOf('服务订单')==typeName.length-4) {
+                                                typeName=typeName.slice(0,typeName.length-4)
+                                            }    
+                                    return <span class="u-txt">{typeName}</span>;
                                 }
                             }
                         }
@@ -184,9 +238,10 @@
                         title: '租赁期限',
                         key: 'ctime',
                         align:'center',
-                         width:100,
+                        width:192,
                         render(tag, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
+                            return tag('span',time)
                         }
                     },
                     {
@@ -219,6 +274,14 @@
                         align:'center',
                         render(tag, params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                            if (time.split('  ').length==2) {
+                                let t1=time.split('  ')[0]
+                                let t2=time.split('  ')[1]
+                                let lines=[];
+                                lines.push(tag('p',t1))
+                                lines.push(tag('p',t2))
+                                return tag('div',lines);  
+                            }
                             return time;
                         }
                     },
@@ -228,7 +291,15 @@
                         align:'center',
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
-                            return time;
+                            if (time.split('  ').length==2) {
+                                let t1=time.split('  ')[0]
+                                let t2=time.split('  ')[1]
+                                let lines=[];
+                                lines.push(tag('p',t1))
+                                lines.push(tag('p',t2))
+                                return tag('div',lines);  
+                            }                           
+                           return time;
                         }
                     },
                     {
@@ -371,9 +442,13 @@
 
             submitExport (){
                 this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');              
             },
-
+            //导出工位数据
+            submitExportSeat(){
+                this.props=Object.assign({},this.props,this.params);
+                utils.commonExport(this.props,'/ben/api/krspace-op-web/order-seat-add/export-all');
+            },
             submitUpperSearch(){
                 if(this.upperError){
                     return ;
@@ -399,6 +474,7 @@
                      this.totalCount=response.data.totalCount;
                      this.joinData=response.data.items;
                      this.openSearch=false;
+                     this.hasSeatDataExportRight=response.data.hasSeatExportRight;//是否具有工位数据导出权限
                  }).catch((error)=>{
                      this.openMessage=true;
                      this.MessageType="error";
@@ -530,9 +606,13 @@
                 }
             }
         }
-        .list-table{
+        .list-table{ 
             margin:20px;
             margin-top:0px;
+            // /deep/ .ivu-table-cell{
+            //     padding-left: 10px;
+            //     padding-right: 10px;
+            // }
         }
         .list-footer{
             margin: 10px 20px;

@@ -15,7 +15,7 @@
                 <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" > {{name}}</span>
             </div>
         </div>
-
+        
         <!-- 项目成员弹窗 -->
         <Modal v-model="modalProject" title="项目成员" width=700>
             <div slot='footer'>

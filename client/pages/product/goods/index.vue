@@ -97,6 +97,8 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import utils from '~/plugins/utils';
+
 export default {
     components:{
         SectionTitle,
@@ -117,25 +119,7 @@ export default {
                 pageSize:15,
             },
             area: [],
-            areaList: [{
-                value: 'beijing',
-                label: '北京',
-                children: [
-                    {
-                        value: 'gugong',
-                        label: '故宫'
-                    },
-                    {
-                        value: 'tiantan',
-                        label: '天坛'
-                    },
-                    {
-                        value: 'wangfujing',
-                        label: '王府井'
-                    }
-                ]
-            
-            }],
+            areaList: [],
             comStatusList:[
                 {
                  label:'已开业',
@@ -254,12 +238,43 @@ export default {
             ]
         }
     },
-    mounted:function(){
-        this.getTableData(this.tabParams);
-        this.getCityinfo()
+    created(){
+        var _this=this;
+        this.getCityinfo(' ',function(){
+            _this.tabParams=Object.assign({},_this.$route.query);
+            _this.formItem=Object.assign({},_this.$route.query);
+            let areaArr=[];
+           
+            if(_this.formItem.id){
+                areaArr.push(_this.formItem.id*1)
+            }
+            if(_this.formItem.cityId){
+                areaArr.push(_this.formItem.cityId*1)
+            }
+            _this.area=areaArr;
+            
+            let appStatus={
+                '1':'已上架',
+                '0':'未上架',
+            }
+            let kmStatu={
+                '1':'已上架',
+                '0':'未上架',
+                '2':'待上架'
+            }
+            _this.formItem.appPublishName=appStatus[_this.formItem.appPublished];
+            _this.formItem.kmPublishName=kmStatu[_this.formItem.kmPublished];
+            
+            
+        });
+        this.getTableData(this.$route.query);
+        
+        
+      
     },
+   
     methods:{
-        getCityinfo(params){
+        getCityinfo(params,callback){
             this.$http.get('get-krmting-mobile-community-city-list').then((res)=>{
                let provinceList=res.data.provinceList.map((item)=>{
                    item.label=item.name;
@@ -275,6 +290,7 @@ export default {
                    return item;
                }) 
                 this.areaList=provinceList;
+                callback && callback();
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -284,6 +300,7 @@ export default {
         },
         changeCity(value){
             if(value[1]){
+                this.tabParams.id=value[0]
                 this.tabParams.cityId=value[1]
             }
         },
@@ -307,7 +324,8 @@ export default {
             let params=Object.assign({},this.tabParams);
             params.page=1;
             params.pageSize=15;
-            this.getTableData(params);
+            utils.addParams(params);
+           
         },
         jumpEdit(params){
             window.open(`/product/goods/edit/${params.communityId}`,'_blank');

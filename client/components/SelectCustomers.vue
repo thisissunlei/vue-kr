@@ -41,6 +41,7 @@ export default {
         mounted:function(){
             this.getCusomerList(' ')
         },
+
         getCusomerList: function (name) {
             let params = {
                 company: name || ''

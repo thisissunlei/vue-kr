@@ -130,7 +130,7 @@ var layoutScrollHeight=0;
                                                 whiteSpace:'nowrap',
                                                 overflow: 'hidden'
                                             }
-                                        },moneyDetail),
+                                        },moneyDetail?moneyDetail:'-'),
                                     ])
                                 ])
                         ])

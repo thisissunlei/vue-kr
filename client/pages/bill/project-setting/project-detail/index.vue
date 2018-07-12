@@ -127,7 +127,7 @@ import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
 import DetailTaskList from './detail-task-list';
-//import GanttChart from '../gantt-chart';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -153,8 +153,8 @@ export default {
     },
     data(){
         return{
-          propertyShow:this.$route.query.propertyShow==="false" ? false : true,
-          productShow:this.$route.query.productShow==="false" ? false : true,
+            propertyShow:  true,
+            productShow:  true,
             projectid:this.$route.query.id,
             name: this.$route.query.name,
             city: this.$route.query.city,
@@ -188,7 +188,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:(this.$route.query.propertyShow==="false" ? false : true)?"property":"product",
+            activeTab:"",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -220,8 +220,10 @@ export default {
     },
     created(){
         this.queryData=this.$route.query;
+        this.actioncheck()
     },
     mounted(){
+
 
          GLOBALSIDESWITCH("false");
         this.getDeletePermission();
@@ -239,7 +241,7 @@ export default {
                   }else{
 
                   }
-          },500)
+          },100)
 
 
 
@@ -248,6 +250,21 @@ export default {
 
     },
     methods:{
+       actioncheck(){
+              this.$http.get('roleActionCheck').then((res)=>{
+                  // this.isshowButton= res.data.ifShow
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
+
+                  this.activeTab =this.propertyShow ?"property":"product"
+                  // this.$route.query.productShow =res.data.productShow+''
+                  // this.$route.query.propertyShow =res.data.productShow+''
+                  // console.log(this.isshowButton,'actioncheck')
+              }).catch((e)=>{
+                // console.log(e,"actioncheck")
+
+              })
+          },
         goback(){
           this.$router.push({path:'/bill/project-setting/comment?'+"name="+this.name+"&city="+this.city+"&id="+this.projectid})
         },

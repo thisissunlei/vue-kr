@@ -27,16 +27,23 @@
                     <span class="map-font-tip">{{item.label}}</span>
                     <span class="map-color-tip" :style="'background:'+item.color"></span>
                 </div>
-
+                
                 <!-- <span class="warning-tip"></span>
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
                 <div style="display:inline-block;margin-right:26px;">
                     <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
-                    <Select v-model="show" multiple placeholder="请输入显示项" style="width:150px;" clearable @on-change="changeCount">
+                    <Select 
+                        v-model="show" 
+                        multiple 
+                        placeholder="请输入显示项" 
+                        style="width:150px;" 
+                        clearable 
+                        @on-change="changeCount" 
+                        >
                         <Option v-for="item in showList" :value="item.value" :key="item.value">
                             {{ item.label }}
                         </Option>
-                    </Select>
+                  </Select>
                 </div>
                 
                 <div style="display:inline-block;margin-right:26px;">
@@ -115,16 +122,25 @@ export default {
            {value:'FUTURE_AVAILABLE',label:'可预租'}
        ],
        show:[],
-       displayList:''   
+       displayList:'',
+       isClickShow:false   
     }
   },
   mounted(){
      wrapDom=document.getElementById('inventory-floor-map-wrap');  
      mainDom=document.getElementById('layout-content-main');
      mainDom.addEventListener('scroll',this.mainScroll);
+     document.body.addEventListener('click',this.allBodyClick);
+     let route=this.$route.query;
+     let str=route.displayList?route.displayList:'';
+     if(str){
+        this.displayList=str;
+        this.show=str.split(',');
+     }
   },
   destroyed(){
      document.body.removeEventListener('click',this.bodyClick);
+     document.body.removeEventListener('click',this.allBodyClick);
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
@@ -149,7 +165,7 @@ export default {
             str=str?str+','+item:item;
         })
         this.displayList=str;
-        console.log('val-99--',this.displayList);
+        this.isClickShow=true;
     },
     //获取数据
     getMapData(values){
@@ -179,6 +195,7 @@ export default {
             })
             clickNone=[];
         }
+        this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});
         this.getMapData(this.tabForms);
     },
     countChange(param,countRadio){
@@ -219,6 +236,12 @@ export default {
          tirDom.style.display = 'block';
          angleDom.style.display = 'block';
          publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
+    },
+    allBodyClick(){
+        if(this.isClickShow){
+            this.isClickShow=false;
+            utils.addParams({displayList:this.displayList});
+        }
     },
     bodyClick(event){
         var id=event.target.getAttribute('data-titleId');

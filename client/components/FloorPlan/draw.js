@@ -82,11 +82,11 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                 { //鼠标hover事件
                     mouseEnter: function (e, node) {
                         let nods={data:node.part.Sd};
+                        iconData={e,nods};
                         //为了解决没有图片问题
                         if(!nods.data.bgsrc){
                             return ;
                         }
-                        iconData={e,nods};
                         isIconEnter=true;
                         isIconLeave=false;
                         enterFn(e,iconData.nods,'icon');

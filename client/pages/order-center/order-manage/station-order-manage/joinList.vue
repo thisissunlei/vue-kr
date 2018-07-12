@@ -447,7 +447,7 @@
             //导出工位数据
             submitExportSeat(){
                 this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/ben/api/krspace-op-web/order-seat-add/export-all');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export-all');
             },
             submitUpperSearch(){
                 if(this.upperError){

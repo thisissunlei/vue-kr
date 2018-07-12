@@ -60,6 +60,7 @@ export default {
                 this.getCusomerList(query)
             }, 200);
         },
+
         getCusomerList: function (name) {
             let params = {
                 company: name || ''

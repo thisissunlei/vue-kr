@@ -127,7 +127,6 @@ import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
 import DetailTaskList from './detail-task-list';
-//import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -144,7 +143,6 @@ export default {
         EditTask,
         WatchRecord,
         DetailTaskList,
-        //GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,

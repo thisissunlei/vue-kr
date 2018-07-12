@@ -19,7 +19,7 @@
 
 <template>
     <div class="com-select-customers">
-        <Select v-model="customer" clearable  filterable remote :placeholder="value" :remote-method="remoteCustomer" :loading="loading1" :disabled="disabled" @on-change="changeContent" :label-in-value="labelInValue">
+        <Select v-model="customer" filterable clearable remote :placeholder="value" :remote-method="remoteCustomer" :loading="loading1" :disabled="disabled" @on-change="changeContent" :label-in-value="labelInValue">
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -50,9 +50,14 @@ export default {
     mounted: function () {
         this.remoteCustomer()
     },
+    watch: {
+        value() {
+            this.customer = this.value;
+        }
+    },
     methods: {
         changeContent: function (customer) {
-            this.onchange(customer)
+            this.onchange(customer)      
         },
         remoteCustomer(query) {
             this.loading1 = true;
@@ -67,7 +72,7 @@ export default {
             }
             let list = [];
             let _this = this;
-            http.get('get-customer', params, r => {
+            http.get('get-customer-financialtransfer', params, r => {
                 list = r.data.customerList;
                 list.map((item) => {
                     let obj = item;

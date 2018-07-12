@@ -75,7 +75,7 @@
         }
         if(type && type == "member"){
             alias = '/';
-            hostname =  'memberadmintest.krspace.cn';
+            hostname =  'memberadmin.krspace.cn';
         }   
         href = location.protocol + "//" + hostname + port + alias + router;
         return href;

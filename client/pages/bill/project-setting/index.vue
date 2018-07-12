@@ -16,7 +16,10 @@
             </TabPane>
         </Tabs>
 
-      <Buttons label='导出'  type='primary' @click='submitExport' checkAction='pm_file_export'/>
+        <div style="padding:0 20px">
+          <Buttons label='导出'  type='primary' @click='submitExport' checkAction='pm_file_export'/>
+        </div>
+
 
 
 

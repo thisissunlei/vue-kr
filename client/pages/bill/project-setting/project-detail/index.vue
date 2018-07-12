@@ -24,7 +24,7 @@
                 <TabPane label="产品档案" v-if="productShow"  name="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
                     <ArchivesManagement v-if="activeTab=='product'" code="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
                 </TabPane>
-             
+
             </Tabs>
 
 
@@ -121,10 +121,13 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
+import DetailTaskList from './detail-task-list';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -140,6 +143,8 @@ export default {
         AddTask,
         EditTask,
         WatchRecord,
+        DetailTaskList,
+        GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,
@@ -223,16 +228,19 @@ export default {
 
         this.$nextTick(()=>{
           //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
-          let div1 = document.getElementsByClassName("ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused")[0]
-          let div2 = document.getElementsByClassName("ivu-tabs-ink-bar")[0]
+          setTimeout(()=>{
+                    let div1 = document.getElementsByClassName("ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused")[0]
+                    let div2 = document.getElementsByClassName("ivu-tabs-ink-bar")[0]
 
-        if(!this.propertyShow || !this.productShow){
+                  if(!this.propertyShow || !this.productShow){
 
-          div1.style.width ='100%'
-          div2.style.width ='100%'
-        }else{
+                    div1.style.width ='100%'
+                    div2.style.width ='100%'
+                  }else{
 
-        }
+                  }
+          },500)
+
 
 
 

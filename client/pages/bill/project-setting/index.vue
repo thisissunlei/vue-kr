@@ -57,7 +57,7 @@ export default {
     },
     methods:{
       submitExport(){
-        window.location="/api/pm/project/export"
+        window.open("/api/pm/project/actions/export")
       },
         tabsClick(key){
             // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];

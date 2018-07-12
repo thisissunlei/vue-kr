@@ -3,270 +3,259 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _47ae4d5e = () => import('../client/pages/krmeetingorder/index.vue' /* webpackChunkName: "pages/krmeetingorder/index" */).then(m => m.default || m)
-const _3afca549 = () => import('../client/pages/about.vue' /* webpackChunkName: "pages/about" */).then(m => m.default || m)
-const _3b854af1 = () => import('../client/pages/ops/index.vue' /* webpackChunkName: "pages/ops/index" */).then(m => m.default || m)
-const _24049b23 = () => import('../client/pages/nav-config/index.vue' /* webpackChunkName: "pages/nav-config/index" */).then(m => m.default || m)
-const _231711b3 = () => import('../client/pages/krmeeting/index.vue' /* webpackChunkName: "pages/krmeeting/index" */).then(m => m.default || m)
-const _509e0302 = () => import('../client/pages/facility-tags/index.vue' /* webpackChunkName: "pages/facility-tags/index" */).then(m => m.default || m)
-const _588a3de3 = () => import('../client/pages/smarthardware/powerowner/index.vue' /* webpackChunkName: "pages/smarthardware/powerowner/index" */).then(m => m.default || m)
-const _ef5f7716 = () => import('../client/pages/product/goods/index.vue' /* webpackChunkName: "pages/product/goods/index" */).then(m => m.default || m)
-const _31e199cc = () => import('../client/pages/krmeeting/timeoutMeeting/index.vue' /* webpackChunkName: "pages/krmeeting/timeoutMeeting/index" */).then(m => m.default || m)
-const _1a63c765 = () => import('../client/pages/Inventory/slotHead.vue' /* webpackChunkName: "pages/Inventory/slotHead" */).then(m => m.default || m)
-const _53dda3ca = () => import('../client/pages/smarthardware/openlog/index.vue' /* webpackChunkName: "pages/smarthardware/openlog/index" */).then(m => m.default || m)
-const _e7ab0c36 = () => import('../client/pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
-const _64b9548b = () => import('../client/pages/bill/project-setting/index.vue' /* webpackChunkName: "pages/bill/project-setting/index" */).then(m => m.default || m)
-const _dd135132 = () => import('../client/pages/operations-center/from-field/index.vue' /* webpackChunkName: "pages/operations-center/from-field/index" */).then(m => m.default || m)
-const _41448dc4 = () => import('../client/pages/community/publicFn.js' /* webpackChunkName: "pages/community/publicFn" */).then(m => m.default || m)
-const _9b287852 = () => import('../client/pages/official-website/calculator/index.vue' /* webpackChunkName: "pages/official-website/calculator/index" */).then(m => m.default || m)
-const _26f58423 = () => import('../client/pages/app-manage/coupon/index.vue' /* webpackChunkName: "pages/app-manage/coupon/index" */).then(m => m.default || m)
-const _3ff3406d = () => import('../client/pages/krmeeting/timeInMeeting/index.vue' /* webpackChunkName: "pages/krmeeting/timeInMeeting/index" */).then(m => m.default || m)
-const _298e7c7d = () => import('../client/pages/krmeetingorder/searchform.vue' /* webpackChunkName: "pages/krmeetingorder/searchform" */).then(m => m.default || m)
-const _4bdc1651 = () => import('../client/pages/basic/preferential/index.vue' /* webpackChunkName: "pages/basic/preferential/index" */).then(m => m.default || m)
-const _d1ddd356 = () => import('../client/pages/Inventory/over-date-unpaid/index.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/index" */).then(m => m.default || m)
-const _02f9a2c0 = () => import('../client/pages/operation/community/index.vue' /* webpackChunkName: "pages/operation/community/index" */).then(m => m.default || m)
-const _1bde1500 = () => import('../client/pages/Inventory/Inventory-gantt-chart/index.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/index" */).then(m => m.default || m)
-const _0d682397 = () => import('../client/pages/smart-hardware/map-depot/index.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/index" */).then(m => m.default || m)
-const _5bbf6a98 = () => import('../client/pages/Inventory/floor-plan/index.vue' /* webpackChunkName: "pages/Inventory/floor-plan/index" */).then(m => m.default || m)
-const _ec9e8472 = () => import('../client/pages/basic/parameter/index.vue' /* webpackChunkName: "pages/basic/parameter/index" */).then(m => m.default || m)
-const _3a95ae33 = () => import('../client/pages/Inventory/searchForm.vue' /* webpackChunkName: "pages/Inventory/searchForm" */).then(m => m.default || m)
-const _0a29be96 = () => import('../client/pages/app-manage/member-welfare/index.vue' /* webpackChunkName: "pages/app-manage/member-welfare/index" */).then(m => m.default || m)
-const _530bf65d = () => import('../client/pages/management-tool/data-monitoring/index.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/index" */).then(m => m.default || m)
-const _607ce0b1 = () => import('../client/pages/Inventory/enter-field/index.vue' /* webpackChunkName: "pages/Inventory/enter-field/index" */).then(m => m.default || m)
-const _12289ad2 = () => import('../client/pages/customer-manage/manage/index.vue' /* webpackChunkName: "pages/customer-manage/manage/index" */).then(m => m.default || m)
-const _51fe4dc0 = () => import('../client/pages/app-manage/notification-manage/index.vue' /* webpackChunkName: "pages/app-manage/notification-manage/index" */).then(m => m.default || m)
-const _2b8ad059 = () => import('../client/pages/Inventory/optional-inventory/index.vue' /* webpackChunkName: "pages/Inventory/optional-inventory/index" */).then(m => m.default || m)
-const _e9afe810 = () => import('../client/pages/Inventory/make-invoice/index.vue' /* webpackChunkName: "pages/Inventory/make-invoice/index" */).then(m => m.default || m)
-const _9a72721c = () => import('../client/pages/member/setting-manager/index.vue' /* webpackChunkName: "pages/member/setting-manager/index" */).then(m => m.default || m)
-const _4ac44d48 = () => import('../client/pages/app-manage/steward-setting/index.vue' /* webpackChunkName: "pages/app-manage/steward-setting/index" */).then(m => m.default || m)
-const _7abd7e1c = () => import('../client/pages/app-manage/home/index.vue' /* webpackChunkName: "pages/app-manage/home/index" */).then(m => m.default || m)
-const _56d11664 = () => import('../client/pages/demo/yihao.vue' /* webpackChunkName: "pages/demo/yihao" */).then(m => m.default || m)
-const _d6919ad2 = () => import('../client/pages/Inventory/publicFn.js' /* webpackChunkName: "pages/Inventory/publicFn" */).then(m => m.default || m)
-const _407870bc = () => import('../client/pages/community/attract-investment/index.vue' /* webpackChunkName: "pages/community/attract-investment/index" */).then(m => m.default || m)
-const _48a03d30 = () => import('../client/pages/Inventory/goods-library/index.vue' /* webpackChunkName: "pages/Inventory/goods-library/index" */).then(m => m.default || m)
-const _6a5c8164 = () => import('../client/pages/Inventory/statistical.vue' /* webpackChunkName: "pages/Inventory/statistical" */).then(m => m.default || m)
-const _3062c2b0 = () => import('../client/pages/bill/payrecord/index.vue' /* webpackChunkName: "pages/bill/payrecord/index" */).then(m => m.default || m)
-const _95d2c3a0 = () => import('../client/pages/bill/income/index.vue' /* webpackChunkName: "pages/bill/income/index" */).then(m => m.default || m)
-const _5c2535ca = () => import('../client/pages/demo/machaoyue.vue' /* webpackChunkName: "pages/demo/machaoyue" */).then(m => m.default || m)
-const _27b10fce = () => import('../client/pages/smart-hardware/space-manage/index.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/index" */).then(m => m.default || m)
-const _3c04dfc6 = () => import('../client/pages/nav-config/config-edit.vue' /* webpackChunkName: "pages/nav-config/config-edit" */).then(m => m.default || m)
-const _156e4e2c = () => import('../client/pages/doorrelationship/map/index.vue' /* webpackChunkName: "pages/doorrelationship/map/index" */).then(m => m.default || m)
-const _50a7e726 = () => import('../client/pages/Inventory/rented-unpaid/index.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/index" */).then(m => m.default || m)
-const _2bea12f6 = () => import('../client/pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
-const _78bc0c1a = () => import('../client/pages/product/meeting/index.vue' /* webpackChunkName: "pages/product/meeting/index" */).then(m => m.default || m)
-const _6fe02b9e = () => import('../client/pages/demo/wusuling.vue' /* webpackChunkName: "pages/demo/wusuling" */).then(m => m.default || m)
-const _f631b41c = () => import('../client/pages/app-manage/icon-manage/index.vue' /* webpackChunkName: "pages/app-manage/icon-manage/index" */).then(m => m.default || m)
-const _54c38554 = () => import('../client/pages/Inventory/daily-inventory/index.vue' /* webpackChunkName: "pages/Inventory/daily-inventory/index" */).then(m => m.default || m)
-const _15560a75 = () => import('../client/pages/bill/payment/index.vue' /* webpackChunkName: "pages/bill/payment/index" */).then(m => m.default || m)
-const _7ebcb79e = () => import('../client/pages/bill/settlement-list/index.vue' /* webpackChunkName: "pages/bill/settlement-list/index" */).then(m => m.default || m)
-const _7c95ad1e = () => import('../client/pages/app-manage/push-manage/index.vue' /* webpackChunkName: "pages/app-manage/push-manage/index" */).then(m => m.default || m)
-const _60fe0998 = () => import('../client/pages/bill/financial-invoice/index.vue' /* webpackChunkName: "pages/bill/financial-invoice/index" */).then(m => m.default || m)
-const _51aeb616 = () => import('../client/pages/community/publicPage/index.vue' /* webpackChunkName: "pages/community/publicPage/index" */).then(m => m.default || m)
-const _0077f49a = () => import('../client/pages/Inventory/over-date/index.vue' /* webpackChunkName: "pages/Inventory/over-date/index" */).then(m => m.default || m)
-const _19a96628 = () => import('../client/pages/Inventory/discount.vue' /* webpackChunkName: "pages/Inventory/discount" */).then(m => m.default || m)
-const _86ad78f0 = () => import('../client/pages/bill/customerAssets/index.vue' /* webpackChunkName: "pages/bill/customerAssets/index" */).then(m => m.default || m)
-const _76b96529 = () => import('../client/pages/nav-config/getColumns.js' /* webpackChunkName: "pages/nav-config/getColumns" */).then(m => m.default || m)
-const _6e225f95 = () => import('../client/pages/bill/make-invoice/index.vue' /* webpackChunkName: "pages/bill/make-invoice/index" */).then(m => m.default || m)
-const _23ac9565 = () => import('../client/pages/krmeetingorder/detail/index.vue' /* webpackChunkName: "pages/krmeetingorder/detail/index" */).then(m => m.default || m)
-const _54488a54 = () => import('../client/pages/app-manage/member-welfare/highSearch.vue' /* webpackChunkName: "pages/app-manage/member-welfare/highSearch" */).then(m => m.default || m)
-const _4015b3b2 = () => import('../client/pages/Inventory/goods-library/search-form.vue' /* webpackChunkName: "pages/Inventory/goods-library/search-form" */).then(m => m.default || m)
-const _57700bda = () => import('../client/pages/smarthardware/openlog/searchForm.vue' /* webpackChunkName: "pages/smarthardware/openlog/searchForm" */).then(m => m.default || m)
-const _b28a03f4 = () => import('../client/pages/doorrelationship/map/allEquipmentList/index.vue' /* webpackChunkName: "pages/doorrelationship/map/allEquipmentList/index" */).then(m => m.default || m)
-const _26e5e8ee = () => import('../client/pages/official-website/calculator/community.vue' /* webpackChunkName: "pages/official-website/calculator/community" */).then(m => m.default || m)
-const _f24c2e76 = () => import('../client/pages/smart-hardware/map-depot/createdMapDepot.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/createdMapDepot" */).then(m => m.default || m)
-const _19e7c25f = () => import('../client/pages/basic/parameter/form.vue' /* webpackChunkName: "pages/basic/parameter/form" */).then(m => m.default || m)
-const _7591787a = () => import('../client/pages/Inventory/make-invoice/pubilcFn.js' /* webpackChunkName: "pages/Inventory/make-invoice/pubilcFn" */).then(m => m.default || m)
-const _c6b76126 = () => import('../client/pages/app-manage/push-manage/create.vue' /* webpackChunkName: "pages/app-manage/push-manage/create" */).then(m => m.default || m)
-const _125ce6d5 = () => import('../client/pages/Inventory/make-invoice/search-from.vue' /* webpackChunkName: "pages/Inventory/make-invoice/search-from" */).then(m => m.default || m)
-const _61b7bd0a = () => import('../client/pages/Inventory/over-date/searchForm.vue' /* webpackChunkName: "pages/Inventory/over-date/searchForm" */).then(m => m.default || m)
-const _6e3885b2 = () => import('../client/pages/bill/project-setting/publicFn.js' /* webpackChunkName: "pages/bill/project-setting/publicFn" */).then(m => m.default || m)
-const _1f0c3502 = () => import('../client/pages/krmeeting/timeoutMeeting/searchForm.vue' /* webpackChunkName: "pages/krmeeting/timeoutMeeting/searchForm" */).then(m => m.default || m)
-const _0f18cd80 = () => import('../client/pages/community/fixHead/attract-head.vue' /* webpackChunkName: "pages/community/fixHead/attract-head" */).then(m => m.default || m)
-const _157fb4fe = () => import('../client/pages/app-manage/notification-manage/create.vue' /* webpackChunkName: "pages/app-manage/notification-manage/create" */).then(m => m.default || m)
-const _1a5a33c2 = () => import('../client/pages/bill/project-setting/project-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/index" */).then(m => m.default || m)
-const _3008343c = () => import('../client/pages/order-center/contract-manage/contract-yard/index.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-yard/index" */).then(m => m.default || m)
-const _5e2f0257 = () => import('../client/pages/bill/payment/highSearch.vue' /* webpackChunkName: "pages/bill/payment/highSearch" */).then(m => m.default || m)
-const _6aade14b = () => import('../client/pages/doorrelationship/map/groupDetail/index.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/index" */).then(m => m.default || m)
-const _34e6b8e7 = () => import('../client/pages/bill/list/highSearch.vue' /* webpackChunkName: "pages/bill/list/highSearch" */).then(m => m.default || m)
-const _0f0d33b7 = () => import('../client/pages/Inventory/goods-library/bind-service.vue' /* webpackChunkName: "pages/Inventory/goods-library/bind-service" */).then(m => m.default || m)
-const _730c7c38 = () => import('../client/pages/product/meeting/create.vue' /* webpackChunkName: "pages/product/meeting/create" */).then(m => m.default || m)
-const _6bec9f26 = () => import('../client/pages/bill/list/pdfDownload.vue' /* webpackChunkName: "pages/bill/list/pdfDownload" */).then(m => m.default || m)
-const _f9754e52 = () => import('../client/pages/bill/make-invoice/pubilcFn.js' /* webpackChunkName: "pages/bill/make-invoice/pubilcFn" */).then(m => m.default || m)
-const _3b64d396 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/index.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/index" */).then(m => m.default || m)
-const _43adfe6a = () => import('../client/pages/Inventory/over-date-unpaid/slotHead.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/slotHead" */).then(m => m.default || m)
-const _030a217a = () => import('../client/pages/bill/payment/unbind.vue' /* webpackChunkName: "pages/bill/payment/unbind" */).then(m => m.default || m)
-const _8a5ab618 = () => import('../client/pages/basic/preferential/createSale.vue' /* webpackChunkName: "pages/basic/preferential/createSale" */).then(m => m.default || m)
-const _5a282bdb = () => import('../client/pages/bill/project-setting/comment/index.vue' /* webpackChunkName: "pages/bill/project-setting/comment/index" */).then(m => m.default || m)
-const _a57d7ff0 = () => import('../client/pages/bill/income/addIncome.vue' /* webpackChunkName: "pages/bill/income/addIncome" */).then(m => m.default || m)
-const _65f326a6 = () => import('../client/pages/Inventory/over-date/slotHead.vue' /* webpackChunkName: "pages/Inventory/over-date/slotHead" */).then(m => m.default || m)
-const _3d18df9a = () => import('../client/pages/bill/project-setting/project-view/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-view/index" */).then(m => m.default || m)
-const _74dac8ef = () => import('../client/pages/Inventory/enter-field/slotHead.vue' /* webpackChunkName: "pages/Inventory/enter-field/slotHead" */).then(m => m.default || m)
-const _3fb1e30c = () => import('../client/pages/app-manage/icon-manage/create.vue' /* webpackChunkName: "pages/app-manage/icon-manage/create" */).then(m => m.default || m)
-const _18f25e28 = () => import('../client/pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
-const _4751add0 = () => import('../client/pages/smart-hardware/space-manage/editSpace.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/editSpace" */).then(m => m.default || m)
-const _00f01c10 = () => import('../client/pages/order-center/order-manage/general-order-manage/index.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/index" */).then(m => m.default || m)
-const _2dde8e1a = () => import('../client/pages/bill/financial-invoice/pubilcFn.js' /* webpackChunkName: "pages/bill/financial-invoice/pubilcFn" */).then(m => m.default || m)
-const _23b48964 = () => import('../client/pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
-const _c2e69c42 = () => import('../client/pages/smarthardware/powerowner/deviceData.vue' /* webpackChunkName: "pages/smarthardware/powerowner/deviceData" */).then(m => m.default || m)
-const _534055cc = () => import('../client/pages/Inventory/floor-plan/searchForm.vue' /* webpackChunkName: "pages/Inventory/floor-plan/searchForm" */).then(m => m.default || m)
-const _1a9145e3 = () => import('../client/pages/management-tool/data-monitoring/list.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/list" */).then(m => m.default || m)
-const _ffccbb78 = () => import('../client/pages/smarthardware/doormanage/devicedetail/index.vue' /* webpackChunkName: "pages/smarthardware/doormanage/devicedetail/index" */).then(m => m.default || m)
-const _30fe7df6 = () => import('../client/pages/customer-manage/manage/createCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/createCustomer" */).then(m => m.default || m)
-const _0608ad20 = () => import('../client/pages/bill/settlement-list/heightSearch.vue' /* webpackChunkName: "pages/bill/settlement-list/heightSearch" */).then(m => m.default || m)
-const _0ce62c75 = () => import('../client/pages/bill/financial-invoice/search-from.vue' /* webpackChunkName: "pages/bill/financial-invoice/search-from" */).then(m => m.default || m)
-const _61db9b4e = () => import('../client/pages/bill/payment/collection/index.vue' /* webpackChunkName: "pages/bill/payment/collection/index" */).then(m => m.default || m)
-const _254f0e38 = () => import('../client/pages/management-tool/data-monitoring/SelectCustomers.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/SelectCustomers" */).then(m => m.default || m)
-const _41216a0a = () => import('../client/pages/app-manage/coupon/create.vue' /* webpackChunkName: "pages/app-manage/coupon/create" */).then(m => m.default || m)
-const _322346d5 = () => import('../client/pages/Inventory/optional-inventory/optionalTable.vue' /* webpackChunkName: "pages/Inventory/optional-inventory/optionalTable" */).then(m => m.default || m)
-const _52f2daea = () => import('../client/pages/bill/payment/bind.vue' /* webpackChunkName: "pages/bill/payment/bind" */).then(m => m.default || m)
-const _7497e0db = () => import('../client/pages/app-manage/push-manage/highSearch.vue' /* webpackChunkName: "pages/app-manage/push-manage/highSearch" */).then(m => m.default || m)
-const _be5cc63c = () => import('../client/pages/app-manage/steward-setting/create.vue' /* webpackChunkName: "pages/app-manage/steward-setting/create" */).then(m => m.default || m)
-const _6b8051c7 = () => import('../client/pages/bill/list/paidList.vue' /* webpackChunkName: "pages/bill/list/paidList" */).then(m => m.default || m)
-const _12c25f48 = () => import('../client/pages/bill/financial-invoice/list.vue' /* webpackChunkName: "pages/bill/financial-invoice/list" */).then(m => m.default || m)
-const _0d70586c = () => import('../client/pages/Inventory/goods-library/editGoods.vue' /* webpackChunkName: "pages/Inventory/goods-library/editGoods" */).then(m => m.default || m)
-const _34ba7120 = () => import('../client/pages/bill/list/waitList.vue' /* webpackChunkName: "pages/bill/list/waitList" */).then(m => m.default || m)
-const _62c25ee8 = () => import('../client/pages/app-manage/member-welfare/create.vue' /* webpackChunkName: "pages/app-manage/member-welfare/create" */).then(m => m.default || m)
-const _71fdbb14 = () => import('../client/pages/order/list/highSearch.vue' /* webpackChunkName: "pages/order/list/highSearch" */).then(m => m.default || m)
-const _683f50b2 = () => import('../client/pages/bill/make-invoice/search-from.vue' /* webpackChunkName: "pages/bill/make-invoice/search-from" */).then(m => m.default || m)
-const _201a26ae = () => import('../client/pages/bill/project-setting/archives-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives-detail/index" */).then(m => m.default || m)
-const _86aa800c = () => import('../client/pages/customer-manage/manage/heightSearch.vue' /* webpackChunkName: "pages/customer-manage/manage/heightSearch" */).then(m => m.default || m)
-const _61ff062a = () => import('../client/pages/product/goods/calendar.vue' /* webpackChunkName: "pages/product/goods/calendar" */).then(m => m.default || m)
-const _0aecd5ab = () => import('../client/pages/bill/make-invoice/list.vue' /* webpackChunkName: "pages/bill/make-invoice/list" */).then(m => m.default || m)
-const _49da345c = () => import('../client/pages/Inventory/Inventory-gantt-chart/publicFn.js' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/publicFn" */).then(m => m.default || m)
-const _a863ca62 = () => import('../client/pages/Inventory/floor-plan/discount.vue' /* webpackChunkName: "pages/Inventory/floor-plan/discount" */).then(m => m.default || m)
-const _35f169d3 = () => import('../client/pages/customer-manage/manage/editCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/editCustomer" */).then(m => m.default || m)
-const _027000ca = () => import('../client/pages/bill/project-setting/archives-management/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives-management/index" */).then(m => m.default || m)
-const _4b218bfa = () => import('../client/pages/member/setting-manager/highSearch.vue' /* webpackChunkName: "pages/member/setting-manager/highSearch" */).then(m => m.default || m)
-const _7d617986 = () => import('../client/pages/customer-manage/manage/switchCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/switchCustomer" */).then(m => m.default || m)
-const _28adffab = () => import('../client/pages/Inventory/goods-library/fixed-head.vue' /* webpackChunkName: "pages/Inventory/goods-library/fixed-head" */).then(m => m.default || m)
-const _595b1586 = () => import('../client/pages/Inventory/enter-field/searchForm.vue' /* webpackChunkName: "pages/Inventory/enter-field/searchForm" */).then(m => m.default || m)
-const _a426e908 = () => import('../client/pages/bill/income/highSearch.vue' /* webpackChunkName: "pages/bill/income/highSearch" */).then(m => m.default || m)
-const _44a995f8 = () => import('../client/pages/operations-center/from-field/NewPage.vue' /* webpackChunkName: "pages/operations-center/from-field/NewPage" */).then(m => m.default || m)
-const _3fa64534 = () => import('../client/pages/smart-hardware/space-manage/createSpace.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/createSpace" */).then(m => m.default || m)
-const _6c3a80c8 = () => import('../client/pages/Inventory/goods-library/newgoods.vue' /* webpackChunkName: "pages/Inventory/goods-library/newgoods" */).then(m => m.default || m)
-const _36bb7821 = () => import('../client/pages/Inventory/Inventory-gantt-chart/list-table.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/list-table" */).then(m => m.default || m)
-const _ef4f556c = () => import('../client/pages/operations-center/from-field/HeightSearch.vue' /* webpackChunkName: "pages/operations-center/from-field/HeightSearch" */).then(m => m.default || m)
-const _4ac22fe8 = () => import('../client/pages/Inventory/rented-unpaid/searchForm.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/searchForm" */).then(m => m.default || m)
-const _63197ac0 = () => import('../client/pages/app-manage/home/member.vue' /* webpackChunkName: "pages/app-manage/home/member" */).then(m => m.default || m)
-const _9046e378 = () => import('../client/pages/order-center/order-manage/station-order-manage/index.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/index" */).then(m => m.default || m)
-const _21f22619 = () => import('../client/pages/Inventory/over-date-unpaid/searchForm.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/searchForm" */).then(m => m.default || m)
-const _2e49ee88 = () => import('../client/pages/bill/project-setting/public-hander/index.vue' /* webpackChunkName: "pages/bill/project-setting/public-hander/index" */).then(m => m.default || m)
-const _571348cb = () => import('../client/pages/bill/project-setting/archives/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives/index" */).then(m => m.default || m)
-const _13bf325a = () => import('../client/pages/Inventory/rented-unpaid/slotHead.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/slotHead" */).then(m => m.default || m)
-const _0d9376ba = () => import('../client/pages/Inventory/daily-inventory/dailyTable.vue' /* webpackChunkName: "pages/Inventory/daily-inventory/dailyTable" */).then(m => m.default || m)
-const _5d66508a = () => import('../client/pages/app-manage/home/joinMember.vue' /* webpackChunkName: "pages/app-manage/home/joinMember" */).then(m => m.default || m)
-const _c197d428 = () => import('../client/pages/app-manage/notification-manage/highSearch.vue' /* webpackChunkName: "pages/app-manage/notification-manage/highSearch" */).then(m => m.default || m)
-const _141e90e8 = () => import('../client/pages/Inventory/make-invoice/list.vue' /* webpackChunkName: "pages/Inventory/make-invoice/list" */).then(m => m.default || m)
-const _575afe8d = () => import('../client/pages/basic/preferential/create.vue' /* webpackChunkName: "pages/basic/preferential/create" */).then(m => m.default || m)
-const _ea62e9fe = () => import('../client/pages/krmeeting/timeInMeeting/searchForm.vue' /* webpackChunkName: "pages/krmeeting/timeInMeeting/searchForm" */).then(m => m.default || m)
-const _7865cd10 = () => import('../client/pages/Inventory/floor-plan/publicFn.js' /* webpackChunkName: "pages/Inventory/floor-plan/publicFn" */).then(m => m.default || m)
-const _feee53b0 = () => import('../client/pages/bill/payment/refund/index.vue' /* webpackChunkName: "pages/bill/payment/refund/index" */).then(m => m.default || m)
-const _8c799596 = () => import('../client/pages/app-manage/home/activity.vue' /* webpackChunkName: "pages/app-manage/home/activity" */).then(m => m.default || m)
-const _ee58e4f2 = () => import('../client/pages/order-center/order-manage/station-order-manage/nullify.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/nullify" */).then(m => m.default || m)
-const _10aba5ca = () => import('../client/pages/bill/project-setting/comment/indexData.js' /* webpackChunkName: "pages/bill/project-setting/comment/indexData" */).then(m => m.default || m)
-const _14d52966 = () => import('../client/pages/order-center/order-manage/station-order-manage/joinList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/joinList" */).then(m => m.default || m)
-const _60a67e37 = () => import('../client/pages/bill/project-setting/project-detail/object-detail-title.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/object-detail-title" */).then(m => m.default || m)
-const _320e67dd = () => import('../client/pages/order-center/contract-manage/contract-list/list/index.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/index" */).then(m => m.default || m)
-const _4a68afbf = () => import('../client/pages/order-center/order-manage/station-order-manage/errorView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/errorView" */).then(m => m.default || m)
-const _04b57621 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-week.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-week" */).then(m => m.default || m)
-const _13ab7174 = () => import('../client/pages/bill/project-setting/project-detail/add-task.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/add-task" */).then(m => m.default || m)
-const _0377af05 = () => import('../client/pages/doorrelationship/map/groupDetail/editForm.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/editForm" */).then(m => m.default || m)
-const _04fed63d = () => import('../client/pages/bill/project-setting/project-detail/archives-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/archives-detail/index" */).then(m => m.default || m)
-const _0ac0d640 = () => import('../client/pages/bill/project-setting/project-view/renderData.js' /* webpackChunkName: "pages/bill/project-setting/project-view/renderData" */).then(m => m.default || m)
-const _dc57128c = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/view-article.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/view-article" */).then(m => m.default || m)
-const _0d3ad5eb = () => import('../client/pages/order-center/order-manage/station-order-manage/replaceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/replaceView" */).then(m => m.default || m)
-const _0d3c43ff = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-day.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-day" */).then(m => m.default || m)
-const _9003efa6 = () => import('../client/pages/bill/project-setting/project-detail/detail-task-list.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/detail-task-list" */).then(m => m.default || m)
-const _dcea01dc = () => import('../client/pages/order-center/order-manage/station-order-manage/applyContract.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/applyContract" */).then(m => m.default || m)
-const _1ecc8a48 = () => import('../client/pages/smart-hardware/map-depot/edit/tvCard.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/edit/tvCard" */).then(m => m.default || m)
-const _498a4f5a = () => import('../client/pages/order-center/order-manage/general-order-manage/nullify.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/nullify" */).then(m => m.default || m)
-const _75333b05 = () => import('../client/pages/bill/project-setting/comment/krSelect.js' /* webpackChunkName: "pages/bill/project-setting/comment/krSelect" */).then(m => m.default || m)
-const _574426b6 = () => import('../client/pages/bill/project-setting/comment/krCity.js' /* webpackChunkName: "pages/bill/project-setting/comment/krCity" */).then(m => m.default || m)
-const _5ca19b60 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/color-type.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/color-type" */).then(m => m.default || m)
-const _66e428a4 = () => import('../client/pages/bill/project-setting/archives-detail/record-detail.vue' /* webpackChunkName: "pages/bill/project-setting/archives-detail/record-detail" */).then(m => m.default || m)
-const _b6db3668 = () => import('../client/pages/bill/project-setting/comment/KrInput.vue' /* webpackChunkName: "pages/bill/project-setting/comment/KrInput" */).then(m => m.default || m)
-const _48f504d2 = () => import('../client/pages/bill/project-setting/project-detail/watch-record.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/watch-record" */).then(m => m.default || m)
-const _82cb24a8 = () => import('../client/pages/order-center/contract-manage/contract-yard/ContractYard.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-yard/ContractYard" */).then(m => m.default || m)
-const _15a3b584 = () => import('../client/pages/order-center/order-manage/station-order-manage/listAndMap/index.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/listAndMap/index" */).then(m => m.default || m)
-const _79c829f3 = () => import('../client/pages/bill/project-setting/comment/indexMethod.js' /* webpackChunkName: "pages/bill/project-setting/comment/indexMethod" */).then(m => m.default || m)
-const _0595c398 = () => import('../client/pages/bill/project-setting/archives/add-archives.vue' /* webpackChunkName: "pages/bill/project-setting/archives/add-archives" */).then(m => m.default || m)
-const _ca07273e = () => import('../client/pages/order-center/order-manage/general-order-manage/heightSearch.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/heightSearch" */).then(m => m.default || m)
-const _882cc40a = () => import('../client/pages/bill/project-setting/comment/overFlowLabel.vue' /* webpackChunkName: "pages/bill/project-setting/comment/overFlowLabel" */).then(m => m.default || m)
-const _3b6e50a6 = () => import('../client/pages/order-center/order-manage/station-order-manage/heightSearch.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/heightSearch" */).then(m => m.default || m)
-const _7eb4977a = () => import('../client/pages/Inventory/goods-library/bulk-changes/change-status.vue' /* webpackChunkName: "pages/Inventory/goods-library/bulk-changes/change-status" */).then(m => m.default || m)
-const _a3bc891e = () => import('../client/pages/Inventory/goods-library/bulk-changes/change-price.vue' /* webpackChunkName: "pages/Inventory/goods-library/bulk-changes/change-price" */).then(m => m.default || m)
-const _5d2b35f0 = () => import('../client/pages/doorrelationship/map/allEquipmentList/searchForm.vue' /* webpackChunkName: "pages/doorrelationship/map/allEquipmentList/searchForm" */).then(m => m.default || m)
-const _15242aba = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/article.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/article" */).then(m => m.default || m)
-const _97dc8196 = () => import('../client/pages/bill/project-setting/project-detail/edit-task.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/edit-task" */).then(m => m.default || m)
-const _2aed26f0 = () => import('../client/pages/doorrelationship/map/groupDetail/equipmentList/index.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/equipmentList/index" */).then(m => m.default || m)
-const _63f63000 = () => import('../client/pages/member/setting-manager/detail/communityManage.vue' /* webpackChunkName: "pages/member/setting-manager/detail/communityManage" */).then(m => m.default || m)
-const _a47d9c68 = () => import('../client/pages/bill/project-setting/project-view/add-archives.vue' /* webpackChunkName: "pages/bill/project-setting/project-view/add-archives" */).then(m => m.default || m)
-const _76c5ebba = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-month.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-month" */).then(m => m.default || m)
-const _1628a764 = () => import('../client/pages/order-center/order-manage/station-order-manage/replaceList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/replaceList" */).then(m => m.default || m)
-const _48bf37bc = () => import('../client/pages/order-center/order-manage/station-order-manage/reduceList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/reduceList" */).then(m => m.default || m)
-const _b8b853fc = () => import('../client/pages/order-center/contract-manage/contract-list/list/PrintAgreement.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/PrintAgreement" */).then(m => m.default || m)
-const _98d6a018 = () => import('../client/pages/order-center/contract-manage/contract-list/list/heightSearch.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/heightSearch" */).then(m => m.default || m)
-const _60c5690c = () => import('../client/pages/doorrelationship/map/groupDetail/equipmentList/equipmentSearch.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/equipmentList/equipmentSearch" */).then(m => m.default || m)
-const _41ae19ce = () => import('../client/pages/order-center/order-manage/station-order-manage/create/reduceStation.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/reduceStation" */).then(m => m.default || m)
-const _8464b262 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/join.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/join" */).then(m => m.default || m)
-const _e7731790 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/renew.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/renew" */).then(m => m.default || m)
-const _66503e46 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/stationList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/stationList" */).then(m => m.default || m)
-const _ef6b48c4 = () => import('../client/pages/order-center/order-manage/general-order-manage/create/addOrder.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/create/addOrder" */).then(m => m.default || m)
-const _61c3981f = () => import('../client/pages/order-center/order-manage/station-order-manage/create/replace.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/replace" */).then(m => m.default || m)
-const _73fcf448 = () => import('../client/pages/order-center/order-manage/station-order-manage/listAndMap/list.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/listAndMap/list" */).then(m => m.default || m)
-const _1ce571cb = () => import('../client/pages/order-center/order-manage/station-order-manage/create/reduce.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/reduce" */).then(m => m.default || m)
-const _1125b640 = () => import('../client/pages/bill/list/detail/_billId.vue' /* webpackChunkName: "pages/bill/list/detail/_billId" */).then(m => m.default || m)
-const _1ab39ec6 = () => import('../client/pages/product/meeting/edit/_id.vue' /* webpackChunkName: "pages/product/meeting/edit/_id" */).then(m => m.default || m)
-const _f5a48224 = () => import('../client/pages/app-manage/member-welfare/detail/_couponId.vue' /* webpackChunkName: "pages/app-manage/member-welfare/detail/_couponId" */).then(m => m.default || m)
-const _379f533c = () => import('../client/pages/product/goods/edit/_id.vue' /* webpackChunkName: "pages/product/goods/edit/_id" */).then(m => m.default || m)
-const _5730b89e = () => import('../client/pages/app-manage/icon-manage/edit/_iconId.vue' /* webpackChunkName: "pages/app-manage/icon-manage/edit/_iconId" */).then(m => m.default || m)
-const _d6b1b36e = () => import('../client/pages/app-manage/notification-manage/detail/_notificationId.vue' /* webpackChunkName: "pages/app-manage/notification-manage/detail/_notificationId" */).then(m => m.default || m)
-const _054a21e7 = () => import('../client/pages/app-manage/member-welfare/edit/_couponId.vue' /* webpackChunkName: "pages/app-manage/member-welfare/edit/_couponId" */).then(m => m.default || m)
-const _c55fc8e4 = () => import('../client/pages/bill/income/detail/_id.vue' /* webpackChunkName: "pages/bill/income/detail/_id" */).then(m => m.default || m)
-const _3b1b57fd = () => import('../client/pages/product/goods/view/_id.vue' /* webpackChunkName: "pages/product/goods/view/_id" */).then(m => m.default || m)
-const _0aa1f57b = () => import('../client/pages/app-manage/coupon/detail/_id.vue' /* webpackChunkName: "pages/app-manage/coupon/detail/_id" */).then(m => m.default || m)
-const _6408c25c = () => import('../client/pages/member/setting-manager/detail/_csrId.vue' /* webpackChunkName: "pages/member/setting-manager/detail/_csrId" */).then(m => m.default || m)
-const _7c69e3a7 = () => import('../client/pages/app-manage/push-manage/detail/_pushId.vue' /* webpackChunkName: "pages/app-manage/push-manage/detail/_pushId" */).then(m => m.default || m)
-const _260fde21 = () => import('../client/pages/smart-hardware/map-depot/edit/_storageId.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/edit/_storageId" */).then(m => m.default || m)
-const _bdfd8ffc = () => import('../client/pages/app-manage/notification-manage/edit/_notificationId.vue' /* webpackChunkName: "pages/app-manage/notification-manage/edit/_notificationId" */).then(m => m.default || m)
-const _052c5ae3 = () => import('../client/pages/bill/payment/detail/_paymentId.vue' /* webpackChunkName: "pages/bill/payment/detail/_paymentId" */).then(m => m.default || m)
-const _b7446018 = () => import('../client/pages/app-manage/coupon/edit/_id.vue' /* webpackChunkName: "pages/app-manage/coupon/edit/_id" */).then(m => m.default || m)
-const _e62d4040 = () => import('../client/pages/app-manage/steward-setting/edit/_manageId.vue' /* webpackChunkName: "pages/app-manage/steward-setting/edit/_manageId" */).then(m => m.default || m)
-const _80722028 = () => import('../client/pages/order/list/detail/_orderId.vue' /* webpackChunkName: "pages/order/list/detail/_orderId" */).then(m => m.default || m)
-const _8b16d652 = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/reduceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/reduceView" */).then(m => m.default || m)
-const _8bd1cea4 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/reduce.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/reduce" */).then(m => m.default || m)
-const _589b56d6 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/reduceStation.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/reduceStation" */).then(m => m.default || m)
-const _e3cbe04c = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/stationList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/stationList" */).then(m => m.default || m)
-const _1db9197d = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/replaceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/replaceView" */).then(m => m.default || m)
-const _57000d9b = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/joinView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/joinView" */).then(m => m.default || m)
-const _53f1aa72 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/join.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/join" */).then(m => m.default || m)
-const _6ac6cd9c = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/replace.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/replace" */).then(m => m.default || m)
-const _37318667 = () => import('../client/pages/order-center/order-manage/general-order-manage/_watchView/joinView.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/_watchView/joinView" */).then(m => m.default || m)
-const _37f6ef00 = () => import('../client/pages/order-center/order-manage/general-order-manage/_orderEdit/editOrder.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/_orderEdit/editOrder" */).then(m => m.default || m)
-const _21ed9356 = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/renewView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/renewView" */).then(m => m.default || m)
-const _8aba3616 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/renew.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/renew" */).then(m => m.default || m)
-const _5a4201e1 = () => import('../client/pages/bill/make-invoice/_add/add-invoice.vue' /* webpackChunkName: "pages/bill/make-invoice/_add/add-invoice" */).then(m => m.default || m)
-const _f0f3e4ae = () => import('../client/pages/bill/settlement-list/_billId/edit.vue' /* webpackChunkName: "pages/bill/settlement-list/_billId/edit" */).then(m => m.default || m)
-const _2c1a4ef0 = () => import('../client/pages/bill/customerAssets/_customer/changeBalance.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/changeBalance" */).then(m => m.default || m)
-const _d981a4e0 = () => import('../client/pages/bill/customerAssets/_customer/spending.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/spending" */).then(m => m.default || m)
-const _77d79662 = () => import('../client/pages/bill/customerAssets/_customer/assets.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/assets" */).then(m => m.default || m)
-const _06235215 = () => import('../client/pages/bill/customerAssets/_customer/basic/index.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/index" */).then(m => m.default || m)
-const _da44bd9e = () => import('../client/pages/smart-hardware/space-manage/_sub/son-space.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/_sub/son-space" */).then(m => m.default || m)
-const _5d0ad8b1 = () => import('../client/pages/bill/customerAssets/_customer/waiting.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/waiting" */).then(m => m.default || m)
-const _e6e9d01e = () => import('../client/pages/bill/customerAssets/_customer/view.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/view" */).then(m => m.default || m)
-const _2e366942 = () => import('../client/pages/bill/customerAssets/_customer/refunds.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/refunds" */).then(m => m.default || m)
-const _4a0db2da = () => import('../client/pages/bill/customerAssets/_customer/giveMoney.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/giveMoney" */).then(m => m.default || m)
-const _7e165b06 = () => import('../client/pages/bill/customerAssets/_customer/changeCommunity.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/changeCommunity" */).then(m => m.default || m)
-const _4bcbd6b0 = () => import('../client/pages/bill/settlement-list/_billId/detail.vue' /* webpackChunkName: "pages/bill/settlement-list/_billId/detail" */).then(m => m.default || m)
-const _2b3679b4 = () => import('../client/pages/operations-center/from-field/_watchView/view.vue' /* webpackChunkName: "pages/operations-center/from-field/_watchView/view" */).then(m => m.default || m)
-const _7ca31980 = () => import('../client/pages/publicPage/make-invoice/_view/view-detail.vue' /* webpackChunkName: "pages/publicPage/make-invoice/_view/view-detail" */).then(m => m.default || m)
-const _de6a5a78 = () => import('../client/pages/bill/customerAssets/_customer/joinInfo.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/joinInfo" */).then(m => m.default || m)
-const _22fcd1c0 = () => import('../client/pages/bill/customerAssets/_customer/balance.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/balance" */).then(m => m.default || m)
-const _94577e50 = () => import('../client/pages/bill/financial-invoice/_add/view-invoice.vue' /* webpackChunkName: "pages/bill/financial-invoice/_add/view-invoice" */).then(m => m.default || m)
-const _74fe2a97 = () => import('../client/pages/bill/customerAssets/_customer/basic/annex.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/annex" */).then(m => m.default || m)
-const _efac818a = () => import('../client/pages/bill/customerAssets/_customer/basic/info.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/info" */).then(m => m.default || m)
-const _a0d8c744 = () => import('../client/pages/publicPage/_view/pdf-view.vue' /* webpackChunkName: "pages/publicPage/_view/pdf-view" */).then(m => m.default || m)
-const _5ab4800e = () => import('../client/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _0193667a = () => import('../client/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _1b19c946 = () => import('../client/pages/ops/index.vue' /* webpackChunkName: "pages/ops/index" */).then(m => m.default || m)
+const _3c48e896 = () => import('../client/pages/about.vue' /* webpackChunkName: "pages/about" */).then(m => m.default || m)
+const _d4ec3dc2 = () => import('../client/pages/krmeeting/index.vue' /* webpackChunkName: "pages/krmeeting/index" */).then(m => m.default || m)
+const _b5f98724 = () => import('../client/pages/facility-tags/index.vue' /* webpackChunkName: "pages/facility-tags/index" */).then(m => m.default || m)
+const _00288d92 = () => import('../client/pages/nav-config/index.vue' /* webpackChunkName: "pages/nav-config/index" */).then(m => m.default || m)
+const _146acd65 = () => import('../client/pages/krmeetingorder/index.vue' /* webpackChunkName: "pages/krmeetingorder/index" */).then(m => m.default || m)
+const _48bb7e1f = () => import('../client/pages/Inventory/over-date/index.vue' /* webpackChunkName: "pages/Inventory/over-date/index" */).then(m => m.default || m)
+const _2d5252ab = () => import('../client/pages/customer-manage/manage/index.vue' /* webpackChunkName: "pages/customer-manage/manage/index" */).then(m => m.default || m)
+const _afd04070 = () => import('../client/pages/Inventory/floor-plan/index.vue' /* webpackChunkName: "pages/Inventory/floor-plan/index" */).then(m => m.default || m)
+const _d82418ee = () => import('../client/pages/bill/payment/index.vue' /* webpackChunkName: "pages/bill/payment/index" */).then(m => m.default || m)
+const _0b7ce72e = () => import('../client/pages/Inventory/over-date-unpaid/index.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/index" */).then(m => m.default || m)
+const _8a6f93fc = () => import('../client/pages/app-manage/member-welfare/index.vue' /* webpackChunkName: "pages/app-manage/member-welfare/index" */).then(m => m.default || m)
+const _e06dae12 = () => import('../client/pages/smarthardware/powerowner/index.vue' /* webpackChunkName: "pages/smarthardware/powerowner/index" */).then(m => m.default || m)
+const _31d56cdc = () => import('../client/pages/Inventory/rented-unpaid/index.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/index" */).then(m => m.default || m)
+const _6157e60a = () => import('../client/pages/demo/wusuling.vue' /* webpackChunkName: "pages/demo/wusuling" */).then(m => m.default || m)
+const _3dce4f70 = () => import('../client/pages/app-manage/steward-setting/index.vue' /* webpackChunkName: "pages/app-manage/steward-setting/index" */).then(m => m.default || m)
+const _3a590fd0 = () => import('../client/pages/Inventory/statistical.vue' /* webpackChunkName: "pages/Inventory/statistical" */).then(m => m.default || m)
+const _59ad4c33 = () => import('../client/pages/basic/parameter/index.vue' /* webpackChunkName: "pages/basic/parameter/index" */).then(m => m.default || m)
+const _d136aca8 = () => import('../client/pages/bill/financial-invoice/index.vue' /* webpackChunkName: "pages/bill/financial-invoice/index" */).then(m => m.default || m)
+const _44a70eab = () => import('../client/pages/smart-hardware/map-depot/index.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/index" */).then(m => m.default || m)
+const _a5bf8bee = () => import('../client/pages/community/publicPage/index.vue' /* webpackChunkName: "pages/community/publicPage/index" */).then(m => m.default || m)
+const _2da531f4 = () => import('../client/pages/member/setting-manager/index.vue' /* webpackChunkName: "pages/member/setting-manager/index" */).then(m => m.default || m)
+const _7ce2a7e8 = () => import('../client/pages/Inventory/make-invoice/index.vue' /* webpackChunkName: "pages/Inventory/make-invoice/index" */).then(m => m.default || m)
+const _72d7a247 = () => import('../client/pages/Inventory/searchForm.vue' /* webpackChunkName: "pages/Inventory/searchForm" */).then(m => m.default || m)
+const _201092bc = () => import('../client/pages/bill/payrecord/index.vue' /* webpackChunkName: "pages/bill/payrecord/index" */).then(m => m.default || m)
+const _0ca7a2d1 = () => import('../client/pages/krmeetingorder/detail/index.vue' /* webpackChunkName: "pages/krmeetingorder/detail/index" */).then(m => m.default || m)
+const _4bf11b2c = () => import('../client/pages/operation/community/index.vue' /* webpackChunkName: "pages/operation/community/index" */).then(m => m.default || m)
+const _cf7d6188 = () => import('../client/pages/Inventory/discount.vue' /* webpackChunkName: "pages/Inventory/discount" */).then(m => m.default || m)
+const _d2cd8d76 = () => import('../client/pages/bill/settlement-list/index.vue' /* webpackChunkName: "pages/bill/settlement-list/index" */).then(m => m.default || m)
+const _7285f4e9 = () => import('../client/pages/krmeetingorder/searchform.vue' /* webpackChunkName: "pages/krmeetingorder/searchform" */).then(m => m.default || m)
+const _3ab0e99f = () => import('../client/pages/bill/project-setting/index.vue' /* webpackChunkName: "pages/bill/project-setting/index" */).then(m => m.default || m)
+const _07d1310a = () => import('../client/pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
+const _0561fcc0 = () => import('../client/pages/Inventory/daily-inventory/index.vue' /* webpackChunkName: "pages/Inventory/daily-inventory/index" */).then(m => m.default || m)
+const _48b89a86 = () => import('../client/pages/product/meeting/index.vue' /* webpackChunkName: "pages/product/meeting/index" */).then(m => m.default || m)
+const _4aba0c88 = () => import('../client/pages/app-manage/home/index.vue' /* webpackChunkName: "pages/app-manage/home/index" */).then(m => m.default || m)
+const _cbc91784 = () => import('../client/pages/smarthardware/temperaturehumiditymap/index.vue' /* webpackChunkName: "pages/smarthardware/temperaturehumiditymap/index" */).then(m => m.default || m)
+const _31350301 = () => import('../client/pages/bill/make-invoice/index.vue' /* webpackChunkName: "pages/bill/make-invoice/index" */).then(m => m.default || m)
+const _697f2404 = () => import('../client/pages/doorrelationship/map/index.vue' /* webpackChunkName: "pages/doorrelationship/map/index" */).then(m => m.default || m)
+const _2b3ccf0a = () => import('../client/pages/operations-center/from-field/index.vue' /* webpackChunkName: "pages/operations-center/from-field/index" */).then(m => m.default || m)
+const _0fc86cf6 = () => import('../client/pages/app-manage/push-manage/index.vue' /* webpackChunkName: "pages/app-manage/push-manage/index" */).then(m => m.default || m)
+const _ccb66e44 = () => import('../client/pages/demo/machaoyue.vue' /* webpackChunkName: "pages/demo/machaoyue" */).then(m => m.default || m)
+const _29c43f36 = () => import('../client/pages/basic/preferential/index.vue' /* webpackChunkName: "pages/basic/preferential/index" */).then(m => m.default || m)
+const _02c56d5e = () => import('../client/pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
+const _533eba4e = () => import('../client/pages/krmeeting/timeInMeeting/index.vue' /* webpackChunkName: "pages/krmeeting/timeInMeeting/index" */).then(m => m.default || m)
+const _1d1d99d4 = () => import('../client/pages/app-manage/notification-manage/index.vue' /* webpackChunkName: "pages/app-manage/notification-manage/index" */).then(m => m.default || m)
+const _692084e0 = () => import('../client/pages/krmeeting/timeoutMeeting/index.vue' /* webpackChunkName: "pages/krmeeting/timeoutMeeting/index" */).then(m => m.default || m)
+const _ce089f0e = () => import('../client/pages/Inventory/slotHead.vue' /* webpackChunkName: "pages/Inventory/slotHead" */).then(m => m.default || m)
+const _cd389c60 = () => import('../client/pages/community/attract-investment/index.vue' /* webpackChunkName: "pages/community/attract-investment/index" */).then(m => m.default || m)
+const _896473f4 = () => import('../client/pages/app-manage/icon-manage/index.vue' /* webpackChunkName: "pages/app-manage/icon-manage/index" */).then(m => m.default || m)
+const _2befb0e2 = () => import('../client/pages/app-manage/coupon/index.vue' /* webpackChunkName: "pages/app-manage/coupon/index" */).then(m => m.default || m)
+const _2853a66e = () => import('../client/pages/management-tool/data-monitoring/index.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/index" */).then(m => m.default || m)
+const _2a8f5c3a = () => import('../client/pages/smart-hardware/space-manage/index.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/index" */).then(m => m.default || m)
+const _81e788f2 = () => import('../client/pages/smarthardware/openlog/index.vue' /* webpackChunkName: "pages/smarthardware/openlog/index" */).then(m => m.default || m)
+const _96af6928 = () => import('../client/pages/Inventory/Inventory-gantt-chart/index.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/index" */).then(m => m.default || m)
+const _956bdf7a = () => import('../client/pages/official-website/calculator/index.vue' /* webpackChunkName: "pages/official-website/calculator/index" */).then(m => m.default || m)
+const _f713dd26 = () => import('../client/pages/Inventory/optional-inventory/index.vue' /* webpackChunkName: "pages/Inventory/optional-inventory/index" */).then(m => m.default || m)
+const _4977ee1d = () => import('../client/pages/Inventory/enter-field/index.vue' /* webpackChunkName: "pages/Inventory/enter-field/index" */).then(m => m.default || m)
+const _05a0bbf4 = () => import('../client/pages/bill/customerAssets/index.vue' /* webpackChunkName: "pages/bill/customerAssets/index" */).then(m => m.default || m)
+const _5613429c = () => import('../client/pages/bill/income/index.vue' /* webpackChunkName: "pages/bill/income/index" */).then(m => m.default || m)
+const _09389c3c = () => import('../client/pages/demo/yihao.vue' /* webpackChunkName: "pages/demo/yihao" */).then(m => m.default || m)
+const _4695043e = () => import('../client/pages/product/goods/index.vue' /* webpackChunkName: "pages/product/goods/index" */).then(m => m.default || m)
+const _41e4c0c8 = () => import('../client/pages/Inventory/goods-library/index.vue' /* webpackChunkName: "pages/Inventory/goods-library/index" */).then(m => m.default || m)
+const _6b9a1eda = () => import('../client/pages/nav-config/config-edit.vue' /* webpackChunkName: "pages/nav-config/config-edit" */).then(m => m.default || m)
+const _6cff62d8 = () => import('../client/pages/bill/payment/refund/index.vue' /* webpackChunkName: "pages/bill/payment/refund/index" */).then(m => m.default || m)
+const _53b6a93a = () => import('../client/pages/smarthardware/temperaturehumiditymap/table.vue' /* webpackChunkName: "pages/smarthardware/temperaturehumiditymap/table" */).then(m => m.default || m)
+const _9519dc60 = () => import('../client/pages/smarthardware/temperaturehumiditymap/searchForm.vue' /* webpackChunkName: "pages/smarthardware/temperaturehumiditymap/searchForm" */).then(m => m.default || m)
+const _423b7d3b = () => import('../client/pages/Inventory/floor-plan/discount.vue' /* webpackChunkName: "pages/Inventory/floor-plan/discount" */).then(m => m.default || m)
+const _5a1979a9 = () => import('../client/pages/customer-manage/manage/switchCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/switchCustomer" */).then(m => m.default || m)
+const _f20366f4 = () => import('../client/pages/Inventory/floor-plan/searchForm.vue' /* webpackChunkName: "pages/Inventory/floor-plan/searchForm" */).then(m => m.default || m)
+const _08e6f98c = () => import('../client/pages/bill/settlement-list/heightSearch.vue' /* webpackChunkName: "pages/bill/settlement-list/heightSearch" */).then(m => m.default || m)
+const _7089db9f = () => import('../client/pages/bill/project-setting/project-view/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-view/index" */).then(m => m.default || m)
+const _6a2e6535 = () => import('../client/pages/Inventory/Inventory-gantt-chart/list-table.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/list-table" */).then(m => m.default || m)
+const _fdb0bd34 = () => import('../client/pages/customer-manage/manage/heightSearch.vue' /* webpackChunkName: "pages/customer-manage/manage/heightSearch" */).then(m => m.default || m)
+const _ff6a111e = () => import('../client/pages/customer-manage/manage/createCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/createCustomer" */).then(m => m.default || m)
+const _643ab084 = () => import('../client/pages/bill/list/waitList.vue' /* webpackChunkName: "pages/bill/list/waitList" */).then(m => m.default || m)
+const _6b4827e9 = () => import('../client/pages/Inventory/make-invoice/search-from.vue' /* webpackChunkName: "pages/Inventory/make-invoice/search-from" */).then(m => m.default || m)
+const _7c359350 = () => import('../client/pages/app-manage/notification-manage/highSearch.vue' /* webpackChunkName: "pages/app-manage/notification-manage/highSearch" */).then(m => m.default || m)
+const _1b902a37 = () => import('../client/pages/bill/project-setting/archives/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives/index" */).then(m => m.default || m)
+const _bf5b120e = () => import('../client/pages/basic/preferential/create.vue' /* webpackChunkName: "pages/basic/preferential/create" */).then(m => m.default || m)
+const _02d48802 = () => import('../client/pages/product/goods/calendar.vue' /* webpackChunkName: "pages/product/goods/calendar" */).then(m => m.default || m)
+const _cbf3824e = () => import('../client/pages/bill/list/pdfDownload.vue' /* webpackChunkName: "pages/bill/list/pdfDownload" */).then(m => m.default || m)
+const _335de59e = () => import('../client/pages/app-manage/home/joinMember.vue' /* webpackChunkName: "pages/app-manage/home/joinMember" */).then(m => m.default || m)
+const _3682eb51 = () => import('../client/pages/Inventory/enter-field/searchForm.vue' /* webpackChunkName: "pages/Inventory/enter-field/searchForm" */).then(m => m.default || m)
+const _fccd7e82 = () => import('../client/pages/Inventory/goods-library/fixed-head.vue' /* webpackChunkName: "pages/Inventory/goods-library/fixed-head" */).then(m => m.default || m)
+const _809fc14c = () => import('../client/pages/official-website/calculator/community.vue' /* webpackChunkName: "pages/official-website/calculator/community" */).then(m => m.default || m)
+const _c05acf60 = () => import('../client/pages/management-tool/data-monitoring/SelectCustomers.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/SelectCustomers" */).then(m => m.default || m)
+const _3a8214bf = () => import('../client/pages/bill/make-invoice/list.vue' /* webpackChunkName: "pages/bill/make-invoice/list" */).then(m => m.default || m)
+const _77762d47 = () => import('../client/pages/app-manage/push-manage/highSearch.vue' /* webpackChunkName: "pages/app-manage/push-manage/highSearch" */).then(m => m.default || m)
+const _a36c292c = () => import('../client/pages/app-manage/notification-manage/create.vue' /* webpackChunkName: "pages/app-manage/notification-manage/create" */).then(m => m.default || m)
+const _b8a02d64 = () => import('../client/pages/app-manage/steward-setting/create.vue' /* webpackChunkName: "pages/app-manage/steward-setting/create" */).then(m => m.default || m)
+const _37d4c802 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/index.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/index" */).then(m => m.default || m)
+const _036d0cc1 = () => import('../client/pages/Inventory/over-date/slotHead.vue' /* webpackChunkName: "pages/Inventory/over-date/slotHead" */).then(m => m.default || m)
+const _a7cc97fa = () => import('../client/pages/Inventory/enter-field/slotHead.vue' /* webpackChunkName: "pages/Inventory/enter-field/slotHead" */).then(m => m.default || m)
+const _bab43b92 = () => import('../client/pages/Inventory/over-date-unpaid/slotHead.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/slotHead" */).then(m => m.default || m)
+const _b8a51e08 = () => import('../client/pages/Inventory/rented-unpaid/searchForm.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/searchForm" */).then(m => m.default || m)
+const _3311b1d9 = () => import('../client/pages/app-manage/push-manage/create.vue' /* webpackChunkName: "pages/app-manage/push-manage/create" */).then(m => m.default || m)
+const _02a699c4 = () => import('../client/pages/bill/make-invoice/search-from.vue' /* webpackChunkName: "pages/bill/make-invoice/search-from" */).then(m => m.default || m)
+const _be09f22c = () => import('../client/pages/app-manage/member-welfare/highSearch.vue' /* webpackChunkName: "pages/app-manage/member-welfare/highSearch" */).then(m => m.default || m)
+const _2fb28454 = () => import('../client/pages/community/fixHead/attract-head.vue' /* webpackChunkName: "pages/community/fixHead/attract-head" */).then(m => m.default || m)
+const _612a1248 = () => import('../client/pages/Inventory/goods-library/newgoods.vue' /* webpackChunkName: "pages/Inventory/goods-library/newgoods" */).then(m => m.default || m)
+const _52e028af = () => import('../client/pages/bill/payment/unbind.vue' /* webpackChunkName: "pages/bill/payment/unbind" */).then(m => m.default || m)
+const _3cb4991c = () => import('../client/pages/doorrelationship/map/allEquipmentList/index.vue' /* webpackChunkName: "pages/doorrelationship/map/allEquipmentList/index" */).then(m => m.default || m)
+const _daa28c58 = () => import('../client/pages/app-manage/home/member.vue' /* webpackChunkName: "pages/app-manage/home/member" */).then(m => m.default || m)
+const _6309934b = () => import('../client/pages/smarthardware/powerowner/deviceData.vue' /* webpackChunkName: "pages/smarthardware/powerowner/deviceData" */).then(m => m.default || m)
+const _4ba7006a = () => import('../client/pages/Inventory/goods-library/bind-service.vue' /* webpackChunkName: "pages/Inventory/goods-library/bind-service" */).then(m => m.default || m)
+const _76efa86e = () => import('../client/pages/Inventory/rented-unpaid/slotHead.vue' /* webpackChunkName: "pages/Inventory/rented-unpaid/slotHead" */).then(m => m.default || m)
+const _f6749814 = () => import('../client/pages/order-center/contract-manage/contract-yard/index.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-yard/index" */).then(m => m.default || m)
+const _2365d9bd = () => import('../client/pages/bill/project-setting/archives-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives-detail/index" */).then(m => m.default || m)
+const _d2049e3c = () => import('../client/pages/order/list/highSearch.vue' /* webpackChunkName: "pages/order/list/highSearch" */).then(m => m.default || m)
+const _65d16d89 = () => import('../client/pages/bill/financial-invoice/search-from.vue' /* webpackChunkName: "pages/bill/financial-invoice/search-from" */).then(m => m.default || m)
+const _a9ed1494 = () => import('../client/pages/operations-center/from-field/HeightSearch.vue' /* webpackChunkName: "pages/operations-center/from-field/HeightSearch" */).then(m => m.default || m)
+const _5904ff49 = () => import('../client/pages/app-manage/home/activity.vue' /* webpackChunkName: "pages/app-manage/home/activity" */).then(m => m.default || m)
+const _3c8e2ad0 = () => import('../client/pages/bill/project-setting/public-hander/index.vue' /* webpackChunkName: "pages/bill/project-setting/public-hander/index" */).then(m => m.default || m)
+const _659633e9 = () => import('../client/pages/Inventory/optional-inventory/optionalTable.vue' /* webpackChunkName: "pages/Inventory/optional-inventory/optionalTable" */).then(m => m.default || m)
+const _349edc12 = () => import('../client/pages/management-tool/data-monitoring/list.vue' /* webpackChunkName: "pages/management-tool/data-monitoring/list" */).then(m => m.default || m)
+const _06630c8f = () => import('../client/pages/Inventory/over-date/searchForm.vue' /* webpackChunkName: "pages/Inventory/over-date/searchForm" */).then(m => m.default || m)
+const _4dffd866 = () => import('../client/pages/member/setting-manager/highSearch.vue' /* webpackChunkName: "pages/member/setting-manager/highSearch" */).then(m => m.default || m)
+const _13e1fe10 = () => import('../client/pages/product/meeting/create.vue' /* webpackChunkName: "pages/product/meeting/create" */).then(m => m.default || m)
+const _8a8746f6 = () => import('../client/pages/Inventory/over-date-unpaid/searchForm.vue' /* webpackChunkName: "pages/Inventory/over-date-unpaid/searchForm" */).then(m => m.default || m)
+const _b71bf0da = () => import('../client/pages/Inventory/goods-library/search-form.vue' /* webpackChunkName: "pages/Inventory/goods-library/search-form" */).then(m => m.default || m)
+const _5229b673 = () => import('../client/pages/basic/parameter/form.vue' /* webpackChunkName: "pages/basic/parameter/form" */).then(m => m.default || m)
+const _7754de92 = () => import('../client/pages/Inventory/daily-inventory/dailyTable.vue' /* webpackChunkName: "pages/Inventory/daily-inventory/dailyTable" */).then(m => m.default || m)
+const _2bcf8a4a = () => import('../client/pages/bill/list/paidList.vue' /* webpackChunkName: "pages/bill/list/paidList" */).then(m => m.default || m)
+const _6d28acfb = () => import('../client/pages/bill/list/highSearch.vue' /* webpackChunkName: "pages/bill/list/highSearch" */).then(m => m.default || m)
+const _741a5608 = () => import('../client/pages/app-manage/member-welfare/create.vue' /* webpackChunkName: "pages/app-manage/member-welfare/create" */).then(m => m.default || m)
+const _693cc024 = () => import('../client/pages/order-center/order-manage/general-order-manage/index.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/index" */).then(m => m.default || m)
+const _e530f53c = () => import('../client/pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
+const _18210154 = () => import('../client/pages/bill/payment/bind.vue' /* webpackChunkName: "pages/bill/payment/bind" */).then(m => m.default || m)
+const _20293258 = () => import('../client/pages/order-center/order-manage/station-order-manage/index.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/index" */).then(m => m.default || m)
+const _0b236982 = () => import('../client/pages/customer-manage/manage/editCustomer.vue' /* webpackChunkName: "pages/customer-manage/manage/editCustomer" */).then(m => m.default || m)
+const _07b3bf94 = () => import('../client/pages/Inventory/goods-library/editGoods.vue' /* webpackChunkName: "pages/Inventory/goods-library/editGoods" */).then(m => m.default || m)
+const _53c17510 = () => import('../client/pages/app-manage/icon-manage/create.vue' /* webpackChunkName: "pages/app-manage/icon-manage/create" */).then(m => m.default || m)
+const _44fc6ae0 = () => import('../client/pages/bill/income/highSearch.vue' /* webpackChunkName: "pages/bill/income/highSearch" */).then(m => m.default || m)
+const _75215f84 = () => import('../client/pages/smart-hardware/space-manage/editSpace.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/editSpace" */).then(m => m.default || m)
+const _0f6e048c = () => import('../client/pages/bill/payment/collection/index.vue' /* webpackChunkName: "pages/bill/payment/collection/index" */).then(m => m.default || m)
+const _29ab0f42 = () => import('../client/pages/doorrelationship/map/groupDetail/index.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/index" */).then(m => m.default || m)
+const _7eb1150f = () => import('../client/pages/app-manage/coupon/create.vue' /* webpackChunkName: "pages/app-manage/coupon/create" */).then(m => m.default || m)
+const _7d3dce74 = () => import('../client/pages/bill/income/addIncome.vue' /* webpackChunkName: "pages/bill/income/addIncome" */).then(m => m.default || m)
+const _ae6afdd0 = () => import('../client/pages/operations-center/from-field/NewPage.vue' /* webpackChunkName: "pages/operations-center/from-field/NewPage" */).then(m => m.default || m)
+const _08852698 = () => import('../client/pages/bill/financial-invoice/list.vue' /* webpackChunkName: "pages/bill/financial-invoice/list" */).then(m => m.default || m)
+const _6f4328d2 = () => import('../client/pages/smart-hardware/space-manage/createSpace.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/createSpace" */).then(m => m.default || m)
+const _2141a5c3 = () => import('../client/pages/bill/payment/highSearch.vue' /* webpackChunkName: "pages/bill/payment/highSearch" */).then(m => m.default || m)
+const _388c67d6 = () => import('../client/pages/krmeeting/timeInMeeting/searchForm.vue' /* webpackChunkName: "pages/krmeeting/timeInMeeting/searchForm" */).then(m => m.default || m)
+const _4ae5ea4e = () => import('../client/pages/smart-hardware/map-depot/createdMapDepot.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/createdMapDepot" */).then(m => m.default || m)
+const _8f97af88 = () => import('../client/pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
+const _37787027 = () => import('../client/pages/smarthardware/openlog/searchForm.vue' /* webpackChunkName: "pages/smarthardware/openlog/searchForm" */).then(m => m.default || m)
+const _99d92622 = () => import('../client/pages/bill/project-setting/comment/index.vue' /* webpackChunkName: "pages/bill/project-setting/comment/index" */).then(m => m.default || m)
+const _51400760 = () => import('../client/pages/basic/preferential/createSale.vue' /* webpackChunkName: "pages/basic/preferential/createSale" */).then(m => m.default || m)
+const _89f750a0 = () => import('../client/pages/smarthardware/doormanage/devicedetail/index.vue' /* webpackChunkName: "pages/smarthardware/doormanage/devicedetail/index" */).then(m => m.default || m)
+const _05ccc358 = () => import('../client/pages/Inventory/make-invoice/list.vue' /* webpackChunkName: "pages/Inventory/make-invoice/list" */).then(m => m.default || m)
+const _1584068b = () => import('../client/pages/bill/project-setting/project-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/index" */).then(m => m.default || m)
+const _38edd324 = () => import('../client/pages/krmeeting/timeoutMeeting/searchForm.vue' /* webpackChunkName: "pages/krmeeting/timeoutMeeting/searchForm" */).then(m => m.default || m)
+const _361642af = () => import('../client/pages/bill/project-setting/archives-management/index.vue' /* webpackChunkName: "pages/bill/project-setting/archives-management/index" */).then(m => m.default || m)
+const _8089a6e4 = () => import('../client/pages/order-center/order-manage/station-order-manage/reduceList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/reduceList" */).then(m => m.default || m)
+const _2628cf71 = () => import('../client/pages/doorrelationship/map/groupDetail/editForm.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/editForm" */).then(m => m.default || m)
+const _59632164 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/color-type.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/color-type" */).then(m => m.default || m)
+const _6e34331c = () => import('../client/pages/doorrelationship/map/allEquipmentList/searchForm.vue' /* webpackChunkName: "pages/doorrelationship/map/allEquipmentList/searchForm" */).then(m => m.default || m)
+const _2146e9e2 = () => import('../client/pages/bill/project-setting/comment/overFlowLabel.vue' /* webpackChunkName: "pages/bill/project-setting/comment/overFlowLabel" */).then(m => m.default || m)
+const _2ad33519 = () => import('../client/pages/order-center/order-manage/station-order-manage/heightSearch.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/heightSearch" */).then(m => m.default || m)
+const _5a4c4f26 = () => import('../client/pages/order-center/order-manage/station-order-manage/applyContract.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/applyContract" */).then(m => m.default || m)
+const _b40556e6 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-week.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-week" */).then(m => m.default || m)
+const _10877c9b = () => import('../client/pages/order-center/order-manage/station-order-manage/nullify.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/nullify" */).then(m => m.default || m)
+const _2d646118 = () => import('../client/pages/order-center/contract-manage/contract-yard/ContractYard.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-yard/ContractYard" */).then(m => m.default || m)
+const _1043308e = () => import('../client/pages/Inventory/goods-library/bulk-changes/change-status.vue' /* webpackChunkName: "pages/Inventory/goods-library/bulk-changes/change-status" */).then(m => m.default || m)
+const _888df220 = () => import('../client/pages/smart-hardware/map-depot/edit/tvCard.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/edit/tvCard" */).then(m => m.default || m)
+const _2da97cf0 = () => import('../client/pages/order-center/order-manage/station-order-manage/listAndMap/index.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/listAndMap/index" */).then(m => m.default || m)
+const _a70dca02 = () => import('../client/pages/order-center/order-manage/station-order-manage/replaceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/replaceView" */).then(m => m.default || m)
+const _4c50f937 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-month.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-month" */).then(m => m.default || m)
+const _35e11640 = () => import('../client/pages/bill/project-setting/project-view/add-archives.vue' /* webpackChunkName: "pages/bill/project-setting/project-view/add-archives" */).then(m => m.default || m)
+const _36176988 = () => import('../client/pages/bill/project-setting/project-detail/add-task.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/add-task" */).then(m => m.default || m)
+const _952e97b4 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/article.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/article" */).then(m => m.default || m)
+const _5953736e = () => import('../client/pages/order-center/contract-manage/contract-list/list/index.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/index" */).then(m => m.default || m)
+const _38f26c66 = () => import('../client/pages/order-center/order-manage/general-order-manage/heightSearch.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/heightSearch" */).then(m => m.default || m)
+const _204aac41 = () => import('../client/pages/bill/project-setting/project-detail/detail-task-list.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/detail-task-list" */).then(m => m.default || m)
+const _7588e813 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-day.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/draw-day" */).then(m => m.default || m)
+const _0f1a7c90 = () => import('../client/pages/bill/project-setting/archives-detail/record-detail.vue' /* webpackChunkName: "pages/bill/project-setting/archives-detail/record-detail" */).then(m => m.default || m)
+const _076e1e64 = () => import('../client/pages/Inventory/Inventory-gantt-chart/gantt-chart/view-article.vue' /* webpackChunkName: "pages/Inventory/Inventory-gantt-chart/gantt-chart/view-article" */).then(m => m.default || m)
+const _34825a34 = () => import('../client/pages/bill/project-setting/project-detail/watch-record.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/watch-record" */).then(m => m.default || m)
+const _9645ac5a = () => import('../client/pages/order-center/order-manage/station-order-manage/errorView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/errorView" */).then(m => m.default || m)
+const _95322710 = () => import('../client/pages/order-center/order-manage/station-order-manage/replaceList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/replaceList" */).then(m => m.default || m)
+const _e1ed8b28 = () => import('../client/pages/member/setting-manager/detail/communityManage.vue' /* webpackChunkName: "pages/member/setting-manager/detail/communityManage" */).then(m => m.default || m)
+const _f8c1c65c = () => import('../client/pages/order-center/order-manage/station-order-manage/joinList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/joinList" */).then(m => m.default || m)
+const _611f1cba = () => import('../client/pages/bill/project-setting/project-detail/object-detail-title.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/object-detail-title" */).then(m => m.default || m)
+const _52d6109c = () => import('../client/pages/doorrelationship/map/groupDetail/equipmentList/index.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/equipmentList/index" */).then(m => m.default || m)
+const _62eec767 = () => import('../client/pages/order-center/order-manage/general-order-manage/nullify.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/nullify" */).then(m => m.default || m)
+const _30a80b48 = () => import('../client/pages/bill/project-setting/archives/add-archives.vue' /* webpackChunkName: "pages/bill/project-setting/archives/add-archives" */).then(m => m.default || m)
+const _6fb1b0e0 = () => import('../client/pages/bill/project-setting/comment/KrInput.vue' /* webpackChunkName: "pages/bill/project-setting/comment/KrInput" */).then(m => m.default || m)
+const _41b66cbe = () => import('../client/pages/bill/project-setting/project-detail/edit-task.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/edit-task" */).then(m => m.default || m)
+const _2dccc2ae = () => import('../client/pages/bill/project-setting/project-detail/archives-detail/index.vue' /* webpackChunkName: "pages/bill/project-setting/project-detail/archives-detail/index" */).then(m => m.default || m)
+const _aadca046 = () => import('../client/pages/Inventory/goods-library/bulk-changes/change-price.vue' /* webpackChunkName: "pages/Inventory/goods-library/bulk-changes/change-price" */).then(m => m.default || m)
+const _66e52485 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/reduceStation.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/reduceStation" */).then(m => m.default || m)
+const _565e5cb8 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/renew.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/renew" */).then(m => m.default || m)
+const _25f7f6b2 = () => import('../client/pages/order-center/order-manage/general-order-manage/create/addOrder.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/create/addOrder" */).then(m => m.default || m)
+const _34b27c42 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/reduce.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/reduce" */).then(m => m.default || m)
+const _9da76aea = () => import('../client/pages/order-center/order-manage/station-order-manage/create/replace.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/replace" */).then(m => m.default || m)
+const _7c560008 = () => import('../client/pages/order-center/contract-manage/contract-list/list/heightSearch.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/heightSearch" */).then(m => m.default || m)
+const _0aed056e = () => import('../client/pages/order-center/order-manage/station-order-manage/create/stationList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/stationList" */).then(m => m.default || m)
+const _63af20f0 = () => import('../client/pages/order-center/order-manage/station-order-manage/listAndMap/list.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/listAndMap/list" */).then(m => m.default || m)
+const _5d0bebe3 = () => import('../client/pages/order-center/order-manage/station-order-manage/create/join.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/create/join" */).then(m => m.default || m)
+const _41517116 = () => import('../client/pages/order-center/contract-manage/contract-list/list/PrintAgreement.vue' /* webpackChunkName: "pages/order-center/contract-manage/contract-list/list/PrintAgreement" */).then(m => m.default || m)
+const _0319f7c0 = () => import('../client/pages/doorrelationship/map/groupDetail/equipmentList/equipmentSearch.vue' /* webpackChunkName: "pages/doorrelationship/map/groupDetail/equipmentList/equipmentSearch" */).then(m => m.default || m)
+const _6ab09711 = () => import('../client/pages/product/goods/view/_id.vue' /* webpackChunkName: "pages/product/goods/view/_id" */).then(m => m.default || m)
+const _a0caff68 = () => import('../client/pages/app-manage/steward-setting/edit/_manageId.vue' /* webpackChunkName: "pages/app-manage/steward-setting/edit/_manageId" */).then(m => m.default || m)
+const _4145c16e = () => import('../client/pages/app-manage/notification-manage/edit/_notificationId.vue' /* webpackChunkName: "pages/app-manage/notification-manage/edit/_notificationId" */).then(m => m.default || m)
+const _13c59576 = () => import('../client/pages/product/goods/edit/_id.vue' /* webpackChunkName: "pages/product/goods/edit/_id" */).then(m => m.default || m)
+const _d482f600 = () => import('../client/pages/order/list/detail/_orderId.vue' /* webpackChunkName: "pages/order/list/detail/_orderId" */).then(m => m.default || m)
+const _dc300a9e = () => import('../client/pages/product/meeting/edit/_id.vue' /* webpackChunkName: "pages/product/meeting/edit/_id" */).then(m => m.default || m)
+const _35ef04b5 = () => import('../client/pages/app-manage/notification-manage/detail/_notificationId.vue' /* webpackChunkName: "pages/app-manage/notification-manage/detail/_notificationId" */).then(m => m.default || m)
+const _8ebea7fc = () => import('../client/pages/app-manage/member-welfare/detail/_couponId.vue' /* webpackChunkName: "pages/app-manage/member-welfare/detail/_couponId" */).then(m => m.default || m)
+const _3c6b45f7 = () => import('../client/pages/bill/payment/detail/_paymentId.vue' /* webpackChunkName: "pages/bill/payment/detail/_paymentId" */).then(m => m.default || m)
+const _7a556508 = () => import('../client/pages/app-manage/coupon/edit/_id.vue' /* webpackChunkName: "pages/app-manage/coupon/edit/_id" */).then(m => m.default || m)
+const _4108958f = () => import('../client/pages/app-manage/coupon/detail/_id.vue' /* webpackChunkName: "pages/app-manage/coupon/detail/_id" */).then(m => m.default || m)
+const _d2a22218 = () => import('../client/pages/bill/list/detail/_billId.vue' /* webpackChunkName: "pages/bill/list/detail/_billId" */).then(m => m.default || m)
+const _79c30035 = () => import('../client/pages/smart-hardware/map-depot/edit/_storageId.vue' /* webpackChunkName: "pages/smart-hardware/map-depot/edit/_storageId" */).then(m => m.default || m)
+const _1bad9a0a = () => import('../client/pages/app-manage/icon-manage/edit/_iconId.vue' /* webpackChunkName: "pages/app-manage/icon-manage/edit/_iconId" */).then(m => m.default || m)
+const _58fd43fb = () => import('../client/pages/app-manage/member-welfare/edit/_couponId.vue' /* webpackChunkName: "pages/app-manage/member-welfare/edit/_couponId" */).then(m => m.default || m)
+const _15341a13 = () => import('../client/pages/app-manage/push-manage/detail/_pushId.vue' /* webpackChunkName: "pages/app-manage/push-manage/detail/_pushId" */).then(m => m.default || m)
+const _66354abc = () => import('../client/pages/bill/income/detail/_id.vue' /* webpackChunkName: "pages/bill/income/detail/_id" */).then(m => m.default || m)
+const _2f280e70 = () => import('../client/pages/member/setting-manager/detail/_csrId.vue' /* webpackChunkName: "pages/member/setting-manager/detail/_csrId" */).then(m => m.default || m)
+const _b1a2c02e = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/replaceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/replaceView" */).then(m => m.default || m)
+const _1cc174f4 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/join.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/join" */).then(m => m.default || m)
+const _acac767c = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/renewView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/renewView" */).then(m => m.default || m)
+const _8099110a = () => import('../client/pages/order-center/order-manage/general-order-manage/_watchView/joinView.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/_watchView/joinView" */).then(m => m.default || m)
+const _8099bf28 = () => import('../client/pages/order-center/order-manage/general-order-manage/_orderEdit/editOrder.vue' /* webpackChunkName: "pages/order-center/order-manage/general-order-manage/_orderEdit/editOrder" */).then(m => m.default || m)
+const _5aaea73e = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/renew.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/renew" */).then(m => m.default || m)
+const _178f9646 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/stationList.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/stationList" */).then(m => m.default || m)
+const _cf0f2bf0 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/replace.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/replace" */).then(m => m.default || m)
+const _5ac8f242 = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/reduceStation.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/reduceStation" */).then(m => m.default || m)
+const _ba6b827c = () => import('../client/pages/order-center/order-manage/station-order-manage/_orderEdit/reduce.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_orderEdit/reduce" */).then(m => m.default || m)
+const _2a3e90eb = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/reduceView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/reduceView" */).then(m => m.default || m)
+const _40fc02a2 = () => import('../client/pages/order-center/order-manage/station-order-manage/_watchView/joinView.vue' /* webpackChunkName: "pages/order-center/order-manage/station-order-manage/_watchView/joinView" */).then(m => m.default || m)
+const _28d47281 = () => import('../client/pages/bill/customerAssets/_customer/basic/index.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/index" */).then(m => m.default || m)
+const _6a0f71ff = () => import('../client/pages/bill/customerAssets/_customer/giveMoney.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/giveMoney" */).then(m => m.default || m)
+const _114769d8 = () => import('../client/pages/bill/customerAssets/_customer/joinInfo.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/joinInfo" */).then(m => m.default || m)
+const _27f0462e = () => import('../client/pages/bill/customerAssets/_customer/changeCommunity.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/changeCommunity" */).then(m => m.default || m)
+const _35134df6 = () => import('../client/pages/bill/customerAssets/_customer/view.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/view" */).then(m => m.default || m)
+const _6705045c = () => import('../client/pages/bill/customerAssets/_customer/changeBalance.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/changeBalance" */).then(m => m.default || m)
+const _735ee376 = () => import('../client/pages/smart-hardware/space-manage/_sub/son-space.vue' /* webpackChunkName: "pages/smart-hardware/space-manage/_sub/son-space" */).then(m => m.default || m)
+const _8871efa8 = () => import('../client/pages/bill/customerAssets/_customer/balance.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/balance" */).then(m => m.default || m)
+const _fca1fc6a = () => import('../client/pages/bill/customerAssets/_customer/refunds.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/refunds" */).then(m => m.default || m)
+const _c1578c28 = () => import('../client/pages/publicPage/make-invoice/_view/view-detail.vue' /* webpackChunkName: "pages/publicPage/make-invoice/_view/view-detail" */).then(m => m.default || m)
+const _e198fe3a = () => import('../client/pages/bill/customerAssets/_customer/assets.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/assets" */).then(m => m.default || m)
+const _1455e1c6 = () => import('../client/pages/bill/customerAssets/_customer/waiting.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/waiting" */).then(m => m.default || m)
+const _13bbc4a4 = () => import('../client/pages/bill/customerAssets/_customer/spending.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/spending" */).then(m => m.default || m)
+const _4da271c8 = () => import('../client/pages/operations-center/from-field/_watchView/view.vue' /* webpackChunkName: "pages/operations-center/from-field/_watchView/view" */).then(m => m.default || m)
+const _098762ec = () => import('../client/pages/bill/financial-invoice/_add/view-invoice.vue' /* webpackChunkName: "pages/bill/financial-invoice/_add/view-invoice" */).then(m => m.default || m)
+const _1048b81c = () => import('../client/pages/bill/settlement-list/_billId/detail.vue' /* webpackChunkName: "pages/bill/settlement-list/_billId/detail" */).then(m => m.default || m)
+const _99a57a16 = () => import('../client/pages/bill/make-invoice/_add/add-invoice.vue' /* webpackChunkName: "pages/bill/make-invoice/_add/add-invoice" */).then(m => m.default || m)
+const _eb374bd6 = () => import('../client/pages/bill/settlement-list/_billId/edit.vue' /* webpackChunkName: "pages/bill/settlement-list/_billId/edit" */).then(m => m.default || m)
+const _48463d62 = () => import('../client/pages/bill/customerAssets/_customer/basic/info.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/info" */).then(m => m.default || m)
+const _d0a169fa = () => import('../client/pages/bill/customerAssets/_customer/basic/annex.vue' /* webpackChunkName: "pages/bill/customerAssets/_customer/basic/annex" */).then(m => m.default || m)
+const _0ee9d66c = () => import('../client/pages/publicPage/_view/pdf-view.vue' /* webpackChunkName: "pages/publicPage/_view/pdf-view" */).then(m => m.default || m)
 
 
 
@@ -303,1328 +292,1271 @@ export function createRouter () {
     scrollBehavior,
     routes: [
 		{
-			path: "/krmeetingorder",
-			component: _47ae4d5e,
-			name: "krmeetingorder"
-		},
-		{
-			path: "/about",
-			component: _3afca549,
-			name: "about"
+			path: "/",
+			component: _0193667a,
+			name: "index"
 		},
 		{
 			path: "/ops",
-			component: _3b854af1,
+			component: _1b19c946,
 			name: "ops"
 		},
 		{
-			path: "/nav-config",
-			component: _24049b23,
-			name: "nav-config"
+			path: "/about",
+			component: _3c48e896,
+			name: "about"
 		},
 		{
 			path: "/krmeeting",
-			component: _231711b3,
+			component: _d4ec3dc2,
 			name: "krmeeting"
 		},
 		{
 			path: "/facility-tags",
-			component: _509e0302,
+			component: _b5f98724,
 			name: "facility-tags"
 		},
 		{
+			path: "/nav-config",
+			component: _00288d92,
+			name: "nav-config"
+		},
+		{
+			path: "/krmeetingorder",
+			component: _146acd65,
+			name: "krmeetingorder"
+		},
+		{
+			path: "/Inventory/over-date",
+			component: _48bb7e1f,
+			name: "Inventory-over-date"
+		},
+		{
+			path: "/customer-manage/manage",
+			component: _2d5252ab,
+			name: "customer-manage-manage"
+		},
+		{
+			path: "/Inventory/floor-plan",
+			component: _afd04070,
+			name: "Inventory-floor-plan"
+		},
+		{
+			path: "/bill/payment",
+			component: _d82418ee,
+			name: "bill-payment"
+		},
+		{
+			path: "/Inventory/over-date-unpaid",
+			component: _0b7ce72e,
+			name: "Inventory-over-date-unpaid"
+		},
+		{
+			path: "/app-manage/member-welfare",
+			component: _8a6f93fc,
+			name: "app-manage-member-welfare"
+		},
+		{
 			path: "/smarthardware/powerowner",
-			component: _588a3de3,
+			component: _e06dae12,
 			name: "smarthardware-powerowner"
 		},
 		{
-			path: "/product/goods",
-			component: _ef5f7716,
-			name: "product-goods"
+			path: "/Inventory/rented-unpaid",
+			component: _31d56cdc,
+			name: "Inventory-rented-unpaid"
+		},
+		{
+			path: "/demo/wusuling",
+			component: _6157e60a,
+			name: "demo-wusuling"
+		},
+		{
+			path: "/app-manage/steward-setting",
+			component: _3dce4f70,
+			name: "app-manage-steward-setting"
+		},
+		{
+			path: "/Inventory/statistical",
+			component: _3a590fd0,
+			name: "Inventory-statistical"
+		},
+		{
+			path: "/basic/parameter",
+			component: _59ad4c33,
+			name: "basic-parameter"
+		},
+		{
+			path: "/bill/financial-invoice",
+			component: _d136aca8,
+			name: "bill-financial-invoice"
+		},
+		{
+			path: "/smart-hardware/map-depot",
+			component: _44a70eab,
+			name: "smart-hardware-map-depot"
+		},
+		{
+			path: "/community/publicPage",
+			component: _a5bf8bee,
+			name: "community-publicPage"
+		},
+		{
+			path: "/member/setting-manager",
+			component: _2da531f4,
+			name: "member-setting-manager"
+		},
+		{
+			path: "/Inventory/make-invoice",
+			component: _7ce2a7e8,
+			name: "Inventory-make-invoice"
+		},
+		{
+			path: "/Inventory/searchForm",
+			component: _72d7a247,
+			name: "Inventory-searchForm"
+		},
+		{
+			path: "/bill/payrecord",
+			component: _201092bc,
+			name: "bill-payrecord"
+		},
+		{
+			path: "/krmeetingorder/detail",
+			component: _0ca7a2d1,
+			name: "krmeetingorder-detail"
+		},
+		{
+			path: "/operation/community",
+			component: _4bf11b2c,
+			name: "operation-community"
+		},
+		{
+			path: "/Inventory/discount",
+			component: _cf7d6188,
+			name: "Inventory-discount"
+		},
+		{
+			path: "/bill/settlement-list",
+			component: _d2cd8d76,
+			name: "bill-settlement-list"
+		},
+		{
+			path: "/krmeetingorder/searchform",
+			component: _7285f4e9,
+			name: "krmeetingorder-searchform"
+		},
+		{
+			path: "/bill/project-setting",
+			component: _3ab0e99f,
+			name: "bill-project-setting"
+		},
+		{
+			path: "/order/list",
+			component: _07d1310a,
+			name: "order-list"
+		},
+		{
+			path: "/Inventory/daily-inventory",
+			component: _0561fcc0,
+			name: "Inventory-daily-inventory"
+		},
+		{
+			path: "/product/meeting",
+			component: _48b89a86,
+			name: "product-meeting"
+		},
+		{
+			path: "/app-manage/home",
+			component: _4aba0c88,
+			name: "app-manage-home"
+		},
+		{
+			path: "/smarthardware/temperaturehumiditymap",
+			component: _cbc91784,
+			name: "smarthardware-temperaturehumiditymap"
+		},
+		{
+			path: "/bill/make-invoice",
+			component: _31350301,
+			name: "bill-make-invoice"
+		},
+		{
+			path: "/doorrelationship/map",
+			component: _697f2404,
+			name: "doorrelationship-map"
+		},
+		{
+			path: "/operations-center/from-field",
+			component: _2b3ccf0a,
+			name: "operations-center-from-field"
+		},
+		{
+			path: "/app-manage/push-manage",
+			component: _0fc86cf6,
+			name: "app-manage-push-manage"
+		},
+		{
+			path: "/demo/machaoyue",
+			component: _ccb66e44,
+			name: "demo-machaoyue"
+		},
+		{
+			path: "/basic/preferential",
+			component: _29c43f36,
+			name: "basic-preferential"
+		},
+		{
+			path: "/bill/list",
+			component: _02c56d5e,
+			name: "bill-list"
+		},
+		{
+			path: "/krmeeting/timeInMeeting",
+			component: _533eba4e,
+			name: "krmeeting-timeInMeeting"
+		},
+		{
+			path: "/app-manage/notification-manage",
+			component: _1d1d99d4,
+			name: "app-manage-notification-manage"
 		},
 		{
 			path: "/krmeeting/timeoutMeeting",
-			component: _31e199cc,
+			component: _692084e0,
 			name: "krmeeting-timeoutMeeting"
 		},
 		{
 			path: "/Inventory/slotHead",
-			component: _1a63c765,
+			component: _ce089f0e,
 			name: "Inventory-slotHead"
 		},
 		{
-			path: "/smarthardware/openlog",
-			component: _53dda3ca,
-			name: "smarthardware-openlog"
-		},
-		{
-			path: "/bill/list",
-			component: _e7ab0c36,
-			name: "bill-list"
-		},
-		{
-			path: "/bill/project-setting",
-			component: _64b9548b,
-			name: "bill-project-setting"
-		},
-		{
-			path: "/operations-center/from-field",
-			component: _dd135132,
-			name: "operations-center-from-field"
-		},
-		{
-			path: "/community/publicFn",
-			component: _41448dc4,
-			name: "community-publicFn"
-		},
-		{
-			path: "/official-website/calculator",
-			component: _9b287852,
-			name: "official-website-calculator"
-		},
-		{
-			path: "/app-manage/coupon",
-			component: _26f58423,
-			name: "app-manage-coupon"
-		},
-		{
-			path: "/krmeeting/timeInMeeting",
-			component: _3ff3406d,
-			name: "krmeeting-timeInMeeting"
-		},
-		{
-			path: "/krmeetingorder/searchform",
-			component: _298e7c7d,
-			name: "krmeetingorder-searchform"
-		},
-		{
-			path: "/basic/preferential",
-			component: _4bdc1651,
-			name: "basic-preferential"
-		},
-		{
-			path: "/Inventory/over-date-unpaid",
-			component: _d1ddd356,
-			name: "Inventory-over-date-unpaid"
-		},
-		{
-			path: "/operation/community",
-			component: _02f9a2c0,
-			name: "operation-community"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart",
-			component: _1bde1500,
-			name: "Inventory-Inventory-gantt-chart"
-		},
-		{
-			path: "/smart-hardware/map-depot",
-			component: _0d682397,
-			name: "smart-hardware-map-depot"
-		},
-		{
-			path: "/Inventory/floor-plan",
-			component: _5bbf6a98,
-			name: "Inventory-floor-plan"
-		},
-		{
-			path: "/basic/parameter",
-			component: _ec9e8472,
-			name: "basic-parameter"
-		},
-		{
-			path: "/Inventory/searchForm",
-			component: _3a95ae33,
-			name: "Inventory-searchForm"
-		},
-		{
-			path: "/app-manage/member-welfare",
-			component: _0a29be96,
-			name: "app-manage-member-welfare"
-		},
-		{
-			path: "/management-tool/data-monitoring",
-			component: _530bf65d,
-			name: "management-tool-data-monitoring"
-		},
-		{
-			path: "/Inventory/enter-field",
-			component: _607ce0b1,
-			name: "Inventory-enter-field"
-		},
-		{
-			path: "/customer-manage/manage",
-			component: _12289ad2,
-			name: "customer-manage-manage"
-		},
-		{
-			path: "/app-manage/notification-manage",
-			component: _51fe4dc0,
-			name: "app-manage-notification-manage"
-		},
-		{
-			path: "/Inventory/optional-inventory",
-			component: _2b8ad059,
-			name: "Inventory-optional-inventory"
-		},
-		{
-			path: "/Inventory/make-invoice",
-			component: _e9afe810,
-			name: "Inventory-make-invoice"
-		},
-		{
-			path: "/member/setting-manager",
-			component: _9a72721c,
-			name: "member-setting-manager"
-		},
-		{
-			path: "/app-manage/steward-setting",
-			component: _4ac44d48,
-			name: "app-manage-steward-setting"
-		},
-		{
-			path: "/app-manage/home",
-			component: _7abd7e1c,
-			name: "app-manage-home"
-		},
-		{
-			path: "/demo/yihao",
-			component: _56d11664,
-			name: "demo-yihao"
-		},
-		{
-			path: "/Inventory/publicFn",
-			component: _d6919ad2,
-			name: "Inventory-publicFn"
-		},
-		{
 			path: "/community/attract-investment",
-			component: _407870bc,
+			component: _cd389c60,
 			name: "community-attract-investment"
 		},
 		{
-			path: "/Inventory/goods-library",
-			component: _48a03d30,
-			name: "Inventory-goods-library"
-		},
-		{
-			path: "/Inventory/statistical",
-			component: _6a5c8164,
-			name: "Inventory-statistical"
-		},
-		{
-			path: "/bill/payrecord",
-			component: _3062c2b0,
-			name: "bill-payrecord"
-		},
-		{
-			path: "/bill/income",
-			component: _95d2c3a0,
-			name: "bill-income"
-		},
-		{
-			path: "/demo/machaoyue",
-			component: _5c2535ca,
-			name: "demo-machaoyue"
-		},
-		{
-			path: "/smart-hardware/space-manage",
-			component: _27b10fce,
-			name: "smart-hardware-space-manage"
-		},
-		{
-			path: "/nav-config/config-edit",
-			component: _3c04dfc6,
-			name: "nav-config-config-edit"
-		},
-		{
-			path: "/doorrelationship/map",
-			component: _156e4e2c,
-			name: "doorrelationship-map"
-		},
-		{
-			path: "/Inventory/rented-unpaid",
-			component: _50a7e726,
-			name: "Inventory-rented-unpaid"
-		},
-		{
-			path: "/order/list",
-			component: _2bea12f6,
-			name: "order-list"
-		},
-		{
-			path: "/product/meeting",
-			component: _78bc0c1a,
-			name: "product-meeting"
-		},
-		{
-			path: "/demo/wusuling",
-			component: _6fe02b9e,
-			name: "demo-wusuling"
-		},
-		{
 			path: "/app-manage/icon-manage",
-			component: _f631b41c,
+			component: _896473f4,
 			name: "app-manage-icon-manage"
 		},
 		{
-			path: "/Inventory/daily-inventory",
-			component: _54c38554,
-			name: "Inventory-daily-inventory"
+			path: "/app-manage/coupon",
+			component: _2befb0e2,
+			name: "app-manage-coupon"
 		},
 		{
-			path: "/bill/payment",
-			component: _15560a75,
-			name: "bill-payment"
+			path: "/management-tool/data-monitoring",
+			component: _2853a66e,
+			name: "management-tool-data-monitoring"
 		},
 		{
-			path: "/bill/settlement-list",
-			component: _7ebcb79e,
-			name: "bill-settlement-list"
+			path: "/smart-hardware/space-manage",
+			component: _2a8f5c3a,
+			name: "smart-hardware-space-manage"
 		},
 		{
-			path: "/app-manage/push-manage",
-			component: _7c95ad1e,
-			name: "app-manage-push-manage"
+			path: "/smarthardware/openlog",
+			component: _81e788f2,
+			name: "smarthardware-openlog"
 		},
 		{
-			path: "/bill/financial-invoice",
-			component: _60fe0998,
-			name: "bill-financial-invoice"
+			path: "/Inventory/Inventory-gantt-chart",
+			component: _96af6928,
+			name: "Inventory-Inventory-gantt-chart"
 		},
 		{
-			path: "/community/publicPage",
-			component: _51aeb616,
-			name: "community-publicPage"
+			path: "/official-website/calculator",
+			component: _956bdf7a,
+			name: "official-website-calculator"
 		},
 		{
-			path: "/Inventory/over-date",
-			component: _0077f49a,
-			name: "Inventory-over-date"
+			path: "/Inventory/optional-inventory",
+			component: _f713dd26,
+			name: "Inventory-optional-inventory"
 		},
 		{
-			path: "/Inventory/discount",
-			component: _19a96628,
-			name: "Inventory-discount"
+			path: "/Inventory/enter-field",
+			component: _4977ee1d,
+			name: "Inventory-enter-field"
 		},
 		{
 			path: "/bill/customerAssets",
-			component: _86ad78f0,
+			component: _05a0bbf4,
 			name: "bill-customerAssets"
 		},
 		{
-			path: "/nav-config/getColumns",
-			component: _76b96529,
-			name: "nav-config-getColumns"
+			path: "/bill/income",
+			component: _5613429c,
+			name: "bill-income"
 		},
 		{
-			path: "/bill/make-invoice",
-			component: _6e225f95,
-			name: "bill-make-invoice"
+			path: "/demo/yihao",
+			component: _09389c3c,
+			name: "demo-yihao"
 		},
 		{
-			path: "/krmeetingorder/detail",
-			component: _23ac9565,
-			name: "krmeetingorder-detail"
+			path: "/product/goods",
+			component: _4695043e,
+			name: "product-goods"
 		},
 		{
-			path: "/app-manage/member-welfare/highSearch",
-			component: _54488a54,
-			name: "app-manage-member-welfare-highSearch"
+			path: "/Inventory/goods-library",
+			component: _41e4c0c8,
+			name: "Inventory-goods-library"
 		},
 		{
-			path: "/Inventory/goods-library/search-form",
-			component: _4015b3b2,
-			name: "Inventory-goods-library-search-form"
-		},
-		{
-			path: "/smarthardware/openlog/searchForm",
-			component: _57700bda,
-			name: "smarthardware-openlog-searchForm"
-		},
-		{
-			path: "/doorrelationship/map/allEquipmentList",
-			component: _b28a03f4,
-			name: "doorrelationship-map-allEquipmentList"
-		},
-		{
-			path: "/official-website/calculator/community",
-			component: _26e5e8ee,
-			name: "official-website-calculator-community"
-		},
-		{
-			path: "/smart-hardware/map-depot/createdMapDepot",
-			component: _f24c2e76,
-			name: "smart-hardware-map-depot-createdMapDepot"
-		},
-		{
-			path: "/basic/parameter/form",
-			component: _19e7c25f,
-			name: "basic-parameter-form"
-		},
-		{
-			path: "/Inventory/make-invoice/pubilcFn",
-			component: _7591787a,
-			name: "Inventory-make-invoice-pubilcFn"
-		},
-		{
-			path: "/app-manage/push-manage/create",
-			component: _c6b76126,
-			name: "app-manage-push-manage-create"
-		},
-		{
-			path: "/Inventory/make-invoice/search-from",
-			component: _125ce6d5,
-			name: "Inventory-make-invoice-search-from"
-		},
-		{
-			path: "/Inventory/over-date/searchForm",
-			component: _61b7bd0a,
-			name: "Inventory-over-date-searchForm"
-		},
-		{
-			path: "/bill/project-setting/publicFn",
-			component: _6e3885b2,
-			name: "bill-project-setting-publicFn"
-		},
-		{
-			path: "/krmeeting/timeoutMeeting/searchForm",
-			component: _1f0c3502,
-			name: "krmeeting-timeoutMeeting-searchForm"
-		},
-		{
-			path: "/community/fixHead/attract-head",
-			component: _0f18cd80,
-			name: "community-fixHead-attract-head"
-		},
-		{
-			path: "/app-manage/notification-manage/create",
-			component: _157fb4fe,
-			name: "app-manage-notification-manage-create"
-		},
-		{
-			path: "/bill/project-setting/project-detail",
-			component: _1a5a33c2,
-			name: "bill-project-setting-project-detail"
-		},
-		{
-			path: "/order-center/contract-manage/contract-yard",
-			component: _3008343c,
-			name: "order-center-contract-manage-contract-yard"
-		},
-		{
-			path: "/bill/payment/highSearch",
-			component: _5e2f0257,
-			name: "bill-payment-highSearch"
-		},
-		{
-			path: "/doorrelationship/map/groupDetail",
-			component: _6aade14b,
-			name: "doorrelationship-map-groupDetail"
-		},
-		{
-			path: "/bill/list/highSearch",
-			component: _34e6b8e7,
-			name: "bill-list-highSearch"
-		},
-		{
-			path: "/Inventory/goods-library/bind-service",
-			component: _0f0d33b7,
-			name: "Inventory-goods-library-bind-service"
-		},
-		{
-			path: "/product/meeting/create",
-			component: _730c7c38,
-			name: "product-meeting-create"
-		},
-		{
-			path: "/bill/list/pdfDownload",
-			component: _6bec9f26,
-			name: "bill-list-pdfDownload"
-		},
-		{
-			path: "/bill/make-invoice/pubilcFn",
-			component: _f9754e52,
-			name: "bill-make-invoice-pubilcFn"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart/gantt-chart",
-			component: _3b64d396,
-			name: "Inventory-Inventory-gantt-chart-gantt-chart"
-		},
-		{
-			path: "/Inventory/over-date-unpaid/slotHead",
-			component: _43adfe6a,
-			name: "Inventory-over-date-unpaid-slotHead"
-		},
-		{
-			path: "/bill/payment/unbind",
-			component: _030a217a,
-			name: "bill-payment-unbind"
-		},
-		{
-			path: "/basic/preferential/createSale",
-			component: _8a5ab618,
-			name: "basic-preferential-createSale"
-		},
-		{
-			path: "/bill/project-setting/comment",
-			component: _5a282bdb,
-			name: "bill-project-setting-comment"
-		},
-		{
-			path: "/bill/income/addIncome",
-			component: _a57d7ff0,
-			name: "bill-income-addIncome"
-		},
-		{
-			path: "/Inventory/over-date/slotHead",
-			component: _65f326a6,
-			name: "Inventory-over-date-slotHead"
-		},
-		{
-			path: "/bill/project-setting/project-view",
-			component: _3d18df9a,
-			name: "bill-project-setting-project-view"
-		},
-		{
-			path: "/Inventory/enter-field/slotHead",
-			component: _74dac8ef,
-			name: "Inventory-enter-field-slotHead"
-		},
-		{
-			path: "/app-manage/icon-manage/create",
-			component: _3fb1e30c,
-			name: "app-manage-icon-manage-create"
-		},
-		{
-			path: "/bill/list/antiSettlement",
-			component: _18f25e28,
-			name: "bill-list-antiSettlement"
-		},
-		{
-			path: "/smart-hardware/space-manage/editSpace",
-			component: _4751add0,
-			name: "smart-hardware-space-manage-editSpace"
-		},
-		{
-			path: "/order-center/order-manage/general-order-manage",
-			component: _00f01c10,
-			name: "order-center-order-manage-general-order-manage"
-		},
-		{
-			path: "/bill/financial-invoice/pubilcFn",
-			component: _2dde8e1a,
-			name: "bill-financial-invoice-pubilcFn"
-		},
-		{
-			path: "/bill/list/settleAccounts",
-			component: _23b48964,
-			name: "bill-list-settleAccounts"
-		},
-		{
-			path: "/smarthardware/powerowner/deviceData",
-			component: _c2e69c42,
-			name: "smarthardware-powerowner-deviceData"
-		},
-		{
-			path: "/Inventory/floor-plan/searchForm",
-			component: _534055cc,
-			name: "Inventory-floor-plan-searchForm"
-		},
-		{
-			path: "/management-tool/data-monitoring/list",
-			component: _1a9145e3,
-			name: "management-tool-data-monitoring-list"
-		},
-		{
-			path: "/smarthardware/doormanage/devicedetail",
-			component: _ffccbb78,
-			name: "smarthardware-doormanage-devicedetail"
-		},
-		{
-			path: "/customer-manage/manage/createCustomer",
-			component: _30fe7df6,
-			name: "customer-manage-manage-createCustomer"
-		},
-		{
-			path: "/bill/settlement-list/heightSearch",
-			component: _0608ad20,
-			name: "bill-settlement-list-heightSearch"
-		},
-		{
-			path: "/bill/financial-invoice/search-from",
-			component: _0ce62c75,
-			name: "bill-financial-invoice-search-from"
-		},
-		{
-			path: "/bill/payment/collection",
-			component: _61db9b4e,
-			name: "bill-payment-collection"
-		},
-		{
-			path: "/management-tool/data-monitoring/SelectCustomers",
-			component: _254f0e38,
-			name: "management-tool-data-monitoring-SelectCustomers"
-		},
-		{
-			path: "/app-manage/coupon/create",
-			component: _41216a0a,
-			name: "app-manage-coupon-create"
-		},
-		{
-			path: "/Inventory/optional-inventory/optionalTable",
-			component: _322346d5,
-			name: "Inventory-optional-inventory-optionalTable"
-		},
-		{
-			path: "/bill/payment/bind",
-			component: _52f2daea,
-			name: "bill-payment-bind"
-		},
-		{
-			path: "/app-manage/push-manage/highSearch",
-			component: _7497e0db,
-			name: "app-manage-push-manage-highSearch"
-		},
-		{
-			path: "/app-manage/steward-setting/create",
-			component: _be5cc63c,
-			name: "app-manage-steward-setting-create"
-		},
-		{
-			path: "/bill/list/paidList",
-			component: _6b8051c7,
-			name: "bill-list-paidList"
-		},
-		{
-			path: "/bill/financial-invoice/list",
-			component: _12c25f48,
-			name: "bill-financial-invoice-list"
-		},
-		{
-			path: "/Inventory/goods-library/editGoods",
-			component: _0d70586c,
-			name: "Inventory-goods-library-editGoods"
-		},
-		{
-			path: "/bill/list/waitList",
-			component: _34ba7120,
-			name: "bill-list-waitList"
-		},
-		{
-			path: "/app-manage/member-welfare/create",
-			component: _62c25ee8,
-			name: "app-manage-member-welfare-create"
-		},
-		{
-			path: "/order/list/highSearch",
-			component: _71fdbb14,
-			name: "order-list-highSearch"
-		},
-		{
-			path: "/bill/make-invoice/search-from",
-			component: _683f50b2,
-			name: "bill-make-invoice-search-from"
-		},
-		{
-			path: "/bill/project-setting/archives-detail",
-			component: _201a26ae,
-			name: "bill-project-setting-archives-detail"
-		},
-		{
-			path: "/customer-manage/manage/heightSearch",
-			component: _86aa800c,
-			name: "customer-manage-manage-heightSearch"
-		},
-		{
-			path: "/product/goods/calendar",
-			component: _61ff062a,
-			name: "product-goods-calendar"
-		},
-		{
-			path: "/bill/make-invoice/list",
-			component: _0aecd5ab,
-			name: "bill-make-invoice-list"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart/publicFn",
-			component: _49da345c,
-			name: "Inventory-Inventory-gantt-chart-publicFn"
-		},
-		{
-			path: "/Inventory/floor-plan/discount",
-			component: _a863ca62,
-			name: "Inventory-floor-plan-discount"
-		},
-		{
-			path: "/customer-manage/manage/editCustomer",
-			component: _35f169d3,
-			name: "customer-manage-manage-editCustomer"
-		},
-		{
-			path: "/bill/project-setting/archives-management",
-			component: _027000ca,
-			name: "bill-project-setting-archives-management"
-		},
-		{
-			path: "/member/setting-manager/highSearch",
-			component: _4b218bfa,
-			name: "member-setting-manager-highSearch"
-		},
-		{
-			path: "/customer-manage/manage/switchCustomer",
-			component: _7d617986,
-			name: "customer-manage-manage-switchCustomer"
-		},
-		{
-			path: "/Inventory/goods-library/fixed-head",
-			component: _28adffab,
-			name: "Inventory-goods-library-fixed-head"
-		},
-		{
-			path: "/Inventory/enter-field/searchForm",
-			component: _595b1586,
-			name: "Inventory-enter-field-searchForm"
-		},
-		{
-			path: "/bill/income/highSearch",
-			component: _a426e908,
-			name: "bill-income-highSearch"
-		},
-		{
-			path: "/operations-center/from-field/NewPage",
-			component: _44a995f8,
-			name: "operations-center-from-field-NewPage"
-		},
-		{
-			path: "/smart-hardware/space-manage/createSpace",
-			component: _3fa64534,
-			name: "smart-hardware-space-manage-createSpace"
-		},
-		{
-			path: "/Inventory/goods-library/newgoods",
-			component: _6c3a80c8,
-			name: "Inventory-goods-library-newgoods"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart/list-table",
-			component: _36bb7821,
-			name: "Inventory-Inventory-gantt-chart-list-table"
-		},
-		{
-			path: "/operations-center/from-field/HeightSearch",
-			component: _ef4f556c,
-			name: "operations-center-from-field-HeightSearch"
-		},
-		{
-			path: "/Inventory/rented-unpaid/searchForm",
-			component: _4ac22fe8,
-			name: "Inventory-rented-unpaid-searchForm"
-		},
-		{
-			path: "/app-manage/home/member",
-			component: _63197ac0,
-			name: "app-manage-home-member"
-		},
-		{
-			path: "/order-center/order-manage/station-order-manage",
-			component: _9046e378,
-			name: "order-center-order-manage-station-order-manage"
-		},
-		{
-			path: "/Inventory/over-date-unpaid/searchForm",
-			component: _21f22619,
-			name: "Inventory-over-date-unpaid-searchForm"
-		},
-		{
-			path: "/bill/project-setting/public-hander",
-			component: _2e49ee88,
-			name: "bill-project-setting-public-hander"
-		},
-		{
-			path: "/bill/project-setting/archives",
-			component: _571348cb,
-			name: "bill-project-setting-archives"
-		},
-		{
-			path: "/Inventory/rented-unpaid/slotHead",
-			component: _13bf325a,
-			name: "Inventory-rented-unpaid-slotHead"
-		},
-		{
-			path: "/Inventory/daily-inventory/dailyTable",
-			component: _0d9376ba,
-			name: "Inventory-daily-inventory-dailyTable"
-		},
-		{
-			path: "/app-manage/home/joinMember",
-			component: _5d66508a,
-			name: "app-manage-home-joinMember"
-		},
-		{
-			path: "/app-manage/notification-manage/highSearch",
-			component: _c197d428,
-			name: "app-manage-notification-manage-highSearch"
-		},
-		{
-			path: "/Inventory/make-invoice/list",
-			component: _141e90e8,
-			name: "Inventory-make-invoice-list"
-		},
-		{
-			path: "/basic/preferential/create",
-			component: _575afe8d,
-			name: "basic-preferential-create"
-		},
-		{
-			path: "/krmeeting/timeInMeeting/searchForm",
-			component: _ea62e9fe,
-			name: "krmeeting-timeInMeeting-searchForm"
-		},
-		{
-			path: "/Inventory/floor-plan/publicFn",
-			component: _7865cd10,
-			name: "Inventory-floor-plan-publicFn"
+			path: "/nav-config/config-edit",
+			component: _6b9a1eda,
+			name: "nav-config-config-edit"
 		},
 		{
 			path: "/bill/payment/refund",
-			component: _feee53b0,
+			component: _6cff62d8,
 			name: "bill-payment-refund"
 		},
 		{
+			path: "/smarthardware/temperaturehumiditymap/table",
+			component: _53b6a93a,
+			name: "smarthardware-temperaturehumiditymap-table"
+		},
+		{
+			path: "/smarthardware/temperaturehumiditymap/searchForm",
+			component: _9519dc60,
+			name: "smarthardware-temperaturehumiditymap-searchForm"
+		},
+		{
+			path: "/Inventory/floor-plan/discount",
+			component: _423b7d3b,
+			name: "Inventory-floor-plan-discount"
+		},
+		{
+			path: "/customer-manage/manage/switchCustomer",
+			component: _5a1979a9,
+			name: "customer-manage-manage-switchCustomer"
+		},
+		{
+			path: "/Inventory/floor-plan/searchForm",
+			component: _f20366f4,
+			name: "Inventory-floor-plan-searchForm"
+		},
+		{
+			path: "/bill/settlement-list/heightSearch",
+			component: _08e6f98c,
+			name: "bill-settlement-list-heightSearch"
+		},
+		{
+			path: "/bill/project-setting/project-view",
+			component: _7089db9f,
+			name: "bill-project-setting-project-view"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/list-table",
+			component: _6a2e6535,
+			name: "Inventory-Inventory-gantt-chart-list-table"
+		},
+		{
+			path: "/customer-manage/manage/heightSearch",
+			component: _fdb0bd34,
+			name: "customer-manage-manage-heightSearch"
+		},
+		{
+			path: "/customer-manage/manage/createCustomer",
+			component: _ff6a111e,
+			name: "customer-manage-manage-createCustomer"
+		},
+		{
+			path: "/bill/list/waitList",
+			component: _643ab084,
+			name: "bill-list-waitList"
+		},
+		{
+			path: "/Inventory/make-invoice/search-from",
+			component: _6b4827e9,
+			name: "Inventory-make-invoice-search-from"
+		},
+		{
+			path: "/app-manage/notification-manage/highSearch",
+			component: _7c359350,
+			name: "app-manage-notification-manage-highSearch"
+		},
+		{
+			path: "/bill/project-setting/archives",
+			component: _1b902a37,
+			name: "bill-project-setting-archives"
+		},
+		{
+			path: "/basic/preferential/create",
+			component: _bf5b120e,
+			name: "basic-preferential-create"
+		},
+		{
+			path: "/product/goods/calendar",
+			component: _02d48802,
+			name: "product-goods-calendar"
+		},
+		{
+			path: "/bill/list/pdfDownload",
+			component: _cbf3824e,
+			name: "bill-list-pdfDownload"
+		},
+		{
+			path: "/app-manage/home/joinMember",
+			component: _335de59e,
+			name: "app-manage-home-joinMember"
+		},
+		{
+			path: "/Inventory/enter-field/searchForm",
+			component: _3682eb51,
+			name: "Inventory-enter-field-searchForm"
+		},
+		{
+			path: "/Inventory/goods-library/fixed-head",
+			component: _fccd7e82,
+			name: "Inventory-goods-library-fixed-head"
+		},
+		{
+			path: "/official-website/calculator/community",
+			component: _809fc14c,
+			name: "official-website-calculator-community"
+		},
+		{
+			path: "/management-tool/data-monitoring/SelectCustomers",
+			component: _c05acf60,
+			name: "management-tool-data-monitoring-SelectCustomers"
+		},
+		{
+			path: "/bill/make-invoice/list",
+			component: _3a8214bf,
+			name: "bill-make-invoice-list"
+		},
+		{
+			path: "/app-manage/push-manage/highSearch",
+			component: _77762d47,
+			name: "app-manage-push-manage-highSearch"
+		},
+		{
+			path: "/app-manage/notification-manage/create",
+			component: _a36c292c,
+			name: "app-manage-notification-manage-create"
+		},
+		{
+			path: "/app-manage/steward-setting/create",
+			component: _b8a02d64,
+			name: "app-manage-steward-setting-create"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/gantt-chart",
+			component: _37d4c802,
+			name: "Inventory-Inventory-gantt-chart-gantt-chart"
+		},
+		{
+			path: "/Inventory/over-date/slotHead",
+			component: _036d0cc1,
+			name: "Inventory-over-date-slotHead"
+		},
+		{
+			path: "/Inventory/enter-field/slotHead",
+			component: _a7cc97fa,
+			name: "Inventory-enter-field-slotHead"
+		},
+		{
+			path: "/Inventory/over-date-unpaid/slotHead",
+			component: _bab43b92,
+			name: "Inventory-over-date-unpaid-slotHead"
+		},
+		{
+			path: "/Inventory/rented-unpaid/searchForm",
+			component: _b8a51e08,
+			name: "Inventory-rented-unpaid-searchForm"
+		},
+		{
+			path: "/app-manage/push-manage/create",
+			component: _3311b1d9,
+			name: "app-manage-push-manage-create"
+		},
+		{
+			path: "/bill/make-invoice/search-from",
+			component: _02a699c4,
+			name: "bill-make-invoice-search-from"
+		},
+		{
+			path: "/app-manage/member-welfare/highSearch",
+			component: _be09f22c,
+			name: "app-manage-member-welfare-highSearch"
+		},
+		{
+			path: "/community/fixHead/attract-head",
+			component: _2fb28454,
+			name: "community-fixHead-attract-head"
+		},
+		{
+			path: "/Inventory/goods-library/newgoods",
+			component: _612a1248,
+			name: "Inventory-goods-library-newgoods"
+		},
+		{
+			path: "/bill/payment/unbind",
+			component: _52e028af,
+			name: "bill-payment-unbind"
+		},
+		{
+			path: "/doorrelationship/map/allEquipmentList",
+			component: _3cb4991c,
+			name: "doorrelationship-map-allEquipmentList"
+		},
+		{
+			path: "/app-manage/home/member",
+			component: _daa28c58,
+			name: "app-manage-home-member"
+		},
+		{
+			path: "/smarthardware/powerowner/deviceData",
+			component: _6309934b,
+			name: "smarthardware-powerowner-deviceData"
+		},
+		{
+			path: "/Inventory/goods-library/bind-service",
+			component: _4ba7006a,
+			name: "Inventory-goods-library-bind-service"
+		},
+		{
+			path: "/Inventory/rented-unpaid/slotHead",
+			component: _76efa86e,
+			name: "Inventory-rented-unpaid-slotHead"
+		},
+		{
+			path: "/order-center/contract-manage/contract-yard",
+			component: _f6749814,
+			name: "order-center-contract-manage-contract-yard"
+		},
+		{
+			path: "/bill/project-setting/archives-detail",
+			component: _2365d9bd,
+			name: "bill-project-setting-archives-detail"
+		},
+		{
+			path: "/order/list/highSearch",
+			component: _d2049e3c,
+			name: "order-list-highSearch"
+		},
+		{
+			path: "/bill/financial-invoice/search-from",
+			component: _65d16d89,
+			name: "bill-financial-invoice-search-from"
+		},
+		{
+			path: "/operations-center/from-field/HeightSearch",
+			component: _a9ed1494,
+			name: "operations-center-from-field-HeightSearch"
+		},
+		{
 			path: "/app-manage/home/activity",
-			component: _8c799596,
+			component: _5904ff49,
 			name: "app-manage-home-activity"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/nullify",
-			component: _ee58e4f2,
-			name: "order-center-order-manage-station-order-manage-nullify"
+			path: "/bill/project-setting/public-hander",
+			component: _3c8e2ad0,
+			name: "bill-project-setting-public-hander"
 		},
 		{
-			path: "/bill/project-setting/comment/indexData",
-			component: _10aba5ca,
-			name: "bill-project-setting-comment-indexData"
+			path: "/Inventory/optional-inventory/optionalTable",
+			component: _659633e9,
+			name: "Inventory-optional-inventory-optionalTable"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/joinList",
-			component: _14d52966,
-			name: "order-center-order-manage-station-order-manage-joinList"
+			path: "/management-tool/data-monitoring/list",
+			component: _349edc12,
+			name: "management-tool-data-monitoring-list"
 		},
 		{
-			path: "/bill/project-setting/project-detail/object-detail-title",
-			component: _60a67e37,
-			name: "bill-project-setting-project-detail-object-detail-title"
+			path: "/Inventory/over-date/searchForm",
+			component: _06630c8f,
+			name: "Inventory-over-date-searchForm"
 		},
 		{
-			path: "/order-center/contract-manage/contract-list/list",
-			component: _320e67dd,
-			name: "order-center-contract-manage-contract-list-list"
+			path: "/member/setting-manager/highSearch",
+			component: _4dffd866,
+			name: "member-setting-manager-highSearch"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/errorView",
-			component: _4a68afbf,
-			name: "order-center-order-manage-station-order-manage-errorView"
+			path: "/product/meeting/create",
+			component: _13e1fe10,
+			name: "product-meeting-create"
 		},
 		{
-			path: "/Inventory/Inventory-gantt-chart/gantt-chart/draw-week",
-			component: _04b57621,
-			name: "Inventory-Inventory-gantt-chart-gantt-chart-draw-week"
+			path: "/Inventory/over-date-unpaid/searchForm",
+			component: _8a8746f6,
+			name: "Inventory-over-date-unpaid-searchForm"
 		},
 		{
-			path: "/bill/project-setting/project-detail/add-task",
-			component: _13ab7174,
-			name: "bill-project-setting-project-detail-add-task"
+			path: "/Inventory/goods-library/search-form",
+			component: _b71bf0da,
+			name: "Inventory-goods-library-search-form"
+		},
+		{
+			path: "/basic/parameter/form",
+			component: _5229b673,
+			name: "basic-parameter-form"
+		},
+		{
+			path: "/Inventory/daily-inventory/dailyTable",
+			component: _7754de92,
+			name: "Inventory-daily-inventory-dailyTable"
+		},
+		{
+			path: "/bill/list/paidList",
+			component: _2bcf8a4a,
+			name: "bill-list-paidList"
+		},
+		{
+			path: "/bill/list/highSearch",
+			component: _6d28acfb,
+			name: "bill-list-highSearch"
+		},
+		{
+			path: "/app-manage/member-welfare/create",
+			component: _741a5608,
+			name: "app-manage-member-welfare-create"
+		},
+		{
+			path: "/order-center/order-manage/general-order-manage",
+			component: _693cc024,
+			name: "order-center-order-manage-general-order-manage"
+		},
+		{
+			path: "/bill/list/settleAccounts",
+			component: _e530f53c,
+			name: "bill-list-settleAccounts"
+		},
+		{
+			path: "/bill/payment/bind",
+			component: _18210154,
+			name: "bill-payment-bind"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage",
+			component: _20293258,
+			name: "order-center-order-manage-station-order-manage"
+		},
+		{
+			path: "/customer-manage/manage/editCustomer",
+			component: _0b236982,
+			name: "customer-manage-manage-editCustomer"
+		},
+		{
+			path: "/Inventory/goods-library/editGoods",
+			component: _07b3bf94,
+			name: "Inventory-goods-library-editGoods"
+		},
+		{
+			path: "/app-manage/icon-manage/create",
+			component: _53c17510,
+			name: "app-manage-icon-manage-create"
+		},
+		{
+			path: "/bill/income/highSearch",
+			component: _44fc6ae0,
+			name: "bill-income-highSearch"
+		},
+		{
+			path: "/smart-hardware/space-manage/editSpace",
+			component: _75215f84,
+			name: "smart-hardware-space-manage-editSpace"
+		},
+		{
+			path: "/bill/payment/collection",
+			component: _0f6e048c,
+			name: "bill-payment-collection"
+		},
+		{
+			path: "/doorrelationship/map/groupDetail",
+			component: _29ab0f42,
+			name: "doorrelationship-map-groupDetail"
+		},
+		{
+			path: "/app-manage/coupon/create",
+			component: _7eb1150f,
+			name: "app-manage-coupon-create"
+		},
+		{
+			path: "/bill/income/addIncome",
+			component: _7d3dce74,
+			name: "bill-income-addIncome"
+		},
+		{
+			path: "/operations-center/from-field/NewPage",
+			component: _ae6afdd0,
+			name: "operations-center-from-field-NewPage"
+		},
+		{
+			path: "/bill/financial-invoice/list",
+			component: _08852698,
+			name: "bill-financial-invoice-list"
+		},
+		{
+			path: "/smart-hardware/space-manage/createSpace",
+			component: _6f4328d2,
+			name: "smart-hardware-space-manage-createSpace"
+		},
+		{
+			path: "/bill/payment/highSearch",
+			component: _2141a5c3,
+			name: "bill-payment-highSearch"
+		},
+		{
+			path: "/krmeeting/timeInMeeting/searchForm",
+			component: _388c67d6,
+			name: "krmeeting-timeInMeeting-searchForm"
+		},
+		{
+			path: "/smart-hardware/map-depot/createdMapDepot",
+			component: _4ae5ea4e,
+			name: "smart-hardware-map-depot-createdMapDepot"
+		},
+		{
+			path: "/bill/list/antiSettlement",
+			component: _8f97af88,
+			name: "bill-list-antiSettlement"
+		},
+		{
+			path: "/smarthardware/openlog/searchForm",
+			component: _37787027,
+			name: "smarthardware-openlog-searchForm"
+		},
+		{
+			path: "/bill/project-setting/comment",
+			component: _99d92622,
+			name: "bill-project-setting-comment"
+		},
+		{
+			path: "/basic/preferential/createSale",
+			component: _51400760,
+			name: "basic-preferential-createSale"
+		},
+		{
+			path: "/smarthardware/doormanage/devicedetail",
+			component: _89f750a0,
+			name: "smarthardware-doormanage-devicedetail"
+		},
+		{
+			path: "/Inventory/make-invoice/list",
+			component: _05ccc358,
+			name: "Inventory-make-invoice-list"
+		},
+		{
+			path: "/bill/project-setting/project-detail",
+			component: _1584068b,
+			name: "bill-project-setting-project-detail"
+		},
+		{
+			path: "/krmeeting/timeoutMeeting/searchForm",
+			component: _38edd324,
+			name: "krmeeting-timeoutMeeting-searchForm"
+		},
+		{
+			path: "/bill/project-setting/archives-management",
+			component: _361642af,
+			name: "bill-project-setting-archives-management"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/reduceList",
+			component: _8089a6e4,
+			name: "order-center-order-manage-station-order-manage-reduceList"
 		},
 		{
 			path: "/doorrelationship/map/groupDetail/editForm",
-			component: _0377af05,
+			component: _2628cf71,
 			name: "doorrelationship-map-groupDetail-editForm"
 		},
 		{
-			path: "/bill/project-setting/project-detail/archives-detail",
-			component: _04fed63d,
-			name: "bill-project-setting-project-detail-archives-detail"
-		},
-		{
-			path: "/bill/project-setting/project-view/renderData",
-			component: _0ac0d640,
-			name: "bill-project-setting-project-view-renderData"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart/gantt-chart/view-article",
-			component: _dc57128c,
-			name: "Inventory-Inventory-gantt-chart-gantt-chart-view-article"
-		},
-		{
-			path: "/order-center/order-manage/station-order-manage/replaceView",
-			component: _0d3ad5eb,
-			name: "order-center-order-manage-station-order-manage-replaceView"
-		},
-		{
-			path: "/Inventory/Inventory-gantt-chart/gantt-chart/draw-day",
-			component: _0d3c43ff,
-			name: "Inventory-Inventory-gantt-chart-gantt-chart-draw-day"
-		},
-		{
-			path: "/bill/project-setting/project-detail/detail-task-list",
-			component: _9003efa6,
-			name: "bill-project-setting-project-detail-detail-task-list"
-		},
-		{
-			path: "/order-center/order-manage/station-order-manage/applyContract",
-			component: _dcea01dc,
-			name: "order-center-order-manage-station-order-manage-applyContract"
-		},
-		{
-			path: "/smart-hardware/map-depot/edit/tvCard",
-			component: _1ecc8a48,
-			name: "smart-hardware-map-depot-edit-tvCard"
-		},
-		{
-			path: "/order-center/order-manage/general-order-manage/nullify",
-			component: _498a4f5a,
-			name: "order-center-order-manage-general-order-manage-nullify"
-		},
-		{
-			path: "/bill/project-setting/comment/krSelect",
-			component: _75333b05,
-			name: "bill-project-setting-comment-krSelect"
-		},
-		{
-			path: "/bill/project-setting/comment/krCity",
-			component: _574426b6,
-			name: "bill-project-setting-comment-krCity"
-		},
-		{
 			path: "/Inventory/Inventory-gantt-chart/gantt-chart/color-type",
-			component: _5ca19b60,
+			component: _59632164,
 			name: "Inventory-Inventory-gantt-chart-gantt-chart-color-type"
 		},
 		{
-			path: "/bill/project-setting/archives-detail/record-detail",
-			component: _66e428a4,
-			name: "bill-project-setting-archives-detail-record-detail"
-		},
-		{
-			path: "/bill/project-setting/comment/KrInput",
-			component: _b6db3668,
-			name: "bill-project-setting-comment-KrInput"
-		},
-		{
-			path: "/bill/project-setting/project-detail/watch-record",
-			component: _48f504d2,
-			name: "bill-project-setting-project-detail-watch-record"
-		},
-		{
-			path: "/order-center/contract-manage/contract-yard/ContractYard",
-			component: _82cb24a8,
-			name: "order-center-contract-manage-contract-yard-ContractYard"
-		},
-		{
-			path: "/order-center/order-manage/station-order-manage/listAndMap",
-			component: _15a3b584,
-			name: "order-center-order-manage-station-order-manage-listAndMap"
-		},
-		{
-			path: "/bill/project-setting/comment/indexMethod",
-			component: _79c829f3,
-			name: "bill-project-setting-comment-indexMethod"
-		},
-		{
-			path: "/bill/project-setting/archives/add-archives",
-			component: _0595c398,
-			name: "bill-project-setting-archives-add-archives"
-		},
-		{
-			path: "/order-center/order-manage/general-order-manage/heightSearch",
-			component: _ca07273e,
-			name: "order-center-order-manage-general-order-manage-heightSearch"
+			path: "/doorrelationship/map/allEquipmentList/searchForm",
+			component: _6e34331c,
+			name: "doorrelationship-map-allEquipmentList-searchForm"
 		},
 		{
 			path: "/bill/project-setting/comment/overFlowLabel",
-			component: _882cc40a,
+			component: _2146e9e2,
 			name: "bill-project-setting-comment-overFlowLabel"
 		},
 		{
 			path: "/order-center/order-manage/station-order-manage/heightSearch",
-			component: _3b6e50a6,
+			component: _2ad33519,
 			name: "order-center-order-manage-station-order-manage-heightSearch"
 		},
 		{
+			path: "/order-center/order-manage/station-order-manage/applyContract",
+			component: _5a4c4f26,
+			name: "order-center-order-manage-station-order-manage-applyContract"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/gantt-chart/draw-week",
+			component: _b40556e6,
+			name: "Inventory-Inventory-gantt-chart-gantt-chart-draw-week"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/nullify",
+			component: _10877c9b,
+			name: "order-center-order-manage-station-order-manage-nullify"
+		},
+		{
+			path: "/order-center/contract-manage/contract-yard/ContractYard",
+			component: _2d646118,
+			name: "order-center-contract-manage-contract-yard-ContractYard"
+		},
+		{
 			path: "/Inventory/goods-library/bulk-changes/change-status",
-			component: _7eb4977a,
+			component: _1043308e,
 			name: "Inventory-goods-library-bulk-changes-change-status"
 		},
 		{
-			path: "/Inventory/goods-library/bulk-changes/change-price",
-			component: _a3bc891e,
-			name: "Inventory-goods-library-bulk-changes-change-price"
+			path: "/smart-hardware/map-depot/edit/tvCard",
+			component: _888df220,
+			name: "smart-hardware-map-depot-edit-tvCard"
 		},
 		{
-			path: "/doorrelationship/map/allEquipmentList/searchForm",
-			component: _5d2b35f0,
-			name: "doorrelationship-map-allEquipmentList-searchForm"
+			path: "/order-center/order-manage/station-order-manage/listAndMap",
+			component: _2da97cf0,
+			name: "order-center-order-manage-station-order-manage-listAndMap"
 		},
 		{
-			path: "/Inventory/Inventory-gantt-chart/gantt-chart/article",
-			component: _15242aba,
-			name: "Inventory-Inventory-gantt-chart-gantt-chart-article"
-		},
-		{
-			path: "/bill/project-setting/project-detail/edit-task",
-			component: _97dc8196,
-			name: "bill-project-setting-project-detail-edit-task"
-		},
-		{
-			path: "/doorrelationship/map/groupDetail/equipmentList",
-			component: _2aed26f0,
-			name: "doorrelationship-map-groupDetail-equipmentList"
-		},
-		{
-			path: "/member/setting-manager/detail/communityManage",
-			component: _63f63000,
-			name: "member-setting-manager-detail-communityManage"
-		},
-		{
-			path: "/bill/project-setting/project-view/add-archives",
-			component: _a47d9c68,
-			name: "bill-project-setting-project-view-add-archives"
+			path: "/order-center/order-manage/station-order-manage/replaceView",
+			component: _a70dca02,
+			name: "order-center-order-manage-station-order-manage-replaceView"
 		},
 		{
 			path: "/Inventory/Inventory-gantt-chart/gantt-chart/draw-month",
-			component: _76c5ebba,
+			component: _4c50f937,
 			name: "Inventory-Inventory-gantt-chart-gantt-chart-draw-month"
 		},
 		{
+			path: "/bill/project-setting/project-view/add-archives",
+			component: _35e11640,
+			name: "bill-project-setting-project-view-add-archives"
+		},
+		{
+			path: "/bill/project-setting/project-detail/add-task",
+			component: _36176988,
+			name: "bill-project-setting-project-detail-add-task"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/gantt-chart/article",
+			component: _952e97b4,
+			name: "Inventory-Inventory-gantt-chart-gantt-chart-article"
+		},
+		{
+			path: "/order-center/contract-manage/contract-list/list",
+			component: _5953736e,
+			name: "order-center-contract-manage-contract-list-list"
+		},
+		{
+			path: "/order-center/order-manage/general-order-manage/heightSearch",
+			component: _38f26c66,
+			name: "order-center-order-manage-general-order-manage-heightSearch"
+		},
+		{
+			path: "/bill/project-setting/project-detail/detail-task-list",
+			component: _204aac41,
+			name: "bill-project-setting-project-detail-detail-task-list"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/gantt-chart/draw-day",
+			component: _7588e813,
+			name: "Inventory-Inventory-gantt-chart-gantt-chart-draw-day"
+		},
+		{
+			path: "/bill/project-setting/archives-detail/record-detail",
+			component: _0f1a7c90,
+			name: "bill-project-setting-archives-detail-record-detail"
+		},
+		{
+			path: "/Inventory/Inventory-gantt-chart/gantt-chart/view-article",
+			component: _076e1e64,
+			name: "Inventory-Inventory-gantt-chart-gantt-chart-view-article"
+		},
+		{
+			path: "/bill/project-setting/project-detail/watch-record",
+			component: _34825a34,
+			name: "bill-project-setting-project-detail-watch-record"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/errorView",
+			component: _9645ac5a,
+			name: "order-center-order-manage-station-order-manage-errorView"
+		},
+		{
 			path: "/order-center/order-manage/station-order-manage/replaceList",
-			component: _1628a764,
+			component: _95322710,
 			name: "order-center-order-manage-station-order-manage-replaceList"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/reduceList",
-			component: _48bf37bc,
-			name: "order-center-order-manage-station-order-manage-reduceList"
+			path: "/member/setting-manager/detail/communityManage",
+			component: _e1ed8b28,
+			name: "member-setting-manager-detail-communityManage"
 		},
 		{
-			path: "/order-center/contract-manage/contract-list/list/PrintAgreement",
-			component: _b8b853fc,
-			name: "order-center-contract-manage-contract-list-list-PrintAgreement"
+			path: "/order-center/order-manage/station-order-manage/joinList",
+			component: _f8c1c65c,
+			name: "order-center-order-manage-station-order-manage-joinList"
 		},
 		{
-			path: "/order-center/contract-manage/contract-list/list/heightSearch",
-			component: _98d6a018,
-			name: "order-center-contract-manage-contract-list-list-heightSearch"
+			path: "/bill/project-setting/project-detail/object-detail-title",
+			component: _611f1cba,
+			name: "bill-project-setting-project-detail-object-detail-title"
 		},
 		{
-			path: "/doorrelationship/map/groupDetail/equipmentList/equipmentSearch",
-			component: _60c5690c,
-			name: "doorrelationship-map-groupDetail-equipmentList-equipmentSearch"
+			path: "/doorrelationship/map/groupDetail/equipmentList",
+			component: _52d6109c,
+			name: "doorrelationship-map-groupDetail-equipmentList"
+		},
+		{
+			path: "/order-center/order-manage/general-order-manage/nullify",
+			component: _62eec767,
+			name: "order-center-order-manage-general-order-manage-nullify"
+		},
+		{
+			path: "/bill/project-setting/archives/add-archives",
+			component: _30a80b48,
+			name: "bill-project-setting-archives-add-archives"
+		},
+		{
+			path: "/bill/project-setting/comment/KrInput",
+			component: _6fb1b0e0,
+			name: "bill-project-setting-comment-KrInput"
+		},
+		{
+			path: "/bill/project-setting/project-detail/edit-task",
+			component: _41b66cbe,
+			name: "bill-project-setting-project-detail-edit-task"
+		},
+		{
+			path: "/bill/project-setting/project-detail/archives-detail",
+			component: _2dccc2ae,
+			name: "bill-project-setting-project-detail-archives-detail"
+		},
+		{
+			path: "/Inventory/goods-library/bulk-changes/change-price",
+			component: _aadca046,
+			name: "Inventory-goods-library-bulk-changes-change-price"
 		},
 		{
 			path: "/order-center/order-manage/station-order-manage/create/reduceStation",
-			component: _41ae19ce,
+			component: _66e52485,
 			name: "order-center-order-manage-station-order-manage-create-reduceStation"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/create/join",
-			component: _8464b262,
-			name: "order-center-order-manage-station-order-manage-create-join"
-		},
-		{
 			path: "/order-center/order-manage/station-order-manage/create/renew",
-			component: _e7731790,
+			component: _565e5cb8,
 			name: "order-center-order-manage-station-order-manage-create-renew"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/create/stationList",
-			component: _66503e46,
-			name: "order-center-order-manage-station-order-manage-create-stationList"
-		},
-		{
 			path: "/order-center/order-manage/general-order-manage/create/addOrder",
-			component: _ef6b48c4,
+			component: _25f7f6b2,
 			name: "order-center-order-manage-general-order-manage-create-addOrder"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/create/replace",
-			component: _61c3981f,
-			name: "order-center-order-manage-station-order-manage-create-replace"
-		},
-		{
-			path: "/order-center/order-manage/station-order-manage/listAndMap/list",
-			component: _73fcf448,
-			name: "order-center-order-manage-station-order-manage-listAndMap-list"
-		},
-		{
 			path: "/order-center/order-manage/station-order-manage/create/reduce",
-			component: _1ce571cb,
+			component: _34b27c42,
 			name: "order-center-order-manage-station-order-manage-create-reduce"
 		},
 		{
-			path: "/bill/list/detail/:billId?",
-			component: _1125b640,
-			name: "bill-list-detail-billId"
+			path: "/order-center/order-manage/station-order-manage/create/replace",
+			component: _9da76aea,
+			name: "order-center-order-manage-station-order-manage-create-replace"
 		},
 		{
-			path: "/product/meeting/edit/:id?",
-			component: _1ab39ec6,
-			name: "product-meeting-edit-id"
+			path: "/order-center/contract-manage/contract-list/list/heightSearch",
+			component: _7c560008,
+			name: "order-center-contract-manage-contract-list-list-heightSearch"
 		},
 		{
-			path: "/app-manage/member-welfare/detail/:couponId?",
-			component: _f5a48224,
-			name: "app-manage-member-welfare-detail-couponId"
+			path: "/order-center/order-manage/station-order-manage/create/stationList",
+			component: _0aed056e,
+			name: "order-center-order-manage-station-order-manage-create-stationList"
 		},
 		{
-			path: "/product/goods/edit/:id?",
-			component: _379f533c,
-			name: "product-goods-edit-id"
+			path: "/order-center/order-manage/station-order-manage/listAndMap/list",
+			component: _63af20f0,
+			name: "order-center-order-manage-station-order-manage-listAndMap-list"
 		},
 		{
-			path: "/app-manage/icon-manage/edit/:iconId?",
-			component: _5730b89e,
-			name: "app-manage-icon-manage-edit-iconId"
+			path: "/order-center/order-manage/station-order-manage/create/join",
+			component: _5d0bebe3,
+			name: "order-center-order-manage-station-order-manage-create-join"
 		},
 		{
-			path: "/app-manage/notification-manage/detail/:notificationId?",
-			component: _d6b1b36e,
-			name: "app-manage-notification-manage-detail-notificationId"
+			path: "/order-center/contract-manage/contract-list/list/PrintAgreement",
+			component: _41517116,
+			name: "order-center-contract-manage-contract-list-list-PrintAgreement"
 		},
 		{
-			path: "/app-manage/member-welfare/edit/:couponId?",
-			component: _054a21e7,
-			name: "app-manage-member-welfare-edit-couponId"
-		},
-		{
-			path: "/bill/income/detail/:id?",
-			component: _c55fc8e4,
-			name: "bill-income-detail-id"
+			path: "/doorrelationship/map/groupDetail/equipmentList/equipmentSearch",
+			component: _0319f7c0,
+			name: "doorrelationship-map-groupDetail-equipmentList-equipmentSearch"
 		},
 		{
 			path: "/product/goods/view/:id?",
-			component: _3b1b57fd,
+			component: _6ab09711,
 			name: "product-goods-view-id"
 		},
 		{
-			path: "/app-manage/coupon/detail/:id",
-			component: _0aa1f57b,
-			name: "app-manage-coupon-detail-id"
-		},
-		{
-			path: "/member/setting-manager/detail/:csrId",
-			component: _6408c25c,
-			name: "member-setting-manager-detail-csrId"
-		},
-		{
-			path: "/app-manage/push-manage/detail/:pushId?",
-			component: _7c69e3a7,
-			name: "app-manage-push-manage-detail-pushId"
-		},
-		{
-			path: "/smart-hardware/map-depot/edit/:storageId?",
-			component: _260fde21,
-			name: "smart-hardware-map-depot-edit-storageId"
+			path: "/app-manage/steward-setting/edit/:manageId?",
+			component: _a0caff68,
+			name: "app-manage-steward-setting-edit-manageId"
 		},
 		{
 			path: "/app-manage/notification-manage/edit/:notificationId?",
-			component: _bdfd8ffc,
+			component: _4145c16e,
 			name: "app-manage-notification-manage-edit-notificationId"
 		},
 		{
+			path: "/product/goods/edit/:id?",
+			component: _13c59576,
+			name: "product-goods-edit-id"
+		},
+		{
+			path: "/order/list/detail/:orderId?",
+			component: _d482f600,
+			name: "order-list-detail-orderId"
+		},
+		{
+			path: "/product/meeting/edit/:id?",
+			component: _dc300a9e,
+			name: "product-meeting-edit-id"
+		},
+		{
+			path: "/app-manage/notification-manage/detail/:notificationId?",
+			component: _35ef04b5,
+			name: "app-manage-notification-manage-detail-notificationId"
+		},
+		{
+			path: "/app-manage/member-welfare/detail/:couponId?",
+			component: _8ebea7fc,
+			name: "app-manage-member-welfare-detail-couponId"
+		},
+		{
 			path: "/bill/payment/detail/:paymentId?",
-			component: _052c5ae3,
+			component: _3c6b45f7,
 			name: "bill-payment-detail-paymentId"
 		},
 		{
 			path: "/app-manage/coupon/edit/:id",
-			component: _b7446018,
+			component: _7a556508,
 			name: "app-manage-coupon-edit-id"
 		},
 		{
-			path: "/app-manage/steward-setting/edit/:manageId?",
-			component: _e62d4040,
-			name: "app-manage-steward-setting-edit-manageId"
+			path: "/app-manage/coupon/detail/:id",
+			component: _4108958f,
+			name: "app-manage-coupon-detail-id"
 		},
 		{
-			path: "/order/list/detail/:orderId?",
-			component: _80722028,
-			name: "order-list-detail-orderId"
+			path: "/bill/list/detail/:billId?",
+			component: _d2a22218,
+			name: "bill-list-detail-billId"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:watchView?/reduceView",
-			component: _8b16d652,
-			name: "order-center-order-manage-station-order-manage-watchView-reduceView"
+			path: "/smart-hardware/map-depot/edit/:storageId?",
+			component: _79c30035,
+			name: "smart-hardware-map-depot-edit-storageId"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:orderEdit?/reduce",
-			component: _8bd1cea4,
-			name: "order-center-order-manage-station-order-manage-orderEdit-reduce"
+			path: "/app-manage/icon-manage/edit/:iconId?",
+			component: _1bad9a0a,
+			name: "app-manage-icon-manage-edit-iconId"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:orderEdit?/reduceStation",
-			component: _589b56d6,
-			name: "order-center-order-manage-station-order-manage-orderEdit-reduceStation"
+			path: "/app-manage/member-welfare/edit/:couponId?",
+			component: _58fd43fb,
+			name: "app-manage-member-welfare-edit-couponId"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:orderEdit?/stationList",
-			component: _e3cbe04c,
-			name: "order-center-order-manage-station-order-manage-orderEdit-stationList"
+			path: "/app-manage/push-manage/detail/:pushId?",
+			component: _15341a13,
+			name: "app-manage-push-manage-detail-pushId"
+		},
+		{
+			path: "/bill/income/detail/:id?",
+			component: _66354abc,
+			name: "bill-income-detail-id"
+		},
+		{
+			path: "/member/setting-manager/detail/:csrId",
+			component: _2f280e70,
+			name: "member-setting-manager-detail-csrId"
 		},
 		{
 			path: "/order-center/order-manage/station-order-manage/:watchView?/replaceView",
-			component: _1db9197d,
+			component: _b1a2c02e,
 			name: "order-center-order-manage-station-order-manage-watchView-replaceView"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:watchView?/joinView",
-			component: _57000d9b,
-			name: "order-center-order-manage-station-order-manage-watchView-joinView"
-		},
-		{
 			path: "/order-center/order-manage/station-order-manage/:orderEdit?/join",
-			component: _53f1aa72,
+			component: _1cc174f4,
 			name: "order-center-order-manage-station-order-manage-orderEdit-join"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:orderEdit?/replace",
-			component: _6ac6cd9c,
-			name: "order-center-order-manage-station-order-manage-orderEdit-replace"
+			path: "/order-center/order-manage/station-order-manage/:watchView?/renewView",
+			component: _acac767c,
+			name: "order-center-order-manage-station-order-manage-watchView-renewView"
 		},
 		{
 			path: "/order-center/order-manage/general-order-manage/:watchView?/joinView",
-			component: _37318667,
+			component: _8099110a,
 			name: "order-center-order-manage-general-order-manage-watchView-joinView"
 		},
 		{
 			path: "/order-center/order-manage/general-order-manage/:orderEdit?/editOrder",
-			component: _37f6ef00,
+			component: _8099bf28,
 			name: "order-center-order-manage-general-order-manage-orderEdit-editOrder"
 		},
 		{
-			path: "/order-center/order-manage/station-order-manage/:watchView?/renewView",
-			component: _21ed9356,
-			name: "order-center-order-manage-station-order-manage-watchView-renewView"
-		},
-		{
 			path: "/order-center/order-manage/station-order-manage/:orderEdit?/renew",
-			component: _8aba3616,
+			component: _5aaea73e,
 			name: "order-center-order-manage-station-order-manage-orderEdit-renew"
 		},
 		{
+			path: "/order-center/order-manage/station-order-manage/:orderEdit?/stationList",
+			component: _178f9646,
+			name: "order-center-order-manage-station-order-manage-orderEdit-stationList"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/:orderEdit?/replace",
+			component: _cf0f2bf0,
+			name: "order-center-order-manage-station-order-manage-orderEdit-replace"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/:orderEdit?/reduceStation",
+			component: _5ac8f242,
+			name: "order-center-order-manage-station-order-manage-orderEdit-reduceStation"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/:orderEdit?/reduce",
+			component: _ba6b827c,
+			name: "order-center-order-manage-station-order-manage-orderEdit-reduce"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/:watchView?/reduceView",
+			component: _2a3e90eb,
+			name: "order-center-order-manage-station-order-manage-watchView-reduceView"
+		},
+		{
+			path: "/order-center/order-manage/station-order-manage/:watchView?/joinView",
+			component: _40fc02a2,
+			name: "order-center-order-manage-station-order-manage-watchView-joinView"
+		},
+		{
+			path: "/bill/customerAssets/:customer/basic",
+			component: _28d47281,
+			name: "bill-customerAssets-customer-basic"
+		},
+		{
+			path: "/bill/customerAssets/:customer/giveMoney",
+			component: _6a0f71ff,
+			name: "bill-customerAssets-customer-giveMoney"
+		},
+		{
+			path: "/bill/customerAssets/:customer/joinInfo",
+			component: _114769d8,
+			name: "bill-customerAssets-customer-joinInfo"
+		},
+		{
+			path: "/bill/customerAssets/:customer/changeCommunity",
+			component: _27f0462e,
+			name: "bill-customerAssets-customer-changeCommunity"
+		},
+		{
+			path: "/bill/customerAssets/:customer/view",
+			component: _35134df6,
+			name: "bill-customerAssets-customer-view"
+		},
+		{
+			path: "/bill/customerAssets/:customer/changeBalance",
+			component: _6705045c,
+			name: "bill-customerAssets-customer-changeBalance"
+		},
+		{
+			path: "/smart-hardware/space-manage/:sub?/son-space",
+			component: _735ee376,
+			name: "smart-hardware-space-manage-sub-son-space"
+		},
+		{
+			path: "/bill/customerAssets/:customer/balance",
+			component: _8871efa8,
+			name: "bill-customerAssets-customer-balance"
+		},
+		{
+			path: "/bill/customerAssets/:customer/refunds",
+			component: _fca1fc6a,
+			name: "bill-customerAssets-customer-refunds"
+		},
+		{
+			path: "/publicPage/make-invoice/:view?/view-detail",
+			component: _c1578c28,
+			name: "publicPage-make-invoice-view-view-detail"
+		},
+		{
+			path: "/bill/customerAssets/:customer/assets",
+			component: _e198fe3a,
+			name: "bill-customerAssets-customer-assets"
+		},
+		{
+			path: "/bill/customerAssets/:customer/waiting",
+			component: _1455e1c6,
+			name: "bill-customerAssets-customer-waiting"
+		},
+		{
+			path: "/bill/customerAssets/:customer/spending",
+			component: _13bbc4a4,
+			name: "bill-customerAssets-customer-spending"
+		},
+		{
+			path: "/operations-center/from-field/:watchView?/view",
+			component: _4da271c8,
+			name: "operations-center-from-field-watchView-view"
+		},
+		{
+			path: "/bill/financial-invoice/:add?/view-invoice",
+			component: _098762ec,
+			name: "bill-financial-invoice-add-view-invoice"
+		},
+		{
+			path: "/bill/settlement-list/:billId?/detail",
+			component: _1048b81c,
+			name: "bill-settlement-list-billId-detail"
+		},
+		{
 			path: "/bill/make-invoice/:add?/add-invoice",
-			component: _5a4201e1,
+			component: _99a57a16,
 			name: "bill-make-invoice-add-add-invoice"
 		},
 		{
 			path: "/bill/settlement-list/:billId?/edit",
-			component: _f0f3e4ae,
+			component: _eb374bd6,
 			name: "bill-settlement-list-billId-edit"
 		},
 		{
-			path: "/bill/customerAssets/:customer/changeBalance",
-			component: _2c1a4ef0,
-			name: "bill-customerAssets-customer-changeBalance"
-		},
-		{
-			path: "/bill/customerAssets/:customer/spending",
-			component: _d981a4e0,
-			name: "bill-customerAssets-customer-spending"
-		},
-		{
-			path: "/bill/customerAssets/:customer/assets",
-			component: _77d79662,
-			name: "bill-customerAssets-customer-assets"
-		},
-		{
-			path: "/bill/customerAssets/:customer/basic",
-			component: _06235215,
-			name: "bill-customerAssets-customer-basic"
-		},
-		{
-			path: "/smart-hardware/space-manage/:sub?/son-space",
-			component: _da44bd9e,
-			name: "smart-hardware-space-manage-sub-son-space"
-		},
-		{
-			path: "/bill/customerAssets/:customer/waiting",
-			component: _5d0ad8b1,
-			name: "bill-customerAssets-customer-waiting"
-		},
-		{
-			path: "/bill/customerAssets/:customer/view",
-			component: _e6e9d01e,
-			name: "bill-customerAssets-customer-view"
-		},
-		{
-			path: "/bill/customerAssets/:customer/refunds",
-			component: _2e366942,
-			name: "bill-customerAssets-customer-refunds"
-		},
-		{
-			path: "/bill/customerAssets/:customer/giveMoney",
-			component: _4a0db2da,
-			name: "bill-customerAssets-customer-giveMoney"
-		},
-		{
-			path: "/bill/customerAssets/:customer/changeCommunity",
-			component: _7e165b06,
-			name: "bill-customerAssets-customer-changeCommunity"
-		},
-		{
-			path: "/bill/settlement-list/:billId?/detail",
-			component: _4bcbd6b0,
-			name: "bill-settlement-list-billId-detail"
-		},
-		{
-			path: "/operations-center/from-field/:watchView?/view",
-			component: _2b3679b4,
-			name: "operations-center-from-field-watchView-view"
-		},
-		{
-			path: "/publicPage/make-invoice/:view?/view-detail",
-			component: _7ca31980,
-			name: "publicPage-make-invoice-view-view-detail"
-		},
-		{
-			path: "/bill/customerAssets/:customer/joinInfo",
-			component: _de6a5a78,
-			name: "bill-customerAssets-customer-joinInfo"
-		},
-		{
-			path: "/bill/customerAssets/:customer/balance",
-			component: _22fcd1c0,
-			name: "bill-customerAssets-customer-balance"
-		},
-		{
-			path: "/bill/financial-invoice/:add?/view-invoice",
-			component: _94577e50,
-			name: "bill-financial-invoice-add-view-invoice"
-		},
-		{
-			path: "/bill/customerAssets/:customer/basic/annex",
-			component: _74fe2a97,
-			name: "bill-customerAssets-customer-basic-annex"
-		},
-		{
 			path: "/bill/customerAssets/:customer/basic/info",
-			component: _efac818a,
+			component: _48463d62,
 			name: "bill-customerAssets-customer-basic-info"
 		},
 		{
-			path: "/publicPage/:view?/pdf-view",
-			component: _a0d8c744,
-			name: "publicPage-view-pdf-view"
+			path: "/bill/customerAssets/:customer/basic/annex",
+			component: _d0a169fa,
+			name: "bill-customerAssets-customer-basic-annex"
 		},
 		{
-			path: "/",
-			component: _5ab4800e,
-			name: "index"
+			path: "/publicPage/:view?/pdf-view",
+			component: _0ee9d66c,
+			name: "publicPage-view-pdf-view"
 		}
     ],
-    
-    
     fallback: false
   })
 }

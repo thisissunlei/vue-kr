@@ -1,8 +1,8 @@
 <template>
-	
+
 	<div class="up-image">
-		<EditLabel 
-			:readOrEdit="readOrEdit" 
+		<EditLabel
+			:readOrEdit="readOrEdit"
 			:value="fileArr"
 			@okClick="okClick"
 			@cancelClick="cancelClick"
@@ -10,22 +10,22 @@
 			labeType="file"
 			@eyeImg="eyeImg"
 		>
-			
+
 			<div class="view" v-for="(item, index ) in fileArr" :key="item.id">
 
 				<img v-if="item.url" :src="item.url" alt="" @click="eyePhotoAlbum(index,$event)">
-				
-                <span 
-                    class="delete-icon" 
+
+                <span
+                    class="delete-icon"
                     @click="delImg(index,$event)"
                 ></span>
-				
+
 			</div>
 
-			<input 
-                :id="inputId" 
-                type="file" 
-                style="display:none;" 
+			<input
+                :id="inputId"
+                type="file"
+                style="display:none;"
                 accept=".jpg, .jpeg, .png"
                 @change="fileChange"
             >
@@ -35,9 +35,9 @@
 			</div>
 			</EditLabel>
 			<PhotoAlbum :data="fileArr" @downImage="downImage" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
-	
+
 	</div>
-	
+
 </template>
 
 <script>
@@ -62,7 +62,7 @@ export default{
 			default:false,
 			type:Boolean
 		}
-		
+
     },
     data(){
         return {
@@ -102,7 +102,7 @@ export default{
 		},
 		delImg(index,event){
             let urls = [].concat(this.fileArr);
-            
+
             urls.splice(index,1);
             this.fileArr = [].concat(urls)
 		},
@@ -111,14 +111,14 @@ export default{
 			inputDom.click();
 		},
 		fileChange(event){
-			
+
 			var that = this;
             var file = event.target.files[0];
             if (!file.type.match('image.*')) {
                 return false;
             }
 			that.getUpFileUrl(file);
-				
+
 		},
 		upfile(form,serverUrl){
 			var that  = this;
@@ -141,10 +141,10 @@ export default{
 					if (xhrfile.status === 200) {
 						if (fileResponse && fileResponse.code > 0) {
 							var data = fileResponse.data;
-						
+
 							that.fileArr.push({url:data.url});
 						} else {
-						
+
 						}
 					} else{
 
@@ -195,7 +195,7 @@ export default{
 		},
     }
 }
-	
+
 </script>
 
 <style lang="less" scoped>
@@ -208,7 +208,7 @@ export default{
 	.edit-label{
 		width: 100%;
 	}
-	
+
 	.up-icon{
 		display: inline-block;
 		width: 180px;
@@ -218,16 +218,16 @@ export default{
 		cursor: pointer;
 		vertical-align: middle;
 		line-height: 135px;
-		
+
 		background: #fff;
 		border: 1px dashed #dddee1;
 		border-radius: 4px;
-		
-	
+
+
 		position: relative;
 		overflow: hidden;
 		transition: border-color .2s ease;
-		margin: 30px 30px 10px;        
+		margin: 30px 30px 10px;
         .add-icon{
             width: 38px;
             height: 38px;
@@ -248,19 +248,19 @@ export default{
 	.up-icon:hover{
         border: 1px dashed #2d8cf0;
     }
-    
+
 	.view{
 		display: inline-block;
 		width: auto;
 		height: 135px;
 		text-align: center;
         line-height: 135px;
-		margin: 30px 30px 10px;        
-		
+		margin: 30px 30px 10px;
+
 		// overflow: hidden;
 		background: #fff;
 		position: relative;
-		
+
 		margin-right: 4px;
 		vertical-align: middle;
         position: relative;
@@ -283,11 +283,11 @@ export default{
             background-size:100%;
             border-radius: 50%;
             background-repeat: no-repeat;
-            background-color:#fff; 
+            background-color:#fff;
             cursor: pointer;
 
         }
-	
+
 
 	}
 	.view:hover .view-mask{

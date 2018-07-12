@@ -36,6 +36,10 @@
 
 export default {
      props:{
+        right:{
+           
+            type:String
+        },
         data:{
             default:()=>[],
             type:Array,

@@ -32,7 +32,7 @@
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
                 <div style="display:inline-block;margin-right:26px;">
                     <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
-                    <Select v-model="show" multiple placeholder="请输入显示项" style="width:150px;" clearable>
+                    <Select v-model="show" multiple placeholder="请输入显示项" style="width:150px;" clearable @on-change="changeCount">
                         <Option v-for="item in showList" :value="item.value" :key="item.value">
                             {{ item.label }}
                         </Option>
@@ -52,10 +52,24 @@
             </div>
             <template slot="export" slot-scope="props" style="display:inline-block;">
                 <div class="export" :id="props.id">导出高清图</div>
-                <div class="export" style="width:60px;">配置</div>
+                <div class="export" style="width:60px;" @click="openConfig">配置</div>
             </template>    
       </FloorPlan>
       
+       <Modal
+            width="600"
+            v-model="openTime"
+            class-name="config-tip"
+            title="提示信息的时间配置"
+        >
+            <Configuration 
+              v-if="openTime"
+              @submit="submitConfig"
+              @close="openConfig"
+            />
+            <div slot="footer"></div>
+       </Modal>
+
   </div>
 </template>
 
@@ -67,6 +81,7 @@ import publicFn from './publicFn';
 import Discount from './discount';
 import utils from '~/plugins/utils';
 import Loading from '~/components/Loading';
+import Configuration from './configuration';
 var wrapDom='';
 var mainDom='';
 //点击的dom存进一个数组
@@ -77,10 +92,12 @@ export default {
     SectionTitle,
     SearchForm,
     Discount,
-    Loading
+    Loading,
+    Configuration
   },
   data(){
     return{
+       openTime:false,
        colorLabels:[
         {label:'未租',color:'#BCE590'},
         {label:'在租',color:'#fedc82'},
@@ -97,7 +114,8 @@ export default {
            {value:'FUTURE_OCCUPIED',label:'未来被占用'},
            {value:'FUTURE_AVAILABLE',label:'可预租'}
        ],
-       show:[]   
+       show:[],
+       displayList:''   
     }
   },
   mounted(){
@@ -110,6 +128,14 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
+    submitConfig(forms){
+        this.tabForms=Object.assign({},this.tabForms,forms);
+        this.openConfig();
+        this.getMapData(this.tabForms);
+    },
+    openConfig(){
+        this.openTime=!this.openTime;
+    },
     mainScroll(event){  
         this.scrollTop=event.target.scrollTop;
         if(this.scrollTop==0){
@@ -117,13 +143,21 @@ export default {
         }
         this.isFirstClick=true;
     },
+    changeCount(val){
+        let str='';
+        val.length&&val.map((item,index)=>{
+            str=str?str+','+item:item;
+        })
+        this.displayList=str;
+        console.log('val-99--',this.displayList);
+    },
     //获取数据
     getMapData(values){
         this.isLoading=false;
         values.currentDate=utils.dateCompatible(values.currentDate);
-        values.futureAvlDays=60;
-        values.futureAvlEndDays=30;
-        values.futureOccDays=60;
+        values.futureAvlDays=values.futureAvlDays||60;
+        values.futureAvlEndDays=values.futureAvlEndDays||30;
+        values.futureOccDays=values.futureOccDays||60;
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
            this.canvasData.map((item,index)=>{
@@ -369,4 +403,9 @@ export default {
          vertical-align: middle;
       }
   }
+  .config-tip{
+    .ivu-modal-content{
+        height:340px;
+    }
+   }
 </style>

@@ -19,7 +19,7 @@ function init(data,picProperty,dataUrl){
                 spaceArr.push(item);
             }else{
                 if(item.futureStatus){
-                    item.parentMin=21;
+                    item.parentMin=20;
                     spaceArr.push(item);
                 }            
             }
@@ -53,13 +53,18 @@ function init(data,picProperty,dataUrl){
         if(spaceArr.length){
             minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
             //两行字的高度加上icon的高度
-            let fixed=spaceArr[0].futureStatus?32+21:32;
+            let fixed='';
+            if(spaceArr[0].belongType=='SPACE'){
+                fixed=spaceArr[0].futureStatus?32+42:32;
+            }else{
+                fixed=spaceArr[0].parentMin;
+            }
             minH=fixed/spaceArr[0].cellHeight;
-        
+            
             spaceArr.map((item,index)=>{
                 let fixItem=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    fixItem=item.futureStatus?32+21:32;
+                    fixItem=item.futureStatus?32+42:32;
                 }
                 if((item.parentMin/item.cellWidth)>minW){
                     minW=item.parentMin/item.cellWidth;
@@ -90,7 +95,7 @@ function init(data,picProperty,dataUrl){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
-            list.bgsrc=occupyPic; //list.futureStatus?(list.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            list.bgsrc=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
             //list.status=true;
         })
     }

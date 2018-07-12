@@ -77,11 +77,15 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel,
                 {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:16, height: 16,margin:5,cursor:'pointer'},
+                {width:16, height: 16,margin:5},
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
                     mouseEnter: function (e, node) {
                         let nods={data:node.part.Sd};
+                        //为了解决没有图片问题
+                        if(!nods.data.bgsrc){
+                            return ;
+                        }
                         iconData={e,nods};
                         isIconEnter=true;
                         isIconLeave=false;
@@ -93,6 +97,10 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                         }
                     },
                     mouseLeave: function (e, node) {
+                        //为了解决没有图片问题
+                        if(!iconData.nods.data.bgsrc){
+                            return ;
+                        }
                         if(isIconLeave){
                             return ;
                         }

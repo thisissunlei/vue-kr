@@ -63,7 +63,13 @@ export default {
             })
            
 
-        }
+        },
+        remoteCustomer(query) {
+            this.loading1 = true;
+            setTimeout(() => {
+                this.getCusomerList(query)
+            }, 200);
+        },
     }
 }
 </script>

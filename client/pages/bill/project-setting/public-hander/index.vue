@@ -170,8 +170,10 @@
              actioncheck(){
               this.$http.get('roleActionCheck').then((res)=>{
                   this.isshowButton= res.data.ifShow
-                  this.productShow= res.data.productShow
-                  this.propertyShow= res.data.propertyShow
+                  // this.productShow= res.data.productShow
+                  // this.propertyShow= res.data.propertyShow
+                  this.$route.query.productShow =res.data.productShow+''
+                  this.$route.query.propertyShow =res.data.productShow+''
                   // console.log(this.isshowButton,'actioncheck')
               }).catch((e)=>{
                 console.log(e,"actioncheck")
@@ -189,8 +191,8 @@
             },
             goProjectDetail(){
 
-                this.$route.query.productShow =this.productShow+''
-                this.$route.query.propertyShow =this.propertyShow+''
+                // this.$route.query.productShow =this.productShow+''
+                // this.$route.query.propertyShow =this.propertyShow+''
                 // this.$route.query.propertyShow ="false"
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },

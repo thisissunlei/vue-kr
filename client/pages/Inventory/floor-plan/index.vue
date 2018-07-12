@@ -131,11 +131,18 @@ export default {
      mainDom=document.getElementById('layout-content-main');
      mainDom.addEventListener('scroll',this.mainScroll);
      document.body.addEventListener('click',this.allBodyClick);
+     let store=localStorage.getItem('floor-map-show-select');
      let route=this.$route.query;
-     let str=route.displayList?route.displayList:'';
-     if(str){
-        this.displayList=str;
-        this.show=str.split(',');
+     if(route.displayList){
+         this.displayList=route.displayList;
+         this.show=(route.displayList).split(',');
+     }else if(store){
+         this.show=JSON.parse(store);
+         let str='';
+         this.show.map((item,index)=>{
+             str=str?str+','+item:item
+         })
+         this.displayList=str; 
      }
   },
   destroyed(){
@@ -165,6 +172,7 @@ export default {
             str=str?str+','+item:item;
         })
         this.displayList=str;
+        localStorage.setItem('floor-map-show-select',JSON.stringify(val));
         this.isClickShow=true;
     },
     //获取数据

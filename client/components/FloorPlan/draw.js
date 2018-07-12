@@ -77,7 +77,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel,
                 {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:16, height: 16,margin:5},
+                {width:12, height: 12,margin:5},
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
                     mouseEnter: function (e, node) {

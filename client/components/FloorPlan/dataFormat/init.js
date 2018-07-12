@@ -19,7 +19,7 @@ function init(data,picProperty,dataUrl){
                 spaceArr.push(item);
             }else{
                 if(item.futureStatus){
-                    item.parentMin=20;
+                    item.parentMin=22;
                     spaceArr.push(item);
                 }            
             }
@@ -55,7 +55,7 @@ function init(data,picProperty,dataUrl){
             //两行字的高度加上icon的高度
             let fixed='';
             if(spaceArr[0].belongType=='SPACE'){
-                fixed=spaceArr[0].futureStatus?32+42:32;
+                fixed=spaceArr[0].futureStatus?32+34:32;
             }else{
                 fixed=spaceArr[0].parentMin;
             }
@@ -64,7 +64,7 @@ function init(data,picProperty,dataUrl){
             spaceArr.map((item,index)=>{
                 let fixItem=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    fixItem=item.futureStatus?32+42:32;
+                    fixItem=item.futureStatus?32+34:32;
                 }
                 if((item.parentMin/item.cellWidth)>minW){
                     minW=item.parentMin/item.cellWidth;

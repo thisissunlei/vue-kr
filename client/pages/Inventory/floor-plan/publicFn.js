@@ -65,6 +65,8 @@ function getIconToolTipContent(thatData,discount){
     var width = 225;
     let status=data.item.futureStatus;
     let customerName='';
+    let typeName=data.item.goodsType=='OPEN'?'固定办公桌':'移动办公桌';
+    let nameStr='';
     let inventStatus=data.item.inventStatus;
     let startTime = data.item.futureStart ? dateUtils.dateToStr('YYYY-MM-DD',new Date(data.item.futureStart)) : '';
     let statusName=status=='FUTURE_AVAILABLE'?'<div>可预租：' + startTime + '</div>':'<div>未来被占用：' + startTime + '起</div>';
@@ -72,7 +74,11 @@ function getIconToolTipContent(thatData,discount){
     if((inventStatus=='IN_RENT'||inventStatus=='NOT_EFFECT')&&status=='FUTURE_OCCUPIED'){
         customerName='<div>'+data.item.customerName+'</div>';
     }
+    if(data.item.belongType!='SPACE'){
+        nameStr='<div>'+typeName+':'+data.item.cellName+'</div>';
+    }
     var str = '<div class="content">'+
+                nameStr+
                 statusName+
                 useType+
                 customerName+

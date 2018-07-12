@@ -191,7 +191,7 @@
 
                 this.$route.query.productShow =this.productShow+''
                 this.$route.query.propertyShow =this.propertyShow+''
-                this.$route.query.propertyShow ="false"
+                // this.$route.query.propertyShow ="false"
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
             //获取项目成员

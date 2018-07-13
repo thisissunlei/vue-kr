@@ -143,11 +143,11 @@ export default {
             kmStatusList:[
                 {
                  label:'已上架',
-                 value:'1'   
+                 value:'2'   
                 },
                 {
                  label:'待上架',
-                 value:'2'   
+                 value:'1'   
                 },
                 {
                  label:'未上架',
@@ -193,8 +193,20 @@ export default {
                     key: 'kmPublished',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.kmPublished=='1'?'已上架':'未上架'
-                        return h('span',{},status)
+                        switch(params.row.kmPublished){
+                            case '1':
+                            return h('span',{},'待上架');
+                            break;
+                            case '2':
+                            return h('span',{},'已上架');
+                            break;
+                            case '0':
+                            return h('span',{},'未上架');
+                            break;
+                        }
+                        
+                       
+                        
                     }
                 },
                 {
@@ -258,9 +270,9 @@ export default {
                 '0':'未上架',
             }
             let kmStatu={
-                '1':'已上架',
+                '2':'已上架',
                 '0':'未上架',
-                '2':'待上架'
+                '1':'待上架'
             }
             _this.formItem.appPublishName=appStatus[_this.formItem.appPublished];
             _this.formItem.kmPublishName=kmStatu[_this.formItem.kmPublished];

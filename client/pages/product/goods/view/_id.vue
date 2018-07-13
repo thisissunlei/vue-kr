@@ -120,9 +120,9 @@ export default {
                 '0':'未上架'
             }
             let kmPublished={
-                '1':'已上架',
+                '2':'已上架',
                 '0':'未上架',
-                '2':'待上架'
+                '1':'待上架'
             }
             let communityStatus={
                 '1':'已开业',

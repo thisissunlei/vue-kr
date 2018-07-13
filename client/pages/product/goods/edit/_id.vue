@@ -89,10 +89,10 @@
                 <DetailStyle info="小程序社区商品信息">
                      <FormItem label="上架状态" class="u-input" style="width:250px" prop="kmPublished">
                             <RadioGroup v-model="formItem.kmPublished" style="width:250px">
-                                <Radio label="1">
+                                <Radio label="2">
                                     已上架
                                 </Radio>
-                                 <Radio label="2">
+                                 <Radio label="1">
                                     待上架
                                 </Radio>
                                 <Radio label="0">

@@ -8,11 +8,14 @@
                 </Select>
             </div>
             <div class='community-overview'>
-                <FeeOverView></FeeOverView>
+                <!-- <FeeOverView></FeeOverView> -->
             </div>
 
             <div class="order-info-list">
-                <OrderInfo></OrderInfo>
+                <!-- <OrderInfo></OrderInfo> -->
+            </div>
+            <div class="set-fee-info-list">
+                <SetFeeDetail></SetFeeDetail>
             </div>
         </div>
     </div>
@@ -21,12 +24,14 @@
 <script>
 import utils from '~/plugins/utils';
 import OrderInfo from './orderInfo.vue';
-import FeeOverView from './feeOverview.vue'
+import FeeOverView from './feeOverview.vue';
+import SetFeeDetail from './setFeeDetail.vue'
 
 export default {
     components: {
         OrderInfo,
-        FeeOverView
+        FeeOverView,
+        SetFeeDetail
     },
     data() {
         return {

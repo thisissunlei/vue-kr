@@ -4,10 +4,19 @@
             <span class='order-number'>{{nunber}}</span>
             <span class='order-amount'>{{amount}}</span>
         </div>
-        <div class='order-fees-stages'>
-            <!-- <Table border :columns="feesStagesColumns" :data="feesStagesDatas"></Table> -->
+        <div class='bill-table order-fees-stages '>
+            <div class='stages-header'>
+                <div class='right'>已付信息</div>
+                <div class='left'>费用信息</div>
+            </div>
+            <Table border :columns="feesStagesColumns" :data="feesStagesDatas"></Table>
         </div>
-        <div class='order-fees-bill'>
+        <div class='bill-table order-fees-bill'>
+            <div class='stages-header bill-header'>
+                <div class='right2'>欠款信息</div>
+                <div class='right1'>已付信息</div>
+                <div class='left'>费用信息</div>
+            </div>
             <Table border :columns="billDetailColumns" :data="billDetailData"></Table>
         </div>
     </div>
@@ -17,10 +26,150 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 export default {
     data() {
+        const statusWidth = 90
+        const amountWidth = 130
         return {
             nunber: '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
             amount: '¥' + utils.thousand((1200000).toFixed(2)),
-
+            feesStagesColumns: [
+                {
+                    title: '分期数',
+                    align: 'center',
+                    key: 'stage',
+                    width: 85,
+                },
+                {
+                    title: '工位/房间明细',
+                    align: 'center',
+                    key: 'seatRoom'
+                },
+                {
+                    title: '费用项',
+                    align: 'center',
+                    key: 'feeTypeName'
+                },
+                {
+                    title: '费用期间',
+                    align: 'center',
+                    key: 'feePeroid',
+                    render(h, params) {
+                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate)) + '  至  ' + dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate));
+                        return h('span', time)
+                    }
+                },
+                {
+                    title: '最晚付款日',
+                    align: 'center',
+                    key: 'latestPayDay',
+                    render(h, params) {
+                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.latestPayDay))
+                        return h('span', time)
+                    }
+                },
+                {
+                    title: '费用金额',
+                    align: 'center',
+                    key: 'needPaid',
+                    className: "colPadRight",
+                    render: (h, params) => {
+                        if (params.row.needPaid) {
+                            let amount = utils.thousand((params.row.needPaid).toFixed(2))
+                            return h('div', '¥' + amount)
+                        }
+                    }
+                },
+                {
+                    title: '相关订单',
+                    align: 'center',
+                    key: 'orderNum',
+                    render: (h, params) => {
+                        if (params.row.orderNum) {
+                            return h(
+                                'span',
+                                {
+                                    style: {
+                                        color: '#2b85e4',
+                                        cursor: 'pointer'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jump2OrderDetail(params.row.id)
+                                        }
+                                    }
+                                },
+                                params.row.orderNum)
+                        }
+                        else {
+                            return h('span', '-')
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    key: 'operate',
+                    render: (h, params) => {
+                        if (params.row.orderNum) {
+                            return h(
+                                'span',
+                                {
+                                    style: {
+                                        color: '#2b85e4',
+                                        cursor: 'pointer'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jump2CalDetail(params.row.id)
+                                        }
+                                    }
+                                },
+                                '计算明细')
+                        }
+                        else {
+                            return h('span', '-')
+                        }
+                    }
+                },
+                {
+                    title: '已付金额',
+                    align: 'center',
+                    key: 'paid',
+                    width: amountWidth,
+                    className: "colPadRight amount",
+                    render: (h, params) => {
+                        if (params.row.paid && params.row.needPaid) {
+                            let amount = utils.thousand((params.row.paid).toFixed(2))
+                            let obj = { clear: false }
+                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                                obj.clear = true
+                            }
+                            return h('div', { 'class': obj }, '¥' + amount)
+                        }
+                    }
+                },
+                {
+                    title: '支付状态',
+                    align: 'center',
+                    key: 'paid',
+                    width: statusWidth,
+                    className: "colPadRight amount",
+                    render: (h, params) => {
+                        let str = '未付清'
+                        let obj = { clear: false }
+                        if (params.row.needPaid && params.row.paid) {
+                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                                str = '已付清'
+                                obj.clear = true
+                            }
+                            else if (Number(params.row.needPaid) > Number(params.row.paid)) {
+                                str = '未付清'
+                            }
+                        }
+                        return h('div', { 'class': obj }, str)
+                    }
+                },
+            ],
+            feesStagesDatas: [],
             billDetailColumns: [
                 {
                     title: '账单类型—编号',
@@ -64,38 +213,46 @@ export default {
                     key: 'needPaid',
                     className: "colPadRight",
                     render: (h, params) => {
-                        let amount = utils.thousand((params.row.needPaid).toFixed(2))
-                        return h('div', '¥' + amount)
+                        if (params.row.needPaid) {
+                            let amount = utils.thousand((params.row.needPaid).toFixed(2))
+                            return h('div', '¥' + amount)
+                        }
                     }
                 },
                 {
                     title: '已付金额',
                     align: 'center',
                     key: 'paid',
+                    width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        let amount = utils.thousand((params.row.paid).toFixed(2))
-                        let obj = { clear: false }
-                        if (Number(params.row.needPaid) === Number(params.row.paid)) {
-                            obj.clear = true
+                        if (params.row.paid && params.row.needPaid) {
+                            let amount = utils.thousand((params.row.paid).toFixed(2))
+                            let obj = { clear: false }
+                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                                obj.clear = true
+                            }
+                            return h('div', { 'class': obj }, '¥' + amount)
                         }
-                        return h('div', { 'class': obj },'¥' + amount)
                     }
                 },
                 {
                     title: '支付状态',
                     align: 'center',
                     key: 'paid',
+                    width: statusWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        let str = ''
+                        let str = '未付清'
                         let obj = { clear: false }
-                        if (Number(params.row.needPaid) === Number(params.row.paid)) {
-                            str = '已付清'
-                            obj.clear = true
-                        }
-                        else if (Number(params.row.needPaid) > Number(params.row.paid)) {
-                            str = '未付清'
+                        if (params.row.needPaid && params.row.paid) {
+                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                                str = '已付清'
+                                obj.clear = true
+                            }
+                            else if (Number(params.row.needPaid) > Number(params.row.paid)) {
+                                str = '未付清'
+                            }
                         }
                         return h('div', { 'class': obj }, str)
                     }
@@ -104,6 +261,7 @@ export default {
                     title: '欠款额',
                     align: 'center',
                     key: 'unpaid',
+                    width: amountWidth,
                     className: "colPadRight",
                     render: (h, params) => {
                         if (params.row.unpaid) {
@@ -116,54 +274,59 @@ export default {
                     title: '欠款天数',
                     align: 'center',
                     key: 'unpaidDays',
+                    width: statusWidth,
                     className: "colPadRight",
                 },
             ],
-            feesStagesDatas: [],
             billDetailData: [],
-
 
             feesStagesDatasDemo: [
                 {
                     stage: '第1期',
                     seatRoom: '03001—03004,03006,301—304,306',
-                    detailList: [
-                        {
-                            feeTypeName: '服务保证金',
-                            feePeroid: '2018.01.01至2018.12.31',
-                            latestPayDay: '2018.01.01',
-                            feeAmount: 31234,
-                            orderNum: '减租—DD0318020101010001',
-                            hasPay: 12390,
-                            payStaus: '已支付'
-                        },
-                        {
-                            feeTypeName: '工位服务费',
-                            feePeroid: '2018.01.01至2018.12.31',
-                            latestPayDay: '2018.01.01',
-                            feeAmount: 557567,
-                            orderNum: '-',
-                            hasPay: 677,
-                            payStaus: '未付清'
-                        },
-                    ]
+                    feeTypeName: '服务保证金',
+                    startDate: 1531886394915,
+                    endDate: 1531486374915,
+                    latestPayDay: 1531486394715,
+                    needPaid: 31234,
+                    orderNum: '减租—DD0318020101010001',
+                    paid: 31234,
+                    payStaus: '已支付'
                 },
                 {
                     stage: '第2期',
                     seatRoom: '03001—03004,03006,301—304,306',
-                    detailList: [
-                        {
-                            feeTypeName: '工位服务费',
-                            feePeroid: '2018.01.01至2018.12.31',
-                            latestPayDay: '2018.01.01',
-                            feeAmount: 557567,
-                            orderNum: '-',
-                            hasPay: 677,
-                            payStaus: '未付清'
-                        },
-                    ]
+                    feeTypeName: '服务保证金',
+                    startDate: 1531436394915,
+                    endDate: 1531486594915,
+                    latestPayDay: 1531786394915,
+                    needPaid: 31234,
+                    orderNum: '',
+                    paid: 12390,
+                    payStaus: '已支付'
+                },
+                {
+                    stage: '第3期',
+                    seatRoom: '03001—03004,03006,301—304,306',
+                    feeTypeName: '服务保证金',
+                    startDate: 1531486374915,
+                    endDate: 1531486894915,
+                    latestPayDay: 1551486394915,
+                    needPaid: 31234,
+                    orderNum: '减租—DD0318020101010001',
+                    paid: 12390,
+                    payStaus: '已支付'
+                },
+                {
+                    stage: '第4期',
+                    seatRoom: '03001—03004,03006,301—304,306',
+                    feeTypeName: '服务保证金',
+                    startDate: 1531486374915,
+                    endDate: 1531486894915,
+                    latestPayDay: 1551486394915,
+                    needPaid: 31234,
+                    payStaus: '已支付'
                 }
-
             ],
             billDetailDataDemo: [
                 {
@@ -223,46 +386,57 @@ export default {
             color: red;
         }
     }
-    .order-fees-stages {
+
+    .bill-table {
         margin-bottom: 20px;
-        .table-column-special {
-            @rowHeight: 38px;
-            .ivu-table-cell {
-                padding-left: 0;
-                padding-right: 0;
-                div {
-                    display: flex;
-                    flex-direction: column;
-                    div {
-                        height: @rowHeight;
-                        line-height: @rowHeight;
-                        flex: 1;
-                        display: inline-block;
-                        width: 100%;
-                        border-bottom: 1px solid rgb(215, 215, 215);
-                        &::after {
-                            content: "--";
-                            opacity: 0;
-                            user-select: none;
-                        }
-                    }
-                    div:last-child {
-                        border: none;
-                    }
-                }
+        @headerWidth: 40px;
+        .stages-header {
+            width: 100%;
+            height: @headerWidth;
+            line-height: @headerWidth;
+            background-color: #f8f8f9;
+            border: 1px solid #e9eaec;
+            border-bottom: none;
+            text-align: center;
+            color: #495060;
+            font-size: 12px;
+            font-weight: 700;
+            .left {
+                width: 100%;
+                border: none;
+                padding-right: 220px;
+            }
+            .right {
+                float: right;
+                top: 0;
+                width: 220px;
+                border: none;
+                border-left: 1px solid #e9eaec;
             }
         }
-        .feeAmount,
-        .hasPay {
-            text-align: right;
+        .bill-header {
+            .left {
+                padding-right: 440px;
+                border: none;
+            }
+            .right1 {
+                float: right;
+                width: 220px;
+                border: none;
+                border-left: 1px solid #e9eaec;
+            }
+            .right2 {
+                float: right;
+                width: 220px;
+                border: none;
+                border-left: 1px solid #e9eaec;
+            }
         }
-    }
-    .order-fees-bill {
-        margin-bottom: 20px;
         .colPadRight {
             .ivu-table-cell {
                 text-align: right;
                 padding-right: 5px;
+                padding-left: 5px;
             }
         }
         .amount {
@@ -270,8 +444,8 @@ export default {
                 div {
                     color: red;
                 }
-                .clear{
-                    color: #2E8E00;
+                .clear {
+                    color: #2e8e00;
                 }
             }
         }

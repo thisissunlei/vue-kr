@@ -186,11 +186,7 @@ export default {
 </script>
 <style lang="less">
 .fee-overview-container {
-    width: 1120px;
-    .deposit-cash {
-        float: right;
-        width: 550px;
-    }
+    width: 1200px;
     .service-charge {
         width: 500px;
         display: inline-block;
@@ -215,6 +211,10 @@ export default {
                 color: red;
             }
         }
+    }
+    .deposit-cash {
+        float: right;
+        width: 600px;
     }
 }
 </style>

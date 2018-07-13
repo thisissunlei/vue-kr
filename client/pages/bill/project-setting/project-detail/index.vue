@@ -153,8 +153,8 @@ export default {
     },
     data(){
         return{
-            propertyShow:  this.$route.query.propertyShow==='true'?true:false,
-            productShow:  this.$route.query.productShow==='true'?true:false,
+            propertyShow:false,//  this.$route.query.propertyShow==='true'?true:false,
+            productShow:false,//  this.$route.query.productShow==='true'?true:false,
             projectid:this.$route.query.id,
             name: this.$route.query.name,
             city: this.$route.query.city,
@@ -188,7 +188,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:this.$route.query.propertyShow ==='true'?"property":"product",
+            activeTab:"", //this.$route.query.propertyShow ==='true'?"property":"product",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -220,8 +220,8 @@ export default {
     },
     created(){
         this.queryData=this.$route.query;
-        // this.actioncheck()
-        console.log(this.propertyShow,this.productShow,"-----")
+        this.actioncheck();
+
     },
     mounted(){
 
@@ -252,17 +252,14 @@ export default {
     methods:{
        actioncheck(){
               this.$http.get('roleActionCheck').then((res)=>{
-                  // this.isshowButton= res.data.ifShow
-                  // this.productShow= res.data.productShow
-                  // this.propertyShow= res.data.propertyShow
+           
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
 
-                  // this.activeTab =this.propertyShow ?"property":"product";
-                  console.log(this.activeTab,"this.activeTab")
-                  // this.$route.query.productShow =res.data.productShow+''
-                  // this.$route.query.propertyShow =res.data.productShow+''
-                  // console.log(this.isshowButton,'actioncheck')
+                  this.activeTab =this.propertyShow ?"property":"product";
+          
               }).catch((e)=>{
-                // console.log(e,"actioncheck")
+      
 
               })
           },

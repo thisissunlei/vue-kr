@@ -248,7 +248,7 @@ export default {
     allBodyClick(){
         if(this.isClickShow){
             this.isClickShow=false;
-            utils.addParams({displayList:this.displayList});
+            this.$router.push({path:'/inventory/floor-plan',query:{displayList:this.displayList}})
         }
     },
     bodyClick(event){

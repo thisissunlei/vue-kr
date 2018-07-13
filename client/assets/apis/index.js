@@ -17,7 +17,7 @@ import Krmeeting from "./krmeeting.js";
 import DoorRelationship from "./doorRelationship.js";
 import KrmeetingRoom from "./krmeetingRoom.js";
 import ProductGoods from './productGoods.js';
-import comment from './comment';
+import comment from './comment.js';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
 
@@ -42,7 +42,6 @@ export default {
   ...KrmeetingRoom,
   ...ProductGoods,
   ...comment,
-  ...ProductGoods,
   ...DevTool,
   ...FinancialtransferApply
 }

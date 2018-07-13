@@ -4,7 +4,7 @@
             <Button  type="default" v-if="isDeletePermission" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px"  @click="switchDelete">终止该项目</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="openProject" >项目成员</Button>
             <Button  type="default" style="color:#4F9EED;border:1px solid #4F9EED;background-color:#fff;margin-left:10px" @click="watchTask">查看编辑纪录</Button>
-            <Button type="primary" style="margin-left:10px;margin-right:20px" @click="goProjectDetail" v-if="isComment">编辑档案</Button>
+            <Button type="primary" style="margin-left:10px;margin-right:20px" @click.stop.prevent="goProjectDetail" v-if="isComment && isshowButton">编辑档案</Button>
         </div>
 
         <div class='title-left'>
@@ -31,7 +31,7 @@
                         :key="index"
                     >
                         <label
-                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;float:left;padding-top:2px"
+                            style="width:100px;display:inline-block;text-align:right;padding-right:3px;"
                         >
                             {{item.displayName}}
                         </label>
@@ -50,7 +50,7 @@
 
             v-model="openWatch"
             title="查看记录"
-            width="700"
+            width="660"
         >
                 <WatchRecord
                     v-if="openWatch"
@@ -113,6 +113,9 @@
         data(){
             return {
                 //编辑记录开关
+                isshowButton:true,
+                productShow:true,
+                propertyShow:true,
                 isDeletePermission:false,
                 openWatch:false,
                 modalProject:false,
@@ -143,9 +146,12 @@
         created(){
             this.queryData=this.$route.query;
 
+
+
         },
         mounted() {
             //  this.memberDetailList();
+               this.actioncheck();
              this.getDeletePermission();
         },
         methods:{
@@ -156,8 +162,21 @@
           getDeletePermission(){
               this.$http.get('get-delete-permission',{id:this.projectId}).then((res)=>{
                   this.isDeletePermission= res.data
-                  console.log(this.isDeletePermission)
+                  // console.log(this.isDeletePermission)
               }).catch((e)=>{
+
+              })
+          },
+             actioncheck(){
+              this.$http.get('roleActionCheck').then((res)=>{
+                  this.isshowButton= res.data.ifShow
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
+                  // this.$route.query.productShow =res.data.productShow+''
+                  // this.$route.query.propertyShow =res.data.productShow+''
+                  // console.log(this.isshowButton,'actioncheck')
+              }).catch((e)=>{
+                console.log(e,"actioncheck")
 
               })
           },
@@ -172,8 +191,10 @@
             },
             goProjectDetail(){
 
-
-                this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
+                // this.$route.query.productShow =this.productShow+''
+                // this.$route.query.propertyShow =this.propertyShow+''
+                // this.$route.query.propertyShow ="false"
+                this.$router.push({path:'/bill/project-setting/project-detail',query:{name:this.$route.query.name,id:this.$route.query.id,city:this.$route.query.city,status:this.$route.query.status}}) //,productShow:this.productShow+'',propertyShow:this.propertyShow+''
             },
             //获取项目成员
             memberDetailList(val){
@@ -270,8 +291,10 @@
                 }).then((response)=>{
 
                 this.switchDelete();
-                    window.close();
-                    window.opener.location.reload();
+
+                    // window.close();
+                    // // window.opener.location.reload();
+                    this.$router.push('/bill/project-setting')
                 }).catch((error)=>{
                     this.MessageType="error";
                     this.openMessage=true;
@@ -287,7 +310,7 @@
 
     }
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 .public-title{
     height: 90px;
     line-height: 90px;

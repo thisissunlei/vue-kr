@@ -31,7 +31,7 @@
                 </div>
                 <!-- <span class="close-btn " @click="close"></span> -->
                 <!-- <iframe height="0" width="0" :src="data[urlIndex].fieldUrl" name="saveImage" id="saveImage"></iframe> -->
-                <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">{{downLabel}}</Button>
+                <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">下载原图</Button>
                 <div v-if="!ifDelete" class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
                 <div v-if="ifDelete" class="down-img close-img" style="left: 65%;"   @click="deleteImg(data[urlIndex].id)" type="ghost">删除</div>
             </div>
@@ -56,11 +56,7 @@ export default {
             default:0,
             type:Number
         },
-        ifDelete:Boolean,
-        downLabel:{
-            type:String,
-            default:'下载原图'
-        }
+        ifDelete:Boolean
         
     },
     data(){
@@ -128,7 +124,7 @@ export default {
         background: #fff;
         line-height: 36px;
         border-radius: 4px;
-        // box-shadow: 0 1px 6px rgba(0,0,0,.2), 0 1px 4px rgba(0,0,0,.2);
+        box-shadow: 0 1px 6px rgba(0,0,0,.2), 0 1px 4px rgba(0,0,0,.2);
     }
     .close-btn{
         position: absolute;

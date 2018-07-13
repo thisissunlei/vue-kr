@@ -33,24 +33,17 @@ export default {
     methods:{
         getData(){
             this.$http.get('get-operations-list',{}, r => {
-                console.log(r,"lllll",r.data.items)
+               
                 let data = {};
                 r.data.items.map((item,index)=>{
-                    if(data[item.type]){
-                        data[item.type].push(item);
+                    if(data[item.name]){
+                        data[item.name].push(item);
                     }else{
-                        data[item.type] = [item];
+                        data[item.name] = [item];
                     }
                    
                 })
                 this.data = Object.assign({},data);
-                 console.log(data,"0pppppppp")
-                // let detail = [];
-                // let attName = this.priceTypes[this.type].resAttName
-                // r.data.items.map(item => detail.push(item[attName]))
-                // this.detail = [].concat(detail);
-                // this.totalCount = r.data.totalCount
-                // this.$Spin.hide();
             }, e => {
                 this.$Notice.error({
                     title: e.message

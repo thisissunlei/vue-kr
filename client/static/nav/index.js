@@ -283,13 +283,15 @@
             return '';
         }
         var router = getRouter();
-       
+        var nowRouter = router.split('.krspace.cn')[1];
+        activeStr = JSON.stringify(navUtils.activeData);
+        console.log(nowRouter,"oooooooo")
         
-
+        var otherActive = 500;
         navs.map(function (item, index) {
             var href = "";
             // var sideFoldFlag = false;
-
+           
 
             if (item.childList && item.childList.length) {
                 href = item.childList[0].childList[0].url;
@@ -299,17 +301,20 @@
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
-                more += '<li  class=' + (router.indexOf(href)!=-1? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+                if(activeStr.indexOf(nowRouter)!=-1){
+                    otherActive = "bold";
+                }
+                more += '<li  class=' + (activeStr.indexOf(nowRouter)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
                 return;
             }
-            html += '<li class=' + (router.indexOf(href)!=-1? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li class=' + (activeStr.indexOf(nowRouter)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {
             more += '</ul>';
             html +=
                 '<li id="'+moreId+'" class="more-name-li">' +
-                    '<span>更多</span>' +
+                    '<span style="font-weight:'+otherActive+';">更多</span>' +
                     '<div class="more-nav" id="more-next"><p></p>' + more + '</div>'
                 '</li>' +
                 '</ul>';

@@ -129,12 +129,9 @@ export default {
                 '0':'未开业'
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
-                let data=Object.assign({},res.data)
-                let appPublished=toString(res.data.appPublished)
-                let kmPublished=toString(res.data.kmPublished);
-                data.appPublished=appPublish[appPublished];
-                data.kmPublished=kmPublished[kmPublished];
-                
+                let data=Object.assign({},res.data);
+                data.appPublished=appPublish[res.data.appPublished];
+                data.kmPublished=kmPublished[res.data.kmPublished];
                 data.communityStatus=communityStatus[res.data.communityStatus];
                 this.goodsInfo = data;
                 

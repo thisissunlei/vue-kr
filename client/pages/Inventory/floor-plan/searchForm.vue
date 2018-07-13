@@ -26,6 +26,7 @@
                         placeholder="请输入楼层" 
                         style="width: 90px;margin-right:54px;"
                         filterable
+                        label-in-value
                         @on-change="floorChange"
                     >
                         <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
@@ -122,7 +123,9 @@ export default {
         this.getFloorList(param); 
     },
     floorChange(param){
-        this.$emit('searchForm',this.formItem);
+        if(typeof param=='object'){
+           this.$emit('searchForm',this.formItem); 
+        }
     },
     dateChange(param){
         this.formItem.currentDate=param;

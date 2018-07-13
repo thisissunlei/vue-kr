@@ -299,10 +299,10 @@
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
-                more += '<li  class=' + (router == href ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+                more += '<li  class=' + (router.indexOf(href)!=-1? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
                 return;
             }
-            html += '<li class=' + (router == href ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li class=' + (router.indexOf(href)!=-1? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {

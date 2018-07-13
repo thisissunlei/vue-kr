@@ -292,7 +292,7 @@ export default {
 
                this.switchDelete();
                 window.close();
-                window.location.reload();
+                // window.location.reload();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

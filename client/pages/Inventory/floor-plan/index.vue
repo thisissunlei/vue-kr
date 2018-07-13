@@ -9,7 +9,7 @@
            @countChange="countChange"
           />
       </div>
-
+      
       <Loading v-if="!isLoading"/>
       
       <FloorPlan
@@ -248,7 +248,8 @@ export default {
     allBodyClick(){
         if(this.isClickShow){
             this.isClickShow=false;
-            this.$router.push({path:'/inventory/floor-plan',query:{displayList:this.displayList}})
+            this.$router.replace({path:'/inventory/floor-plan',query:{displayList:this.displayList}});
+            //utils.addParams({displayList:this.displayList})
         }
     },
     bodyClick(event){

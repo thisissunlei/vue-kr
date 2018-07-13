@@ -61,26 +61,23 @@ function getToolTipContent(thatData,param,time) {
     var data = Object.assign({}, thatData);
     if(param=='NOT_EFFECT'){
         label='合同未生效';
-        if(!data.realEnd&&!data.realStart){
-            width=100;
-        }
     }else if(param=='IN_RENT'){
         label='在租';
         width=240;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
-        if(!data.realEnd||!data.realStart){
+        if(!data.realEnd&&!data.realStart){
+            width=60;
+        }else if(!data.realEnd||!data.realStart){
             width=168;
-        }else if(!data.realEnd&&!data.realStart){
-            width=100;
         }else{
             width=240;
         }
         label="未租";
     }else if(param=='OFF'||(thatData.status=='OFF'&&param=='2')){
-        if(!data.realEnd||!data.realStart){
+        if(!data.realEnd&&!data.realStart){
+            width=60;
+        }else if(!data.realEnd||!data.realStart){
             width=168;
-        }else if(!data.realEnd&&!data.realStart){
-            width=100;
         }else{
             width=240;
         }
@@ -88,6 +85,9 @@ function getToolTipContent(thatData,param,time) {
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
         width = 185;
+        if(!data.realEnd&&!data.realStart){
+            width=100;
+        }
     }
         var startDay = data.realStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realStart)) :'-';
         var endDay = data.realEnd ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realEnd)) :'-';

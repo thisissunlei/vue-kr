@@ -15,7 +15,7 @@
                 <span  style="color:#499DF1;font-size:14px;cursor:pointer;" @click="goback" > {{name}}</span>
             </div>
         </div>
-        
+
         <!-- 项目成员弹窗 -->
         <Modal v-model="modalProject" title="项目成员" width=700>
             <div slot='footer'>
@@ -170,8 +170,8 @@
              actioncheck(){
               this.$http.get('roleActionCheck').then((res)=>{
                   this.isshowButton= res.data.ifShow
-                  // this.productShow= res.data.productShow
-                  // this.propertyShow= res.data.propertyShow
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
                   // this.$route.query.productShow =res.data.productShow+''
                   // this.$route.query.propertyShow =res.data.productShow+''
                   // console.log(this.isshowButton,'actioncheck')
@@ -191,8 +191,8 @@
             },
             goProjectDetail(){
 
-                // this.$route.query.productShow =this.productShow+''
-                // this.$route.query.propertyShow =this.propertyShow+''
+                this.$route.query.productShow =this.productShow+''
+                this.$route.query.propertyShow =this.propertyShow+''
                 // this.$route.query.propertyShow ="false"
                 this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
             },
@@ -292,7 +292,7 @@
 
                 this.switchDelete();
                     window.close();
-                    window.location.reload();
+                    window.opener.location.reload();
                 }).catch((error)=>{
                     this.MessageType="error";
                     this.openMessage=true;
@@ -308,7 +308,7 @@
 
     }
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 .public-title{
     height: 90px;
     line-height: 90px;

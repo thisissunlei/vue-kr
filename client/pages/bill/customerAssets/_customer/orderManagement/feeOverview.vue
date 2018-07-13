@@ -1,5 +1,6 @@
 <template>
-    <div class='fee-overview-container'>
+    <div class='fee-overview-container' id='fee-overview-container'>
+        <div id='merge-header'></div>
         <Table border :row-class-name="rowClassName" :columns="columns" :data="dataList"></Table>
     </div>
 </template>
@@ -20,11 +21,13 @@ export default {
                     title: '社区',
                     key: 'communityName',
                     align: 'center',
+                    className:"merge"
                 },
                 {
                     title: '费用类型',
                     key: 'feeTypeName',
                     align: 'center',
+                     className:"merge",
                     render: (h, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -37,6 +40,7 @@ export default {
                     title: '应交金额',
                     key: 'amountShould',
                     align: 'center',
+                     className:"merge",
                     render: (h, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -50,6 +54,7 @@ export default {
                     title: '已交金额',
                     key: 'amountHas',
                     align: 'center',
+                    
                     render: (h, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -63,6 +68,7 @@ export default {
                     title: '未交金额',
                     key: 'amountNo',
                     align: 'center',
+                    
                     render: (h, params) => {
                         let lines = [];
                         params.row.detailList.map(item => {
@@ -125,8 +131,15 @@ export default {
     
     mounted() {
         this.formatData();
+        this.mergeHeader();
     },
     methods: {
+        mergeHeader()
+        {
+            let columns2Merge=document.querySelectorAll('#fee-overview-container .merge')
+            [].Foreach.call(columns2Merge)
+            console.log(columns2Merge)
+        },
         formatData() {
             this.dataDemo.map(item => {
                 if (item.detailList.length > 1) {

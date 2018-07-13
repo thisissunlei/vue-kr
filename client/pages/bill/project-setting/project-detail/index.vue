@@ -232,9 +232,8 @@ export default {
         this.$nextTick(()=>{
           //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
           setTimeout(()=>{
-                    let div1 = document.getElementsByClassName("ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused")[0]
-                    let div2 = document.getElementsByClassName("ivu-tabs-ink-bar")[0]
-
+                      let div1 = document.querySelectorAll(".edit-left-bar .ivu-tabs-tab-active")[0]
+                    let div2 = document.querySelectorAll(".edit-left-bar .ivu-tabs-ink-bar")[0]
                   if(!this.propertyShow || !this.productShow){
 
                     div1.style.width ='100%'

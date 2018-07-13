@@ -60,19 +60,18 @@ export default {
                 this.getCusomerList(query)
             }, 200);
         },
-
         getCusomerList: function (name) {
             let params = {
-                company: name || ''
+                companyName: name || ''
             }
             let list = [];
             let _this = this;
-            http.get('get-customer', params, r => {
-                list = r.data.customerList;
+            http.get('get-customer-manage', params, r => {
+                list = r.data;
                 list.map((item) => {
                     let obj = item;
-                    obj.label = item.company;
-                    obj.value = item.id + '';
+                    obj.label = item.companyName;
+                    obj.value = item.csrId + '';
                     return obj;
                 });
                 _this.loading1 = false;

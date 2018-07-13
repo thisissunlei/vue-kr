@@ -391,7 +391,7 @@ import PdfDownload from './pdfDownload';
                 this.openMessage=data;
             },
             lowerSubmit(){
-                let customerName=this.tabParams.customerName;
+                let customerName=this.tabParams.customerName || '';
                 this.page=1;
                 this.tabParams={
                     page:1,

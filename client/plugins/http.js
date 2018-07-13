@@ -15,6 +15,7 @@ axios.defaults.mode = 'cors';
 
 
 axios.interceptors.request.use(config => {
+  // console.log(config,"=====")
   if(config.method  == 'post' || config.method  == 'put'){
     if(!config.data.isPut){
       let data = Qs.stringify(config.data);
@@ -22,6 +23,8 @@ axios.interceptors.request.use(config => {
     }else{
       delete config.data.isPut;
     }
+   
+   
   }
   if(config.url.indexOf('mockjs ') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';

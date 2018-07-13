@@ -65,14 +65,14 @@ function getToolTipContent(thatData,param,time) {
         label='在租';
         width=240;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
-        if(!data.endDate){
+        if(!data.realEnd){
             width=168;
         }else{
             width=240;
         }
         label="未租";
     }else if(param=='OFF'||(thatData.status=='OFF'&&param=='2')){
-        if(!data.endDate){
+        if(!data.realEnd){
             width=168;
         }else{
             width=240;
@@ -82,8 +82,8 @@ function getToolTipContent(thatData,param,time) {
         label="不可用";
         width = 185;
     }
-        var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) :time.startTime;
-        var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) :'-';
+        var startDay = data.realStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realStart)) :time.startTime;
+        var endDay = data.realEnd ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realEnd)) :'-';
         var str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
         if(data.customerVOs&&data.customerVOs.length){
             str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
@@ -93,7 +93,7 @@ function getToolTipContent(thatData,param,time) {
         }else{
             str += '<div class="title" style="margin-left:5px;">' + label + '</div>';
         }    
-
+        
     return {
         str: str,
         width: width

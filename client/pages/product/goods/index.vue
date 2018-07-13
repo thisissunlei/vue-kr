@@ -194,13 +194,13 @@ export default {
                     align:'center',
                     render:(h,params)=>{
                         switch(params.row.kmPublished){
-                            case '1':
+                            case 1:
                             return h('span',{},'待上架');
                             break;
-                            case '2':
+                            case 2:
                             return h('span',{},'已上架');
                             break;
-                            case '0':
+                            case 0:
                             return h('span',{},'未上架');
                             break;
                         }

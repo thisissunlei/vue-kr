@@ -39,7 +39,7 @@
             </DetailStyle>
             <DetailStyle info="APP社区商品信息">
                 <LabelText label="上架状态：">
-                   {{goodsInfo.appPublished?goodsInfo.appPublished:'未上架'}}
+                   {{goodsInfo.appPublished}}
                 </LabelText>
                 <LabelText label="已上架会议室商品数量：">
                     {{goodsInfo.appRoomNum}}
@@ -50,7 +50,7 @@
             </DetailStyle>
             <DetailStyle info="小程序社区商品信息">
                 <LabelText label="上架状态：">
-                    {{goodsInfo.kmPublished?goodsInfo.kmPublished:'未上架'}}
+                    {{goodsInfo.kmPublished}}
                 </LabelText>
                 <LabelText label="社区折扣策略：">
                     {{goodsInfo.promotionDesc?goodsInfo.promotionDesc:'-'}}

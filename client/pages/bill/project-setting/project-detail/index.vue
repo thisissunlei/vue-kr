@@ -144,7 +144,6 @@ export default {
         EditTask,
         WatchRecord,
         DetailTaskList,
-        GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,

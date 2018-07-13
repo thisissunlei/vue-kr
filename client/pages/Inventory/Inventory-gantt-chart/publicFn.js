@@ -61,19 +61,26 @@ function getToolTipContent(thatData,param,time) {
     var data = Object.assign({}, thatData);
     if(param=='NOT_EFFECT'){
         label='合同未生效';
+        if(!data.realEnd&&!data.realStart){
+            width=100;
+        }
     }else if(param=='IN_RENT'){
         label='在租';
         width=240;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
-        if(!data.realEnd){
+        if(!data.realEnd||!data.realStart){
             width=168;
+        }else if(!data.realEnd&&!data.realStart){
+            width=100;
         }else{
             width=240;
         }
         label="未租";
     }else if(param=='OFF'||(thatData.status=='OFF'&&param=='2')){
-        if(!data.realEnd){
+        if(!data.realEnd||!data.realStart){
             width=168;
+        }else if(!data.realEnd&&!data.realStart){
+            width=100;
         }else{
             width=240;
         }
@@ -82,9 +89,12 @@ function getToolTipContent(thatData,param,time) {
         label="不可用";
         width = 185;
     }
-        var startDay = data.realStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realStart)) :time.startTime;
+        var startDay = data.realStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realStart)) :'-';
         var endDay = data.realEnd ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realEnd)) :'-';
-        var str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        var str='';
+        if(data.realStart||data.realEnd){
+            str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        }  
         if(data.customerVOs&&data.customerVOs.length){
             str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
             data.customerVOs.map((item,index)=>{

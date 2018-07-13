@@ -1,5 +1,5 @@
 
-function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
+function draw (go,content,data,clickFn,enterFn,leaveFn) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -16,24 +16,14 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
             //是否可以移动对象
             allowMove: false
         });
+    //库存平面图
+    let isElementEnter=false;
+    let isIconEnter=false;
+    let isElementLeave=false;
+    let isIconLeave=false;
+    let elData={};
+    let iconData={};
     
-
-    function myCallback(blob) {
-        downLoadPic(blob,data.pic.picName);
-    }
-    
-    //导出svg图片
-    if(data.pic){
-        var button = document.getElementById(pic);
-            button.addEventListener('click', function() {
-            var svg = myDiagram.makeImageData({
-                scale:1,
-                maxSize:new go.Size(data.pic.width,data.pic.height),
-                returnType: "blob",
-                callback: myCallback
-            })
-        }, false);
-    }
     
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
@@ -45,6 +35,11 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
     function textStyle() {
         return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
     }
+   
+    /*function linkProblemConverter(msg) {
+        if (msg) return "red";
+        return null;
+    }*/
     
     //背景图
     if(data.pic){
@@ -56,12 +51,15 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
         ));
     }
     
+    
     //绘制
     myDiagram.nodeTemplate =
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
             new go.Binding("fill","color"),{ stroke: null }),
+            /*点击产生同一状态*/
+            /*new go.Binding("stroke",'status',linkProblemConverter)),*/
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置
@@ -76,12 +74,66 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
                 { row: 1, column: 0},
                 new go.Binding("text", "property")),
             ),
+            $(go.Panel,
+                {alignment: go.Spot.TopRight},
+                $(go.Picture,
+                {width:12, height: 12,margin:5},
+                new go.Binding('source','bgsrc')),
+                { //鼠标hover事件
+                    mouseEnter: function (e, node) {
+                        let nods={data:node.part.Sd};
+                        iconData={e,nods};
+                        //为了解决没有图片问题
+                        if(!nods.data.bgsrc){
+                            return ;
+                        }
+                        isIconEnter=true;
+                        isIconLeave=false;
+                        enterFn(e,iconData.nods,'icon');
+                        if(isElementEnter){
+                            isElementLeave=true;
+                            isElementEnter=false;
+                            leaveFn(elData.e,elData.node);
+                        }
+                    },
+                    mouseLeave: function (e, node) {
+                        //为了解决没有图片问题
+                        if(!iconData.nods.data.bgsrc){
+                            return ;
+                        }
+                        if(isIconLeave){
+                            return ;
+                        }
+                        isIconLeave=true;
+                        isIconEnter=false;
+                        leaveFn(e,iconData.nods,'icon')
+                        if(isElementLeave){
+                            isElementEnter=true;
+                            isElementLeave=false;
+                            enterFn(elData.e,elData.node);
+                        }
+                    }
+                }
+            ),
             { //鼠标hover事件
                 mouseEnter: function (e, node) { 
+                    isElementEnter=true;
+                    isElementLeave=false;
+                    elData={e,node};
                     enterFn(e,node)
+                    if(isIconEnter){
+                        isIconLeave=true;
+                        isIconEnter=false;
+                        leaveFn(iconData.e,iconData.nods,'icon');
+                    }
                 },
                 mouseLeave: function (e, node) { 
-                    leaveFn(e,node)
+                    if(isElementLeave){
+                        return ;
+                    }
+                    isElementLeave=true;
+                    isElementEnter=false;
+                    leaveFn(e,node);
                 }
             }
         );

@@ -37,7 +37,7 @@ export default  {
     },
     //每日库存-时间轴
     'getDailyTimeLine': {
-        url: '/song/api/krspace-finance-web/inventory/list/timeline',
+        url: '/api/krspace-finance-web/inventory/list/timeline',
         method: 'get'
     },
     //可租库存-时间轴
@@ -76,7 +76,7 @@ export default  {
     },
     //每日库存-平面图
     'getInventoryMap': {
-        url: '/song/api/krspace-finance-web/cmt/floor-graph/list',
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
         method: 'get'
     },
     // 即将进场

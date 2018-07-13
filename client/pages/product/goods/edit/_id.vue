@@ -158,7 +158,6 @@
             </Form>
             <div style="text-align:center">
                 <Button type="primary" @click="handleSubmit('formItems')">确定</Button>
-                <Button type="ghost" @click="handleReset('formItems')" style="margin-left: 8px">取消</Button>
             </div>
         </div>
     </div>
@@ -275,9 +274,6 @@ export default {
                     });
             })
         }, 
-        handleReset (name) {
-            this.$refs[name].resetFields();
-        },
         changeAppStartTime(data){
              this.formItem.kmStartTime=data;
             if(this.formItem.kmStartTime && this.formItem.kmEndTime){

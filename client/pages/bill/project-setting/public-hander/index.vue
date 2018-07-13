@@ -291,8 +291,10 @@
                 }).then((response)=>{
 
                 this.switchDelete();
-                    window.close();
-                    window.opener.location.reload();
+
+                    // window.close();
+                    // // window.opener.location.reload();
+                    this.$router.push('/bill/project-setting')
                 }).catch((error)=>{
                     this.MessageType="error";
                     this.openMessage=true;

@@ -191,10 +191,10 @@
             },
             goProjectDetail(){
 
-                this.$route.query.productShow =this.productShow+''
-                this.$route.query.propertyShow =this.propertyShow+''
+                // this.$route.query.productShow =this.productShow+''
+                // this.$route.query.propertyShow =this.propertyShow+''
                 // this.$route.query.propertyShow ="false"
-                this.$router.push({path:'/bill/project-setting/project-detail',query:this.$route.query})
+                this.$router.push({path:'/bill/project-setting/project-detail',query:{name:this.$route.query.name,id:this.$route.query.id,city:this.$route.query.city,status:this.$route.query.status,productShow:this.productShow+'',propertyShow:this.propertyShow+''}})
             },
             //获取项目成员
             memberDetailList(val){

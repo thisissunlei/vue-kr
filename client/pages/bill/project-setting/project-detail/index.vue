@@ -127,6 +127,7 @@ import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
 import DetailTaskList from './detail-task-list';
+
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -143,6 +144,7 @@ export default {
         EditTask,
         WatchRecord,
         DetailTaskList,
+        GanttChart,
         Message,
         Drawer,
         ObjectDetailTitle,
@@ -151,8 +153,8 @@ export default {
     },
     data(){
         return{
-            propertyShow:  true,
-            productShow:  true,
+            propertyShow:  this.$route.query.propertyShow==='true'?true:false,
+            productShow:  this.$route.query.productShow==='true'?true:false,
             projectid:this.$route.query.id,
             name: this.$route.query.name,
             city: this.$route.query.city,
@@ -186,7 +188,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:"",
+            activeTab:this.$route.query.propertyShow ==='true'?"property":"product",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -218,7 +220,8 @@ export default {
     },
     created(){
         this.queryData=this.$route.query;
-        this.actioncheck()
+        // this.actioncheck()
+        console.log(this.propertyShow,this.productShow,"-----")
     },
     mounted(){
 
@@ -228,10 +231,10 @@ export default {
 
         this.$nextTick(()=>{
           //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
-         setTimeout(()=>{
-                    let div1 = document.querySelectorAll(".edit-left-bar .ivu-tabs-tab-active")[0]
-                    let div2 = document.querySelectorAll(".edit-left-bar .ivu-tabs-ink-bar")[0]
-                    console.log(div1,div2);
+          setTimeout(()=>{
+                    let div1 = document.getElementsByClassName("ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused")[0]
+                    let div2 = document.getElementsByClassName("ivu-tabs-ink-bar")[0]
+
                   if(!this.propertyShow || !this.productShow){
 
                     div1.style.width ='100%'
@@ -243,6 +246,7 @@ export default {
 
 
 
+
         })
 
     },
@@ -250,10 +254,11 @@ export default {
        actioncheck(){
               this.$http.get('roleActionCheck').then((res)=>{
                   // this.isshowButton= res.data.ifShow
-                  this.productShow= res.data.productShow
-                  this.propertyShow= res.data.propertyShow
+                  // this.productShow= res.data.productShow
+                  // this.propertyShow= res.data.propertyShow
 
-                  this.activeTab =this.propertyShow ?"property":"product"
+                  // this.activeTab =this.propertyShow ?"property":"product";
+                  console.log(this.activeTab,"this.activeTab")
                   // this.$route.query.productShow =res.data.productShow+''
                   // this.$route.query.propertyShow =res.data.productShow+''
                   // console.log(this.isshowButton,'actioncheck')

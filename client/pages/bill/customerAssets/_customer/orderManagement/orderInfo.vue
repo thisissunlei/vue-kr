@@ -31,6 +31,7 @@ export default {
         return {
             nunber: '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
             amount: '¥' + utils.thousand((1200000).toFixed(2)),
+
             feesStagesColumns: [
                 {
                     title: '分期数',
@@ -356,6 +357,7 @@ export default {
         },
         //跳转至订单的计算明细
         jump2CalDetail(orderNo) {
+            this.seatFeeListLoading = true
             this.$emit('onShowCalDetail', orderNo)
         }
 

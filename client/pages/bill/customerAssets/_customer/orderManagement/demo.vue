@@ -1,6 +1,6 @@
 <template>
-   <div>
-        <p style='display:inline'>
+    <div class='seat-info-card'>
+        <p class='title'>
             <span @click='clickPanel'>
                 <Icon :type='iconType'></Icon>
                 <span>{{item.type}}【</span> {{item.seats}}
@@ -8,7 +8,7 @@
                 </span>
             </span>
         </p>
-        <Table  v-show='showTable' border class='service-charge' :columns='columns' :data='dataList'></Table>
+        <Table v-show='showTable' border class='service-charge' :columns='columns' :data='dataList'></Table>
     </div>
 
 </template>
@@ -17,12 +17,12 @@
 export default {
     data() {
         return {
-            item:{
-                type:'kjkjkjk',
-                seats:'kjfdkjhkldjhkldjhkldjhlk'
+            item: {
+                type: '独立房间',
+                seats: '301—304,306'
             },
             showTable: true,
-            iconType: "arrow-right-b",
+            iconType: "arrow-down-b",
             columns: [
                 {
                     title: "服务期",
@@ -119,4 +119,22 @@ export default {
 </script>
 
 <style lang="less">
+.seat-info-card {
+    box-sizing: border-box;
+    .title {
+        width: 100%;
+        height: 38px;
+        line-height: 38px;
+        display: inline-block;
+        background-color: #f7f7f7;
+        padding-left: 32px;
+
+        span {
+            font-weight: 700;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+        }
+    }
+}
 </style>

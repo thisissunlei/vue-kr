@@ -8,15 +8,20 @@
                 </Select>
             </div>
             <div class='community-overview'>
-                <!-- <FeeOverView></FeeOverView> -->
+                <FeeOverView></FeeOverView>
             </div>
 
             <div class="order-info-list">
-                <!-- <OrderInfo></OrderInfo> -->
+                <OrderInfo @onShowCalDetail='handleShowCalDetail'></OrderInfo>
             </div>
             <div class="set-fee-info-list">
-                <!-- <SeatFeeDetail></SeatFeeDetail> -->
-                <Demo></Demo>
+                <Modal v-model="seatFeeDetailListModal" width='830' @on-cancel='handleCloseModal'>
+                    <p slot="header" style="padding-left:15px">明细</p>
+                    <Spin size="large" fix v-if="spinShow"></Spin>
+                    <seatFeeDetailList></seatFeeDetailList>
+                    <div class="seat-fee-detail-list-modal-footer" slot="footer">
+                    </div>
+                </Modal>
             </div>
         </div>
     </div>
@@ -26,18 +31,18 @@
 import utils from '~/plugins/utils';
 import OrderInfo from './orderInfo.vue';
 import FeeOverView from './feeOverview.vue';
-import SeatFeeDetail from './seatFeeDetail.vue'
-import Demo from './demo'
+import seatFeeDetailList from './seatFeeDetailList.vue'
 
 export default {
     components: {
         OrderInfo,
         FeeOverView,
-        SeatFeeDetail,
-        Demo
+        seatFeeDetailList,
     },
     data() {
         return {
+            spinShow: true,
+            seatFeeDetailListModal: false,
             targetCommunity: '',//选中的要查看详细工位信息的社区
             communityList: [
                 {
@@ -62,6 +67,17 @@ export default {
         //获取客户名下的所有信息
         getOrderInfos() {
 
+        },
+        handleShowCalDetail(orderNo) {
+            this.seatFeeDetailListModal = true;
+            setTimeout((orderNo) => {
+                document.querySelectorAll('.seat-fee-detail-list-modal-footer')[0].parentNode.style.display = "none";
+                this.spinShow = false
+            }, 3000);
+        },
+        handleCloseModal() {
+            this.spinShow = true
+
         }
     }
 }
@@ -80,6 +96,13 @@ export default {
     }
     .order-info-list {
         margin: 20px 0;
+    }
+    .set-fee-info-list {
+    }
+    .seat-fee-detail-list-modal {
+        .ivu-modal-footer {
+            display: none;
+        }
     }
 }
 </style>

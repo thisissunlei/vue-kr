@@ -1,133 +1,69 @@
 <template>
-   <div class='seat-info-card'>
+    <div class='seat-info-card'>
         <p class='title'>
             <span @click='clickPanel'>
-                <Icon :type='iconType'></Icon> 
-                <span>{{item.type}}【</span> {{item.seats}}
+                <Icon :type='iconType'></Icon>
+                <span>{{data[0]['type']}}【</span> {{data[0]['seats']}}
                 <span>】
                 </span>
             </span>
         </p>
-        <Table  v-show='showTable' border class='service-charge' :columns='columns' :data='getData(item)'></Table>
+        <Table v-show='showTable' border class='service-charge' :columns='columns' :data='data'></Table>
     </div>
 
 </template>
 
 <script>
 export default {
+    props: {
+        columns: {
+            type: Array,
+            required: true
+        },
+        data: {
+            type: Array,
+            required: true
+        },
+    },
     data() {
         return {
             showTable: true,
             iconType: "arrow-right-b",
-            columns: [
-                {
-                    title: "服务期",
-                    key: "servicePriod",
-                    align: "center"
-                },
-                {
-                    title: "服务费计算说明",
-                    key: "feeCalDesc",
-                    align: "center"
-                },
-                {
-                    title: "单价",
-                    key: "price",
-                    align: "center"
-                },
-                {
-                    title: "数量",
-                    key: "count",
-                    align: "center"
-                },
-                {
-                    title: "小计",
-                    key: "sum",
-                    align: "center"
-                }
-            ],
-            dataList: [],
-            dataListDemo: [
-                {
-                    type: "工位",
-                    seats: "03001—03004,03006",
-                    startDate: 1431886394915,
-                    endDate: 1531486374915,
-                    feeCalDesc: "整月以月计算服务费",
-                    price: 200,
-                    month: 3,
-                    seatCount: 5
-                },
-                {
-                    type: "独立房间",
-                    seats: "301—304,306",
-                    startDate: 1431886394915,
-                    endDate: 1531486374915,
-                    feeCalDesc: "整月以月计算服务费",
-                    price: 200,
-                    month: 3,
-                    seatCount: 5
-                },
-                {
-                    type: "独立房间",
-                    seats: "301—304",
-                    startDate: 1431886394915,
-                    endDate: 1531486374915,
-                    feeCalDesc: "整月以月计算服务费",
-                    price: 200,
-                    month: 3,
-                    seatCount: 5
-                },
-                {
-                    type: "工位",
-                    seats: "03001—03004,03006",
-                    startDate: 1431886394915,
-                    endDate: 1531486374915,
-                    feeCalDesc: "整月以月计算服务费",
-                    price: 200,
-                    month: 3,
-                    seatCount: 5
-                }
-            ]
         };
     },
-    mounted() {
-        this.formatData();
-    },
     methods: {
-        formatData() {
-            this.dataList = [].concat(this.dataListDemo);
-        },
-        getData(item) {
-            let data = [];
-            data.push(item);
-            return data;
-        },
         clickPanel() {
             this.showTable = !this.showTable;
             this.iconType = this.showTable ? "arrow-down-b" : "arrow-right-b";
         },
-        getKey() {
-            return uuid.v1();
-        }
     }
 };
 </script>
 
 <style lang="less">
 .seat-info-card {
+    margin-bottom: 5px;
+    box-sizing: border-box;
     .title {
-        height: 38px;
-        line-height: 38px;
+        height: 40px;
+        width: 100%;
+        line-height: 40px;
         display: inline-block;
         background-color: #f7f7f7;
+        padding-left: 32px;
+        color: #666;
         span {
-            height: 38px;
-            line-height: 38px;
-            padding-left: 32px;
-            color: #666;
             cursor: pointer;
-            position: relative;
+        }
+    }
+    .service-charge {
+        margin: 2px 10px 5px 30px;
+        .colPadRight {
+            .ivu-table-cell {
+                text-align: right;
+                padding-right: 5px;
+                padding-left: 5px;
+            }
         }
     }
 }

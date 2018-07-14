@@ -1,6 +1,6 @@
 <template>
-    <Collapse v-model="value">
-        <Panel v-for='(item,index) in dataList' :key="index" :name="''+index">
+    <Collapse v-model="value1" @on-change='collapseChange'>
+        <Panel v-for='(item,index) in dataList' :key='getKey()' >
              <p style='display:inline'><span>{{item.type}}【</span> {{item.seats}}<span>】</span></p> 
             <div slot="content">
                 <Table border class='service-charge' :columns="columns" :data="getData(item)"></Table>
@@ -9,10 +9,12 @@
     </Collapse>
 </template>
 <script>
+import uuid from 'uuid'
+
 export default {
     data() {
         return {
-            value: [],
+            value1: [],
             columns: [
                 {
                     title: '服务期',
@@ -90,13 +92,20 @@ export default {
     },
     methods:{
         formatData(){
-            this.value= Array.from(Array(this.dataListDemo.length), (v,k) =>''+k);
+            
             this.dataList=[].concat(this.dataListDemo)
+       
         },
         getData(item){
             let data=[];
             data.push(item)
             return data
+        },
+        collapseChange(){
+            console.log(this.value1)
+        },
+        getKey(){
+            return uuid.v1()
         }
     }
 }

@@ -1,14 +1,14 @@
 <template>
-   <div>
-        <p style='display:inline'>
+   <div class='seat-info-card'>
+        <p class='title'>
             <span @click='clickPanel'>
-                <Icon :type='iconType'></Icon>
+                <Icon :type='iconType'></Icon> 
                 <span>{{item.type}}【</span> {{item.seats}}
                 <span>】
                 </span>
             </span>
         </p>
-        <Table  v-show='showTable' border class='service-charge' :columns='columns' :data='dataList'></Table>
+        <Table  v-show='showTable' border class='service-charge' :columns='columns' :data='getData(item)'></Table>
     </div>
 
 </template>
@@ -17,10 +17,6 @@
 export default {
     data() {
         return {
-            item:{
-                type:'kjkjkjk',
-                seats:'kjfdkjhkldjhkldjhkldjhlk'
-            },
             showTable: true,
             iconType: "arrow-right-b",
             columns: [
@@ -119,4 +115,20 @@ export default {
 </script>
 
 <style lang="less">
+.seat-info-card {
+    .title {
+        height: 38px;
+        line-height: 38px;
+        display: inline-block;
+        background-color: #f7f7f7;
+        span {
+            height: 38px;
+            line-height: 38px;
+            padding-left: 32px;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+        }
+    }
+}
 </style>

@@ -15,7 +15,8 @@
                 <!-- <OrderInfo></OrderInfo> -->
             </div>
             <div class="set-fee-info-list">
-                <SetFeeDetail></SetFeeDetail>
+                <!-- <SeatFeeDetail></SeatFeeDetail> -->
+                <Demo></Demo>
             </div>
         </div>
     </div>
@@ -25,13 +26,15 @@
 import utils from '~/plugins/utils';
 import OrderInfo from './orderInfo.vue';
 import FeeOverView from './feeOverview.vue';
-import SetFeeDetail from './setFeeDetail.vue'
+import SeatFeeDetail from './seatFeeDetail.vue'
+import Demo from './demo'
 
 export default {
     components: {
         OrderInfo,
         FeeOverView,
-        SetFeeDetail
+        SeatFeeDetail,
+        Demo
     },
     data() {
         return {

@@ -10,6 +10,8 @@
 
 
         },
+
+        activeHander:'',
         
         user:{},
         navs:[{
@@ -87,6 +89,18 @@
         }else {
             return 'vue';
         }
+    }
+    function setDefaultHeader(value) {
+        setTimeout(function(){
+            var j_li = document.getElementsByName(value)[0];
+            console.log(j_li,"kkkkk")
+            if(j_li){
+                j_li.setAttribute("class", "active");
+            }else{
+                return
+            }
+        },1000)
+       
     }
     //获取侧边栏里的数据
     function getClickNav(arr, str) {
@@ -310,7 +324,7 @@
                 more += '<li  class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
                 return;
             }
-            html += '<li class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {
@@ -424,15 +438,16 @@
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        renderHanderAndSidebar();
+        
         // console.log("pppppp------",dom)
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
-          
+            routerRefresh();
+            console.log(999999)
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;
-               
+              
                 navUtils.navs = [].concat(navUtils.navs,navs);
                 navUtils.user = Object.assign(user);
                 routerRefresh();
@@ -440,14 +455,14 @@
            
         })
     }
+    renderHanderAndSidebar();
     window.addEventListener('load',function(){
 
     })
    
-    global.GLOBALSIDESWITCH = pushCloseRoutrs;
-    // // global.GLOBALHEADERSET = Router.setDefaultHeader;
-    // // global.listenSidebarOpen = Router.listenSidebarOpen;
-    global.LISTENSIDEBAROPEN = listenSidebarOpen;
+    global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
+    global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部
+    global.LISTENSIDEBAROPEN = listenSidebarOpen;//监听开关
     // global.GLOBALHEADERSET = Router.setDefaultHeader;
 
     // Router.init();

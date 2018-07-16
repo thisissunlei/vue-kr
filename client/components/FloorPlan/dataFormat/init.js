@@ -55,7 +55,7 @@ function init(data,picProperty,dataUrl){
             //两行字的高度加上icon的高度
             let fixed='';
             if(spaceArr[0].belongType=='SPACE'){
-                fixed=spaceArr[0].futureStatus?32+34:32;
+                fixed=spaceArr[0].futureStatus?32+42:32;
             }else{
                 fixed=spaceArr[0].parentMin;
             }
@@ -64,7 +64,7 @@ function init(data,picProperty,dataUrl){
             spaceArr.map((item,index)=>{
                 let fixItem=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    fixItem=item.futureStatus?32+34:32;
+                    fixItem=item.futureStatus?32+42:32;
                 }
                 if((item.parentMin/item.cellWidth)>minW){
                     minW=item.parentMin/item.cellWidth;
@@ -95,7 +95,12 @@ function init(data,picProperty,dataUrl){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
-            list.bgsrc=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            let picRen=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            if(list.item.belongType=='SPACE'){
+                list.bgsrc=picRen;
+            }else{
+                list.desksrc=picRen;
+            }
             //list.status=true;
         })
     }

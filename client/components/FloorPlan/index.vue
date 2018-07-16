@@ -179,7 +179,7 @@ let initData='';
             var every=event.subject.part.data;
             var everyData =every?every:{};
             console.log('everoo',everyData);
-            this.$emit('click',event,everyData,canvasData); 
+            this.$emit('click',event,everyData,canvasData,this.drawingBoard,this.scroll); 
         }
     }
  }

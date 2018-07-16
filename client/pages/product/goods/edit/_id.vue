@@ -100,7 +100,7 @@
                                 </Radio>
                             </RadioGroup> 
                     </FormItem>
-                    <FormItem label="社区折扣策略"  style="width:252px" prop="communityAddress">
+                    <FormItem label="社区折扣策略"  style="width:252px" >
                         <Input 
                             v-model="formItem.promotionDesc" 
                             placeholder="社区折扣策略"

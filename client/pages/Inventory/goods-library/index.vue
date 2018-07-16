@@ -22,7 +22,7 @@
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
-                <Buttons type="primary" :label="isShowEdit?'编辑操作':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
+                <Buttons type="primary" :label="isShowEdit?'编辑':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
          </div>
 
             <Table 
@@ -224,6 +224,7 @@
             >
             <div style="text-align:left;">
                 <p>请及时在<span  @click="clanar"    style="color:red;text-decoration:underline;cursor: pointer;" >平面图配置</span>中配置商品位置</p>
+                <p>请在社区开业前，批量“创建物理空间”或手动关联已有的物理空间</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -240,7 +241,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
              <div slot="footer">
                  <Button type="primary" @click="determine" >确定导入</Button>
@@ -575,7 +576,7 @@ export default {
                     }
                 },
                 {
-                    title: '设备绑定',
+                    title: '物理空间',
                     key: 'bindingText',
                     align:'center',
                     width:60,
@@ -596,7 +597,7 @@ export default {
                     }
                 },
                 {
-                    title: '商品位置',
+                    title: '平面图配置',
                     key: 'goodsLocation',
                     align:'center',
                     width:120,

@@ -20,6 +20,7 @@
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openSpace">创建空间</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
                 <Buttons type="primary" :label="isShowEdit?'编辑':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
@@ -69,6 +70,21 @@
                  <Button type="primary" @click="submitStatus">修改</Button>
                  <Button type="ghost" style="margin-left:20px" @click="openStatus">取消</Button>
             </div>
+        </Modal>
+
+        <Modal
+            width="660"
+            v-model="spaceOpen"
+            title="创建物理空间"
+        >
+                <AddPhysical    
+                     v-if="spaceOpen"
+                    :data="statusData"
+                    :errorData="errorData"
+                    @submit="submitSpace"
+                    @cancel="openSpace"
+                />
+            <div slot="footer"></div>
         </Modal>
 
         <Modal
@@ -318,6 +334,7 @@ import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
 import Buttons from '~/components/Buttons';
 import EditGoods from './editGoods';
+import AddPhysical from './bulk-changes/add-physical';
 export default {
 
 
@@ -336,7 +353,8 @@ export default {
                 BindService,
                 Buttons,
                 EditGoods,
-                ChangePrice
+                ChangePrice,
+                AddPhysical
                  },
         props:{
                 mask:String
@@ -345,6 +363,7 @@ export default {
                 return{
             editOpen:false,
             priceOpen:false,
+            spaceOpen:false,
             editData:{},
             serviceData:{},
             warnCode:'',
@@ -663,6 +682,16 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        openSpace(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
+            this.spaceOpen=!this.spaceOpen;
+            this.errorData=[];       
+        },
         openSingleStatus(array){
             this.statusData=[].concat([array]);
             this.statusOldData=[].concat([array]);
@@ -1052,6 +1081,23 @@ export default {
                     title:error.message
                 });
             })
+        },
+        submitSpace(form){
+           this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+              console.log('提交',response.data)
+              if(response.data.length){
+                    this.errorData=response.data;
+              }else{
+                    this.openStatus()
+                    this.openComplete();
+                    this.getListData(this.tabForms);
+                    this.statusData=[];
+              }
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            }) 
         },
         openComplete(){
            this.complete=!this.complete;      

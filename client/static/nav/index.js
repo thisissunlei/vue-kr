@@ -302,7 +302,6 @@
             }
             oldHref = '"url":"'+oldHref+'"'
             href = setHref(item.type, href)
-            console.log(oldHref,"oooooooo")
             //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
                 if(index>7 && activeStr.indexOf(oldHref)!=-1){
@@ -356,9 +355,19 @@
                             showSidebar = 'block';
                         }
                     }
-                    console.log(router,'---------',href)
+                    var activeRouter = '';
+                    if(child.name == "即将到期" || child.name == '逾期未付'){
+                        console.log(router,'---------',href)
+                    }
+                    if(router.indexOf('krspace.cn')!=-1){
+                        activeRouter = router.split('krspace.cn')[1];
+                    }
+                    if(activeRouter.indexOf('#')!=-1){
+                        activeRouter = activeRouter.split('#')[1];
+                    }
+                    
 
-                    html += '<li class=' + (router.indexOf(href)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
+                    html += '<li class=' + (activeRouter==href ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
                 })
                 html += '</ul>';
             }

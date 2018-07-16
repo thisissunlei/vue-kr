@@ -9,10 +9,7 @@ import utils from '~/plugins/utils';
 
 export default {
     props: {
-        data: {
-            type: Object,
-            default: () => { }
-        }
+        communityId: '',
     },
     data() {
         return {
@@ -152,7 +149,11 @@ export default {
 
         }
     },
-
+    watch: {
+        communityId() {
+            this.getData(this.communityId);
+        }
+    },
     mounted() {
         this.formatData();
         // this.mergeHeader();
@@ -172,6 +173,7 @@ export default {
             this.serviceChargeData = [].concat(this.serviceChargeDataDemo);
             this.depositCashData = [].concat(this.depositCashDataDemo)
         },
+        //table 奇偶行附className 以显示不同颜色
         rowClassName(row, index) {
             if ((index & 1) === 0) {
                 return 'table-even-row';
@@ -180,7 +182,20 @@ export default {
             }
             return '';
         },
-
+        //获取Table Data
+        getData(communityId) {           
+            let params={}
+            this.$http.get('join-bill-list', params).then((response) => {
+                this.totalCount = response.data.totalCount;
+                this.joinData = response.data.items;
+                this.openSearch = false;
+                this.hasSeatDataExportRight = response.data.hasSeatExportRight;//是否具有工位数据导出权限
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
+        },
     }
 }
 </script>

@@ -3,22 +3,22 @@
         <div class='order-management'>
             <div class='community-selection'>
                 <span style='margin-right:5px'>社区</span>
-                <Select clearable v-model="targetCommunity" style="width:200px">
+                <Select clearable v-model="targetCommunity" @on-change='handleCommunityChange' style="width:200px">
                     <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </div>
             <div class='community-overview'>
-                <FeeOverView></FeeOverView>
+                <FeeOverView :communityId='targetCommunity'></FeeOverView>
             </div>
 
             <div class="order-info-list">
-                <OrderInfo @onShowCalDetail='handleShowCalDetail'></OrderInfo>
+                <OrderInfo :communityId='targetCommunity' @onShowCalDetail='handleShowCalDetail'></OrderInfo>
             </div>
             <div class="set-fee-info-list">
                 <Modal v-model="seatFeeDetailListModal" width='830' @on-cancel='handleCloseModal'>
                     <p slot="header" style="padding-left:15px">明细</p>
                     <Spin size="large" fix v-if="spinShow"></Spin>
-                    <seatFeeDetailList v-if='seatFeeDetailListModal'></seatFeeDetailList>
+                    <seatFeeDetailList :orderId='' v-if='seatFeeDetailListModal'></seatFeeDetailList>
                     <div class="seat-fee-detail-list-modal-footer" slot="footer">
                     </div>
                 </Modal>
@@ -41,6 +41,7 @@ export default {
     },
     data() {
         return {
+            orderId:'',
             spinShow: true,
             seatFeeDetailListModal: false,
             targetCommunity: '',//选中的要查看详细工位信息的社区
@@ -68,8 +69,9 @@ export default {
         getOrderInfos() {
 
         },
-        handleShowCalDetail(orderNo) {
+        handleShowCalDetail(orderNo) {           
             this.seatFeeDetailListModal = true;
+            this.orderId=orderNo
             setTimeout((orderNo) => {
                 document.querySelectorAll('.seat-fee-detail-list-modal-footer')[0].parentNode.style.display = "none";
                 this.spinShow = false
@@ -77,7 +79,11 @@ export default {
         },
         handleCloseModal() {
             this.spinShow = true
+        },
+        handleCommunityChange(){
+            //获取社区费用概览
 
+            //获取社区费用信息
         }
     }
 }

@@ -13,6 +13,9 @@ export default {
     components: {
         SeatFeeCard
     },
+    props:{
+        orderId:''
+    },
     data() {
         return {
             columns: [
@@ -117,6 +120,11 @@ export default {
             ]
         }
     },
+    watch:{
+        orderId(){
+            this.getDataList(this.orderId);
+        }
+    },
     mounted() {
         this.formatData();
     },
@@ -124,7 +132,9 @@ export default {
         formatData() {
             this.dataList = [].concat(this.dataListDemo)
         },
+        getDataList(orderId){
 
+        },
         getData(item) {
             let data = [];
             data.push(item)

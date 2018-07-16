@@ -25,6 +25,9 @@
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 export default {
+    props: {
+        communityId: ''
+    },
     data() {
         const statusWidth = 90
         const amountWidth = 130
@@ -94,7 +97,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jump2OrderDetail(params.row.id)
+                                            this.jump2OrderDetail(params)
                                         }
                                     }
                                 },
@@ -187,7 +190,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.jump2OrderDetail(params.row.id)
+                                        this.jump2BillDetail(params.row.id)
                                     }
                                 }
                             },
@@ -342,18 +345,47 @@ export default {
             ]
         }
     },
+    watch: {
+        communityId() {
+            this.getData(this.communityId);
+        }
+    },
     mounted() {
         this.formatDataList();
     },
     methods: {
+        getData(communityId) {
+            let params = {}
+            this.$http.get('join-bill-list', params).then((response) => {
+                this.totalCount = response.data.totalCount;
+                this.joinData = response.data.items;
+                this.openSearch = false;
+                this.hasSeatDataExportRight = response.data.hasSeatExportRight;//是否具有工位数据导出权限
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
+        },
         //格式化接收数据
         formatDataList() {
             this.feesStagesDatas = [].concat(this.feesStagesDatasDemo)
             this.billDetailData = [].concat(this.billDetailDataDemo)
         },
         //跳转至订单详情
-        jump2OrderDetail(orderNo) {
-
+        jump2OrderDetail(params) {
+            var viewName = '';
+            if (params.row.orderType == 'CONTINUE') {
+                viewName = 'renewView';
+            } else {
+                viewName = 'joinView';
+            }
+            let orderNo = params.row.id || 12974
+            window.open(`/order-center/order-manage/station-order-manage/${orderNo}/${viewName}`, '_blank');
+        },
+        jump2BillDetail(billNo) {
+            billNo = billNo || 480
+            window.open(`/bill/list/detail/${billNo}`, '_blank');
         },
         //跳转至订单的计算明细
         jump2CalDetail(orderNo) {
@@ -374,7 +406,7 @@ export default {
         background-color: #f0f0f0;
         margin: 10px 0;
         .order-number {
-            color: #3F4EFC;
+            color: #3f4efc;
             height: @titleHeight;
             line-height: @titleHeight;
             padding-left: 24px;
@@ -447,7 +479,7 @@ export default {
                     color: red;
                 }
                 .clear {
-                    color: #5DD462;
+                    color: #5dd462;
                 }
             }
         }

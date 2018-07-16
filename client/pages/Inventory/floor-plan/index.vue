@@ -4,6 +4,7 @@
       <div class="bar">
           <SearchForm 
            @searchForm="searchForm"
+           @changeCount="changeCount"
           />
           <Discount 
            @countChange="countChange"
@@ -30,22 +31,7 @@
                 
                 <!-- <span class="warning-tip"></span>
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
-                    <Select 
-                        v-model="show" 
-                        multiple 
-                        placeholder="请输入显示项" 
-                        style="width:150px;" 
-                        clearable 
-                        @on-change="changeCount" 
-                        >
-                        <Option v-for="item in showList" :value="item.value" :key="item.value">
-                            {{ item.label }}
-                        </Option>
-                  </Select>
-                </div>
-                
+                 
                 <div style="display:inline-block;margin-right:26px;">
                     <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">未来被占用</span>
                     <span class='m-use'></span>
@@ -117,13 +103,9 @@ export default {
        discount:"",
        isFirstClick:false,
        scrollTop:0,
-       showList:[
-           {value:'FUTURE_OCCUPIED',label:'未来被占用'},
-           {value:'FUTURE_AVAILABLE',label:'可预租'}
-       ],
-       show:[],
        displayList:'',
-       isClickShow:false   
+       isClickShow:false,
+       displayList:''   
     }
   },
   mounted(){
@@ -135,11 +117,10 @@ export default {
      let route=this.$route.query;
      if(route.displayList){
          this.displayList=route.displayList;
-         this.show=(route.displayList).split(',');
      }else if(store){
-         this.show=JSON.parse(store);
+         let show=JSON.parse(store);
          let str='';
-         this.show.map((item,index)=>{
+         show.map((item,index)=>{
              str=str?str+','+item:item
          })
          this.displayList=str; 
@@ -151,6 +132,15 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
+    changeCount(val){
+        let str='';
+        val.length&&val.map((item,index)=>{
+            str=str?str+','+item:item;
+        })
+        this.displayList=str;
+        localStorage.setItem('floor-map-show-select',JSON.stringify(val));
+        this.isClickShow=true;
+    },
     submitConfig(forms){
         this.tabForms=Object.assign({},this.tabForms,forms);
         this.openConfig();
@@ -165,15 +155,6 @@ export default {
             return ;
         }
         this.isFirstClick=true;
-    },
-    changeCount(val){
-        let str='';
-        val.length&&val.map((item,index)=>{
-            str=str?str+','+item:item;
-        })
-        this.displayList=str;
-        localStorage.setItem('floor-map-show-select',JSON.stringify(val));
-        this.isClickShow=true;
     },
     //获取数据
     getMapData(values){

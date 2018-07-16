@@ -104,6 +104,7 @@
                         <Input 
                             v-model="formItem.promotionDesc" 
                             placeholder="社区折扣策略"
+                            :maxlength="maxLength"
                         />
                     </FormItem>
                     <LabelText label="已上架会议室商品数量：">
@@ -112,7 +113,7 @@
                     <LabelText label="已上架散座商品数量：">
                         {{goodsInfo.kmSeatNum}}
                     </LabelText>
-                    <FormItem label="可预订时段" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:350px"   >
                            <div style="width:350px;float:left;">
                                <TimePicker 
                                     format="HH:mm" 
@@ -188,6 +189,7 @@ export default {
             category:'app/upgrade',
             isAppError:false,
             formItem:{},
+            maxLength:10,
             form:{
                kmStartTime:'09:00',
                kmEndTime:'19:00',

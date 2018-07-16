@@ -86,7 +86,7 @@
         </Modal>
 
         <Modal
-            title="Title"
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -224,7 +224,7 @@
             >
             <div style="text-align:left;">
                 <p>请及时在<span  @click="clanar"    style="color:red;text-decoration:underline;cursor: pointer;" >平面图配置</span>中配置商品位置</p>
-                <p>请在社区开业前，批量“创建物理空间”或手动关联已有的物理空间</p>
+                <p style="margin-top: 10px;">请在社区开业前，批量“创建物理空间”或手动关联已有的物理空间</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -498,7 +498,7 @@ export default {
                     key: 'goodsStatusName',
                     align:'center',
                     width:90,
-                   render(tag, params){
+                   render:(tag, params)=>{
                      var statusName=params.row.goodsStatusName?params.row.goodsStatusName:'-';
                      var status=params.row.goodsStatus;
                      var colorClass='';
@@ -510,6 +510,14 @@ export default {
                     return tag('span',{
                             attrs: {
                                 class:colorClass
+                            },
+                            style: {
+                                cursor:'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.openSingleStatus(params.row)
+                                }
                             }
                     },statusName);
                   }
@@ -655,6 +663,11 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        openSingleStatus(array){
+            this.statusData=[].concat([array]);
+            this.statusOldData=[].concat([array]);
+            this.openStatus();
+        },
         openPrice(){
             if(!this.statusData.length){
                 this.$Notice.error({

@@ -105,7 +105,8 @@ export default {
        scrollTop:0,
        displayList:'',
        isClickShow:false,
-       displayList:''   
+       displayList:'',
+       countNum:0   
     }
   },
   mounted(){
@@ -133,6 +134,10 @@ export default {
   },
   methods:{
     changeCount(val){
+        this.countNum++;
+        if(this.countNum==1){
+            return ;
+        }
         let str='';
         val.length&&val.map((item,index)=>{
             str=str?str+','+item:item;

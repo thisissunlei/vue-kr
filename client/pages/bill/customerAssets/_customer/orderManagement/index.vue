@@ -18,7 +18,7 @@
                 <Modal v-model="seatFeeDetailListModal" width='830' @on-cancel='handleCloseModal'>
                     <p slot="header" style="padding-left:15px">明细</p>
                     <Spin size="large" fix v-if="spinShow"></Spin>
-                    <seatFeeDetailList></seatFeeDetailList>
+                    <seatFeeDetailList v-if='seatFeeDetailListModal'></seatFeeDetailList>
                     <div class="seat-fee-detail-list-modal-footer" slot="footer">
                     </div>
                 </Modal>

@@ -89,7 +89,7 @@ export default {
                                 'span',
                                 {
                                     style: {
-                                        color: '#2b85e4',
+                                        color: '#3F4EFC',
                                         cursor: 'pointer'
                                     },
                                     on: {
@@ -115,7 +115,7 @@ export default {
                                 'span',
                                 {
                                     style: {
-                                        color: '#2b85e4',
+                                        color: '#3F4EFC',
                                         cursor: 'pointer'
                                     },
                                     on: {
@@ -182,7 +182,7 @@ export default {
                             'span',
                             {
                                 style: {
-                                    color: '#2b85e4',
+                                    color: '#3F4EFC',
                                     cursor: 'pointer'
                                 },
                                 on: {
@@ -374,7 +374,7 @@ export default {
         background-color: #f0f0f0;
         margin: 10px 0;
         .order-number {
-            color: #000bff;
+            color: #3F4EFC;
             height: @titleHeight;
             line-height: @titleHeight;
             padding-left: 24px;
@@ -447,7 +447,7 @@ export default {
                     color: red;
                 }
                 .clear {
-                    color: #2e8e00;
+                    color: #5DD462;
                 }
             }
         }

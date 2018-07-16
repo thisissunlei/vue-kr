@@ -33,11 +33,11 @@
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
                  
                 <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">未来被占用</span>
+                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">未来被占用</span>
                     <span class='m-use'></span>
                 </div>
                 <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">可预租</span>
+                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">可预租</span>
                     <span class='m-can'></span>
                 </div>
 

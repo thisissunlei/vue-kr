@@ -157,7 +157,7 @@
             }
         }
     }
-    function listenSidebarOpen(){
+    function listenSidebarOpen(callback){
         if (!callback){
             return;
         }
@@ -356,6 +356,7 @@
                             showSidebar = 'block';
                         }
                     }
+                    console.log(router,'---------',href)
 
                     html += '<li class=' + (router.indexOf(href)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
                 })
@@ -437,8 +438,7 @@
     global.GLOBALSIDESWITCH = pushCloseRoutrs;
     // // global.GLOBALHEADERSET = Router.setDefaultHeader;
     // // global.listenSidebarOpen = Router.listenSidebarOpen;
-    // global.LISTENSIDEBAROPEN = navUtils.listenSidebarOpen;
-
+    global.LISTENSIDEBAROPEN = listenSidebarOpen;
     // global.GLOBALHEADERSET = Router.setDefaultHeader;
 
     // Router.init();

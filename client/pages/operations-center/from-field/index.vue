@@ -193,7 +193,7 @@
                                     }
                                 }));
                             }
-                           return h('div',btnRender);  
+                           return h('div',{},btnRender);  
                         }
                     }
                 ],
@@ -349,8 +349,12 @@
 </script>
 
 
-<style lang="less" scoped> 
+<style lang="less" > 
    .from-field-list{
+       .ivu-table{
+           width: 100%;
+
+       }
        .m-bill-search{
             display:inline-block;
             height:22px;

@@ -209,7 +209,7 @@ export default {
     countChange(param,countRadio){
         this.discount=countRadio==1?'':param;
     },
-    mouseClick(event,every,all){
+    mouseClick(event,every,all,canvas,scroll){
         if(!this.isFirstClick){
             mainDom.scrollTop=0;
         }else{
@@ -218,7 +218,12 @@ export default {
         var index=this.findEle(clickNone,'id',every.item.id);
         if(index!=-1){
             return ;
-        } 
+        }
+        var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
+        if(!tirDom){
+            let icon=false;
+            this.createTooltip(event,every,all,canvas,scroll,icon,every.item.id);
+        }
         clickNone.push({id:every.item.id,everyData:every});
     },
     findEle(array,attr,val){
@@ -229,12 +234,8 @@ export default {
         }
         return -1;
     },
-    mouseEnter(event,every,all,canvas,scroll,isIcon){
-         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
-         var index=this.findEle(clickNone,'id',selectId);
-         if(index!=-1){
-            return ;
-         } 
+    //生成浮框
+    createTooltip(event,every,all,canvas,scroll,isIcon,selectId){
          this.createDom(every,isIcon);
          //监听click事件
          document.body.addEventListener('click',this.bodyClick);
@@ -244,6 +245,14 @@ export default {
          tirDom.style.display = 'block';
          angleDom.style.display = 'block';
          publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
+    },
+    mouseEnter(event,every,all,canvas,scroll,isIcon){
+         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+         var index=this.findEle(clickNone,'id',selectId);
+         if(index!=-1){
+            return ;
+         } 
+         this.createTooltip(event,every,all,canvas,scroll,isIcon,selectId);
     },
     allBodyClick(){
         if(this.isClickShow){
@@ -288,9 +297,10 @@ export default {
     //生成dom
     createDom(every,isIcon){
          let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+         let isTitle=isIcon=='icon'?'':'<div class="title" data-titleId='+selectId+'></div>';
          var productDom=
             '<div id="gantt-chart-tool-tip'+selectId+'" class="gantt-chart-tool-tip">'+
-                '<div class="title" data-titleId='+selectId+'></div>'+
+                isTitle+
                 '<div id="gantt-chart-tool-tip-content'+selectId+'" class="gantt-chart-tool-tip-content"></div>'+
             '</div>'+
             '<div id="gantt-chart-tool-tip-triangle'+selectId+'" class="top-triangle gantt-chart-tool-tip-triangle" />';

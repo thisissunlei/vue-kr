@@ -284,30 +284,34 @@
         }
         var router = getRouter();
         var nowRouter = router.split('.krspace.cn')[1];
+       
         activeStr = JSON.stringify(navUtils.activeData);
-        console.log(nowRouter,"oooooooo")
         
-        var otherActive = 500;
+        
+        var otherActive = 'normal';
         navs.map(function (item, index) {
             var href = "";
+            let oldHref =''; 
             // var sideFoldFlag = false;
            
 
             if (item.childList && item.childList.length) {
-                href = item.childList[0].childList[0].url;
+                oldHref = href = item.childList[0].childList[0].url;
                 // sideFoldFlag = item.childList[0].childList[0].sideFoldFlag == 'YES'?true:false;
                 item.type = item.childList[0].childList[0].projectType || ''
             }
+            oldHref = '"url":"'+oldHref+'"'
             href = setHref(item.type, href)
+            console.log(oldHref,"oooooooo")
             //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
-                if(activeStr.indexOf(nowRouter)!=-1){
+                if(index>7 && activeStr.indexOf(oldHref)!=-1){
                     otherActive = "bold";
                 }
-                more += '<li  class=' + (activeStr.indexOf(nowRouter)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+                more += '<li  class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
                 return;
             }
-            html += '<li class=' + (activeStr.indexOf(nowRouter)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {

@@ -430,16 +430,16 @@ export default {
       }
       .m-use{
          display:inline-block;
-         width:20px;
-         height:20px;
+         width:16px;
+         height:16px;
          background:url('~/assets/images/use.svg') no-repeat center;
          background-size:100%;
          vertical-align: middle;
       }
       .m-can{
          display:inline-block;
-         width:20px;
-         height:20px;
+         width:16px;
+         height:16px;
          background:url('~/assets/images/can.svg') no-repeat center;
          background-size:100%;
          vertical-align: middle;

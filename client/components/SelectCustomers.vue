@@ -12,24 +12,30 @@
 
 import http from '~/plugins/http.js';
 
-export default {
-    props: {
-        onchange: Function,
-        value: String,
-        disabled: Boolean,
-        labelInValue: {
-            default: false,
-            type: Boolean
-        }
-    },
-    data() {
 
-        return {
-            customer: '',
-            loading1: false,
-            customerOptions: [],
-        };
-    },
+    export default {
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean,
+            labelInValue:{
+                default:false,
+                type:Boolean
+            },
+            url:{
+                type:String,
+                default:'get-customer'
+            }
+        },
+    
+        data() {
+
+            return {
+                customer: '',
+                loading1: false,
+                customerOptions: [],
+            };
+        },
     mounted: function () {
         this.remoteCustomer()
     },
@@ -41,7 +47,6 @@ export default {
         mounted:function(){
             this.getCusomerList(' ')
         },
-
         getCusomerList: function (name) {
             let params = {
                 company: name || ''

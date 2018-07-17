@@ -1,6 +1,6 @@
 <template>
-    <div class='seat-info-card-container ivu-collapse'>
-        <SeatFeeCard v-for='item in dataList' :key='getKey()' :columns='columns' :data='getData(item)'></SeatFeeCard>
+    <div class="seat-info-card-container ivu-collapse">
+        <SeatFeeCard v-for="item in dataList" :key="getKey()" :columns="columns" :data="getData(item)"></SeatFeeCard>
     </div>
 </template>
 <script>

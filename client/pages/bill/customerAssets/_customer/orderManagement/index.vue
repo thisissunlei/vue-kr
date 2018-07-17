@@ -4,7 +4,7 @@
             <div class="community-selection">
                 <span style="margin-right:5px">社区</span>
                 <Select clearable v-model="targetCommunity" @on-change="handleCommunityChange" style="width:200px">
-                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
+                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{item.name }}</Option>
                 </Select>
             </div>
             <div class="community-overview">

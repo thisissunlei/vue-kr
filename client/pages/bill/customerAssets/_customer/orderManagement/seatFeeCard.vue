@@ -1,14 +1,14 @@
 <template>
-    <div class='seat-info-card'>
-        <p class='title'>
-            <span @click='clickPanel'>
-                <Icon :type='iconType'></Icon>
-                <span>{{data[0]['type']}}【</span> {{data[0]['seats']}}
+    <div class="seat-info-card">
+        <p class="title">
+            <span @click="clickPanel">
+                <Icon :type="iconType"></Icon>
+                <span>{{data[0]["type"]}}【</span> {{data[0]["seats"]}}
                 <span>】
                 </span>
             </span>
         </p>
-        <Table v-show='showTable' border class='service-charge' :columns='columns' :data='data'></Table>
+        <Table v-show="showTable" border class="service-charge" :columns="columns" :data="data"></Table>
     </div>
 
 </template>

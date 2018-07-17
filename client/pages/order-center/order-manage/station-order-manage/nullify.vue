@@ -85,7 +85,9 @@ export default {
         });
     },
     handleCancel() {
-      this.$emit('closeModalForm');
+		this.formItem.select = '';
+        this.formItem.input = '';
+      	this.$emit('closeModalForm');
     },
     handleSubmit(name) {
       {
@@ -94,11 +96,10 @@ export default {
           invalidType: this.formItem.select,
           remark: this.formItem.input
         };
-        console.log(params)
         this.$http
           .post("join-nullify", params)
           .then(response => {
-            console.log(response.data)
+            
             this.formItem.select = '';
             this.formItem.input = '';
             this.$emit('refershList', { id: params.id });

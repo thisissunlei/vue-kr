@@ -47,7 +47,7 @@
                 </div>
             </Modal>
             
-            <Modal id='nullifymodel' v-if="openNullify" title="请确认是否作废订单" width="500">
+            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
                 <Nullify :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
 
                 <div id="nulldiv" slot="footer">
@@ -405,16 +405,17 @@
             let params={
                 id:this.id
             };
-                if(this.nullDisabled){
-                    return ;
-                }
-                this.nullDisabled=true;
-                this.closeNullify();
-                this.$http.post('join-nullify', params).then((response) => {
+            if(this.nullDisabled){
+                return ;
+            }
+            this.nullDisabled=true;
+            
+            this.$http.post('join-nullify', params).then((response) => {
                     this.openMessage=true;
                     this.MessageType="success";
                     this.warn='作废成功';
                     this.getListData(this.params);
+                    this.closeNullify();
             }).catch( (error) => {
                     this.openMessage=true;
                     this.MessageType="error";
@@ -565,8 +566,9 @@
         },
 
         closeNullify(){
+            console.log("999999")
             this.openNullify=!this.openNullify;
-            this.nullDisabled=false;
+            // this.nullDisabled=false;
         },
 
         closeApply(){

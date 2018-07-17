@@ -24,22 +24,27 @@
             :data="item"
       >
             <div  class="flow-chart-top-toolbar" slot="toolbar">
-                <div class="toolbar-inner" v-for="item in colorLabels" :key="item.id">
-                    <span class="map-font-tip">{{item.label}}</span>
-                    <span class="map-color-tip" :style="'background:'+item.color"></span>
-                </div>
-                
+                <Tooltip v-for="item in colorLabels" :key="item.id" :content="item.content" placement="bottom"> 
+                    <div :class="item.class">
+                        <span class="map-font-tip">{{item.label}}</span>
+                        <span class="map-color-tip" :style="'background:'+item.color"></span>
+                    </div>
+                </Tooltip>
                 <!-- <span class="warning-tip"></span>
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
-                 
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">未来被占用</span>
-                    <span class='m-use'></span>
-                </div>
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">可预租</span>
-                    <span class='m-can'></span>
-                </div>
+
+                <Tooltip content="在随后的60天内，有客户或特殊情况占用（目前只可短租）" placement="bottom"> 
+                    <div style="display:inline-block;">
+                        <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">未来被占用</span>
+                        <span class='m-use'></span>
+                    </div>
+                </Tooltip>
+                <Tooltip content="目前的占用将在30天内结束，结束后有连续60天可租" placement="bottom"> 
+                    <div style="display:inline-block;margin-right:26px;margin-left:26px;">
+                        <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">可预租</span>
+                        <span class='m-can'></span>
+                    </div>
+                </Tooltip>
 
 
             </div>
@@ -92,10 +97,10 @@ export default {
     return{
        openTime:false,
        colorLabels:[
-        {label:'未租',color:'#BCE590'},
-        {label:'在租',color:'#fedc82'},
-        {label:'合同未生效',color:'#fea877'},
-        {label:'不可用',color:'#E4E4E4'}
+        {label:'未租',color:'#BCE590',content:'库存日期当日是未租的',class:'toolbar-inner no-rent'},
+        {label:'在租',color:'#fedc82',content:'库存日期当日有客户在租，合同已生效',class:'toolbar-inner in-rent'},
+        {label:'合同未生效',color:'#fea877',content:'库存日期当日有未生效的合同占用',class:'toolbar-inner no-availible'},
+        {label:'不可用',color:'#E4E4E4',content:'库存日期当日被特殊情况占用',class:'toolbar-inner no-use'}
        ],
        canvasData:[],
        tabForms:{},
@@ -147,7 +152,6 @@ export default {
         this.isClickShow=true;
     },
     submitConfig(forms){
-        this.tabForms=Object.assign({},this.tabForms,forms);
         this.openConfig();
         this.getMapData(this.tabForms);
     },
@@ -161,13 +165,21 @@ export default {
         }
         this.isFirstClick=true;
     },
+    getItem(arr){
+        var obj={};
+        arr.map((item,index)=>{
+            console.log('name---',localStorage.getItem('map-config-'+item.name),'00',item.name);
+            obj[item.name]=localStorage.getItem('map-config-'+item.name)||item.number;
+        })
+        return obj
+    },
     //获取数据
     getMapData(values){
         this.isLoading=false;
         values.currentDate=utils.dateCompatible(values.currentDate);
-        values.futureAvlDays=values.futureAvlDays||60;
-        values.futureAvlEndDays=values.futureAvlEndDays||30;
-        values.futureOccDays=values.futureOccDays||60;
+        let arr=[{name:'futureAvlDays',number:60},{name:'futureOccDays',number:60},{name:'futureAvlEndDays',number:30}];
+        console.log('this.getItem(arr)---',this.getItem(arr));
+        values=Object.assign({},values,this.getItem(arr));
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
            this.canvasData.map((item,index)=>{
@@ -314,7 +326,6 @@ export default {
         display:inline-block;
         .toolbar-inner{
              display:inline-block;
-             margin-right:26px;
             .map-font-tip{
                 display:inline-block;
                 vertical-align: middle;
@@ -429,6 +440,24 @@ export default {
          background:url('~/assets/images/can.svg') no-repeat center;
          background-size:100%;
          vertical-align: middle;
+      }
+      .ivu-tooltip-inner{
+        white-space: normal;
+      }
+      .in-rent{
+          margin:0 26px;
+      }
+      .no-use{
+          margin:0 26px;
+      }
+      .floor-chart-box-map{
+          .ivu-tooltip{
+              &:first-child{
+                  .ivu-tooltip-popper{
+                      width:100px;
+                  }
+              }
+          }
       }
   }
   .config-tip{

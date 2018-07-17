@@ -92,7 +92,7 @@ import dateUtils from 'vue-dateutils';
                 arr.length&&arr.map((item,index)=>{
                     if(error.length){
                         error.map((items,indexs)=>{
-                            if(items==item.id){
+                            if(items.id==item.id){
                                 item.color='red';
                             }
                         })               
@@ -117,7 +117,7 @@ import dateUtils from 'vue-dateutils';
                     list.capacity=item.capacity;
                     goodsMiddle.push(list);
                 })
-                this.formItem.goodListText=JSON.stringify(goodsMiddle);
+                this.formItem.batchDate=JSON.stringify(goodsMiddle);
             },
             submitSpace(){
                 this.$emit('submit',this.formItem);

@@ -1095,9 +1095,7 @@ export default {
             })
         },
         submitSpace(form){
-           console.log('fomr--',form);
-           this.$http.post('get-change-status',form).then((response)=>{    
-              console.log('提交',response.data)
+           this.$http.post('goods-add-space',form).then((response)=>{    
               if(response.data.length){
                     this.errorData=response.data;
               }else{

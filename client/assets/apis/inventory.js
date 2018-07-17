@@ -167,5 +167,10 @@ export default  {
         url: '/api/krspace-finance-web/cmt/goods/getGoodsInfo',
         method: 'get'
     },
+    //批量创建空间
+    'goods-add-space': {
+        url: '/song/api/krspace-finance-web/cmt/goods/add/device/batch',
+        method: 'post'
+    },
   }
   

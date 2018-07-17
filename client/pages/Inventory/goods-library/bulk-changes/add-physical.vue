@@ -32,7 +32,10 @@
                 </Form-item>
          </Form>
 
-         <div slot="footer">
+         <div v-if="!errorD.length">点击“创建”将创建同名的物理空间，并自动绑定。物理空间需绑定硬件设备后才可用。</div>
+         <div v-if="errorD.length"><span style="color:red;">部分商品创建过空间，并且还未解除绑定。</span><span>如仍需创建请先解除原有的绑定</span></div>
+
+         <div slot="footer" style="text-align:center;margin-top:30px;margin-bottom: 20px;">
              <Button type="primary" @click="submitSpace">创建</Button>
              <Button type="ghost" style="margin-left:20px" @click="cancelSpace">取消</Button>
          </div>

@@ -76,6 +76,7 @@
             width="660"
             v-model="spaceOpen"
             title="创建物理空间"
+            class-name="m-clear-footer"
         >
                 <AddPhysical    
                      v-if="spaceOpen"
@@ -110,6 +111,18 @@
                 <span style="color:red;">{{statusOldData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
                      <Button type="primary" @click="openComplete" >成功</Button>
+                </div>
+        </Modal>
+
+        <Modal
+            title="创建物理空间"
+            v-model="spaceTip"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+                  <span>创建成功</span>
+                  <div slot="footer" style="text-align:center;">
+                     <Button type="primary" @click="openComplete" >确定</Button>
                 </div>
         </Modal>
 
@@ -309,9 +322,7 @@
            :floor="newgoodForm.floor"
            :editData="serviceData"
         />
-        <div slot="footer">
-        
-         </div>
+        <div slot="footer"></div>
      </Modal>
 
     </div>
@@ -401,6 +412,7 @@ export default {
             switchParams:{},
             modifystate: false,
             complete: false,
+            spaceTip:false,
             newmodal:false,
             pudyt:false,
             butpudyt:false,
@@ -1083,6 +1095,7 @@ export default {
             })
         },
         submitSpace(form){
+           console.log('fomr--',form);
            this.$http.post('get-change-status',this.statusForm).then((response)=>{    
               console.log('提交',response.data)
               if(response.data.length){
@@ -1102,6 +1115,9 @@ export default {
         openComplete(){
            this.complete=!this.complete;      
         },
+        openSpaceSuccess(){
+            this.spaceTip=!this.spaceTip;
+        }
  
         //格式转换
         dateSwitch(data){
@@ -1161,6 +1177,11 @@ export default {
 }
 </script>
 <style lang='less'>
+  .m-clear-footer{
+        .ivu-modal-footer{
+            padding:0;
+        }
+   }
   .attract-investment{
           .upload{
                 width: 200px;

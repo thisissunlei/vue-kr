@@ -122,7 +122,7 @@
             >
                   <span>创建成功</span>
                   <div slot="footer" style="text-align:center;">
-                     <Button type="primary" @click="openComplete" >确定</Button>
+                     <Button type="primary" @click="openSpaceSuccess" >确定</Button>
                 </div>
         </Modal>
 
@@ -1096,13 +1096,13 @@ export default {
         },
         submitSpace(form){
            console.log('fomr--',form);
-           this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+           this.$http.post('get-change-status',form).then((response)=>{    
               console.log('提交',response.data)
               if(response.data.length){
                     this.errorData=response.data;
               }else{
                     this.openStatus()
-                    this.openComplete();
+                    this.openSpaceSuccess();
                     this.getListData(this.tabForms);
                     this.statusData=[];
               }
@@ -1117,8 +1117,7 @@ export default {
         },
         openSpaceSuccess(){
             this.spaceTip=!this.spaceTip;
-        }
- 
+        },
         //格式转换
         dateSwitch(data){
             if(data){

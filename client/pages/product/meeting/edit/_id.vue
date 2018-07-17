@@ -437,7 +437,7 @@ export default {
                     this.detailImgList=detailImgList;
                     this.formItem=data;
                     if(data.lockBeginTime){
-                         this.startDate==dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockBeginTime));
+                        this.startDate=dateUtils.dateToStr("YYYY-MM-DD", new Date(res.data.lockBeginTime));
                         this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
                         this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
                         this.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
@@ -568,6 +568,7 @@ export default {
                     duration: 3
                 });
                 let _this = this;
+                console.log('------->>>>',this.startDate , this.startHour)
                 if(this.startDate && this.startHour){
                     this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
                 }else{

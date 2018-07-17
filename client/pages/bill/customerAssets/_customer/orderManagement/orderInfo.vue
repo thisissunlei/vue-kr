@@ -9,7 +9,7 @@
                 <div class="right">已付信息</div>
                 <div class="left">费用信息</div>
             </div>
-            <Table border :columns="orderColumns" :data="orderDatas"></Table>
+            <Table border :columns="orderColumns" :data="orderData"></Table>
         </div>
         <div class="bill-table order-fees-bill">
             <div class="stages-header bill-header">
@@ -26,9 +26,13 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 export default {
     props: {
-        billData:{
-            type:Array,
-            default:()=>[]
+        billData: {
+            type: Array,
+            default: () => []
+        },
+        orderData: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -176,7 +180,6 @@ export default {
                     }
                 },
             ],
-            orderDatas: [],
             billColumns: [
                 {
                     title: '账单类型—编号',
@@ -285,9 +288,8 @@ export default {
                     className: "colPadRight",
                 },
             ],
-            
 
-            orderDatasDemo: [
+            orderDataDemo: [
                 {
                     stage: '第1期',
                     seatRoom: '03001—03004,03006,301—304,306',
@@ -372,7 +374,7 @@ export default {
         },
         //格式化接收数据
         formatDataList() {
-            // this.orderDatas = [].concat(this.orderDatasDemo)
+            // this.orderData = [].concat(this.orderDataDemo)
             // this.billData = [].concat(this.billDataDemo)
         },
         //跳转至订单详情

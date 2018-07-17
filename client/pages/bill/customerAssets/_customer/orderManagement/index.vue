@@ -3,7 +3,7 @@
         <div class="order-management">
             <div class="community-selection">
                 <span style="margin-right:5px">社区</span>
-                <Select clearable v-model="targetCommunity" @on-change="handleCommunityChange" style="width:200px">
+                <Select clearable v-model="targetCommunity" style="width:200px">
                     <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{item.name }}</Option>
                 </Select>
             </div>
@@ -12,7 +12,7 @@
             </div>
 
             <div class="order-info-list">
-                <OrderInfo :billData="billData" @onShowCalDetail="handleShowCalDetail"></OrderInfo>
+                <OrderInfo :billData="billData" :orderData="orderData" @onShowCalDetail="handleShowCalDetail"></OrderInfo>
             </div>
             <div class="set-fee-info-list">
                 <Modal v-model="seatFeeDetailListModal" width="830" @on-cancel="handleCloseModal">
@@ -47,6 +47,7 @@ export default {
             serviceChargeData:[],
             depositCashData:[],
             billData:[],
+            orderData:[],
             orderId: '',
             spinShow: true,
             seatFeeDetailListModal: false,
@@ -56,17 +57,13 @@ export default {
     },
     watch: {
         targetCommunity() {
-            this.getData(this.customerId,this.targetCommunity)
+            this.getFeeDataList(this.customerId,this.targetCommunity)
         }
     },
     mounted() {
-        this.getOrderInfos();
+        this.getCommunityList();
     },
     methods: {
-        //获取客户名下的所有信息
-        getOrderInfos() {
-            this.getCommunityList()
-        },
         // 获取社区列表
         getCommunityList() {
             let param = {
@@ -85,8 +82,7 @@ export default {
             })
         },
         //获取Table Data
-        getData(customerId, communityId) {
-
+        getFeeDataList(customerId, communityId) {
             if (!customerId||!communityId) {
                 return;
             }
@@ -95,7 +91,6 @@ export default {
                 communityId: communityId
             }
             this.$http.get('get-fee-overivew-list', params).then((r) => {  
-                debugger
                 this.serviceChargeData =[].concat(r.data.fee) ;
                 this.depositCashData = [].concat(r.data.deposit);
                 this.billData=[].concat(r.data.bill)
@@ -116,11 +111,6 @@ export default {
         handleCloseModal() {
             this.spinShow = true
         },
-        handleCommunityChange() {
-            //获取社区费用概览
-
-            //获取社区费用信息
-        }
     }
 }
 </script>

@@ -9,7 +9,14 @@ import utils from '~/plugins/utils';
 
 export default {
     props: {
-        communityId: '',
+        serviceChargeData: {
+            type: Array,
+            default: []
+        },
+        depositCashData: {
+            type: Array,
+            default: []
+        },
     },
     data() {
         return {
@@ -103,8 +110,6 @@ export default {
                     }
                 },
             ],
-            serviceChargeData: [],
-            depositCashData: [],
             serviceChargeDataDemo: [
                 {
                     feeName: '工位服务费',
@@ -149,13 +154,8 @@ export default {
 
         }
     },
-    watch: {
-        communityId() {
-            this.getData(this.communityId);
-        }
-    },
     mounted() {
-        this.formatData();
+        // this.formatData();
         // this.mergeHeader();
     },
     methods: {
@@ -170,8 +170,8 @@ export default {
             headerDom.style.width = width + 'px'
         },
         formatData() {
-            this.serviceChargeData = [].concat(this.serviceChargeDataDemo);
-            this.depositCashData = [].concat(this.depositCashDataDemo)
+            // this.serviceChargeData = [].concat(this.serviceChargeDataDemo);
+            // this.depositCashData = [].concat(this.depositCashDataDemo)
         },
         //table 奇偶行附className 以显示不同颜色
         rowClassName(row, index) {
@@ -181,20 +181,6 @@ export default {
                 return 'table-odd-row';
             }
             return '';
-        },
-        //获取Table Data
-        getData(communityId) {           
-            let params={}
-            this.$http.get('join-bill-list', params).then((response) => {
-                this.totalCount = response.data.totalCount;
-                this.joinData = response.data.items;
-                this.openSearch = false;
-                this.hasSeatDataExportRight = response.data.hasSeatExportRight;//是否具有工位数据导出权限
-            }).catch((error) => {
-                this.$Notice.error({
-                    title: error.message
-                });
-            })
         },
     }
 }

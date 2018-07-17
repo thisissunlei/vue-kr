@@ -1,23 +1,23 @@
 <template>
     <div class="order-info-container">
-        <div class='info-title'>
-            <span class='order-number'>{{nunber}}</span>
-            <span class='order-amount'>{{amount}}</span>
+        <div class="info-title">
+            <span class="order-number" @click="jump2OrderDetail">{{nunber}}</span>
+            <span class="order-amount">{{amount}}</span>
         </div>
-        <div class='bill-table order-fees-stages '>
-            <div class='stages-header'>
-                <div class='right'>已付信息</div>
-                <div class='left'>费用信息</div>
+        <div class="bill-table order-fees-stages ">
+            <div class="stages-header">
+                <div class="right">已付信息</div>
+                <div class="left">费用信息</div>
             </div>
-            <Table border :columns="feesStagesColumns" :data="feesStagesDatas"></Table>
+            <Table border :columns="orderColumns" :data="orderDatas"></Table>
         </div>
-        <div class='bill-table order-fees-bill'>
-            <div class='stages-header bill-header'>
-                <div class='right2'>欠款信息</div>
-                <div class='right1'>已付信息</div>
-                <div class='left'>费用信息</div>
+        <div class="bill-table order-fees-bill">
+            <div class="stages-header bill-header">
+                <div class="right2">欠款信息</div>
+                <div class="right1">已付信息</div>
+                <div class="left">费用信息</div>
             </div>
-            <Table border :columns="billDetailColumns" :data="billDetailData"></Table>
+            <Table border :columns="billColumns" :data="billData"></Table>
         </div>
     </div>
 </template>
@@ -26,7 +26,10 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 export default {
     props: {
-        communityId: ''
+        billData:{
+            type:Array,
+            default:()=>[]
+        }
     },
     data() {
         const statusWidth = 90
@@ -35,7 +38,7 @@ export default {
             nunber: '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
             amount: '¥' + utils.thousand((1200000).toFixed(2)),
 
-            feesStagesColumns: [
+            orderColumns: [
                 {
                     title: '分期数',
                     align: 'center',
@@ -173,12 +176,12 @@ export default {
                     }
                 },
             ],
-            feesStagesDatas: [],
-            billDetailColumns: [
+            orderDatas: [],
+            billColumns: [
                 {
                     title: '账单类型—编号',
                     align: 'center',
-                    width: 260,
+                    width: 270,
                     key: 'billNo',
                     render: (h, params) => {
                         return h(
@@ -214,11 +217,11 @@ export default {
                 {
                     title: '账单金额',
                     align: 'center',
-                    key: 'needPaid',
+                    key: 'need',
                     className: "colPadRight",
                     render: (h, params) => {
-                        if (params.row.needPaid) {
-                            let amount = utils.thousand((params.row.needPaid).toFixed(2))
+                        if (params.row.need) {
+                            let amount = utils.thousand((params.row.need).toFixed(2))
                             return h('div', '¥' + amount)
                         }
                     }
@@ -230,10 +233,10 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        if (params.row.paid && params.row.needPaid) {
+                        if (params.row.paid && params.row.need) {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
-                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                            if (Number(params.row.need) === Number(params.row.paid)) {
                                 obj.clear = true
                             }
                             return h('div', { 'class': obj }, '¥' + amount)
@@ -249,12 +252,12 @@ export default {
                     render: (h, params) => {
                         let str = '未付清'
                         let obj = { clear: false }
-                        if (params.row.needPaid && params.row.paid) {
-                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                        if (params.row.need && params.row.paid) {
+                            if (Number(params.row.need) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true
                             }
-                            else if (Number(params.row.needPaid) > Number(params.row.paid)) {
+                            else if (Number(params.row.need) > Number(params.row.paid)) {
                                 str = '未付清'
                             }
                         }
@@ -282,9 +285,9 @@ export default {
                     className: "colPadRight",
                 },
             ],
-            billDetailData: [],
+            
 
-            feesStagesDatasDemo: [
+            orderDatasDemo: [
                 {
                     stage: '第1期',
                     seatRoom: '03001—03004,03006,301—304,306',
@@ -332,7 +335,7 @@ export default {
                     payStaus: '已支付'
                 }
             ],
-            billDetailDataDemo: [
+            billDataDemo: [
                 {
                     billNo: '增值账单—ZD031806011001010001',
                     feeName: '会议室账单',
@@ -369,8 +372,8 @@ export default {
         },
         //格式化接收数据
         formatDataList() {
-            this.feesStagesDatas = [].concat(this.feesStagesDatasDemo)
-            this.billDetailData = [].concat(this.billDetailDataDemo)
+            // this.orderDatas = [].concat(this.orderDatasDemo)
+            // this.billData = [].concat(this.billDataDemo)
         },
         //跳转至订单详情
         jump2OrderDetail(params) {
@@ -380,11 +383,11 @@ export default {
             } else {
                 viewName = 'joinView';
             }
-            let orderNo = params.row.id || 12974
+            let orderNo = params.row.id
             window.open(`/order-center/order-manage/station-order-manage/${orderNo}/${viewName}`, '_blank');
         },
         jump2BillDetail(billNo) {
-            billNo = billNo || 480
+            billNo = billNo
             window.open(`/bill/list/detail/${billNo}`, '_blank');
         },
         //跳转至订单的计算明细
@@ -411,6 +414,7 @@ export default {
             line-height: @titleHeight;
             padding-left: 24px;
             float: left;
+            cursor: pointer;
         }
         .order-amount {
             height: @titleHeight;

@@ -43,7 +43,7 @@
 
             		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
             	</div> -->
-				<OrderManagement v-if="selectedTab=='order'" class="tab-texts"/>
+				<OrderManagement v-if="selectedTab=='order'" :customerId="customerId" class="tab-texts"/>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
         </div>

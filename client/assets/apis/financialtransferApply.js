@@ -69,5 +69,17 @@ export default {
     "get-customer-financialtransfer": {
         url: "api/krspace-op-web/customer/v/my-customers?",
         method: "get"
+    },
+
+    //获取客户社区列表
+    "get-fee-communitys": {
+        url: "/ben/api/krspace-op-web/seat-installment/cmt-list",
+        method: "get"
+    },
+
+    //获取客户费用汇总列表
+    "get-fee-overivew-list": {
+        url: "/ben/api/krspace-op-web/seat-installment/fee-list",
+        method: "get"
     }
 };

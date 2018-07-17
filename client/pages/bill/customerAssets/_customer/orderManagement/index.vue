@@ -1,24 +1,24 @@
 <template>
-    <div class='scoped-container'>
-        <div class='order-management'>
-            <div class='community-selection'>
-                <span style='margin-right:5px'>社区</span>
-                <Select clearable v-model="targetCommunity" @on-change='handleCommunityChange' style="width:200px">
-                    <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <div class="scoped-container">
+        <div class="order-management">
+            <div class="community-selection">
+                <span style="margin-right:5px">社区</span>
+                <Select clearable v-model="targetCommunity" @on-change="handleCommunityChange" style="width:200px">
+                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
             </div>
-            <div class='community-overview'>
-                <FeeOverView :communityId='targetCommunity'></FeeOverView>
+            <div class="community-overview">
+                <FeeOverView :serviceChargeData="serviceChargeData" :depositCashData="depositCashData"></FeeOverView>
             </div>
 
             <div class="order-info-list">
-                <OrderInfo :communityId='targetCommunity' @onShowCalDetail='handleShowCalDetail'></OrderInfo>
+                <OrderInfo :billData="billData" @onShowCalDetail="handleShowCalDetail"></OrderInfo>
             </div>
             <div class="set-fee-info-list">
-                <Modal v-model="seatFeeDetailListModal" width='830' @on-cancel='handleCloseModal'>
+                <Modal v-model="seatFeeDetailListModal" width="830" @on-cancel="handleCloseModal">
                     <p slot="header" style="padding-left:15px">明细</p>
                     <Spin size="large" fix v-if="spinShow"></Spin>
-                    <seatFeeDetailList :orderId='' v-if='seatFeeDetailListModal'></seatFeeDetailList>
+                    <seatFeeDetailList :orderId="orderId" v-if="seatFeeDetailListModal" />
                     <div class="seat-fee-detail-list-modal-footer" slot="footer">
                     </div>
                 </Modal>
@@ -39,26 +39,24 @@ export default {
         FeeOverView,
         seatFeeDetailList,
     },
+    props: {
+        customerId: ''
+    },
     data() {
         return {
-            orderId:'',
+            serviceChargeData:[],
+            depositCashData:[],
+            billData:[],
+            orderId: '',
             spinShow: true,
             seatFeeDetailListModal: false,
             targetCommunity: '',//选中的要查看详细工位信息的社区
-            communityList: [
-                {
-                    label: "大街",
-                    value: 1
-                },
-                {
-                    label: "创业",
-                    value: 2
-                },
-                {
-                    label: "酒仙桥",
-                    value: 3
-                }
-            ],//[{communityId,communityName}]
+            communityList: [],//[{communityId,communityName}]
+        }
+    },
+    watch: {
+        targetCommunity() {
+            this.getData(this.customerId,this.targetCommunity)
         }
     },
     mounted() {
@@ -67,11 +65,49 @@ export default {
     methods: {
         //获取客户名下的所有信息
         getOrderInfos() {
-
+            this.getCommunityList()
         },
-        handleShowCalDetail(orderNo) {           
+        // 获取社区列表
+        getCommunityList() {
+            let param = {
+                customerId: this.customerId
+            };
+            this.$http.get('get-fee-communitys', param).then((r) => {
+                this.communityList = r.data
+                if (r.data.length > 0) {
+                    this.targetCommunity = ''+r.data[1].id;
+                }
+
+            }).catch((err) => {
+                this.$Notice.error({
+                    title: err.message
+                });
+            })
+        },
+        //获取Table Data
+        getData(customerId, communityId) {
+
+            if (!customerId||!communityId) {
+                return;
+            }
+            let params = {
+                customerId: customerId,
+                communityId: communityId
+            }
+            this.$http.get('get-fee-overivew-list', params).then((r) => {  
+                debugger
+                this.serviceChargeData =[].concat(r.data.fee) ;
+                this.depositCashData = [].concat(r.data.deposit);
+                this.billData=[].concat(r.data.bill)
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
+        },
+        handleShowCalDetail(orderNo) {
             this.seatFeeDetailListModal = true;
-            this.orderId=orderNo
+            this.orderId = orderNo
             setTimeout((orderNo) => {
                 document.querySelectorAll('.seat-fee-detail-list-modal-footer')[0].parentNode.style.display = "none";
                 this.spinShow = false
@@ -80,7 +116,7 @@ export default {
         handleCloseModal() {
             this.spinShow = true
         },
-        handleCommunityChange(){
+        handleCommunityChange() {
             //获取社区费用概览
 
             //获取社区费用信息

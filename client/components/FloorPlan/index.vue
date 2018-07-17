@@ -7,8 +7,8 @@
                  <span class="map-color-tip" :style="'background:'+item.color"></span>
              </div>
 
-             <span class="warning-tip"></span>
-             <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span> 
+             <!-- <span class="warning-tip"></span>
+             <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
 
              <div class="export" :id="drawingPicture">导出高清图</div>    
         </div>

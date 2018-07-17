@@ -16,17 +16,15 @@
                 <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
             </div> -->
             <PublicHander :name="name" :city="city" @goback="goback" />
-            <Tabs size="default" @on-click="tabClick" :animated="false">
-                <TabPane label="物业档案" name="property">
-                    <ArchivesManagement v-if="activeTab=='property'" code="property"/>
+            <Tabs size="default" @on-click="tabClick" :animated="false" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                <TabPane label="物业档案" v-if="propertyShow" name="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='property'" code="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
 
                 </TabPane>
-                <TabPane label="产品档案"  name="product">
-
-
-                    <ArchivesManagement v-if="activeTab=='product'" code="product"/>
+                <TabPane label="产品档案" v-if="productShow"  name="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='product'" code="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
                 </TabPane>
-             
+
             </Tabs>
 
 
@@ -123,10 +121,13 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
+import DetailTaskList from './detail-task-list';
+
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
@@ -142,6 +143,7 @@ export default {
         AddTask,
         EditTask,
         WatchRecord,
+        DetailTaskList,
         Message,
         Drawer,
         ObjectDetailTitle,
@@ -150,6 +152,8 @@ export default {
     },
     data(){
         return{
+            propertyShow:false,//  this.$route.query.propertyShow==='true'?true:false,
+            productShow:false,//  this.$route.query.productShow==='true'?true:false,
             projectid:this.$route.query.id,
             name: this.$route.query.name,
             city: this.$route.query.city,
@@ -183,7 +187,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:'property',
+            activeTab:"", //this.$route.query.propertyShow ==='true'?"property":"product",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -215,14 +219,49 @@ export default {
     },
     created(){
         this.queryData=this.$route.query;
+        this.actioncheck();
+
     },
     mounted(){
+
 
          GLOBALSIDESWITCH("false");
         this.getDeletePermission();
 
+        this.$nextTick(()=>{
+          //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
+          setTimeout(()=>{
+                      let div1 = document.querySelectorAll(".edit-left-bar .ivu-tabs-tab-active")[0]
+                    let div2 = document.querySelectorAll(".edit-left-bar .ivu-tabs-ink-bar")[0]
+                  if(!this.propertyShow || !this.productShow){
+
+                    div1.style.width ='100%'
+                    div2.style.width ='100%'
+                  }else{
+
+                  }
+          },100)
+
+
+
+
+        })
+
     },
     methods:{
+       actioncheck(){
+              this.$http.get('roleActionCheck').then((res)=>{
+           
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
+
+                  this.activeTab =this.propertyShow ?"property":"product";
+          
+              }).catch((e)=>{
+      
+
+              })
+          },
         goback(){
           this.$router.push({path:'/bill/project-setting/comment?'+"name="+this.name+"&city="+this.city+"&id="+this.projectid})
         },
@@ -249,7 +288,7 @@ export default {
 
                this.switchDelete();
                 window.close();
-                window.opener.location.reload();
+                // window.location.reload();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;
@@ -702,7 +741,7 @@ export default {
 </script>
 
 <style lang="less">
-   .edit-left-bar{
+  .edit-left-bar{
 
        width:100%;
        background: #fff;

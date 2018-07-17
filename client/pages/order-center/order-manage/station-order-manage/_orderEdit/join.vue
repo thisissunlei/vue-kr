@@ -529,8 +529,7 @@ export default {
     methods: {
         //获取销售机会列表
         getSalerChanceList() {
-        let chanceid=this.formItem.saleChanceId;
-        console.log(chanceid,'getSalerChanceList000000')
+            let chanceid=this.formItem.saleChanceId;
             if(chanceid){
                 this.chancedisabled=true
                 return;
@@ -712,7 +711,7 @@ export default {
                     _this.formItem.items = data.contractTactics;
                 }, 700)
                 _this.getFloor = +new Date()
-                console.log(_this.formItem)
+                // _this.validSaleChance();
                 _this.getSalerChanceList();
             }, e => {
                 _this.$Notice.error({
@@ -1202,6 +1201,7 @@ export default {
             }
         },
         validSaleChance() {
+           
             // this.showSaleChance = this.formItem.salerId && this.formItem.customerId && this.formItem.communityId;
             let obj = {};
             obj.customerId = this.formItem.customerId;

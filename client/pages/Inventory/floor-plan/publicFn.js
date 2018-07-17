@@ -26,6 +26,9 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
         left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
+    if(toolLocation.top<=0){
+        toolLocation.top=0;
+    }
     
     if(isIcon=='icon'){
         toolLocation.left=Number(every.cellCoordX)+6+Number(every.cellWidth)-Number(tirDetail.width)-scroll.left;

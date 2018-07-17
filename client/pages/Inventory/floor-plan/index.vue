@@ -304,6 +304,7 @@ export default {
             '<div id="gantt-chart-tool-tip-triangle'+selectId+'" class="top-triangle gantt-chart-tool-tip-triangle" />';
          var el = document.createElement('div');
          el.innerHTML = productDom;
+         el.style.pointerEvents='none';
          wrapDom.appendChild(el);
     }
   }

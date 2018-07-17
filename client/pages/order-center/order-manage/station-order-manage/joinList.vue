@@ -47,7 +47,7 @@
                 </div>
             </Modal>
             
-            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+            <Modal id='nullifymodel' v-if="openNullify" title="请确认是否作废订单" width="500">
                 <Nullify :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
 
                 <div id="nulldiv" slot="footer">
@@ -367,271 +367,224 @@
                         }
                     }
                 
-                ]
-            }
-        },
-    
+            ]
+        }
+    },
 
-        watch: {
-            $props: {
-                deep: true,
-                handler(nextProps) {
-                    if (nextProps.mask == 'join') {
-                        this.getListData(this.switchParams);
-                        this.params = this.switchParams;
-                    }
-                }
-            }
-        },
-
-        mounted() {
-            let mask = this.$route.query.mask;
-            if (!mask || mask == 'join') {
-                sessionStorage.setItem('paramsJoin', JSON.stringify(this.$route.query));
-            }
-
-            let jsonJoin = JSON.parse(sessionStorage.getItem('paramsJoin'));
-            this.switchParams = Object.assign({}, jsonJoin, { page: 1, pageSize: 15 });
-            this.getListData(this.switchParams);
-            this.params = this.switchParams;
-        },
-
-        methods: {
-            //刷新列表
-            refershJoinList(params) {
-                this.getListData(this.params);
-                this.openNullify = false;
-            },
-            // submitNullify() {
-            //     let params = {
-            //         id: this.id
-            //     };
-            //     if (this.nullDisabled) {
-            //         return;
-            //     }
-            //     this.nullDisabled = true;
-            //     this.closeNullify();
-            //     this.$http.post('join-nullify', params).then((response) => {
-            //         this.openMessage = true;
-            //         this.MessageType = "success";
-            //         this.warn = '作废成功';
-            //         this.getListData(this.params);
-            //     }).catch((error) => {
-            //         this.openMessage = true;
-            //         this.MessageType = "error";
-            //         this.warn = error.message;
-            //     })
-            // },
-
-            watch: {
-                $props: {
-                    deep: true,
-                    handler(nextProps) {
-                        if(nextProps.mask=='join'){
-                        this.getListData(this.switchParams);
-                        this.params=this.switchParams; 
-                        }
-                    }
-                }
-            },
-            
-            mounted(){
-                let mask=this.$route.query.mask;
-                if(!mask||mask=='join'){
-                sessionStorage.setItem('paramsJoin',JSON.stringify(this.$route.query));
-                }
-
-                let jsonJoin=JSON.parse(sessionStorage.getItem('paramsJoin'));
-                this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15});
-                this.getListData(this.switchParams);
-                this.params=this.switchParams;
-            },
-
-            methods:{   
-                submitNullify (){
-                    let params={
-                        id:this.id
-                    };
-                    if(this.nullDisabled){
-                        return ;
-                    }
-                    this.nullDisabled=true;
-                    this.closeNullify();
-                    this.$http.post('join-nullify', params).then((response) => {
-                        this.openMessage=true;
-                        this.MessageType="success";
-                        this.warn='作废成功';
-                        this.getListData(this.params);
-                    }).catch( (error) => {
-                        this.openMessage=true;
-                        this.MessageType="error";
-                        this.warn=error.message;
-                    })
-                },
-
-                submitApply(){
-                    let params={
-                        id:this.id
-                    };
-                    if(this.applyDisabled){
-                        return ;
-                    }
-                    this.applyDisabled=true;
-                    this.closeApply();
-                    this.$http.post('apply-contract', params).then((response)=>{
-                        this.openMessage=true;
-                        this.MessageType="success";
-                        this.warn='申请成功';
-                        this.getListData(this.params);
-                    }).catch((error)=>{
-                        this.openMessage=true;
-                        this.MessageType="error";
-                        this.warn=error.message;
-                    })
-                },
-
-                submitExport (){
-                    this.props=Object.assign({},this.props,this.params);
-                    utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');              
-                },
-                //导出工位数据
-                submitExportSeat(){
-                    this.props=Object.assign({},this.props,this.params);
-                    utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export-all');
-                },
-                submitUpperSearch(){
-                    if(this.upperError){
-                        return ;
-                    }
-                    this.params=Object.assign({},this.params,this.upperData);
-                    this.params.mask='join';
-                    this.params.page=1;
-                    this.params.pageSize=15;
-                    this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
-                    this.params.effectStart=this.params.effectStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectStart)):'';
-                    this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                    this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
-                    utils.addParams(this.params);
-                },
-
-                submitLowerSearch(){
-                    this.params.mask='join';
-                    utils.addParams(this.params);
-                },
-
-                getListData(params){
-                    this.$http.get('join-bill-list', params).then((response)=>{
-                        this.totalCount=response.data.totalCount;
-                        this.joinData=response.data.items;
-                        this.openSearch=false;
-                        this.hasSeatDataExportRight=response.data.hasSeatExportRight;//是否具有工位数据导出权限
-                    }).catch((error)=>{
-                        this.openMessage=true;
-                        this.MessageType="error";
-                        this.warn=error.message;
-                    })
-                },
-
-                onPageChange (index) {
-                    let params=this.params;
-                    params.page=index;
-                    this.getListData(params);
-                },
-
-                onUpperChange(params,error){
-                    this.upperError=error;
-                    this.upperData=params;
-                },
-
-                onMessageChange(data){
-                    this.openMessage=data;
-                },
-
-                onKeyEnter: function (ev) {
-                    this.submitLowerSearch();
-                },
-
-                jumpJoin(){
-                    window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
-                },
-                jumpReduce(){
-                    window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
-                },
-
-                jumpRenew(){
-                    window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
-                },
-
-                jumpReplace(){
-                    window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
-                },
-
-                jumpView(params){
-                    var viewName='';
-                    if(params.row.orderType=='CONTINUE'){
-                        viewName='renewView';  
-                    }else{
-                        viewName='joinView';   
-                    }
-                    window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
-                },
-
-                jumpEdit(values){
-                    var popup = window.open();
-                    let params={
-                        orderId:values.row.id
-                    }
-                    this.$http.get('order-first-payed', params).then((response)=>{
-                        let type = '';
-                        switch (values.row.orderType){
-                            case 'IN':
-                                type = 'join';
-                                break;
-                            case 'INCREASE':
-                                type = 'join';
-                                break;
-                            case 'CONTINUE':
-                                type = 'renew';
-                                break;
-                            default:
-                                type = 'join';
-                                break;
-                        }
-                        popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
-                    }).catch((error)=>{
-                        popup.close();
-                        this.openMessage=true;
-                        this.MessageType="error";
-                        this.warn=error.message;
-                    })
-                },
-
-                showNullify(params){
-                    this.id=params.row.id;
-                    this.closeNullify();
-                },
-
-                closeNullify(){
-                    this.openNullify=!this.openNullify;
-                    this.nullDisabled=false;
-                },
-
-                closeApply(){
-                    this.openApply=!this.openApply;
-                    this.applyDisabled=false;
-                },
-
-                showSearch () {
-                    this.openSearch=!this.openSearch;
-                },
-
-                showApply(params){
-                    this.id=params.row.id;
-                    this.closeApply();
+    watch: {
+        $props: {
+            deep: true,
+            handler(nextProps) {
+                if (nextProps.mask == 'join') {
+                    this.getListData(this.switchParams);
+                    this.params = this.switchParams;
                 }
             }
         }
+    },
+
+    mounted() {
+        let mask = this.$route.query.mask;
+        if (!mask || mask == 'join') {
+            sessionStorage.setItem('paramsJoin', JSON.stringify(this.$route.query));
+        }
+
+        let jsonJoin = JSON.parse(sessionStorage.getItem('paramsJoin'));
+        this.switchParams = Object.assign({}, jsonJoin, { page: 1, pageSize: 15 });
+        this.getListData(this.switchParams);
+        this.params = this.switchParams;
+    },
+
+
+    methods:{   
+        refershJoinList(params) {
+            this.getListData(this.params);
+            this.openNullify = false;
+        },
+        submitNullify (){
+            let params={
+                id:this.id
+            };
+                if(this.nullDisabled){
+                    return ;
+                }
+                this.nullDisabled=true;
+                this.closeNullify();
+                this.$http.post('join-nullify', params).then((response) => {
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='作废成功';
+                    this.getListData(this.params);
+            }).catch( (error) => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+            })
+        },
+
+        submitApply(){
+            let params={
+                id:this.id
+            };
+            if(this.applyDisabled){
+                return ;
+            }
+                this.applyDisabled=true;
+                this.closeApply();
+                this.$http.post('apply-contract', params).then((response)=>{
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='申请成功';
+                    this.getListData(this.params);
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                })
+        },
+
+        submitExport (){
+            this.props=Object.assign({},this.props,this.params);
+            utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');              
+        },
+        //导出工位数据
+        submitExportSeat(){
+            this.props=Object.assign({},this.props,this.params);
+            utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export-all');
+        },
+        submitUpperSearch(){
+            if(this.upperError){
+                return ;
+            }
+            this.params=Object.assign({},this.params,this.upperData);
+            this.params.mask='join';
+            this.params.page=1;
+            this.params.pageSize=15;
+            this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
+            this.params.effectStart=this.params.effectStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectStart)):'';
+            this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+            this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+            utils.addParams(this.params);
+        },
+
+        submitLowerSearch(){
+            this.params.mask='join';
+            utils.addParams(this.params);
+        },
+
+        getListData(params){
+                this.$http.get('join-bill-list', params).then((response)=>{
+                    this.totalCount=response.data.totalCount;
+                    this.joinData=response.data.items;
+                    this.openSearch=false;
+                    this.hasSeatDataExportRight=response.data.hasSeatExportRight;//是否具有工位数据导出权限
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                })
+        },
+
+        onPageChange (index) {
+            let params=this.params;
+            params.page=index;
+            this.getListData(params);
+        },
+
+        onUpperChange(params,error){
+            this.upperError=error;
+            this.upperData=params;
+        },
+
+        onMessageChange(data){
+            this.openMessage=data;
+        },
+
+        onKeyEnter: function (ev) {
+            this.submitLowerSearch();
+        },
+
+        jumpJoin(){
+            window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
+        },
+        jumpReduce(){
+            window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
+        },
+
+        jumpRenew(){
+            window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
+        },
+
+        jumpReplace(){
+            window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
+        },
+
+        jumpView(params){
+            var viewName='';
+            if(params.row.orderType=='CONTINUE'){
+                viewName='renewView';  
+            }else{
+                viewName='joinView';   
+            }
+            window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
+        },
+
+        jumpEdit(values){
+            var popup = window.open();
+            let params={
+                orderId:values.row.id
+            }
+            this.$http.get('order-first-payed', params).then((response)=>{
+                let type = '';
+                switch (values.row.orderType){
+                    case 'IN':
+                        type = 'join';
+                        break;
+                    case 'INCREASE':
+                        type = 'join';
+                        break;
+                    case 'CONTINUE':
+                        type = 'renew';
+                        break;
+                    default:
+                        type = 'join';
+                        break;
+                }
+                popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
+                }).catch((error)=>{
+                    popup.close();
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                })
+        },
+
+        showNullify(params){
+            this.id=params.row.id;
+            this.closeNullify();
+        },
+
+        closeNullify(){
+            this.openNullify=!this.openNullify;
+            this.nullDisabled=false;
+        },
+
+        closeApply(){
+            this.openApply=!this.openApply;
+            this.applyDisabled=false;
+        },
+
+        showSearch () {
+            this.openSearch=!this.openSearch;
+        },
+
+        showApply(params){
+            this.id=params.row.id;
+            this.closeApply();
+        }
     }
+}
+
 </script>
 
 <style lang='less' scoped>

@@ -214,7 +214,7 @@ import tableSort from './tableSort';
     //创建dom
     function createElement(){
         var dom=document.createElement('span');
-        dom.style.display='none';
+        dom.style.visibility='hidden';
         document.body.appendChild(dom);
         return dom;
     }

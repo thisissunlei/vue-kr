@@ -44,7 +44,7 @@ function init(data,picProperty,dataUrl){
             list.item=item;
             dataRender.push(list);
         })
-        
+        dom&&document.body.removeChild(dom);
         
         //scale计算
         let minW=0.5;

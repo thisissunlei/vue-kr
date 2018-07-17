@@ -61,7 +61,6 @@
         },
         methods:{
             childrenClick(index){
-                console.log("=======",index)
                 this.$emit('childrenClick',index)
             },
             onChange(index,data){

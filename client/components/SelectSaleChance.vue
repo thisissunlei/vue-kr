@@ -69,7 +69,9 @@ export default {
             showValue:''+this.defaultValue,
             loading1: false,
             isRender:false,
+
             show:this.showType,
+
             salerOptions: [
                 {
                     label: '请选择',
@@ -85,7 +87,7 @@ export default {
     //             return this.defaultValue;
     //         },
     //         set(val) {
-    //             console.log(val)
+    //            
     //         }
 
     //     },
@@ -101,7 +103,7 @@ export default {
         // },
         orderitems() {
             this.getSalerChanceList();
-            // nconsole.log("09999999")
+           
         },
         defaultValue(){
             this.showValue = this.defaultValue;
@@ -112,13 +114,12 @@ export default {
             
         },
         // defaultValue(){
-        //     console.log("899999")
-        //     console.log(this.defaultValue,this.salerOptions)
+        //   
+        //    
         //     this.value = this.defaultValue;
         // }
     },
     mounted() {
-        console.log(this.showType,"=======")
     },
     methods: {
         changeContent(item) {
@@ -164,8 +165,6 @@ export default {
                 }else{
                     this.showValue = '';
                 }
-                 
-            //   
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({

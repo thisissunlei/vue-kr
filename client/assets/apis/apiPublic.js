@@ -1,5 +1,4 @@
 //公共的api
-
 export default  {
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
@@ -28,10 +27,6 @@ export default  {
         url:'/api/krspace-op-web/customer/my-customers/order-currency',
         method:'get'
     },
-    
-
-
-
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',
@@ -68,5 +63,17 @@ export default  {
     'roleEidtDetail':{
         url:'/api/pm/role/action/edit',
         method:'post'
+    },
+    "typePage":{
+        url:'/api/pm/discuss/list/type/page',
+        method:'get'
+    },
+    	'list-type-code-detail': {
+        url: 'api/pm/form-field/list/type/detail',
+       method: 'get'
+    },
+    'roleActionCheck':{
+        url:'api/pm/role/action/check',
+        method: 'get'
     }
 }

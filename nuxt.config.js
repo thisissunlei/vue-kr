@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   srcDir: 'client/',
-  cache:{ max: 20, maxAge: 600000 },
+  cache:{ max: 20, maxAge: 700000 },
   transition: {
     name: 'page',
     mode: 'out-in',
@@ -33,7 +33,7 @@ module.exports = {
     vendor: ['iview'],
     publicPath: '/',
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      webpackConfig.performance.maxAssetSize = 600000;
+      webpackConfig.performance.maxAssetSize = 700000;
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [

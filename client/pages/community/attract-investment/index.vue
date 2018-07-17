@@ -117,6 +117,16 @@ export default {
                     }
                 },
                 {
+                    title: '签约单价',
+                    key: 'orderList',
+                    className:'current-range',
+                    width:90,
+                    align:'right',
+                    render(h,obj){
+                        return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
+                    }
+                },
+                {
                     title: '折扣',
                     key: 'orderList',
                     className:'current-range',

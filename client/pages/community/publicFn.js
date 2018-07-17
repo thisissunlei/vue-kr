@@ -24,6 +24,9 @@ function mergeCell(h,rowArray,param,isTime){
             var otherName=param=='discount'?'折':(param=='rentTime'?'天':'');
             var pageData=item[param]?item[param]+otherName:'-';
             var popData=(item[param]&&isTime)?dateUtils.dateToStr("YYYY-MM-DD",new Date(item[param])):pageData;
+            if(isTime=='teshu'){
+                popData=(item.price&&param)?parseInt(item.price/param):'-';
+            }
             return h('div', [
                 h('Tooltip', {
                     props: {

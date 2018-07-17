@@ -176,7 +176,6 @@
                 item.menuItems.map(function (child) {
                     var href = ""
                     href = setHref(child.type, child.router);
-                    console.log("href",href,"router",router);
                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -194,7 +193,7 @@
         if (!callback){
             return;
         }
-        console.log(this,"pppppppp")
+       
         globalNav.menuBtnBacks.push(callback);
     }
     //用户名
@@ -297,7 +296,7 @@
             //===按钮被点击
             j_menu_btn.addEventListener('click', function () {
                 if (!navUtils.isHome) {
-                    console.log(j_menu_btn.className)
+                   
                     var open = true;
                     if (j_menu_btn.className.indexOf('menu-btn-open')>0){
                         open = false;
@@ -628,16 +627,16 @@
                             menuCode: 'oper_cmt_communityList_base',
                             router: 'product/communityAllocation/communityList'
                         },
-                        {
-                            primaryText: '空间',
-                            menuCode: 'oper_cmt_spaceList_base',
-                            router: 'product/communityAllocation/CommunityMeetingRoom'
-                        },
-                        {
-                            primaryText: '工位',
-                            menuCode: 'oper_cmt_stationList_base',
-                            router: 'product/communityAllocation/communityStation'
-                        },
+                        // {
+                        //     primaryText: '空间',
+                        //     menuCode: 'oper_cmt_spaceList_base',
+                        //     router: 'product/communityAllocation/CommunityMeetingRoom'
+                        // },
+                        // {
+                        //     primaryText: '工位',
+                        //     menuCode: 'oper_cmt_stationList_base',
+                        //     router: 'product/communityAllocation/communityStation'
+                        // },
                         {
                             primaryText: "商品库",
                             router: 'inventory/goods-library',
@@ -705,6 +704,12 @@
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
                         //},
+                        {
+                            primaryText: '社区商品配置',
+                            router: 'product/goods',
+                            type: 'vue',
+                            menuCode: 'mobile_community_goods',
+                        },
                         {
                             primaryText: '会议室',
                             router: 'product/meeting',
@@ -878,14 +883,9 @@
                             primaryText: '版本更新通知',
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
-                        },
+                        }
                        
-                        {
-                            primaryText: '项目管理权限',
-                            menuCode: 'pm_manage_role',
-                            type: 'vue',
-                            router: 'nav-config'
-                        },
+                       
                     ]
                 },
                 {
@@ -910,6 +910,11 @@
                             menuCode: 'brightpoint_label_list',
                             type:'vue',
                             router: 'facility-tags/',
+                        },
+                        {
+                            primaryText: '轮播图列表',
+                            menuCode: 'por_mobilepic_list',
+                            router: 'WebBackstage/picList',
                         },
                         {
                             primaryText: '关键词配置',
@@ -998,7 +1003,7 @@
                       
                         {
                             primaryText: '项目管理权限',
-                            menuCode: 'sso_loginLog_base',
+                            menuCode: 'pm_manage_role',
                             type: 'vue',
                             router: 'nav-config'
                         },
@@ -1337,9 +1342,8 @@
                         primaryText: "账款数据",
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
-                    },
-                    {
-                        primaryText: "财务端",
+                    },                    
+                    {primaryText: "财务端",
                         router: 'bill/make-invoice',
                         type: 'vue',
                         menuCode: 'invoice_finance'
@@ -1355,7 +1359,13 @@
                         router: 'bill/financial-invoice',
                         type: 'vue',
                         menuCode: 'qualification'
-                    },
+                    }, 
+                    // {
+                    //     primaryText: "客户资金转移",
+                    //     type: 'vue',
+                    //     router: 'order-center/apply-manage/_transferOperate',
+                    //     menuCode: 'wallet_transfer',
+                    // }
                     ]
                 },
         ]

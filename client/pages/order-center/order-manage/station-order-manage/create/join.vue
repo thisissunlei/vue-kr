@@ -382,10 +382,26 @@ export default {
                                     this.changePrice(params.index,price)
                                 }
                             }
-                        },'44')
+                        }, '44')
+                             
                     }
                 },
 
+                {
+                    title: '租赁期限',
+                    key: 'address',
+                    render: (h, params) => {
+                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.endDate)))
+                    }
+                },
+                {
+                    title: '小计',
+                    key: 'originalAmount',
+                    render:function(h,params){
+                        return h('span',{},utils.thousand(params.row.originalAmount))
+                        }
+                },
+                
                 {
                     title: '租赁期限',
                     key: 'address',
@@ -1041,6 +1057,7 @@ export default {
         clearStation: function () {
             // 清除所选的工位
             if (this.stationList.length) {
+                
 
                 this.stationData = {
                     submitData: [],
@@ -1069,6 +1086,7 @@ export default {
                 this.formItem.customerId = '';
             }
             this.getFloor = +new Date();
+            
             this.validSaleChance();
             this.clearStation()
 

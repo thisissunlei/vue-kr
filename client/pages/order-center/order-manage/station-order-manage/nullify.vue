@@ -110,8 +110,8 @@ export default {
             this.$Notice.error({
               title: error.message
             });
-            this.formItem.select = '';
-            this.formItem.input = '';
+            // this.formItem.select = '';
+            // this.formItem.input = '';
           });
       }
 

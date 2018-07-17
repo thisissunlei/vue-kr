@@ -1145,9 +1145,7 @@
                 var toString = Object.prototype.toString;
                 
                 var typeStr = toString.call([]); 
-               
                 if(this.selecedStationList && typeStr == '[object Array]' &&  this.selecedStationList.length){
-                   
                     this.clearFormThree();
                 }
             },

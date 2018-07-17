@@ -778,8 +778,9 @@ export default {
         changeCustomer: function (value) {
             if (value) {
                 this.renewForm.customerId = value;
+                 this.clearStation()
                 this.getStationFn = +new Date()
-                this.clearStation()
+               
             } else {
                 this.renewForm.customerId = '';
             }
@@ -866,6 +867,25 @@ export default {
                 this.disabled = false;
             }
             this.renewForm.rentAmount = '0'
+
+            //   if (this.stationList.length) {
+            //     this.stationData = {
+            //         submitData: [],
+            //         deleteData: [],
+            //     };
+            //     this.stationList = [];
+            //     this.formItem.items = []
+            // }
+            // if (this.formItem.items.length) {
+            //     this.formItem.items = []
+            //     this.saleAmount = 0;
+            //     this.saleAmounts = utils.smalltoBIG(0)
+            // }
+            // if (this.discountError) {
+            //     this.discountError = false;
+            //     this.disabled = false
+
+            // }
 
         },
         dealEndDate(val) {
@@ -1471,6 +1491,7 @@ export default {
     position: absolute;
     bottom: 2px;
     display: block;
+    top: 40px;
 }
 .OpportunityRequired {
     color: #ed3f14;

@@ -127,9 +127,9 @@ import dateUtils from 'vue-dateutils';
                   };
                       //商品定价
             const validateOrder = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
+                    callback('请输入非负整数');
                 }else if(value&&value>9999999){
                     callback('单价最高9999999');
                 }else{
@@ -138,11 +138,11 @@ import dateUtils from 'vue-dateutils';
             };
             //工位数
             const validateStation = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^\+?[0-9]\d*$/;
                 if(!value){
                     callback('请填写工位数');
                 }else if(!reg.test(value)){
-                    callback('请输入正整数');
+                    callback('请输入非负整数');
                 }else if(value>999){
                     callback('最大999个工位');
                 }else{

@@ -57,35 +57,42 @@ function poptipOver(event, data,param,time,sideBar) {
 //气泡的具体内容
 function getToolTipContent(thatData,param,time) {
     var label='';
-    var width = 280;
+    var width = 285;
     var data = Object.assign({}, thatData);
     if(param=='NOT_EFFECT'){
         label='合同未生效';
     }else if(param=='IN_RENT'){
         label='在租';
-        width=235;
+        width=240;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
         if(!data.endDate){
-            width=163;
+            width=168;
         }else{
-            width=235;
+            width=240;
         }
         label="未租";
     }else if(param=='OFF'||(thatData.status=='OFF'&&param=='2')){
         if(!data.endDate){
-            width=163;
+            width=168;
         }else{
-            width=235;
+            width=240;
         }
         label="下架";
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
-        width = 180;
+        width = 185;
     }
-    var str = '<div class="title">' + label + '：</div>';      
         var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) :time.startTime;
         var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) :'-';
-        str += '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        var str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        if(data.customerVOs&&data.customerVOs.length){
+            str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
+            data.customerVOs.map((item,index)=>{
+                str += '<div style="font-size:14px;">' + item.customerName + '</div>';
+            })
+        }else{
+            str += '<div class="title" style="margin-left:5px;">' + label + '</div>';
+        }    
 
     return {
         str: str,

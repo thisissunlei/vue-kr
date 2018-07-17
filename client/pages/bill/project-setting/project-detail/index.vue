@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class='edit-left-bar'>
-            <div class='detail-title'>
+            <!-- <div class='detail-title'>
                 <div class='title-left'>
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
@@ -14,49 +14,48 @@
 
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
                 <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
-            </div>
-            <Tabs size="default" @on-click="tabClick" :animated="false">
-                <TabPane label="物业档案" name="property">
-                    <ArchivesManagement v-if="activeTab=='property'" code="property"/>
+            </div> -->
+            <PublicHander :name="name" :city="city" @goback="goback" />
+            <Tabs size="default" @on-click="tabClick" :animated="false" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                <TabPane label="物业档案" v-if="propertyShow" name="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='property'" code="property" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
 
                 </TabPane>
-                <TabPane label="产品档案"  name="product">
-
-                    
-                    <ArchivesManagement v-if="activeTab=='product'" code="product"/>
+                <TabPane label="产品档案" v-if="productShow"  name="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}">
+                    <ArchivesManagement v-if="activeTab=='product'" code="product" :style="(!propertyShow || !productShow)?{width:'100%'}:{}" />
                 </TabPane>
-             
+
             </Tabs>
-         
+
 
         </div>
 
-        <Drawer 
+        <Drawer
             :openDrawer="openEditTask"
             iconType="view-icon"
             :close="cancelEditTask"
             width="735"
-        >   
+        >
             <ObjectDetailTitle slot="title" :taskStatus="taskStatus" :data="getEdit" />
-            <EditTask 
-                :id="editId"  
-                @dataChange="dataChange" 
-                v-if="openEditTask" 
+            <EditTask
+                :id="editId"
+                @dataChange="dataChange"
+                v-if="openEditTask"
                 :getEdit="Object.assign({},getEdit)"
             />
         </Drawer>
 
         <Modal
-           
+
             v-model="openWatch"
             title="查看记录"
             width="660"
         >
-                <WatchRecord 
+                <WatchRecord
                     v-if="openWatch"
                     :id="queryData.id"
-                    :watchRecord="watchRecord" 
-                    @searchClick="searchClick" 
+                    :watchRecord="watchRecord"
+                    @searchClick="searchClick"
                     :watchTotalCount="watchTotalCount"
                     :watchPage = "watchPage"
                 />
@@ -112,7 +111,7 @@
             width="440"
             >
             <div class='sure-sign'>确认终止项目?</div>
-            
+
             <div slot="footer">
                 <Button type="primary" @click="deleteProject">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="switchDelete">取消</Button>
@@ -122,16 +121,20 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
+import DetailTaskList from './detail-task-list';
+
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from './object-detail-title';
 import ArchivesManagement from '../archives-management';
+import PublicHander from '../public-hander'
 var ganttChartScrollTop = 0;
 
 
@@ -140,13 +143,20 @@ export default {
         AddTask,
         EditTask,
         WatchRecord,
+        DetailTaskList,
         Message,
         Drawer,
         ObjectDetailTitle,
-        ArchivesManagement
+        ArchivesManagement,
+        PublicHander
     },
     data(){
         return{
+            propertyShow:false,//  this.$route.query.propertyShow==='true'?true:false,
+            productShow:false,//  this.$route.query.productShow==='true'?true:false,
+            projectid:this.$route.query.id,
+            name: this.$route.query.name,
+            city: this.$route.query.city,
             queryData:{},
             listData:[],
             openMessage:false,
@@ -177,7 +187,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
-            activeTab:'property',
+            activeTab:"", //this.$route.query.propertyShow ==='true'?"property":"product",
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -209,14 +219,52 @@ export default {
     },
     created(){
         this.queryData=this.$route.query;
+        this.actioncheck();
+
     },
     mounted(){
-       
+
+
          GLOBALSIDESWITCH("false");
         this.getDeletePermission();
-    
+
+        this.$nextTick(()=>{
+          //ivu-tabs-tab ivu-tabs-tab-active ivu-tabs-tab-focused
+          setTimeout(()=>{
+                      let div1 = document.querySelectorAll(".edit-left-bar .ivu-tabs-tab-active")[0]
+                    let div2 = document.querySelectorAll(".edit-left-bar .ivu-tabs-ink-bar")[0]
+                  if(!this.propertyShow || !this.productShow){
+
+                    div1.style.width ='100%'
+                    div2.style.width ='100%'
+                  }else{
+
+                  }
+          },100)
+
+
+
+
+        })
+
     },
     methods:{
+       actioncheck(){
+              this.$http.get('roleActionCheck').then((res)=>{
+           
+                  this.productShow= res.data.productShow
+                  this.propertyShow= res.data.propertyShow
+
+                  this.activeTab =this.propertyShow ?"property":"product";
+          
+              }).catch((e)=>{
+      
+
+              })
+          },
+        goback(){
+          this.$router.push({path:'/bill/project-setting/comment?'+"name="+this.name+"&city="+this.city+"&id="+this.projectid})
+        },
         switchDelete(){
             this.openDelete = !this.openDelete;
         },
@@ -231,16 +279,16 @@ export default {
                 this.openMessage=true;
                 this.warn=error.message;
             })
-           
+
         },
         deleteProject(){
              this.$http.delete('delete-project-setting',{
                 id:this.$route.query.id
             }).then((response)=>{
-                
+
                this.switchDelete();
                 window.close();
-                window.opener.location.reload();
+                // window.location.reload();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;
@@ -249,7 +297,7 @@ export default {
         },
         tabClick(name){
             this.activeTab = name;
-          
+
         },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
@@ -261,10 +309,10 @@ export default {
         },
         //查看记录页面搜索被点击
         searchClick(params){
-           
+
             this.watchParams = Object.assign({},params);
             this.getWatchData(this.watchParams);
-           
+
         },
         selectFormat(data){
             var dataArr =  data.map((item)=>{
@@ -364,8 +412,8 @@ export default {
                         var endObj = this.monthAdd(response.data.lastEndTime);
                         this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                     }
-                    
-                   
+
+
                 }
                 this.isLoading = false;
                 this.scrollPosititon();
@@ -413,7 +461,7 @@ export default {
             if(!data.startTime || !data.endTime){
                 return data;
             }
-            
+
             data.endTime = data.endTime.split(' ')[0] + ' 23:59:59';
             return data;
         },
@@ -424,7 +472,7 @@ export default {
                 this.watchRecord=response.data.items;
                 this.watchPage = response.data.page;
                 this.watchTotalCount = response.data.totalCount;
-                
+
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -525,13 +573,13 @@ export default {
         cancelEditTask(){
             this.openEditTask=!this.openEditTask;
         },
-       
+
         //打开编辑任务
         editTask(id,callback){
             this.editId=id;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                 var data = Object.assign({},response.data)
-               
+
                 data.planStartTime=this.timeApplyFox(data.planStartTime,true);
                 data.planEndTime=this.timeApplyFox(data.planEndTime,true);
                 data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
@@ -544,7 +592,7 @@ export default {
                 }else{
 
                 }
-                
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title: error.message,
@@ -553,8 +601,8 @@ export default {
         },
         //取消查看任务
         cancelWatch(){
-           
-            
+
+
             this.openWatch=!this.openWatch;
         },
         //打开查看任务
@@ -597,13 +645,13 @@ export default {
             this.addData=params;
         },
         //编辑对象传递校验
-        dataChange(params){ 
+        dataChange(params){
             var data = Object.assign({},params);
             this.submitEditTask(data)
-        
-           
+
+
         },
-        
+
           //编辑任务提交
         submitEditTask(params){
             var dataParams = Object.assign({},params);
@@ -693,7 +741,7 @@ export default {
 </script>
 
 <style lang="less">
-   .edit-left-bar{
+  .edit-left-bar{
 
        width:100%;
        background: #fff;
@@ -707,7 +755,7 @@ export default {
         .ivu-tabs-ink-bar{
             top:0px;
             height: 4px;
-           
+
             border-top: 0px;
             border-bottom: 0px;
             box-sizing: border-box;
@@ -717,7 +765,7 @@ export default {
             text-align: center;
             line-height: 35px;
             padding: 8px 20px;
-            
+
         }
         .ivu-tabs-no-animation{
             overflow: visible !important;
@@ -725,7 +773,7 @@ export default {
         .ivu-tabs-bar{
             margin: 0px;
         }
-       
+
        .detail-title{
            background: #F5F6FA;
            height:50px;

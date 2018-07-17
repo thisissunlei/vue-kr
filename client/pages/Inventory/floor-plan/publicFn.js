@@ -71,7 +71,7 @@ function getIconToolTipContent(thatData,discount){
     let startTime = data.item.futureStart ? dateUtils.dateToStr('YYYY-MM-DD',new Date(data.item.futureStart)) : '';
     let statusName=status=='FUTURE_AVAILABLE'?'<div>可预租：' + startTime + '</div>':'<div>未来被占用：' + startTime + '起</div>';
     let useType=status=='FUTURE_OCCUPIED'?'<div>被占用类型：' +data.item.futureType+ '</div>':''
-    if((inventStatus=='IN_RENT'||inventStatus=='NOT_EFFECT')&&status=='FUTURE_OCCUPIED'){
+    if(status=='FUTURE_OCCUPIED'){
         customerName='<div>'+data.item.futureCustomerName+'</div>';
     }
     if(data.item.belongType!='SPACE'){

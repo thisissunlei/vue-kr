@@ -63,7 +63,7 @@ import dateUtils from 'vue-dateutils';
                 fixedLocationStr:[],
                 opentLocationStr:[],
                 formItem:{
-                    goodListText:''
+                    batchDate:''
                 },
                 num:0
             }

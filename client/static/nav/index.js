@@ -705,6 +705,12 @@
                         //     router: 'product/communityManage/detail',
                         //},
                         {
+                            primaryText: '社区商品配置',
+                            router: 'product/goods',
+                            type: 'vue',
+                            menuCode: 'mobile_community_goods',
+                        },
+                        {
                             primaryText: '会议室',
                             router: 'product/meeting',
                             type: 'vue',
@@ -904,6 +910,11 @@
                             menuCode: 'brightpoint_label_list',
                             type:'vue',
                             router: 'facility-tags/',
+                        },
+                        {
+                            primaryText: '轮播图列表',
+                            menuCode: 'por_mobilepic_list',
+                            router: 'WebBackstage/picList',
                         },
                         {
                             primaryText: '关键词配置',

@@ -69,16 +69,16 @@
           <div>
             <Col span="8" v-for='(item) in  typeCodeInfo' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#666">{{item.displayName}}</div>
-            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label=" (Array.isArray(item.fieldValue) && item.fieldValue.length>0)?item.fieldValue:!Array.isArray(item.fieldValue)?(item.fieldValue?item.fieldValue:'-'):'-'" />
             </Col>
             <Col span="8" v-for='(item) in  coreinfoBusiness' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#666">{{item.displayName}}</div>
-            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label="item.fieldValue?item.fieldValue:'-'" />
+            <OverFlowLabel style="font-size:16px;color:#333;height:50px;overflow:hidden" :label=" (Array.isArray(item.fieldValue) && item.fieldValue.length>0)?item.fieldValue:!Array.isArray(item.fieldValue)?(item.fieldValue?item.fieldValue:'-'):'-'" />
             </Col>
             <Col span="8" v-for='(item) in  coreinfoFinance' :key="item.id" style="margin-top:10px;margin-buttom:10px;padding-left:10px;text-align:left">
             <div style="font-size:12px;color:#666">{{item.displayName}}</div>
             <div style="font-size:16px;color:#333;height:50px;overflow:hidden">
-              <OverFlowLabel :label="item.fieldValue?item.fieldValue:'-'" />
+              <OverFlowLabel :label="(Array.isArray(item.fieldValue) && item.fieldValue.length>0)?item.fieldValue:!Array.isArray(item.fieldValue)?(item.fieldValue?item.fieldValue:'-'):'-'  " />
             </div>
             </Col>
           </div>

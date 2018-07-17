@@ -440,11 +440,13 @@ export default {
                          this.startDate==dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockBeginTime));
                         this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
                         this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
+                        this.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
                     }
                     if(data.lockEndTime){
                         this.endDates=dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockEndTime));
                         this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                          this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime)).substr(11,5);
+                         this.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime)).substr(11,5);
                     }
                     if(data.detailImg){
                          this.formItem.detailImgs=data.detailImg.join(',');
@@ -566,18 +568,18 @@ export default {
                     duration: 3
                 });
                 let _this = this;
+                if(this.startDate && this.startHour){
+                    this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+                }else{
+                    this.formItem.lockBeginTime='';
+                }   
+          
+                if(this.endDates && this.endHour){
+                    this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+                }else{
+                    this.formItem.lockEndTime='';
+                }
              
-               if(this.startDate && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
-               }else{
-                   this.formItem.lockBeginTime=""
-               }
-               if(this.endDates && this.endHour){
-                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-               }else{
-                    this.formItem.lockEndTime=""
-               }
-              
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();

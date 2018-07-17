@@ -311,26 +311,26 @@ export default {
             this.getListData(this.params);
             this.openNullify = false;
         },
-        submitNullify() {
-            let params = {
-                id: this.id
-            };
-            if (this.nullDisabled) {
-                return;
-            }
-            this.nullDisabled = true;
-            this.closeNullify();
-            this.$http.post('join-nullify', params).then((response) => {
-                this.openMessage = true;
-                this.MessageType = "success";
-                this.warn = '作废成功';
-                this.getListData(this.params);
-            }).catch((error) => {
-                this.openMessage = true;
-                this.MessageType = "error";
-                this.warn = error.message;
-            })
-        },
+        // submitNullify() {
+        //     let params = {
+        //         id: this.id
+        //     };
+        //     if (this.nullDisabled) {
+        //         return;
+        //     }
+        //     this.nullDisabled = true;
+        //     this.closeNullify();
+        //     this.$http.post('join-nullify', params).then((response) => {
+        //         this.openMessage = true;
+        //         this.MessageType = "success";
+        //         this.warn = '作废成功';
+        //         this.getListData(this.params);
+        //     }).catch((error) => {
+        //         this.openMessage = true;
+        //         this.MessageType = "error";
+        //         this.warn = error.message;
+        //     })
+        // },
 
         submitApply() {
             let params = {

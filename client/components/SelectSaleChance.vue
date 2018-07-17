@@ -120,7 +120,6 @@ export default {
         // }
     },
     mounted() {
-       
     },
     methods: {
         changeContent(item) {
@@ -130,6 +129,7 @@ export default {
             } else {
                 v = item.value
             }
+            console.log("vvvvvvv",v)
             this.$emit('onChange', v);
         },
         //获取销售机会列表
@@ -161,6 +161,7 @@ export default {
                 }
                 if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
                     this.showValue = ''+list[1].value;
+                     this.$emit('onChange',  this.showValue);
                 }else{
                     this.showValue = '';
                 }

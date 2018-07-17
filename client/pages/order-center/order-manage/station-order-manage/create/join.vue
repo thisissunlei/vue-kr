@@ -676,7 +676,7 @@ export default {
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
             formItem.opportunityId = this.formItem.saleChanceId;//销售机会ID
-            console.log(this.formItem.saleChanceId,'joinFormSubmit_join_this.formItem.saleChanceId')
+            console.log(this.formItem.opportunityId,'joinFormSubmit_join_this.formItem.saleChanceId')
             formItem.signDate = signDate;
             formItem.timeRange = this.formItem.timeRange;
 
@@ -1102,7 +1102,6 @@ export default {
             } else {
                 this.formItem.saleChanceId = value;
             }
-            console.log(this.formItem.saleChanceId)
         },
         handleGotChancelist(parms) {
             // return ;

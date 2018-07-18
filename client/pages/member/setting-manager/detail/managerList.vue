@@ -96,11 +96,11 @@ export default {
                  key: 'manageCmtName',
 				 align:'center',
 				},
-                {
-				 title: '激活状态  ',
-                 key: 'enterCmtName',
-				 align:'center',
-				},
+                // {
+				//  title: '激活状态  ',
+                //  key: 'enterCmtName',
+				//  align:'center',
+				// },
 				// {
 				//  title: '管理员',
                 //  key: 'isManager',

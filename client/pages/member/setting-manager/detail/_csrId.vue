@@ -7,7 +7,7 @@
 				<LabelText :inline="false" label="企业名称：" >
 					{{companyInfo.csrName}}
 				</LabelText>
-				<div class="u-status-tip">
+				<!-- <div class="u-status-tip">
                         <div class="u-tip-txt">
                             <span class="u-tip-icon"></span>
                             <span>关于管理员激活状态</span>
@@ -17,7 +17,7 @@
                            <p>1.  若该管理员登录过APP或官网-会员中心，系统认定为其“已激活”；</p> 
                            <p> 2.  若管理员一直未激活，请注意提醒Ta ，避免无法接收企业账单、管理企业等情况。</p> 
                         </div>
-                </div>
+                </div> -->
 			</div>
 		 	<Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
 		</div>
@@ -80,6 +80,22 @@
 			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
       </div>
     </Modal>
+	 <Modal
+        v-model="openPhoneTip"
+        title="提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="660"
+     >
+	 	<div class="u-cancel-title">
+            该手机号尚未成为氪空间注册用户，是否帮TA创建账号？
+        </div>
+        
+        <div slot="footer">
+            <Button type="primary" @click="createAccountSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="showPhoneTip">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 <script>
@@ -108,6 +124,7 @@ export default {
 			activeKey:'manager',
 			key:'',
 			detail:{},
+			openPhoneTip:false,
 			openTip:false,
 			isAddManager:true,
 			basicInfo:{},
@@ -165,14 +182,14 @@ export default {
                  key: 'managerNum',
 				 align:'center',
 				},
-				{
-				 title: '管理员未激活数量',
-                 key: 'managerNum',
-				 align:'center',
-				 render(h,obj){
+				// {
+				//  title: '管理员未激活数量',
+                //  key: 'managerNum',
+				//  align:'center',
+				//  render(h,obj){
 
-				 }
-                }
+				//  }
+                // }
 			],
 			
 			companyList:[],
@@ -185,6 +202,12 @@ export default {
 		this.getCompanyInfo(params);
 	},
 	methods:{
+		showPhoneTip(){
+			this.openPhoneTip=!this.openPhoneTip;
+		},
+		createAccountSubmit(){
+
+		},
 		getManagerCount(){
 
 		},

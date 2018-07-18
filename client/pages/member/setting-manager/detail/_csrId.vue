@@ -80,22 +80,6 @@
 			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
       </div>
     </Modal>
-	 <Modal
-        v-model="openPhoneTip"
-        title="提示"
-        ok-text="确定"
-        cancel-text="取消"
-        width="660"
-     >
-	 	<div class="u-cancel-title">
-            该手机号尚未成为氪空间注册用户，是否帮TA创建账号？
-        </div>
-        
-        <div slot="footer">
-            <Button type="primary" @click="createAccountSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="showPhoneTip">取消</Button>
-        </div>
-    </Modal>
 </div>
 </template>
 <script>
@@ -124,7 +108,6 @@ export default {
 			activeKey:'manager',
 			key:'',
 			detail:{},
-			openPhoneTip:false,
 			openTip:false,
 			isAddManager:false,
 			basicInfo:{},
@@ -202,12 +185,6 @@ export default {
 		this.getCompanyInfo(params);
 	},
 	methods:{
-		showPhoneTip(){
-			this.openPhoneTip=!this.openPhoneTip;
-		},
-		createAccountSubmit(){
-
-		},
 		getManagerCount(){
 
 		},

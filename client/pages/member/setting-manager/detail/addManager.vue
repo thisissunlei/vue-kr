@@ -15,7 +15,7 @@
                             />
                         </FormItem>
                          <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
-
+                        <div class="u-error-tip" v-if="ifError">该手机号尚未成为氪空间注册用户，继续“添加管理员”后会自动为TA创建账号</div>
                          <FormItem label="姓名" class="u-input" prop="iconName">
                             <Input 
                                 v-model="formItem.iconName" 
@@ -76,6 +76,7 @@ export default {
             checkAllGroup:[],
             checkList:"",
             communityList:[],
+            ifError:false,
             formItem:{
 
             },
@@ -130,6 +131,12 @@ export default {
 .g-add-manage{
     .u-form{
         box-sizing: border-box;
+        .u-error-tip{
+            color:#ed3f14;
+            font-size: 14px;
+            margin-bottom: 20px;
+            margin-top: -10px;
+        }
         form{
             width: 100%;
             padding-left:10px;

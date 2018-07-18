@@ -1125,6 +1125,7 @@ export default {
                     this.chanceRemindStr = '入驻订单必须绑定机会'
                     this.showChanceSelector = false;
                     this.OpportunityRequired = true;
+                    this.formItem.saleChanceId = '';
                     this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
                 }
             }
@@ -1135,6 +1136,7 @@ export default {
                 this.OpportunityRequired = false;
                 if (parms.count == 0) {
                     this.showChanceSelector = false;
+                    this.formItem.saleChanceId="";
                     this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
                 }
                 else if (parms.count >= 1) {

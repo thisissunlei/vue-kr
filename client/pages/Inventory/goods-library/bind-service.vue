@@ -1,7 +1,7 @@
 
 <template>
     <div>
-     <Form ref="formItemService" :model="formItem" :rules="ruleService" label-position="left">
+     <Form ref="formItemService" :model="formItem" :rules="ruleService" label-position="left" style="margin-left: 20px;">
         <Form-item prop="enable">
             <RadioGroup v-model="formItem.enable" @on-change="radioChange">
                     <Radio label="ok">
@@ -15,7 +15,7 @@
         <Form-item  prop="basicSpaceId" v-if="isHave"> 
             <Select
                 v-model="formItem.basicSpaceId"
-                style="width:250px;margin-left:20px;"
+                style="width:250px;"
                 placeholder="请选择房间"
                 filterable
                 clearable

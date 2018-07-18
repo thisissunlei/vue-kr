@@ -39,7 +39,7 @@
                         <span class='m-use'></span>
                     </div>
                 </Tooltip>
-                <Tooltip content="目前的占用将在30天内结束，结束后有连续60天可租" placement="bottom"> 
+                <Tooltip content="目前的占用将在30天内结束，结束后至少有连续60天可租" placement="bottom"> 
                     <div style="display:inline-block;margin-right:26px;margin-left:26px;">
                         <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">可预租</span>
                         <span class='m-can'></span>

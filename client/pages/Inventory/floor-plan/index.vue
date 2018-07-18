@@ -295,7 +295,7 @@ export default {
     //生成dom
     createDom(every,isIcon){
          let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
-         let isTitle=isIcon=='icon'?'':'<div class="title" data-titleId='+selectId+'></div>';
+         let isTitle=isIcon=='icon'?'':'<div class="title" style="pointer-events:auto;" data-titleId='+selectId+'></div>';
          var productDom=
             '<div id="gantt-chart-tool-tip'+selectId+'" class="gantt-chart-tool-tip">'+
                 isTitle+

@@ -6,20 +6,16 @@
                     v-model="formItem.cityId" 
                     placeholder="请输入城市" 
                     style="width: 90px;margin-right:10px;"
+                    filterable
                     @on-change="cityChange"
                 >
-                    <Option 
-                        v-for="item in cityList" 
-                        :value="item.cityId" 
-                        :key="item.cityId"
-                    >
-                        {{ item.cityName }}
-                    </Option>
+                    <Option v-for="item in cityList" :value="item.cityId" :key="item.cityId">{{ item.cityName }}</Option>
                 </Select>
                 <Select 
                         v-model="formItem.communityId" 
                         placeholder="请输入社区" 
                         style="width:150px;margin-right:10px;"
+                        filterable
                         @on-change="communityChange"
                     >
                         <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -28,7 +24,9 @@
                 <Select 
                         v-model="formItem.floor" 
                         placeholder="请输入楼层" 
-                        style="width: 90px;margin-right:54px;"
+                        style="width: 90px;margin-right:20px;"
+                        filterable
+                        label-in-value
                         @on-change="floorChange"
                     >
                         <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
@@ -39,11 +37,25 @@
                 <DatePicker 
                     v-model="formItem.currentDate" 
                     placeholder="请输入库存日期"
-                    style="width: 200px;margin-right: 9px;"
+                    style="width: 120px;margin-right: 9px;"
                     @on-change="dateChange"
                 />
+                <div style="display:inline-block;margin-right:5px;">
+                    <Select 
+                        v-model="formItem.show" 
+                        multiple 
+                        placeholder="只看当日状态" 
+                        style="width:150px;" 
+                        clearable 
+                        @on-change="changeCount" 
+                        >
+                        <Option v-for="item in showList" :value="item.value" :key="item.value">
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                </div>
             </Form-item>
-            <Tooltip content="查询某一天，以平面图的方式展示某个社区库存情况。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询" placement="bottom">
+            <Tooltip content="四种颜色表示房间和工位的在指定日期当天的占用情况，可选择是否展示未来被占用和可预租的提示。" placement="bottom">
                 <span class='icon-tip'></span>
             </Tooltip>
       </Form>
@@ -56,6 +68,10 @@ var oldFloor='';
 export default {
   data(){
     return{
+       showList:[
+           {value:'FUTURE_OCCUPIED',label:'未来被占用'},
+           {value:'FUTURE_AVAILABLE',label:'可预租'}
+       ],
        cityList:[],
        communityList:[],
        floorList:[],
@@ -63,12 +79,20 @@ export default {
           cityId:'',
           communityId:'',
           floor:'',
+          show:[],
           currentDate:publicFn.getToDay()
        }
     }
   },
   mounted(){
-      this.getCityList();
+     let store=localStorage.getItem('floor-map-show-select');
+     let route=this.$route.query;
+     if(route.displayList){
+         this.formItem.show=(route.displayList).split(',');
+     }else if(store){
+         this.formItem.show=JSON.parse(store);
+     }
+     this.getCityList();
   },
   methods:{
     //城市接口
@@ -125,11 +149,16 @@ export default {
         this.getFloorList(param); 
     },
     floorChange(param){
-        this.$emit('searchForm',this.formItem);
+        if(typeof param=='object'){
+           this.$emit('searchForm',this.formItem); 
+        }
     },
     dateChange(param){
         this.formItem.currentDate=param;
         this.$emit('searchForm',this.formItem);
+    },
+    changeCount(val){
+        this.$emit('changeCount',val);
     }
   }
 }

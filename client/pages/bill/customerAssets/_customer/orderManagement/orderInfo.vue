@@ -1,17 +1,23 @@
 <template>
-    <div class="order-info-container">
-        <div class="info-title">
-            <span class="order-number" @click="jump2OrderDetail">{{nunber}}</span>
-            <span class="order-amount">{{amount}}</span>
-        </div>
-        <div class="bill-table order-fees-stages ">
-            <div class="stages-header">
-                <div class="right">已付信息</div>
-                <div class="left">费用信息</div>
+    <div class="order-bill-info-container">
+        <div class='order-zone'>
+            <div v-for='item in orderData' :key="item.orderId" class="order-single">
+                <div class="info-title">
+                    <span class="order-number" @click="jump2OrderDetail(item)">{{formatNumber(item)}}</span>
+                    <span class="order-amount">{{formatAmount(item)}}</span>
+                </div>
+                <div>
+                    <div class="bill-zone order-fees-stages ">
+                        <div class="stages-header">
+                            <div class="right">已付信息</div>
+                            <div class="left">费用信息</div>
+                        </div>
+                        <Table border :columns="orderColumns" :data="item.installmentFee"></Table>
+                    </div>
+                </div>
             </div>
-            <Table border :columns="orderColumns" :data="orderData"></Table>
         </div>
-        <div class="bill-table order-fees-bill">
+        <div class="bill-zone order-fees-bill">
             <div class="stages-header bill-header">
                 <div class="right2">欠款信息</div>
                 <div class="right1">已付信息</div>
@@ -32,7 +38,7 @@ export default {
         },
         orderData: {
             type: Array,
-            default: () => []
+            default: () => { }
         }
     },
     data() {
@@ -46,45 +52,45 @@ export default {
                 {
                     title: '分期数',
                     align: 'center',
-                    key: 'stage',
+                    key: 'periodsName',
                     width: 85,
                 },
                 {
                     title: '工位/房间明细',
                     align: 'center',
-                    key: 'seatRoom'
+                    key: 'seatNames'
                 },
                 {
                     title: '费用项',
                     align: 'center',
-                    key: 'feeTypeName'
+                    key: 'feeName'
                 },
                 {
                     title: '费用期间',
                     align: 'center',
                     key: 'feePeroid',
                     render(h, params) {
-                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate)) + '  至  ' + dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate));
+                        let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentStart)) + '  至  ' + dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentEnd));
                         return h('span', time)
                     }
                 },
                 {
                     title: '最晚付款日',
                     align: 'center',
-                    key: 'latestPayDay',
+                    key: 'lastPaymentDate',
                     render(h, params) {
-                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.latestPayDay))
+                        let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.lastPaymentDate))
                         return h('span', time)
                     }
                 },
                 {
                     title: '费用金额',
                     align: 'center',
-                    key: 'needPaid',
+                    key: 'amount',
                     className: "colPadRight",
                     render: (h, params) => {
-                        if (params.row.needPaid) {
-                            let amount = utils.thousand((params.row.needPaid).toFixed(2))
+                        if (params.row.amount) {
+                            let amount = utils.thousand((params.row.amount).toFixed(2))
                             return h('div', '¥' + amount)
                         }
                     }
@@ -92,9 +98,10 @@ export default {
                 {
                     title: '相关订单',
                     align: 'center',
-                    key: 'orderNum',
+                    key: 'reduceOrder',
                     render: (h, params) => {
-                        if (params.row.orderNum) {
+                        let reduceOrder = params.row.reduceOrder
+                        if (reduceOrder) {
                             return h(
                                 'span',
                                 {
@@ -104,11 +111,11 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jump2OrderDetail(params)
+                                            this.jump2OrderDetail(reduceOrder.orderId)
                                         }
                                     }
                                 },
-                                params.row.orderNum)
+                                `减租-${reduceOrder.orderNo ? reduceOrder.orderNo : '订单号'}`)
                         }
                         else {
                             return h('span', '-')
@@ -347,46 +354,57 @@ export default {
                     unpaid: 0,
                     unpaidDays: 0
                 }
-            ]
+            ],
+
+            demoData: '{"code":1,"data":{"fee":[{"feeName":"工位服务费","needPaid":0,"paid":0,"unpaid":0}],"deposit":[{"deposit":1540.00,"depositFree":0.00,"feeName":"服务保证金","lockDeposit":0.00,"needPaid":0}],"bill":[],"order":[{"end":1543507200000,"installmentFee":[{"amount":300.00,"feeName":"工位服务费","installmentEnd":1532966400000,"installmentStart":1530374400000,"lastPaymentDate":1530374400000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1535644800000,"installmentStart":1533052800000,"lastPaymentDate":1531584000000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1538236800000,"installmentStart":1535731200000,"lastPaymentDate":1534262400000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1540915200000,"installmentStart":1538323200000,"lastPaymentDate":1536940800000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1543507200000,"installmentStart":1541001600000,"lastPaymentDate":1539532800000,"paid":0,"periods":5,"periodsName":"第5期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"}],"orderId":13074,"orderName":"DD031807181316020001","start":1530374400000,"totalRentAmount":1500.00},{"end":1548864000000,"installmentFee":[{"amount":470.00,"feeName":"工位服务费","installmentEnd":1535644800000,"installmentStart":1533052800000,"lastPaymentDate":1533052800000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1538236800000,"installmentStart":1535731200000,"lastPaymentDate":1534262400000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1540915200000,"installmentStart":1538323200000,"lastPaymentDate":1536940800000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1543507200000,"installmentStart":1541001600000,"lastPaymentDate":1539532800000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1546185600000,"installmentStart":1543593600000,"lastPaymentDate":1542211200000,"paid":0,"periods":5,"periodsName":"第5期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1548864000000,"installmentStart":1546272000000,"lastPaymentDate":1544803200000,"paid":0,"periods":6,"periodsName":"第6期","reduceOrder":[],"seat":[],"seatNames":"666,665"}],"orderId":13076,"orderName":"DD031807181447120001","start":1533052800000,"totalRentAmount":2820.00},{"end":1564502400000,"installmentFee":[{"amount":480.00,"feeName":"工位服务费","installmentEnd":1548864000000,"installmentStart":1543593600000,"lastPaymentDate":1531843200000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1553961600000,"installmentStart":1548950400000,"lastPaymentDate":1547481600000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1559232000000,"installmentStart":1554048000000,"lastPaymentDate":1552579200000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1564502400000,"installmentStart":1559318400000,"lastPaymentDate":1557849600000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"}],"orderId":13078,"orderName":"DD031807181514100001","start":1543593600000,"totalRentAmount":1920.00}]},"message":"ok"}',
         }
     },
-    watch: {
-        communityId() {
-            this.getData(this.communityId);
-        }
+    computed: {
+
     },
     mounted() {
         this.formatDataList();
     },
     methods: {
-        getData(communityId) {
-            let params = {}
-            this.$http.get('join-bill-list', params).then((response) => {
-                this.totalCount = response.data.totalCount;
-                this.joinData = response.data.items;
-                this.openSearch = false;
-                this.hasSeatDataExportRight = response.data.hasSeatExportRight;//是否具有工位数据导出权限
-            }).catch((error) => {
-                this.$Notice.error({
-                    title: error.message
-                });
-            })
+        formatNumber(data) {
+            // '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
+            let { orderTypeName, orderName, start, end } = data
+            let time = dateUtils.dateToStr("YY.MM.DD", new Date(start)) + '至' + dateUtils.dateToStr("YY.MM.DD", new Date(end))
+            return `${orderTypeName}-${orderName}(${time})`
+        },
+        formatAmount(data) {
+            let { totalRentAmount } = data
+            return utils.thousand((totalRentAmount).toFixed(2))
         },
         //格式化接收数据
         formatDataList() {
             // this.orderData = [].concat(this.orderDataDemo)
             // this.billData = [].concat(this.billDataDemo)
+            this.orderDataDemo = JSON.parse(this.demoData).data.order;
         },
         //跳转至订单详情
         jump2OrderDetail(params) {
-            var viewName = '';
-            if (params.row.orderType == 'CONTINUE') {
-                viewName = 'renewView';
-            } else {
-                viewName = 'joinView';
+            if ((typeof params) == 'object') {
+                let viewName = '';
+                let orderType = params.orderType
+                if (orderType == 'CONTINUE') {
+                    viewName = 'renewView';
+                } else if (orderType == 'IN') {
+                    viewName = 'joinView';
+                }
+                else if (orderType == 'INCREASE') {
+                    viewName = 'joinView';
+                } else if (orderType == 'REDUCE') {
+                    viewName = 'reduceView';
+                }
+                else if (orderType == 'REPLACE') {
+                    viewName = 'replaceView';
+                }
+                window.open(`/order-center/order-manage/station-order-manage/${params.orderId}/${viewName}`, '_blank');
             }
-            let orderNo = params.row.id
-            window.open(`/order-center/order-manage/station-order-manage/${orderNo}/${viewName}`, '_blank');
+            else {
+                window.open(`/order-center/order-manage/station-order-manage/${params}/reduceView`, '_blank');
+            }
         },
         jump2BillDetail(billNo) {
             billNo = billNo
@@ -402,32 +420,37 @@ export default {
 }
 </script>
 <style lang="less">
-.order-info-container {
-    .info-title {
-        @titleHeight: 52px;
-        font-size: 14px;
-        height: @titleHeight;
-        width: 100%;
-        background-color: #f0f0f0;
-        margin: 10px 0;
-        .order-number {
-            color: #3f4efc;
-            height: @titleHeight;
-            line-height: @titleHeight;
-            padding-left: 24px;
-            float: left;
-            cursor: pointer;
-        }
-        .order-amount {
-            height: @titleHeight;
-            line-height: @titleHeight;
-            padding-right: 24px;
-            float: right;
-            color: red;
+.order-bill-info-container {
+    .order-zone {
+        .order-single {
+            margin-bottom: 10px;
+            .info-title {
+                @titleHeight: 52px;
+                font-size: 14px;
+                height: @titleHeight;
+                width: 100%;
+                background-color: #f0f0f0;
+                margin: 10px 0;
+                .order-number {
+                    color: #3f4efc;
+                    height: @titleHeight;
+                    line-height: @titleHeight;
+                    padding-left: 24px;
+                    float: left;
+                    cursor: pointer;
+                }
+                .order-amount {
+                    height: @titleHeight;
+                    line-height: @titleHeight;
+                    padding-right: 24px;
+                    float: right;
+                    color: red;
+                }
+            }
         }
     }
 
-    .bill-table {
+    .bill-zone {
         margin-bottom: 20px;
         @headerWidth: 40px;
         .stages-header {

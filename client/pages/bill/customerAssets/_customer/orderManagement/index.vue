@@ -72,7 +72,7 @@ export default {
             this.$http.get('get-fee-communitys', param).then((r) => {
                 this.communityList = r.data
                 if (r.data.length > 0) {
-                    this.targetCommunity = ''+r.data[1].id;
+                    this.targetCommunity = ''+r.data[0].id;
                 }
 
             }).catch((err) => {
@@ -91,9 +91,11 @@ export default {
                 communityId: communityId
             }
             this.$http.get('get-fee-overivew-list', params).then((r) => {  
+                console.log(r.data)
                 this.serviceChargeData =[].concat(r.data.fee) ;
                 this.depositCashData = [].concat(r.data.deposit);
                 this.billData=[].concat(r.data.bill)
+                this.orderData=[].concat(r.data.order)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

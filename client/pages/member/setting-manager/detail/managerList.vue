@@ -8,7 +8,7 @@
                         :onSubmit="lowerSubmit"
                         :searchFilter="searchFilter"
                     />
-                    <div class="u-status-tip">
+                    <!-- <div class="u-status-tip">
                         <div class="u-tip-txt">
                             <span class="u-tip-icon"></span>
                             <span>关于管理员激活状态</span>
@@ -18,7 +18,7 @@
                            <p>1.  若该管理员登录过APP或官网-会员中心，系统认定为其“已激活”；</p> 
                            <p> 2.  若管理员一直未激活，请注意提醒Ta ，避免无法接收企业账单、管理企业等情况。</p> 
                         </div>
-                    </div>
+                    </div> -->
                    
             </div>
 		</div>

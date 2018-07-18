@@ -126,7 +126,7 @@ export default {
 			detail:{},
 			openPhoneTip:false,
 			openTip:false,
-			isAddManager:true,
+			isAddManager:false,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",

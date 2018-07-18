@@ -4,24 +4,46 @@
 			<span class="u-border-left"/>
 			商品详情
 		</div>
+		<div style="font-size:26px;font-weight:bold;padding-left: 48px;padding-top: 20px;">802</div>
 		<div class="m-detail-content">
 			<DetailStyle info="基本信息">
-				<LabelText label="客户名称：">
+				<LabelText label="商品定价：">
 					{{basicInfo.customerName}}
 				</LabelText>
-				<LabelText label="社区名称：">
+				<LabelText label="工位单价：">
 					{{basicInfo.communityName}}
 				</LabelText>
-				<LabelText label="销售人员：">
+				<LabelText label="城市：">
 					{{basicInfo.salerName}}
 				</LabelText>
-				<LabelText label="创建时间：">
+				<LabelText label="社区：">
 					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
-				<LabelText label="订单状态：">
+				<LabelText label="楼层：">
 					{{basicInfo.orderStatusName}}
 				</LabelText>
-				<LabelText label="生效时间：">
+				<LabelText label="类型：">
+					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+				</LabelText>
+				<LabelText label="工位：">
+					{{basicInfo.customerName}}
+				</LabelText>
+				<LabelText label="面积：">
+					{{basicInfo.communityName}}
+				</LabelText>
+				<LabelText label="方位：">
+					{{basicInfo.salerName}}
+				</LabelText>
+				<LabelText label="套间：">
+					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+				</LabelText>
+				<LabelText label="位置：">
+					{{basicInfo.orderStatusName}}
+				</LabelText>
+				<LabelText label="描述：">
+					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+				</LabelText>
+				<LabelText label="空间：">
 					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 			</DetailStyle>
@@ -47,7 +69,7 @@ export default {
 	name:'RenewView',
 	head() {
         return {
-            title: '续租详情'
+            title: '商品详情'
         }
     },
 	components:{
@@ -56,45 +78,10 @@ export default {
 	},
 	data(){
 		return{
-			showAll:false,
-			showButton:false,
-			installments:[],
 			basicInfo:{},
-			capitalService:'',
-
 			service:[
 				{
-				 title: '工位/房间编号',
-                 key: 'seatName',
-                 align:'center'	
-				},
-				{
-                        title: '类型',
-                        key: 'seatType',
-                        align:'center',
-                        render:(h, params) => {
-                            let type = params.row.seatType;
-                            let typeName = '开放工位';
-                            if(type =='SPACE'){
-                                typeName = '独立办公室'
-                            }else{
-                                typeName = "开放工位"
-                            }
-                            return typeName
-                        }
-                    },
-				{
-                    title:'工位可容纳人数',
-                    key:'capacity',
-                    align:'center'	
-                },
-				{
-				 title: '标准单价(元/月)',
-                 key: 'originalPrice',
-                 align:'center'	
-                },
-                {
-				 title: '开始日期',
+				 title: '时间',
                  key: 'startDate',
 				 align:'center',
 				 render(tag,params){
@@ -102,38 +89,49 @@ export default {
 					 return time;
 				 }	
                 },
-                {
-				 title: '结束日期',
-                 key: 'endDate',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
-					 return time;
-				 }	
+				{
+                    title:'状态',
+                    key:'capacity',
+                    align:'center'	
                 },
-                {
-				 title: '小计',
-                 key: 'originalAmount',
+				{
+				 title: '时长',
+                 key: 'originalPrice',
                  align:'center'	
-				}
+                }
 			],
 
             contract:[
                {
-				 title: '合同编号',
+				 title: '修改内容',
                  key: 'contractNum',
                  align:'center'	
 				},
 				{
-				 title: '合同金额',
+				 title: '修改前',
                  key: 'rentAmount',
                  align:'center'	
 				},
 				{
-				 title: '状态',
+				 title: '修改后',
                  key: 'orderStatusTypeName',
                  align:'center'	
-				}  
+				},
+				{
+				 title: '修改时间',
+                 key: 'rentAmount',
+                 align:'center'	
+				},
+				{
+				 title: '操作者',
+                 key: 'orderStatusTypeName',
+                 align:'center'	
+				},
+				{
+				 title: '备注',
+                 key: 'orderStatusTypeName',
+                 align:'center'	
+				}   
 			],
 
 			serviceData:[],
@@ -155,8 +153,6 @@ export default {
 			this.$http.get('join-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
 					
-					this.installments = response.data.installments || []
-					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					this.serviceData=response.data.orderSeatDetailVo||[];
 					this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
 				}).catch((error)=>{
@@ -164,17 +160,7 @@ export default {
 						title:error.message
 					});
 			})
-		},
-		notAllList(){
-			let list = this.installmentAll
-			this.showAll = false;
-			this.installments = list.slice(0,10)
-		},
-		showAllList(){
-			let list = this.installmentAll
-			this.showAll = true;
-			this.installments = list;
-		},
+		}
 	}
 }
 </script>
@@ -197,7 +183,7 @@ export default {
 			}
 		}
 		.m-detail-content{
-			padding:30px 24px;
+			padding: 15px 24px 30px 24px;
 			.ivu-table-wrapper{
 				margin-bottom:30px;
 			}
@@ -224,14 +210,6 @@ export default {
 			width:16px;
 			height: 16px;
 			transform: rotate(180deg);
-			vertical-align: middle;
-		}
-		.showAll{
-			display: block;
-			margin:0 auto;
-			width:16px;
-			height: 16px;
-
 			vertical-align: middle;
 		}
 		.formula{

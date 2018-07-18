@@ -437,38 +437,47 @@ export default {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
-                     render(h, params){
+                    render:(h, params)=>{
                          var ile= params.row.name;
                          var nes=params.row.duplicateNo;
                           var btnRender=[];
                           if(params.row.duplicateNo==0){
                                 btnRender=[
-                                   h('p', {                                       
-                                        },ile),
+                                   h('p',{                                       
+                                    },ile),
                                 ];
                           }else{
                                  btnRender.push(
-                                     h('p', { 
+                                    h('p', { 
                                         
                                         },ile),
-                                         h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },'('),
-                                         h('span', { 
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            },'有重复 '),
-                                               h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },' 编号'+nes+')'),
+                                    h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },'('),
+                                    h('span', { 
+                                        style: {
+                                            color:'#FF6868'
+                                        }       
+                                    },'有重复 '),
+                                        h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },' 编号'+nes+')'),
                             )
                           }
-                          return h('div',btnRender)
+                          return h('div',{
+                              style: {
+                                cursor:'pointer'
+                              },
+                              on: {
+                                click: () => {
+                                    this.goDetail(params.row)
+                                }
+                              }
+                          },btnRender)
 
                     }
                 },
@@ -694,6 +703,9 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        goDetail(params){
+            window.open(`/inventory/goods-library/${params.id}/goods-detail`,'_blank')
+        },
         openSpace(){
             if(!this.statusData.length){
                 this.$Notice.error({

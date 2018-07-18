@@ -131,12 +131,12 @@ export default {
 				},
 				{
 				 title: '入驻开始日期',
-                 key: 'enterStatusDesc',
+                 key: 'enterDate',
 				 align:'center',
 				},
 				{
 				 title: '入驻结束日期',
-                 key: 'enterStatusDesc',
+                 key: 'leaveDate',
 				 align:'center',
 				},
 				{
@@ -145,14 +145,13 @@ export default {
 				 align:'center',
 				 render(h,obj){
 					 let status;
-					 switch (obj.row.enterStatusDesc){
+					 switch (obj.row.enterStatus){
 						 case '':
-						 status=obj.row.enterStatusDesc
 						 return h('span',{
 								style:{
 									color:'#F5A623'
 								}
-						 },status) 
+						 },obj.row.enterStatusDesc) 
 						 break;
 						 default:
 						 return h('span',{},obj.row.enterStatusDesc);

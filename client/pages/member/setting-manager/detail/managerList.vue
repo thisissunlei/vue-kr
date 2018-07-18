@@ -68,17 +68,17 @@ export default {
             list:[
 				{
 				 title: '姓名',
-                 key: 'name',
+                 key: 'mbrName',
 				 align:'center',
                 },
                 {
 				 title: '联系电话',
-                 key: 'phone',
+                 key: 'mbrPhone',
 				 align:'center',
                 },
                 {
 				 title: '邮箱',
-                 key: 'email',
+                 key: 'mbrEmail',
 				 align:'center',
                 },
                 {

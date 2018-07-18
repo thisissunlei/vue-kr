@@ -68,17 +68,17 @@ export default {
             list:[
 				{
 				 title: '姓名',
-                 key: 'name',
+                 key: 'mbrName',
 				 align:'center',
                 },
                 {
 				 title: '联系电话',
-                 key: 'phone',
+                 key: 'mbrPhone',
 				 align:'center',
                 },
                 {
 				 title: '邮箱',
-                 key: 'email',
+                 key: 'mbrEmail',
 				 align:'center',
                 },
 				{
@@ -88,10 +88,10 @@ export default {
                 },
 				{
 				 title: '是否为管理员',
-                 key: 'leader',
+                 key: 'isManager',
 				 align:'center',
 				 render(h,obj){
-					let manager= obj.row.leader?'是':'否';
+					let manager= obj.row.isManager?'是':'否';
 					return manager;
 				  }
 				},

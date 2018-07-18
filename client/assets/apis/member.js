@@ -5,11 +5,6 @@ export default {
         url: '/api/krspace-op-web/customer/manager/list',
         method: 'get'
     },
-    //获取企业管理员详情--员工信息
-    'customer-manager-staff-list': {
-        url: 'api/krspace-op-web/customer/manager/staff/list',
-        method: 'get'
-    },
     //修改管理员
     'edit-customer-manager': {
         url: '/api/krspace-op-web/customer/manager/edit',

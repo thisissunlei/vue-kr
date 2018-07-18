@@ -39,7 +39,7 @@
                                 类型
                             </div>
                             <div class="u-text">
-                                非本企业员工
+                               {{companyType}}
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,8 @@ export default {
                 mbrEmail:[
                     { required: true, message: '请输入邮箱', trigger: 'change' }
                 ],
-          }
+          },
+          companyType:'',
              
         }
     },
@@ -102,6 +103,7 @@ export default {
             }
             this.$http.get('get-customer-manager-user-detail', form).then((res)=>{
                 this.formItem=Object.assign(this.formItem,res.data);
+                this.companyType=res.data.mbrType==1?"在职员工":'非企业员工';
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

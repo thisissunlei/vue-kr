@@ -120,7 +120,7 @@
             class-name="vertical-center-modal"
             style="text-align:left;"
             >
-                  <span style="font-size:14px;text-align:center;">创建成功</span>
+                  <span style="font-size:16px;">创建成功！</span>
                   <div slot="footer" style="text-align:center;">
                      <Button type="primary" @click="openSpaceSuccess" >确定</Button>
                 </div>

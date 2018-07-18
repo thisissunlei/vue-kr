@@ -114,6 +114,7 @@ import dateUtils from 'vue-dateutils';
                     list.seatId=item.id;
                     list.seatType=item.seatType;
                     list.color=item.color;
+                    list.name=item.name;
                     list.capacity=item.capacity;
                     goodsMiddle.push(list);
                 })

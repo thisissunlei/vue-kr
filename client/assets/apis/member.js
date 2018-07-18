@@ -87,7 +87,6 @@ export default {
         method: 'get'
     },
     
-
     //获取企业管理员详情--在职员工列表
     'get-customer-manager-employees': {
         url: '/api/krspace-op-web/customer/manager/employees',
@@ -96,6 +95,11 @@ export default {
     //获取企业管理员详情--管理员列表
     'get-customer-manager-admin': {
         url: '/api/krspace-op-web/customer/manager/admin/list',
+        method: 'get'
+    },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-user-detail': {
+        url: '/api/krspace-op-web/customer/manager/user/detail',
         method: 'get'
     },
 

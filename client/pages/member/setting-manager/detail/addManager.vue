@@ -10,7 +10,7 @@
                     <div class="u-part-content">
                          <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="iconName">
                             <Input 
-                                v-model="formItem.iconName" 
+                                v-model="formItem.mbrPhone" 
                                 placeholder="请输入手机号"
                             />
                         </FormItem>
@@ -18,19 +18,19 @@
                         <div class="u-error-tip" v-if="ifError">该手机号尚未成为氪空间注册用户，继续“添加管理员”后会自动为TA创建账号</div>
                          <FormItem label="姓名" class="u-input" prop="iconName">
                             <Input 
-                                v-model="formItem.iconName" 
+                                v-model="formItem.mbrName" 
                                 placeholder="请输入姓名"
                             />
                         </FormItem>
                         <FormItem label="邮箱" class="u-input" prop="iconName">
                             <Input 
-                                v-model="formItem.iconName" 
+                                v-model="formItem.mbrEmail" 
                                 placeholder="请输入邮箱"
                             />
                         </FormItem>
                          <FormItem label="身份证号" class="u-input" >
                             <Input 
-                                v-model="formItem.iconName" 
+                                v-model="formItem.mbrIdCardNo" 
                                 placeholder="请输入邮箱"
                             />
                         </FormItem>
@@ -81,13 +81,13 @@ export default {
 
             },
             ruleCustom:{
-                iconName:[
+                mbrPhone:[
                     { required: true, message: '请输入手机号码', trigger:'change' }
                 ],
-                destUrl:[
+                mbrName:[
                     { required: true, message: '请输入姓名', trigger: 'change' }
                 ],
-                enable:[
+                mbrEmail:[
                     { required: true, message: '请输入邮箱', trigger: 'change' }
                 ],
           }
@@ -96,7 +96,17 @@ export default {
     },
     methods:{
         searchInfo(){
-
+            let phone=this.formItem.phone;
+            let form={
+              phone: phone 
+            }
+            this.$http.get('get-customer-manager-user-detail', form).then((res)=>{
+                this.formItem=Object.assign(this.formItem,res.data);
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
         },
         checkGroupChange(data){
             let checkList=[].concat(this.checkAllGroup)

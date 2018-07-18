@@ -58,32 +58,32 @@ export default {
             searchFilter:[
                 {
                     label:'姓名',
-                    value:'mbrName'
+                    value:'name'
                 },
                 {
                     label:'手机号',
-                    value:''
+                    value:'phone'
                 }
             ],
             list:[
 				{
 				 title: '姓名',
-                 key: 'mbrName',
+                 key: 'name',
 				 align:'center',
                 },
                 {
 				 title: '联系电话',
-                 key: 'mbrPhone',
+                 key: 'phone',
 				 align:'center',
                 },
                 {
 				 title: '邮箱',
-                 key: 'mbrEmail',
+                 key: 'email',
 				 align:'center',
                 },
                 {
 				 title: '成员类型',
-                 key: 'enterCmtName',
+                 key: 'mbrType',
 				 align:'center',
 				},
 				{
@@ -148,8 +148,8 @@ export default {
         },
         getInfo(){
 			let {params}=this.$route;
-			this.Params.csrId=params.csrId;
-			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
+			this.Params.customerId=params.csrId;
+			this.$http.get('get-customer-manager-admin', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;
 			}).catch((err)=>{

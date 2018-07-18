@@ -88,7 +88,20 @@ export default {
     },
     //获取企业管理员详情--获取管理的社区列表
     'get-manage-cmt-list': {
-        url: 'api/krspace-op-web/customer/manager/manage-cmt-list',
+        url: '/api/krspace-op-web/customer/manager/manage-cmt-list',
         method: 'get'
     },
+    
+
+    //获取企业管理员详情--在职员工列表
+    'get-customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/employees',
+        method: 'get'
+    },
+    //获取企业管理员详情--管理员列表
+    'get-customer-manager-admin': {
+        url: '/api/krspace-op-web/customer/manager/admin/list',
+        method: 'get'
+    },
+
 } 

@@ -68,17 +68,17 @@ export default {
             list:[
 				{
 				 title: '姓名',
-                 key: 'mbrName',
+                 key: 'name',
 				 align:'center',
                 },
                 {
 				 title: '联系电话',
-                 key: 'mbrPhone',
+                 key: 'phone',
 				 align:'center',
                 },
                 {
 				 title: '邮箱',
-                 key: 'mbrEmail',
+                 key: 'email',
 				 align:'center',
                 },
 				{
@@ -88,10 +88,10 @@ export default {
                 },
 				{
 				 title: '是否为管理员',
-                 key: 'isManager',
+                 key: 'leader',
 				 align:'center',
 				 render(h,obj){
-					let manager= obj.row.isManager=="1"?'是':'否';
+					let manager= obj.row.leader?'是':'否';
 					return manager;
 				  }
 				},
@@ -133,8 +133,8 @@ export default {
         },
         getInfo(){
 			let {params}=this.$route;
-			this.Params.csrId=params.csrId;
-			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
+			this.Params.customerId=params.csrId;
+			this.$http.get('get-customer-manager-employees', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;
 			}).catch((err)=>{

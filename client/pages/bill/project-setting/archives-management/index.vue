@@ -86,7 +86,7 @@ export default {
             this.activeIndex = 0;
             data.projectId = this.queryData.id;
             this.fileDetailData = {};
-            this.$http.get('project－archives-file-detail',data).then((response)=>{
+            this.$http.get('project－archives-file-detail-write',data).then((response)=>{
              
             //    this.collapseData = [].concat(response.data);
             this.fileDetailData = Object.assign({},response.data);

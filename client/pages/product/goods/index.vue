@@ -5,12 +5,17 @@
             <div class="u-select">
                 <div class="u-select-list">
                     <span class="u-select-label">所属地区</span>
-                    <Cascader :data="areaList" v-model="area" class="Cascader"></Cascader>
+                    <Cascader 
+                        :data="areaList"
+                         v-model="area" 
+                         class="Cascader"
+                         @on-change="changeCity"
+                ></Cascader>
                 </div>
                 <div class="u-select-list">
                     <span  class="u-select-label">社区开业状态</span>
                     <Select
-                        v-model="formItem.comPublish"
+                        v-model="tabParams.communityStatus"
                         style="width:100px"
                         placeholder="请选择"
                         clearable
@@ -27,13 +32,13 @@
                 <div class="u-select-list">
                     <span  class="u-select-label">APP上架状态</span>
                     <Select
-                        v-model="formItem.appPublish"
+                        v-model="tabParams.appPublished"
                         style="width:100px"
                         placeholder="请选择"
                         clearable
                     >
                         <Option
-                            v-for="item in statusList"
+                            v-for="item in appStatusList"
                             :value="item.value"
                             :key="item.value"
                         >
@@ -43,15 +48,15 @@
                 </div>
                 <div class="u-search">
                     <div class="u-select-list">
-                        <span  class="u-select-label">KM上架状态</span>
+                        <span  class="u-select-label">小程序上架状态</span>
                         <Select
-                            v-model="formItem.KMPublish"
+                            v-model="tabParams.kmPublished"
                             style="width:100px"
                             placeholder="请选择"
                             clearable
                         >
                             <Option
-                                v-for="item in statusList"
+                                v-for="item in kmStatusList"
                                 :value="item.value"
                                 :key="item.value"
                             >
@@ -62,15 +67,7 @@
                     <div class="u-select-list">
                         <span class="u-select-label">社区名称</span>
                         <Input
-                            v-model="formItem.roomName"
-                            placeholder="请输入搜索关键词"
-                            style="width: 150px"
-                        />
-                  </div>
-                  <div class="u-select-list">
-                        <span class="u-select-label">社区编号</span>
-                        <Input
-                            v-model="formItem.roomCode"
+                            v-model="tabParams.communityName"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -100,6 +97,8 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import utils from '~/plugins/utils';
+
 export default {
     components:{
         SectionTitle,
@@ -120,87 +119,94 @@ export default {
                 pageSize:15,
             },
             area: [],
-            formItem:{},
-            areaList: [{
-                value: 'beijing',
-                label: '北京',
-                children: [
-                    {
-                        value: 'gugong',
-                        label: '故宫'
-                    },
-                    {
-                        value: 'tiantan',
-                        label: '天坛'
-                    },
-                    {
-                        value: 'wangfujing',
-                        label: '王府井'
-                    }
-                ]
-            
-            }],
+            areaList: [],
             comStatusList:[
                 {
                  label:'已开业',
-                 value:'true'   
+                 value:'1'   
                 },
                 {
                  label:'未开业',
-                 value:'false'   
-                },
+                 value:'0'   
+                }
             ],
-            statusList:[
+            appStatusList:[
                 {
                  label:'已上架',
-                 value:'true'   
+                 value:'1'   
                 },
                 {
                  label:'未上架',
-                 value:'false'   
+                 value:'0'   
+                }
+            ],
+            kmStatusList:[
+                {
+                 label:'已上架',
+                 value:'2'   
                 },
+                {
+                 label:'待上架',
+                 value:'1'   
+                },
+                {
+                 label:'未上架',
+                 value:'0'   
+                }
             ],
             columns:[
                  {
                     title: '社区编码',
-                    key: 'id',
+                    key: 'communityCode',
                     align:'center',
                 },
                 {
                     title: '社区名称',
-                    key: 'name',
-                    align:'center',
-                },
-                {
-                    title: '所属城市',
                     key: 'communityName',
                     align:'center',
                 },
                 {
+                    title: '所属城市',
+                    key: 'cityName',
+                    align:'center',
+                },
+                {
                     title: '社区开业状态',
-                    key: 'comPublish',
+                    key: 'communityStatus',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.comPublish?'已开业':'未开业'
-                        return status
+                        let status=params.row.communityStatus=='1'?'已开业':'未开业'
+                        return h('span',{},status)
                     }
                 },
                 {
                     title: 'APP上架状态',
-                    key: 'appPublish',
+                    key: 'appPublished',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.appPublish?'已上架':'未上架'
-                        return status
+                        let status=params.row.appPublished=='1'?'已上架':'未上架'
+                         return h('span',{},status)
                     }
                 },
                 {
-                    title: 'KM上架状态',
-                    key: 'KMPublish',
+                    title: '小程序上架状态',
+                    key: 'kmPublished',
                     align:'center',
                     render:(h,params)=>{
-                        let status=params.row.KMPublish?'已上架':'未上架'
-                        return status
+                        switch(params.row.kmPublished){
+                            case 1:
+                            return h('span',{},'待上架');
+                            break;
+                            case 2:
+                            return h('span',{},'已上架');
+                            break;
+                            case 0:
+                            return h('span',{},'未上架');
+                            break;
+                        }
+                        
+                       
+                        
                     }
                 },
                 {
@@ -244,21 +250,84 @@ export default {
             ]
         }
     },
-    mounted:function(){
-		this.getTableData(this.tabParams)
+    created(){
+        var _this=this;
+        this.getCityinfo(' ',function(){
+            _this.tabParams=Object.assign({},_this.$route.query);
+            _this.formItem=Object.assign({},_this.$route.query);
+            let areaArr=[];
+           
+            if(_this.formItem.id){
+                areaArr.push(_this.formItem.id*1)
+            }
+            if(_this.formItem.cityId){
+                areaArr.push(_this.formItem.cityId*1)
+            }
+            _this.area=areaArr;
+            
+            let appStatus={
+                '1':'已上架',
+                '0':'未上架',
+            }
+            let kmStatu={
+                '2':'已上架',
+                '0':'未上架',
+                '1':'待上架'
+            }
+            _this.formItem.appPublishName=appStatus[_this.formItem.appPublished];
+            _this.formItem.kmPublishName=kmStatu[_this.formItem.kmPublished];
+            
+            
+        });
+        this.getTableData(this.$route.query);
+        
+        
+      
     },
+   
     methods:{
-        changePage(){
+        getCityinfo(params,callback){
+            this.$http.get('get-krmting-mobile-community-city-list').then((res)=>{
+               let provinceList=res.data.provinceList.map((item)=>{
+                   item.label=item.name;
+                   item.value=item.id;
+                   if(item.subAreaList){
+                       item.children=item.subAreaList.map((childrenItem)=>{
+                            childrenItem.label=childrenItem.name;
+                            childrenItem.value=childrenItem.id;
+                            return childrenItem;
+                        })
+                   }
+                     
+                   return item;
+               }) 
+                this.areaList=provinceList;
+                callback && callback();
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+                
+        },
+        changeCity(value){
+            if(value[1]){
+                this.tabParams.id=value[0]
+                this.tabParams.cityId=value[1]
+            }else{
+                this.tabParams.id=''
+                this.tabParams.cityId=''
+            }
+        },
+        changePage(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
         },
         getTableData(params){
-                
-            this.$http.get('get-krmting-room-list', params).then((res)=>{
+            this.$http.get('get-krmting-mobile-community-list', params).then((res)=>{
                 this.meetingList=res.data.items;
                 this.totalCount=res.data.totalCount;
-                this.openSearch=false;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -267,17 +336,18 @@ export default {
                 
         },
         lowerSubmit(){
-            let params=Object.assign({},this.formItem);
+            let params=Object.assign({},this.tabParams);
             params.page=1;
             params.pageSize=15;
-            this.getTableData(params);
+            utils.addParams(params);
+           
         },
         jumpEdit(params){
-            window.open(`/product/goods/edit/${params.id}`,'_blank');
+            window.open(`/product/goods/edit/${params.communityId}`,'_blank');
           
         },
         openView(params){
-            window.open(`/product/goods/view/${params.id}`,'_blank');
+            window.open(`/product/goods/view/${params.communityId}`,'_blank');
           
         },
     }

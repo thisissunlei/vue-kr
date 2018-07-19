@@ -375,7 +375,8 @@
                         console.log(router,'---------',href)
                     }
                     if(router.indexOf('krspace.cn')!=-1){
-                        activeRouter = router.split('krspace.cn')[1];
+                        var port = location.port?':'+location.port:'';
+                        activeRouter = router.split('krspace.cn'+port)[1];
                     }
                     if(activeRouter.indexOf('#')!=-1){
                         activeRouter = activeRouter.split('#')[1];

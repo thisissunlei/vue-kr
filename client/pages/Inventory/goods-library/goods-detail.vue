@@ -8,10 +8,10 @@
 		<div class="m-detail-content">
 			<DetailStyle info="基本信息">
 				<LabelText label="商品定价：">
-					{{basicInfo.quotedPrice}}
+					{{basicInfo.quotedPrice?basicInfo.quotedPrice+'元':'-'}}
 				</LabelText>
 				<LabelText label="工位单价：">
-					{{basicInfo.avgPrice}}
+					{{basicInfo.avgPrice?basicInfo.avgPrice+'元':'-'}}
 				</LabelText>
 				<LabelText label="城市：">
 					{{basicInfo.cityName}}
@@ -20,16 +20,16 @@
 					{{basicInfo.communityName}}
 				</LabelText>
 				<LabelText label="楼层：">
-					{{basicInfo.floor}}
+					{{basicInfo.floor?basicInfo.floor+'层':'-'}}
 				</LabelText>
 				<LabelText label="类型：">
 					{{basicInfo.goodsTypeName}}
 				</LabelText>
 				<LabelText label="工位：">
-					{{basicInfo.capacity}}
+					{{basicInfo.capacity?basicInfo.capacity+'工位':'-'}}
 				</LabelText>
 				<LabelText label="面积：">
-					{{basicInfo.area}}
+					{{basicInfo.area?basicInfo.area+'平方':'-'}}
 				</LabelText>
 				<LabelText label="方位：">
 					{{basicInfo.locationType}}
@@ -48,10 +48,10 @@
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="启用状态">
-				<Table :columns="service" :data="serviceData"/>
+				<Table border :columns="service" :data="serviceData"/>
 			</DetailStyle>
 			<DetailStyle info="商品修改记录">
-				<Table :columns="contract" :data="contractData"/>
+				<Table border :columns="contract" :data="contractData"/>
 			</DetailStyle>
 		</div>
 	</div>	
@@ -91,7 +91,7 @@ export default {
 					 let end=endTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(endTime)):'-';
 					 let time='-';
 					 if(startTime&&endTime){
-						 time=start+'-'+end;
+						 time=start+' － '+end;
 					 }else if(startTime&&!endTime){
 						 time=start+'起';
 					 }else if(!startTime&&endTime){
@@ -103,7 +103,15 @@ export default {
 				{
                     title:'状态',
                     key:'goodsStatusName',
-                    align:'center'	
+					align:'center',
+					render(tag,params){
+					 let status=params.row.goodsStatusName;
+					 return tag('span',{
+						 style:{
+							 color:(status=='下架'||status=='不可用')?'red':''
+						 }
+					 },status);
+				 }	
                 },
 				{
 				 title: '时长',
@@ -133,7 +141,7 @@ export default {
                  key: 'utime',
 				 align:'center',
 				 render(tag,params){
-					 let time=params.row.utime?dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.utime)):'-';
+					 let time=params.row.utime?dateUtils.dateToStr('YYYY-MM-DD HH:mm',new Date(params.row.utime)):'-';
 					 return tag('span',{},time);
 				 }		
 				},

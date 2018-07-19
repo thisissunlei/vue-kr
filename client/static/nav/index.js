@@ -549,11 +549,11 @@
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
-                        {
-                            primaryText: "客户门禁权限",
-                            router: 'user/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        },
+                        // {
+                        //     primaryText: "客户门禁权限",
+                        //     router: 'user/memberManage/doormanage',
+                        //     menuCode: 'door_base',
+                        // },
                         {
                             primaryText: '客户线索',
                             router: 'user/customerManage/customerList',
@@ -679,16 +679,16 @@
                             type: 'vue',
                             menuCode: 'cmt_investment',
                         },
-                        {
-                            primaryText: '销控',
-                            menuCode: 'cmt_sell_control',
-                            router: 'product/communityManage/controlTable',
-                        },
-                        {
-                            primaryText: "招商数据",
-                            router: 'product/statistical/index',
-                            menuCode: 'stat_group',
-                        },
+                        // {
+                        //     primaryText: '销控',
+                        //     menuCode: 'cmt_sell_control',
+                        //     router: 'product/communityManage/controlTable',
+                        // },
+                        // {
+                        //     primaryText: "招商数据",
+                        //     router: 'product/statistical/index',
+                        //     menuCode: 'stat_group',
+                        // },
                         {
                             primaryText: '注册地址',
                             menuCode: 'cmt_registerAddress_list',

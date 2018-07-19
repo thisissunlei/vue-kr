@@ -135,11 +135,19 @@ export default {
 				 title: '入驻开始日期',
                  key: 'enterDate',
 				 align:'center',
+				 render(h,obj){
+					 let time=obj.row.enterDate?obj.row.enterDate:'-';
+					 return h('span',{},time);
+				 }
 				},
 				{
 				 title: '入驻结束日期',
                  key: 'leaveDate',
 				 align:'center',
+				 render(h,obj){
+					 let time=obj.row.leaveDate?obj.row.leaveDate:'-';
+					 return h('span',{},time);
+				 }
 				},
 				{
 				 title: '当前入驻状态',

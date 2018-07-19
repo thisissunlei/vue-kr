@@ -772,7 +772,7 @@ export default {
                 }
                 else if (parms.count >= 1) {
                     this.showChanceSelector = true;
-                    // this.defaultChanceID = parms.list[1].value
+                    this.defaultChanceID = ''
                 }
             }
         },

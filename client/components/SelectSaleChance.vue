@@ -148,7 +148,7 @@ export default {
               
                 r.data.items.data.map(item => {
                     list.push({
-                        label: item.name,
+                        label: item.name||'   ',
                         value: item.id
                     })
                 })

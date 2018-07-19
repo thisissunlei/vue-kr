@@ -58,11 +58,11 @@ export default {
             searchFilter:[
                 {
                     label:'姓名',
-                    value:'mbrName'
+                    value:'name'
                 },
                 {
                     label:'手机号',
-                    value:''
+                    value:'phone'
                 }
             ],
             list:[
@@ -144,8 +144,9 @@ export default {
 			})
         },
         lowerSubmit(form){
-            this.Params.page=1;
-            this.Params.mbrName=form.mbrName;
+            this.Params.page=1; 
+            this.Params.name=form.name?form.name:'';
+            this.Params.phone=form.phone?form.phone:'';
             this.getInfo();
         },
         setManager(params){

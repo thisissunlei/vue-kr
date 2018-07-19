@@ -160,7 +160,8 @@ export default {
         },
         lowerSubmit(form){
             this.Params.page=1;
-            this.Params.mbrName=form.mbrName;
+            this.Params.name=form.name?form.name:'';
+            this.Params.phone=form.phone?form.phone:'';
             this.getInfo();
         },
         setManager(params){

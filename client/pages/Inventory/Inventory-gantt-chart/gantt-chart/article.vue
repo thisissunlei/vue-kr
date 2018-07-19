@@ -133,7 +133,7 @@ export default {
             var planStart = data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate)):this.start;
             var planEnd = data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate)):this.end;
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
-          
+            
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
                 office:utils.dateDiff(officeStart,planStart)

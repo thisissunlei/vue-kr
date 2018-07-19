@@ -36,10 +36,10 @@ export default {
                
                 let data = {};
                 r.data.items.map((item,index)=>{
-                    if(data[item.name]){
-                        data[item.name].push(item);
+                    if(data[item.typeName]){
+                        data[item.typeName].push(item);
                     }else{
-                        data[item.name] = [item];
+                        data[item.typeName] = [item];
                     }
                    
                 })

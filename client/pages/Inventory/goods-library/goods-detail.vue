@@ -4,47 +4,47 @@
 			<span class="u-border-left"/>
 			商品详情
 		</div>
-		<div style="font-size:26px;font-weight:bold;padding-left: 48px;padding-top: 20px;">802</div>
+		<div style="font-size:26px;font-weight:bold;padding-left: 48px;padding-top: 20px;">{{basicInfo.name}}</div>
 		<div class="m-detail-content">
 			<DetailStyle info="基本信息">
 				<LabelText label="商品定价：">
-					{{basicInfo.customerName}}
+					{{basicInfo.quotedPrice}}
 				</LabelText>
 				<LabelText label="工位单价：">
-					{{basicInfo.communityName}}
+					{{basicInfo.avgPrice}}
 				</LabelText>
 				<LabelText label="城市：">
-					{{basicInfo.salerName}}
+					{{basicInfo.cityName}}
 				</LabelText>
 				<LabelText label="社区：">
-					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
-				</LabelText>
-				<LabelText label="楼层：">
-					{{basicInfo.orderStatusName}}
-				</LabelText>
-				<LabelText label="类型：">
-					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
-				</LabelText>
-				<LabelText label="工位：">
-					{{basicInfo.customerName}}
-				</LabelText>
-				<LabelText label="面积：">
 					{{basicInfo.communityName}}
 				</LabelText>
+				<LabelText label="楼层：">
+					{{basicInfo.floor}}
+				</LabelText>
+				<LabelText label="类型：">
+					{{basicInfo.goodsTypeName}}
+				</LabelText>
+				<LabelText label="工位：">
+					{{basicInfo.capacity}}
+				</LabelText>
+				<LabelText label="面积：">
+					{{basicInfo.area}}
+				</LabelText>
 				<LabelText label="方位：">
-					{{basicInfo.salerName}}
+					{{basicInfo.locationType}}
 				</LabelText>
 				<LabelText label="套间：">
-					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{basicInfo.suiteType}}
 				</LabelText>
 				<LabelText label="位置：">
-					{{basicInfo.orderStatusName}}
+					{{basicInfo.goodsLocationText}}
 				</LabelText>
 				<LabelText label="描述：">
-					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{basicInfo.remark}}
 				</LabelText>
 				<LabelText label="空间：">
-					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{basicInfo.basicSpaceName}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="启用状态">
@@ -85,13 +85,24 @@ export default {
                  key: 'startDate',
 				 align:'center',
 				 render(tag,params){
-					 let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
-					 return time;
+					 let startTime=params.row.startDate;
+					 let endTime=params.row.endDate;
+					 let start=startTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(startTime)):'-';
+					 let end=endTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(endTime)):'-';
+					 let time='-';
+					 if(startTime&&endTime){
+						 time=start+'-'+end;
+					 }else if(startTime&&!endTime){
+						 time=start+'起';
+					 }else if(!startTime&&endTime){
+						 time='-'+end;
+					 }
+					 return tag('span',{},time);
 				 }	
                 },
 				{
                     title:'状态',
-                    key:'capacity',
+                    key:'goodsStatusName',
                     align:'center'	
                 },
 				{
@@ -104,32 +115,36 @@ export default {
             contract:[
                {
 				 title: '修改内容',
-                 key: 'contractNum',
+                 key: 'typeName',
                  align:'center'	
 				},
 				{
 				 title: '修改前',
-                 key: 'rentAmount',
+                 key: 'contentBefore',
                  align:'center'	
 				},
 				{
 				 title: '修改后',
-                 key: 'orderStatusTypeName',
+                 key: 'contentAfter',
                  align:'center'	
 				},
 				{
 				 title: '修改时间',
-                 key: 'rentAmount',
-                 align:'center'	
+                 key: 'utime',
+				 align:'center',
+				 render(tag,params){
+					 let time=params.row.utime?dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.utime)):'-';
+					 return tag('span',{},time);
+				 }		
 				},
 				{
 				 title: '操作者',
-                 key: 'orderStatusTypeName',
+                 key: 'creator',
                  align:'center'	
 				},
 				{
 				 title: '备注',
-                 key: 'orderStatusTypeName',
+                 key: 'remark',
                  align:'center'	
 				}   
 			],
@@ -143,18 +158,18 @@ export default {
 		GLOBALSIDESWITCH('false');
 		this.getDetailData();
 	},
-
+    
 	methods:{
 		getDetailData(){
-			let {params}=this.$route;
-			let from={
-				id:params.watchView
+			let params={
+				id:this.$route.query.id,
+				goodsType:this.$route.query.goodsType
 			};
-			this.$http.get('join-bill-detail', from).then((response)=>{  
+			this.$http.get('goods-detail', params).then((response)=>{  
 					this.basicInfo=response.data;
-					
-					this.serviceData=response.data.orderSeatDetailVo||[];
-					this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
+		
+					this.serviceData=response.data.followStatus||[];
+					this.contractData=response.data.goodsOperateLogs||[];
 				}).catch((error)=>{
 					this.$Notice.error({
 						title:error.message

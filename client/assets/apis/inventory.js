@@ -172,5 +172,10 @@ export default  {
         url: '/song/api/krspace-finance-web/cmt/goods/add/device/batch',
         method: 'post'
     },
+    //商品详情
+    'goods-detail': {
+        url: '/song/api/krspace-finance-web/cmt/goods/detail',
+        method: 'get'
+    }
   }
   

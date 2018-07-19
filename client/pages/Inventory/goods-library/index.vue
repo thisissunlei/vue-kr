@@ -704,7 +704,7 @@ export default {
         },
         methods:{
         goDetail(params){
-            window.open(`/inventory/goods-library/${params.id}/goods-detail`,'_blank')
+            window.open('/inventory/goods-library/goods-detail?goodsType='+params.goodsType+'&id='+params.id,'_blank')
         },
         openSpace(){
             if(!this.statusData.length){

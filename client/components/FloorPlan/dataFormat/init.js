@@ -19,7 +19,7 @@ function init(data,picProperty,dataUrl){
                 spaceArr.push(item);
             }else{
                 if(item.futureStatus){
-                    item.parentMin=22;
+                    item.parentMin=17;
                     spaceArr.push(item);
                 }            
             }
@@ -51,26 +51,28 @@ function init(data,picProperty,dataUrl){
         let minH=0.5;
         let min=0.5;
         if(spaceArr.length){
-            minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
             //两行字的高度加上icon的高度
-            let fixed='';
+            let fixedW=spaceArr[0].parentMin;
+            let fixedH=spaceArr[0].parentMin;
             if(spaceArr[0].belongType=='SPACE'){
-                fixed=spaceArr[0].futureStatus?32+42:32;
-            }else{
-                fixed=spaceArr[0].parentMin;
+                fixedH=spaceArr[0].futureStatus?32+42:32;
+                fixedW=spaceArr[0].futureStatus?(spaceArr[0].parentMin+42):spaceArr[0].parentMin;
             }
-            minH=fixed/spaceArr[0].cellHeight;
+            minH=fixedH/spaceArr[0].cellHeight;
+            minW=fixedW/spaceArr[0].cellWidth;
             
             spaceArr.map((item,index)=>{
-                let fixItem=item.parentMin;
+                let switchW=item.parentMin;
+                let switchH=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    fixItem=item.futureStatus?32+42:32;
+                    switchW=item.futureStatus?(item.parentMin+42):item.parentMin;
+                    switchH=item.futureStatus?32+42:32;
                 }
-                if((item.parentMin/item.cellWidth)>minW){
-                    minW=item.parentMin/item.cellWidth;
+                if((switchW/item.cellWidth)>minW){
+                    minW=switchW/item.cellWidth;
                 }
-                if((fixItem/item.cellHeight)>minH){
-                    minH=fixItem/item.cellHeight;
+                if((switchH/item.cellHeight)>minH){
+                    minH=switchH/item.cellHeight;
                 }
             }) 
         }

@@ -129,7 +129,7 @@ export default {
                 var floor=this.floorList[0].floor;
                 this.formItem.floor=this.floorList.length?floor:''; 
                 if(oldFloor==floor){
-                    this.floorChange(floor);
+                    this.floorChange({label:'',value:floor});
                 }
                 oldFloor=floor; 
                 if(len>1){

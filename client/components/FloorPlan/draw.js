@@ -33,9 +33,9 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     
     //公共字体样式
     function textStyle() {
-        return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
+        return {stroke: "#999", font: "bold 12px PingFangSC-Medium"};
     }
-   
+    
     /*function linkProblemConverter(msg) {
         if (msg) return "red";
         return null;
@@ -107,10 +107,10 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel, "Table",
                 //元件属性
                 $(go.TextBlock,textStyle(),
-                { row: 0, column: 0,margin:5,textAlign:'center'},
+                { row: 0, column: 0,margin:2.5},
                 new go.Binding("text", "name")),      
                 $(go.TextBlock,textStyle(),
-                { row: 1, column: 0},
+                { row: 1, column: 0,margin:2.5},
                 new go.Binding("text", "property")),
             ),
             $(go.Panel,

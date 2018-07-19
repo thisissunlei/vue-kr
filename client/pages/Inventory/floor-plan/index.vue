@@ -168,7 +168,6 @@ export default {
     getItem(arr){
         var obj={};
         arr.map((item,index)=>{
-            console.log('name---',localStorage.getItem('map-config-'+item.name),'00',item.name);
             obj[item.name]=localStorage.getItem('map-config-'+item.name)||item.number;
         })
         return obj
@@ -178,7 +177,6 @@ export default {
         this.isLoading=false;
         values.currentDate=utils.dateCompatible(values.currentDate);
         let arr=[{name:'futureAvlDays',number:60},{name:'futureOccDays',number:60},{name:'futureAvlEndDays',number:30}];
-        console.log('this.getItem(arr)---',this.getItem(arr));
         values=Object.assign({},values,this.getItem(arr));
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
@@ -240,8 +238,8 @@ export default {
          //显示
          var tirDom = document.getElementById('gantt-chart-tool-tip'+selectId);
          var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+selectId);
-         tirDom.style.display = 'block';
-         angleDom.style.display = 'block';
+         tirDom.style.display = 'inline-block';
+         angleDom.style.display = 'inline-block';
          publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
     },
     mouseEnter(event,every,all,canvas,scroll,isIcon){
@@ -255,8 +253,9 @@ export default {
     allBodyClick(){
         if(this.isClickShow){
             this.isClickShow=false;
-            this.$router.replace({path:'/inventory/floor-plan',query:{displayList:this.displayList}});
-            //utils.addParams({displayList:this.displayList})
+            this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});
+            this.getMapData(this.tabForms);
+            //this.$router.replace({path:'/inventory/floor-plan',query:{displayList:this.displayList}});
         }
     },
     bodyClick(event){
@@ -369,7 +368,7 @@ export default {
         cursor: pointer;
     }
     .gantt-chart-tool-tip{
-          max-width: 280px;
+          //max-width: 280px;
           display: none;
           //opacity: 0;
           background: #575D6A;

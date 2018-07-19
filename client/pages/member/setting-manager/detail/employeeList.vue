@@ -48,6 +48,7 @@ export default {
     props:{
         openSetManager:Function,
         ifReload:Boolean,
+        reload:Function,
     },
     data(){
         return{
@@ -134,9 +135,10 @@ export default {
     watch: {
         $props: {
             deep: true,
-            handler(nextProps,prevProps) {
+            handler() {
                if(this.ifReload){
                     this.getInfo();
+                    this.reload();
                 }
             }
         }

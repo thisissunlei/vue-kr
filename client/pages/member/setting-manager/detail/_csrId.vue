@@ -201,12 +201,14 @@ export default {
 		let {params}=this.$route;
 		this.Params.csrId=params.csrId;
 		this.getCompanyInfo(params);
-		this.getCount(params);
+		this.getCount();
 	},
 	methods:{
-		getCount(params){
+		getCount(){
+			let {params}=this.$route;
+			let customerId=params.csrId;
 			this.$http.get('get-customer-manager-csr-mbrtype-num', {
-				customerId:params.csrId
+				customerId:customerId
 			}).then((res)=>{
 				this.count=res.data.items;
 				

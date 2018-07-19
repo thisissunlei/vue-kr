@@ -189,9 +189,7 @@ export default {
 				//  }
                 // }
 			],
-			
 			companyList:[],
-			detailInfo:{},
 			tipTitle:'',
 		}
 	},
@@ -240,16 +238,17 @@ export default {
 		
 		hideTip(form){
 			if(form){
-				console.log('form----',form)
-				this.detailInfo=form;
+				this.itemDetail=form;
 				this.tipTitle=`请选择 ${form.mbrName} 管理的社区`
 			}
 			this.openTip=!this.openTip;
 		},
 		tipSubmit(){
+			let {params}=this.$route;
 			let Params={
 				mbrId:this.itemDetail.mbrId,
-				cmtIds:this.cmtIds
+				cmtIds:this.cmtIds,
+				customerId:params.csrId,
 			}
 			console.log('Params',Params)
 			this.$http.post('edit-customer-manager', Params).then((res)=>{

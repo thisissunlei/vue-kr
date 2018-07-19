@@ -89,7 +89,7 @@ export default {
                     key: 'amount',
                     className: "colPadRight",
                     render: (h, params) => {
-                        if (params.row.amount) {
+                        if (params.row.amount!=null) {
                             let amount = utils.thousand((params.row.amount).toFixed(2))
                             return h('div', '¥' + amount)
                         }
@@ -101,6 +101,11 @@ export default {
                     key: 'reduceOrder',
                     render: (h, params) => {
                         let reduceOrder = params.row.reduceOrder
+                        let str='-'
+                        if (reduceOrder.orderTypeName&&reduceOrder.orderId) {
+                           str= `${reduceOrder.orderTypeName}-${reduceOrder.orderId}`
+                        }
+                        
                         if (reduceOrder) {
                             return h(
                                 'span',
@@ -111,11 +116,11 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jump2OrderDetail(reduceOrder.orderId)
+                                            this.jump2OrderDetail(reduceOrder.orderType,reduceOrder.orderId)
                                         }
                                     }
                                 },
-                                `减租-${reduceOrder.orderNo ? reduceOrder.orderNo : '订单号'}`)
+                                str)
                         }
                         else {
                             return h('span', '-')
@@ -155,10 +160,10 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        if (params.row.paid && params.row.needPaid) {
+                        if (params.row.paid!=null && params.row.amount!=null) {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
-                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                            if (Number(params.row.amount) === Number(params.row.paid)) {
                                 obj.clear = true
                             }
                             return h('div', { 'class': obj }, '¥' + amount)
@@ -174,12 +179,12 @@ export default {
                     render: (h, params) => {
                         let str = '未付清'
                         let obj = { clear: false }
-                        if (params.row.needPaid && params.row.paid) {
-                            if (Number(params.row.needPaid) === Number(params.row.paid)) {
+                        if (params.row.amount!=null && params.row.paid!=null) {
+                            if (Number(params.row.amount) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true
                             }
-                            else if (Number(params.row.needPaid) > Number(params.row.paid)) {
+                            else if (Number(params.row.amount) > Number(params.row.paid)) {
                                 str = '未付清'
                             }
                         }

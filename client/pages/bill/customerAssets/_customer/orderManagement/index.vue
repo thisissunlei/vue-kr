@@ -90,6 +90,8 @@ export default {
                 customerId: customerId,
                 communityId: communityId
             }
+            // params.customerId=12733;
+            // params.communityId=4;
             this.$http.get('get-fee-overivew-list', params).then((r) => {  
                 console.log(r.data)
                 this.serviceChargeData =[].concat(r.data.fee) ;

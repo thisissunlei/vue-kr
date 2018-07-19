@@ -76,7 +76,7 @@
                                 </Select> 
                             </Form-item>
                         
-                            <Form-item label="设备绑定" class='daily-form'> 
+                            <Form-item label="物理空间" class='daily-form'> 
                                 <Select 
                                     v-model="formItem.binding" 
                                     style="width: 200px;;margin-left:10px;"

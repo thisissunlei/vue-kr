@@ -94,7 +94,7 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-                      <div>启用状态、绑定设备、平面图配置可在列表中直接点击操作</div>
+                      <div>启用状态、物理空间、平面图配置可在列表中直接点击操作</div>
             </Form>   
         </template>
 <script>

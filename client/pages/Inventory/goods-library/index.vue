@@ -20,9 +20,10 @@
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openSpace">创建空间</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
-                <Buttons type="primary" :label="isShowEdit?'编辑操作':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
+                <Buttons type="primary" :label="isShowEdit?'编辑':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
          </div>
 
             <Table 
@@ -72,6 +73,22 @@
         </Modal>
 
         <Modal
+            width="660"
+            v-model="spaceOpen"
+            title="创建物理空间"
+            class-name="m-clear-footer"
+        >
+                <AddPhysical    
+                     v-if="spaceOpen"
+                    :data="statusData"
+                    :errorData="errorData"
+                    @submit="submitSpace"
+                    @cancel="openSpace"
+                />
+            <div slot="footer"></div>
+        </Modal>
+
+        <Modal
             width="530"
             v-model="priceOpen"
             title="修改定价"
@@ -86,7 +103,7 @@
         </Modal>
 
         <Modal
-            title="Title"
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -94,6 +111,18 @@
                 <span style="color:red;">{{statusOldData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
                      <Button type="primary" @click="openComplete" >成功</Button>
+                </div>
+        </Modal>
+
+        <Modal
+            title="创建物理空间"
+            v-model="spaceTip"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+                  <span style="font-size:16px;">创建成功！</span>
+                  <div slot="footer" style="text-align:center;">
+                     <Button type="primary" @click="openSpaceSuccess" >确定</Button>
                 </div>
         </Modal>
 
@@ -224,6 +253,7 @@
             >
             <div style="text-align:left;">
                 <p>请及时在<span  @click="clanar"    style="color:red;text-decoration:underline;cursor: pointer;" >平面图配置</span>中配置商品位置</p>
+                <p style="margin-top: 10px;">请在社区开业前，批量“创建物理空间”或手动关联已有的物理空间</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -240,7 +270,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
              <div slot="footer">
                  <Button type="primary" @click="determine" >确定导入</Button>
@@ -292,9 +322,7 @@
            :floor="newgoodForm.floor"
            :editData="serviceData"
         />
-        <div slot="footer">
-        
-         </div>
+        <div slot="footer"></div>
      </Modal>
 
     </div>
@@ -317,6 +345,7 @@ import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
 import Buttons from '~/components/Buttons';
 import EditGoods from './editGoods';
+import AddPhysical from './bulk-changes/add-physical';
 export default {
 
 
@@ -335,7 +364,8 @@ export default {
                 BindService,
                 Buttons,
                 EditGoods,
-                ChangePrice
+                ChangePrice,
+                AddPhysical
                  },
         props:{
                 mask:String
@@ -344,6 +374,7 @@ export default {
                 return{
             editOpen:false,
             priceOpen:false,
+            spaceOpen:false,
             editData:{},
             serviceData:{},
             warnCode:'',
@@ -381,6 +412,7 @@ export default {
             switchParams:{},
             modifystate: false,
             complete: false,
+            spaceTip:false,
             newmodal:false,
             pudyt:false,
             butpudyt:false,
@@ -405,38 +437,47 @@ export default {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
-                     render(h, params){
+                    render:(h, params)=>{
                          var ile= params.row.name;
                          var nes=params.row.duplicateNo;
                           var btnRender=[];
                           if(params.row.duplicateNo==0){
                                 btnRender=[
-                                   h('p', {                                       
-                                        },ile),
+                                   h('p',{                                       
+                                    },ile),
                                 ];
                           }else{
                                  btnRender.push(
-                                     h('p', { 
+                                    h('p', { 
                                         
                                         },ile),
-                                         h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },'('),
-                                         h('span', { 
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            },'有重复 '),
-                                               h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },' 编号'+nes+')'),
+                                    h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },'('),
+                                    h('span', { 
+                                        style: {
+                                            color:'#FF6868'
+                                        }       
+                                    },'有重复 '),
+                                        h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },' 编号'+nes+')'),
                             )
                           }
-                          return h('div',btnRender)
+                          return h('div',{
+                              style: {
+                                cursor:'pointer'
+                              },
+                              on: {
+                                click: () => {
+                                    this.goDetail(params.row)
+                                }
+                              }
+                          },btnRender)
 
                     }
                 },
@@ -497,7 +538,7 @@ export default {
                     key: 'goodsStatusName',
                     align:'center',
                     width:90,
-                   render(tag, params){
+                   render:(tag, params)=>{
                      var statusName=params.row.goodsStatusName?params.row.goodsStatusName:'-';
                      var status=params.row.goodsStatus;
                      var colorClass='';
@@ -509,6 +550,14 @@ export default {
                     return tag('span',{
                             attrs: {
                                 class:colorClass
+                            },
+                            style: {
+                                cursor:'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.openSingleStatus(params.row)
+                                }
                             }
                     },statusName);
                   }
@@ -575,7 +624,7 @@ export default {
                     }
                 },
                 {
-                    title: '设备绑定',
+                    title: '物理空间',
                     key: 'bindingText',
                     align:'center',
                     width:60,
@@ -596,7 +645,7 @@ export default {
                     }
                 },
                 {
-                    title: '商品位置',
+                    title: '平面图配置',
                     key: 'goodsLocation',
                     align:'center',
                     width:120,
@@ -654,6 +703,24 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+        goDetail(params){
+            window.open('/inventory/goods-library/goods-detail?goodsType='+params.goodsType+'&id='+params.id,'_blank')
+        },
+        openSpace(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
+            this.spaceOpen=!this.spaceOpen;
+            this.errorData=[];       
+        },
+        openSingleStatus(array){
+            this.statusData=[].concat([array]);
+            this.statusOldData=[].concat([array]);
+            this.openStatus();
+        },
         openPrice(){
             if(!this.statusData.length){
                 this.$Notice.error({
@@ -1039,10 +1106,28 @@ export default {
                 });
             })
         },
+        submitSpace(form){
+           this.$http.post('goods-add-space',form).then((response)=>{    
+              if(response.data.length){
+                    this.errorData=response.data;
+              }else{
+                    this.openSpace()
+                    this.openSpaceSuccess();
+                    this.getListData(this.tabForms);
+                    this.statusData=[];
+              }
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            }) 
+        },
         openComplete(){
            this.complete=!this.complete;      
         },
- 
+        openSpaceSuccess(){
+            this.spaceTip=!this.spaceTip;
+        },
         //格式转换
         dateSwitch(data){
             if(data){
@@ -1101,6 +1186,11 @@ export default {
 }
 </script>
 <style lang='less'>
+  .m-clear-footer{
+        .ivu-modal-footer{
+            padding:0;
+        }
+   }
   .attract-investment{
           .upload{
                 width: 200px;

@@ -297,7 +297,8 @@
             return '';
         }
         var router = getRouter();
-        var nowRouter = router.split('.krspace.cn')[1];
+        var port = location.port?':'+location.port:'';
+        var nowRouter = router.split('.krspace.cn'+port)[1];
        
         activeStr = JSON.stringify(navUtils.activeData);
         

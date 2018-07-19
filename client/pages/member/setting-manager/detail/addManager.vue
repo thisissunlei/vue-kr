@@ -143,7 +143,7 @@ export default {
             }else{
                 this.checkAll=false; 
             }
-            this.$emit('checkData',this.checkList)
+            this.formItem.cmtIds=this.checkList;
         },
         onCheckAll(){
           let checkList=[];

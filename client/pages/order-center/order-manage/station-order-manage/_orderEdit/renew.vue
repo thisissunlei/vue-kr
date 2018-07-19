@@ -232,6 +232,7 @@ export default {
             }
         };
         return {
+            orderId:'',
             chancedisabled:true,
             salerdisabled:true,
             cummunitydisabled:true,
@@ -454,7 +455,8 @@ export default {
                     let parms = {
                     customerId: this.renewForm.customerId,
                     communityId: this.renewForm.communityId,
-                    receiveId: this.renewForm.salerId
+                    receiveId: this.renewForm.salerId,
+                    orderId:this.orderId
                 }
                 let list = [];
                 let _this = this;
@@ -555,6 +557,7 @@ export default {
             let from = {
                 id: params.orderEdit
             };
+            this.orderId=from.id;
             this.$http.get('join-bill-detail', from, r => {
                 let data = r.data;
                 let money = 0;
@@ -809,6 +812,7 @@ export default {
             obj.customerId = this.renewForm.customerId;
             obj.communityId = this.renewForm.communityId;
             obj.salerId = this.renewForm.salerId;
+            obj.orderId=this.orderId
             this.orderitems = Object.assign({}, obj);
         },
          handleGotChancelist(parms) {

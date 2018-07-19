@@ -137,7 +137,8 @@ export default {
             let parms = {
                 customerId: this.orderitems.customerId,
                 communityId: this.orderitems.communityId,
-                receiveId: this.orderitems.salerId
+                receiveId: this.orderitems.salerId,
+                orderId:this.orderitems.orderId
             }
             if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
             let list = [];
@@ -153,7 +154,7 @@ export default {
                 })
                 list.unshift({ label: '不绑定机会', value: -1 })
                 _this.salerOptions = [].concat(list);
-
+                console.log(_this.salerOptions)
                 let parms = {
                     count: list.length - 1,
                     isNewUser: r.data.items.isNewUser,
@@ -163,7 +164,7 @@ export default {
                     this.showValue = ''+list[1].value;
                      this.$emit('onChange',  this.showValue);
                 }else{
-                    this.showValue = '';
+                    // this.showValue = '';
                 }
                 this.$emit('gotChanceList', parms);
             }, error => {

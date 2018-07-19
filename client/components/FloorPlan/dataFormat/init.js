@@ -52,24 +52,20 @@ function init(data,picProperty,dataUrl){
         let min=0.5;
         if(spaceArr.length){
             //两行字的高度加上icon的高度
-            let fixedW=spaceArr[0].parentMin;
             let fixedH=spaceArr[0].parentMin;
             if(spaceArr[0].belongType=='SPACE'){
                 fixedH=spaceArr[0].futureStatus?32+42:32;
-                fixedW=spaceArr[0].futureStatus?(spaceArr[0].parentMin+42):spaceArr[0].parentMin;
             }
             minH=fixedH/spaceArr[0].cellHeight;
-            minW=fixedW/spaceArr[0].cellWidth;
+            minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
             
             spaceArr.map((item,index)=>{
-                let switchW=item.parentMin;
                 let switchH=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    switchW=item.futureStatus?(item.parentMin+42):item.parentMin;
                     switchH=item.futureStatus?32+42:32;
                 }
-                if((switchW/item.cellWidth)>minW){
-                    minW=switchW/item.cellWidth;
+                if((item.parentMin/item.cellWidth)>minW){
+                    minW=item.parentMin/item.cellWidth;
                 }
                 if((switchH/item.cellHeight)>minH){
                     minH=switchH/item.cellHeight;

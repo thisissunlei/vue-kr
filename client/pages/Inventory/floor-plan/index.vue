@@ -168,7 +168,8 @@ export default {
     getItem(arr){
         var obj={};
         arr.map((item,index)=>{
-            obj[item.name]=localStorage.getItem('map-config-'+item.name)||item.number;
+            let storeData=localStorage.getItem('map-config-'+item.name);
+            obj[item.name]=(storeData&&storeData!='undefined')?storeData:item.number;
         })
         return obj
     },

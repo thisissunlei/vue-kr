@@ -23,10 +23,18 @@
             }
         },
         mounted:function(){
-            var _this=this;
-            setTimeout(function() {
-                _this.data=window.resourcesCode||[];
-            }, 200);
+            
+            if(!window.resourcesCode||!window.resourcesCode.length){
+                this.$http.get('getUserData',{forceUpdate:1}).then((response)=>{    
+                    this.data = response.data.resourcesCode;
+                    window.resourcesCode = response.data.resourcesCode;
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
+            }
+         
         }
     }
 </script>

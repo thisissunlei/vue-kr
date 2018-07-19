@@ -71,5 +71,10 @@ module.exports = {
     'roleActionCheck':{
         url:'api/pm/role/action/check',
         method: 'get'
+    },
+    //获取客户信息
+    'getUserData':{
+        url:'krspace-sso-web/sso/sysOwn/findUserData',
+        method: 'get'
     }
 }

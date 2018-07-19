@@ -445,7 +445,6 @@
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
             routerRefresh();
-            console.log(999999)
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;

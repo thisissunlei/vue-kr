@@ -33,8 +33,12 @@
                         title:error.message
                     });
                 })
+            }else{
+                this.data=window.resourcesCode
             }
-         
+            // setTimeout(function() {
+            //     _this.data=window.resourcesCode||[];
+            // }, 200);
         }
     }
 </script>

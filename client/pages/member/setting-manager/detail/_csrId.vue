@@ -78,9 +78,11 @@
 			v-if="isAddManager"
 			:detail="itemDetail"
 			@formData="getformData"
+			:valid="managerSubmit"
+			@submitFn="getFunction"
 		/>
 	  <div slot="footer">
-			<Button type="primary" @click="managerSubmit">确定</Button>
+			<Button type="primary" @click="addManagerSubmit">确定</Button>
 			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
       </div>
     </Modal>
@@ -113,7 +115,7 @@ export default {
 			key:'',
 			detail:{},
 			openTip:false,
-			isAddManager:true,
+			isAddManager:false,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",
@@ -195,6 +197,7 @@ export default {
 			companyList:[],
 			tipTitle:'',
 			formData:{},
+			submitManager:null,
 		}
 	},
 	mounted:function(){
@@ -225,9 +228,6 @@ export default {
         },
 		openAddManager(){
 			this.isAddManager=!this.isAddManager;
-		},
-		managerSubmit(){
-
 		},
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
@@ -273,13 +273,40 @@ export default {
 				});
 			})
 		},
+		managerSubmit(){
+			let {params}=this.$route;
+			let Params=Object.assign({},this.formData);
+			Params.customerId=params.csrId;
+			var _this=this;
+			this.$http.post('customer-manager-employees', Params).then((res)=>{
+				this.ifReload=true;
+				this.isAddManager=false;
+				this.getCount();
+				this.$Notice.success({
+					title:'添加管理员成功'
+				});
+				setTimeout(function(){
+					_this.ifReload=false
+				},500)
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+		},
 		getformData(form){
-			console.log('form-----',form)
 			this.formData=form;
 		},
 		getCheckData(form){
 			this.cmtIds=form;
+		},
+		getFunction(form){
+			this.submitManager=form;
+		},
+		addManagerSubmit(){
+			this.submitManager && this.submitManager(this.managerSubmit);
 		}
+		
 
 	},
 	

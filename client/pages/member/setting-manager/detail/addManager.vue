@@ -70,7 +70,7 @@ import LabelText from '~/components/LabelText';
 export default {
     components:{
 		LabelText,
-	},
+    },
     data(){
         return{
             checkAll:false,
@@ -97,6 +97,9 @@ export default {
              
         }
     },
+    mounted() {
+        this.$emit('submitFn', this.handleSubmit);
+    },
     methods:{
         searchInfo(){
             let {params}=this.$route;
@@ -111,10 +114,21 @@ export default {
                 }else{
                     this.ifError=false;
                 }
-                this.formItem=Object.assign({},res.data);
+                this.communityList=res.data.cmtList;
+                let data=Object.assign({},res.data);
+                delete data.cmtList;
+                delete data.mbrType;
+                this.formItem=Object.assign({},data);
                 this.companyType=res.data.mbrType==1?"在职员工":'非企业员工';
                 this.ifShow=true;
-                this.communityList=res.data.cmtList;
+                let arr=[];
+                res.data.cmtList.map((item)=>{
+                    if(item.isManager=="1"){
+                       arr.push(item.cmtId);
+                    }
+                })
+                this.checkAllGroup=arr;
+               
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -146,6 +160,23 @@ export default {
            }
            this.formItem.cmtIds=this.checkList;
               
+        },
+        handleSubmit:function(callback) {
+			let message = '请填写完表单';
+			this.$Notice.config({
+				top: 80,
+				duration: 3
+			});
+			let _this = this;
+			this.$refs.formItems.validate((valid) => {
+				if (valid) {
+                    callback && callback();
+				} else {
+					this.$Notice.error({
+						title:message
+					});
+				}
+			})
         },
     },
     updated:function(){

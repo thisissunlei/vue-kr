@@ -74,7 +74,7 @@ module.exports = {
     },
     //获取客户信息
     'getUserData':{
-        url:'krspace-sso-web/sso/sysOwn/findUserData',
+        url:'/api/krspace-sso-web/sso/sysOwn/findUserData',
         method: 'get'
     }
 }

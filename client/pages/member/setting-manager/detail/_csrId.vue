@@ -35,6 +35,7 @@
 							:mask="key"
 							:reload="getCount"
 							:openSetManager="hideTip"
+							:ifReload="ifReload"
 						/>
 					</Tab-pane>
 					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
@@ -42,6 +43,7 @@
 							:mask="key"
 							:reload="getCount"
 							:openSetManager="hideTip"
+							:ifReload="ifReload"
 						/>
 					</Tab-pane>
 				</Tabs> 
@@ -127,6 +129,7 @@ export default {
 			itemDetail:{},
 			companyInfo:{},
 			cmtIds:"",
+			ifReload:false,
 			companyColumns:[
 				{
 				 title: '入驻社区',
@@ -236,11 +239,12 @@ export default {
 			})
 		},
 		
-		hideTip(form){
+		hideTip(form,callback,params){
 			if(form){
 				this.itemDetail=form;
-				this.tipTitle=`请选择 ${form.mbrName} 管理的社区`
+				this.tipTitle=`请选择 ${form.mbrName} 管理的社区`;
 			}
+			
 			this.openTip=!this.openTip;
 		},
 		tipSubmit(){
@@ -252,7 +256,7 @@ export default {
 			}
 			console.log('Params',Params)
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
-				this.getInfo();
+				this.ifReload=true;
 				this.openTip=false;
 				this.$Notice.success({
 					title:'设置管理员成功'

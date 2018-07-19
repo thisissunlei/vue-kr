@@ -160,12 +160,15 @@ export default {
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
-                    this.showValue = ''+list[1].value;
-                     this.$emit('onChange',  this.showValue);
-                }else{
-                    // this.showValue = '';
-                }
+                setTimeout(()=>{
+                    if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
+                                        this.showValue = ''+list[1].value;
+                                        this.$emit('onChange',  this.showValue);
+                                    }else{
+                                        // this.showValue = '';
+                                    }
+                },100)
+             
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({

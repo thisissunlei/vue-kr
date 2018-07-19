@@ -54,7 +54,8 @@ export default {
     methods:{
         getItem(arr){
             arr.map((item,index)=>{
-                this.formItem[item]=localStorage.getItem('map-config-'+item)||this.formItem[item];
+                let storeData=localStorage.getItem('map-config-'+item);
+                this.formItem[item]=(storeData&&storeData!='undefined')?storeData:this.formItem[item];
             })
         },
         storeItem(arr){

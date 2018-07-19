@@ -45,12 +45,16 @@ export default {
     components:{
         SearchForm
     },
+    props:{
+        openSetManager:Function,
+    },
     data(){
         return{
             totalCount:0,
             pageSize:15,
             listInfo:[],
             mbrName:'',
+            itemDetail:{},
             Params:{
                 page:1,
                 pageSize:15
@@ -165,8 +169,8 @@ export default {
             this.getInfo();
         },
         setManager(params){
-			this.itemDetail=params;
-			//this.hideTip();
+            this.itemDetail=Object.assign({},params);
+            this.openSetManager && this.openSetManager(this.itemDetail)
         },
         
     }

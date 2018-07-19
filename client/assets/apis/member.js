@@ -107,5 +107,10 @@ export default {
         url: '/api/krspace-op-web/customer/manager/csr-mbrtype-num',
         method: 'get'
     },
+    //获取企业管理员详情--编辑会员信息
+    'customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/employees',
+        method: 'post'
+    },
 
 } 

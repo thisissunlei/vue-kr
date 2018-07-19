@@ -34,12 +34,14 @@
 						<ManagerList 
 							:mask="key"
 							:reload="getCount"
+							:openSetManager="hideTip"
 						/>
 					</Tab-pane>
 					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
 						<EmployeeList 
 							:mask="key"
 							:reload="getCount"
+							:openSetManager="hideTip"
 						/>
 					</Tab-pane>
 				</Tabs> 
@@ -48,7 +50,7 @@
 	</div>
 	 <Modal
         v-model="openTip"
-        title="提示"
+        :title="tipTitle"
         ok-text="确定"
         cancel-text="取消"
         width="600"
@@ -189,6 +191,8 @@ export default {
 			],
 			
 			companyList:[],
+			detailInfo:{},
+			tipTitle:'',
 		}
 	},
 	mounted:function(){
@@ -234,7 +238,12 @@ export default {
 			})
 		},
 		
-		hideTip(){
+		hideTip(form){
+			if(form){
+				console.log('form----',form)
+				this.detailInfo=form;
+				this.tipTitle=`请选择 ${form.mbrName} 管理的社区`
+			}
 			this.openTip=!this.openTip;
 		},
 		tipSubmit(){

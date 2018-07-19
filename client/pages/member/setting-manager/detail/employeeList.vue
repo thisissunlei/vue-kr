@@ -97,7 +97,7 @@ export default {
                  key: 'isManager',
 				 align:'center',
 				 render(h,obj){
-					let manager= obj.row.isManager?'是':'否';
+					let manager= obj.row.isManager==1?'是':'否';
 					return manager;
 				  }
 				},

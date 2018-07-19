@@ -90,7 +90,26 @@ export default {
                 {
 				 title: '成员类型',
                  key: 'mbrType',
-				 align:'center',
+                 align:'center',
+                render(h,obj){
+					 let status;
+					 switch (obj.row.mbrType){
+						 case 1:
+						 return h('span',{
+								style:{
+									color:'#666666'
+								}
+						 },'在职员工') 
+						 break;
+						 default:
+						 return h('span',{
+							style:{
+								color:'#FE7749'
+							} 
+						 },'非企业员工');
+					 }
+					
+				 }
 				},
 				{
 				 title: '入驻社区',

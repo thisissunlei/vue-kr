@@ -134,8 +134,8 @@ export default {
     watch: {
         $props: {
             deep: true,
-            handler(nextProps) {
-                if(this.ifReload){
+            handler(nextProps,prevProps) {
+               if(this.ifReload){
                     this.getInfo();
                 }
             }

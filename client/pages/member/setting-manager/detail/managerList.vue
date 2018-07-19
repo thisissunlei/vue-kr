@@ -145,6 +145,16 @@ export default {
     mounted(){
         this.getInfo();
     },
+    watch: {
+        $props: {
+            deep: true,
+            handler(nextProps) {
+                if(this.ifReload){
+                    this.getInfo();
+                }
+            }
+        }
+    },
     methods:{
         changePage(page){
 			this.Params.page=page;

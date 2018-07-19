@@ -255,12 +255,16 @@ export default {
 				customerId:params.csrId,
 			}
 			console.log('Params',Params)
+			var _this=this;
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
 				this.ifReload=true;
 				this.openTip=false;
 				this.$Notice.success({
 					title:'设置管理员成功'
 				});
+				setTimeout(function(){
+					_this.ifReload=false
+				},500)
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

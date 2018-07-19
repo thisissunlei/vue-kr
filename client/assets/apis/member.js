@@ -102,5 +102,10 @@ export default {
         url: '/api/krspace-op-web/customer/manager/user/detail',
         method: 'get'
     },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-csr-mbrtype-num': {
+        url: '/api/krspace-op-web/customer/manager/csr-mbrtype-num',
+        method: 'get'
+    },
 
 } 

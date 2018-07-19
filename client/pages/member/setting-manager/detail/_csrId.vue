@@ -30,16 +30,16 @@
 					<Button type="primary" @click="openAddManager">添加管理员</Button>
 				</div>
 				<Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-					<Tab-pane :label="`管理员(${managerCount})`" name="manager">
+					<Tab-pane :label="`管理员(${count.adminNum})`" name="manager">
 						<ManagerList 
 							:mask="key"
-							:reload="getManagerCount"
+							:reload="getCount"
 						/>
 					</Tab-pane>
-					<Tab-pane :label="`在职员工(${employeeCount})`" name="employee">   
+					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
 						<EmployeeList 
 							:mask="key"
-							:reload="getEmployeeCount"
+							:reload="getCount"
 						/>
 					</Tab-pane>
 				</Tabs> 
@@ -118,9 +118,11 @@ export default {
                 page:1,
                 pageSize:15
 			},
+			count:{
+				adminNum:0,
+				employeesNum:0,
+			},
 			itemDetail:{},
-			managerCount:0,
-			employeeCount:0,
 			companyInfo:{},
 			cmtIds:"",
 			companyColumns:[
@@ -146,15 +148,19 @@ export default {
 				 render(h,obj){
 					 let status;
 					 switch (obj.row.enterStatus){
-						 case '':
+						 case 2:
 						 return h('span',{
 								style:{
-									color:'#F5A623'
+									color:'#666666'
 								}
 						 },obj.row.enterStatusDesc) 
 						 break;
 						 default:
-						 return h('span',{},obj.row.enterStatusDesc);
+						 return h('span',{
+							style:{
+								color:'#FE7749'
+							} 
+						 },obj.row.enterStatusDesc);
 					 }
 					
 				 }
@@ -182,13 +188,20 @@ export default {
 		let {params}=this.$route;
 		this.Params.csrId=params.csrId;
 		this.getCompanyInfo(params);
+		this.getCount(params);
 	},
 	methods:{
-		getManagerCount(){
-
-		},
-		getEmployeeCount(){
-
+		getCount(params){
+			this.$http.get('get-customer-manager-csr-mbrtype-num', {
+				customerId:params.csrId
+			}).then((res)=>{
+				this.count=res.data.items;
+				
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
 		},
 		tabsClick(key){
            this.key=key;

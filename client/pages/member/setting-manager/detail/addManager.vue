@@ -6,9 +6,9 @@
                     <div class="u-part-number">1</div>
                     <div class="u-part-title">确认会员信息</div>
                     <div class="u-part-tip">温馨提示：您可以添加非本企业员工作为管理员，此类管理员不占用会员名额</div>
-                    <div class="u-part-line" ></div>
+                    <div class="u-part-line" v-if="ifShow"></div>
                     <div class="u-part-content">
-                         <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="iconName">
+                         <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="mbrPhone">
                             <Input 
                                 v-model="formItem.mbrPhone" 
                                 placeholder="请输入手机号"
@@ -16,38 +16,39 @@
                         </FormItem>
                          <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
                         <div class="u-error-tip" v-if="ifError">该手机号尚未成为氪空间注册用户，继续“添加管理员”后会自动为TA创建账号</div>
-                         <FormItem label="姓名" class="u-input" prop="iconName">
-                            <Input 
-                                v-model="formItem.mbrName" 
-                                placeholder="请输入姓名"
-                            />
-                        </FormItem>
-                        <FormItem label="邮箱" class="u-input" prop="iconName">
-                            <Input 
-                                v-model="formItem.mbrEmail" 
-                                placeholder="请输入邮箱"
-                            />
-                        </FormItem>
-                         <FormItem label="身份证号" class="u-input" >
-                            <Input 
-                                v-model="formItem.mbrIdCardNo" 
-                                placeholder="请输入邮箱"
-                            />
-                        </FormItem>
-                        <div class="u-label-text u-input">
-                            <div class="u-label">
-                                类型
-                            </div>
-                            <div class="u-text">
-                               {{companyType}}
+                        <div v-if="ifShow">       
+                            <FormItem label="姓名" class="u-input" prop="mbrName">
+                                <Input 
+                                    v-model="formItem.mbrName" 
+                                    placeholder="请输入姓名"
+                                />
+                            </FormItem>
+                            <FormItem label="邮箱" class="u-input" prop="mbrEmail">
+                                <Input 
+                                    v-model="formItem.mbrEmail" 
+                                    placeholder="请输入邮箱"
+                                />
+                            </FormItem>
+                            <FormItem label="身份证号" class="u-input" >
+                                <Input 
+                                    v-model="formItem.mbrIdCardNo" 
+                                    placeholder="请输入邮箱"
+                                />
+                            </FormItem>
+                            <div class="u-label-text u-input">
+                                <div class="u-label">
+                                    类型
+                                </div>
+                                <div class="u-text">
+                                {{companyType}}
+                                </div>
                             </div>
                         </div>
                     </div>
-                   
-
                 </div>
-                <div class="u-part">
+                <div class="u-part" v-if="ifShow">
                     <div class="u-part-number">2</div>
+                    <div class="u-part2-line"></div>
                     <div class="u-part-title">管理的社区</div>
                     <div class="u-part-tip">温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可</div>
                      <div class="u-community-check-list">
@@ -77,6 +78,7 @@ export default {
             checkList:"",
             communityList:[],
             ifError:false,
+            ifShow:false,
             formItem:{
 
             },
@@ -97,13 +99,22 @@ export default {
     },
     methods:{
         searchInfo(){
-            let phone=this.formItem.phone;
+            let {params}=this.$route;
+            let phone=this.formItem.mbrPhone;
             let form={
-              phone: phone 
+              mbrPhone: phone ,
+              customerId:params.csrId
             }
             this.$http.get('get-customer-manager-user-detail', form).then((res)=>{
-                this.formItem=Object.assign(this.formItem,res.data);
+                if(res.code==2){
+                    this.ifError=true;
+                }else{
+                    this.ifError=false;
+                }
+                this.formItem=Object.assign({},res.data);
                 this.companyType=res.data.mbrType==1?"在职员工":'非企业员工';
+                this.ifShow=true;
+                this.communityList=res.data.cmtList;
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -133,10 +144,13 @@ export default {
                this.checkAllGroup=[];
                this.checkList="";
            }
-           this.$emit('checkData',this.checkList)
+           this.formItem.cmtIds=this.checkList;
               
         },
-    }
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 }
 </script>
 <style lang="less">
@@ -197,6 +211,15 @@ export default {
             position: absolute;
             left:14px;
             top:30px;
+        }
+        .u-part2-line{
+            width:0;
+            height:100%;
+            border-left:1px dashed #333333;
+            position: absolute;
+            left:14px;
+            top:30px;
+            display: inline-block;
         }
         .u-part-content{
             padding-left:44px;

@@ -77,7 +77,7 @@
 		<AddManager  
 			v-if="isAddManager"
 			:detail="itemDetail"
-			@checkData="getCheckData"
+			@formData="getformData"
 		/>
 	  <div slot="footer">
 			<Button type="primary" @click="managerSubmit">确定</Button>
@@ -113,7 +113,7 @@ export default {
 			key:'',
 			detail:{},
 			openTip:false,
-			isAddManager:false,
+			isAddManager:true,
 			basicInfo:{},
 			incomeType:null,
 			dealDate:"",
@@ -194,6 +194,7 @@ export default {
 			],
 			companyList:[],
 			tipTitle:'',
+			formData:{},
 		}
 	},
 	mounted:function(){
@@ -256,7 +257,6 @@ export default {
 				cmtIds:this.cmtIds,
 				customerId:params.csrId,
 			}
-			console.log('Params',Params)
 			var _this=this;
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
 				this.ifReload=true;
@@ -272,6 +272,10 @@ export default {
 					title:err.message
 				});
 			})
+		},
+		getformData(form){
+			console.log('form-----',form)
+			this.formData=form;
 		},
 		getCheckData(form){
 			this.cmtIds=form;

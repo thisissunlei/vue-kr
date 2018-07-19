@@ -32,10 +32,10 @@
 					{{basicInfo.area?basicInfo.area+'平方':'-'}}
 				</LabelText>
 				<LabelText label="方位：">
-					{{basicInfo.locationType}}
+					{{basicInfo.locationTypeName}}
 				</LabelText>
 				<LabelText label="套间：">
-					{{basicInfo.suiteType}}
+					{{basicInfo.suiteTypeName}}
 				</LabelText>
 				<LabelText label="位置：">
 					{{basicInfo.goodsLocationText}}
@@ -111,12 +111,16 @@ export default {
 							 color:(status=='下架'||status=='不可用')?'red':''
 						 }
 					 },status);
-				 }	
+				    }	
                 },
 				{
 				 title: '时长',
                  key: 'originalPrice',
-                 align:'center'	
+				 align:'center',
+				 render(tag,params){
+					 let status=params.row.originalPrice?params.row.originalPrice+'天':'-';
+					 return tag('span',{},status);
+				 } 	
                 }
 			],
 

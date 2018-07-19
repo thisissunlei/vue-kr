@@ -449,7 +449,7 @@
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;
-              
+                window.resourcesCode = response.data.resourcesCode;
                 navUtils.navs = [].concat(navUtils.navs,navs);
                 navUtils.user = Object.assign(user);
                 routerRefresh();

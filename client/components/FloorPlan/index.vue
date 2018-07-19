@@ -43,7 +43,9 @@ let initData='';
     mounted(){
         //背景图
         img=new Image();
-        img.src= document.location.protocol+window.location.host+this.data.graphFilePath;
+        var port = location.port || '';
+        img.src= location.protocol +'//'+location.hostname+port+this.data.graphFilePath;
+        console.log(img.src,"ppppppp","===",window.location.host);
         img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },

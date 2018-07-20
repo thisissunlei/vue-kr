@@ -64,7 +64,7 @@ export default {
                         }, [
                                 h('div', {
                                     style: {
-                                        width: "60px",
+                                        maxWidth: "200px",
                                         overflow: "hidden",
                                         textOverflow: "ellipsis",
                                         whiteSpace: "nowrap"

@@ -711,7 +711,7 @@ export default {
             this.disabled = true;
             
             this.$http.post('save-renew', renewForm).then(r => {
-                return ;
+        
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
                 // window.close();
                 window.opener.location.reload();

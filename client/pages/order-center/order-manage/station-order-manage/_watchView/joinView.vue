@@ -23,7 +23,7 @@
 				<LabelText label="生效时间：">
 					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
-				<LabelText label="机   会：" v-show='opportunityStr'>
+				<LabelText label="机会：" v-show='opportunityStr'>
 					{{opportunityStr}}
 				</LabelText>
 				<LabelText label="作废原因：" v-show='nullifyReason'>
@@ -299,15 +299,13 @@ export default {
 			let list = [];
 			let _this = this;
 			this.$http.get('get-salechance', parms, r => {
-				r.data.items.map(item => {
+				r.data.items.data.map(item => {
 					list.push({
 						label: item.name,
 						value: item.id
 					})
 				})
-
 				let obj = list.find(item => item.value == this.basicInfo.opportunityId)
-				debugger;
 				this.opportunityStr = obj.label || '';
 			}, error => {
 				this.$Notice.error({
@@ -327,7 +325,8 @@ export default {
 				let pars = {
 					customerId: this.basicInfo.customerId,
 					communityId: this.basicInfo.communityId,
-					receiveId: this.basicInfo.salerId
+					receiveId: this.basicInfo.salerId,
+					orderId:this.basicInfo.id
 				}
 				this.getSalerChanceList(pars);
 				if (response.data.installments.length > 10) {

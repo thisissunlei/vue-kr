@@ -221,9 +221,9 @@ export default {
     data() {
             //工位数量
             const validateStation = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
+                    callback('请输入非负整数');
                 }else if(value&&value>999){
                     callback('最大999个工位');
                 }else if (this.formItem.stationsMin&&this.formItem.stationsMax&&Number(this.formItem.stationsMin)>Number(this.formItem.stationsMax)) {
@@ -232,11 +232,11 @@ export default {
                     callback();
                 }
             };
-            //签约价
+            //商品定价
             const validatePrice = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
+                    callback('请输入非负整数');
                 }else if(value&&value>9999999){
                     callback('单价最高9999999');
                 }else if (this.formItem.priceMin&&this.formItem.priceMax&&Number(this.formItem.priceMin)>Number(this.formItem.priceMax)) {
@@ -247,9 +247,9 @@ export default {
             };
             //商品定价
             const validateOrder = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
+                    callback('请输入非负整数');
                 }else if(value&&value>9999999){
                     callback('单价最高9999999');
                 }else if (this.formItem.orderPriceMin&&this.formItem.orderPriceMax&&Number(this.formItem.orderPriceMin)>Number(this.formItem.orderPriceMax)) {
@@ -270,20 +270,16 @@ export default {
                 }
             };    
             //面积
-            const validatearea = (rule, value, callback) => {
-                   var reg = /^\+?[1-9]\d*$/;
+             const validatearea = (rule, value, callback) => {
+                var reg=/^(([1-9]{1}[0-9]{0,3})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,3}\.\d{1,2}))$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>9999){
-                    callback('最大9999面积');
+                    callback('小于10000的数字,最多2位小数');
                 }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
-
-
-            };    
+            }; 
             //商品名称
             const validateName = (rule, value, callback) => {
                 if(value&&value.length>20){

@@ -5,6 +5,7 @@
             <SearchForm @submitSearchData="submitSearchData"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small"></Table>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -17,11 +18,11 @@
                     <span>确认删除</span>
                 </p>
                 <div style="text-align:center">
-                    <p>移除后，父级组的成员将失去该组的权限。</p>
+                    <p>解除关系后后，父级组的成员将失去自己组的设备权限。</p>
                     <p>你要删除吗？</p>
                 </div>
                 <div slot="footer">
-                    <Button type="error" size="large" long  @click="confirmDelete">Delete</Button>
+                    <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
                 </div>
         </Modal>
         </div>
@@ -39,10 +40,10 @@ export default {
    },
    data(){
      return{
+        selectedItems : [],
         showTips : false,
         title : "子集列报表",
-        lastReq : [],
-        eidtItem:{},
+        totalCount : 100,
         page : '',
         searchData :{
             groupId: '',
@@ -83,7 +84,7 @@ export default {
                         
                     },
                     {
-                        title: '创建时间',
+                        title: '加入该组时间',
                         key: 'time',
                         align:'center',
                         render(h,obj){
@@ -95,13 +96,13 @@ export default {
                         }
                     },
                     {
-                        title: '创建人',
+                        title: '操作人',
                         key: 'phone',
                         align:'center',
                         
                     },
                     {
-                        title: '从组中移除',
+                        title: '解除父子关系',
                         key: 'phone',
                         align:'center',
                         render: (h, params) => {
@@ -116,7 +117,7 @@ export default {
                                             this.remove(params)
                                         }
                                     }
-                                }, '移除')
+                                }, '解除')
                             ]);
                         }
                     },
@@ -165,9 +166,10 @@ export default {
 
            let _this =this;
            let params = this.searchData;
-            this.$http.get('get-open-log-list',params).then((res)=>{
+            this.$http.get('get-son-group-list',params).then((res)=>{
 
                 
+                _this.totalCount = res.data.totalCount;
                 _this.openLogList = res.data.items;
                
                 
@@ -208,7 +210,7 @@ export default {
        },
        remove(params){
            console.log("params",params)
-           this.eidtItem = params;
+           this.selectedItems = [params];
            this.showTipOrNot();
        },
        showTipOrNot(){
@@ -216,14 +218,25 @@ export default {
        },
        confirmDelete(){
            let _this =this;
-           this.$http.get('get-smart-hard-ware-dict','').then((res)=>{
-                
+           var relationIdsArr = [];
+           var arr = this.selectedItems;
+           for(var i=0;i<arr.length;i++){
+            //    relationIdsArr.push(arr[i].row.relationIds||null);
+               relationIdsArr.push(arr[i].row.relationIds||2);
+           }
+           console.log("relationIdsArr",relationIdsArr);
+           relationIdsArr =[];
+           var params = {
+               relationIds:relationIdsArr
+           }
+           console.log("params",params);
+           
+            this.$http.post('delete-father-son-relation', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();
-                this.$Message.success('移除成功');
-
-            }).catch((error)=>{
+                this.$Message.success('解除关系成功');
+            }).catch((error) => {
                 this.$Message.warning(error.message);
             })
 
@@ -260,6 +273,10 @@ export default {
                 50%  { transform: rotate(180deg);}
                 to   { transform: rotate(360deg);}
             }
+        }
+        .bottom-page{
+            float:right;
+            margin:10px;
         }
     }
 </style>

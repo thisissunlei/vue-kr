@@ -116,16 +116,14 @@ import dateUtils from 'vue-dateutils';
             };
             //面积
              const validarea = (rule, value, callback) => {
-               var reg = /^\+?[1-9]\d*$/;
+                var reg=/^(([1-9]{1}[0-9]{0,3})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,3}\.\d{1,2}))$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>9999){
-                    callback('最大9999面积');
+                    callback('小于10000的数字,最多2位小数');
                 }else{
                     callback();
                 }
-                  };
-                      //商品定价
+            };
+             //商品定价
             const validateOrder = (rule, value, callback) => {
                 var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){

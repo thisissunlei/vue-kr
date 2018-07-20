@@ -57,7 +57,9 @@
         var alias = '/new/#';
         var hostname = location.hostname;
         var port = location.port || '';
-        
+        if(router.indexOf('http://')!=-1||router.indexOf('https://')!=-1){
+            return router;
+        }
         var nowType = getNowType(getRouter());
        
         if (port) {

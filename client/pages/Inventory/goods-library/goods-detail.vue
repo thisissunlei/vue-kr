@@ -115,10 +115,10 @@ export default {
                 },
 				{
 				 title: '时长',
-                 key: 'originalPrice',
+                 key: 'days',
 				 align:'center',
 				 render(tag,params){
-					 let status=params.row.originalPrice?params.row.originalPrice+'天':'-';
+					 let status=params.row.days?params.row.days+'天':'-';
 					 return tag('span',{},status);
 				 } 	
                 }

@@ -127,8 +127,8 @@ import dateUtils from 'vue-dateutils';
                var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>999){
-                    callback('最大999面积');
+                }else if(value&&value>9999){
+                    callback('最大9999面积');
                 }else{
                     callback();
                 }

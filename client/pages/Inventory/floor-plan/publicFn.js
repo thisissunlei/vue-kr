@@ -51,7 +51,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     }
      
     //计算位置赋值
-    tirDom.style.maxWidth = obj.width + 'px';
+    //tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
     if(isIcon=='icon'){
@@ -65,7 +65,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
 //图标浮框内容
 function getIconToolTipContent(thatData,discount){
     var data = Object.assign({}, thatData);
-    var width = 225;
+    var width = 300;
     let status=data.item.futureStatus;
     let customerName='';
     let typeName=data.item.goodsType=='OPEN'?'固定办公桌':'移动办公桌';
@@ -95,7 +95,7 @@ function getIconToolTipContent(thatData,discount){
 //气泡的具体内容
 function getToolTipContent(thatData,discount) {
     let data = Object.assign({}, thatData);
-    let width = 264;
+    let width = 300;
     
     let unitPrice=(data.item.unitPrice||data.item.unitPrice===0)?data.item.unitPrice:'';
     let price=(data.item.price||data.item.price===0)?data.item.price:'';

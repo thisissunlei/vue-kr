@@ -20,10 +20,11 @@
 						
 					</div>
 				</div>
+				<div v-if="upIconShow && !disabled" class="up-icon" :style="`width:${imgWidth}px;height:${imgHeight}px;line-height:${imgHeight}px;`" @click="upBtnClick">
+					<Icon type="plus-round u-position"></Icon>
+				</div>
 			</div>
-			<div v-if="upIconShow && !disabled" class="up-icon" :style="`width:${imgWidth}px;height:${imgHeight}px;line-height:${imgHeight}px;`" @click="upBtnClick">
-				<Icon type="plus-round u-position"></Icon>
-			</div>
+			
 			<slot  name="up-btn" ></slot>
 		
 		</div>
@@ -561,7 +562,7 @@ export default{
 		// height: 88px;
 		border-radius: 4px;
 		overflow: hidden;
-		margin: 0 10px;
+		margin: 0 10px 10px;
 		vertical-align:middle;
 		.img-mask{
 			position: absolute;

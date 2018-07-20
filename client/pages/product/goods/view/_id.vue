@@ -4,91 +4,69 @@
         <div class="m-goods-content">
             <DetailStyle info="社区基本信息">
                 <LabelText label="社区名称：">
-                    {{goodsInfo.comName}}
+                    {{goodsInfo.communityName}}
                 </LabelText>
-                <LabelText label="社区编码：">
-                    {{goodsInfo.comNumber}}
-                </LabelText>
-                <LabelText label="所在地区：">
-                   {{goodsInfo.area}}
-                </LabelText>
-                <LabelText label="开业状态：">
-                    {{goodsInfo.openStatus}}
-                </LabelText>
-                <LabelText label="开业时间：">
-                    {{goodsInfo.openTime}}
-                </LabelText>
-            </DetailStyle>
-            <DetailStyle info="社区基本运营信息">
                 <LabelText label="大厦名称：">
-                    <Input v-model="goodsInfo.buildname" class="input"/>
+                    {{goodsInfo.buildingName}}
                 </LabelText>
-                <LabelText label="地址描述：">
-                    <Input v-model="goodsInfo.address" class="input"/>
+                <LabelText label="正式开业状态：">
+                   {{goodsInfo.communityStatus}}
                 </LabelText>
-                <LabelText label="社区坐标：">
-                    <Input v-model="goodsInfo.coordinate" class="input"/>
+                <LabelText label="正式开业时间：">
+                    {{goodsInfo.openDate}}
                 </LabelText>
-                <LabelText label="大厦外景：">
-                    <UploadFile></UploadFile>
+                 <LabelText label="详细地址：">
+                    {{goodsInfo.communityAddress?goodsInfo.communityAddress:'-'}}
                 </LabelText>
-                
+                <div class="u-img-content">
+                    <div class="u-img-title">大厦外景图：</div><span>{{goodsInfo.buildingImg?'':'无'}}</span>
+                    <div v-if="goodsInfo.buildingImg">
+                        <img :src="goodsInfo.buildingImg" class="u-img-url">
+                    </div>
+                    
+                </div>
+                <div class="u-img-content">
+                    <div class="u-img-title">社区展示图册：</div><span v-if="!goodsInfo.communityImgs">无</span>
+                    <div style="display:block;width:100%;" v-if="goodsInfo.communityImgs">
+                        <img 
+                            :src="item" 
+                            :key="index"
+                            class="u-img-url"
+                            v-for="(item,index) in goodsInfo.communityImgs"
+                         >
+                    </div>
+                </div>
             </DetailStyle>
-            <DetailStyle info="APP商品信息">
+            <DetailStyle info="APP社区商品信息">
                 <LabelText label="上架状态：">
-                    <RadioGroup v-model="goodsInfo.appStatus">
-                        <Radio label="已上架">已上架</Radio>
-                        <Radio label="未上架">未上架</Radio>
-                    </RadioGroup>
+                   {{goodsInfo.appPublished}}
                 </LabelText>
-                <LabelText label="APP可用会议室楼层：">
-                    {{goodsInfo.appMeeting}}
+                <LabelText label="已上架会议室商品数量：">
+                    {{goodsInfo.appRoomNum}}
+                </LabelText>
+                <LabelText label="已上架散座商品数量：">
+                    {{goodsInfo.appSeatNum}}
                 </LabelText>
             </DetailStyle>
-            <DetailStyle info="KM会议室商品信息">
+            <DetailStyle info="小程序社区商品信息">
                 <LabelText label="上架状态：">
-                    <RadioGroup v-model="goodsInfo.KMStatus">
-                        <Radio label="已上架">已上架</Radio>
-                        <Radio label="待上架">待上架</Radio>
-                        <Radio label="未上架">未上架</Radio>
-                    </RadioGroup>
+                    {{goodsInfo.kmPublished}}
                 </LabelText>
                 <LabelText label="社区折扣策略：">
-                    <Input v-model="goodsInfo.discountMsg" class="input"/>
+                    {{goodsInfo.promotionDesc?goodsInfo.promotionDesc:'-'}}
                 </LabelText>
-                <LabelText label="KM可预订会议室数量（个）：">
-                   {{goodsInfo.meetingCount}}
+                <LabelText label="已上架会议室商品数量：">
+                   {{goodsInfo.kmRoomNum}}
                 </LabelText>
-                 <LabelText label="KM可用会议室楼层：">
-                   {{goodsInfo.kmMeeting}}
+                 <LabelText label="已上架散座商品数量：">
+                   {{goodsInfo.kmSeatNum}}
                 </LabelText>
-                <LabelText label="KM不可预定日期策略：">
-                    <Select
-                        v-model="goodsInfo.dateSelect"
-                        style="width:100px"
-                        placeholder="请选择"
-                        clearable
-                    >
-                        <Option
-                            v-for="item in statusList"
-                            :value="item.value"
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                    </Select>
+                <LabelText label="散座营业时段：">
+                    {{goodsInfo.kmStartTime}}-{{goodsInfo.kmEndTime}}
                 </LabelText>
-                <LabelText label="KM不可预定日期：">
-                   <!-- <span v-on:mouseover="tipsShow" v-on:mouseout="tipsHide">
-                        <Icon type="help-circled" style="font-size:18px;margin-left:-18px;margin-top:8px;"></Icon>
-                    </span> -->
-                    <!-- <div class="tips" v-show="isShow">
-                        <p>温馨提示</p>
-                        <p>① 灰色日期为不可预订日期</p>
-                        <p>② 单击选中日期，即可设置该日期是否可预订</p>
-                        <p>③ 默认所有周末为不可预订</p>
-                    </div> -->
-                </LabelText>
+                <!-- <LabelText label="不可预订日期策略：">
+                    {{goodsInfo.kmMeeting}}
+                </LabelText> -->
             </DetailStyle>
         </div>
     </div>
@@ -124,33 +102,38 @@ export default {
                  value:'false'   
                 },
             ],
-            goodsInfo:{
-                comName:"慈云社社区",
-                comNumber:"BZJB",
-                area:"北京市/北京市/朝阳区",
-                openStatus:"已开业",
-                openTime:"2017-3-3",
-                buildname:"住邦2000",
-                address:"北京市朝阳区八里庄西里100号住邦2000",
-                coordinate:"116.501734，39.921302",
-                appMeeting:"5层 6层",
-                appStatus:"未上架",
-                KMStatus:"未上架",
-                discountMsg:"限时5折优惠",
-                meetingCount:"5",
-                kmMeeting:"5层 6层",
-                dateSelect:"false"
-            },
+            goodsInfo:{},
         }
     },
     mounted:function(){
-		GLOBALSIDESWITCH("false")
+        GLOBALSIDESWITCH("false")
+        this.getGoodsInfo();
     },
     methods:{
         getGoodsInfo(){
-            var params = {orderId :this.$route.query.orderId };
-            this.$http.get('', params).then((res)=>{
-                this.goodsInfo = res.data
+            let {params}=this.$route;
+            let form={
+                communityId: params.id
+             }
+            let appPublish={
+                '1':'已上架',
+                '0':'未上架'
+            }
+            let kmPublished={
+                '2':'已上架',
+                '0':'未上架',
+                '1':'待上架'
+            }
+            let communityStatus={
+                '1':'已开业',
+                '0':'未开业'
+            }
+            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
+                let data=Object.assign({},res.data);
+                data.appPublished=appPublish[res.data.appPublished];
+                data.kmPublished=kmPublished[res.data.kmPublished];
+                data.communityStatus=communityStatus[res.data.communityStatus];
+                this.goodsInfo = data;
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -169,7 +152,24 @@ export default {
             .input{
                 width: 300px;
             }
-		}
+        }
+         .u-img-content{
+            width:100%;
+            display: inline-block;
+             margin-bottom:24px;
+            .u-img-title{
+                color: #333333;
+                margin-left:14px;
+                display: inline-block;
+                font-weight: bold;
+            }
+            .u-img-url{
+                max-width: 132px;
+                max-width: 132px;
+                float: left;
+                margin-right:20px;
+            }
+        }
 	}
 </style>
 

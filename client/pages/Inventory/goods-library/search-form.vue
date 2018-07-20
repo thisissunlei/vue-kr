@@ -274,8 +274,8 @@ export default {
                    var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>999){
-                    callback('最大999面积');
+                }else if(value&&value>9999){
+                    callback('最大9999面积');
                 }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
                     callback('后者需要大于前者');
                 }else{

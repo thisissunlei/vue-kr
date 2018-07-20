@@ -219,16 +219,12 @@
                                             }
                                         }
                             }, '查看'),
-                            h('Button', {
+                            h(Buttons, {
                                         props: {
                                             type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4',
-                                            display:"block",
-                                            marginLeft:"7px",
-                                            display:params.row.crmId?'none':"block"
+                                            checkAction:'seat_order_view',
+                                            label:'编辑',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
                                             click: () => {

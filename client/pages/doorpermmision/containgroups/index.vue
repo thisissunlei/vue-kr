@@ -1,7 +1,7 @@
 <template>
   <div class="g-openlog">
       <div class="g-openlog-box">
-            <SectionTitle title="子集" />
+            <SectionTitle :title="title" />
             <SearchForm @submitSearchData="submitSearchData"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small"></Table>
@@ -11,6 +11,19 @@
                     </Spin>
                 </div>
             </div>
+           <Modal v-model="showTips" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                    <Icon type="information-circled"></Icon>
+                    <span>确认删除</span>
+                </p>
+                <div style="text-align:center">
+                    <p>移除后，父级组的成员将失去该组的权限。</p>
+                    <p>你要删除吗？</p>
+                </div>
+                <div slot="footer">
+                    <Button type="error" size="large" long  @click="confirmDelete">Delete</Button>
+                </div>
+        </Modal>
         </div>
     </div>
 </template>
@@ -26,11 +39,13 @@ export default {
    },
    data(){
      return{
-        tableScrollTop : 0,
+         showTips : false,
+        title : "子集列报表",
         lastReq : [],
+        eidtItem:{},
         page : '',
         searchData :{
-            lastId: '',
+            groupId: '',
             pageSize:25
         },
         loading : false,
@@ -54,20 +69,6 @@ export default {
                             
                         }
                         
-                    },
-                    {
-                        title: '组级别',
-                        key: 'openType',
-                        align:'center',
-                        
-                        render:(h,obj)=>{
-                            return h('div', [
-                               
-                                h('span', this.returnOpenType(obj.row.openType))
-                            ]);
-                            
-                        }
-
                     },
                     {
                         title: '社区',
@@ -100,10 +101,24 @@ export default {
                         
                     },
                     {
-                        title: '手机号',
+                        title: '从组中移除',
                         key: 'phone',
                         align:'center',
-                        
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params)
+                                        }
+                                    }
+                                }, '移除')
+                            ]);
+                        }
                     },
                     
                     
@@ -115,6 +130,8 @@ export default {
 
    },
    mounted(){
+       this.searchData.groupId = this.$route.query.groupid;
+       this.title = this.$route.query.groupname+"的子集列表";
        this.getListData();
        this.getSmartHardwareDict();
    },
@@ -138,12 +155,8 @@ export default {
        submitSearchData(data){
 
            let _this =this;
-           var timeObj = {
-               sdate :(data.time && data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
-               edate :(data.time && data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
-               lastId :''
-           }
-           var newObj = Object.assign({},_this.searchData,data,timeObj);
+           
+           var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
            this.getListData();
 
@@ -155,30 +168,9 @@ export default {
             this.$http.get('get-open-log-list',params).then((res)=>{
 
                 
-                var itmesList = res.data.items;
-                
-
-                _this.lastReq = itmesList;
-                
-                
-                
-                
-                if(this.searchData.lastId){
-
-                    var arr = this.openLogList;
-                    var newArr = arr.concat(itmesList);
-                    _this.openLogList = newArr;
-
-                }else{
-                    _this.openLogList = itmesList;
-                }
+                _this.openLogList = res.data.items;
                
-
-                if(itmesList.length>0){
-                    _this.searchData.lastId = itmesList[itmesList.length-1].id;
-                }else{
-                    _this.searchData.lastId = '';
-                }
+                
                 _this.loading = false
             }).catch((error)=>{
                 _this.$Notice.error({
@@ -214,10 +206,27 @@ export default {
                return "失败" 
            }
        },
-      
+       remove(params){
+           console.log("params",params)
+           this.eidtItem = params;
+           this.showTipOrNot();
+       },
+       showTipOrNot(){
+           this.showTips = !this.showtips;
+       },
+       confirmDelete(){
+           let _this =this;
+           this.$http.get('get-smart-hard-ware-dict','').then((res)=>{
+                _this.showTipOrNot();
+                this.$Message.success('移除成功');
+                this.searchData.time = new Date().getTime();
+                _this.getListData();
+            }).catch((error)=>{
+                _this.$Message.warning(error.message);
+            })
 
-
-   }
+        }
+    }
 
 }
 </script>

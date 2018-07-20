@@ -18,7 +18,7 @@
             <FormItem label="公司：">
                 <Select
                     clearable
-                    v-model="formItem.communityId"
+                    v-model="formItem.customerId"
                     style="width:150px"
                     placeholder="请选择公司"
                     filterable
@@ -29,7 +29,7 @@
             </FormItem>
             
             <FormItem label="组名称：">
-                <Input v-model="formItem.memberName" size="large" placeholder="姓名"></Input>
+                <Input v-model="formItem.name" size="large" placeholder="组名称"></Input>
             </FormItem>
            
             
@@ -50,7 +50,6 @@ export default{
            companyList:[],
             communityList :[],
 			formItem : {
-               
 
             },
           
@@ -100,8 +99,8 @@ export default{
 
             this.formItem.communityId = communityId;
         },
-        onChangeCompanys(companyId){
-            this.formItem.companyId = companyId;
+        onChangeCompanys(customerId){
+            this.formItem.customerId = customerId;
         },
         searchEquipment(){
             this.$emit("submitSearchData",this.formItem);

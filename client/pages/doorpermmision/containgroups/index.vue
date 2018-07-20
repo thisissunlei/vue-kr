@@ -39,7 +39,7 @@ export default {
    },
    data(){
      return{
-         showTips : false,
+        showTips : false,
         title : "子集列报表",
         lastReq : [],
         eidtItem:{},
@@ -212,17 +212,19 @@ export default {
            this.showTipOrNot();
        },
        showTipOrNot(){
-           this.showTips = !this.showtips;
+           this.showTips = !this.showTips;
        },
        confirmDelete(){
            let _this =this;
            this.$http.get('get-smart-hard-ware-dict','').then((res)=>{
-                _this.showTipOrNot();
-                this.$Message.success('移除成功');
+                
+                this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
-                _this.getListData();
+                this.getListData();
+                this.$Message.success('移除成功');
+
             }).catch((error)=>{
-                _this.$Message.warning(error.message);
+                this.$Message.warning(error.message);
             })
 
         }

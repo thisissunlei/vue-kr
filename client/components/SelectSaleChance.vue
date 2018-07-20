@@ -53,7 +53,7 @@ export default {
         // placeholder: '请选择',
 
         orderitems: {
-            type: Object
+            type: [Object,String]
         },
         disabled:{
             type:Boolean,
@@ -102,11 +102,12 @@ export default {
         //     }
         // },
         orderitems() {
+            console.log(this.orderitems,"....")
             this.getSalerChanceList();
            
         },
         defaultValue(){
-            this.showValue = this.defaultValue;
+            this.showValue = ''+this.defaultValue;
              console.log(this.showValue,"-----")
         },
         showType(){
@@ -120,6 +121,8 @@ export default {
         // }
     },
     mounted() {
+        console.log(this.showValue,"mmmmmmm")
+       
     },
     methods: {
         changeContent(item) {
@@ -140,10 +143,11 @@ export default {
                 receiveId: this.orderitems.salerId,
                 orderId:this.orderitems.orderId
             }
+            console.log("kkkk")
             if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
             let list = [];
             let _this = this;
-
+            console.log("jjjjjj")
             http.get('get-salechance', parms, r => {
               
                 r.data.items.data.map(item => {
@@ -154,20 +158,21 @@ export default {
                 })
                 list.unshift({ label: '不绑定机会', value: -1 })
                 _this.salerOptions = [].concat(list);
-                console.log(_this.salerOptions)
+                console.log(_this.showValue,"mmmm",_this.salerOptions)
                 let parms = {
                     count: list.length - 1,
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
                 setTimeout(()=>{
+
                     if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
                                         this.showValue = ''+list[1].value;
                                         this.$emit('onChange',  this.showValue);
                                     }else{
                                         // this.showValue = '';
                                     }
-                },100)
+                },200)
              
                 this.$emit('gotChanceList', parms);
             }, error => {

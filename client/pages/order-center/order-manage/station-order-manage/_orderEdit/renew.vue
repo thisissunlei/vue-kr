@@ -244,7 +244,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: {},
+            orderitems: '',
             showSaleChance: true,
             showFree: false,
             disabled: false,//提交按钮是否有效
@@ -446,8 +446,8 @@ export default {
     methods: {
                 //获取销售机会列表
         getSalerChanceList() {
-        let chanceid=this.renewForm.saleChanceId;
-            if(chanceid){
+        // let chanceid=this.renewForm.saleChanceId;
+            if(this.defaultChanceID){
                 this.chancedisabled=true
                 return;
             }
@@ -462,7 +462,7 @@ export default {
                 let _this = this;
 
                 this.$http.get('get-salechance', parms, r => {
-                    debugger;
+                    // debugger;
                     if (r.data.items.data.length==0) {                       
                         _this.remindinfoNewUser = false
                         _this.remindinfo = true
@@ -572,6 +572,12 @@ export default {
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
                     return obj;
                 })
+                 _this.orderitems = Object.assign({}, {
+                     customerId:data.customerId,
+                     communityId:data.communityId,
+                     salerId:data.salerId
+                 });
+                 console.log(this.orderitems,"oooooo")
                 _this.getSaleTactics({ communityId: data.communityId })
                 _this.renewForm.customerId = JSON.stringify(data.customerId);
                 _this.customerName = data.customerName;
@@ -595,6 +601,7 @@ export default {
                 _this.depositAmount = data.deposit + '';
                 _this.renewForm.firstPayTime = data.firstPayTime;
                 // _this.getStationAmount()
+                _this.defaultChanceID = data.opportunityId;
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
 
@@ -702,7 +709,9 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
+            
             this.$http.post('save-renew', renewForm).then(r => {
+                return ;
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
                 // window.close();
                 window.opener.location.reload();
@@ -816,7 +825,7 @@ export default {
             this.orderitems = Object.assign({}, obj);
         },
          handleGotChancelist(parms) {
-             debugger;
+            
              return;
             if (parms.isNewUser) {
                 this.remindinfo = false

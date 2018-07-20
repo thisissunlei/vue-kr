@@ -282,7 +282,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: {},
+            orderitems: '',
             showSaleChance: true,
             showFree: false,
             openStation: false,
@@ -657,6 +657,7 @@ export default {
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
                     return obj;
                 })
+                
                 _this.originStationList = data.orderSeatDetailVo;
                 _this.stationData = {
                     submitData: data.orderSeatDetailVo,

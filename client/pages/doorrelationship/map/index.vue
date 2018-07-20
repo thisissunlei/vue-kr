@@ -168,6 +168,7 @@ export default {
             
        },
        refreshMap(){
+
            var dateTemplate =this.dateTemplate;
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
@@ -741,8 +742,9 @@ export default {
                         containInThisPage++
                         _this.myDiagram.model.setDataProperty(findNodeData, "isHighlighted",true);
                     }
-                    _this.myDiagram.commitTransaction("changed highLight");
+                    
                 }
+                _this.myDiagram.commitTransaction("changed highLight");
                 if(containInThisPage==0){
                     this.$Notice.open({
                         title: '查找的设备不在当前社区的设备组中',

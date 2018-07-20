@@ -1,6 +1,6 @@
 <template>
     <div class="seat-info-card-container ivu-collapse">
-        <SeatFeeCard v-for="item in dataList" :key="getKey()" :columns="columns" :data="getData(item)"></SeatFeeCard>
+        <SeatFeeCard v-for="item in data" :key="getKey()" :columns="columns" :data="getData(item)"></SeatFeeCard>
     </div>
 </template>
 <script>
@@ -13,8 +13,11 @@ export default {
     components: {
         SeatFeeCard
     },
-    props:{
-        orderId:''
+    props: {
+        data: {
+            type: Array,
+            default: () => []
+        }
     },
     data() {
         return {
@@ -25,57 +28,43 @@ export default {
                     align: 'center',
                     width: 200,
                     render(h, params) {
-                        let time = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate)) + '  至  ' + dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate));
+                        let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.startDate)) + '  至  ' + dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.endDate));
                         return h('span', time)
                     }
                 },
                 {
                     title: '服务费计算说明',
-                    key: 'feeCalDesc',
+                    key: 'feeDesc',
                     align: 'center',
                     width: 170,
                 },
                 {
                     title: '单价',
-                    key: 'price',
+                    key: 'priceDesc',
                     align: 'center',
-                    width:130,
+                    width: 130,
                     className: "colPadRight",
-                    render(h, params) {
-                        let priceStr = `${params.row.price}元/月/${params.row.type.substr(-2)}`
-                        return h('span', priceStr)
-                    }
                 },
                 {
                     title: '数量',
-                    key: 'count',
+                    key: 'countDesc',
                     align: 'center',
                     width: 150,
-                    render(h, params) {
-                        let countStr = `${params.row.month}月*${params.row.seatCount}${params.row.type.substr(-2)}`
-                        return h('span', countStr)
-                    }
                 },
                 {
                     title: '小计',
-                    key: 'sum',
+                    key: 'amount',
                     align: 'center',
                     className: "colPadRight",
                     width: 100,
                     render: (h, params) => {
-                        let price = params.row.price
-                        let month = params.row.month
-                        let seatCount = params.row.seatCount
-                        if (price && month && seatCount) {
-                            let amount = 1 * price * month * seatCount;
-                            if (amount) {
-                                return h('div', '¥' + utils.thousand((amount).toFixed(2)))
-                            }
+                        if (params.row.amount) {
+                            return h('div', '¥' + utils.thousand((params.row.amount).toFixed(2)))
                         }
+
                     }
                 },
             ],
-            dataList: [],
             dataListDemo: [
                 {
                     type: '工位',
@@ -120,20 +109,13 @@ export default {
             ]
         }
     },
-    watch:{
-        orderId(){
-            this.getDataList(this.orderId);
-        }
-    },
+
     mounted() {
-        this.formatData();
+        // this.formatData();
     },
     methods: {
         formatData() {
             this.dataList = [].concat(this.dataListDemo)
-        },
-        getDataList(orderId){
-
         },
         getData(item) {
             let data = [];
@@ -148,7 +130,8 @@ export default {
 </script>
 
 <style lang="less">
-.seat-info-card-container{
+.seat-info-card-container {
     width: 793px;
+    padding-bottom: 15px;
 }
 </style>

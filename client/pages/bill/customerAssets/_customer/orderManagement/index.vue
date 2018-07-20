@@ -18,7 +18,7 @@
                 <Modal v-model="seatFeeDetailListModal" width="830" @on-cancel="handleCloseModal">
                     <p slot="header" style="padding-left:15px">明细</p>
                     <Spin size="large" fix v-if="spinShow"></Spin>
-                    <seatFeeDetailList :orderId="orderId" v-if="seatFeeDetailListModal" />
+                    <seatFeeDetailList :data="seatFeeDetailListData" v-if="seatFeeDetailListModal" />
                     <div class="seat-fee-detail-list-modal-footer" slot="footer">
                     </div>
                 </Modal>
@@ -44,10 +44,11 @@ export default {
     },
     data() {
         return {
-            serviceChargeData:[],
-            depositCashData:[],
-            billData:[],
-            orderData:[],
+            seatFeeDetailListData: [],
+            serviceChargeData: [],
+            depositCashData: [],
+            billData: [],
+            orderData: [],
             orderId: '',
             spinShow: true,
             seatFeeDetailListModal: false,
@@ -57,7 +58,7 @@ export default {
     },
     watch: {
         targetCommunity() {
-            this.getFeeDataList(this.customerId,this.targetCommunity)
+            this.getFeeDataList(this.customerId, this.targetCommunity)
         }
     },
     mounted() {
@@ -72,9 +73,8 @@ export default {
             this.$http.get('get-fee-communitys', param).then((r) => {
                 this.communityList = r.data
                 if (r.data.length > 0) {
-                    this.targetCommunity = ''+r.data[0].id;
+                    this.targetCommunity = '' + r.data[0].id;
                 }
-
             }).catch((err) => {
                 this.$Notice.error({
                     title: err.message
@@ -83,44 +83,51 @@ export default {
         },
         //获取Table Data
         getFeeDataList(customerId, communityId) {
-            if (!customerId||!communityId) {
+            if (!customerId || !communityId) {
                 return;
             }
             let params = {
                 customerId: customerId,
                 communityId: communityId
             }
-            // params.customerId=12733;
-            // params.communityId=4;
-            this.$http.get('get-fee-overivew-list', params).then((r) => {  
+            this.$http.get('get-fee-overivew-list', params).then((r) => {
                 console.log(r.data)
-                this.serviceChargeData =[].concat(r.data.fee) ;
+                this.serviceChargeData = [].concat(r.data.fee);
                 this.depositCashData = [].concat(r.data.deposit);
-                this.billData=[].concat(r.data.bill)
-                this.orderData=[].concat(r.data.order)
+                this.billData = [].concat(r.data.bill)
+                this.orderData = [].concat(r.data.order)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
                 });
             })
         },
-        handleShowCalDetail(orderNo) {
+        handleShowCalDetail(params) {
             this.seatFeeDetailListModal = true;
-            this.orderId = orderNo
-            setTimeout((orderNo) => {
-                document.querySelectorAll('.seat-fee-detail-list-modal-footer')[0].parentNode.style.display = "none";
+            this.spinShow = true
+            this.$http.get('get-seat-fee-list', params).then((r) => {
+                console.log(r.data)
+                this.seatFeeDetailListData = r.data;
                 this.spinShow = false
-            }, 3000);
+            }).catch((error) => {
+                this.spinShow = true
+                setTimeout(()=>this.seatFeeDetailListModal = false,1000)
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
+            document.querySelectorAll('.seat-fee-detail-list-modal-footer')[0].parentNode.style.display = "none";
         },
         handleCloseModal() {
-            this.spinShow = true
+            this.seatFeeDetailListData = []
+            this.spinShow = false
         },
     }
 }
 </script>
 
 <style lang="less">
-// .scoped-container/deep/.order-management {
+// .scoped-container/deep/.order-management
 .order-management {
     text-align: left;
     padding-left: 20px;

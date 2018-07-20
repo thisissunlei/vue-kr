@@ -81,5 +81,10 @@ export default {
     "get-fee-overivew-list": {
         url: "/ben/api/krspace-op-web/seat-installment/fee-list",
         method: "get"
-    }
+    },
+    //获取工位费用列表
+    "get-seat-fee-list": {
+        url: "/ben/api/krspace-op-web/seat-installment/seat-fee-list",
+        method: "get"
+    },
 };

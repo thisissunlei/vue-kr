@@ -103,7 +103,7 @@ export default {
                     title: '冻结服务保证金',
                     key: 'lockDeposit',
                     align: 'center',
-                    className: "colPadRight",
+                    className: "colPadRight  unpaid",
                     render: (h, params) => {
                         let amount = utils.thousand((params.row.lockDeposit).toFixed(2))
                         return h('div', '¥' + amount)

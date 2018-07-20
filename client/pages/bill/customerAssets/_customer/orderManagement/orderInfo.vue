@@ -45,9 +45,6 @@ export default {
         const statusWidth = 90
         const amountWidth = 130
         return {
-            nunber: '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
-            amount: '¥' + utils.thousand((1200000).toFixed(2)),
-
             orderColumns: [
                 {
                     title: '分期数',
@@ -58,12 +55,37 @@ export default {
                 {
                     title: '工位/房间明细',
                     align: 'center',
-                    key: 'seatNames'
+                    key: 'seatNames',
+                    render(h, params) {
+                        return h('Tooltip', {
+                            props: {
+                                placement: 'top'
+                            }
+                        }, [
+                                h('div', {
+                                    style: {
+                                        width: "60px",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap"
+                                    }
+                                }, params.row.seatNames),
+                                h('div', {
+                                    style: {
+                                        wordWrap: "break-word"
+                                    },
+                                    slot: 'content'
+                                }, params.row.seatNames)
+                            ]
+                        )
+                    }
+
                 },
                 {
                     title: '费用项',
                     align: 'center',
-                    key: 'feeName'
+                    key: 'feeName',
+                    width: 140,
                 },
                 {
                     title: '费用期间',
@@ -78,6 +100,7 @@ export default {
                     title: '最晚付款日',
                     align: 'center',
                     key: 'lastPaymentDate',
+                    width: 110,
                     render(h, params) {
                         let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.lastPaymentDate))
                         return h('span', time)
@@ -87,9 +110,10 @@ export default {
                     title: '费用金额',
                     align: 'center',
                     key: 'amount',
+                    width: 140,
                     className: "colPadRight",
                     render: (h, params) => {
-                        if (params.row.amount!=null) {
+                        if (params.row.amount != null) {
                             let amount = utils.thousand((params.row.amount).toFixed(2))
                             return h('div', '¥' + amount)
                         }
@@ -99,31 +123,39 @@ export default {
                     title: '相关订单',
                     align: 'center',
                     key: 'reduceOrder',
+                    width: 250,
+                    className: 'col-related-order',
                     render: (h, params) => {
-                        let reduceOrder = params.row.reduceOrder
-                        let str='-'
-                        if (reduceOrder.orderTypeName&&reduceOrder.orderId) {
-                           str= `${reduceOrder.orderTypeName}-${reduceOrder.orderId}`
-                        }
-                        
-                        if (reduceOrder) {
-                            return h(
-                                'span',
-                                {
-                                    style: {
-                                        color: '#3F4EFC',
-                                        cursor: 'pointer'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jump2OrderDetail(reduceOrder.orderType,reduceOrder.orderId)
-                                        }
-                                    }
-                                },
-                                str)
+                        if (params.row.reduceOrder == null || params.row.reduceOrder.length == 0) {
+                            return h('span', '-')
                         }
                         else {
-                            return h('span', '-')
+                            let lines = []
+                            let reduceOrders = Array.from(params.row.reduceOrder)
+                            reduceOrders.map(item => {
+                                let str = '-'
+                                if (item.orderTypeName && item.orderId) {
+                                    str = `${item.orderTypeName}-${item.orderNo}`
+                                }
+                                if (str == '-')
+                                    lines.push('p', str)
+                                else {
+                                    lines.push(h('p',
+                                        {
+                                            style: {
+                                                color: '#3F4EFC',
+                                                cursor: 'pointer'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jump2OrderDetail({ orderType: item.orderType, orderId: item.orderId })
+                                                }
+                                            }
+                                        }, str))
+                                }
+                            }
+                            )
+                            return h('div', lines)
                         }
                     }
                 },
@@ -131,10 +163,16 @@ export default {
                     title: '操作',
                     align: 'center',
                     key: 'operate',
+                    className: 'col-related-order',
+                    width: 90,
                     render: (h, params) => {
-                        if (params.row.orderNum) {
-                            return h(
-                                'span',
+                        let lines = []
+                        let reduceOrders = Array.from(params.row.reduceOrder)
+                        if (reduceOrders.length == 0) {
+                            reduceOrders.push(0)
+                        }
+                        reduceOrders.map(item => {
+                            lines.push(h('p',
                                 {
                                     style: {
                                         color: '#3F4EFC',
@@ -142,15 +180,13 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jump2CalDetail(params.row.id)
+                                            this.jump2CalDetail(params.row)
                                         }
                                     }
-                                },
-                                '计算明细')
+                                }, '计算明细'))
                         }
-                        else {
-                            return h('span', '-')
-                        }
+                        )
+                        return h('div', lines)
                     }
                 },
                 {
@@ -160,7 +196,7 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        if (params.row.paid!=null && params.row.amount!=null) {
+                        if (params.row.paid != null && params.row.amount != null) {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
                             if (Number(params.row.amount) === Number(params.row.paid)) {
@@ -179,7 +215,7 @@ export default {
                     render: (h, params) => {
                         let str = '未付清'
                         let obj = { clear: false }
-                        if (params.row.amount!=null && params.row.paid!=null) {
+                        if (params.row.amount != null && params.row.paid != null) {
                             if (Number(params.row.amount) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true
@@ -360,12 +396,9 @@ export default {
                     unpaidDays: 0
                 }
             ],
-
+            orderId: '',
             demoData: '{"code":1,"data":{"fee":[{"feeName":"工位服务费","needPaid":0,"paid":0,"unpaid":0}],"deposit":[{"deposit":1540.00,"depositFree":0.00,"feeName":"服务保证金","lockDeposit":0.00,"needPaid":0}],"bill":[],"order":[{"end":1543507200000,"installmentFee":[{"amount":300.00,"feeName":"工位服务费","installmentEnd":1532966400000,"installmentStart":1530374400000,"lastPaymentDate":1530374400000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1535644800000,"installmentStart":1533052800000,"lastPaymentDate":1531584000000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1538236800000,"installmentStart":1535731200000,"lastPaymentDate":1534262400000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1540915200000,"installmentStart":1538323200000,"lastPaymentDate":1536940800000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":300.00,"feeName":"工位服务费","installmentEnd":1543507200000,"installmentStart":1541001600000,"lastPaymentDate":1539532800000,"paid":0,"periods":5,"periodsName":"第5期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"}],"orderId":13074,"orderName":"DD031807181316020001","start":1530374400000,"totalRentAmount":1500.00},{"end":1548864000000,"installmentFee":[{"amount":470.00,"feeName":"工位服务费","installmentEnd":1535644800000,"installmentStart":1533052800000,"lastPaymentDate":1533052800000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1538236800000,"installmentStart":1535731200000,"lastPaymentDate":1534262400000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1540915200000,"installmentStart":1538323200000,"lastPaymentDate":1536940800000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1543507200000,"installmentStart":1541001600000,"lastPaymentDate":1539532800000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1546185600000,"installmentStart":1543593600000,"lastPaymentDate":1542211200000,"paid":0,"periods":5,"periodsName":"第5期","reduceOrder":[],"seat":[],"seatNames":"666,665"},{"amount":470.00,"feeName":"工位服务费","installmentEnd":1548864000000,"installmentStart":1546272000000,"lastPaymentDate":1544803200000,"paid":0,"periods":6,"periodsName":"第6期","reduceOrder":[],"seat":[],"seatNames":"666,665"}],"orderId":13076,"orderName":"DD031807181447120001","start":1533052800000,"totalRentAmount":2820.00},{"end":1564502400000,"installmentFee":[{"amount":480.00,"feeName":"工位服务费","installmentEnd":1548864000000,"installmentStart":1543593600000,"lastPaymentDate":1531843200000,"paid":0,"periods":1,"periodsName":"首期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1553961600000,"installmentStart":1548950400000,"lastPaymentDate":1547481600000,"paid":0,"periods":2,"periodsName":"第2期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1559232000000,"installmentStart":1554048000000,"lastPaymentDate":1552579200000,"paid":0,"periods":3,"periodsName":"第3期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"},{"amount":480.00,"feeName":"工位服务费","installmentEnd":1564502400000,"installmentStart":1559318400000,"lastPaymentDate":1557849600000,"paid":0,"periods":4,"periodsName":"第4期","reduceOrder":[],"seat":[],"seatNames":"彗星,06002"}],"orderId":13078,"orderName":"DD031807181514100001","start":1543593600000,"totalRentAmount":1920.00}]},"message":"ok"}',
         }
-    },
-    computed: {
-
     },
     mounted() {
         this.formatDataList();
@@ -373,18 +406,17 @@ export default {
     methods: {
         formatNumber(data) {
             // '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
-            let { orderTypeName, orderName, start, end } = data
+            let { orderTypeName, orderName, start, end, orderId } = data
+            this.orderId = orderId;
             let time = dateUtils.dateToStr("YY.MM.DD", new Date(start)) + '至' + dateUtils.dateToStr("YY.MM.DD", new Date(end))
             return `${orderTypeName}-${orderName}(${time})`
         },
         formatAmount(data) {
             let { totalRentAmount } = data
-            return utils.thousand((totalRentAmount).toFixed(2))
+            return '¥' + utils.thousand((totalRentAmount).toFixed(2))
         },
         //格式化接收数据
         formatDataList() {
-            // this.orderData = [].concat(this.orderDataDemo)
-            // this.billData = [].concat(this.billDataDemo)
             this.orderDataDemo = JSON.parse(this.demoData).data.order;
         },
         //跳转至订单详情
@@ -407,18 +439,19 @@ export default {
                 }
                 window.open(`/order-center/order-manage/station-order-manage/${params.orderId}/${viewName}`, '_blank');
             }
-            else {
-                window.open(`/order-center/order-manage/station-order-manage/${params}/reduceView`, '_blank');
-            }
         },
         jump2BillDetail(billNo) {
             billNo = billNo
             window.open(`/bill/list/detail/${billNo}`, '_blank');
         },
         //跳转至订单的计算明细
-        jump2CalDetail(orderNo) {
+        jump2CalDetail(row) {
             this.seatFeeListLoading = true
-            this.$emit('onShowCalDetail', orderNo)
+            let params = {
+                orderId: this.orderId,
+                seatVO: JSON.stringify(row.seat)
+            }
+            this.$emit('onShowCalDetail', params)
         }
 
     }
@@ -450,6 +483,29 @@ export default {
                     padding-right: 24px;
                     float: right;
                     color: red;
+                }
+            }
+            .col-related-order {
+                .ivu-table-cell {
+                    padding: 0;
+                    @lineHeight: 36px;
+                    div {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        p {
+                            flex: 1;
+                            height: @lineHeight;
+                            line-height: @lineHeight;
+                            text-align: center;
+                            border-bottom: 1px solid #e9eaec;
+                            display: inline-block;
+                            width: 100%;
+                        }
+                        p:last-child {
+                            border-bottom: none;
+                        }
+                    }
                 }
             }
         }

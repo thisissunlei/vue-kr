@@ -92,7 +92,7 @@ import dateUtils from 'vue-dateutils';
                 arr.length&&arr.map((item,index)=>{
                     if(error.length){
                         error.map((items,indexs)=>{
-                            if(items.id==item.id){
+                            if(items.seatId==item.id){
                                 item.color='red';
                             }
                         })               

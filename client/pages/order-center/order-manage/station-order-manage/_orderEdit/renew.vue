@@ -244,7 +244,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: '',
+            orderitems: {},
             showSaleChance: true,
             showFree: false,
             disabled: false,//提交按钮是否有效

@@ -38,7 +38,6 @@
                     <Col class="col">
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
                         <SelectChance 
-                            type='edit' 
                             :disabled='chanceDisable' 
                             name="formItem.salerId" 
                             @onChange="changeChance" 

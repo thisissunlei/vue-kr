@@ -53,7 +53,7 @@ import http from '~/plugins/http.js';
             }
             let list = [];
             let _this = this;
-            http.get('get-customer', params, r => {
+            http.get(this.url, params, r => {
                 list = r.data.customerList;
                 list.map((item) => {
                     let obj = item;

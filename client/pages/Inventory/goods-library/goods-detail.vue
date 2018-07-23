@@ -4,15 +4,13 @@
 			<span class="u-border-left"/>
 			商品详情
 		</div>
-		<div style="font-size:26px;font-weight:bold;padding-left: 48px;padding-top: 20px;">{{basicInfo.name}}</div>
+		<div style="padding-left:60px;font-weight: 700;font-size:14px;padding-top:20px;margin-bottom:20px;">
+			<div style="font-size:26px;">{{basicInfo.name}}</div>
+			<div>商品定价：<span style="color:red;font-size:26px;">{{basicInfo.quotedPrice?basicInfo.quotedPrice+'元':'-'}}</span></div>
+			<div style="padding-top: 10px;">工位单价：{{basicInfo.avgPrice?basicInfo.avgPrice+'元':'-'}}</div>
+		</div>
 		<div class="m-detail-content">
 			<DetailStyle info="基本信息">
-				<LabelText label="商品定价：">
-					{{basicInfo.quotedPrice?basicInfo.quotedPrice+'元':'-'}}
-				</LabelText>
-				<LabelText label="工位单价：">
-					{{basicInfo.avgPrice?basicInfo.avgPrice+'元':'-'}}
-				</LabelText>
 				<LabelText label="城市：">
 					{{basicInfo.cityName}}
 				</LabelText>

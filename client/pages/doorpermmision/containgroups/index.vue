@@ -66,23 +66,10 @@ export default {
                         width: 60,
                         align: 'center'
                     },
-                    {
+                     {
                         title: '组名称',
-                        key: 'memberName',
+                        key: 'name',
                         align:'center',
-                        render:(h,obj)=>{
-                            return h('div', [
-                               
-                                h('Tooltip',
-                                    {
-                                    props: {
-                                        placement: 'top',
-                                        content :obj.row.card
-                                    },
-                                }, obj.row.memberName||"/"),
-                            ]);
-                            
-                        }
                         
                     },
                     {
@@ -105,12 +92,12 @@ export default {
                     },
                     {
                         title: '操作时间',
-                        key: 'time',
+                        key: 'ctime',
                         align:'center',
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.time)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.ctime)))
                             ]);
                             
                         }
@@ -128,7 +115,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params)
+                                            this.remove(params.row)
                                         }
                                     }
                                 }, '解除')
@@ -253,13 +240,14 @@ export default {
            var relationIdsArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-               relationIdsArr.push(arr[i].row.relationId);
+               console.log("arr[i].row",arr[i])
+               relationIdsArr.push(arr[i].relationId);
            }
            var params = {
-               relationIds:relationIdsArr
+               relationIds:relationIdsArr.join(",")
            }
            
-            this.$http.post('delete-father-son-relation', params).then((response) => {
+            this.$http.delete('delete-father-son-relation', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();

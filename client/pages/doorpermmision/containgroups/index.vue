@@ -284,9 +284,9 @@ export default {
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
             console.log("selectedItemsIds",selectedItemsIds);
-            selectedItemsIds = JSON.stringify(selectedItemsIds);
+            var paramsStr = selectedItemsIds.join(',');
             var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
-            var paramsOther = this.groupLevel ="PARENT"?{children:selectedItemsIds}:{parents:selectedItemsIds};
+            var paramsOther = this.groupLevel ="PARENT"?{children:paramsStr}:{parents:paramsStr};
             var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },

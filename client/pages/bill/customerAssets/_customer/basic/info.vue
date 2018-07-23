@@ -155,7 +155,6 @@ import FieldBox from '~/components/FieldBox';
                     this.canSubmit = false;
                     console.log('valid',valid)
                   } else{
-                    console.log('=========',this.canSubmit)
                     this.canSubmit = true;
                   } 
                 })

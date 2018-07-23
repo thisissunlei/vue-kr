@@ -1,5 +1,5 @@
  <template>         
-            <Form ref="fromFieldValidate" :model="formItem" label-position="top" :rules="ruleValidate">
+            <Form ref="editCustomerData" :model="formItem" label-position="top" :rules="ruleValidate">
                 <Form-item label="客户名称" class="bill-search-class" prop="company">
                     <i-input 
                         v-model="formItem.company" 
@@ -60,7 +60,8 @@
                         placeholder="请选择客户类型" 
                         style="width: 252px"
                         clearable
-
+                        :disabled="isCompany"
+                        
                     >
                         <Option 
                             v-for="item in customerTypeOptions" 
@@ -72,7 +73,7 @@
                    </Select> 
                 </Form-item>
                 
-                <Form-item label="客户联系人" class="bill-search-class" prop="name">
+                <Form-item v-if="isShow" label="客户联系人" class="bill-search-class" prop="name">
                     <i-input 
                         v-model="formItem.name" 
                         placeholder="请输入客户联系人"
@@ -80,18 +81,20 @@
                         :maxlength="max"
                     />
                 </Form-item>
-                <Form-item label="联系人手机号" class="bill-search-class" prop="mobile">
+                <Form-item v-if="isShow" label="联系人手机号" class="bill-search-class" prop="mobile">
                     <i-input 
                         v-model="formItem.mobile" 
                         placeholder="请输入联系人手机号"
                         style="width: 252px"
+                        
                     />
                 </Form-item>
-                <Form-item  label="联系人邮箱" class="bill-search-class" prop="mail">
+                <Form-item v-if="isShow" label="联系人邮箱" class="bill-search-class" prop="mail">
                     <i-input 
                         v-model="formItem.mail" 
                         placeholder="请输入联系人邮箱"
                         style="width: 252px"
+                        
                     />
                 </Form-item>
          </Form>
@@ -104,13 +107,16 @@
         props: {
              mask:String,
              keys:String,
-             params:{}
+             params:{},
+            initailData :{},
+            
         },
         data (){
+            let _this =this;
             const validatephone = (rule, value, callback) => {
-               
-                if (value.length>20) {
-                    callback(new Error('联系方式的最大长度为20字符'));
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (!phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
                 }else{
                     callback()
 
@@ -123,43 +129,51 @@
                     this.canSubmit = false
                     callback(new Error('请填写客户联系人'));
                 }else{
-                   
-                    this.$http.get('check-company', {company:value}).then( r => {
-                        if(r.message == "ok"){
-                            this.canSubmit = true;
-                            callback()
-                        }else{
-                           callback(new Error('客户名称不可重复')) 
-                        }
-                    }).catch( e => {
-                        this.canSubmit = false;
-                        callback(new Error('客户名称不可重复')) 
+                   if(value==_this.initailData.company){
+                       this.canSubmit = true;
+                       callback()
+                   }else{
+                       this.$http.get('check-company', {company:value}).then( r => {
+                            if(r.message == "ok"){
+                                this.canSubmit = true;
+                                callback()
+                            }else{
+                                callback(new Error('客户名称不可重复')) 
+                            }
+                        }).catch( e => {
+                            this.canSubmit = false;
+                            callback(new Error('客户名称不可重复')) 
 
-                        
-                    })
+                            
+                        })
 
+                    }
+                    
                 }
             };
             return{
+                isCompany : true,
                 customerSourceTypeOptionsParam : 'com.krspace.order.api.enums.customer.CsrChannelType',
                 customerSourceTypeOptions :[],
                 customerSourceOptions:[],
                 customerTypeOptions:[],
                 dateError:false,
-                isShow:true,
                 effectError:false,
                 canSubmit:true,
+                isShow:true,
                 formItem:{
                 	company:'',
-                	communityId:'',
+                	communityId:1,
                 	channelType:'',
                 	channelId:'',
-                	type:'PERSONAL',
+                	type:'',
                 	name:'',
                 	mobile:'',
                 	mail:'',
                 },
                 statusList:[],
+                firstSource:[],
+                secondSource:[],
                 communityList:[],
                 max:25,
                 maxName:50,
@@ -177,9 +191,10 @@
                     name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    contactTel:[
-                        { required: true, message: '请填写电话联系人手机号',trigger: 'change'},
-                        { required: true, trigger: 'change' ,validator: validatephone},
+                    mobile:[
+                        { required: true, message: '请填写客户联系人电话'},
+                        { required: true, trigger: 'blur' ,validator: validatephone},
+
                     ],
                     channelType:[
                         { required: true, message: '请选择客户来源类型'}
@@ -189,44 +204,44 @@
                     ],
                     channelId:[
                         { required: true, message: '请选择客户来源',}
-                        
                     ]
                 },
             }
         },
 
-        watch: {
-            $props: {
-                deep: true,
-                handler(nextProps) {
-                    this.formItem=Object.assign({},nextProps.params);
-                }
-            }
-        },
  
         mounted:function(){
             this.getCommunity();
             this.getCustomerSourceTypeOptions();
             this.getCustomerTypeOptions();
+            console.log("this.initailData",this.initailData);
+            this.formItem =Object.assign({},this.initailData);
+            console.log("this.formItem",this.formItem)
+            this.formItem.communityId = this.initailData.communityId+"";
+            console.log("this.formItem",this.formItem)
+            this.isShow = this.initailData.type=="ENTERPRISE"?false:true;
         },
+        
 
         updated:function(){
         	var data = false;
             var haveNull = false;
+
             for(let key in this.formItem){
                 if(!this.formItem[key]){
                     haveNull = true;
                 }
             }
-            console.log("haveNull",haveNull)
+            console.log("haveNull",haveNull);
+
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
-            this.$emit('newData', data,this.canSubmit);
+            console.log("this.canSubmit",this.canSubmit);
+            this.$emit('editCustomer', data,this.canSubmit);
         },
 
         methods:{
-            
             //获取客户类型列表
             getCustomerTypeOptions(){
                 var param = {enmuKey : "com.krspace.op.api.enums.customer.CustomerType"}
@@ -255,19 +270,7 @@
                     });
                 }) 
             },
-             getCommunity(){
-                this.$http.get('join-bill-community','').then((response)=>{    
-                        this.communityList=response.data.items 
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-            },
-            
-            
             sourceTypeChange(value){
-                console.log("value",value);
                 var param = {type : value}
                 this.$http.get('get-customermanage-customer-type',param).then((response)=>{    
                     console.log("response",response);
@@ -283,6 +286,18 @@
                 })
               
             },
+          
+             getCommunity(){
+                this.$http.get('join-bill-community','').then((response)=>{    
+                        this.communityList=response.data.items 
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
+            },
+            
+            
 
         }
     }

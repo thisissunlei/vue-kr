@@ -139,7 +139,7 @@
                     </Row>
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
-                        <Button type="primary" @click="openPlanMap">添加房间/工位</Button>
+                        <Button type="primary" @click="openPlanMap">选择工位</Button>
                         <span style="padding:0 5px"> </span>
                         <Button type="primary" @click="entryPrice">录入单价</Button>
                     </Row>
@@ -319,7 +319,7 @@
 
         <Modal
             v-model="showMap"
-            title="选择商品"
+            title="选择工位"
             ok-text="保存"
             cancel-text="取消"
             width="90%"
@@ -327,8 +327,7 @@
          >
             <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap"/>
             <div slot="footer">
-                <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
-                <Button  @click="cancelStation">取消</Button>
+                <Button type="primary" @click="submitStation">确定</Button>
             </div>
         </Modal>
 
@@ -1146,9 +1145,7 @@
                 var toString = Object.prototype.toString;
                 
                 var typeStr = toString.call([]); 
-                console.log(this.selecedStationList,">>>>>>>>>",typeStr)
                 if(this.selecedStationList && typeStr == '[object Array]' &&  this.selecedStationList.length){
-                    console.log(this.selecedStationList,"============")
                     this.clearFormThree();
                 }
             },
@@ -1487,6 +1484,7 @@
                     deleteData:[],
                 };
                 this.showMap = false
+
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;

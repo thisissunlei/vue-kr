@@ -145,6 +145,7 @@ export default {
 
    },
    mounted(){
+       GLOBALSIDESWITCH("false");
        this.searchData.groupId = this.$route.query.groupid;
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;

@@ -46,15 +46,11 @@
                 </div>
             </Modal>
 
-            <Modal
-                v-model="openNullify"
-                title="提示信息"
-                width="500"
-            >
-                <Nullify/>
+            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+                <Nullify v-if="openNullify" :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
                 <div slot="footer">
-                    <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                    <!-- <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
                 </div>
             </Modal>
 
@@ -361,6 +357,10 @@
 
 
         methods:{
+            refershJoinList(params) {
+                this.getListData(this.params);
+                this.openNullify = false;
+            },
             getListData(params){
                  this.$http.get('reduce-bill-list', params).then((response)=>{
                      this.totalCount=response.data.totalCount;

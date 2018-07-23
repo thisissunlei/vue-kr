@@ -48,6 +48,13 @@
             }
         
         },
+        methods:{
+            getIcon(){
+                console.log(window.location,"ppppp")
+                return 'http://img.krspace.cn/common/favicon_new.ico';
+            }
+            
+        }
         
     }
 </script>

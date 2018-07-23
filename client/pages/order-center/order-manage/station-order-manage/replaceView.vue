@@ -486,6 +486,7 @@ export default {
                     return obj;
                 })
                 let price = item.signPrice.split('元')[0]
+                // price=price.replace(/\,/g,'')
                 let params = {
                     codeName:item.name,
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),

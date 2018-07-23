@@ -93,9 +93,12 @@ export default {
                     }
                 })
                 .catch(function(error) {
+                  if(error && error.response &&  error.response.data){
                     error = error.response.data;
                     failure && failure(error);
                     reject(error);
+                  }
+                   
                 });
         }),
     post: (url, params, success, failure) =>

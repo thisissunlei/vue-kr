@@ -485,7 +485,8 @@ export default {
                     obj.seatType = item.seatType;
                     return obj;
                 })
-                let price = item.signPrice.split('元')[0]
+                // let price = item.signPrice.split('元')[0]
+                let price = item.price
                 // price=price.replace(/\,/g,'')
                 let params = {
                     codeName:item.name,

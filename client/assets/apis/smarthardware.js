@@ -126,8 +126,8 @@ export default  {
     },
 
     //获取公司列表数据
-    'get-company-list':{
-        url: '/api/krspace-sso-web/member/customer/csr-list',
+    'get-samrt-hard-company-list':{
+        url: 'api/iot-platform/customer/select-items',
         method: 'get'
     },
     

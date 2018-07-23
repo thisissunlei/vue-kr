@@ -24,7 +24,7 @@
                     filterable
                     @on-change="onChangeCompanys"
                 >
-                    <Option  v-for="item in companyList" :value="item.id" :key="item.id"> {{ item.companyName }}</Option>
+                    <Option  v-for="item in companyList" :value="item.id" :key="item.id"> {{ item.company }}</Option>
                 </Select>
             </FormItem>
             
@@ -91,7 +91,7 @@ export default{
         },
         getCompany(){
             
-            this.$http.get('get-company-list','').then((res)=>{
+            this.$http.get('get-samrt-hard-company-list','').then((res)=>{
 
                 this.companyList=res.data.items;
 

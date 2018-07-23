@@ -34,11 +34,8 @@
            
             
             <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
-            <div class="float-right">
-                <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
-                <Button type="primary"  @click="addGroups" class="delete-relations">添加组</Button>
-            </div>
-
+            <Button type="primary" icon="ios-plus-outline" @click="addGroups" class="search-btn">添加并继续</Button>
+            <Button type="primary" icon="ios-close-outline" @click="addGroups" class="search-btn">添加并关闭</Button>
         </Form>
         
 
@@ -133,7 +130,7 @@ export default{
 .all-equipment-list-searchform{
     padding-left:20px;
     .search-btn{
-       margin-top:32px;
+       margin:32px 10px 0 0 ;
    }
    .float-right{
        float : right;

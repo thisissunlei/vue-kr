@@ -2,7 +2,7 @@
   <div class="g-openlog">
       <div class="g-openlog-box">
             <SectionTitle :title="title" />
-            <SearchForm @submitSearchData="submitSearchData" @deleteRelations = 'deleteRelations'/>
+            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" />
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
@@ -25,6 +25,11 @@
                     <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
                 </div>
         </Modal>
+        <Modal v-model="groupAllListShow" width="900">
+            <DoorGroupList :groupLevel = "groupLevel" v-if="groupAllListShow"/>
+            <div slot="footer">
+            </div>
+        </Modal>
         </div>
     </div>
 </template>
@@ -32,11 +37,13 @@
 import SectionTitle from '~/components/SectionTitle';
 import SearchForm from './searchForm';
 import dateUtils from 'vue-dateutils';
+import DoorGroupList from '~/components/DoorGroupList';
+
 
 
 export default {
    components:{
-      SectionTitle,SearchForm
+      SectionTitle,SearchForm,DoorGroupList
    },
    data(){
      return{
@@ -44,6 +51,7 @@ export default {
         groupName : '',
         selectedItems : [],
         showTips : false,
+        groupAllListShow : false,
         totalCount : 100,
         page : '',
         searchData :{
@@ -262,6 +270,12 @@ export default {
         },
         selectedChange(selection){
             this.selectedItems = selection;
+        },
+        addGroups(){
+            this.groupAllListShowFun()
+        },
+        groupAllListShowFun(){
+            this.groupAllListShow = !this.groupAllListShow
         }
     }
 

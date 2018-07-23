@@ -429,7 +429,8 @@
 
         submitApply(){
             let params={
-                id:this.id
+                id:this.id,
+                languageType:this.contractLanguage
             };
             if(this.applyDisabled){
                 return ;

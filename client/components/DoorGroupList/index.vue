@@ -46,22 +46,9 @@ export default {
                         align: 'center'
                     },
                     {
-                        title: '组名称',
-                        key: 'memberName',
+                         title: '社区',
+                        key: 'name',
                         align:'center',
-                        render:(h,obj)=>{
-                            return h('div', [
-                               
-                                h('Tooltip',
-                                    {
-                                    props: {
-                                        placement: 'top',
-                                        content :obj.row.card
-                                    },
-                                }, obj.row.memberName||"/"),
-                            ]);
-                            
-                        }
                         
                     },
                     {
@@ -72,7 +59,7 @@ export default {
                     },
                     {
                         title: '公司',
-                        key: 'company',
+                        key: 'customerName',
                         align:'center',
                         
                     },
@@ -86,7 +73,6 @@ export default {
    mounted(){
        
        this.getListData();
-       console.log("groupLevel",this.groupLevel);
        this.searchData.groupLevel = this.groupLevel=="PARENT"?"NORMAL":"PARENT"
    },
    props:[
@@ -116,14 +102,13 @@ export default {
        submitSearchData(data){
 
            let _this =this;
-           
+           this.selectedAddItmes = [];
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
            this.getListData();
 
        },
        getListData(){
-            console.log("this.groupLevel",this.groupLevel);
             let _this =this;
             let params = this.searchData;
             console.log("params",params);

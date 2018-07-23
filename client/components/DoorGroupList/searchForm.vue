@@ -29,11 +29,10 @@
             </FormItem>
             
             <FormItem label="组名称：">
-                <Input v-model="formItem.name" size="large" placeholder="组名称"></Input>
+                <Input v-model="formItem.name" size="large" placeholder="组名称" @on-change="inputchange"></Input>
             </FormItem>
            
             
-            <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
             <Button type="primary" icon="ios-plus-outline" @click="addGroupsContinue" class="search-btn">添加并继续</Button>
             <Button type="primary" icon="ios-close-outline" @click="addGroupsClose" class="search-btn">添加并关闭</Button>
         </Form>
@@ -61,7 +60,6 @@ export default{
     mounted(){
 
         this.formItem.deviceId = this.$route.query.deviceId || "";
-        this.$route.query.deviceId && this.searchEquipment();
         this.getCommunity();
         this.getCompany();
         
@@ -101,13 +99,19 @@ export default{
         onChangeCommunity(communityId){
 
             this.formItem.communityId = communityId;
+            this.$emit("submitSearchData",this.formItem);
+
         },
         onChangeCompanys(customerId){
             this.formItem.customerId = customerId;
+            this.$emit("submitSearchData",this.formItem);
+
         },
-        searchEquipment(){
+        inputchange(e){
+            this.formItem.name = e.currentTarget.value;
             this.$emit("submitSearchData",this.formItem);
         },
+       
         updated:function(){
             this.$emit('formData', this.formItem);
         },

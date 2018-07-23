@@ -35,8 +35,8 @@
             
             <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
             <div class="float-right">
-                <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
                 <Button type="primary"  @click="addGroups" class="delete-relations">添加组</Button>
+                <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
             </div>
 
         </Form>

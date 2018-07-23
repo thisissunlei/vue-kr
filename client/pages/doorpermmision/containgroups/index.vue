@@ -283,10 +283,11 @@ export default {
             for(var i=0;i<selectedAddItems.length;i++){
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
+            console.log("selectedItemsIds",selectedItemsIds);
             selectedItemsIds = JSON.stringify(selectedItemsIds);
             var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
             var paramsOther = this.groupLevel ="PARENT"?{children:selectedItemsIds}:{parents:selectedItemsIds};
-            var params = Object.assign({},{groupId:this.groupId},paramsOther)
+            var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){

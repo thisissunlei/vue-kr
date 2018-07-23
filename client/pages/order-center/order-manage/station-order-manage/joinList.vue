@@ -69,7 +69,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract :requireChineseEnglish='requireChineseEnglish' @onSelectionChange='onSelectApplyContract'/>
+                <ApplyContract v-if='openApply' :requireChineseEnglish='requireChineseEnglish' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>

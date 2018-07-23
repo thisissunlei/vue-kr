@@ -1655,6 +1655,7 @@
                 })
             },
             changePrice(index,price){
+               
                 this.selecedStationList = this.selecedStationList.map((item,i)=>{
                     item.seatNum = item.name;
                     if(i == index){
@@ -1664,6 +1665,7 @@
                     }
                     return item
                 })
+                console.log()
                 this.getStationAmount()
             },
             getStationAmount(list){
@@ -1684,7 +1686,7 @@
                     if(item.originalPrice === ''){
                         originalPrice = true;
                     }
-                    obj.floor = item.whereFloor;
+                   
                     return obj;
                 })
                 if(originalPrice){

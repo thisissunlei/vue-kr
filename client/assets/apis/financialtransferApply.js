@@ -73,18 +73,18 @@ export default {
 
     //获取客户社区列表
     "get-fee-communitys": {
-        url: "/ben/api/krspace-op-web/seat-installment/cmt-list",
+        url: "/api/krspace-op-web/seat-installment/cmt-list",
         method: "get"
     },
 
     //获取客户费用汇总列表
     "get-fee-overivew-list": {
-        url: "/ben/api/krspace-op-web/seat-installment/fee-list",
+        url: "/api/krspace-op-web/seat-installment/fee-list",
         method: "get"
     },
     //获取工位费用列表
     "get-seat-fee-list": {
-        url: "/ben/api/krspace-op-web/seat-installment/seat-fee-list",
+        url: "/api/krspace-op-web/seat-installment/seat-fee-list",
         method: "get"
     },
 };

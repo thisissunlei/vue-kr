@@ -36,7 +36,7 @@
             <div class="float-right">
                 <Tips :imgClass = "imgClass" tipsDirection="left-start" :tipsContent="tipsContent"/>
                 
-                <Button type="primary"  @click="addGroups" class="delete-relations">添加组</Button>
+                <Button type="primary"  @click="addGroups" class="delete-relations">{{groupLevel=="PARENT"?"添加父级组":"添加设备组"}}</Button>
                 <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
             </div>
 
@@ -62,20 +62,19 @@ export default{
 			formItem : {
 
             },
+
           
 		}
 
     },
     mounted(){
 
-        this.formItem.deviceId = this.$route.query.deviceId || "";
-        this.$route.query.deviceId && this.searchEquipment();
         this.getCommunity();
         this.getCompany();
         
     },
     props:[
-       
+       'groupLevel'
     ],
     components: {
      Tips

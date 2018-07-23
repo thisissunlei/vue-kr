@@ -2,7 +2,7 @@
   <div class="g-openlog">
       <div class="g-openlog-box">
             <SectionTitle :title="title" />
-            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" />
+            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" :groupLevel="groupLevel"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>

@@ -228,11 +228,14 @@
             var haveNull = false;
 
             for(let key in this.formItem){
-                if(!this.formItem[key]){
-                    haveNull = true;
+                if(key!='mobile'){
+                    if(!this.formItem[key]){
+                        haveNull = true;
+                    }
                 }
+                
             }
-            console.log("haveNull",haveNull);
+           
 
             if(!haveNull){
                 data = Object.assign({},this.formItem);

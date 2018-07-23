@@ -117,12 +117,19 @@ export default  {
         url: '/api/iot-platform/door-device/admin/actions/refresh-reported-info',
         method: 'get'
     },
-    //刷新设备获取上报信息
+
+
+     //温湿度变化
+     'temperaturehumiditymaplist':{
+        url: '/api/iot-platform/device-status-log/list',
+        method: 'get'
+    },
+
+    //获取公司列表数据
     'get-company-list':{
         url: '/api/krspace-sso-web/member/customer/csr-list',
         method: 'get'
     },
-    
     
     
 

@@ -34,6 +34,7 @@
            
             
             <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
+            <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
         </Form>
         
 
@@ -71,6 +72,9 @@ export default{
      
     },
     methods:{
+        deleteRelations(){
+            this.$emit('deleteRelations');
+        },
         getCommunity(){
             
             this.$http.get('join-bill-community','').then((res)=>{
@@ -112,6 +116,7 @@ export default{
         this.$emit('formData', this.formItem);
     },
     
+    
 
 }
 </script>
@@ -120,6 +125,10 @@ export default{
     padding-left:20px;
     .search-btn{
        margin-top:32px;
+   }
+   .delete-relations{
+       margin:32px 12px 0 0 ;
+       float : right;
    }
 }
    

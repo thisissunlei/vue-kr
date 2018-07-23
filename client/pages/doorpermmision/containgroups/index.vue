@@ -2,9 +2,9 @@
   <div class="g-openlog">
       <div class="g-openlog-box">
             <SectionTitle :title="title" />
-            <SearchForm @submitSearchData="submitSearchData"/>
+            <SearchForm @submitSearchData="submitSearchData" @deleteRelations = 'deleteRelations'/>
             <div class="table-box">
-                <Table :columns="columns1" :data="openLogList" size="small"></Table>
+                <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
@@ -19,7 +19,7 @@
                 </p>
                 <div style="text-align:center">
                     <p>解除关系后后，父级组的成员将失去自己组的设备权限。</p>
-                    <p>你要删除吗？</p>
+                    <p>确定解除吗？</p>
                 </div>
                 <div slot="footer">
                     <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
@@ -40,9 +40,10 @@ export default {
    },
    data(){
      return{
+        groupLevel : '',
+        groupName : '',
         selectedItems : [],
         showTips : false,
-        title : "子集列报表",
         totalCount : 100,
         page : '',
         searchData :{
@@ -52,6 +53,11 @@ export default {
         loading : false,
         openTypeList :[],
         columns1: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '组名称',
                         key: 'memberName',
@@ -84,7 +90,13 @@ export default {
                         
                     },
                     {
-                        title: '加入该组时间',
+                        title: '操作人',
+                        key: 'phone',
+                        align:'center',
+                        
+                    },
+                    {
+                        title: '操作时间',
                         key: 'time',
                         align:'center',
                         render(h,obj){
@@ -94,12 +106,6 @@ export default {
                             ]);
                             
                         }
-                    },
-                    {
-                        title: '操作人',
-                        key: 'phone',
-                        align:'center',
-                        
                     },
                     {
                         title: '解除父子关系',
@@ -132,9 +138,20 @@ export default {
    },
    mounted(){
        this.searchData.groupId = this.$route.query.groupid;
-       this.title = this.$route.query.groupname+"的子集列表";
+       this.groupName = this.$route.query.groupname;
+       this.groupLevel = this.$route.query.groupLevel;
        this.getListData();
        this.getSmartHardwareDict();
+   },
+   computed: {
+
+       title : function(){
+           if(this.groupLevel == "PARENT"){
+               return this.groupName + "的子集列表"
+           }else{
+               return this.groupName + "的父级组列表"
+           }
+       }
    },
    methods:{
        returnResultExplain(data){
@@ -164,10 +181,10 @@ export default {
        },
        getListData(){
 
-           let _this =this;
-           let params = this.searchData;
-            this.$http.get('get-son-group-list',params).then((res)=>{
-
+            let _this =this;
+            let params = this.searchData;
+            var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
+            this.$http.get(reqURL,params).then((res)=>{
                 
                 _this.totalCount = res.data.totalCount;
                 _this.openLogList = res.data.items;
@@ -209,9 +226,15 @@ export default {
            }
        },
        remove(params){
-           console.log("params",params)
            this.selectedItems = [params];
            this.showTipOrNot();
+       },
+       deleteRelations(){
+           if(this.selectedItems.length<1){
+               this.$Message.warning("请选择要解除关系的组");
+               return;
+           }
+           this.confirmDelete();
        },
        showTipOrNot(){
            this.showTips = !this.showTips;
@@ -221,15 +244,11 @@ export default {
            var relationIdsArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-            //    relationIdsArr.push(arr[i].row.relationIds||null);
-               relationIdsArr.push(arr[i].row.relationIds||2);
+               relationIdsArr.push(arr[i].row.relationId);
            }
-           console.log("relationIdsArr",relationIdsArr);
-           relationIdsArr =[];
            var params = {
                relationIds:relationIdsArr
            }
-           console.log("params",params);
            
             this.$http.post('delete-father-son-relation', params).then((response) => {
                 this.showTipOrNot();
@@ -240,6 +259,9 @@ export default {
                 this.$Message.warning(error.message);
             })
 
+        },
+        selectedChange(selection){
+            this.selectedItems = selection;
         }
     }
 

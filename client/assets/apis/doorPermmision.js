@@ -10,9 +10,14 @@ export default  {
     //删除父子组之间的关系
     'delete-father-son-relation':{
         
-        url : '/mockjs/53/iot-platform/auth-group-relation/actions/delete',
+        url : '/api/iot-platform/auth-group-relation/actions/delete',
         method: 'post'
-    }
+    },
+
+    'get-father-group-list':{
+        url: '/api/iot-platform/auth-group/parent-list',
+        method: 'get'
+    },
 
   }
 

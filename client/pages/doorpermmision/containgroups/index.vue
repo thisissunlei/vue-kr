@@ -280,11 +280,8 @@ export default {
         addGroupsToGroup(selectedAddItems,StatuParam){
             var selectedItemsIds=[];
             for(var i=0;i<selectedAddItems.length;i++){
-                console.log("selectedItemsIds",selectedItemsIds);
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
-            console.log("selectedAddItems？？？？？？",selectedAddItems)
-
             selectedItemsIds = JSON.stringify(selectedItemsIds);
             var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
             var paramsOther = this.groupLevel ="PARENT"?{children:selectedItemsIds}:{parents:selectedItemsIds};

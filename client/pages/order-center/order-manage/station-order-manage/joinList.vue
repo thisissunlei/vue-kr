@@ -406,8 +406,7 @@
         },
         submitNullify (){
             let params={
-                id:this.id,
-                languageType:this.contractLanguage
+                id:this.id
             };
             if(this.nullDisabled){
                 return ;

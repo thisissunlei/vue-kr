@@ -601,7 +601,7 @@ export default {
                 _this.depositAmount = data.deposit + '';
                 _this.renewForm.firstPayTime = data.firstPayTime;
                 // _this.getStationAmount()
-                _this.defaultChanceID = data.opportunityId;
+                _this.defaultChanceID = data.opportunityId||'';
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
 
@@ -701,7 +701,7 @@ export default {
             renewForm.customerId = this.renewForm.customerId;
             renewForm.communityId = this.renewForm.communityId;
             renewForm.salerId = this.renewForm.salerId;
-            renewForm.opportunityId = this.renewForm.saleChanceId;//销售机会ID
+            renewForm.opportunityId = this.renewForm.saleChanceId||'';//销售机会ID
             renewForm.rentAmount = this.renewForm.rentAmount;
             renewForm.signDate = signDate;
             renewForm.startDate = start;
@@ -709,7 +709,7 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
-            
+
             this.$http.post('save-renew', renewForm).then(r => {
         
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
@@ -812,7 +812,7 @@ export default {
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {
-                this.renewForm.saleChanceId = value;
+                this.renewForm.saleChanceId = value||'';
             }
         },
         validSaleChance() {

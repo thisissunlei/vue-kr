@@ -107,6 +107,9 @@ export default {
 
         },
         defaultValue() {
+            if (this.defaultValue==undefined) {
+                this.defaultValue=''
+            }
             this.showValue = '' + this.defaultValue;
             console.log(this.showValue, "-----")
         },

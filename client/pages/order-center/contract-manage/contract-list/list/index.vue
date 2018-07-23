@@ -43,8 +43,8 @@
                 :autosize="{minRows: 5,maxRows: 5}" 
                 style="width:100%;" 
                 placeholder="写入描述..." 
-            />
-            <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
+            /> -->
+            <!-- <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
             <CheckboxGroup v-model="otherAgreedChked">
                 <Checkbox v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block'>
                     <span class='contract-span' v-html="item.content"></span>

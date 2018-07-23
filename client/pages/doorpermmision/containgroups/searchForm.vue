@@ -34,6 +34,8 @@
            
             
             <div class="float-right">
+                <Tips :imgClass = "imgClass" tipsDirection="left-start" :tipsContent="tipsContent"/>
+                
                 <Button type="primary"  @click="addGroups" class="delete-relations">添加组</Button>
                 <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
             </div>
@@ -46,12 +48,16 @@
 </template>
 
 <script>
-
+import Tips from '~/components/Tips';
 export default{
     name:'equipmentSearch',
     data (){
 		return{
-           companyList:[],
+            imgClass : "img-class",
+            tipsContent:[{text:"父级组只能添加设备组作为其子集"},{text:"同样,设备组只能添加父级组作为其父级"}]
+            
+            ,
+            companyList:[],
             communityList :[],
 			formItem : {
 
@@ -72,7 +78,7 @@ export default{
        
     ],
     components: {
-     
+     Tips
     },
     methods:{
         
@@ -141,10 +147,14 @@ export default{
        margin-top:32px;
    }
    .float-right{
-       float : right;
+        float : right;
+        
         .delete-relations{
             margin:32px 12px 0 0 ;
         }
+   }
+   .img-class{
+
    }
    
 }

@@ -33,9 +33,9 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     
     //公共字体样式
     function textStyle() {
-        return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
+        return {stroke: "#999", font: "bold 12px PingFangSC-Medium"};
     }
-   
+    
     /*function linkProblemConverter(msg) {
         if (msg) return "red";
         return null;
@@ -51,6 +51,45 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
         ));
     }
     
+    //picture公共hover事件
+    function picHoverEnter(e,node,picName1,picName2,param){
+        //为了解决没有图片问题
+        if(!picName1&&!picName2){
+            return ;
+        }
+        if(picName1&&param=='big'){
+            return ;
+        }
+        isIconEnter=true;
+        isIconLeave=false;
+        enterFn(e,iconData.nods,'icon');
+        if(isElementEnter){
+            isElementLeave=true;
+            isElementEnter=false;
+            leaveFn(elData.e,elData.node);
+        }
+    }
+    
+    function picHoverLeave(e,node,picName1,picName2,param){
+        //为了解决没有图片问题
+        if(!picName1&&!picName2){
+            return ;
+        }
+        if(picName1&&param=='big'){
+            return ;
+        }
+        if(isIconLeave){
+            return ;
+        }
+        isIconLeave=true;
+        isIconEnter=false;
+        leaveFn(e,iconData.nods,'icon')
+        if(isElementLeave){
+            isElementEnter=true;
+            isElementLeave=false;
+            enterFn(elData.e,elData.node);
+        }
+    }
     
     //绘制
     myDiagram.nodeTemplate =
@@ -68,50 +107,41 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Panel, "Table",
                 //元件属性
                 $(go.TextBlock,textStyle(),
-                { row: 0, column: 0,margin:5,textAlign:'center'},
+                { row: 0, column: 0,margin:2.5},
                 new go.Binding("text", "name")),      
                 $(go.TextBlock,textStyle(),
-                { row: 1, column: 0},
+                { row: 1, column: 0,margin:2.5},
                 new go.Binding("text", "property")),
             ),
             $(go.Panel,
                 {alignment: go.Spot.TopRight},
                 $(go.Picture,
-                {width:12, height: 12,margin:5},
+                {width:16, height: 16,margin:5},
                 new go.Binding('source','bgsrc')),
                 { //鼠标hover事件
                     mouseEnter: function (e, node) {
                         let nods={data:node.part.Sd};
                         iconData={e,nods};
-                        //为了解决没有图片问题
-                        if(!nods.data.bgsrc){
-                            return ;
-                        }
-                        isIconEnter=true;
-                        isIconLeave=false;
-                        enterFn(e,iconData.nods,'icon');
-                        if(isElementEnter){
-                            isElementLeave=true;
-                            isElementEnter=false;
-                            leaveFn(elData.e,elData.node);
-                        }
+                        picHoverEnter(e,node,nods.data.desksrc,nods.data.bgsrc,'big');
                     },
                     mouseLeave: function (e, node) {
-                        //为了解决没有图片问题
-                        if(!iconData.nods.data.bgsrc){
-                            return ;
-                        }
-                        if(isIconLeave){
-                            return ;
-                        }
-                        isIconLeave=true;
-                        isIconEnter=false;
-                        leaveFn(e,iconData.nods,'icon')
-                        if(isElementLeave){
-                            isElementEnter=true;
-                            isElementLeave=false;
-                            enterFn(elData.e,elData.node);
-                        }
+                        picHoverLeave(e,node,iconData.nods.data.desksrc,iconData.nods.data.bgsrc,'big');
+                    }
+                }
+            ),
+            $(go.Panel,
+                {alignment: go.Spot.TopRight},
+                $(go.Picture,
+                {width:12, height: 12,margin:5},
+                new go.Binding('source','desksrc')),
+                { //鼠标hover事件
+                    mouseEnter: function (e, node) {
+                        let nods={data:node.part.Sd};
+                        iconData={e,nods};
+                        picHoverEnter(e,node,nods.data.desksrc,nods.data.bgsrc,'small');
+                    },
+                    mouseLeave: function (e, node) {
+                        picHoverLeave(e,node,iconData.nods.data.desksrc,iconData.nods.data.bgsrc,'small');
                     }
                 }
             ),

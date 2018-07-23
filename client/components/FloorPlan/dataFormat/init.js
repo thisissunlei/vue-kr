@@ -19,7 +19,7 @@ function init(data,picProperty,dataUrl){
                 spaceArr.push(item);
             }else{
                 if(item.futureStatus){
-                    item.parentMin=22;
+                    item.parentMin=17;
                     spaceArr.push(item);
                 }            
             }
@@ -44,33 +44,31 @@ function init(data,picProperty,dataUrl){
             list.item=item;
             dataRender.push(list);
         })
-        
+        dom&&document.body.removeChild(dom);
         
         //scale计算
         let minW=0.5;
         let minH=0.5;
         let min=0.5;
         if(spaceArr.length){
-            minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
             //两行字的高度加上icon的高度
-            let fixed='';
+            let fixedH=spaceArr[0].parentMin;
             if(spaceArr[0].belongType=='SPACE'){
-                fixed=spaceArr[0].futureStatus?32+34:32;
-            }else{
-                fixed=spaceArr[0].parentMin;
+                fixedH=spaceArr[0].futureStatus?32+42:32;
             }
-            minH=fixed/spaceArr[0].cellHeight;
+            minH=fixedH/spaceArr[0].cellHeight;
+            minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
             
             spaceArr.map((item,index)=>{
-                let fixItem=item.parentMin;
+                let switchH=item.parentMin;
                 if(item.belongType=='SPACE'){
-                    fixItem=item.futureStatus?32+34:32;
+                    switchH=item.futureStatus?32+42:32;
                 }
                 if((item.parentMin/item.cellWidth)>minW){
                     minW=item.parentMin/item.cellWidth;
                 }
-                if((fixItem/item.cellHeight)>minH){
-                    minH=fixItem/item.cellHeight;
+                if((switchH/item.cellHeight)>minH){
+                    minH=switchH/item.cellHeight;
                 }
             }) 
         }
@@ -95,7 +93,12 @@ function init(data,picProperty,dataUrl){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
-            list.bgsrc=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            let picRen=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            if(list.item.belongType=='SPACE'){
+                list.bgsrc=picRen;
+            }else{
+                list.desksrc=picRen;
+            }
             //list.status=true;
         })
     }

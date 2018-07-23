@@ -26,6 +26,9 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
         left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
+    if(toolLocation.top<=0){
+        toolLocation.top=0;
+    }
     
     if(isIcon=='icon'){
         toolLocation.left=Number(every.cellCoordX)+6+Number(every.cellWidth)-Number(tirDetail.width)-scroll.left;
@@ -48,7 +51,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     }
      
     //计算位置赋值
-    tirDom.style.maxWidth = obj.width + 'px';
+    //tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
     if(isIcon=='icon'){
@@ -62,7 +65,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
 //图标浮框内容
 function getIconToolTipContent(thatData,discount){
     var data = Object.assign({}, thatData);
-    var width = 225;
+    var width = 300;
     let status=data.item.futureStatus;
     let customerName='';
     let typeName=data.item.goodsType=='OPEN'?'固定办公桌':'移动办公桌';
@@ -71,8 +74,8 @@ function getIconToolTipContent(thatData,discount){
     let startTime = data.item.futureStart ? dateUtils.dateToStr('YYYY-MM-DD',new Date(data.item.futureStart)) : '';
     let statusName=status=='FUTURE_AVAILABLE'?'<div>可预租：' + startTime + '</div>':'<div>未来被占用：' + startTime + '起</div>';
     let useType=status=='FUTURE_OCCUPIED'?'<div>被占用类型：' +data.item.futureType+ '</div>':''
-    if((inventStatus=='IN_RENT'||inventStatus=='NOT_EFFECT')&&status=='FUTURE_OCCUPIED'){
-        customerName='<div>'+data.item.customerName+'</div>';
+    if(status=='FUTURE_OCCUPIED'){
+        customerName='<div>'+data.item.futureCustomerName+'</div>';
     }
     if(data.item.belongType!='SPACE'){
         nameStr='<div>'+typeName+':'+data.item.cellName+'</div>';
@@ -92,7 +95,7 @@ function getIconToolTipContent(thatData,discount){
 //气泡的具体内容
 function getToolTipContent(thatData,discount) {
     let data = Object.assign({}, thatData);
-    let width = 264;
+    let width = 300;
     
     let unitPrice=(data.item.unitPrice||data.item.unitPrice===0)?data.item.unitPrice:'';
     let price=(data.item.price||data.item.price===0)?data.item.price:'';

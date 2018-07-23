@@ -4,6 +4,7 @@
       <div class="bar">
           <SearchForm 
            @searchForm="searchForm"
+           @changeCount="changeCount"
           />
           <Discount 
            @countChange="countChange"
@@ -23,37 +24,27 @@
             :data="item"
       >
             <div  class="flow-chart-top-toolbar" slot="toolbar">
-                <div class="toolbar-inner" v-for="item in colorLabels" :key="item.id">
-                    <span class="map-font-tip">{{item.label}}</span>
-                    <span class="map-color-tip" :style="'background:'+item.color"></span>
-                </div>
-                
+                <Tooltip v-for="item in colorLabels" :key="item.id" :content="item.content" placement="bottom"> 
+                    <div :class="item.class">
+                        <span class="map-font-tip">{{item.label}}</span>
+                        <span class="map-color-tip" :style="'background:'+item.color"></span>
+                    </div>
+                </Tooltip>
                 <!-- <span class="warning-tip"></span>
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span>  -->
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="display:inline-block;margin-right:10px;font-size:14px;color: #333333;vertical-align: middle;">显示</span>
-                    <Select 
-                        v-model="show" 
-                        multiple 
-                        placeholder="请输入显示项" 
-                        style="width:150px;" 
-                        clearable 
-                        @on-change="changeCount" 
-                        >
-                        <Option v-for="item in showList" :value="item.value" :key="item.value">
-                            {{ item.label }}
-                        </Option>
-                  </Select>
-                </div>
-                
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">未来被占用</span>
-                    <span class='m-use'></span>
-                </div>
-                <div style="display:inline-block;margin-right:26px;">
-                    <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;">可预租</span>
-                    <span class='m-can'></span>
-                </div>
+
+                <Tooltip content="在随后的60天内，有客户或特殊情况占用（目前只可短租）" placement="bottom"> 
+                    <div style="display:inline-block;">
+                        <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">未来被占用</span>
+                        <span class='m-use'></span>
+                    </div>
+                </Tooltip>
+                <Tooltip content="目前的占用将在30天内结束，结束后至少有连续60天可租" placement="bottom"> 
+                    <div style="display:inline-block;margin-right:26px;margin-left:26px;">
+                        <span style="font-size:14px;color: #999999;display:inline-block;margin-right:5px;vertical-align: middle;font-family: PingFangSC-Medium;">可预租</span>
+                        <span class='m-can'></span>
+                    </div>
+                </Tooltip>
 
 
             </div>
@@ -106,10 +97,10 @@ export default {
     return{
        openTime:false,
        colorLabels:[
-        {label:'未租',color:'#BCE590'},
-        {label:'在租',color:'#fedc82'},
-        {label:'合同未生效',color:'#fea877'},
-        {label:'不可用',color:'#E4E4E4'}
+        {label:'未租',color:'#BCE590',content:'库存日期当日是未租的',class:'toolbar-inner no-rent'},
+        {label:'在租',color:'#fedc82',content:'库存日期当日有客户在租，合同已生效',class:'toolbar-inner in-rent'},
+        {label:'合同未生效',color:'#fea877',content:'库存日期当日有未生效的合同占用',class:'toolbar-inner no-availible'},
+        {label:'不可用',color:'#E4E4E4',content:'库存日期当日被特殊情况占用',class:'toolbar-inner no-use'}
        ],
        canvasData:[],
        tabForms:{},
@@ -117,13 +108,10 @@ export default {
        discount:"",
        isFirstClick:false,
        scrollTop:0,
-       showList:[
-           {value:'FUTURE_OCCUPIED',label:'未来被占用'},
-           {value:'FUTURE_AVAILABLE',label:'可预租'}
-       ],
-       show:[],
        displayList:'',
-       isClickShow:false   
+       isClickShow:false,
+       displayList:'',
+       countNum:0   
     }
   },
   mounted(){
@@ -135,11 +123,10 @@ export default {
      let route=this.$route.query;
      if(route.displayList){
          this.displayList=route.displayList;
-         this.show=(route.displayList).split(',');
      }else if(store){
-         this.show=JSON.parse(store);
+         let show=JSON.parse(store);
          let str='';
-         this.show.map((item,index)=>{
+         show.map((item,index)=>{
              str=str?str+','+item:item
          })
          this.displayList=str; 
@@ -151,8 +138,20 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
+    changeCount(val){
+        this.countNum++;
+        if(this.countNum==1){
+            return ;
+        }
+        let str='';
+        val.length&&val.map((item,index)=>{
+            str=str?str+','+item:item;
+        })
+        this.displayList=str;
+        localStorage.setItem('floor-map-show-select',JSON.stringify(val));
+        this.isClickShow=true;
+    },
     submitConfig(forms){
-        this.tabForms=Object.assign({},this.tabForms,forms);
         this.openConfig();
         this.getMapData(this.tabForms);
     },
@@ -166,22 +165,20 @@ export default {
         }
         this.isFirstClick=true;
     },
-    changeCount(val){
-        let str='';
-        val.length&&val.map((item,index)=>{
-            str=str?str+','+item:item;
+    getItem(arr){
+        var obj={};
+        arr.map((item,index)=>{
+            let storeData=localStorage.getItem('map-config-'+item.name);
+            obj[item.name]=(storeData&&storeData!='undefined')?storeData:item.number;
         })
-        this.displayList=str;
-        localStorage.setItem('floor-map-show-select',JSON.stringify(val));
-        this.isClickShow=true;
+        return obj
     },
     //获取数据
     getMapData(values){
         this.isLoading=false;
         values.currentDate=utils.dateCompatible(values.currentDate);
-        values.futureAvlDays=values.futureAvlDays||60;
-        values.futureAvlEndDays=values.futureAvlEndDays||30;
-        values.futureOccDays=values.futureOccDays||60;
+        let arr=[{name:'futureAvlDays',number:60},{name:'futureOccDays',number:60},{name:'futureAvlEndDays',number:30}];
+        values=Object.assign({},values,this.getItem(arr));
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
            this.canvasData.map((item,index)=>{
@@ -209,7 +206,7 @@ export default {
     countChange(param,countRadio){
         this.discount=countRadio==1?'':param;
     },
-    mouseClick(event,every,all){
+    mouseClick(event,every,all,canvas,scroll){
         if(!this.isFirstClick){
             mainDom.scrollTop=0;
         }else{
@@ -218,7 +215,12 @@ export default {
         var index=this.findEle(clickNone,'id',every.item.id);
         if(index!=-1){
             return ;
-        } 
+        }
+        var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
+        if(!tirDom){
+            let icon=false;
+            this.createTooltip(event,every,all,canvas,scroll,icon,every.item.id);
+        }
         clickNone.push({id:every.item.id,everyData:every});
     },
     findEle(array,attr,val){
@@ -229,27 +231,32 @@ export default {
         }
         return -1;
     },
-    mouseEnter(event,every,all,canvas,scroll,isIcon){
-         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
-         var index=this.findEle(clickNone,'id',selectId);
-         if(index!=-1){
-            return ;
-         } 
+    //生成浮框
+    createTooltip(event,every,all,canvas,scroll,isIcon,selectId){
          this.createDom(every,isIcon);
          //监听click事件
          document.body.addEventListener('click',this.bodyClick);
          //显示
          var tirDom = document.getElementById('gantt-chart-tool-tip'+selectId);
          var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+selectId);
-         tirDom.style.display = 'block';
-         angleDom.style.display = 'block';
+         tirDom.style.display = 'inline-block';
+         angleDom.style.display = 'inline-block';
          publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
+    },
+    mouseEnter(event,every,all,canvas,scroll,isIcon){
+         let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+         var index=this.findEle(clickNone,'id',selectId);
+         if(index!=-1){
+            return ;
+         } 
+         this.createTooltip(event,every,all,canvas,scroll,isIcon,selectId);
     },
     allBodyClick(){
         if(this.isClickShow){
             this.isClickShow=false;
-            this.$router.replace({path:'/inventory/floor-plan',query:{displayList:this.displayList}});
-            //utils.addParams({displayList:this.displayList})
+            this.tabForms=Object.assign({},this.tabForms,{displayList:this.displayList});
+            this.getMapData(this.tabForms);
+            //this.$router.replace({path:'/inventory/floor-plan',query:{displayList:this.displayList}});
         }
     },
     bodyClick(event){
@@ -288,14 +295,16 @@ export default {
     //生成dom
     createDom(every,isIcon){
          let selectId=isIcon=='icon'?(every.item.id+'icon'+every.item.id):every.item.id;
+         let isTitle=isIcon=='icon'?'':'<div class="title" style="pointer-events:auto;" data-titleId='+selectId+'></div>';
          var productDom=
             '<div id="gantt-chart-tool-tip'+selectId+'" class="gantt-chart-tool-tip">'+
-                '<div class="title" data-titleId='+selectId+'></div>'+
+                isTitle+
                 '<div id="gantt-chart-tool-tip-content'+selectId+'" class="gantt-chart-tool-tip-content"></div>'+
             '</div>'+
             '<div id="gantt-chart-tool-tip-triangle'+selectId+'" class="top-triangle gantt-chart-tool-tip-triangle" />';
          var el = document.createElement('div');
          el.innerHTML = productDom;
+         el.style.pointerEvents='none';
          wrapDom.appendChild(el);
     }
   }
@@ -318,7 +327,6 @@ export default {
         display:inline-block;
         .toolbar-inner{
              display:inline-block;
-             margin-right:26px;
             .map-font-tip{
                 display:inline-block;
                 vertical-align: middle;
@@ -361,7 +369,7 @@ export default {
         cursor: pointer;
     }
     .gantt-chart-tool-tip{
-          max-width: 280px;
+          //max-width: 280px;
           display: none;
           //opacity: 0;
           background: #575D6A;
@@ -420,19 +428,37 @@ export default {
       }
       .m-use{
          display:inline-block;
-         width:20px;
-         height:20px;
+         width:16px;
+         height:16px;
          background:url('~/assets/images/use.svg') no-repeat center;
          background-size:100%;
          vertical-align: middle;
       }
       .m-can{
          display:inline-block;
-         width:20px;
-         height:20px;
+         width:16px;
+         height:16px;
          background:url('~/assets/images/can.svg') no-repeat center;
          background-size:100%;
          vertical-align: middle;
+      }
+      .ivu-tooltip-inner{
+        white-space: normal;
+      }
+      .in-rent{
+          margin:0 26px;
+      }
+      .no-use{
+          margin:0 26px;
+      }
+      .floor-chart-box-map{
+          .ivu-tooltip{
+              &:first-child{
+                  .ivu-tooltip-popper{
+                      width:100px;
+                  }
+              }
+          }
       }
   }
   .config-tip{

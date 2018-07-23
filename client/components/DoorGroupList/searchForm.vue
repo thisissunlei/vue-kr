@@ -59,7 +59,6 @@ export default{
     },
     mounted(){
 
-        this.formItem.deviceId = this.$route.query.deviceId || "";
         this.getCommunity();
         this.getCompany();
         

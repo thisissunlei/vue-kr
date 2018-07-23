@@ -29,11 +29,10 @@
             </FormItem>
             
             <FormItem label="组名称：">
-                <Input v-model="formItem.name" size="large" placeholder="组名称"></Input>
+                <Input v-model="formItem.name" size="large" placeholder="组名称" @on-change="inputChanged"></Input>
             </FormItem>
            
             
-            <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
             <div class="float-right">
                 <Button type="primary"  @click="addGroups" class="delete-relations">添加组</Button>
                 <Button type="error"  @click="deleteRelations" class="delete-relations">解除关系</Button>
@@ -104,9 +103,15 @@ export default{
         onChangeCommunity(communityId){
 
             this.formItem.communityId = communityId;
+            this.searchEquipment();
         },
         onChangeCompanys(customerId){
             this.formItem.customerId = customerId;
+            this.searchEquipment();
+        },
+        inputChanged(e){
+            this.formItem.name = e.currentTarget.value;
+            this.searchEquipment();
         },
         searchEquipment(){
             this.$emit("submitSearchData",this.formItem);

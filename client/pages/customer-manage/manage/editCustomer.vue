@@ -193,7 +193,7 @@
                     ],
                     mobile:[
                         { required: true, message: '请填写客户联系人电话'},
-                        { required: true, trigger: 'blur' ,validator: validatephone},
+                        // { required: true, trigger: 'blur' ,validator: validatephone},
 
                     ],
                     channelType:[

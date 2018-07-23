@@ -65,6 +65,17 @@
                 <Button type="ghost" style="margin-left:8px" @click="createNew">取消</Button>
             </div>
         </Modal>
+        <Modal
+            v-model="openEdit"
+            title="编辑客户"
+            width="660"
+        >
+            <EditCustomer  @editCustomer="editCustomer" ref="editCustomerData" :initailData ="editData" v-if="openEdit" />
+            <div slot="footer">
+                <Button type="primary" @click="submitEdit('editCustomerData')">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="openEditDialog">取消</Button>
+            </div>
+        </Modal>
 
         <Modal
             v-model="openSwitch"
@@ -98,6 +109,7 @@
     import dateUtils from 'vue-dateutils';
     import SwitchCustomer from './switchCustomer';
     import Message from '~/components/Message';
+    import EditCustomer from './editCustomer';
 
     export default {
         name: 'customerAssets',
@@ -107,10 +119,13 @@
             CreateCustomer,
             HeightSearch,
             SwitchCustomer,
-            Message
+            Message,
+            EditCustomer
         },
         data () {
             return {
+                openEdit : false,
+                editData : {},
                 totalCount:0,
                 page:1,
                 pageSize:15,
@@ -120,7 +135,9 @@
                 openCreate:false,
                 upperError:'',
                 newPageData:{},
+                editPageData:{},
                 canSubmit:true,
+                editCanSubmit : true,
             /*转移客户*/
             isSwitch:false,
             switchIds:'',
@@ -140,6 +157,12 @@
                         type: 'selection',
                         title: '客户ID',
                         key: 'id',
+                        align:'center',
+                        width:60,
+                    },
+                    {
+                        title: '客户类型',
+                        key: 'customerTypeName',
                         align:'center',
                     },
                     {
@@ -196,6 +219,19 @@
                                             }
                                         }
                             }, '查看'),
+                            h(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            checkAction:'seat_order_view',
+                                            label:'编辑',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openEditFun(params.row)
+                                            }
+                                        }
+                            }, '编辑'),
                          ]);
 
                         
@@ -262,17 +298,20 @@
                 this.upperData=params;
             },
             submitCreate(name){
+
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    console.log('======validate',this.canSubmit)
+                newPageRefs[name].validate((valid) => {
                     if (!valid || !this.canSubmit) {
 
                         isSubmit = false
                     }else{
-                       this.$http.post('add-customer',this.newPageData).then( r => {
+                        var addNewData = this.newPageData;
+                        console.log("addNewData",addNewData);
+                       this.$http.post('add-customer',addNewData).then( r => {
                             this.openCreate = false;
-                            this.getListData()
+                            this.getListData();
+                            this.$Message.success('新增成功');
                         }).catch( e => {
                             this.$Notice.error({
                                 title:e.message
@@ -284,11 +323,36 @@
                 
 
             },
+            submitEdit(name){
+                var editPageRefs = this.$refs.editCustomerData.$refs;
+                var isSubmit = true;
+                editPageRefs[name].validate((valid,data) => {
+                    if (!valid || !this.editCanSubmit) {
+
+                        isSubmit = false
+                    }else{
+                        console.log("this.editPageData",this.editPageData);
+                       this.$http.post('edit-customer',this.editPageData).then( r => {
+                            this.openEditDialog();
+                            this.getListData();
+                            this.$Message.success('编辑成功');
+                        }).catch( e => {
+                            this.$Notice.error({
+                                title:e.message
+                            });
+                        })
+                    }
+                })
+            },
+            editCustomer(data,submit){
+                this.editCanSubmit = submit;
+                this.editPageData = Object.assign({},data);
+                var params = Object.assign({},data)  
+            },
             newCustomer(data,submit){
-                console.log('newCustomer',submit)
                 this.canSubmit = submit;
                 this.newPageData = Object.assign({},data);
-                var params = Object.assign({},data)  
+                console.log(data,"oooooo".data)
             },
 
             //获取form数据
@@ -348,7 +412,33 @@
             //信息提示框
             onMessageChange(data){
                 this.openMessage=data;
-            }
+            },
+            openEditFun(param){
+                
+                //获取编辑客户回显数据
+                this.$http.get('get-customer-detail',{customerId : param.id}).then((res)=>{
+                    // PERSONAL  ENTERPRISE
+                    console.log("res.data.detail",res.data.detail,"res.data.detail.communityId",res.data.detail.communityId)
+                    var responseData = Object.assign({},res.data.detail)
+                    this.editData = Object.assign({},responseData);
+                    // this.editData = res.data.detail;
+
+                    
+
+                    
+                    this.openEditDialog();
+
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+                
+            },
+            openEditDialog(){
+                this.openEdit = !this.openEdit;
+            },
+
         }
     }
 </script>

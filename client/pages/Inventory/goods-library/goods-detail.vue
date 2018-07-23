@@ -45,9 +45,11 @@
 					{{basicInfo.basicSpaceName}}
 				</LabelText>
 			</DetailStyle>
-			<DetailStyle info="启用状态">
-				<Table border :columns="service" :data="serviceData"/>
-			</DetailStyle>
+			<div style="margin-top:20px;">
+				<DetailStyle info="启用状态">
+					<Table border :columns="service" :data="serviceData"/>
+				</DetailStyle>
+			</div>
 			<DetailStyle info="商品修改记录">
 				<Table border :columns="contract" :data="contractData"/>
 			</DetailStyle>

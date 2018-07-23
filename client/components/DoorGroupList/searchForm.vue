@@ -34,8 +34,8 @@
            
             
             <Button type="primary" icon="ios-search" @click="searchEquipment" class="search-btn">搜索</Button>
-            <Button type="primary" icon="ios-plus-outline" @click="addGroups" class="search-btn">添加并继续</Button>
-            <Button type="primary" icon="ios-close-outline" @click="addGroups" class="search-btn">添加并关闭</Button>
+            <Button type="primary" icon="ios-plus-outline" @click="addGroupsContinue" class="search-btn">添加并继续</Button>
+            <Button type="primary" icon="ios-close-outline" @click="addGroupsClose" class="search-btn">添加并关闭</Button>
         </Form>
         
 
@@ -114,8 +114,14 @@ export default{
         deleteRelations:function(){
             this.$emit('deleteRelations');
         },
-        addGroups: function(){
-            this.$emit('addGroups');
+        addGroupsContinue:function(){
+            this.addGroups("continue")
+        },
+        addGroupsClose:function(){
+            this.addGroups("close")
+        },
+        addGroups: function(param){
+            this.$emit('addGroups',param);
         }
 
 

@@ -235,6 +235,7 @@
                 }
                 
             }
+            console.log(haveNull,"pppppp")
            
 
             if(!haveNull){

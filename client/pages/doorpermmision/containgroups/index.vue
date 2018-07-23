@@ -26,7 +26,7 @@
                 </div>
         </Modal>
         <Modal v-model="groupAllListShow" width="900">
-            <DoorGroupList :groupLevel = "groupLevel" v-if="groupAllListShow"/>
+            <DoorGroupList :groupLevel = "groupLevel" v-if="groupAllListShow" @addGroupsToGroup="addGroupsToGroup"/>
             <div slot="footer">
             </div>
         </Modal>
@@ -52,7 +52,7 @@ export default {
         selectedItems : [],
         showTips : false,
         groupAllListShow : false,
-        totalCount : 100,
+        totalCount : 0,
         page : '',
         searchData :{
             groupId: '',
@@ -276,7 +276,41 @@ export default {
         },
         groupAllListShowFun(){
             this.groupAllListShow = !this.groupAllListShow
+        },
+        addGroupsToGroup(selectedAddItems,StatuParam){
+            var selectedItemsIds=[];
+            for(var i=0;i<selectedAddItems.length;i++){
+                console.log("selectedItemsIds",selectedItemsIds);
+                selectedItemsIds.push(selectedAddItems[i].id)
+            }
+            console.log("selectedAddItems？？？？？？",selectedAddItems)
+
+            selectedItemsIds = JSON.stringify(selectedItemsIds);
+            var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
+            var paramsOther = this.groupLevel ="PARENT"?{children:selectedItemsIds}:{parents:selectedItemsIds};
+            var params = Object.assign({},{groupId:this.groupId},paramsOther)
+            this.sendAjaxReq(url,params,StatuParam);
+        },
+        sendAjaxReq(url,params,StatuParam){
+            this.$http.post(url, params).then((response) => {
+                this.$Message.success('添加成功');
+                if(StatuParam && StatuParam=="close"){
+                    this.groupAllListShowFun();
+                }
+            }).catch((error) => {
+                this.$Message.warning(error.message);
+            })
+
         }
+
+
+
+
+
+
+
+
+
     }
 
 }

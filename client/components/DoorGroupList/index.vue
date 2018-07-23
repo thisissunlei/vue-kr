@@ -28,7 +28,7 @@ export default {
    data(){
      return{
         groupName : '',
-        selectedItems : [],
+        selectedAddItmes : [],
         showTips : false,
         groupAllListShow : false,
         totalCount : 100,
@@ -142,25 +142,15 @@ export default {
        },
        
         selectedChange(selection){
-            this.selectedItems = selection;
+            this.selectedAddItmes = selection;
         },
-        addGroups(){
-            if(this.selectedItems.length<1){
+        addGroups(param){
+            if(this.selectedAddItmes.length<1){
                 this.$Message.warning("请选择要添加的组");
                 return;
             }
-            // this.$http.get(reqURL,params).then((res)=>{
-                
-            //     _this.totalCount = res.data.totalCount;
-            //     _this.openLogList = res.data.items;
-               
-                
-            //     _this.loading = false
-            // }).catch((error)=>{
-            //     _this.$Notice.error({
-            //         title:error.message
-            //     });
-            // })
+            console.log("this.selectedAddItmes",this.selectedAddItmes);
+            this.$emit("addGroupsToGroup",this.selectedAddItmes,param);
 
         }
        

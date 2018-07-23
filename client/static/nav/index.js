@@ -120,8 +120,8 @@
             if (port) {
                 port = ":" + port;
             }
-            if (location.hash.indexOf("#/") != -1) {
-                str = location.hash.split("#/")[1]
+            if (location.hash.indexOf("#") != -1) {
+                str = location.hash.split("#")[1]
                 href = every.url;
             } else {
                 href = location.protocol + "//" + location.hostname + port + every.url;

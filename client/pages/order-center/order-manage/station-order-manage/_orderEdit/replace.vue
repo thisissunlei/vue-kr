@@ -1779,6 +1779,7 @@
                     oldSeats:JSON.stringify(this.selectedOldStation),
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     realEndDate:time,
+                    //欢哥说必要，但是没用
                     orderId:10718
 
                 }

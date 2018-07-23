@@ -709,7 +709,7 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
-            
+
             this.$http.post('save-renew', renewForm).then(r => {
         
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
@@ -809,7 +809,6 @@ export default {
             this.clearStation()
         },
         changeChance(value) {
-            debugger
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {

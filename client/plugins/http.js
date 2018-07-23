@@ -126,10 +126,10 @@ export default {
                     }
                 })
                 .catch(function(error) {
-                    if (error.response) {
-                        error = error.response.data;
-                        failure && failure(error);
-                        reject && reject(error);
+                    if (error && error.response &&  error.response.data) {
+						error = error.response.data;
+						failure && failure(error);
+						reject && reject(error);
                     } else {
                         reject(error);
                     }
@@ -156,9 +156,12 @@ export default {
                     }
                 })
                 .catch(function(error) {
-                    error = error.response.data;
-                    failure && failure(error);
-                    reject(error);
+					if(error && error.response &&  error.response.data){
+						error = error.response.data;
+						failure && failure(error);
+						reject(error);
+					}
+                    
                 });
         }),
     delete: (url, params, success, failure) =>
@@ -182,9 +185,12 @@ export default {
                     }
                 })
                 .catch(function(error) {
-                    error = error.response.data;
-                    failure && failure(error);
-                    reject(error);
+					if(error && error.response &&  error.response.data){
+						error = error.response.data;
+						failure && failure(error);
+						reject(error);
+					}
+                    
                 });
         })
 };

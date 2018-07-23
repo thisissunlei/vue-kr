@@ -601,7 +601,7 @@ export default {
                 _this.depositAmount = data.deposit + '';
                 _this.renewForm.firstPayTime = data.firstPayTime;
                 // _this.getStationAmount()
-                _this.defaultChanceID = data.opportunityId;
+                _this.defaultChanceID = data.opportunityId||'';
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
 
@@ -809,10 +809,11 @@ export default {
             this.clearStation()
         },
         changeChance(value) {
+            debugger
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {
-                this.renewForm.saleChanceId = value;
+                this.renewForm.saleChanceId = value||'';
             }
         },
         validSaleChance() {

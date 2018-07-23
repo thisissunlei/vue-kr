@@ -62,7 +62,6 @@
         methods:{
             //格式转换
             dateSwitch(data){
-                console.log('data=======',data)
                 if(data){
                     return new Date(data).getTime();
                 }else{

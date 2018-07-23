@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "nuxt":"nuxt",
-    "dev": "cross-env NODE_ENV=development node server/index.js",
+    "dev": "cross-env NODE_ENV=development node --max_old_space_size=4096 server/index.js",
     "dev:test": "cross-env NODE_ENV=test node  server/index.js",
     "dev:test01": "cross-env NODE_ENV=test01 node  server/index.js",
     "dev:test02": "cross-env NODE_ENV=test02 node  server/index.js",

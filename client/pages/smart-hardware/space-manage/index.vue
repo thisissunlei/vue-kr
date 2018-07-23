@@ -246,7 +246,7 @@ export default {
                   key: 'operation',
                   align:'center',
                   render:(h,obj)=>{
-                      if(obj.row.type=="OFFICE" || obj.row.type=="STATION"){
+                      if(obj.row.type=="OFFICE" || obj.row.type=="STATION" || obj.row.type=="BOARDROOM"){
                           return h('div', [
                                 h('Button', {
                                     props: {

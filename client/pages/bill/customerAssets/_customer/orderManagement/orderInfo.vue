@@ -19,7 +19,7 @@
         </div>
         <div class="bill-zone order-fees-bill">
             <div class="stages-header bill-header">
-                <div class="right2">欠款信息</div>
+                <!-- <div class="right2">欠款信息</div> -->
                 <div class="right1">已付信息</div>
                 <div class="left">费用信息</div>
             </div>
@@ -85,7 +85,7 @@ export default {
                     title: '费用项',
                     align: 'center',
                     key: 'feeName',
-                    width: 140,
+                    width: 92,
                 },
                 {
                     title: '费用期间',
@@ -315,26 +315,26 @@ export default {
                         return h('div', { 'class': obj }, str)
                     }
                 },
-                {
-                    title: '欠款额',
-                    align: 'center',
-                    key: 'unpaid',
-                    width: amountWidth,
-                    className: "colPadRight",
-                    render: (h, params) => {
-                        if (params.row.unpaid) {
-                            let amount = utils.thousand((params.row.unpaid).toFixed(2))
-                            return h('div', '¥' + amount)
-                        }
-                    }
-                },
-                {
-                    title: '欠款天数',
-                    align: 'center',
-                    key: 'unpaidDays',
-                    width: statusWidth,
-                    className: "colPadRight",
-                },
+                // {
+                //     title: '欠款额',
+                //     align: 'center',
+                //     key: 'unpaid',
+                //     width: amountWidth,
+                //     className: "colPadRight",
+                //     render: (h, params) => {
+                //         if (params.row.unpaid) {
+                //             let amount = utils.thousand((params.row.unpaid).toFixed(2))
+                //             return h('div', '¥' + amount)
+                //         }
+                //     }
+                // },
+                // {
+                //     title: '欠款天数',
+                //     align: 'center',
+                //     key: 'unpaidDays',
+                //     width: statusWidth,
+                //     className: "colPadRight",
+                // },
             ],
 
             orderDataDemo: [

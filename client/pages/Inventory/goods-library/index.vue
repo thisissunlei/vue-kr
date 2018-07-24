@@ -790,7 +790,9 @@ export default {
          this.$http.post(url,data).then((response)=>{ 
               this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.serviceOpen=!this.serviceOpen;
+              if(!this.isAdd){
+                  this.serviceOpen=!this.serviceOpen;
+              }
               this.newmodal=false;
               this.editOpen=false;
             }).catch((error)=>{

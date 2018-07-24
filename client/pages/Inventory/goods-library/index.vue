@@ -790,11 +790,15 @@ export default {
          this.$http.post(url,data).then((response)=>{ 
               this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              if(!this.isAdd){
-                  this.serviceOpen=!this.serviceOpen;
-              }
               this.newmodal=false;
               this.editOpen=false;
+              this.openMessage=true;
+              this.MessageType='success';
+              this.warn="编辑成功";
+              if(!this.isAdd){
+                  this.serviceOpen=!this.serviceOpen;
+                  this.warn="新建成功";
+              }
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";

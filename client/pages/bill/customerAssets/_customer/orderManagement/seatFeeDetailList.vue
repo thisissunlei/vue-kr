@@ -132,6 +132,6 @@ export default {
 <style lang="less">
 .seat-info-card-container {
     width: 793px;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
 }
 </style>

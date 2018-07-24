@@ -143,9 +143,9 @@ export default {
 
        title : function(){
            if(this.groupLevel == "PARENT"){
-               return this.groupName + "的子集列表"
+               return this.groupName + "[父级组]的子集列表"
            }else{
-               return this.groupName + "的父级组列表"
+               return this.groupName + "[设备组]的父级组列表"
            }
        }
    },

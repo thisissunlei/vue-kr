@@ -2,7 +2,7 @@
     <div class="tip-box">
      
         <Tooltip :placement="toolTipsDiraction">
-            <span  >
+            <span  class="img-box">
                 <img src="./images/tips.svg" class="imgInitialClass"/>
             </span>
             <div slot="content" class="tool-tip-box">
@@ -60,12 +60,22 @@ export default{
 <style lang="less" >
 .tip-box{
     display: inline-block;
+    max-width:100px;
+    max-height:100px;
+    overflow:hidden;
     vertical-align:bottom;
     padding: 5px 10px;
-    .imgInitialClass{
-        width : 25px;
-        vertical-align:top;
+    .img-box{
+        display:inline-block;
+        width:100%;
+        height:100%;
+        overflow : hidden;
+        .imgInitialClass{
+            width : 25px;
+            vertical-align:top;
+        }
     }
+    
 
 }
     

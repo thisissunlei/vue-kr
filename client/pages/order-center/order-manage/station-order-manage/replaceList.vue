@@ -46,15 +46,11 @@
                 </div>
             </Modal>
             
-            <Modal
-                v-model="openNullify"
-                title="提示信息"
-                width="500"
-            >
-                <Nullify/>
+            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+                <Nullify v-if="openNullify" :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
                 <div slot="footer">
-                    <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                    <!-- <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
                 </div>
             </Modal>
 
@@ -70,7 +66,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract/>
+                <ApplyContract  :requireChineseEnglish='false' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
@@ -117,6 +113,7 @@
                 switchParams:{
                      orderType:'REPLACE'
                 },
+                contractLanguage:'CHINESE',//合同语言类型
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -396,6 +393,10 @@
         },
 
         methods:{   
+            refershJoinList(params) {
+                this.getListData(this.params);
+                this.openNullify = false;
+            },
             submitNullify (){
                 let params={
                     id:this.id
@@ -552,6 +553,10 @@
             showApply(params){
                 this.id=params.row.id;
                 this.closeApply();
+            },
+            //中英文合同选择切换
+            onSelectApplyContract(contractLanguage){
+                this.contractLanguage=contractLanguage;
             }
         }
     }

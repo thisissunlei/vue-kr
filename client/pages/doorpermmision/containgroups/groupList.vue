@@ -1,31 +1,48 @@
 <template>
-    <div class="g-door-permmision-owner">
-        <SectionTitle :title="title" />
-        <div class="tabs-box">
-            <Tabs >
-                <TabPane label="个人    " icon="person">
-                    <MemberList/>
-                </TabPane>
-                <TabPane label="组     " icon="folder">
-                    <GroupList/>
-                </TabPane>
-            </Tabs>
+  <div class="g-openlog">
+      <div class="g-openlog-box">
+            
+            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" :groupLevel="groupLevel"/>
+            <div class="table-box">
+                <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <div class="loading-box"  v-if="loading">
+                    <Spin fix>
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                    </Spin>
+                </div>
+            </div>
+           <Modal v-model="showTips" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                    <Icon type="information-circled"></Icon>
+                    <span>确认删除</span>
+                </p>
+                <div style="text-align:center">
+                    <p>解除关系后后，父级组的成员将失去自己组的设备权限。</p>
+                    <p>确定解除吗？</p>
+                </div>
+                <div slot="footer">
+                    <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
+                </div>
+        </Modal>
+        <Modal v-model="groupAllListShow" width="900">
+            <DoorGroupList :groupLevel = "groupLevel" v-if="groupAllListShow" @addGroupsToGroup="addGroupsToGroup"/>
+            <div slot="footer">
+            </div>
+        </Modal>
         </div>
     </div>
 </template>
 <script>
-import SectionTitle from '~/components/SectionTitle';
+import SearchForm from './searchGroupForm';
 import dateUtils from 'vue-dateutils';
 import DoorGroupList from '~/components/DoorGroupList';
-import GroupList from './groupList';
-import MemberList from './memberList';
 
 
 
 export default {
    components:{
-      SectionTitle,DoorGroupList,
-      GroupList,MemberList
+      SearchForm,DoorGroupList
    },
    data(){
      return{
@@ -85,7 +102,7 @@ export default {
                         }
                     },
                     {
-                        title: '操作',
+                        title: '解除父子关系',
                         key: 'phone',
                         align:'center',
                         render: (h, params) => {
@@ -100,7 +117,7 @@ export default {
                                             this.remove(params.row)
                                         }
                                     }
-                                }, '移除')
+                                }, '解除')
                             ]);
                         }
                     },
@@ -121,12 +138,7 @@ export default {
        this.getListData();
        this.getSmartHardwareDict();
    },
-   computed: {
-
-       title : function(){
-            return "权限授予详情（组名称："+ this.groupName + "）"
-       }
-   },
+   
    methods:{
        returnResultExplain(data){
            if(data.success){
@@ -282,12 +294,39 @@ export default {
 }
 </script>
 <style lang="less">
-.g-door-permmision-owner{
-    .tabs-box{
-        padding:10px;
+    .g-openlog{
+        height: 100%;
+        overflow: scroll;
+        .g-openlog-box{
+            // overflow: scroll;
+        }
     }
-}
-    
+    .table-box{
+        padding: 0 10px 10px 10px;
+        .ivu-table-cell{
+            padding : 0;
+        }
+        .all-data{
+            text-align:center;
+            padding:10px;
+        }
+        .loading-box{
+            height: 100px;
+            position: relative;
+            .demo-spin-icon-load{
+                animation: ani-demo-spin 1s linear infinite;
+            }
+            @keyframes ani-demo-spin {
+                from { transform: rotate(0deg);}
+                50%  { transform: rotate(180deg);}
+                to   { transform: rotate(360deg);}
+            }
+        }
+        .bottom-page{
+            float:right;
+            margin:10px;
+        }
+    }
 </style>
 
 

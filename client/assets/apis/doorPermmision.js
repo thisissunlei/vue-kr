@@ -37,6 +37,11 @@ export default  {
         url: '/api/iot-platform/auth-group/actions/add-parent',
         method: 'post'
     },
+    //门禁权限组的权限拥有人
+    'get-door-permmsion-owner-member':{
+        url: '/api/iot-platform/auth/user-group/user/list',
+        method: 'get'
+    },
 
   }
 

@@ -19,6 +19,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     } 
     
     contentDom.innerHTML = obj.str;
+    tirDom.style.maxWidth = obj.width + 'px';
     tirDetail=tirDom.getBoundingClientRect();
     contentDom=document.getElementById('gantt-chart-tool-tip-content'+selectId);
     
@@ -51,7 +52,6 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     }
      
     //计算位置赋值
-    //tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
     if(isIcon=='icon'){

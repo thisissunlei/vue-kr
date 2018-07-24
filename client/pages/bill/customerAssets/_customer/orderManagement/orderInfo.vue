@@ -56,7 +56,7 @@ export default {
                     title: '工位/房间明细',
                     align: 'center',
                     key: 'seatNames',
-                    width:120,
+                    width: 120,
                     render(h, params) {
                         return h('Tooltip', {
                             props: {
@@ -91,7 +91,7 @@ export default {
                     title: '费用期间',
                     align: 'center',
                     key: 'feePeroid',
-                    width:124,
+                    width: 124,
                     render(h, params) {
                         let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentStart)) + '  至  ' + dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentEnd));
                         return h('span', time)
@@ -197,7 +197,9 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        if (params.row.paid != null && params.row.amount != null) {
+                        if (!isNaN(params.row.paid) && !isNaN(params.row.amount)) //
+                        // if (params.row.paid != null && params.row.amount != null)
+                        {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
                             if (Number(params.row.amount) === Number(params.row.paid)) {
@@ -216,7 +218,9 @@ export default {
                     render: (h, params) => {
                         let str = '未付清'
                         let obj = { clear: false }
-                        if (params.row.amount != null && params.row.paid != null) {
+                        // if (params.row.amount != null && params.row.paid != null)
+                        if (!isNaN(params.row.paid) && !isNaN(params.row.amount))
+                         {
                             if (Number(params.row.amount) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true
@@ -275,7 +279,7 @@ export default {
                         if (!isNaN(params.row.need)) {
                             let amount = utils.thousand((params.row.need).toFixed(2))
                             return h('div', '¥' + amount)
-                        }else{
+                        } else {
                             return h('div', '¥0.00')
                         }
                     }
@@ -287,7 +291,7 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        // if (params.row.paid && params.row.need) 
+                        if (!isNaN(params.row.need) && !isNaN(params.row.paid)) //
                         {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
@@ -307,7 +311,8 @@ export default {
                     render: (h, params) => {
                         let str = '未付清'
                         let obj = { clear: false }
-                        if (params.row.need && params.row.paid) {
+                        if (!isNaN(params.row.need) && !isNaN(params.row.paid)) //
+                        {
                             if (Number(params.row.need) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true
@@ -408,10 +413,10 @@ export default {
         this.formatDataList();
     },
     methods: {
-        getOrderData(item){
-            item.installmentFee.map(fee=>{
-                fee.orderId=item.orderId
-            })           
+        getOrderData(item) {
+            item.installmentFee.map(fee => {
+                fee.orderId = item.orderId
+            })
             return item.installmentFee;
         },
         formatNumber(data) {

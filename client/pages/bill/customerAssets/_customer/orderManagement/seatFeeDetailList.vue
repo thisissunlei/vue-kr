@@ -58,7 +58,7 @@ export default {
                     className: "colPadRight",
                     width: 100,
                     render: (h, params) => {
-                        if (params.row.amount) {
+                        if (!isNaN(params.row.amount)) {
                             return h('div', '¥' + utils.thousand((params.row.amount).toFixed(2)))
                         }
 

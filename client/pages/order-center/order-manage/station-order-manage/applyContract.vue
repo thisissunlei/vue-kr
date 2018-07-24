@@ -7,13 +7,13 @@
 
             <div style="height:300px;">
                 <div class="cachet-box" @click="selectCachet(false)">
-                    <img src="./images/noCachet.png" />
+                    <img src="./images/noCachet.jpg" />
                     <div>示例一：中文版合同</div>
                     <div :class="!this.isCH_AND_EN?'select cachet':'select'" />
                 </div>
 
                 <div class="cachet-box" @click="selectCachet(true)">
-                    <img src="./images/cachet.png" />
+                    <img src="./images/cachet.jpg" />
                     <div>示例二：中英文版合同</div>
                     <div :class="this.isCH_AND_EN?'select cachet':'select'" />
                 </div>

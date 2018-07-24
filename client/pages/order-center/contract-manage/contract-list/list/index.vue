@@ -61,13 +61,13 @@
 
             <div style="height:300px;">
                 <div class="cachet-box" @click="selectCachet(false)">
-                    <img src="./images/noCachet.png" />
+                    <img src="./images/noCachet.jpg" />
                     <div>示例一：未加盖公章的合同</div>
                     <div :class="!this.isCachet?'select cachet':'select'" />
                 </div>
 
                 <div class="cachet-box" @click="selectCachet(true)">
-                    <img src="./images/cachet.png" />
+                    <img src="./images/cachet.jpg" />
                     <div>示例二：加盖公章的合同</div>
                     <div :class="this.isCachet?'select cachet':'select'" />
                 </div>

@@ -1,31 +1,49 @@
 <template>
-    <div class="g-door-permmision-owner">
-        <SectionTitle :title="title" />
-        <div class="tabs-box">
-            <Tabs >
-                <TabPane label="个人    " icon="person" v-if="groupLevel!=='PARENT'">
-                    <MemberList v-if="groupLevel!=='PARENT'"/>
-                </TabPane>
-                <TabPane label="组     " icon="folder" >
-                    <GroupList/>
-                </TabPane>
-            </Tabs>
+  <div class="g-openlog">
+      <div class="g-openlog-box">
+            
+            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addDevice = "addDevice" :groupLevel="groupLevel"/>
+            <div class="table-box">
+                <Table :columns="columns1" :data="deviceList" size="small" @on-selection-change="selectedChange"></Table>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <div class="loading-box"  v-if="loading">
+                    <Spin fix>
+                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                    </Spin>
+                </div>
+            </div>
+           <Modal v-model="showTips" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                    <Icon type="information-circled"></Icon>
+                    <span>确认删除</span>
+                </p>
+                <div style="text-align:center">
+                    <p>如果把会员从该组删除，会员将失去该组内所有设备权限</p>
+                    <p>确定删除吗？</p>
+                </div>
+                <div slot="footer">
+                    <Button type="error" size="large" long  @click="confirmDelete">删除</Button>
+                </div>
+        </Modal>
+        <Modal v-model="groupAllListShow" width="990">
+            <DeviceList :groupLevel = "groupLevel" v-if="groupAllListShow" @addDevice="addDevicePermmision"/>
+            <div slot="footer">
+            </div>
+        </Modal>
         </div>
     </div>
 </template>
 <script>
-import SectionTitle from '~/components/SectionTitle';
+import SearchForm from './searchDeviceForm';
 import dateUtils from 'vue-dateutils';
-import DoorGroupList from '~/components/DoorGroupList';
-import GroupList from './groupList';
-import MemberList from './memberList';
+import DeviceList from '~/components/DeviceList';
 
 
 
 export default {
    components:{
-      SectionTitle,DoorGroupList,
-      GroupList,MemberList
+      SearchForm,
+      DeviceList
    },
    data(){
      return{
@@ -37,8 +55,8 @@ export default {
         totalCount : 0,
         page : '',
         searchData :{
-            groupId: '',
-            pageSize:25
+            pageSize:25,
+            granteeId : ''
         },
         loading : false,
         openTypeList :[],
@@ -49,31 +67,32 @@ export default {
                         align: 'center'
                     },
                      {
-                        title: '组名称',
+                        title: '社区名称',
                         key: 'name',
                         align:'center',
                         
                     },
                     {
-                        title: '社区',
-                        key: 'communityName',
-                        align:'center',
-                        
-                    },
-                    {
-                        title: '公司',
-                        key: 'company',
-                        align:'center',
-                        
-                    },
-                    {
-                        title: '操作人',
+                        title: '标题',
                         key: 'phone',
                         align:'center',
                         
                     },
+                    
                     {
-                        title: '操作时间',
+                        title: '显示',
+                        key: 'creatorName',
+                        align:'center',
+                        
+                    },
+                    {
+                        title: '硬件ID',
+                        key: 'creatorName',
+                        align:'center',
+                        
+                    },
+                    {
+                        title: '授权时间',
                         key: 'ctime',
                         align:'center',
                         render(h,obj){
@@ -107,7 +126,7 @@ export default {
                     
                     
                 ],
-                openLogList: []
+                deviceList: []
      }
    },
    created(){
@@ -115,22 +134,15 @@ export default {
    },
    mounted(){
        GLOBALSIDESWITCH("false");
-       this.searchData.groupId = this.$route.query.groupid;
+       this.searchData.granteeId = this.$route.query.groupid;
+       this.searchData.granteeType = this.$route.query.groupLevel;
+       
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
        this.getListData();
-       this.getSmartHardwareDict();
    },
-   computed: {
-
-       title : function(){
-           if(this.groupLevel!=="PARENT"){
-                return "权限授予详情（组名称："+ this.groupName + "）"
-           }else{
-                return "已有权限详情（组名称："+ this.groupName + "）"
-           }
-       }
-   },
+   
+   
    methods:{
        returnResultExplain(data){
            if(data.success){
@@ -159,14 +171,15 @@ export default {
        },
        getListData(){
 
+           console.log("searchData",this.searchData);
+
             let _this =this;
             let params = Object.assign({},this.searchData,{date:new Date()});
-            var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
+            var reqURL = "get-device-in-group";
             this.$http.get(reqURL,params).then((res)=>{
                 
                 _this.totalCount = res.data.totalCount;
-                _this.openLogList = res.data.items;
-               
+                _this.deviceList = res.data.items;
                 
                 _this.loading = false
             }).catch((error)=>{
@@ -175,27 +188,7 @@ export default {
                 });
             })
        },
-       getSmartHardwareDict(){
-           this.$http.get('get-smart-hard-ware-dict','').then((res)=>{
-                this.openTypeList = res.data.OpenType;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-       },
-      
-       returnOpenType(type){
-           var indexNo ;
-           var arr = this.openTypeList.map(function(item,index){
-               
-               if(type == item.value){
-                   indexNo = index
-               }
-               return item.desc;
-           })
-           return arr[indexNo]
-       },
+       
        returnResult(result){
            if(result == true){
                return "成功" 
@@ -209,10 +202,10 @@ export default {
        },
        deleteRelations(){
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要解除关系的组");
+               this.$Message.warning("请选择要移除的人");
                return;
            }
-           this.confirmDelete();
+           this.showTipOrNot();
        },
        showTipOrNot(){
            this.showTips = !this.showTips;
@@ -222,18 +215,17 @@ export default {
            var relationIdsArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-               console.log("arr[i].row",arr[i])
-               relationIdsArr.push(arr[i].relationId);
+               relationIdsArr.push(arr[i].id);
            }
            var params = {
-               relationIds:relationIdsArr.join(",")
+               ids:relationIdsArr.join(",")
            }
            
-            this.$http.delete('delete-father-son-relation', params).then((response) => {
+            this.$http.post('delete-member-permmision-from-group', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();
-                this.$Message.success('解除关系成功');
+                this.$Message.success('移除成功');
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })
@@ -242,22 +234,26 @@ export default {
         selectedChange(selection){
             this.selectedItems = selection;
         },
-        addGroups(){
+        addDevice(){
             this.groupAllListShowFun()
         },
         groupAllListShowFun(){
             this.groupAllListShow = !this.groupAllListShow
         },
-        addGroupsToGroup(selectedAddItems,StatuParam){
+        addDevicePermmision(selectedAddItems,StatuParam){
             var selectedItemsIds=[];
+            console.log("selectedAddItems====>",selectedAddItems);
             for(var i=0;i<selectedAddItems.length;i++){
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
-            console.log("selectedItemsIds",selectedItemsIds);
             var paramsStr = selectedItemsIds.join(',');
-            var url = this.groupLevel =="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
-            var paramsOther = this.groupLevel =="PARENT"?{children:paramsStr}:{parents:paramsStr};
-            var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
+            var url = this.groupLevel =="PARENT"?"add-device-to-group":"add-device-to-group";
+            var paramsOther = this.groupLevel =="PARENT"?{deviceIds:paramsStr}:{deviceIds:paramsStr};
+            var basicInfo = {
+                granteeId : this.searchData.groupId,
+                granteeType : this.searchData.granteeType,
+            }
+            var params = Object.assign({},basicInfo,paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){
@@ -286,12 +282,39 @@ export default {
 }
 </script>
 <style lang="less">
-.g-door-permmision-owner{
-    .tabs-box{
-        padding:10px;
+    .g-openlog{
+        height: 100%;
+        overflow: scroll;
+        .g-openlog-box{
+            // overflow: scroll;
+        }
     }
-}
-    
+    .table-box{
+        padding: 0 10px 10px 10px;
+        .ivu-table-cell{
+            padding : 0;
+        }
+        .all-data{
+            text-align:center;
+            padding:10px;
+        }
+        .loading-box{
+            height: 100px;
+            position: relative;
+            .demo-spin-icon-load{
+                animation: ani-demo-spin 1s linear infinite;
+            }
+            @keyframes ani-demo-spin {
+                from { transform: rotate(0deg);}
+                50%  { transform: rotate(180deg);}
+                to   { transform: rotate(360deg);}
+            }
+        }
+        .bottom-page{
+            float:right;
+            margin:10px;
+        }
+    }
 </style>
 
 

@@ -57,6 +57,23 @@ export default  {
         url: '/api/iot-platform/auth/user-group-mapping/delete',
         method: 'post'
     }, 
+    //获取智能硬件通用字典
+    'get-smart-hard-dict':{
+        url: '/api/iot-platform/dict/common',
+        method: 'get'
+    }, 
+
+    //获取组授权的设备
+    'get-device-in-group':{
+        url: '/api/iot-platform/auth/device-grant/list',
+        method: 'get'
+    }, 
+    //将设备授权给某个组
+    'add-device-to-group':{
+        url: '/api/iot-platform/auth/device-grant/add',
+        method: 'post'
+    }, 
+    // ?
     
 
   }

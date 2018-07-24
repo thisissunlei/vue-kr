@@ -3,11 +3,11 @@
         <SectionTitle :title="title" />
         <div class="tabs-box">
             <Tabs >
-                <TabPane label="个人    " icon="person" v-if="groupLevel!=='PARENT'">
-                    <MemberList v-if="groupLevel!=='PARENT'"/>
+                <TabPane label="设备" icon="ipad">
+                    <DeviceList />
                 </TabPane>
-                <TabPane label="组     " icon="folder" >
-                    <GroupList/>
+                <TabPane label="组" icon="folder" v-if="groupLevel=='PARENT'" >
+                    <GroupList v-if="groupLevel=='PARENT'"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -17,15 +17,15 @@
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import DoorGroupList from '~/components/DoorGroupList';
-import GroupList from './groupList';
-import MemberList from './memberList';
+import GroupList from '../powerOwner/groupList';
+import DeviceList from './deviceList';
 
 
 
 export default {
    components:{
       SectionTitle,DoorGroupList,
-      GroupList,MemberList
+      GroupList,DeviceList
    },
    data(){
      return{
@@ -115,7 +115,6 @@ export default {
    },
    mounted(){
        GLOBALSIDESWITCH("false");
-       this.searchData.groupId = this.$route.query.groupid;
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
        this.getListData();
@@ -127,7 +126,7 @@ export default {
            if(this.groupLevel!=="PARENT"){
                 return "权限授予详情（组名称："+ this.groupName + "）"
            }else{
-                return "已有权限详情（组名称："+ this.groupName + "）"
+                return "已有权限(权限来源)详情（组名称："+ this.groupName + "）"
            }
        }
    },

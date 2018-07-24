@@ -65,14 +65,18 @@ function getToolTipContent(thatData,param,time) {
         label='在租';
         width=240;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
-        if(!data.endDate){
+        if(!data.realEnd&&!data.realStart){
+            width=60;
+        }else if(!data.realEnd||!data.realStart){
             width=168;
         }else{
             width=240;
         }
         label="未租";
     }else if(param=='OFF'||(thatData.status=='OFF'&&param=='2')){
-        if(!data.endDate){
+        if(!data.realEnd&&!data.realStart){
+            width=60;
+        }else if(!data.realEnd||!data.realStart){
             width=168;
         }else{
             width=240;
@@ -81,10 +85,16 @@ function getToolTipContent(thatData,param,time) {
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
         width = 185;
+        if(!data.realEnd&&!data.realStart){
+            width=100;
+        }
     }
-        var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) :time.startTime;
-        var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) :'-';
-        var str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        var startDay = data.realStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realStart)) :'-';
+        var endDay = data.realEnd ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.realEnd)) :'-';
+        var str='';
+        if(data.realStart||data.realEnd){
+            str = '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
+        }  
         if(data.customerVOs&&data.customerVOs.length){
             str += '<div class="title" style="margin-left:5px;">' + label + '：</div>';
             data.customerVOs.map((item,index)=>{
@@ -93,7 +103,7 @@ function getToolTipContent(thatData,param,time) {
         }else{
             str += '<div class="title" style="margin-left:5px;">' + label + '</div>';
         }    
-
+        
     return {
         str: str,
         width: width

@@ -27,7 +27,7 @@
             </Table>
         </div>
         <div  class='list-footer'>
-                <Button type="primary" @click='submitExport'>导出</Button>
+                <Buttons  type="primary"  label="导出"  checkAction='cmt_investment_excel' @click="submitExport"/>
                 <div style="float: right;">
                     <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
@@ -49,13 +49,15 @@ import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
 import SlotHead from '../fixHead/attract-head';
+import Buttons from '~/components/Buttons';
 
 export default {
     components:{
        Loading,
        SearchForm,
        Message,
-       SlotHead
+       SlotHead,
+       Buttons
     },
     data() {
         return{

@@ -1,30 +1,37 @@
 import colorStatus from './colorStatus';
-function init(data,picProperty,dataUrl,drawWrap){
-    var dataRender=[];
-    var scale=1;
-    var nameWidth=document.getElementById('spanWidthMapInventoryName');
-    var caWidth=document.getElementById('spanWidthMapInventoryCapacity');
+import utils from '~/plugins/utils';
+import homePic from '~/assets/images/can.svg';
+import occupyPic from '~/assets/images/use.svg';
+function init(data,picProperty,dataUrl){
+    let dataRender=[];
+    let scale=1;
+    let dom=utils.createElement();
     if(data.figures.length){
-        var spaceArr=[];
-        var parentMin=32;
+        let spaceArr=[];
+        let parentMin=32;
         data.figures.map((item,index)=>{
             //找空间最小宽度
             if(item.belongType=='SPACE'){
-                nameWidth.innerHTML=item.cellName?item.cellName:'601';
-                caWidth.innerHTML=item.capacity+'工位';
-                parentMin=caWidth.offsetWidth>nameWidth.offsetWidth?caWidth.offsetWidth:nameWidth.offsetWidth;
+                let name=utils.getStrWidth(dom,item.cellName);
+                let opacity=utils.getStrWidth(dom,item.capacity+'工位');
+                parentMin=name>opacity?name:opacity;
                 item.parentMin=parentMin;
                 spaceArr.push(item);
+            }else{
+                if(item.futureStatus){
+                    item.parentMin=17;
+                    spaceArr.push(item);
+                }            
             }
             
             //左上,根据中心点坐标转换成左上角坐标值
-            var position={
+            let position={
                 x:item.cellCoordX-item.cellWidth/2,
                 y:item.cellCoordY-item.cellHeight/2
             }
-            var list={};
-            var isName=item.belongType=='SPACE'?item.cellName:'';
-            var isSuite=item.belongType=='SPACE'?item.capacity+'工位':'';
+            let list={};
+            let isName=item.belongType=='SPACE'?item.cellName:'';
+            let isSuite=item.belongType=='SPACE'?item.capacity+'工位':'';
             list.name=isName;
             list.property=isSuite;
             list.pos=position.x+' '+position.y;
@@ -37,25 +44,35 @@ function init(data,picProperty,dataUrl,drawWrap){
             list.item=item;
             dataRender.push(list);
         })
-        
+        dom&&document.body.removeChild(dom);
         
         //scale计算
-        var minW=0.5;
-        var minH=0.5;
-        var min=0.5;
+        let minW=0.5;
+        let minH=0.5;
+        let min=0.5;
         if(spaceArr.length){
+            //两行字的高度加上icon的高度
+            let fixedH=spaceArr[0].parentMin;
+            if(spaceArr[0].belongType=='SPACE'){
+                fixedH=spaceArr[0].futureStatus?32+42:32;
+            }
+            minH=fixedH/spaceArr[0].cellHeight;
             minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
-            minH=32/spaceArr[0].cellHeight;
             
             spaceArr.map((item,index)=>{
+                let switchH=item.parentMin;
+                if(item.belongType=='SPACE'){
+                    switchH=item.futureStatus?32+42:32;
+                }
                 if((item.parentMin/item.cellWidth)>minW){
                     minW=item.parentMin/item.cellWidth;
                 }
-                if((32/item.cellHeight)>minH){
-                    minH=32/item.cellHeight;
+                if((switchH/item.cellHeight)>minH){
+                    minH=switchH/item.cellHeight;
                 }
             }) 
         }
+        
         min=minW>minH?minW:minH;
         if(min>1){
             scale=1
@@ -76,23 +93,28 @@ function init(data,picProperty,dataUrl,drawWrap){
             list.pos=Number(list.cellCoordX)*scale+' '+Number(list.cellCoordY)*scale;
             list.cellCoordX=Number(list.cellCoordX)*scale;
             list.cellCoordY=Number(list.cellCoordY)*scale;
+            let picRen=list.item.futureStatus?(list.item.futureStatus=='FUTURE_AVAILABLE'?homePic:occupyPic):'';
+            if(list.item.belongType=='SPACE'){
+                list.bgsrc=picRen;
+            }else{
+                list.desksrc=picRen;
+            }
+            //list.status=true;
         })
     }
-
+    
     
     //pic尺寸
-    picProperty={
+    let pic={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
         pos:data.graphFilePath,
         picName:data.communityName+data.currentDate,
-        dataUrl:dataUrl,
-        picId:data.graphFileId
+        dataUrl:dataUrl
     }
     
-    //高度自适应图片高度
-    drawWrap.style.height=picProperty.height+20+'px';
-    return {data:[].concat(dataRender),pic:picProperty};
+    
+    return {data:[].concat(dataRender),pic:pic};
 }
 
 export default init;

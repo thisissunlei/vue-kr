@@ -1,6 +1,5 @@
 //公共的api
-module.exports = {
-    //
+export default  {
     'post-list-upload-url': {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
@@ -20,9 +19,14 @@ module.exports = {
         url:'/api/op/sys/downFile',
         method:'get'
     },
-
-
-
+    'down-file':{
+        url:'/api/op/sys/downFile',
+        method:'get'
+    },
+    'get-customers-order-currency':{
+        url:'/api/krspace-op-web/customer/my-customers/order-currency',
+        method:'get'
+    },
     //权限
     'type-page':{
         url:'/api/pm/role/list/type/page',
@@ -70,6 +74,11 @@ module.exports = {
     },
     'roleActionCheck':{
         url:'api/pm/role/action/check',
+        method: 'get'
+    },
+    //获取客户信息
+    'getUserData':{
+        url:'/api/krspace-sso-web/sso/sysOwn/findUserData',
         method: 'get'
     }
 }

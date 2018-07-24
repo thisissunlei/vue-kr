@@ -1,22 +1,3 @@
-<style lang="less">
-.com-select-customers {
-    ::-webkit-input-placeholder {
-        color: #666;
-    }
-    ::-moz-placeholder {
-        color: #666;
-    } /* firefox 19+ */
-    :-ms-input-placeholder {
-        color: #666;
-    } /* ie */
-    input:-moz-placeholder {
-        color: #666;
-    }
-}
-</style>
-
-
-
 <template>
     <div class="com-select-customers">
         <Select v-model="customer" clearable  filterable remote :placeholder="value" :remote-method="remoteCustomer" :loading="loading1" :disabled="disabled" @on-change="changeContent" :label-in-value="labelInValue">
@@ -27,26 +8,34 @@
 
 
 <script>
+
+
 import http from '~/plugins/http.js';
 
-export default {
-    props: {
-        onchange: Function,
-        value: String,
-        disabled: Boolean,
-        labelInValue: {
-            default: false,
-            type: Boolean
-        },
-    },
-    data() {
 
-        return {
-            customer: '',
-            loading1: false,
-            customerOptions: [],
-        };
-    },
+    export default {
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean,
+            labelInValue:{
+                default:false,
+                type:Boolean
+            },
+            url:{
+                type:String,
+                default:'get-customer'
+            }
+        },
+    
+        data() {
+
+            return {
+                customer: '',
+                loading1: false,
+                customerOptions: [],
+            };
+        },
     mounted: function () {
         this.remoteCustomer()
     },
@@ -54,20 +43,17 @@ export default {
         changeContent: function (customer) {
             this.onchange(customer)
         },
-        remoteCustomer(query) {
-            this.loading1 = true;
-            setTimeout(() => {
-                this.getCusomerList(query)
-            }, 200);
-        },
 
+        mounted:function(){
+            this.getCusomerList(' ')
+        },
         getCusomerList: function (name) {
             let params = {
                 company: name || ''
             }
             let list = [];
             let _this = this;
-            http.get('get-customer', params, r => {
+            http.get(this.url, params, r => {
                 list = r.data.customerList;
                 list.map((item) => {
                     let obj = item;
@@ -81,11 +67,25 @@ export default {
             }, e => {
                 console.log('error--->', e)
             })
-            return list;
+           
 
-        }
-
-
+        },
+        remoteCustomer(query) {
+            this.loading1 = true;
+            setTimeout(() => {
+                this.getCusomerList(query)
+            }, 200);
+        },
     }
 }
 </script>
+
+<style lang="less"> 
+    .com-select-community{
+            ::-webkit-input-placeholder { color:#666; }
+            ::-moz-placeholder { color:#666; } /* firefox 19+ */
+            :-ms-input-placeholder { color:#666; } /* ie */
+            input:-moz-placeholder { color:#666; }
+
+    }
+</style>

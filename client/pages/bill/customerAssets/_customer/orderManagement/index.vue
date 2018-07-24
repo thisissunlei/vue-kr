@@ -131,6 +131,7 @@ export default {
 .order-management {
     text-align: left;
     padding-left: 20px;
+    width: 1228px;
     .community-overview {
         margin: 20px 0;
     }

@@ -215,6 +215,7 @@ export default {
     }
     .deposit-cash {
         float: right;
+        right:-58px;
         width: 600px;
     }
 }

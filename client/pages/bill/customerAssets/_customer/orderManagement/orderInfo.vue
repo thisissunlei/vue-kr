@@ -12,7 +12,7 @@
                             <div class="right">已付信息</div>
                             <div class="left">费用信息</div>
                         </div>
-                        <Table border :columns="orderColumns" :data="item.installmentFee"></Table>
+                        <Table border :columns="orderColumns" :data="getOrderData(item)"></Table>
                     </div>
                 </div>
             </div>
@@ -404,6 +404,12 @@ export default {
         this.formatDataList();
     },
     methods: {
+        getOrderData(item){
+            item.installmentFee.map(fee=>{
+                fee.orderId=item.orderId
+            })           
+            return item.installmentFee;
+        },
         formatNumber(data) {
             // '入驻订单—DD021806121624360001（18.01.01至18.12.31）',
             let { orderTypeName, orderName, start, end, orderId } = data
@@ -448,7 +454,7 @@ export default {
         jump2CalDetail(row) {
             this.seatFeeListLoading = true
             let params = {
-                orderId: this.orderId,
+                orderId: row.orderId,
                 seatVO: JSON.stringify(row.seat)
             }
             this.$emit('onShowCalDetail', params)

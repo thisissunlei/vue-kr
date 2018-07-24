@@ -3,7 +3,7 @@
         <p class="title">
             <span @click="clickPanel">
                 <Icon :type="iconType"></Icon>
-                <span>{{data[0]["type"]}}【</span> {{data[0]["seats"]}}
+                <span>{{data[0]["seatTypeName"]}}【</span> {{data[0]["name"]}}
                 <span>】
                 </span>
             </span>

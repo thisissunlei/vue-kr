@@ -271,9 +271,11 @@ export default {
                     key: 'need',
                     className: "colPadRight",
                     render: (h, params) => {
-                        if (params.row.need) {
+                        if (!isNaN(params.row.need)) {
                             let amount = utils.thousand((params.row.need).toFixed(2))
                             return h('div', '¥' + amount)
+                        }else{
+                            return h('div', '¥0.00')
                         }
                     }
                 },
@@ -291,6 +293,9 @@ export default {
                                 obj.clear = true
                             }
                             return h('div', { 'class': obj }, '¥' + amount)
+                        }
+                        else{
+                            return h('div', { 'class': obj }, '¥' + '0.00')
                         }
                     }
                 },

@@ -66,7 +66,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract/>
+                <ApplyContract  :requireChineseEnglish='false' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
@@ -113,6 +113,7 @@
                 switchParams:{
                      orderType:'REPLACE'
                 },
+                contractLanguage:'CHINESE',//合同语言类型
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -552,6 +553,10 @@
             showApply(params){
                 this.id=params.row.id;
                 this.closeApply();
+            },
+            //中英文合同选择切换
+            onSelectApplyContract(contractLanguage){
+                this.contractLanguage=contractLanguage;
             }
         }
     }

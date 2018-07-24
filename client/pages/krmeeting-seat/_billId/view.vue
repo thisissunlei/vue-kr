@@ -261,22 +261,26 @@ export default {
     },
     mounted(){
       this.getSeatDetail()
+        GLOBALSIDESWITCH("false");
+         var _this=this;
       var dom=document.getElementById('layout-content-main');
       var dailyTableDom=document.getElementById('daily-inventory-table-list');
       if(dailyTableDom){
-          this.left=dailyTableDom.getBoundingClientRect().left;
-          this.width=dailyTableDom.getBoundingClientRect().width;
+          
           setTimeout(function(){
-             layoutScrollHeight = dailyTableDom.getBoundingClientRect().top;
+            _this.left=dailyTableDom.getBoundingClientRect().left;
+            _this.width=dailyTableDom.getBoundingClientRect().width;
+            layoutScrollHeight = dailyTableDom.getBoundingClientRect().top;
+            dom.addEventListener("scroll",_this.onScrollListener);
+            window.addEventListener('resize',_this.onResize);  
+           
+            LISTENSIDEBAROPEN(function (params) {
+                _this.sideBar=params;
+            })
           },200)
       }  
       
-      dom.addEventListener("scroll",this.onScrollListener);
-      window.addEventListener('resize',this.onResize);  
-      var _this=this;
-      LISTENSIDEBAROPEN(function (params) {
-          _this.sideBar=params;
-      })
+      
     },
     watch:{
       sideBar:function(val){

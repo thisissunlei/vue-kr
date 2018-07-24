@@ -178,7 +178,7 @@ export default {
        getListData(){
 
             let _this =this;
-            let params = this.searchData;
+            let params = Object.assign({},this.searchData,{date:new Date()});
             var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
             this.$http.get(reqURL,params).then((res)=>{
                 
@@ -280,6 +280,7 @@ export default {
         },
         sendAjaxReq(url,params,StatuParam){
             this.$http.post(url, params).then((response) => {
+                this.getListData();
                 this.$Message.success('添加成功');
                 if(StatuParam && StatuParam=="close"){
                     this.groupAllListShowFun();

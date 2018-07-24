@@ -3,7 +3,7 @@
         <div class="order-management">
             <div class="community-selection">
                 <span style="margin-right:5px">社区</span>
-                <Select clearable v-model="targetCommunity" style="width:200px">
+                <Select v-model="targetCommunity" style="width:200px">
                     <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{item.name }}</Option>
                 </Select>
             </div>

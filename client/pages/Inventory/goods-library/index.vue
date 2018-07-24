@@ -896,7 +896,7 @@ export default {
          var form = new FormData();
 
         // console.log(this.tabForms.floor,"ppppp")
-         form.append('floors',this.floorStr);
+         form.append('floors','');
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
          var xhr = new XMLHttpRequest();

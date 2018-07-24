@@ -1,7 +1,7 @@
 <template>
     <div class="krmeeting-seat">
       <div class="seat-title">散座-{{detailData.communityName}}</div>
-      <Form ref="formItems" :model="formItem" :rules="ruleCustom" label-position="top">
+      <Form ref="formItems" :model="detailData" :rules="ruleCustom" label-position="top">
         <div class="u-upload">
              <FormItem label="封面图（1张）" class="u-input" prop="coverPic" style="width:100%">
                 <div class="content">
@@ -119,7 +119,119 @@
             <span class="price-title">价格日历</span>
             <span class="edit-book" @click="changeBook">去编辑不可预订日期</span>
           </div>
-          <Table  border :columns="priceColumns" :data="priceList" ></Table>
+          <div class="input-table">
+            <Row class="price-row row-header">
+                <Col span="3" class="parice-col">
+                  日期
+                </Col>
+                <Col span="3" class="parice-col">
+                   开放数量 (个)
+                </Col>
+                <Col span="3" class="parice-col">
+                   可预订数量 (个)
+                </Col>
+                <Col span="3" class="parice-col">
+                   会员价 (个·天)
+                </Col>
+                <Col span="4" class="parice-col">
+                   会员优惠价 (个·天)
+                </Col>
+                <Col span="4" class="parice-col">
+                   游客价 (个·天)
+                </Col>
+                <Col span="4" class="parice-col">
+                   游客优惠价 (个·天)
+                </Col>
+            </Row>
+            <Row v-for="(item,index) in detailData.goods" :key="item.id" class="price-row">
+                <Col span="3" class="parice-col">
+                  <span class="date">{{item.enableDate |dateFormat('MM月dd日')}}{{item.enableDateDtr}}</span>
+                </Col>
+                <Col span="3" class="parice-col">
+                   <FormItem style="width:120px" 
+                    :prop="'goods.' + index + '.quantity'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                    >
+                      <Input 
+                          v-model="item.quantity" 
+                          placeholder=""
+                          :maxlength="max"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+                <Col span="3" class="parice-col">
+                   <FormItem style="width:120px" 
+                   :prop="'goods.' + index + '.remainQuantity'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                   >
+                      <Input 
+                          v-model="item.remainQuantity" 
+                          placeholder=""
+                          :maxlength="max"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+                <Col  span="3" class="parice-col">
+                   <FormItem style="width:120px" 
+                   :prop="'goods.' + index + '.priceDecimal'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                   >
+                      <Input 
+                          v-model="item.priceDecimal" 
+                          placeholder=""
+                          :maxlength="max"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+                <Col  span="4" class="parice-col">
+                   <FormItem style="width:120px" 
+                   :prop="'goods.' + index + '.promotionPriceDecimal'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                   >
+                      <Input 
+                          v-model="item.promotionPriceDecimal" 
+                          placeholder=""
+                          :maxlength="maxPrice"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+                <Col  span="4" class="parice-col">
+                   <FormItem style="width:120px" 
+                   :prop="'goods.' + index + '.guestPriceDecimal'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                   >
+                      <Input 
+                          v-model="item.guestPriceDecimal" 
+                          placeholder=""
+                          :maxlength="maxPrice"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+                <Col span="4" class="parice-col">
+                   <FormItem style="width:120px" 
+                    :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
+                    :key="item.id"
+                    :rules="{validator: validateNumber, trigger: 'blur'}">
+                      <Input 
+                          v-model="item.guestPromotionPriceDecimal" 
+                          placeholder=""
+                          :maxlength="maxPrice"
+                          style="width:100px"
+                      />
+                   </FormItem>
+                </Col>
+            </Row>
+          </div>
         </div>
       </Form>
 
@@ -143,7 +255,15 @@ export default {
             }
     },
     data(){
+      const validateNumber = (rule, value, callback) => {
+          if (value && isNaN(value)) {
+              callback(new Error('请填写数字'));
+          } else {
+              callback();
+          }
+      };
       return {
+        validateNumber:validateNumber,
         max:5,
         maxPrice:10,
         formItem:{},
@@ -345,6 +465,7 @@ export default {
         priceList:[],
         detailData:{
           devices:[],
+          goods:[]
         }
       }
     },
@@ -393,77 +514,16 @@ export default {
       getSeatDetail(){
         let { params } = this.$route;
         let communityId = params.billId;
-        // this.$http.get('get-kr-meeting-seat-detail', {cmtId:communityId}).then((res)=>{
-        //   this.krMeetingList = res.data
-        // }).catch((err)=>{
-        //   this.$Notice.error({
-        //       title:err.message
-        //   });
-        // })
-        let jiashuju = {
-          "communityId":1,
-          "communityName":'chaoyang',
-          "coverPic":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg",
-          "ctime":1531134752000,
-          "devices":[{
-            "createDate":1531213067000,"id":1,"imgurl":"阿三打撒","name":"桌子","updateDate":1531213067000
-          }],
-          "goods":[
-            {"communityId":1,
-             "ctime":1531389303000,
-             "enableDate":1531929600000,
-             "guestPrice":100,
-             "guestPriceDecimal":1,
-             "guestPromotionPrice":100,
-             "guestPromotionPriceDecimal":'-',
-             "id":72,"mobileSeatId":1,
-             "price":100,"priceDecimal":1,
-             "promotionPrice":100,"promotionPriceDecimal":1,
-             "quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532016000000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":73,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532102400000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":74,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532188800000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":75,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532275200000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":76,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532361600000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":77,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532448000000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":78,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532534400000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":79,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532620800000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":80,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532707200000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":81,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1532793600000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":82,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533398400000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":89,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533484800000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":90,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533571200000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":91,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533657600000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":92,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533744000000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":93,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531389303000,"enableDate":1533830400000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":94,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-            "communityId":1,"ctime":1531811089000,"enableDate":1534348800000,"guestPrice":200,"guestPriceDecimal":2,"guestPromotionPrice":200,"guestPromotionPriceDecimal":2,"id":95,"mobileSeatId":1,"price":200,"priceDecimal":2,"promotionPrice":200,"promotionPriceDecimal":2,"quantity":1,"remainQuantity":1
-          }],
-          "guestPrice":200,
-          "guestPriceDecimal":2,
-          "guestPromotionPrice":200,
-          "guestPromotionPriceDecimal":2,
-          "id":1,
-          "openQuantity":1,
-          "pics":[{              
-            "id":101,"mobileSeatId":1,"picUrl":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg"
-            },{              
-              "id":102,"mobileSeatId":1,"picUrl":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg"
-            },{              
-              "id":103,"mobileSeatId":1,"picUrl":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg"
-            },{              
-              "id":104,"mobileSeatId":1,"picUrl":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg"
-            },{              
-              "id":105,"mobileSeatId":1,"picUrl":"https://web.krspace.cn/kr-web/images/welcome/members/first-member.jpg"
-            },
-          ],
-          "price":200,
-          "priceDecimal":2,
-          "promotionPrice":200,
-          "promotionPriceDecimal":2,
-          "published":true,
-        }
-        this.detailData = jiashuju;
-        this.priceList = jiashuju.goods;
+        this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
+          this.detailData = res.data;
+          this.priceList = res.data.goods;
+        }).catch((err)=>{
+          this.$Notice.error({
+              title:err.message
+          });
+        })
+        
+        
 
       }    
     }
@@ -538,4 +598,40 @@ export default {
       }
     }
   }
+  .price-row{
+        border:1px solid  #E1E6EB;
+        border-top:none;
+        &:first-child{
+           border-top:1px solid  #E1E6EB; 
+        }
+        .date{
+            display: inline-block;
+            height: 33px;
+            line-height: 33px;
+            margin:15px 0;
+        }
+        .ivu-form-item{
+            margin: 15px 0;
+        }
+        .ivu-form-item-error-tip{
+            padding-top: 3px;
+            padding-left: 10px;
+            position: relative;
+            text-align:left;
+        }
+        .parice-col{
+            text-align:center;
+            border-right:1px solid  #E1E6EB;
+            &:last-child{
+                border-right: none;
+            }
+        }
+    }
+    .row-header{
+        height: 50px;
+        line-height: 50px;
+        background-color: #F5F6FA;
+        font-size: 14px;
+        color:#333;
+    }
 </style>

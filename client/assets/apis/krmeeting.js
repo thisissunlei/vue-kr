@@ -18,7 +18,7 @@ export default {
     },
     // 散座商品详情页
     'get-kr-meeting-seat-detail': {
-        url: '/api/krseat/inventory/view',
+        url: '/api/op/krseat/inventory/view',
         method: 'get'
     },
 } 

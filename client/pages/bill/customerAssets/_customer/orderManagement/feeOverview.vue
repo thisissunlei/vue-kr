@@ -1,7 +1,7 @@
 <template>
     <div class='fee-overview-container'>
-        <Table border class='service-charge' :row-class-name="rowClassName" :columns="serviceChargeColumns" :data="serviceChargeData"></Table>
-        <Table border class='service-charge deposit-cash' :row-class-name="rowClassName" :columns="depositCashColumns" :data="depositCashData "></Table>
+        <Table border class='service-charge' :columns="serviceChargeColumns" :data="serviceChargeData"></Table>
+        <Table border class='service-charge deposit-cash' :columns="depositCashColumns" :data="depositCashData "></Table>
     </div>
 </template>
 <script>
@@ -215,7 +215,7 @@ export default {
     }
     .deposit-cash {
         float: right;
-        right:-58px;
+        right: -58px;
         width: 600px;
     }
 }

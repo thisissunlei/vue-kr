@@ -42,8 +42,8 @@ export default {
         }
     },
     data() {
-        const statusWidth = 90
-        const amountWidth = 130
+        const statusWidth = 80
+        const amountWidth = 110
         return {
             orderColumns: [
                 {
@@ -56,6 +56,7 @@ export default {
                     title: '工位/房间明细',
                     align: 'center',
                     key: 'seatNames',
+                    width:120,
                     render(h, params) {
                         return h('Tooltip', {
                             props: {
@@ -64,7 +65,7 @@ export default {
                         }, [
                                 h('div', {
                                     style: {
-                                        maxWidth: "200px",
+                                        width: "80px",
                                         overflow: "hidden",
                                         textOverflow: "ellipsis",
                                         whiteSpace: "nowrap"
@@ -85,12 +86,12 @@ export default {
                     title: '费用项',
                     align: 'center',
                     key: 'feeName',
-                    width: 92,
                 },
                 {
                     title: '费用期间',
                     align: 'center',
                     key: 'feePeroid',
+                    width:124,
                     render(h, params) {
                         let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentStart)) + '  至  ' + dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.installmentEnd));
                         return h('span', time)
@@ -110,7 +111,7 @@ export default {
                     title: '费用金额',
                     align: 'center',
                     key: 'amount',
-                    width: 140,
+                    width: 110,
                     className: "colPadRight",
                     render: (h, params) => {
                         if (params.row.amount != null) {
@@ -286,16 +287,14 @@ export default {
                     width: amountWidth,
                     className: "colPadRight amount",
                     render: (h, params) => {
-                        if (params.row.paid && params.row.need) {
+                        // if (params.row.paid && params.row.need) 
+                        {
                             let amount = utils.thousand((params.row.paid).toFixed(2))
                             let obj = { clear: false }
                             if (Number(params.row.need) === Number(params.row.paid)) {
                                 obj.clear = true
                             }
                             return h('div', { 'class': obj }, '¥' + amount)
-                        }
-                        else{
-                            return h('div', { 'class': obj }, '¥' + '0.00')
                         }
                     }
                 },
@@ -539,24 +538,24 @@ export default {
             .left {
                 width: 100%;
                 border: none;
-                padding-right: 220px;
+                padding-right: 190px;
             }
             .right {
                 float: right;
                 top: 0;
-                width: 220px;
+                width: 190px;
                 border: none;
                 border-left: 1px solid #e9eaec;
             }
         }
         .bill-header {
             .left {
-                padding-right: 440px;
+                padding-right: 190px;
                 border: none;
             }
             .right1 {
                 float: right;
-                width: 220px;
+                width: 190px;
                 border: none;
                 border-left: 1px solid #e9eaec;
             }

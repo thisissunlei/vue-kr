@@ -38,12 +38,12 @@
 
             		<a href="javascript:void(0);" @click="openBill">点击查看账单列表</a> 
             	</div>
-            	<!-- <div v-if="selectedTab=='order'" class="tab-texts">
+            	<div v-if="selectedTab=='order'" class="tab-texts">
             		<img src="./images/bill.svg" alt="">
 
             		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
-            	</div> -->
-				<OrderManagement v-if="selectedTab=='order'" :customerId="customerId" class="tab-texts"/>
+            	</div>
+				<OrderManagement v-if="selectedTab=='stagingBill'" :customerId="customerId" class="tab-texts"/>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
         </div>
@@ -95,6 +95,9 @@
 				},{
 					name:'账户信息',
 					code:'account'
+				},{
+					name:'分期账单',
+					code:'stagingBill'
 				},{
 					name:'更多',
 					code:'more'

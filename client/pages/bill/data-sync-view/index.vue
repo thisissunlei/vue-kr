@@ -343,7 +343,7 @@ export default {
 </script>
 
 
-<style lang="less" scoped>
+<style lang="less" >
 .g-data-sync-view {
     // margin:-10px;
     .m-detail-header {
@@ -358,7 +358,15 @@ export default {
             border: 2px solid #499df1;
             margin-right: 20px;
         }
-    }
+	}
+	.ivu-tabs-nav .ivu-tabs-tab{
+		width:50%;
+		margin-right:0px;
+		text-align:center;
+	}
+	.ivu-tabs-nav{
+		width:100%;
+	}
     .m-detail-content {
         padding: 30px 24px;
         .ivu-table-wrapper {

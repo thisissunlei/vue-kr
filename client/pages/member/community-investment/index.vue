@@ -2,7 +2,7 @@
 <div class="customer-assets">
    <SectionTitle title="招商角色配置"></SectionTitle>
         <div class="div-search">
-            
+            <SearchFormInput :searchFilter="searchFilter" @onSubmit="searchSubmit"/>
         </div>
         <div class="table-list">
             <Table  border :columns="columns" :data="accountList" />
@@ -24,14 +24,14 @@
 
 <script>
     import SectionTitle from '~/components/SectionTitle';
-    import Buttons from '~/components/Buttons';
+    import SearchFormInput from '~/components/SearchFormInput';
     import utils from '~/plugins/utils';
 
     export default {
         name: 'customerAssets',
         components:{
             SectionTitle,
-            Buttons
+            SearchFormInput
         },
         data () {
             return {
@@ -42,6 +42,12 @@
             params:{
                 pageSize:15,
             },
+            searchFilter:[
+                {label:'登录名',value:'123'},
+                {label:'姓名',value:'123'},
+                {label:'手机号',value:'123'},
+                {label:'邮箱',value:'123'}
+            ],
             accountList:[],
             columns: [
                     
@@ -128,6 +134,9 @@
             changePage(page){
                 this.params.page = page;
                 this.getListData(this.params)
+            },
+            searchSubmit(params){
+                console.log('parm--',params);
             }
         }
     }
@@ -139,6 +148,8 @@
     .div-search{
         text-align: right;
         padding:20px ;
+        margin-top: -10px;
+        margin-bottom: 20px;
     }
     .table-list{
         padding:0 20px;

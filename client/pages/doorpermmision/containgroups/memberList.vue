@@ -2,7 +2,7 @@
   <div class="g-openlog">
       <div class="g-openlog-box">
             
-            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" :groupLevel="groupLevel"/>
+            <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addMember = "addMember" :groupLevel="groupLevel"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="memberList" size="small" @on-selection-change="selectedChange"></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
@@ -18,15 +18,15 @@
                     <span>确认删除</span>
                 </p>
                 <div style="text-align:center">
-                    <p>解除关系后后，父级组的成员将失去自己组的设备权限。</p>
-                    <p>确定解除吗？</p>
+                    <p>如果把会员从该组删除，会员将失去该组内所有设备权限</p>
+                    <p>确定删除吗？</p>
                 </div>
                 <div slot="footer">
-                    <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
+                    <Button type="error" size="large" long  @click="confirmDelete">删除</Button>
                 </div>
         </Modal>
-        <Modal v-model="groupAllListShow" width="900">
-            <DoorGroupList :groupLevel = "groupLevel" v-if="groupAllListShow" @addGroupsToGroup="addGroupsToGroup"/>
+        <Modal v-model="groupAllListShow" width="990">
+            <MemberList :groupLevel = "groupLevel" v-if="groupAllListShow" @addMemberPermmision="addMemberPermmision"/>
             <div slot="footer">
             </div>
         </Modal>
@@ -36,13 +36,13 @@
 <script>
 import SearchForm from './searchMemberForm';
 import dateUtils from 'vue-dateutils';
-import DoorGroupList from '~/components/DoorGroupList';
+import MemberList from '~/components/MemberList';
 
 
 
 export default {
    components:{
-      SearchForm,DoorGroupList
+      SearchForm,MemberList
    },
    data(){
      return{
@@ -131,7 +131,6 @@ export default {
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
        this.getListData();
-       this.getSmartHardwareDict();
    },
    
    methods:{
@@ -169,7 +168,6 @@ export default {
                 
                 _this.totalCount = res.data.totalCount;
                 _this.memberList = res.data.items;
-               
                 
                 _this.loading = false
             }).catch((error)=>{
@@ -178,27 +176,7 @@ export default {
                 });
             })
        },
-       getSmartHardwareDict(){
-           this.$http.get('get-smart-hard-ware-dict','').then((res)=>{
-                this.openTypeList = res.data.OpenType;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-       },
-      
-       returnOpenType(type){
-           var indexNo ;
-           var arr = this.openTypeList.map(function(item,index){
-               
-               if(type == item.value){
-                   indexNo = index
-               }
-               return item.desc;
-           })
-           return arr[indexNo]
-       },
+       
        returnResult(result){
            if(result == true){
                return "成功" 
@@ -212,10 +190,10 @@ export default {
        },
        deleteRelations(){
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要解除关系的组");
+               this.$Message.warning("请选择要移除的人");
                return;
            }
-           this.confirmDelete();
+           this.showTipOrNot();
        },
        showTipOrNot(){
            this.showTips = !this.showTips;
@@ -225,18 +203,17 @@ export default {
            var relationIdsArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-               console.log("arr[i].row",arr[i])
-               relationIdsArr.push(arr[i].relationId);
+               relationIdsArr.push(arr[i].id);
            }
            var params = {
-               relationIds:relationIdsArr.join(",")
+               ids:relationIdsArr.join(",")
            }
            
-            this.$http.delete('delete-father-son-relation', params).then((response) => {
+            this.$http.post('delete-member-permmision-from-group', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();
-                this.$Message.success('解除关系成功');
+                this.$Message.success('移除成功');
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })
@@ -245,21 +222,22 @@ export default {
         selectedChange(selection){
             this.selectedItems = selection;
         },
-        addGroups(){
+        addMember(){
             this.groupAllListShowFun()
         },
         groupAllListShowFun(){
             this.groupAllListShow = !this.groupAllListShow
         },
-        addGroupsToGroup(selectedAddItems,StatuParam){
+        addMemberPermmision(selectedAddItems,StatuParam){
             var selectedItemsIds=[];
+            console.log("selectedAddItems",selectedAddItems);
             for(var i=0;i<selectedAddItems.length;i++){
-                selectedItemsIds.push(selectedAddItems[i].id)
+                selectedItemsIds.push(selectedAddItems[i].uid)
             }
-            console.log("selectedItemsIds",selectedItemsIds);
             var paramsStr = selectedItemsIds.join(',');
-            var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
-            var paramsOther = this.groupLevel ="PARENT"?{children:paramsStr}:{parents:paramsStr};
+            console.log("paramsStr",paramsStr);
+            var url = this.groupLevel =="PARENT"?"add-member-permmision-to-group":"add-member-permmision-to-group";
+            var paramsOther = this.groupLevel =="PARENT"?{uids:paramsStr}:{uids:paramsStr};
             var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },

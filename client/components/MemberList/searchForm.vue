@@ -2,7 +2,7 @@
 
 <div>
      
-    <Form  :model="formItem" label-position="left" inline class="all-equipment-list-searchform">
+    <Form  :model="formItem" label-position="left" inline class="member-list-searchform">
             <FormItem label="社区：">
                 <Select
                     clearable
@@ -29,19 +29,15 @@
             </FormItem>
             
             <FormItem label="姓名：">
-                <Input v-model="formItem.name" size="large" placeholder="姓名" @on-change="inputNameChanged"></Input>
+                <Input v-model="formItem.name" size="large" placeholder="姓名" @on-change="inputNameChange"></Input>
             </FormItem>
-            <FormItem label="电话号：">
-                <Input v-model="formItem.phone" size="large" placeholder="手机号" @on-change="inputPhoneChanged"></Input>
+            <FormItem label="电话：">
+                <Input v-model="formItem.phone" size="large" placeholder="电话" @on-change="inputPhoneChange"></Input>
             </FormItem>
            
             
-            <div class="float-right">
-                
-                <Button type="primary"  @click="addMember" class="delete-relations" icon="ios-plus-outline">{{groupLevel=="PARENT"?"添加":"添加"}}</Button>
-                <Button type="error"  @click="deleteRelations" class="delete-relations" icon="ios-minus-outline">移除</Button>
-            </div>
-
+            <Button type="primary" icon="ios-plus-outline" @click="addMemberContinue" class="search-btn">添加并继续</Button>
+            <Button type="primary" icon="ios-close-outline" @click="addMemberClose" class="search-btn">添加并关闭</Button>
         </Form>
         
 
@@ -50,20 +46,16 @@
 </template>
 
 <script>
+
 export default{
     name:'equipmentSearch',
     data (){
 		return{
-            imgClass : "img-class",
-            tipsContent:[{text:"父级组只能添加设备组作为其子集"},{text:"同样,设备组只能添加父级组作为其父级"}]
-            
-            ,
-            companyList:[],
+           companyList:[],
             communityList :[],
 			formItem : {
 
             },
-
           
 		}
 
@@ -75,9 +67,10 @@ export default{
         
     },
     props:[
-       'groupLevel'
+       
     ],
     components: {
+     
     },
     methods:{
         
@@ -108,31 +101,37 @@ export default{
         onChangeCommunity(communityId){
 
             this.formItem.communityId = communityId;
-            this.searchMember();
+            this.$emit("submitSearchData",this.formItem);
+
         },
         onChangeCompanys(customerId){
             this.formItem.customerId = customerId;
-            this.searchMember();
+            this.$emit("submitSearchData",this.formItem);
+
         },
-        inputNameChanged(e){
+        inputNameChange(e){
             this.formItem.name = e.currentTarget.value;
-            this.searchMember();
-        },
-        inputPhoneChanged(e){
-            this.formItem.phone = e.currentTarget.value;
-            this.searchMember();
-        },
-        searchMember(){
             this.$emit("submitSearchData",this.formItem);
         },
+        inputPhoneChange(e){
+            this.formItem.phone = e.currentTarget.value;
+            this.$emit("submitSearchData",this.formItem);
+        },
+       
         updated:function(){
             this.$emit('formData', this.formItem);
         },
         deleteRelations:function(){
             this.$emit('deleteRelations');
         },
-        addMember: function(){
-            this.$emit('addMember');
+        addMemberContinue:function(){
+            this.addMember("continue")
+        },
+        addMemberClose:function(){
+            this.addMember("close")
+        },
+        addMember: function(param){
+            this.$emit('addMember',param);
         }
 
 
@@ -144,20 +143,16 @@ export default{
 }
 </script>
 <style lang="less" >
-.all-equipment-list-searchform{
+.member-list-searchform{
     padding-left:20px;
     .search-btn{
-       margin-top:32px;
+       margin:32px 10px 0 0 ;
    }
    .float-right{
-        float : right;
-        
+       float : right;
         .delete-relations{
             margin:32px 12px 0 0 ;
         }
-   }
-   .img-class{
-
    }
    
 }

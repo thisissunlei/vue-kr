@@ -220,7 +220,7 @@ export default {
                this.$Message.warning("请选择要解除关系的组");
                return;
            }
-           this.confirmDelete();
+           this.showTipOrNot();
        },
        showTipOrNot(){
            this.showTips = !this.showTips;
@@ -263,12 +263,14 @@ export default {
             }
             console.log("selectedItemsIds",selectedItemsIds);
             var paramsStr = selectedItemsIds.join(',');
-            var url = this.groupLevel ="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
-            var paramsOther = this.groupLevel ="PARENT"?{children:paramsStr}:{parents:paramsStr};
+            console.log("this.groupLevel",this.groupLevel)
+            var url = this.groupLevel =="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
+            var paramsOther = this.groupLevel =="PARENT"?{children:paramsStr}:{parents:paramsStr};
             var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){
+            console.log("url",url);
             this.$http.post(url, params).then((response) => {
                 this.getListData();
                 this.$Message.success('添加成功');

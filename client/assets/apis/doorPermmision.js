@@ -33,7 +33,7 @@ export default  {
         method: 'post'
     },
     //添加父级组
-    'add-son-father-to-son':{
+    'add-father-group-to-son':{
         url: '/api/iot-platform/auth-group/actions/add-parent',
         method: 'post'
     },
@@ -42,6 +42,22 @@ export default  {
         url: '/api/iot-platform/auth/user-group/user/list',
         method: 'get'
     },
+    //获取会员列表
+    'get-member-list':{
+        url: '/api/sso/user/list',
+        method: 'get'
+    },
+    //将会员添加到门禁权限组
+    'add-member-permmision-to-group':{
+        url: '/api/iot-platform/auth/user-group-mapping/add',
+        method: 'post'
+    }, 
+    //将会员从门禁权限组删除
+    'delete-member-permmision-from-group':{
+        url: '/api/iot-platform/auth/user-group-mapping/delete',
+        method: 'post'
+    }, 
+    
 
   }
 

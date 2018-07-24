@@ -109,8 +109,9 @@ export default {
 					value[this.filterValue]=this.searchValue
                 }else{
                     value.content=this.searchValue;
-                }   
-                this.onSubmit && this.onSubmit(value); 
+				}   
+				this.$emit('onSubmit',value);
+                //this.onSubmit && this.onSubmit(value); 
                
 			}
            

@@ -19,19 +19,34 @@
                 </div>
             </div>
         </div>
+
+        <Modal
+            title="授予"
+            v-model="openAwarded"
+            width="440"
+            class-name="no-footer"
+            >
+            <Awarded 
+             @cancel="cancelRole"
+             @submit="submitRole"
+            />
+            <div slot="footer"></div>
+        </Modal>
 </div>
 </template>
 
 <script>
     import SectionTitle from '~/components/SectionTitle';
-    import SearchFormInput from '~/components/SearchFormInput';
+    import SearchFormInput from '~/components/SearchForm';
     import utils from '~/plugins/utils';
+    import Awarded from './awarded';
 
     export default {
         name: 'customerAssets',
         components:{
             SectionTitle,
-            SearchFormInput
+            SearchFormInput,
+            Awarded
         },
         data () {
             return {
@@ -48,6 +63,7 @@
                 {label:'手机号',value:'123'},
                 {label:'邮箱',value:'123'}
             ],
+            openAwarded:false,
             accountList:[],
             columns: [
                     
@@ -103,7 +119,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.showDetail(params.row)
+                                                this.showRole(params.row)
                                             }
                                         }
                             }, '授予'),
@@ -137,12 +153,21 @@
             },
             searchSubmit(params){
                 console.log('parm--',params);
+            },
+            showRole(){
+                this.cancelRole();
+            },
+            cancelRole(){
+                this.openAwarded=!this.openAwarded;
+            },
+            submitRole(params){
+
             }
         }
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .customer-assets{
     position: relative;
     .div-search{
@@ -160,6 +185,11 @@
         margin-left: 10px;
         font-size: 14px;
         cursor: pointer;
+    }
+}
+.no-footer{
+    .ivu-modal-footer{
+        padding:0;
     }
 }
 </style>

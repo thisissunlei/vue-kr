@@ -177,9 +177,9 @@
                     name:[
                         { required: true, message: '请填写客户联系人'}
                     ],
-                    contactTel:[
-                        { required: true, message: '请填写电话联系人手机号',trigger: 'change'},
-                        { required: true, trigger: 'change' ,validator: validatephone},
+                    mobile:[
+                        { required: true, message: '请填写客户联系人电话'},
+
                     ],
                     channelType:[
                         { required: true, message: '请选择客户来源类型'}
@@ -214,9 +214,12 @@
         	var data = false;
             var haveNull = false;
             for(let key in this.formItem){
-                if(!this.formItem[key]){
-                    haveNull = true;
-                }
+                if(key!='mobile'){
+                    if(!this.formItem[key]){
+                        haveNull = true;
+                    }
+                }   
+               
             }
             console.log("haveNull",haveNull)
             if(!haveNull){

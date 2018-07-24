@@ -58,8 +58,12 @@
 				</LabelText>
 			</DetailStyle>
 			<Tabs value="name1">
-                <TabPane label="原始数据" name="name1">标签一的内容</TabPane>
-                <TabPane label="传输数据" name="name2">标签二的内容</TabPane>
+                <TabPane label="原始数据" name="original">
+					 <Table border :columns="originalCol" :data="originalData"></Table>
+				</TabPane>
+                <TabPane label="传输数据" name="transmission">
+					 <Table border :columns="transmissionCol" :data="transmissionData"></Table>
+				</TabPane>
                 
             </Tabs>
 		</div>
@@ -89,15 +93,30 @@ export default {
 		return {
 			detailData:{
 				
-			}
-	
+			},
+			originalCol:[ 
+				{
+					title: 'Name',
+					key: 'name'
+				},
+
+			],
+			originalData:[],
+			transmissionCol:[
+				{
+					title: 'Name',
+					key: 'name'
+				},
+			],
+			transmissionData:[]
+
 		}
 	},
 
 	mounted: function () {
 		GLOBALSIDESWITCH('false');
 		// GLOBALHEADERSET('订单合同')
-		this.getDetailData();
+		// this.getDetailData();
 	},
 
 	methods: {

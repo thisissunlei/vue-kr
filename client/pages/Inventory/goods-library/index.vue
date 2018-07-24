@@ -772,6 +772,7 @@ export default {
         cancelService(){
             this.serviceData={};
             this.newgoodForm={};
+            this.serviceId='';
             this.serviceOpen=!this.serviceOpen;
         },
         clanar(){

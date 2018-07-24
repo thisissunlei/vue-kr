@@ -70,13 +70,13 @@ export default {
                                         textOverflow: "ellipsis",
                                         whiteSpace: "nowrap"
                                     }
-                                }, params.row.seatNames),
+                                }, params.row.seatNames || '-'),
                                 h('div', {
                                     style: {
                                         wordWrap: "break-word"
                                     },
                                     slot: 'content'
-                                }, params.row.seatNames)
+                                }, params.row.seatNames || '-')
                             ]
                         )
                     }
@@ -167,13 +167,9 @@ export default {
                     className: 'col-related-order',
                     width: 90,
                     render: (h, params) => {
-                        let lines = []
-                        let reduceOrders = Array.from(params.row.reduceOrder)
-                        if (reduceOrders.length == 0) {
-                            reduceOrders.push(0)
-                        }
-                        reduceOrders.map(item => {
-                            lines.push(h('p',
+                        if (params.row.seatNames) {
+                            return h(
+                                'span',
                                 {
                                     style: {
                                         color: '#3F4EFC',
@@ -184,11 +180,33 @@ export default {
                                             this.jump2CalDetail(params.row)
                                         }
                                     }
-                                }, '计算明细'))
+                                },
+                                params.row.seatNames ? '计算明细' : '-')
+                        } else {
+                            return h('span', '-')
                         }
-                        )
-                        return h('div', lines)
                     }
+                    // let lines = []
+                    // let reduceOrders = Array.from(params.row.reduceOrder)
+                    // if (reduceOrders.length == 0) {
+                    //     reduceOrders.push(0)
+                    // }
+                    // reduceOrders.map(item => {
+                    //     lines.push(h('p',
+                    //         {
+                    //             style: {
+                    //                 color: '#3F4EFC',
+                    //                 cursor: 'pointer'
+                    //             },
+                    //             on: {
+                    //                 click: () => {
+                    //                     this.jump2CalDetail(params.row)
+                    //                 }
+                    //             }
+                    //         }, '计算明细'))
+                    // }
+                    // )
+                    // return h('div', lines)
                 },
                 {
                     title: '已付金额',
@@ -219,8 +237,7 @@ export default {
                         let str = '未付清'
                         let obj = { clear: false }
                         // if (params.row.amount != null && params.row.paid != null)
-                        if (!isNaN(params.row.paid) && !isNaN(params.row.amount))
-                         {
+                        if (!isNaN(params.row.paid) && !isNaN(params.row.amount)) {
                             if (Number(params.row.amount) === Number(params.row.paid)) {
                                 str = '已付清'
                                 obj.clear = true

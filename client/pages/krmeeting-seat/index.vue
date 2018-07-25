@@ -279,8 +279,13 @@ var layoutScrollHeight=0;
           onMessageChange(data){
             this.openMessage = data;
           },
-          jumpEdit(row) {},
-          jumpCheck(row) {}
+          jumpEdit(row) {
+
+            window.open(`/krmeeting-seat/${row.communityId}/edit`,'_blank');
+          },
+          jumpCheck(row) {
+            window.open(`/krmeeting-seat/${row.communityId}/view`,'_blank');
+          }
         }
     }
 </script>

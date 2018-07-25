@@ -246,7 +246,7 @@
         <div class="bittons">
           <Button type="primary" @click="handleSubmit('detailData')" style="width:108px;">确定</Button>
           <span style="width:20px;display:inline-block;"></span>
-          <Button type="ghost" @click="handleSubmit('detailData')" style="width:108px;" >取消</Button>
+          <Button type="ghost" @click="cancel" style="width:108px;" >取消</Button>
           
         </div>
       </Form>
@@ -272,10 +272,12 @@ export default {
     },
     data(){
       const validateNumber = (rule, value, callback) => {
-          if(!value){
+        console.log('value',value)
+        let str = value+'';
+          if(!str){
             callback(new Error('请填写完整'));
           }
-          if (value && isNaN(value)) {
+          if (isNaN(value)) {
               callback(new Error('请填写数字'));
           } else {
               callback();
@@ -521,6 +523,9 @@ export default {
       changeBook(){
 
       },
+      cancel(){
+        window.close();
+      },
       coverImgRemove(){
           this.detailData.coverPic="";
       },
@@ -650,10 +655,10 @@ export default {
             this.$Notice.success({
                     title:'编辑成功'
                 });
-                // setTimeout(function(){
-                //     window.close();
-                //     window.opener.location.reload();
-                // },1000) 
+                setTimeout(function(){
+                    window.close();
+                    window.opener.location.reload();
+                },1000) 
         }).catch((err)=>{
             this.$Notice.error({
                     title:err.message

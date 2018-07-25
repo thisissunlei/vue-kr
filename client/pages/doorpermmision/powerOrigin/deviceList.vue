@@ -56,7 +56,8 @@ export default {
         page : '',
         searchData :{
             pageSize:25,
-            granteeId : ''
+            granteeId : '',
+            granteeType : "USER_GROUP"
         },
         loading : false,
         openTypeList :[],
@@ -68,26 +69,26 @@ export default {
                     },
                      {
                         title: '社区名称',
-                        key: 'name',
+                        key: 'communityName',
                         align:'center',
                         
                     },
                     {
                         title: '标题',
-                        key: 'phone',
+                        key: 'title',
                         align:'center',
                         
                     },
                     
                     {
-                        title: '显示',
-                        key: 'creatorName',
+                        title: '显示编号',
+                        key: 'doorCode',
                         align:'center',
                         
                     },
                     {
                         title: '硬件ID',
-                        key: 'creatorName',
+                        key: 'serialNo',
                         align:'center',
                         
                     },
@@ -98,7 +99,7 @@ export default {
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.ctime)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.startAt))+"————"+dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.endAt)))
                             ]);
                             
                         }
@@ -135,7 +136,6 @@ export default {
    mounted(){
        GLOBALSIDESWITCH("false");
        this.searchData.granteeId = this.$route.query.groupid;
-       this.searchData.granteeType = this.$route.query.groupLevel;
        
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
@@ -202,7 +202,7 @@ export default {
        },
        deleteRelations(){
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要移除的人");
+               this.$Message.warning("请选择要移除的设备");
                return;
            }
            this.showTipOrNot();
@@ -212,13 +212,13 @@ export default {
        },
        confirmDelete(){
            let _this =this;
-           var relationIdsArr = [];
+           var toDeleteArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-               relationIdsArr.push(arr[i].id);
+               toDeleteArr.push(arr[i].id);
            }
            var params = {
-               ids:relationIdsArr.join(",")
+               ids:toDeleteArr.join(",")
            }
            
             this.$http.post('delete-member-permmision-from-group', params).then((response) => {
@@ -240,9 +240,9 @@ export default {
         groupAllListShowFun(){
             this.groupAllListShow = !this.groupAllListShow
         },
-        addDevicePermmision(selectedAddItems,StatuParam){
+        addDevicePermmision(selectedAddItems,StatuParam,timeArr){
             var selectedItemsIds=[];
-            console.log("selectedAddItems====>",selectedAddItems);
+
             for(var i=0;i<selectedAddItems.length;i++){
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
@@ -250,13 +250,16 @@ export default {
             var url = this.groupLevel =="PARENT"?"add-device-to-group":"add-device-to-group";
             var paramsOther = this.groupLevel =="PARENT"?{deviceIds:paramsStr}:{deviceIds:paramsStr};
             var basicInfo = {
-                granteeId : this.searchData.groupId,
-                granteeType : this.searchData.granteeType,
+                granteeId : this.searchData.granteeId,
+                granteeType : "USER_GROUP",
+                startAt : timeArr[0]||'',
+                endAt : timeArr[1]||'',
             }
             var params = Object.assign({},basicInfo,paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){
+            console.log("params~~~~~~~",params)
             this.$http.post(url, params).then((response) => {
                 this.getListData();
                 this.$Message.success('添加成功');

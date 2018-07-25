@@ -55,10 +55,17 @@
             </div>
 
         </Form>
-        <Modal v-model="showTime">
-            <div class="modal-box" @on-ok="confirmAddDevice">
+        <Modal v-model="showTime" @on-ok="confirmAddDevice">
+            <div class="modal-box" >
                 <span>请选择授权时间：</span>
-                <DatePicker type="datetimerange" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择授权时间" style="width: 300px"></DatePicker>
+                <DatePicker 
+                    type="datetimerange" 
+                    format="yyyy-MM-dd HH:mm:ss" 
+                    placeholder="请选择授权时间" 
+                    @on-change="timerChanged"
+                    style="width: 300px"
+                >
+                </DatePicker>
             </div>
         </Modal>
         
@@ -74,7 +81,7 @@ export default{
 		return{
             showTime :false,
             imgClass : "img-class",
-            
+            timeArr : [],
             doorTypeOptions:[],
             floorOptions:[],
             communityList :[],
@@ -183,12 +190,14 @@ export default{
         },
         addDeviceClose:function(){
             this.switchShowTime();
-            this.status = "continue"
+            this.status = "close"
         },
-        confirmAddDevice: function(timer){
-            console.log("timer",timer);
-            this.$emit('addDevice',this.status);
-        }
+        confirmAddDevice: function(){
+            this.$emit('addDevice',this.status,this.timeArr);
+        },
+        timerChanged:function(timer){
+            this.timeArr = timer;
+        },
 
 
     },

@@ -120,7 +120,6 @@ export default {
        getListData(){
             let _this =this;
             let params = this.searchData;
-            console.log("params",params);
             this.$http.get("getAllEquipmentList",params).then((res)=>{
                 
                 _this.totalCount = res.data.totalCount;
@@ -138,12 +137,12 @@ export default {
         selectedChange(selection){
             this.selectedAddItmes = selection;
         },
-        addDevice(param){
+        addDevice(param,timeArr){
             if(this.selectedAddItmes.length<1){
                 this.$Message.warning("请选择要添加的组");
                 return;
             }
-            this.$emit("addDevice",this.selectedAddItmes,param);
+            this.$emit("addDevice",this.selectedAddItmes,param,timeArr);
 
         }
        

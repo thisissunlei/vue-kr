@@ -79,13 +79,13 @@ export default {
                     },
                     {
                         title: '公司',
-                        key: 'company',
+                        key: 'customerName',
                         align:'center',
                         
                     },
                     {
                         title: '操作人',
-                        key: 'phone',
+                        key: 'creatorName',
                         align:'center',
                         
                     },

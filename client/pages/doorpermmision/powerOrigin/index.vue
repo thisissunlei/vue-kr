@@ -3,8 +3,8 @@
         <SectionTitle :title="title" />
         <div class="tabs-box">
             <Tabs >
-                <TabPane label="设备" icon="ipad">
-                    <DeviceList />
+                <TabPane label="设备" icon="ipad" v-if="groupLevel!=='PARENT'">
+                    <DeviceList v-if="groupLevel!=='PARENT'"/>
                 </TabPane>
                 <TabPane label="组" icon="folder" v-if="groupLevel=='PARENT'" >
                     <GroupList v-if="groupLevel=='PARENT'"/>

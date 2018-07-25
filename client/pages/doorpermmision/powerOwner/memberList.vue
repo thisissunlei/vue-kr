@@ -200,13 +200,13 @@ export default {
        },
        confirmDelete(){
            let _this =this;
-           var relationIdsArr = [];
+           var toDeleteArr = [];
            var arr = this.selectedItems;
            for(var i=0;i<arr.length;i++){
-               relationIdsArr.push(arr[i].id);
+               toDeleteArr.push(arr[i].id);
            }
            var params = {
-               ids:relationIdsArr.join(",")
+               ids:toDeleteArr.join(",")
            }
            
             this.$http.post('delete-member-permmision-from-group', params).then((response) => {

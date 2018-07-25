@@ -695,7 +695,7 @@ export default {
 
         this.$http.post('post-krseat-price-config', form).then((res)=>{
             console.log('====',res.data) 
-            this.priceList = res.data;
+            this.detailData.goods = res.data;
         }).catch((err)=>{
           this.setPriceList()
             // this.$Notice.error({

@@ -217,6 +217,7 @@ export default {
                 this.searchData.time = new Date().getTime();
                 this.getListData();
                 this.$Message.success('移除成功');
+                this.selectedItems = [];
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })

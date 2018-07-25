@@ -22,7 +22,7 @@
                     <span>移除确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>移除后，复合组将失去该组的权限。</p>
+                    <p>移除后，当前组将不再授予移除的复合组的权限</p>
                     <p>确定移除吗？</p>
                 </div>
                 <div slot="footer">

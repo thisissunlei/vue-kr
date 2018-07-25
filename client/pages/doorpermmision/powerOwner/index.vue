@@ -3,12 +3,13 @@
         <SectionTitle :title="title" />
         <div class="tabs-box">
             <Tabs >
-                <TabPane label="组" icon="folder" >
-                    <GroupList />
+                <TabPane label="个人" icon="person" >
+                    <MemberList />
                 </TabPane>
-                <TabPane label="个人" icon="person" v-if="groupLevel=='NORMAL'">
-                    <MemberList v-if="groupLevel=='NORMAL'"/>
+                <TabPane label="组" icon="folder" v-if="groupLevel=='NORMAL'">
+                    <GroupList v-if="groupLevel=='NORMAL'"/>
                 </TabPane>
+                
             </Tabs>
         </div>
     </div>

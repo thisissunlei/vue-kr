@@ -4,7 +4,8 @@
             <SearchForm  @submitSearchData="submitSearchData" @addMember="addMember" />
             <div class="table-box">
                 <Table :columns="columns1" :data="memberList" size="small" @on-selection-change="selectedChange"></Table>
-                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
+                :page-size="pageSize" @on-change="changePage"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -33,8 +34,10 @@ export default {
         groupAllListShow : false,
         totalCount : 100,
         page : '',
+        pageSize :15,
         searchData :{
-            pageSize:25,
+            pageSize:15,
+            page :1
         },
         loading : false,
         openTypeList :[],
@@ -140,6 +143,10 @@ export default {
             }
             this.$emit("addMemberPermmision",this.selectedAddItmes,param);
 
+        },
+        changePage(page){
+            this.searchData.page =page;
+            this.getListData();
         }
        
     }

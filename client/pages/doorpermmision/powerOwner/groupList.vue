@@ -5,7 +5,11 @@
             <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addGroups = "addGroups" :groupLevel="groupLevel"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
-                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
+                    :page-size="pageSize" 
+                    @on-change="changePage"
+                >
+                </Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -15,14 +19,14 @@
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
                     <Icon type="information-circled"></Icon>
-                    <span>确认删除</span>
+                    <span>移除确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>解除关系后后，父级组的成员将失去自己组的设备权限。</p>
-                    <p>确定解除吗？</p>
+                    <p>移除后，复合组将失去该组的权限。</p>
+                    <p>确定移除吗？</p>
                 </div>
                 <div slot="footer">
-                    <Button type="error" size="large" long  @click="confirmDelete">解除</Button>
+                    <Button type="error" size="large" long  @click="confirmDelete">确定</Button>
                 </div>
         </Modal>
         <Modal v-model="groupAllListShow" width="900">
@@ -53,9 +57,11 @@ export default {
         groupAllListShow : false,
         totalCount : 0,
         page : '',
+        pageSize:25,
         searchData :{
             groupId: '',
-            pageSize:25
+            pageSize:25,
+            page:1
         },
         loading : false,
         openTypeList :[],
@@ -117,7 +123,7 @@ export default {
                                             this.remove(params.row)
                                         }
                                     }
-                                }, '解除')
+                                }, '移除')
                             ]);
                         }
                     },
@@ -220,8 +226,9 @@ export default {
            this.showTipOrNot();
        },
        deleteRelations(){
+           console.log("this.selectedItems",this.selectedItems,this.selectedItems.length)
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要解除关系的组");
+               this.$Message.warning("请选择要移除的组");
                return;
            }
            this.showTipOrNot();
@@ -246,7 +253,8 @@ export default {
                 this.searchData.time = new Date().getTime();
                 console.log("kfdkkdlkdfs=====>");
                 this.getListData();
-                this.$Message.success('解除关系成功');
+                this.$Message.success('移除成功');
+                this.selectedItems = [];
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })
@@ -287,6 +295,10 @@ export default {
                 this.$Message.warning(error.message);
             })
 
+        },
+        changePage(page){
+            this.searchData.page =page;
+            this.getListData();
         }
 
 

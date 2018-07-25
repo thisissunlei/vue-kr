@@ -38,7 +38,6 @@ export default {
         page : '',
         searchData :{
             groupId: '',
-            pageSize:25
         },
         loading : false,
         openTypeList :[],
@@ -123,11 +122,11 @@ export default {
    computed: {
 
        title : function(){
-           if(this.groupLevel!=="PARENT"){
-                return "权限授予详情（组名称："+ this.groupName + "）"
-           }else{
-                return "已有权限(权限来源)详情（组名称："+ this.groupName + "）"
-           }
+        //    if(this.groupLevel!=="PARENT"){
+        //         return "权限授予详情（组名称："+ this.groupName + "）"
+        //    }else{
+                return "权限来源详情（组名称："+ this.groupName + "）"
+        //    }
        }
    },
    methods:{

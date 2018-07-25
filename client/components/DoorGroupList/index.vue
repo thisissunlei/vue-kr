@@ -4,7 +4,8 @@
             <SearchForm  @submitSearchData="submitSearchData" @addGroups="addGroups" />
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
-                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page"
+                :page-size="pageSize" @on-change="changePage"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -33,9 +34,11 @@ export default {
         groupAllListShow : false,
         totalCount : 100,
         page : '',
+        pageSize:15,
         searchData :{
             groupId: '',
-            pageSize:25,
+            pageSize:15,
+            page : 1
         },
         loading : false,
         openTypeList :[],
@@ -46,7 +49,7 @@ export default {
                         align: 'center'
                     },
                     {
-                         title: '社区',
+                         title: '组名称',
                         key: 'name',
                         align:'center',
                         
@@ -137,6 +140,10 @@ export default {
             console.log("this.selectedAddItmes",this.selectedAddItmes);
             this.$emit("addGroupsToGroup",this.selectedAddItmes,param);
 
+        },
+        changePage(page){
+            this.searchData.page =page;
+            this.getListData();
         }
        
     }

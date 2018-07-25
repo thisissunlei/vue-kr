@@ -3,8 +3,9 @@
       <div class="g-openlog-box">
             <SearchForm  @submitSearchData="submitSearchData" @addDevice="addDevice" />
             <div class="table-box">
-                <Table :columns="columns1" :data="memberList" size="small" @on-selection-change="selectedChange"></Table>
-                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <Table :columns="columns1" :data="deviceList" size="small" @on-selection-change="selectedChange"></Table>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
+                :page-size="pageSize" @on-change="changePage"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -32,9 +33,10 @@ export default {
         showTips : false,
         groupAllListShow : false,
         totalCount : 100,
-        page : '',
+        pageSize : 15,
         searchData :{
-            pageSize:25,
+            pageSize:15,
+            page :1
         },
         loading : false,
         openTypeList :[],
@@ -74,7 +76,7 @@ export default {
                         width: 160,
                     }
                 ],
-                memberList: []
+                deviceList: []
      }
    },
    created(){
@@ -120,10 +122,11 @@ export default {
        getListData(){
             let _this =this;
             let params = this.searchData;
+            console.log("params",params);
             this.$http.get("getAllEquipmentList",params).then((res)=>{
                 
                 _this.totalCount = res.data.totalCount;
-                _this.memberList = res.data.items;
+                _this.deviceList = res.data.items;
                
                 
                 _this.loading = false
@@ -144,6 +147,11 @@ export default {
             }
             this.$emit("addDevice",this.selectedAddItmes,param,timeArr);
 
+        },
+        changePage(page){
+            console.log("page====",page)
+            this.searchData.page =page;
+            this.getListData();
         }
        
     }

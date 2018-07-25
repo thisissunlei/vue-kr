@@ -5,7 +5,8 @@
             <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addDevice = "addDevice" :groupLevel="groupLevel"/>
             <div class="table-box">
                 <Table :columns="columns1" :data="deviceList" size="small" @on-selection-change="selectedChange"></Table>
-                <Page :total="totalCount" size="small" show-total class-name="bottom-page"></Page>
+                <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
+                :page-size="pageSize" @on-change="changePage"></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -15,14 +16,14 @@
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
                     <Icon type="information-circled"></Icon>
-                    <span>确认删除</span>
+                    <span>移除确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>如果把会员从该组删除，会员将失去该组内所有设备权限</p>
-                    <p>确定删除吗？</p>
+                    <p>将设备删除后，当前组将失去移除的设备的权限</p>
+                    <p>确定移除吗？</p>
                 </div>
                 <div slot="footer">
-                    <Button type="error" size="large" long  @click="confirmDelete">删除</Button>
+                    <Button type="error" size="large" long  @click="confirmDelete">确认</Button>
                 </div>
         </Modal>
         <Modal v-model="groupAllListShow" width="990">
@@ -54,7 +55,10 @@ export default {
         groupAllListShow : false,
         totalCount : 0,
         page : '',
+
+        pageSize : 25,
         searchData :{
+            page : 1,
             pageSize:25,
             granteeId : '',
             granteeType : "USER_GROUP"
@@ -270,6 +274,10 @@ export default {
                 this.$Message.warning(error.message);
             })
 
+        },
+        changePage(page){
+            this.searchData.page =page;
+            this.getListData();
         }
 
 

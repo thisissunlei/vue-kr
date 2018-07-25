@@ -51,6 +51,7 @@
                     <div class="u-part2-line"></div>
                     <div class="u-part-title">管理的社区</div>
                     <div class="u-part-tip">温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可</div>
+                    <div class="u-error-tip" v-if="ifCheckError">请选择要管理的社区</div>
                      <div class="u-community-check-list">
                         <div class="u-all-check">
                             <Checkbox v-model="checkAll" @on-change="onCheckAll" >全选</Checkbox>
@@ -74,13 +75,18 @@ export default {
     data(){
         return{
             checkAll:false,
+            ifCheckError:false,
             checkAllGroup:[],
             checkList:"",
             communityList:[],
             ifError:false,
             ifShow:false,
             formItem:{
-
+               cmtIds:'',
+               mbrPhone:'',
+               mbrName:'',
+               mbrEmail:'',
+               mbrIdCardNo:''
             },
             ruleCustom:{
                 mbrPhone:[
@@ -139,9 +145,14 @@ export default {
             let checkList=[].concat(this.checkAllGroup)
             this.checkList=checkList.join(',')
             if(checkList.length==this.communityList.length){
-                this.checkAll=true; 
+                this.checkAll=true;
             }else{
-                this.checkAll=false; 
+                this.checkAll=false;
+            }
+            if(checkList.length>0){
+                this.ifCheckError=false;
+            }else{
+                this.ifCheckError=true;
             }
             this.formItem.cmtIds=this.checkList;
         },
@@ -153,10 +164,12 @@ export default {
               })
               this.checkAllGroup=[].concat(checkList);
               this.checkList=checkList.join(',');
+              this.ifCheckError=false;
               
            }else{
                this.checkAllGroup=[];
                this.checkList="";
+               this.ifCheckError=true;
            }
            this.formItem.cmtIds=this.checkList;
               
@@ -167,9 +180,19 @@ export default {
 				top: 80,
 				duration: 3
 			});
-			let _this = this;
+            let _this = this;
+            if(!this.formItem.cmtIds){
+                console.log('88888')
+                this.ifCheckError=true;
+            }else{
+                 console.log('111')
+                 this.ifCheckError=false;
+            }
+            console.log('this.ifCheckError',this.ifCheckError)
+          
 			this.$refs.formItems.validate((valid) => {
-				if (valid) {
+                console.log('this.formItem.cmtIds',this.formItem.cmtIds)
+				if (valid && this.formItem.cmtIds) {
                     callback && callback();
 				} else {
 					this.$Notice.error({

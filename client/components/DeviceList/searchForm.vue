@@ -50,7 +50,7 @@
            
             <div class="float-right">
                 
-                <Button type="primary"  @click="addDeviceContinue" class="search-btn">添加并继续</Button>
+                <Button type="primary"  @click="addDeviceContinue" class="search-btn add-btn">添加并继续</Button>
                 <Button type="primary"  @click="addDeviceClose" class="search-btn">添加并关闭</Button>
             </div>
 
@@ -211,8 +211,10 @@ export default{
 .all-equipment-list-searchform{
     padding-left:20px;
     .search-btn{
-       margin:32px 0 0 10px;
-
+       margin:32px 0 0 0;
+   }
+   .add-btn{
+       margin-right:10px;
    }
    .float-right{
         float : right;

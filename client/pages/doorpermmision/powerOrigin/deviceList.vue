@@ -225,7 +225,7 @@ export default {
                ids:toDeleteArr.join(",")
            }
            
-            this.$http.post('delete-member-permmision-from-group', params).then((response) => {
+            this.$http.post('delete-device-from-group', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();

@@ -73,7 +73,11 @@ export default  {
         url: '/api/iot-platform/auth/device-grant/add',
         method: 'post'
     }, 
-    // ?
+    //从设备组中删除设备
+    'delete-device-from-group':{
+        url: '/api/iot-platform/auth/device-grant/delete',
+        method: 'post'
+    }, 
     
 
   }

@@ -6,29 +6,26 @@
                 <SectionTitle title="基本信息"></SectionTitle>
                 <div class="basic-info-box">
                     <dl>
-                        <dt>订单编号：</dt><dd>{{info.orderNo || '-'}}</dd>
+                        <dt>订单编号：</dt><dd>{{info.orderNo}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单状态：</dt><dd>{{info.orderShowStatusName || '-'}}</dd>
+                        <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(info.orderShowStatusName)}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单金额：￥</dt><dd>{{info.totalAmountDecimal || '-'}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{info.totalAmountDecimal}}</dd>
                     </dl>
                     <dl class="seat-order-wech">
                         <dt>订单生成时间：</dt><dd>{{this.returnCtime(info.ctime)}}</dd>
                     </dl>
-                    <dl class="seat-order-wech" v-if="!!info.uid" @click="goToMember(info.uid)" >
-                        <dt>下单人ID：</dt><dd style="color:#499df1;cursor:pointer;">{{info.uid || '-'}}</dd>
-                    </dl>
-                    <dl class="seat-order-wech" v-else>
-                        <dt>下单人ID：</dt><dd>-</dd>
+                    <dl class="seat-order-wech" @click="goToMember(info.uid)" >
+                        <dt>下单人ID：</dt><dd style="color:#499df1;cursor:pointer;">{{info.uid}}</dd>
                     </dl>
                     <dl class="seat-order-wech">
                         <dt>下单人微信：</dt>
                         <dd>
-                            <img v-if="!!info.wechatUser && !!info.wechatUser.wechatAvatar" :src="info.wechatUser.wechatAvatar" alt=""/>
-                            <img v-if="!!info.wechatUser && !info.wechatUser.wechatAvatar" src="./images/visitor.png"/>
-                            <span v-if="!!info.wechatUser && !!info.wechatUser.wechatNick">{{info.wechatUser.wechatNick}}</span>
+                            <img v-if="!!info.wechatUser.wechatAvatar" :src="info.wechatUser.wechatAvatar" alt=""/>
+                            <img v-if="!info.wechatUser.wechatAvatar" src="./images/visitor.png"/>
+                            <span>{{info.wechatUser.wechatNick}}</span>
                         </dd>
                     </dl>
                     
@@ -38,40 +35,40 @@
                 <SectionTitle title="预订信息"></SectionTitle>
                 <div class="basic-info-box">
                     <dl>
-                        <dt>预订日期：</dt><dd style="color:#FF6868;">{{info.reserveDayStr || '-'}}</dd>
+                        <dt>预订日期：</dt><dd style="color:#FF6868;">{{info.reserveDayStr}}</dd>
                     </dl>
                     <dl>
-                        <dt>预订的社区：</dt><dd>{{info.communityName || '-'}}</dd>
+                        <dt>预订的社区：</dt><dd>{{info.communityName}}</dd>
                     </dl>
                     <dl>
-                        <dt>预定数量：</dt><dd>{{info.quantity || '-'}}</dd>
+                        <dt>预定数量：</dt><dd>{{info.quantity}}</dd>
                     </dl>
                     <dl>
-                        <dt>预订天数：</dt><dd>{{info.reserveDays || '-'}}</dd>
+                        <dt>预订天数：</dt><dd>{{info.reserveDays}}</dd>
                     </dl>
                     <dl>
-                        <dt>预计到场时间：</dt><dd v-if="!!info.seatOrderExtInfo && !!info.seatOrderExtInfo.arrivingTime">{{info.seatOrderExtInfo.arrivingTime}}</dd>
+                        <dt>预计到场时间：</dt><dd>{{seatOrderExtInfo.arrivingTime}}</dd>
                     </dl>
                     <dl>
-                        <dt>行程提醒：</dt><dd v-if="!!info.seatOrderExtInfo && !!info.seatOrderExtInfo.alertTimeName">{{info.seatOrderExtInfo.alertTimeName}}</dd>
+                        <dt>行程提醒：</dt><dd>{{seatOrderExtInfo.alertTimeName}}</dd>
                     </dl>
                     <dl>
-                        <dt>联系电话：</dt><dd v-if="!!info.seatOrderExtInfo && !!info.seatOrderExtInfo.linkPhone">{{info.seatOrderExtInfo.linkPhone}}</dd>
+                        <dt>联系电话：</dt><dd>{{seatOrderExtInfo.linkPhone}}</dd>
                     </dl>
                 </div>
             </div>
-            <div class="basic-info order-money-info" v-if="!!info.details && info.details.length > 0">
+            <div class="basic-info order-money-info">
                 <SectionTitle title="订单金额明细"></SectionTitle>
                 <div class="basic-info-box">
-                    <Table border :columns="tilteAndStyle" :data="info.details"></Table>
+                    <Table border :columns="tilteAndStyle" :data="detail"></Table>
                     <ul>
                         <li>商品总价：</li>
                         <li>{{totalPrice}}</li>
                     </ul>
-                    <!--<ul>-->
-                        <!--<li>使用的优惠策略：</li>-->
-                        <!--<li>300</li>-->
-                    <!--</ul>-->
+                    <ul>
+                        <li>使用的优惠策略：</li>
+                        <li>300</li>
+                    </ul>
                     <ul>
                         <li>订单金额：</li>
                         <li>{{totalAmountDecimal}}</li>
@@ -104,8 +101,42 @@ export default {
     },
    data(){
        return {
-         info: {},
+         info: {
+           orderNo: 123,
+           orderShowStatusName: 'CLOSED',
+           totalAmountDecimal: '100.00',
+           ctime: 1532417025000,
+           uid: 111,
+           wechatUser: {
+             wechatId: 'id',
+             wechatNick: 'nickName',
+             wechatAvatar: ''
+           },
+
+           reserveDayStr: '2018-07-24（星期二）',
+           communityName: '慈云寺社区',
+           quantity: 2,
+           reserveDays: 2
+         },
+         seatOrderExtInfo: {
+           arrivingTime: '9:00',
+           alertTimeName: 'ri',
+           linkPhone: '18710112352'
+         },
          meetingStatusOptions :[],
+         detail : [{
+           enableDate: '2018-07-24 12:12:12',
+           price: '100.00',
+           promotionPrice: '30.00',
+           quantity: 2,
+           totalAmountDecimal: '60.00'
+         }, {
+           enableDate: '2018-07-24 12:12:12',
+           price: '100.00',
+           promotionPrice: '30.00',
+           quantity: 1,
+           totalAmountDecimal: '30.00'
+         }],
          tilteAndStyle:[
            {
              title: '预订日期',
@@ -144,7 +175,7 @@ export default {
                ]);
              }
            }],
-         refund: [],
+         refund: [{id: 123}],
          tilteRefund: [{
            title: '退款操作人',
            key: 'id',
@@ -191,20 +222,22 @@ export default {
        window.open(`/new/#/member/memberManage/list/${id}`, '_blank');
      },
      getDetailInfo () {
+       let totalPrice = 0
+       let totalAmountDecimal = 0
+       this.detail.forEach((val, i) => {
+         totalPrice += Number(val.price)*Number(val.quantity)
+         totalAmountDecimal += Number(val.promotionPrice)*Number(val.quantity)
+       })
+       this.totalPrice = totalPrice.toFixed(2)
+       this.totalAmountDecimal = totalAmountDecimal.toFixed(2)
+
+
+
+
        let _this = this;
-       var params = {id: this.$route.query.orderId};
+       var params = {orderId: this.$route.query.orderId};
        this.$http.get('get-kr-o-view', params).then((res) => {
-         this.info = res.data
-         let totalPrice = 0
-         let totalAmountDecimal = 0
-         if ( !!this.info.details && this.info.details.length > 0 ) {
-           this.info.details.forEach((val, i) => {
-             totalPrice += Number(val.price)*Number(val.quantity)
-             totalAmountDecimal += Number(val.promotionPrice)*Number(val.quantity)
-           })
-           this.totalPrice = totalPrice.toFixed(2)
-           this.totalAmountDecimal = totalAmountDecimal.toFixed(2)
-         }
+
        }).catch((err) => {
          this.$Notice.error({
            title: err.message
@@ -220,7 +253,7 @@ export default {
        }
      },
      returnCtime (param) {
-       var ctimeParse = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param)) || "-";
+       var ctimeParse = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param)) || "";
        return ctimeParse;
      },
      getkrmeetingStatus () {

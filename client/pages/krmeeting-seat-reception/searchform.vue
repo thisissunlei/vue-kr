@@ -1,13 +1,6 @@
 <template>
     <div class="km-order">
-        <Form  :model="formItem" label-position="left" inline class="all-kr-mmeting-order">
-            <FormItem>
-                <Input v-model="formItem.orderNo" placeholder="按订单编号搜索" clearable style="width: 300px"/>
-            </FormItem>
-            <FormItem style="padding-left: 20px;">
-                <Input v-model="formItem.reserverPhone" placeholder="按手机号搜索" clearable style="width: 300px"/>
-            </FormItem>
-            <div></div>
+        <Form :model="formItem" label-position="left" inline class="all-kr-mmeting-order">
             <FormItem label="预订的社区:" class="form-item">
                 <Select
                     v-model="formItem.communityId"
@@ -24,25 +17,35 @@
                     </Option>
                 </Select>
             </FormItem>
-            <FormItem label="订单状态:"  class="form-item-status">
-                <Select
-                    v-model="formItem.orderShowStatus"
-                    style="width:100px"
-                    placeholder="请选择订单状态"
-                    clearable
-                    >
-                    <Option
-                        v-for="item in meetingStatusOptions"
-                        :value="item.name"
-                        :key="item.name"
-                    >
-                        {{ item.desc }}
-                    </Option>
-                </Select>
+            <FormItem>
+                <Input v-model="formItem.phone" placeholder="按联系电话搜索" style="width: 300px"/>
             </FormItem>
+            <FormItem style="padding-left: 20px;">
+                <RadioGroup v-model="formItem.expired">
+                    <Radio value="0" label="false">未过期</Radio>
+                    <Radio value="1" label="true">已过期</Radio>
+                </RadioGroup>
+            </FormItem>
+            <div></div>
+            <!--<FormItem label="订单状态:"  class="form-item-status">-->
+                <!--<Select-->
+                    <!--v-model="formItem.orderShowStatus"-->
+                    <!--style="width:100px"-->
+                    <!--placeholder="请选择订单状态"-->
+                    <!--clearable-->
+                    <!--&gt;-->
+                    <!--<Option-->
+                        <!--v-for="item in meetingStatusOptions"-->
+                        <!--:value="item.name"-->
+                        <!--:key="item.name"-->
+                    <!--&gt;-->
+                        <!--{{ item.desc }}-->
+                    <!--</Option>-->
+                <!--</Select>-->
+            <!--</FormItem>-->
              <FormItem label="订单生成时间:" class="form-item-timer">
                 <DatePicker 
-                    v-model="formItem.cStartTime"
+                    v-model="formItem.useStartTime"
                     type="datetime" 
                     format="yyyy-MM-dd HH:mm"
                     value="yyyy-MM-dd HH:mm"
@@ -53,7 +56,7 @@
                 
                 <span class="timer-span">至</span>
                 <DatePicker 
-                    v-model="formItem.cEndTime"
+                    v-model="formItem.useEndTime"
                     type="datetime" 
                     format="yyyy-MM-dd HH:mm"
                     value="yyyy-MM-dd HH:mm"
@@ -139,7 +142,6 @@ export default {
             }
             
             var newObj = Object.assign({},this.formItem,param);
-            console.log("newObj",newObj);
             this.formItem = newObj;
         },
         submitSearchData(){

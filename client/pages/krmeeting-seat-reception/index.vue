@@ -1,12 +1,13 @@
 <template>
     <div class="km-order">
-        <SectionTitle title="散座订单"></SectionTitle>
+        <SectionTitle title="散座接待"></SectionTitle>
         <SearchForm 
             @submitSearchData = "submitSearchData"
             :meetingStatusOptions ="meetingStatusOptions"
         />
         <div class="seat-table-box table-box" id="daily-inventory-table-list">
-            <Table border :loading="loading" :columns="tilteAndStyle" :data="krMeetingList"></Table>
+            <div class="seat-seat-num">预订座位总数：20</div>
+            <Table border :columns="tilteAndStyle" :data="krMeetingList"></Table>
             <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
             <div :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="!!krMeetingList && krMeetingList.length>0">
                 <div style="display:inline-block;">
@@ -29,7 +30,7 @@ export default {
    name:'billList',
     head () {
             return {
-                title: "散座订单"
+                title: "散座接待"
             }
     },
    data(){
@@ -48,63 +49,69 @@ export default {
          meetingStatusOptions : [],
          tilteAndStyle: [
            {
-             title: '订单编号',
-             key: 'orderNo',
-           },
-           {
-             title: '预订的社区',
-             key: 'communityName',
-             width: 200,
-             align:'center',
-           },
-           {
-             title: '预订数量（个·天）',
-             key: 'quantity',
-             width: 100,
-             align:'center',
-           },
-           {
-             title: '预订天数（天）',
-             key: 'reserveDays',
-             width: 100,
-             align:'center',
-           },
-           {
-             title: '订单金额（元）',
-             key: 'totalAmountDecimal',
-             width: 100,
-             align:'center',
-           },
-           {
-             title: '预订人手机号',
-             key: 'seatOrderExtInfo.linkPhone',
-             width: 120,
-             align:'center',
-           },
-           {
-             title: '订单生成时间',
-             key: 'ctime',
-             width: 180,
+             title: '使用日期',
+             key: 'useDate',
+             width: 160,
              align:'center',
              className: 'order-ctime',
              render: (h, params) => {
                return h('div', [
 
-                 h('span', this.returnCtime(params.row.ctime))
+                 h('span', this.returnCtime(params.row.useDate))
                ]);
              }
            },
            {
-             title: '订单状态',
-             key: 'orderShowStatusName',
+             title: '预计到场时间',
+             key: 'arrivingTime',
+             width: 120,
+             align:'center',
+           },
+           {
+             title: '预订的社区',
+             key: 'communityName',
+             align:'center',
+           },
+           {
+             title: '预订座位数',
+             key: 'quantity',
              width: 100,
              align:'center',
-//             render: (h, params) => {
-//               return h('div', [
-//
-//                 h('span', this.returnText(params.row.orderShowStatusName))
-//               ]);
-//             }
+           },
+           {
+             title: '已到场人数',
+             key: 'arrivedPeople',
+             width: 100,
+             align:'center',
+           },
+           {
+             title: '联系电话',
+             key: 'phone',
+             width: 120,
+             align:'center',
+           },
+           {
+             title: '预订人身份',
+             key: 'userTypeName',
+             width: 120,
+             align:'center',
+           },
+           {
+             title: '预订人所在社区',
+             key: 'reserverCmt',
+             align:'center',
+           },
+           {
+             title: '其他预订',
+             key: 'otherReserve',
+             width: 100,
+             align:'center',
+             render: (h, params) => {
+               return h('div', [
+
+                 h('span', params.row.otherReserve || '-')
+               ]);
+             }
            },
            {
              title: '操作',
@@ -126,7 +133,7 @@ export default {
                        this.toDetail(params)
                      }
                    }
-                 }, '查看')
+                 }, '查看订单')
                ]);
              }
            }
@@ -164,12 +171,12 @@ export default {
   },
    methods:{
         submitSearchData(params){
-            var beginTime =( params.cStartTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.cStartTime)))||"";
-            var endTime = (params.cEndTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.cEndTime)))||"";
+            var beginTime =( params.useStartTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.useStartTime)))||"";
+            var endTime = (params.useEndTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.useEndTime)))||"";
 
             var timeObject ={
-              cStartTime : beginTime,
-              cEndTime : endTime
+              useStartTime : beginTime,
+              useEndTime : endTime
             }
           this.loading = true
           this.searchparams.page = 1
@@ -181,11 +188,11 @@ export default {
 
         },
         toDetail(params){
-            window.open(`/order-center/order-manage/seat-order-manage/detail?orderId=${params.row.id}`,'_blank');
+          window.open(`/order-center/order-manage/seat-order-manage/detail?orderId=${params.row.id}`,'_blank');
         },
         getListData(){
           var params = this.searchparams;
-          this.$http.get('get-kr-o-list', params).then((res)=>{
+          this.$http.get('get-kr-t-list', params).then((res)=>{
             this.loading = false
             this.totalCount = res.data.totalCount
             this.krMeetingList = this.krMeetingList.concat(res.data.items)
@@ -223,8 +230,10 @@ export default {
             })
         },
         returnCtime(param){
-            var cTime = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param))||"";
-            return cTime
+//            var cTime = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param))||"";
+          var cTime = param && dateUtils.dateToStr("YYYY-MM-DD", new Date(param))||"";
+
+          return cTime
         },
      onScrollListener() {
        var dom=document.getElementById('layout-content-main');
@@ -285,6 +294,9 @@ export default {
         .header-no{
             transition: opacity 0.2 ease;
             opacity: 0;
+        }
+        .seat-seat-num {
+            padding-bottom: 10px;
         }
     }
 </style>

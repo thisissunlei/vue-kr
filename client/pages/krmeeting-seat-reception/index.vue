@@ -102,18 +102,6 @@ export default {
              align:'center',
            },
            {
-             title: '其他预订',
-             key: 'otherReserve',
-             width: 100,
-             align:'center',
-             render: (h, params) => {
-               return h('div', [
-
-                 h('span', params.row.otherReserve || '-')
-               ]);
-             }
-           },
-           {
              title: '操作',
              key: '操作',
              width: 100,

@@ -21,7 +21,7 @@
     },
     data() {
         return{
-            data:['使用日期','预计到场时间','预订的社区','预订座位数','已到场人数','联系电话','预订人身份','预订人所在社区', '其他预订','操作'],
+            data:['使用日期','预计到场时间','预订的社区','预订座位数','已到场人数','联系电话','预订人身份','预订人所在社区','操作'],
         }
     }
 }
@@ -48,12 +48,12 @@
             font-weight: 700;
             height: 40px;
             &:nth-child(3), &:nth-child(8){
-                border-left: solid 1px #e9eaec;
                 flex: 1.5;
                 padding-left: 20px;
                 width: 100%;
             }
             &:nth-child(1){
+                border-left: solid 1px #e9eaec;
                 width: 160px;
             }
             &:nth-child(2),
@@ -63,8 +63,7 @@
             }
             &:nth-child(4),
             &:nth-child(5),
-            &:nth-child(9),
-            &:nth-child(10){
+            &:nth-child(9){
                 width: 100px;
             }
             span{

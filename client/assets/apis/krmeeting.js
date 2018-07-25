@@ -31,4 +31,9 @@ export default {
         url: '/api/op/krseat/inventory/initPriceCalander',
         method: 'post'
     },
+    // 散座商品设置获取所有设备
+    'get-all-devices': {
+        url: '/api/op/krseat/inventory/getAllDevices',
+        method: 'get'
+    },
 } 

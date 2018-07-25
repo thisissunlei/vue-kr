@@ -1,6 +1,9 @@
 <template>
     <div class="krmeeting-seat">
-      <div class="seat-title">散座-{{detailData.communityName}}</div>
+      <div class="seat-title">
+        <span class="line"></span>
+        <span style="margin-left: -80px;">散座-{{detailData.communityName}}</span>
+      </div>
       <Form ref="detailData" :model="detailData" :rules="ruleCustom" label-position="top">
         <div class="u-upload">
              <FormItem label="封面图（1张）" class="u-input" prop="coverPic" style="width:100%">
@@ -57,6 +60,13 @@
                   未上架
               </Radio>
           </RadioGroup> 
+        </FormItem>
+        <FormItem label="散座配套" class="u-input"  prop="devicesStrArray">
+          <CheckboxGroup v-model="detailData.devicesStrArray">
+              <Checkbox v-for="item in deviceList" :label="item.name" :key="item.id">
+                  <span>{{item.name}}</span>
+              </Checkbox>
+          </CheckboxGroup>
         </FormItem>
         <div class="config">
           <div class="warn">首次配置，及30自然日之后的默认配置</div>
@@ -145,7 +155,7 @@
             </Row>
             <Row v-for="(item,index) in detailData.goods" :key="item.id" class="price-row">
                 <Col span="3" class="parice-col">
-                  <span class="date">{{item.enableDate |dateFormat('MM月dd日')}}{{item.enableDateDtr}}</span>
+                  <span class="date">{{item.enableDateStr}}</span>
                 </Col>
                 <Col span="3" class="parice-col">
                    <FormItem style="width:120px" 
@@ -234,8 +244,9 @@
           </div>
         </div>
         <div class="bittons">
-          <Button type="primary" @click="handleSubmit('detailData')" >提交</Button>
-          <Button type="ghost" @click="handleSubmit('detailData')" >取消</Button>
+          <Button type="primary" @click="handleSubmit('detailData')" style="width:108px;">确定</Button>
+          <span style="width:20px;display:inline-block;"></span>
+          <Button type="ghost" @click="handleSubmit('detailData')" style="width:108px;" >取消</Button>
           
         </div>
       </Form>
@@ -277,6 +288,7 @@ export default {
           }
       };
       return {
+        devices:[],
         validateNumber:validateNumber,
         max:5,
         maxPrice:10,
@@ -309,6 +321,9 @@ export default {
           published:[
             { required: true, message: '请选择', trigger: 'blur' }
           ],
+          devicesStrArray:[
+            { required: true, message: '请选择散座配套', trigger: 'change' }
+          ]
         },
         priceColumns: [
           {
@@ -480,7 +495,8 @@ export default {
         detailData:{
           devices:[],
           goods:[]
-        }
+        },
+        deviceList:[]
       }
     },
     components:{
@@ -491,6 +507,7 @@ export default {
     },
     mounted(){
       this.getSeatDetail()
+      this.getDevices()
       GLOBALSIDESWITCH("false");
     },
     watch:{
@@ -506,7 +523,7 @@ export default {
       },
       coverImgSuccess(file){
           this.detailData.coverPic=file.data.url;
-           this.$refs.detailData.validateField('coverImg') 
+           this.$refs.detailData.validateField('coverPic') 
       },
       detailImgsRemove(fileList){
           let imglist=[];
@@ -514,7 +531,7 @@ export default {
               imglist.push(item.url)
           })
           let detailImgs=imglist.join(',');
-          this.detailData.detailImgs=detailImgs;
+          this.detailData.pics=detailImgs;
       },
       detailImgsSuccess(response, file, fileList){
           let imglist=[].concat(this.imglist);
@@ -537,7 +554,18 @@ export default {
                 title:'图片大小超出限制'
             });
       },
+      getDevices(){
+        this.$http.get('get-all-devices','').then((res)=>{
+          
+            this.deviceList = res.data;
+          }).catch((err)=>{
+            this.$Notice.error({
+                title:err.message
+            });
+          })
+      },
       getSeatDetail(){
+        
         let { params } = this.$route;
         let communityId = params.billId;
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
@@ -552,12 +580,17 @@ export default {
               obj.url=item.picUrl;
               detailImgList.push(obj)
           })
-          res.data.published=String(res.data.published);
-          res.data.pics=String(res.data.pics);
+          res.data.published=JSON.stringify(res.data.published);
+          res.data.pics=JSON.stringify(res.data.pics);
+          var devicesStrArray = res.data.devices.map(item=>{
+            return item.name;
+          })
+          
           this.detailImgList=detailImgList;
           this.coverImgList = coverImgList;
           this.priceList = res.data.goods;
           this.detailData = res.data;
+          this.detailData.devicesStrArray = devicesStrArray;
         }).catch((err)=>{
           this.$Notice.error({
               title:err.message
@@ -574,6 +607,13 @@ export default {
             duration: 3
         });
         let _this = this;
+        let devicesStr = this.deviceList.filter(item=>{
+          if(this.detailData.devicesStrArray.indexOf(item.name) != -1){
+            return true;
+          }
+        })
+        this.detailData.devicesStr = JSON.stringify(devicesStr) 
+        this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
         console.log('handleSubmit',this.detailData)
         this.$refs[name].validate((valid) => {
             if (valid) {
@@ -595,15 +635,15 @@ export default {
           obj.picUrl = item.url;
           picsStr.push(obj)
         })
-        res.data.published=String(res.data.published)
-        this.detailData.picsStr = String(picsStr);
-        this.detailData.goodsStr = String(this.detailData.goods) 
-        console.log('submitCreate',this.detailData)
-
-        return;
+        this.detailData.picsStr = JSON.stringify(picsStr);
+        this.detailData.goodsStr = JSON.stringify(this.detailData.goods) 
         
+        let formData = Object.assign({},this.detailData)
+        delete formData.devices  
+        delete formData.goods 
+
            
-        this.$http.post('post-krseat-data', this.formItem).then((res)=>{
+        this.$http.post('post-krseat-data', formData).then((res)=>{
             this.$Notice.success({
                     title:'编辑成功'
                 });
@@ -647,6 +687,15 @@ export default {
       font-size: 16px;
       color:#333;
       margin-bottom: 25px;
+      position: relative;
+      .line{
+        display: inline-block;
+        margin-left: 2px;
+        width:80px;
+        height:4px;
+        z-index:1;
+        background-color: #D8D8D8;
+      }
     }
     .content{
       padding-top: 20px;
@@ -727,7 +776,6 @@ export default {
         .ivu-form-item-error-tip{
             padding-top: 3px;
             padding-left: 10px;
-            position: relative;
             text-align:left;
         }
         .parice-col{
@@ -739,11 +787,12 @@ export default {
         }
     }
     .row-header{
-        height: 50px;
-        line-height: 50px;
-        background-color: #F5F6FA;
-        font-size: 14px;
-        color:#333;
+        height: 40px;
+        line-height: 40px;
+        background-color: #f8f8f9;
+        font-size: 12px;
+        color:#495060;
+        font-weight: 700;
     }
     .bittons{
       position: fixed;

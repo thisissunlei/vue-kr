@@ -1,116 +1,25 @@
 <template>
     <Form ref="formDynamic" :model="formDynamic" style="width:990px">
-        <Row class="price-row row-header">
-            <Col span="3" class="parice-col">
-              日期
-            </Col>
-            <Col span="3" class="parice-col">
-               开放数量 (个)
-            </Col>
-            <Col span="3" class="parice-col">
-               可预订数量 (个)
-            </Col>
-            <Col span="3" class="parice-col">
-               会员价 (个·天)
-            </Col>
-            <Col span="4" class="parice-col">
-               会员优惠价 (个·天)
-            </Col>
-            <Col span="4" class="parice-col">
-               游客价 (个·天)
-            </Col>
-            <Col span="4" class="parice-col">
-               游客优惠价 (个·天)
-            </Col>
-        </Row>
-        <Row v-for="(item,index) in formDynamic.goods" :key="item.id" class="price-row">
-            <Col span="3" class="parice-col">
-              <span class="date">日期</span>
-            </Col>
-            <Col span="3" class="parice-col">
-               <FormItem style="width:120px" 
-                :prop="'goods.' + index + '.guestPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}"
-                >
-                  <Input 
-                      v-model="item.guestPriceDecimal" 
-                      placeholder=""
-                      :maxlength="max"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-            <Col span="3" class="parice-col">
-               <FormItem style="width:120px" 
-               :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}"
-               >
-                  <Input 
-                      v-model="item.openQuantity" 
-                      placeholder=""
-                      :maxlength="max"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-            <Col  span="3" class="parice-col">
-               <FormItem style="width:120px" 
-               :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}"
-               >
-                  <Input 
-                      v-model="item.priceDecimal" 
-                      placeholder=""
-                      :maxlength="max"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-            <Col  span="4" class="parice-col">
-               <FormItem style="width:120px" 
-               :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}"
-               >
-                  <Input 
-                      v-model="item.promotionPriceDecimal" 
-                      placeholder=""
-                      :maxlength="maxPrice"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-            <Col  span="4" class="parice-col">
-               <FormItem style="width:120px" 
-               :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}"
-               >
-                  <Input 
-                      v-model="item.guestPriceDecimal" 
-                      placeholder=""
-                      :maxlength="maxPrice"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-            <Col span="4" class="parice-col">
-               <FormItem style="width:120px" 
-                :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
-                :key="item.id"
-                :rules="{validator: validateNumber, trigger: 'blur'}">
-                  <Input 
-                      v-model="item.guestPromotionPriceDecimal" 
-                      placeholder=""
-                      :maxlength="maxPrice"
-                      style="width:100px"
-                  />
-               </FormItem>
-            </Col>
-        </Row>
+        <CheckboxGroup v-model="social">
+            <Checkbox label="twitter">
+                <Icon type="social-twitter"></Icon>
+                <span>Twitter</span>
+            </Checkbox>
+            <Checkbox label="facebook">
+                <Icon type="social-facebook"></Icon>
+                <span>Facebook</span>
+            </Checkbox>
+            <Checkbox label="github">
+                <Icon type="social-github"></Icon>
+                <span>Github</span>
+            </Checkbox>
+            <Checkbox label="snapchat">
+                <Icon type="social-snapchat"></Icon>
+                <span>Snapchat</span>
+            </Checkbox>
+        </CheckboxGroup>
+        <Button type="primary" @click="handleSubmit" >按默认配置初始化近30天价格</Button>
+
     </Form>
 </template>
 <script>
@@ -124,6 +33,7 @@
                 }
             };
             return {
+                social:[],
                 validateNumber:validateNumber,
                 maxPrice:10,
                 max:5,
@@ -136,35 +46,12 @@
                             status: 1
                         }
                     ],
-               
-                    goods:[
-                        {"communityId":1,
-                         "ctime":1531389303000,
-                         "enableDate":1531929600000,
-                         "guestPrice":100,
-                         "guestPriceDecimal":1,
-                         "guestPromotionPrice":100,
-                         "guestPromotionPriceDecimal":'-',
-                         "id":1,"mobileSeatId":1,
-                         "price":100,"priceDecimal":1,
-                         "promotionPrice":100,"promotionPriceDecimal":1,
-                         "quantity":1,"remainQuantity":1},{
-                        "communityId":1,"ctime":1531389303000,"enableDate":1532016000000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":2,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-                        "communityId":1,"ctime":1531389303000,"enableDate":1532102400000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":3,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1},{
-                        "communityId":1,"ctime":1531389303000,"enableDate":1532188800000,"guestPrice":100,"guestPriceDecimal":1,"guestPromotionPrice":100,"guestPromotionPriceDecimal":1,"id":4,"mobileSeatId":1,"price":100,"priceDecimal":1,"promotionPrice":100,"promotionPriceDecimal":1,"quantity":1,"remainQuantity":1}
-                        ],
                 },
             }
         },
         methods: {
             handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
+                console.log('dsdasd',this.social)
             },
             handleReset (name) {
                 this.$refs[name].resetFields();

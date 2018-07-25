@@ -6,55 +6,55 @@
 		<div class="m-detail-content">
 			<DetailStyle info="基本信息">
 				<LabelText label="同步名称：">
-					{{basicInfo.customerName}}
+					{{detailData.name}}
 				</LabelText>
 				<LabelText label="批次名称：">
-					{{basicInfo.communityName}}
+					{{detailData.communityName}}
 				</LabelText>
 				<LabelText label="同步数据数：">
-					{{basicInfo.salerName}}
+					{{detailData.syncDataCount}}
 				</LabelText>
 				<LabelText label="同步时间：">
-					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{detailData.createTime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 				<LabelText label="操作人：">
-					{{basicInfo.orderStatusName}}
+					{{detailData.operatorName}}
 				</LabelText>
 				<LabelText label="同步方式：">
-					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{detailData.syncType || '-'}}
 				</LabelText>
-				<LabelText label="同步状态：" v-show='opportunityStr'>
-					{{opportunityStr}}
+				<LabelText label="同步状态：" >
+					{{detailData.syncStatus}}
 				</LabelText>
-				<LabelText label="同步数据类型：" v-show='nullifyReason'>
-					{{nullifyReason}}
+				<LabelText label="同步数据类型：" >
+					{{detailData.syncDataType}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="过滤条件">
 				<LabelText label="开始时间：">
-					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}
+					{{detailData.startTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="结束时间：">
-					{{basicInfo.endDate| dateFormat('YYYY-MM-dd')}}
+					{{detailData.endTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="所选客户：">
-					{{basicInfo.installmentTypeName}}
+					{{detailData.customerNames}}
 				</LabelText>
 				<LabelText label="所选社区：">
-					{{basicInfo.firstPayTime}}
+					{{detailData.communityNames}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="传输结果">
 				
 				<LabelText label="重试次数：" style="font-weight:bold;">
-					{{basicInfo.seatRentAmount}} {{capitalService}}
+					{{detailData.tryCount}}
 				</LabelText>
 				
 				<LabelText label="最后重试时间：" style="font-weight:bold;">
-					{{basicInfo.tactiscAmount}} {{capitalTreatment}}
+					{{detailData.lastSyncTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
                 <LabelText label="重试操作人：" style="font-weight:bold;">
-					{{basicInfo.tactiscAmount}} {{capitalTreatment}}
+					{{detailData.lastSyncUserName}}
 				</LabelText>
 			</DetailStyle>
 			<Tabs value="name1">
@@ -77,6 +77,7 @@ import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
+import fn from './pubilcFn';
 
 export default {
 	name: 'JoinView',
@@ -94,21 +95,22 @@ export default {
 			detailData:{
 				
 			},
-			originalCol:[ 
-				{
-					title: 'Name',
-					key: 'name'
-				},
-
-			],
-			originalData:[],
-			transmissionCol:[
-				{
-					title: 'Name',
-					key: 'name'
-				},
-			],
-			transmissionData:[]
+			//原始应收
+			originalAccountsCol:this.fn.originalAccountsCol.call(this),
+			//原始回款
+			originalReceivableCol:this.fn.originalReceivableCol.call(this),
+			//传输应收
+			transmissionAccountsCol:this.fn.transmissionAccountsCol.call(this),
+			//传输回款
+			transmissionReceivableCol:this.fn.transmissionReceivableCol.call(this),
+			//原始应收返回数据
+			originalAccountsData:[],
+			//原始回款返回数据
+			originalReceivableData:[],
+			//传输应收返回数据
+			transmissionAccountsData:[],
+			//传输回款返回数据
+			transmissionReceivableData:[],
 
 		}
 	},
@@ -116,7 +118,7 @@ export default {
 	mounted: function () {
 		GLOBALSIDESWITCH('false');
 		// GLOBALHEADERSET('订单合同')
-		// this.getDetailData();
+		this.getDetailData();
 	},
 
 	methods: {

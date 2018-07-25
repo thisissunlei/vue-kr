@@ -1,221 +1,160 @@
 <template>
-  <div class="g-app-manage-home">
-    <div class="u-home-main-part">
-        <div class="u-community-info">
-           <span class="u-community-name">{{communityName}}</span>
-           <span class="u-change-community-btn" @click="openCommunity">切换社区</span>
-           <DatePicker 
-                class="u-date-right" 
-                type="daterange" 
-                placement="bottom-end" 
-                placeholder="日期" 
-                @on-change="changeDate"
-             />
-        </div>
+    <div class="g-member-online">
+         <SectionTitle :title="`各社区会员线上化（${sectionTitle}）`" />
+         <div class="u-search">
+
+         </div>
+         <div class="u-table">
+            <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+         </div> 
     </div>
-      <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-            <Tab-pane label="会员7天线上化率" name="member"> 
-                <div class="u-member-tip" v-if="isTip">
-                    <div class="u-member-small-trigon"></div>
-                    已入驻会员获得会员权限满7天后，通过是否登录过APP计算“7天线上化率”，用以分析引导入驻会员加入线上APP社群情况；
-                    <span class="u-member-tip-close" @click="tipClose"></span>
-                </div>
-                <Member   
-                    :mask="key"
-                    :detail="formItem"
-                />
-            </Tab-pane>
-            <Tab-pane label="入驻会员活跃情况" name="joinMember">
-                <JoinMember 
-                    :mask="key"
-                    :detail="formItem" 
-                /> 
-            </Tab-pane>
-            <Tab-pane label="活动情况" name="activity">
-               <Activity 
-                    :mask="key"
-                    :detail="formItem"
-                />
-            </Tab-pane>
-      </Tabs>  
-     <Modal
-        v-model="openDialog"
-        title="选择社区"
-        ok-text="确定"
-        cancel-text="取消"
-        width="500"
-     >
-        <div class="m-community-dialog">
-                <span class="u-community-label">社区</span>
-                <Select
-                        v-model="cmtId"
-                        style="width:250px"
-                        placeholder="请选择社区"
-                        filterable
-                        clearable
-                        :label-in-value="true"
-                        @on-change="changeCommunity"
-                    >
-                        <Option  v-for="item in communityList" :value="item.cmtId" :key="item.cmtId"> {{ item.cmtName }}</Option>
-                </Select>
-        </div>
-        <div slot="footer">
-            <Button type="primary" @click="submitChange">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="openCommunity">取消</Button>
-        </div>
-    </Modal>
-  </div>
 </template>
 <script>
-import Member from './member';
-import JoinMember from './joinMember';
-import Activity from './activity';
+import SectionTitle from '~/components/SectionTitle';
 
 export default {
-   head() {
+    head() {
         return {
-            title: '产品运营主页'
+            title: '会员线上化'
         }
     },
-   data(){
-       return {
-           activeKey:'member',
-           key:'member',
-           joinMemberPage:1,
-           joinMemberTotalCount:0,
-           pageSize:15,
+    components:{
+        SectionTitle
+    },
+    data(){
+        return{
+            sectionTitle:'',
+            tabParams:{
+               dataDate:'',
+            },
+            Columns:[
+              {
+                  title: '社区',
+                  key: 'communityName',
+                  align:'center',
+              },
+              {
+                  title: '线上化率',
+                  key: 'onlineRate',
+                  align:'center',
+                  sortable:true,
+              },
+              {
+                  title: '对比前日',
+                  key: 'conToOneDaybefore',
+                  align:'center',
+                  sortable:true,
+              },
+              {
+                  title: '对比周初',
+                  key: 'conToWeekStart',
+                  align:'center',
+                  sortable:true,
+              },
+              {
+                  title: '日均上线会员数（当周）',
+                  key: 'onlineUser',
+                  align:'center',
+                  sortable:true,
+              },
+              {
+                  title: '同比前周',
+                  key: 'conToWeekBefore',
+                  align:'center',
+                  sortable:true,
+              },
+              {
+                  title: '操作',
+                  key: 'operation',
+                  align:'center',
+                  render:(h,params)=>{
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'text',
+                                    size: 'small'
+                                },
+                                style: {
+                                    color:'#2b85e4'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.jumpView(params.row)
+                                    }
+                                }
+                            }, '查看历史')
+                            
+                        ]);  
+                    }
+              },
+           ],
            memberList:[],
-           communityName:'全部社区',
-           openDialog:false,
-           formItem:{
-              beginDate:'',
-              cmtId:'',
-              endDate:'',
-           },
-           cmtId:'',
-           communityList:[],
-           isTip:true,
-           communityObj:{},
-       }
-   },
-   components:{
-      Member,
-      JoinMember,
-      Activity      
-   },
-   mounted(){
-      this.activeKey=sessionStorage.getItem('hometMask')||'member';
-      this.getCommunity();
-   },
-   methods:{
-        tipClose(){
-            this.isTip=!this.isTip
+        }
+    },
+    mounted(){
+         this.tabParams.dataDate=this.getDay(-1, '-')
+        
+         this.getTableData(this.tabParams);
+    },
+    methods:{
+        getDay(num, str){
+            let today = new Date();
+            let nowTime = today.getTime();
+            let ms = 24*3600*1000*num;
+            today.setTime(parseInt(nowTime + ms));
+            let oYear = today.getFullYear();
+            let oMoth = (today.getMonth() + 1).toString();
+            let oDay = today.getDate().toString();
+            this.sectionTitle=`${oYear}年${oMoth}月${oDay}日`;
+            if (oMoth.length <= 1) oMoth = '0' + oMoth;
+            if (oDay.length <= 1) oDay = '0' + oDay;
+            return oYear + str + oMoth + str + oDay;
         },
-        openCommunity(){
-            this.openDialog=!this.openDialog
-        },
-        tabsClick(key){
-           this.key=key;
-           sessionStorage.setItem('hometMask',key);
-        },
-        changeCommunity(form){
-            this.communityObj=form;
-        },
-        submitChange(){
-             this.communityName= this.communityObj.label;
-             this.formItem.cmtId=this.cmtId;
-             this.openDialog=false;
-        },
-        changeDate(data){
-            this.formItem.beginDate=data[0];
-            this.formItem.endDate=data[1];
-            
-        },
-        getCommunity(){
-              this.$http.get('get-community-new-list','').then((res)=>{
-                this.communityList=res.data.cmts;
-
-                }).catch((error)=>{
+        getTableData(params){
+             this.$http.get('get-operation-community-use-rate', params).then((res)=>{
+                    this.memberList=res.data.items;
+                    
+                }).catch((err)=>{
                     this.$Notice.error({
-                        title:error.message
-                    });
+						title:err.message
+					});
                 })
-         }
+        },
+        jumpView(params){
+
+        },
+        sortChange(form){
+            let orderLine;
+            switch(form.key){
+                case 'conToOneDaybefore':
+                orderLine='CTOB'
+                break;
+                case 'conToWeekStart':
+                orderLine='CTWS'
+                break;
+                default:
+                orderLine='CTWB'
+            }
+            this.tabParams.orderLine=orderLine;
+            this.tabParams.orderRule=form.order.toUpperCase()
+            console.log('form----',form)
+            console.log('this.tabParams----',this.tabParams)
+        }
     }
 }
 </script>
+
 <style lang="less">
-.g-app-manage-home{
-  .u-home-main-part{
-    background-color: #fff;
-    height: 60px;
-    border-radius: 4px;
-    width: 100%;
-    line-height: 60px;
-    margin-bottom: 20px;
-    box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.1);
-    margin-bottom:20px;
-  }
- 
-  .u-community-name{
-        padding-left:40px;
-        font-size: 18px;
-        color: #394457;
-        margin-right: 30px; 
-  }
-  .u-change-community-btn{
-        font-size: 14px;
-        color: #2D8DCD;
-        cursor: pointer;
-  }
-  .u-date-right{
-      float:right;
-      margin-top:14px;
-      margin-right:28px;
-      width: 200px
+.g-member-online{
+    .u-search{
+        height:32px;
+        margin:16px 0;
+        padding:0 20px;
+    }
+    .u-table{
+        padding:20px 20px 0;
+    }
+}
 
-  }
-  .u-member-tip{
-        width:800px;
-        background:rgba(0,0,0,0.7);
-        font-size:13px;
-        color:#fff;
-        padding:8px;
-        border-radius: 3px;
-        margin-left:15px;
-        text-align: left;
-        line-height: 18px;
-        box-shadow:0 0 2px rgba(0,0,0,.2);
-        position: relative;
-    }
-    .u-member-small-trigon{
-        width:0;
-        height:0;
-        border:6px solid transparent;
-        border-bottom-color: rgba(0,0,0,0.7);
-        position: absolute;
-        top:-12px;
-        left:8%;
-        margin-left:-3px;
-    } 
-    .u-member-tip-close{
-        float:right;
-        width:10px;
-        height:10px;
-        background: url('~/assets/images/close.svg') no-repeat center center;
-        background-size:100% 100%;
-        margin-top:3px;
-        margin-right:10px;
-    }
-  
-}
-.m-community-dialog{
-    width:300px;
-    margin:20px auto;
-    .u-community-label{
-        padding-right: 20px; 
-    }
-}
 </style>
-
 

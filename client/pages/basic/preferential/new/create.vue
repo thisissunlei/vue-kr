@@ -32,17 +32,20 @@
                 <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
             </div>
         </Modal>
+        <discountSelect></discountSelect>
     </div>
 </template>
 <script>
 import CreateSale from './createSale.vue';
 // import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCommunities from './SelectCommunities.vue'
+import discountSelect from './discountSelect.vue'
 
 export default {
     components: {
         CreateSale,
-        selectCommunities
+        selectCommunities,
+        discountSelect
     },
     props: {
         editData: Object,

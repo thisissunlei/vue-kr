@@ -272,6 +272,9 @@ export default {
     },
     data(){
       const validateNumber = (rule, value, callback) => {
+          if(!value){
+            callback(new Error('请填写完整'));
+          }
           if (value && isNaN(value)) {
               callback(new Error('请填写数字'));
           } else {

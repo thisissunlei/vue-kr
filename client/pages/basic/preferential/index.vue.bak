@@ -2,34 +2,21 @@
 <div class="g-order">
     <SectionTitle title="社区优惠配置"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button>
+        <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button> 
+        <Button type="primary" @click="onCreate" >新建社区优惠</Button> 
         <span style="padding:0 10px"></span> 
-        <div style="display:inline-block;width:200px;">
-            社区：
+        <div style="display:inline-block;width:400px;">
+            选择社区：
             <Select 
-                    :v-model="cmtId"
-                    @on-change="changeContent" 
-                    filterable
-                    clearable 
-                    style="width:150px">
+                        :v-model="cmtId"
+                        @on-change="changeContent" 
+                        filterable
+                        clearable 
+                        style="width:300px">
                 <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
             </Select>
         </div>
-        <span style="padding:0 10px"></span> 
-        <div style="display:inline-block;width:200px;">
-            状态：
-            <Select 
-                    :v-model="state"
-                    @on-change="changeContent" 
-                    filterable
-                    clearable 
-                    style="width:100px">
-                <Option v-for="(option, index) in stateList" :value="option.value" :key="option.value">{{option.label}}</Option>
-            </Select>
-        </div>
-        <div class='u-create'>
-            <Button type="primary" @click="onCreate" >添加</Button>
-        </div>
+        
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData"  stripe></Table>
@@ -95,8 +82,8 @@ import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
-import Create from './new/create.vue';
-import CreateSale from './new/createSale.vue';
+import Create from './create.vue';
+import CreateSale from './createSale.vue';
 
 
 export default {
@@ -109,8 +96,6 @@ export default {
         },
         data () {
             return {
-                state:'',//优惠可用状态
-                stateList:[],//优惠可用状态列表 
                 communityList:[],
                 cmtId:'',
                 openSale:false,
@@ -135,63 +120,50 @@ export default {
                 dataItem:[],
                 columns: [
                     {
-                        title: '优惠方案',
-                        key: 'descName',
-                        align:'center',
+                        title: '社区名称',
+                        key: 'cmtName',
+                        align:'center'
                     },
                     {
                         title: '优惠类型',
                         key: 'name',
                         align:'center'
-                    }, 
+                    },
                     {
-                        title: '社区名称',
-                        key: 'cmtName',
-                        align:'center'
-                    },                                 
+                        title: '优惠描述',
+                        key: 'descName',
+                        align:'center',
+                    },
                     {
-                        title: '有效期开始',
+                        title: '有效期开始日期',
                         key: 'validStart',
                         align:'center',
                         render: (h, params) => {
-                            let date=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validStart))
-                            return  h('div',date)
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validStart))
                         }
                     },
                     {
-                        title: '有效期结束',
+                        title: '有效期结束日期',
                         key: 'validEnd',
                         align:'center',
                         render: (h, params) => {
-                            let date=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validEnd))
-                            return  h('div',date)
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validEnd))
                         }
                     },
-                    {
-                        title: '权限',
-                        key: 'cmtName',
-                        align:'center'
-                    }, 
                     {
                         title: '创建日期',
                         key: 'ctime',
                         align:'center',
                         render: (h, params) => {
-                            let date=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
-                            return  h('div',date)
+                            return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                         }
                     },
-                    {
+                      {
                         title: '创建人',
                         key: 'username',
                         align:'center',
                     },
-                    {
-                        title: '备注',
-                        key: 'remark',
-                        align:'center'
-                    }, 
-                    {
+                     {
                         title: '状态',
                         key: 'validEnd',
                         align:'center',
@@ -205,39 +177,33 @@ export default {
                             }
                             return h('span',{style:style},result)
                         }
-                    },
-                    {
-                        title: '操作',
-                        key: 'operation',
-                        align:'center',
-                        width:110,
-                        render:(h,params)=>{
-                            let today = new Date().getTime();
-                            let result;
-                            let style;
-                            result = today > (params && params.row.validEnd) 
-                            if (result) {
-                                return h('div','-')
-                            } else {
-                                return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.handleStopDiscount(params.row)                                                
-                                        }
-                                    }
-                                }, '停用')
-                            ]);  
-                            }                                               
                     }
-                    }
+                    // {
+                    //     title: '操作',
+                    //     key: 'operation',
+                    //     align:'center',
+                    //     width:110,
+                    //     render:(h,params)=>{
+                    //        return h('div', [
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'text',
+                    //                     size: 'small'
+                    //                 },
+                    //                 style: {
+                    //                     color:'#2b85e4'
+                    //                 },
+                    //                 on: {
+                    //                     click: () => {
+                    //                         this.showEdit(params.row)
+                                                
+                    //                     }
+                    //                 }
+                    //             }, '编辑')
+                    //         ]);  
+                    
+                    // }
+                    // }
                 ]
                 
             }
@@ -251,18 +217,10 @@ export default {
         },
         created(){
              this.getTableData(this.params);
-             this.getCmtList();
-             this.getStateList();
+             this.getList()
         },
         methods:{
-            getStateList(){
-                let list=[{
-                    label:'全部',
-                    value:' '
-                }]
-                this.stateList=[].concat(list)
-            },
-            getCmtList(){
+            getList(){
                 this.$http.get('join-bill-community','').then((response)=>{    
                     let list = response.data.items;
                     list.map((item)=>{
@@ -270,11 +228,7 @@ export default {
                         obj.label = item.name;
                         obj.value = item.id+'';
                         return obj;
-                    }); 
-                    list.unshift({
-                        label:'全部',
-                        value:' '
-                    })
+                    });
                     this.communityList = list;
                     }).catch((error)=>{
                         this.$Notice.error({
@@ -408,12 +362,7 @@ export default {
                     this.parameterData = data;
                 }
             },
-            //停用
-            handleStopDiscount(item){
-                this.editData = item;
-                this.parameterData = item;
-                this.openEdit = true;
-            },
+
 
         }
 
@@ -425,10 +374,6 @@ export default {
   .u-search{
         height:32px;
         margin:16px 20px;
-        .u-create{
-            float: right;
-            right: 50px;
-        }
     }
     .ivu-table-cell{
         padding:0;
@@ -443,7 +388,6 @@ export default {
         font-size:14px;
         cursor:pointer;
     }
-    
 }   
 .u-cancel-title{
     width:334px;

@@ -172,6 +172,8 @@
                case 'alreadyReceive':
                    status.push('RECEIVED');
                    break;
+               case 'waitProvide':
+                   status.push('GRANT');
                default:
                    status.push('RETURNING,RECOVERYED');
                    break;
@@ -288,8 +290,13 @@
               this.editItem = item;
 
             },
+
+            // 发放按钮点击
+            provideClick(item){
+              // this.$emit('provideDone', 'test')
+            },
             //跳转查看页面
-            // goView(data){
+            // waitArrive(data){
             //   window.open(`/publicPage/make-invoice/${data.id}/view-detail`,data.id);
 
             // },

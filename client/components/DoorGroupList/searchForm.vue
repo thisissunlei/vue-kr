@@ -19,7 +19,7 @@
                 <Select
                     clearable
                     v-model="formItem.customerId"
-                    style="width:150px"
+                    style="width:200px"
                     placeholder="请选择公司"
                     filterable
                     @on-change="onChangeCompanys"
@@ -85,7 +85,10 @@ export default{
         },
         getCompany(){
             
-            this.$http.get('get-samrt-hard-company-list','').then((res)=>{
+            var param = {
+                companyName :''
+            }
+            this.$http.get('get-samrt-hard-company-list',param).then((res)=>{
 
                 this.companyList=res.data.items;
 

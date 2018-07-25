@@ -53,6 +53,7 @@ export default{
 		return{
            companyList:[],
             communityList :[],
+            companyName:'',
 			formItem : {
 
             },
@@ -87,8 +88,10 @@ export default{
             })
         },
         getCompany(){
-            
-            this.$http.get('get-samrt-hard-company-list','').then((res)=>{
+            var param = {
+                companyName : this.companyName
+            }
+            this.$http.get('get-samrt-hard-company-list',param).then((res)=>{
 
                 this.companyList=res.data.items;
 

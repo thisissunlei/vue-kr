@@ -4,7 +4,7 @@
             <span @click="clickPanel">
                 <Icon :type="iconType"></Icon>
                 <span>{{data[0]["seatTypeName"]}}【</span> {{data[0]["name"]}}
-                <span>】
+                <span>】(<span>{{getFeeType(data[0]['feeDesc'])}}</span>)
                 </span>
             </span>
         </p>
@@ -32,6 +32,10 @@ export default {
         };
     },
     methods: {
+        getFeeType(str){
+            str.replace(/(.+)以.计算/,'$1')
+            return RegExp.$1
+        },
         clickPanel() {
             this.showTable = !this.showTable;
             this.iconType = this.showTable ? "arrow-down-b" : "arrow-right-b";

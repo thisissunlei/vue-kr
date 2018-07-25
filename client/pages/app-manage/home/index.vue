@@ -11,7 +11,7 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-
+import RateImg  from './rateImg'
 export default {
     head() {
         return {
@@ -19,7 +19,8 @@ export default {
         }
     },
     components:{
-        SectionTitle
+        SectionTitle,
+        RateImg
     },
     data(){
         return{
@@ -44,12 +45,27 @@ export default {
                   key: 'conToOneDaybefore',
                   align:'center',
                   sortable:true,
+                  render:(h,obj)=>{
+                     
+                        return h(RateImg ,{
+                            props: {
+                                detailInfo:obj.row.conToOneDaybefore
+                            }
+                         });
+                 }
               },
               {
                   title: '对比周初',
                   key: 'conToWeekStart',
                   align:'center',
                   sortable:true,
+                  render:(h,obj)=>{
+                       return h(RateImg ,{
+                            props: {
+                                detailInfo:obj.row.conToWeekStart
+                            }
+                         });
+                    }
               },
               {
                   title: '日均上线会员数（当周）',
@@ -62,6 +78,13 @@ export default {
                   key: 'conToWeekBefore',
                   align:'center',
                   sortable:true,
+                  render:(h,obj)=>{
+                       return h(RateImg ,{
+                            props: {
+                                detailInfo:obj.row.conToWeekBefore
+                            }
+                        });
+                }
               },
               {
                   title: '操作',
@@ -132,8 +155,9 @@ export default {
                 case 'conToWeekStart':
                 orderLine='CTWS'
                 break;
-                default:
+                case 'conToWeekBefore':
                 orderLine='CTWB'
+                break;
             }
             this.tabParams.orderLine=orderLine;
             this.tabParams.orderRule=form.order.toUpperCase()

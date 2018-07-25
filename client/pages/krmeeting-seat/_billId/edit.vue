@@ -520,7 +520,10 @@ export default {
     },
     methods:{
       changeBook(){
-
+        let { params } = this.$route;
+        let communityId = params.billId;
+        window.open(`/product/goods/edit/${communityId}`,'_blank');
+          
       },
       cancel(){
         window.close();
@@ -666,6 +669,20 @@ export default {
                 });
         })
       },
+      setPriceList(){
+        var goods = this.detailData.goods;
+        goods = goods.map(item=>{
+          let obj = item;
+          obj.guestPriceDecimal = this.detailData.guestPriceDecimal
+          obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
+          obj.openQuantity = this.detailData.openQuantity
+          obj.priceDecimal = this.detailData.priceDecimal
+          obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal
+          return obj;
+        })
+        this.detailData.goods = goods;
+
+      },
       initPriceList(){
         let form = {};
         let {params}=this.$route;
@@ -680,9 +697,10 @@ export default {
             console.log('====',res.data) 
             this.priceList = res.data;
         }).catch((err)=>{
-            this.$Notice.error({
-                    title:err.message
-                });
+          this.setPriceList()
+            // this.$Notice.error({
+            //     title:err.message
+            // });
         })
       }
 
@@ -764,6 +782,9 @@ export default {
         font-size: 14px;
         color: #499DF1;
         float: right;
+        &:hover{
+          cursor: pointer;
+        }
       }
     }
   }

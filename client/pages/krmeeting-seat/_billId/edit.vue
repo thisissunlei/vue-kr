@@ -272,7 +272,6 @@ export default {
     },
     data(){
       const validateNumber = (rule, value, callback) => {
-        console.log('value',value)
         let str = value+'';
           if(!str){
             callback(new Error('请填写完整'));
@@ -539,6 +538,7 @@ export default {
               imglist.push(item.url)
           })
           let detailImgs=imglist.join(',');
+          this.detailImgList = fileList
           this.detailData.pics=detailImgs;
       },
       detailImgsSuccess(response, file, fileList){
@@ -547,7 +547,7 @@ export default {
               imglist.push(item.url)
           })
           let detailImgs=imglist.join(',');
-          console.log('========',this.detailImgList,detailImgs)
+          console.log('========',this.detailImgList)
           this.detailData.pics=detailImgs;
           this.$refs.detailData.validateField('pics') 
             
@@ -638,11 +638,14 @@ export default {
         this.detailData.communityId=params.billId;
         
         let picsStr = []
+        console.log('submitCreate1',this.detailImgList)
         this.detailImgList.map(item=>{
           let obj = {};
           obj.picUrl = item.url;
           picsStr.push(obj)
         })
+        console.log('submitCreate2',picsStr)
+
         this.detailData.picsStr = JSON.stringify(picsStr);
         this.detailData.goodsStr = JSON.stringify(this.detailData.goods) 
         
@@ -655,10 +658,8 @@ export default {
             this.$Notice.success({
                     title:'编辑成功'
                 });
-                setTimeout(function(){
                     window.close();
                     window.opener.location.reload();
-                },1000) 
         }).catch((err)=>{
             this.$Notice.error({
                     title:err.message

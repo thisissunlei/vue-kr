@@ -224,7 +224,28 @@ export default  {
       url: '/api/krspace-pay/payment/customer/like',
       method: 'get'
     },
-    
+
+  // todo: test改成api
+    // 同步数据--预收数据
+    'get-advanced-collection-list': {
+      url: '/test/sync/listKdPaymentSummaryByPage',
+      method: 'get'
+    },
+    // 同步数据--预收数据导出
+    'export-advanced-collection-list': {
+      url: '/test/sync/paymentSummaries/export',
+      method: 'get'
+    },
+    // 同步数据--应收数据
+    'get-receivable-collection-list': {
+      url: '/test/sync/listKdIncomeSummaryByPage',
+      method: 'get'
+    },
+    // 同步数据--应收数据导出
+    'export-receivable-collection-list': {
+      url: '/test/sync/incomeSummaries/export',
+      method: 'get'
+    }
 
   }
   

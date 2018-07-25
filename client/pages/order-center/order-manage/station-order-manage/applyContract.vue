@@ -3,18 +3,18 @@
         <!-- 确定要申请合同吗？ -->
         <p v-if='!requireChineseEnglish'>确定要申请合同吗？</p>
         <div v-if='requireChineseEnglish'>
-            <div style="text-align:center;font-size: 16px;color: #333;">请选择您要生成中文版还是中英文版合同？</div>
+            <div style="text-align:center;font-size: 16px;color: #333;margin-bottom:10px">请选择您要生成中文版还是中英文版合同？</div>
 
             <div style="height:300px;">
                 <div class="cachet-box" @click="selectCachet(false)">
-                    <img src="./images/noCachet.png" />
-                    <div>示例一：中文版合同</div>
+                    <img src="./images/noCachet.jpg" />
+                    <div class='cachet-bottom-text'>示例一：中文版合同</div>
                     <div :class="!this.isCH_AND_EN?'select cachet':'select'" />
                 </div>
 
                 <div class="cachet-box" @click="selectCachet(true)">
-                    <img src="./images/cachet.png" />
-                    <div>示例二：中英文版合同</div>
+                    <img src="./images/cachet.jpg" />
+                    <div class='cachet-bottom-text'>示例二：中英文版合同</div>
                     <div :class="this.isCH_AND_EN?'select cachet':'select'" />
                 </div>
             </div>
@@ -61,6 +61,10 @@ export default {
         float: left;
         text-align: center;
         cursor: pointer;
+        .cachet-bottom-text{
+            color: #FF9D00;
+            font-weight: 700
+        }
         .select {
             width: 60px;
             height: 60px;

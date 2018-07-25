@@ -3,8 +3,8 @@
         <SectionTitle :title="title" />
         <div class="tabs-box">
             <Tabs >
-                <TabPane label="设备" icon="ipad" v-if="groupLevel!=='PARENT'">
-                    <DeviceList v-if="groupLevel!=='PARENT'"/>
+                <TabPane label="设备" icon="ipad" v-if="groupLevel=='NORMAL'">
+                    <DeviceList v-if="groupLevel=='NORMAL'"/>
                 </TabPane>
                 <TabPane label="组" icon="folder" v-if="groupLevel=='PARENT'" >
                     <GroupList v-if="groupLevel=='PARENT'"/>
@@ -161,6 +161,9 @@ export default {
             let _this =this;
             let params = Object.assign({},this.searchData,{date:new Date()});
             var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
+            if(!params.groupId){
+                return;
+            }
             this.$http.get(reqURL,params).then((res)=>{
                 
                 _this.totalCount = res.data.totalCount;

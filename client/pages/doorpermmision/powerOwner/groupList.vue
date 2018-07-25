@@ -135,6 +135,8 @@ export default {
        this.searchData.groupId = this.$route.query.groupid;
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
+        console.log("kfdkkdlkdfs=====>2");
+
        this.getListData();
        this.getSmartHardwareDict();
    },
@@ -162,13 +164,15 @@ export default {
            
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
+                console.log("kfdkkdlkdfs=====>3");
+           
            this.getListData();
 
        },
        getListData(){
-
+           console.log("---------")
             let _this =this;
-            let params = Object.assign({},this.searchData,{date:new Date()});
+            let params = Object.assign({},this.searchData);
             var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
             this.$http.get(reqURL,params).then((res)=>{
                 
@@ -240,6 +244,7 @@ export default {
             this.$http.delete('delete-father-son-relation', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
+                console.log("kfdkkdlkdfs=====>");
                 this.getListData();
                 this.$Message.success('解除关系成功');
             }).catch((error) => {
@@ -261,17 +266,18 @@ export default {
             for(var i=0;i<selectedAddItems.length;i++){
                 selectedItemsIds.push(selectedAddItems[i].id)
             }
-            console.log("selectedItemsIds",selectedItemsIds);
             var paramsStr = selectedItemsIds.join(',');
-            console.log("this.groupLevel",this.groupLevel)
             var url = this.groupLevel =="PARENT"?"add-son-group-to-father":"add-father-group-to-son";
             var paramsOther = this.groupLevel =="PARENT"?{children:paramsStr}:{parents:paramsStr};
             var params = Object.assign({},{groupId:this.searchData.groupId},paramsOther)
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){
-            console.log("url",url);
+
             this.$http.post(url, params).then((response) => {
+                this.searchData.time = new Date();
+                console.log("kfdkkdlkdfs=====>1");
+
                 this.getListData();
                 this.$Message.success('添加成功');
                 if(StatuParam && StatuParam=="close"){

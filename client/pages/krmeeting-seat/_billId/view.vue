@@ -1,6 +1,9 @@
 <template>
     <div class="krmeeting-seat">
-      <div class="seat-title">散座-{{detailData.communityName}}</div>
+      <div class="seat-title">
+        <span class="line"></span>
+        <span style="margin-left: -80px;">散座-{{detailData.communityName}}</span>
+      </div>
       <Row style="margin-bottom:35px">
         <Col>
           <div class="item-name required">封面图（1张）</div>  
@@ -87,17 +90,14 @@ export default {
         priceColumns: [
           {
               title: '日期',
-              key: 'enableDate',
-              render: (h, params) => {
-                  return dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr;
-              }
+              key: 'enableDateStr',
           },
           {
               title: '开放数量（个）',
               key: 'quantity',
               render: (h, params) => {
                 var tableContent=params.row.quantity?params.row.quantity:'-';
-                let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'开放数量：' ;
+                let time = params.row.enableDateStr+'开放数量：' ;
                 return h('div', [
                     h('Tooltip', {
                         props: {
@@ -123,7 +123,7 @@ export default {
               key: 'remainQuantity',
               render: (h, params) => {
                 var tableContent=params.row.remainQuantity?params.row.remainQuantity:'-';
-                let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'可预订数量：' ;
+                let time =params.row.enableDateStr+'可预订数量：' ;
                 return h('div', [
                     h('Tooltip', {
                         props: {
@@ -149,7 +149,7 @@ export default {
               key: 'priceDecimal',
               render: (h, params) => {
                   var tableContent=params.row.priceDecimal?'￥'+params.row.priceDecimal:'-';
-                  let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'会员价' ;
+                  let time =  params.row.enableDateStr+'会员价' ;
                   return h('div', [
                       h('Tooltip', {
                           props: {
@@ -175,7 +175,7 @@ export default {
               key: 'promotionPriceDecimal',
               render: (h, params) => {
                   var tableContent=params.row.promotionPriceDecimal?'￥'+params.row.promotionPriceDecimal:'-';
-                  let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'会员价' ;
+                  let time =  params.row.enableDateStr+'会员价' ;
                   return h('div', [
                       h('Tooltip', {
                           props: {
@@ -201,7 +201,7 @@ export default {
               key: 'guestPriceDecimal',
               render: (h, params) => {
                   var tableContent=params.row.guestPriceDecimal?'￥'+params.row.guestPriceDecimal:'-';
-                  let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'会员价' ;
+                  let time =  params.row.enableDateStr+'会员价' ;
                   return h('div', [
                       h('Tooltip', {
                           props: {
@@ -227,7 +227,7 @@ export default {
               key: 'guestPromotionPriceDecimal',
               render: (h, params) => {
                   var tableContent=params.row.guestPromotionPriceDecimal?'￥'+params.row.guestPromotionPriceDecimal:'-';
-                  let time = dateUtils.dateToStr("MM月DD日",new Date(params.row.enableDate)) + params.row.enableDateStr+'会员价' ;
+                  let time =params.row.enableDateStr+'会员价' ;
                   return h('div', [
                       h('Tooltip', {
                           props: {
@@ -337,6 +337,15 @@ export default {
       font-size: 16px;
       color:#333;
       margin-bottom: 25px;
+      position: relative;
+      .line{
+        display: inline-block;
+        margin-left: 2px;
+        width:80px;
+        height:4px;
+        z-index:1;
+        background-color: #D8D8D8;
+      }
     }
     img{
       border-radius: 4px;

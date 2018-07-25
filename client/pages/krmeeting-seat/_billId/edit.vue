@@ -1,12 +1,12 @@
 <template>
     <div class="krmeeting-seat">
       <div class="seat-title">散座-{{detailData.communityName}}</div>
-      <Form ref="formItems" :model="detailData" :rules="ruleCustom" label-position="top">
+      <Form ref="detailData" :model="detailData" :rules="ruleCustom" label-position="top">
         <div class="u-upload">
              <FormItem label="封面图（1张）" class="u-input" prop="coverPic" style="width:100%">
                 <div class="content">
                 <UploadFile 
-                  v-model="formItem.coverPic"
+                  v-model="detailData.coverPic"
                   :category="category"
                   withCredentials
                   :format="['jpg','png','gif']"
@@ -26,10 +26,10 @@
             </FormItem>
         </div>
         <div class="u-upload">
-          <FormItem label="配图" class="u-input" prop="picsStr" style="width:100%">
+          <FormItem label="配图" class="u-input" prop="pics" style="width:100%">
             <div class="content-list">
               <UploadFile 
-                  v-model="formItem.picsStr"
+                  v-model="detailData.pics"
                   multiple
                   :category="category"
                   withCredentials
@@ -49,7 +49,7 @@
           </FormItem>
         </div>
         <FormItem label="上架状态" class="u-input" style="width:250px" prop="published">
-          <RadioGroup v-model="formItem.appPublish" style="width:250px">
+          <RadioGroup v-model="detailData.published" style="width:250px">
               <Radio label="true">
                   已上架
               </Radio>
@@ -64,7 +64,7 @@
             <Col class="col">
                <FormItem label="开房数量（个）" style="width:120px" prop="openQuantity">
                   <Input 
-                      v-model="formItem.openQuantity" 
+                      v-model="detailData.openQuantity" 
                       placeholder=""
                       :maxlength="max"
                       style="width:100px"
@@ -74,7 +74,7 @@
             <Col class="col">
                <FormItem label="会员价(个·天)" style="width:120px" prop="priceDecimal">
                   <Input 
-                      v-model="formItem.priceDecimal" 
+                      v-model="detailData.priceDecimal" 
                       placeholder=""
                       :maxlength="max"
                       style="width:100px"
@@ -84,7 +84,7 @@
             <Col class="col">
                <FormItem label="会员优惠价(个·天)" style="width:120px" prop="promotionPriceDecimal">
                   <Input 
-                      v-model="formItem.promotionPriceDecimal" 
+                      v-model="detailData.promotionPriceDecimal" 
                       placeholder=""
                       :maxlength="maxPrice"
                       style="width:100px"
@@ -94,7 +94,7 @@
             <Col class="col">
                <FormItem label="游客价(个·天)" style="width:120px" prop="guestPriceDecimal">
                   <Input 
-                      v-model="formItem.guestPriceDecimal" 
+                      v-model="detailData.guestPriceDecimal" 
                       placeholder=""
                       :maxlength="maxPrice"
                       style="width:100px"
@@ -104,7 +104,7 @@
             <Col class="col">
                <FormItem label="游客优惠价(个·天)" style="width:120px" prop="guestPromotionPriceDecimal">
                   <Input 
-                      v-model="formItem.guestPromotionPriceDecimal" 
+                      v-model="detailData.guestPromotionPriceDecimal" 
                       placeholder=""
                       :maxlength="maxPrice"
                       style="width:100px"
@@ -113,7 +113,7 @@
             </Col>
           </Row>
         </div>
-        <Button type="primary" @click="setConfig" >按默认配置初始化近30天价格</Button>
+        <Button type="primary" @click="initPriceList" >按默认配置初始化近30天价格</Button>
         <div class="price-table">
           <div style="margin-bottom: 11px" >
             <span class="price-title">价格日历</span>
@@ -233,6 +233,11 @@
             </Row>
           </div>
         </div>
+        <div class="bittons">
+          <Button type="primary" @click="handleSubmit('detailData')" >提交</Button>
+          <Button type="ghost" @click="handleSubmit('detailData')" >取消</Button>
+          
+        </div>
       </Form>
 
 
@@ -262,6 +267,15 @@ export default {
               callback();
           }
       };
+      const validateConfig = (rule, value, callback) => {
+          if(!value){
+            callback(new Error('请填写完整'));
+          }else if (value && isNaN(value)) {
+              callback(new Error('请填写数字'));
+          } else {
+              callback();
+          }
+      };
       return {
         validateNumber:validateNumber,
         max:5,
@@ -274,23 +288,23 @@ export default {
           coverPic:[
             { required: true, message: '请上传封面图', trigger: 'change' }
           ],
-          picsStr:[
+          pics:[
             { required: true, message: '请上传配图', trigger: 'change' }
           ],
           guestPromotionPriceDecimal:[
-            { required: true, message: '请填写游客优惠价格', trigger: 'blur' }
+            { required: true,validator: validateConfig,  trigger: 'blur' }
           ],
           openQuantity:[
-            { required: true, message: '请填写开放数量', trigger: 'blur' }
+            { required: true, validator: validateConfig,  trigger: 'blur' }
           ],
           priceDecimal:[
-            { required: true, message: '请填写会员价格', trigger: 'blur' }
+            { required: true, validator: validateConfig, trigger: 'blur' }
           ],
           promotionPriceDecimal:[
-            { required: true, message: '请填写会员优惠价格', trigger: 'blur' }
+            { required: true,validator: validateConfig,  trigger: 'blur' }
           ],
           guestPriceDecimal:[
-            { required: true, message: '请填写游客价格', trigger: 'blur' }
+            { required: true,validator: validateConfig, trigger: 'blur' }
           ],
           published:[
             { required: true, message: '请选择', trigger: 'blur' }
@@ -477,6 +491,7 @@ export default {
     },
     mounted(){
       this.getSeatDetail()
+      GLOBALSIDESWITCH("false");
     },
     watch:{
     },
@@ -486,20 +501,31 @@ export default {
       changeBook(){
 
       },
-      setConfig(){
-
-      },
-      detailImgsSuccess(){
-
-      },
-      detailImgsRemove(){
-
-      },
-      coverImgSuccess(){
-
-      },
       coverImgRemove(){
-
+          this.detailData.coverPic="";
+      },
+      coverImgSuccess(file){
+          this.detailData.coverPic=file.data.url;
+           this.$refs.detailData.validateField('coverImg') 
+      },
+      detailImgsRemove(fileList){
+          let imglist=[];
+          fileList.map((item)=>{
+              imglist.push(item.url)
+          })
+          let detailImgs=imglist.join(',');
+          this.detailData.detailImgs=detailImgs;
+      },
+      detailImgsSuccess(response, file, fileList){
+          let imglist=[].concat(this.imglist);
+          fileList.map((item)=>{
+              imglist.push(item.url)
+          })
+          let detailImgs=imglist.join(',');
+          console.log('========',this.detailImgList,detailImgs)
+          this.detailData.pics=detailImgs;
+          this.$refs.detailData.validateField('pics') 
+            
       },
       imgSizeFormat(){
             this.$Notice.error({
@@ -515,8 +541,23 @@ export default {
         let { params } = this.$route;
         let communityId = params.billId;
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
-          this.detailData = res.data;
+          
+          var coverImgList = []
+          if(res.data.coverPic!=''){
+            coverImgList.push({'url':res.data.coverPic});
+          }
+          let detailImgList=[];
+          res.data.pics.map((item)=>{
+              let obj={};
+              obj.url=item.picUrl;
+              detailImgList.push(obj)
+          })
+          res.data.published=String(res.data.published);
+          res.data.pics=String(res.data.pics);
+          this.detailImgList=detailImgList;
+          this.coverImgList = coverImgList;
           this.priceList = res.data.goods;
+          this.detailData = res.data;
         }).catch((err)=>{
           this.$Notice.error({
               title:err.message
@@ -525,7 +566,77 @@ export default {
         
         
 
-      }    
+      },
+      handleSubmit(name){
+        let message = '请填写完表单';
+        this.$Notice.config({
+            top: 80,
+            duration: 3
+        });
+        let _this = this;
+        console.log('handleSubmit',this.detailData)
+        this.$refs[name].validate((valid) => {
+            if (valid) {
+                _this.submitCreate();
+             } else {
+                 _this.$Notice.error({
+                     title:message
+                 });
+             }
+        }) 
+      }, 
+      submitCreate(){
+        let {params}=this.$route;
+        this.detailData.communityId=params.billId;
+        
+        let picsStr = []
+        this.detailImgList.map(item=>{
+          let obj = {};
+          obj.picUrl = item.url;
+          picsStr.push(obj)
+        })
+        res.data.published=String(res.data.published)
+        this.detailData.picsStr = String(picsStr);
+        this.detailData.goodsStr = String(this.detailData.goods) 
+        console.log('submitCreate',this.detailData)
+
+        return;
+        
+           
+        this.$http.post('post-krseat-data', this.formItem).then((res)=>{
+            this.$Notice.success({
+                    title:'编辑成功'
+                });
+                // setTimeout(function(){
+                //     window.close();
+                //     window.opener.location.reload();
+                // },1000) 
+        }).catch((err)=>{
+            this.$Notice.error({
+                    title:err.message
+                });
+        })
+      },
+      initPriceList(){
+        let form = {};
+        let {params}=this.$route;
+        form.communityId=params.billId;
+        form.guestPriceDecimal = this.detailData.guestPriceDecimal;
+        form.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal;
+        form.openQuantity = this.detailData.openQuantity;
+        form.priceDecimal = this.detailData.priceDecimal;
+        form.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
+
+        this.$http.post('post-krseat-price-config', form).then((res)=>{
+            console.log('====',res.data) 
+            this.priceList = res.data;
+        }).catch((err)=>{
+            this.$Notice.error({
+                    title:err.message
+                });
+        })
+      }
+
     }
  }
 </script>
@@ -538,7 +649,7 @@ export default {
       margin-bottom: 25px;
     }
     .content{
-      padding-top: 27px;
+      padding-top: 20px;
       padding-left: 26px;
       height: 195px;
       width: 380px;
@@ -633,5 +744,17 @@ export default {
         background-color: #F5F6FA;
         font-size: 14px;
         color:#333;
+    }
+    .bittons{
+      position: fixed;
+      bottom:0;
+      width:100%;
+      height:60px;
+      left:0;
+      z-index: 8;
+      background-color: #fff;
+      line-height: 60px;
+      text-align:center;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.20);
     }
 </style>

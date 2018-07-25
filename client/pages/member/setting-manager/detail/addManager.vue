@@ -134,6 +134,7 @@ export default {
                     }
                 })
                 this.checkAllGroup=arr;
+                this.formItem.cmtIds=arr.join(',');
                
 			}).catch((err)=>{
 				this.$Notice.error({

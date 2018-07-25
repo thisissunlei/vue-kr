@@ -4,13 +4,15 @@
       <Row style="margin-bottom:35px">
         <Col>
           <div class="item-name required">封面图（1张）</div>  
-          <img :src="detailData.coverPic" alt="" class="first-pic">  
+          <img :src="detailData.coverPic" alt="" class="first-pic" v-if="detailData.coverPic">  
+          <span v-if="!detailData.coverPic">暂无</span>
         </Col>
       </Row>
       <Row style="margin-bottom:35px">
         <Col>
           <div class="item-name required">配图</div>  
           <div class="pic-box" >
+            <span v-if="!detailData.pics">暂无</span>
             <img v-for="item  in detailData.pics" :key="item.id" :src="item.picUrl" alt="">
           </div>
         </Col>
@@ -33,23 +35,23 @@
         <div class="detail-configs">
           <div class="detail-content">
             <span class="detail-config">开房数量(个)</span>
-            <span class="content">{{detailData.openQuantity}}</span>
+            <span class="content">{{detailData.openQuantity || '-'}}</span>
           </div>
           <div class="detail-content">
             <span class="detail-config">会员价(个·天)</span>
-            <span class="content">￥{{detailData.priceDecimal}}</span>
+            <span class="content">￥{{detailData.priceDecimal || '-'}}</span>
           </div>
           <div class="detail-content">
             <span class="detail-config">会员优惠价(个·天)</span>
-            <span class="content">￥{{detailData.promotionPriceDecimal}}</span>
+            <span class="content">￥{{detailData.promotionPriceDecimal || '-'}}</span>
           </div>
           <div class="detail-content">
             <span class="detail-config">游客价(个·天)</span>
-            <span class="content">￥{{detailData.guestPriceDecimal}}</span>
+            <span class="content">￥{{detailData.guestPriceDecimal || '-'}}</span>
           </div>
           <div class="detail-content">
             <span class="detail-config">游客优惠价(个·天)</span>
-            <span class="content">￥{{detailData.guestPromotionPriceDecimal}}</span>
+            <span class="content">￥{{detailData.guestPromotionPriceDecimal || '-'}}</span>
           </div>
         </div>  
       </div>

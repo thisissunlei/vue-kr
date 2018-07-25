@@ -51,7 +51,7 @@
                     <div class="u-part2-line"></div>
                     <div class="u-part-title">管理的社区</div>
                     <div class="u-part-tip">温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可</div>
-                    <div class="u-error-tip" v-if="ifCheckError">请选择要管理的社区</div>
+                    <div class="u-error-check" v-if="ifCheckError">请选择要管理的社区</div>
                      <div class="u-community-check-list">
                         <div class="u-all-check">
                             <Checkbox v-model="checkAll" @on-change="onCheckAll" >全选</Checkbox>
@@ -182,16 +182,13 @@ export default {
 			});
             let _this = this;
             if(!this.formItem.cmtIds){
-                console.log('88888')
                 this.ifCheckError=true;
             }else{
-                 console.log('111')
                  this.ifCheckError=false;
             }
-            console.log('this.ifCheckError',this.ifCheckError)
+            
           
 			this.$refs.formItems.validate((valid) => {
-                console.log('this.formItem.cmtIds',this.formItem.cmtIds)
 				if (valid && this.formItem.cmtIds) {
                     callback && callback();
 				} else {
@@ -216,6 +213,12 @@ export default {
             font-size: 14px;
             margin-bottom: 20px;
             margin-top: -10px;
+        }
+        .u-error-check{
+            color:#ed3f14;
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding-left: 44px;
         }
         form{
             width: 100%;

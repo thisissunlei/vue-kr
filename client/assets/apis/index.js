@@ -20,8 +20,10 @@ import ProductGoods from './productGoods.js';
 import comment from './comment.js';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
+import Kingdee from './kingdee.js';
 
 export default {
+  ...Kingdee,
   ...OrderApi,
   ...OrderManageApi,
   ...ContractCenter,

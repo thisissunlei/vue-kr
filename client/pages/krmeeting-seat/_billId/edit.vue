@@ -702,21 +702,24 @@ export default {
         })
       },
       setPriceList(arr){
-        var goods = arr;
-        goods = goods.map(item=>{
+        var goods = arr.slice(0);
+        let god  = []
+        console.log('item.guestPriceDecimal',goods)
+        god = goods.map(item=>{
           let obj = item;
           obj.guestPriceDecimal = this.detailData.guestPriceDecimal
           obj.openQuantity = this.detailData.openQuantity
           obj.priceDecimal = this.detailData.priceDecimal
+          console.log('setPriceList=====',item.guestPriceDecimal)
           if(item.guestPriceDecimal){
             obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
             obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
           }
           return obj;
         })
-        this.detailData.goods = goods;
-        this.goods = goods;
-        console.log('======>',goods)
+        this.detailData.goods = god;
+        this.goods = god;
+        console.log('======>',god)
 
       },
       // 点击30天设置，校验首次配置项填写的是否正确，若无错设置价格日历
@@ -752,6 +755,7 @@ export default {
             if(code == 1){
               that.setPriceList(this.goods)
             }else{
+              console.log('initPriceList',res.data.goods)
               that.setPriceList(res.data.goods)
             }
         }).catch((err)=>{

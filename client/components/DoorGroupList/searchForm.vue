@@ -21,8 +21,11 @@
                     v-model="formItem.customerId"
                     style="width:200px"
                     placeholder="请选择公司"
-                    filterable
                     @on-change="onChangeCompanys"
+                    filterable
+                    remote
+                    :remote-method="getCompany"
+                    :loading="loadingCompany"
                 >
                     <Option  v-for="item in companyList" :value="item.id" :key="item.id"> {{ item.company }}</Option>
                 </Select>
@@ -48,6 +51,7 @@ export default{
     name:'equipmentSearch',
     data (){
 		return{
+            loadingCompany:false,
            companyList:[],
             communityList :[],
 			formItem : {
@@ -60,7 +64,7 @@ export default{
     mounted(){
 
         this.getCommunity();
-        this.getCompany();
+        this.getCompany('');
         
     },
     props:[
@@ -83,12 +87,14 @@ export default{
                 });
             })
         },
-        getCompany(){
+        getCompany(value){
             
+            this.loadingCompany =true;
             var param = {
-                companyName :''
+                companyName :value
             }
             this.$http.get('get-samrt-hard-company-list',param).then((res)=>{
+                this.loadingCompany =false;
 
                 this.companyList=res.data.items;
 
@@ -128,7 +134,8 @@ export default{
         },
         addGroups: function(param){
             this.$emit('addGroups',param);
-        }
+        },
+        
 
 
     },

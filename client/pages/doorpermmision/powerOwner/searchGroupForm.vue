@@ -21,9 +21,11 @@
                     v-model="formItem.customerId"
                     style="width:200px"
                     placeholder="请选择公司"
-                    filterable
                     @on-change="onChangeCompanys"
-                    @on-query-change="inputCompanyName"
+                    filterable
+                    remote
+                    :remote-method="inputCompanyName"
+                    :loading="loadingCompany"
                 >
                     <Option  v-for="item in companyList" :value="item.id" :key="item.id"> {{ item.company }}</Option>
                 </Select>
@@ -63,7 +65,8 @@ export default{
 			formItem : {
 
             },
-            companyName: ''
+            companyName: '',
+            loadingCompany :false
 
           
 		}
@@ -99,7 +102,9 @@ export default{
             var params = {
                 companyName: value
             }
+            this.loadingCompany = true;
             this.$http.get('get-samrt-hard-company-list',params).then((res)=>{
+                this.loadingCompany = false;
 
                 this.companyList=res.data.items;
 
@@ -110,9 +115,7 @@ export default{
             })
         },
         inputCompanyName(value){
-            console.log("value",value);
             this.getCompany(value);
-
         },
         onChangeCommunity(communityId){
 

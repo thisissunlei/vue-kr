@@ -21,8 +21,11 @@
                     v-model="formItem.customerId"
                     style="width:200px"
                     placeholder="请选择公司"
-                    filterable
                     @on-change="onChangeCompanys"
+                    filterable
+                    remote
+                    :remote-method="getCompany"
+                    :loading="loadingCompany"
                 >
                     <Option  v-for="item in companyList" :value="item.id" :key="item.id"> {{ item.company }}</Option>
                 </Select>
@@ -54,6 +57,7 @@ export default{
     name:'equipmentSearch',
     data (){
 		return{
+            loadingCompany :false,
             imgClass : "img-class",
             tipsContent:[{text:"父级组只能添加设备组作为其子集"},{text:"同样,设备组只能添加父级组作为其父级"}]
             
@@ -72,7 +76,7 @@ export default{
     mounted(){
 
         this.getCommunity();
-        this.getCompany();
+        this.getCompany('');
         
     },
     props:[
@@ -94,9 +98,9 @@ export default{
                 });
             })
         },
-        getCompany(){
+        getCompany(value){
              var params = {
-                companyName :this.companyName
+                companyName :value
             }
             this.$http.get('get-samrt-hard-company-list',params).then((res)=>{
 

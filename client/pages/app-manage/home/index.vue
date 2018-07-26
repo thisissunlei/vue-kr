@@ -167,8 +167,12 @@ export default {
             }
             this.tabParams.orderLine=orderLine;
             this.tabParams.orderRule=form.order.toUpperCase()
-            console.log('form----',form)
-            console.log('this.tabParams----',this.tabParams)
+        },
+        changeDate(form){
+            console.log('form',form)
+            this.tabParams.dataDate=form;
+
+             //this.sectionTitle=`${oYear}年${oMoth}月${oDay}日`;
         }
     }
 }

@@ -48,11 +48,11 @@
                 <Input v-model="formItem.doorCode" size="large" placeholder="屏幕编号" @on-change="inputDoorCodeChanged"></Input>
             </FormItem>
            
-            <div class="btn-box">
+            <FormItem>
                 
                 <Button type="primary"  @click="addDeviceContinue" class="search-btn add-btn">添加并继续</Button>
                 <Button type="primary"  @click="addDeviceClose" class="search-btn">添加并关闭</Button>
-            </div>
+            </FormItem>
 
         </Form>
         <Modal v-model="showTime" @on-ok="confirmAddDevice">

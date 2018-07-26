@@ -9,11 +9,7 @@
                 :page-size="pageSize" @on-change="changePage"
                 :current="currentPage"
                 ></Page>
-                <div class="loading-box"  v-if="loading">
-                    <Spin fix>
-                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                    </Spin>
-                </div>
+                
             </div>
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
@@ -312,18 +308,6 @@ export default {
         .all-data{
             text-align:center;
             padding:10px;
-        }
-        .loading-box{
-            height: 100px;
-            position: relative;
-            .demo-spin-icon-load{
-                animation: ani-demo-spin 1s linear infinite;
-            }
-            @keyframes ani-demo-spin {
-                from { transform: rotate(0deg);}
-                50%  { transform: rotate(180deg);}
-                to   { transform: rotate(360deg);}
-            }
         }
         .bottom-page{
             float:right;

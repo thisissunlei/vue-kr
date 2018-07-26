@@ -13,6 +13,7 @@
          </div>
          <div class="u-table">
             <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Button type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
          </div> 
     </div>
 </template>
@@ -32,6 +33,7 @@ export default {
     data(){
         return{
             sectionTitle:'',
+            totalCount:0,
             tabParams:{
                dataDate:'',
             },
@@ -148,7 +150,7 @@ export default {
         getTableData(params){
              this.$http.get('get-operation-community-use-rate', params).then((res)=>{
                     this.memberList=res.data.items;
-                    
+                    this.totalCount=this.memberList.length;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
@@ -178,6 +180,9 @@ export default {
             this.tabParams.dataDate=form;
             let time=String(form).split('-')
             this.sectionTitle=`${time[0]}年${time[1]}月${time[2]}日`;
+        },
+        onExport(){
+
         }
     }
 }

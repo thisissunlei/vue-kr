@@ -1,6 +1,12 @@
 <template>
     <div class="g-member-online">
          <SectionTitle :title="`各社区会员线上化（${sectionTitle}）`" />
+         <IconTip style="left:260px;top:-32px;" contentStyle="width:300px" iconStyle="black">
+            <p>①  线上化率：已入驻会员获得会员权限满7天后，通过是否登录过APP计算“7天线上化率”；</p>
+            <p>②  对比周初：当日的线上化率与上周日的数据对比；</p>
+            <p>③  日均上线会员数（当周）：已选中日期所在周的平均值（当周登录APP会员总数/截止该日当周总天数）；</p>
+            <p>④  同比前周：当周日均上线会员数与上周7天日均上线会员数的浮动值；</p>
+         </IconTip>
          <div class="u-search">
              <DatePicker 
                 class="u-date-right" 
@@ -13,13 +19,15 @@
          </div>
          <div class="u-table">
             <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
-            <Button type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
+            <Button  style="margin-top:10px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
          </div> 
     </div>
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-import RateImg  from './rateImg'
+import RateImg  from './rateImg';
+import IconTip from '~/components/IconTip';
+
 export default {
     head() {
         return {
@@ -28,7 +36,8 @@ export default {
     },
     components:{
         SectionTitle,
-        RateImg
+        RateImg,
+        IconTip,
     },
     data(){
         return{
@@ -142,7 +151,7 @@ export default {
             let oYear = today.getFullYear();
             let oMoth = (today.getMonth() + 1).toString();
             let oDay = today.getDate().toString();
-            this.sectionTitle=`${oYear}年${oMoth}月${oDay}日`;
+            this.sectionTitle=`${oMoth}月${oDay}日`;
             if (oMoth.length <= 1) oMoth = '0' + oMoth;
             if (oDay.length <= 1) oDay = '0' + oDay;
             return oYear + str + oMoth + str + oDay;

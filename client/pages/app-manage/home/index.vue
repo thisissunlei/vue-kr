@@ -174,7 +174,8 @@ export default {
                 break;
             }
             this.tabParams.orderLine=orderLine;
-            this.tabParams.orderRule=form.order.toUpperCase()
+            this.tabParams.orderRule=form.order.toUpperCase();
+            this.getTableData(this.tabParams);
         },
         changeDate(form){
             this.tabParams.dataDate=form;

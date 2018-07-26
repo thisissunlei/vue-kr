@@ -254,7 +254,11 @@ export default {
             .ivu-input{
                 border: 1px solid #ed3f14;
                 box-shadow: none;
+                &:focus{
+                    box-shadow: 0 0 0 2px rgba(237,63,20,.2);
+                }
             }
+
         }    
         .u-error-check{
             color:#ed3f14;

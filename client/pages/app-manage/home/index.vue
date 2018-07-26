@@ -19,7 +19,7 @@
          </div>
          <div class="u-table">
             <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
-            <Button  style="margin-top:10px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
+            <Button  style="margin-top:30px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
          </div> 
     </div>
 </template>

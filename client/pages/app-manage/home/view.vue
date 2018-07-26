@@ -4,40 +4,30 @@
         <div class="u-community-info">
            <span class="u-community-name">{{communityName}}</span>
            <span class="u-change-community-btn" @click="openCommunity">切换社区</span>
-           <DatePicker 
+        </div>
+    </div>
+    <div>
+         <div>
+            <span>会员7天线上化</span>    
+            <IconTip style="left:260px;top:-32px;" contentStyle="width:300px" iconStyle="black">
+                <p>①  线上化率：已入驻会员获得会员权限满7天后，通过是否登录过APP计算“7天线上化率”；</p>
+                <p>②  对比周初：当日的线上化率与上周日的数据对比；</p>
+                <p>③  日均上线会员数（当周）：已选中日期所在周的平均值（当周登录APP会员总数/截止该日当周总天数）；</p>
+                <p>④  同比前周：当周日均上线会员数与上周7天日均上线会员数的浮动值；</p>
+             </IconTip>
+         </div>
+        <DatePicker 
                 class="u-date-right" 
                 type="daterange" 
                 placement="bottom-end" 
                 placeholder="日期" 
                 @on-change="changeDate"
              />
-        </div>
     </div>
-      <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-            <Tab-pane label="会员7天线上化率" name="member"> 
-                <div class="u-member-tip" v-if="isTip">
-                    <div class="u-member-small-trigon"></div>
-                    已入驻会员获得会员权限满7天后，通过是否登录过APP计算“7天线上化率”，用以分析引导入驻会员加入线上APP社群情况；
-                    <span class="u-member-tip-close" @click="tipClose"></span>
-                </div>
-                <Member   
-                    :mask="key"
-                    :detail="formItem"
-                />
-            </Tab-pane>
-            <Tab-pane label="入驻会员活跃情况" name="joinMember">
-                <JoinMember 
-                    :mask="key"
-                    :detail="formItem" 
-                /> 
-            </Tab-pane>
-            <Tab-pane label="活动情况" name="activity">
-               <Activity 
-                    :mask="key"
-                    :detail="formItem"
-                />
-            </Tab-pane>
-      </Tabs>  
+    <div class="u-table">
+        <Table border  :columns="memberColumns" :data="memberList" ref="table" stripe></Table>
+        <Button  style="margin-top:30px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
+    </div>
      <Modal
         v-model="openDialog"
         title="选择社区"
@@ -67,9 +57,7 @@
   </div>
 </template>
 <script>
-import Member from './member';
-import JoinMember from './joinMember';
-import Activity from './activity';
+import IconTip from '~/components/IconTip';
 
 export default {
    head() {
@@ -77,13 +65,12 @@ export default {
             title: '产品运营主页'
         }
     },
+    components:{
+     IconTip     
+   },
    data(){
        return {
-           activeKey:'member',
-           key:'member',
-           joinMemberPage:1,
-           joinMemberTotalCount:0,
-           pageSize:15,
+           totalCount:0,
            memberList:[],
            communityName:'全部社区',
            openDialog:false,
@@ -94,29 +81,58 @@ export default {
            },
            cmtId:'',
            communityList:[],
-           isTip:true,
            communityObj:{},
+           memberColumns:[
+              {
+                  title: '日期',
+                  key: 'dataDate',
+                  align:'center',
+              },
+              {
+                  title: '激活会员数',
+                  key: 'loginNum',
+                  align:'center',
+              },
+              {
+                  title: '入驻会员数',
+                  key: 'enterNum',
+                  align:'center',
+              },
+              {
+                  title: '7天线上化率',
+                  key: 'useRate',
+                  align:'center',
+              },
+              {
+                  title: '对比昨天',
+                  key: 'useRate',
+                  align:'center',
+              },
+              {
+                  title: '对比上周日',
+                  key: 'useRate',
+                  align:'center',
+              },
+              {
+                  title: '日均上线会员数（当周）',
+                  key: 'useRate',
+                  align:'center',
+              },
+              {
+                  title: '同比前周',
+                  key: 'useRate',
+                  align:'center',
+              },
+           ],
        }
-   },
-   components:{
-      Member,
-      JoinMember,
-      Activity      
    },
    mounted(){
       this.activeKey=sessionStorage.getItem('hometMask')||'member';
       this.getCommunity();
    },
    methods:{
-        tipClose(){
-            this.isTip=!this.isTip
-        },
         openCommunity(){
             this.openDialog=!this.openDialog
-        },
-        tabsClick(key){
-           this.key=key;
-           sessionStorage.setItem('hometMask',key);
         },
         changeCommunity(form){
             this.communityObj=form;
@@ -129,7 +145,6 @@ export default {
         changeDate(data){
             this.formItem.beginDate=data[0];
             this.formItem.endDate=data[1];
-            
         },
         getCommunity(){
               this.$http.get('get-community-new-list','').then((res)=>{
@@ -140,12 +155,18 @@ export default {
                         title:error.message
                     });
                 })
+         },
+         onExport(){
+
          }
     }
 }
 </script>
 <style lang="less">
 .g-app-manage-home{
+    .u-table{
+        padding:20px 20px 0;
+    }
   .u-home-main-part{
     background-color: #fff;
     height: 60px;
@@ -207,6 +228,7 @@ export default {
         margin-top:3px;
         margin-right:10px;
     }
+
   
 }
 .m-community-dialog{

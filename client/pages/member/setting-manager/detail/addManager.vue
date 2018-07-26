@@ -13,7 +13,6 @@
                                 v-model="formItem.mbrPhone" 
                                 placeholder="请输入手机号"
                                 :maxlength='11'
-                                type="number"
                                 
                             />
                         </FormItem>
@@ -38,7 +37,8 @@
                                     v-model="formItem.mbrIdCardNo" 
                                     placeholder="请输入身份证号"
                                     :maxlength='18'
-                                    type="number"
+                                    @on-change="cardChange"
+                                    :class="ifCard?'u-card-error-tip':''"
                                 />
                             </FormItem>
                             <div class="u-label-text u-input">
@@ -49,6 +49,7 @@
                                 {{companyType}}
                                 </div>
                             </div>
+                             <div class="u-card-tip" v-if="ifCard">请输入数字</div>
                         </div>
                     </div>
                 </div>
@@ -79,6 +80,18 @@ export default {
 		LabelText,
     },
     data(){
+
+        const validatePhone= (rule, value, callback) => {
+                var reg = /^\+?[1-9]\d*$/;
+                if(!value){
+                    callback(new Error('请输入手机号码'));
+                }else if (value&&!reg.test(value)) {
+                    callback(new Error('请输入数字'));
+                }else{
+                    callback();
+                }
+        };
+
         return{
             checkAll:false,
             ifCheckError:false,
@@ -87,6 +100,7 @@ export default {
             communityList:[],
             ifError:false,
             ifShow:false,
+            ifCard:false,
             formItem:{
                cmtIds:'',
                mbrPhone:'',
@@ -96,16 +110,17 @@ export default {
             },
             ruleCustom:{
                 mbrPhone:[
-                    { required: true, message: '请输入手机号码', trigger:'change' }
+                    {validator:validatePhone,required: true,  trigger:'change' }
                 ],
                 mbrName:[
                     { required: true, message: '请输入姓名', trigger: 'change' }
                 ],
                 mbrEmail:[
-                    { required: true, message: '请输入邮箱', trigger: 'change' }
+                    {required: true, message: '请输入邮箱', trigger: 'change' }
                 ],
           },
           companyType:'',
+         
              
         }
     },
@@ -113,6 +128,15 @@ export default {
         this.$emit('submitFn', this.handleSubmit);
     },
     methods:{
+        cardChange(){
+            let card=this.formItem.mbrIdCardNo;
+            let reg = /^\+?[1-9]\d*$/;
+            if(card&&!reg.test(card)) {
+                  this.ifCard=true;  
+            }else{
+                 this.ifCard=false;  
+            }
+        },
         searchInfo(){
             let {params}=this.$route;
             let phone=this.formItem.mbrPhone;
@@ -221,6 +245,17 @@ export default {
             margin-bottom: 20px;
             margin-top: -10px;
         }
+        .u-card-tip{
+            color:#ed3f14;
+            font-size: 12px;
+            margin-top: -18px;
+        }
+        .u-card-error-tip{
+            .ivu-input{
+                border: 1px solid #ed3f14;
+                box-shadow: none;
+            }
+        }    
         .u-error-check{
             color:#ed3f14;
             font-size: 14px;

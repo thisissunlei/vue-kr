@@ -193,7 +193,7 @@
                     ],
                     mobile:[
                         { required: true, message: '请填写客户联系人电话'},
-                        { required: true, trigger: 'blur' ,validator: validatephone},
+                        // { required: true, trigger: 'blur' ,validator: validatephone},
 
                     ],
                     channelType:[
@@ -228,11 +228,15 @@
             var haveNull = false;
 
             for(let key in this.formItem){
-                if(!this.formItem[key]){
-                    haveNull = true;
+                if(key!='mobile'){
+                    if(!this.formItem[key]){
+                        haveNull = true;
+                    }
                 }
+                
             }
-            console.log("haveNull",haveNull);
+            console.log(haveNull,"pppppp")
+           
 
             if(!haveNull){
                 data = Object.assign({},this.formItem);

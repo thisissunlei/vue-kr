@@ -1,110 +1,114 @@
 <template>
-    <Form ref="formDynamic" :model="formDynamic" style="width:990px">
-        <CheckboxGroup v-model="social">
-            <Checkbox label="twitter">
-                <Icon type="social-twitter"></Icon>
-                <span>Twitter</span>
-            </Checkbox>
-            <Checkbox label="facebook">
-                <Icon type="social-facebook"></Icon>
-                <span>Facebook</span>
-            </Checkbox>
-            <Checkbox label="github">
-                <Icon type="social-github"></Icon>
-                <span>Github</span>
-            </Checkbox>
-            <Checkbox label="snapchat">
-                <Icon type="social-snapchat"></Icon>
-                <span>Snapchat</span>
-            </Checkbox>
-        </CheckboxGroup>
-        <Button type="primary" @click="handleSubmit" >按默认配置初始化近30天价格</Button>
-
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <FormItem label="Name" prop="name">
+            <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        </FormItem>
+        <FormItem label="E-mail" prop="mail">
+            <Input v-model="formValidate.mail" placeholder="Enter your e-mail"></Input>
+        </FormItem>
+        <FormItem label="City" prop="city">
+            <Select v-model="formValidate.city" placeholder="Select your city">
+                <Option value="beijing">New York</Option>
+                <Option value="shanghai">London</Option>
+                <Option value="shenzhen">Sydney</Option>
+            </Select>
+        </FormItem>
+        <FormItem label="Date">
+            <Row>
+                <Col span="11">
+                    <FormItem prop="date">
+                        <DatePicker type="date" placeholder="Select date" v-model="formValidate.date"></DatePicker>
+                    </FormItem>
+                </Col>
+                <Col span="2" style="text-align: center">-</Col>
+                <Col span="11">
+                    <FormItem prop="time">
+                        <TimePicker type="time" placeholder="Select time" v-model="formValidate.time"></TimePicker>
+                    </FormItem>
+                </Col>
+            </Row>
+        </FormItem>
+        <FormItem label="Gender" prop="gender">
+            <RadioGroup v-model="formValidate.gender">
+                <Radio label="male">Male</Radio>
+                <Radio label="female">Female</Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem label="Hobby" prop="interest">
+            <CheckboxGroup v-model="formValidate.interest">
+                <Checkbox label="Eat"></Checkbox>
+                <Checkbox label="Sleep"></Checkbox>
+                <Checkbox label="Run"></Checkbox>
+                <Checkbox label="Movie"></Checkbox>
+            </CheckboxGroup>
+        </FormItem>
+        <FormItem label="Desc" prop="desc">
+            <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        </FormItem>
+        <FormItem>
+            <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
+            <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">Reset</Button>
+        </FormItem>
     </Form>
 </template>
 <script>
     export default {
         data () {
-            const validateNumber = (rule, value, callback) => {
-                if (value && isNaN(value)) {
-                    callback(new Error('请填写数字'));
-                } else {
-                    callback();
-                }
-            };
             return {
-                social:[],
-                validateNumber:validateNumber,
-                maxPrice:10,
-                max:5,
-                index: 1,
-                formDynamic: {
-                    items: [
-                        {
-                            value: '',
-                            index: 1,
-                            status: 1
-                        }
-                    ],
+                formValidate: {
+                    name: '',
+                    mail: '',
+                    city: '',
+                    gender: '',
+                    interest: [],
+                    date: '',
+                    time: '',
+                    desc: ''
                 },
+                ruleValidate: {
+                    name: [
+                        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+                    ],
+                    mail: [
+                        { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+                        { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                    ],
+                    city: [
+                        { required: true, message: 'Please select the city', trigger: 'change' }
+                    ],
+                    gender: [
+                        { required: true, message: 'Please select gender', trigger: 'change' }
+                    ],
+                    interest: [
+                        { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+                        { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+                    ],
+                    date: [
+                        { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+                    ],
+                    time: [
+                        { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                    ],
+                    desc: [
+                        { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+                        { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                    ]
+                }
             }
         },
         methods: {
             handleSubmit (name) {
-                console.log('dsdasd',this.social)
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
-            },
-            handleAdd () {
-                this.index++;
-                this.formDynamic.items.push({
-                    value: '',
-                    index: this.index,
-                    status: 1
-                });
-            },
-            handleRemove (index) {
-                this.formDynamic.items[index].status = 0;
             }
         }
     }
 </script>
-<style lang="less">
-    .price-row{
-        border:1px solid  #E1E6EB;
-        border-top:none;
-        &:first-child{
-           border-top:1px solid  #E1E6EB; 
-        }
-        .date{
-            display: inline-block;
-            height: 33px;
-            line-height: 33px;
-            margin:15px 0;
-        }
-        .ivu-form-item{
-            margin: 15px 0;
-        }
-        .ivu-form-item-error-tip{
-            padding-top: 3px;
-            padding-left: 10px;
-            position: relative;
-            text-align:left;
-        }
-        .parice-col{
-            text-align:center;
-            border-right:1px solid  #E1E6EB;
-            &:last-child{
-                border-right: none;
-            }
-        }
-    }
-    .row-header{
-        height: 50px;
-        line-height: 50px;
-        background-color: #F5F6FA;
-        font-size: 16px;
-        color:#333;
-    }
-</style>

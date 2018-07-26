@@ -153,7 +153,12 @@
                    游客优惠价 (个·天)
                 </Col>
             </Row>
-            <Row v-for="(item,index) in detailData.goods" :key="item.id" class="price-row">
+            <Row v-if="!goods.length"  class="price-row">
+              <Col span="24" class="parice-col" style="padding:40px 0">
+                暂无数据
+              </Col>
+            </Row>
+            <Row v-if="goods.length" v-for="(item,index) in goods" :key="item.id" class="price-row">
                 <Col span="3" class="parice-col">
                   <span class="date">{{item.enableDateStr}}</span>
                 </Col>
@@ -338,7 +343,7 @@ export default {
             { required: true, message: '请选择', trigger: 'blur' }
           ],
           devicesStrArray:[
-            { required: true, message: '请选择散座配套', trigger: 'change' }
+            { required: true, type: 'array', min: 1, message: '请选择散座配套', trigger: 'change' },
           ]
         },
         priceColumns: [
@@ -512,7 +517,8 @@ export default {
           devices:[],
           goods:[]
         },
-        deviceList:[]
+        deviceList:[],
+        goods:[]
       }
     },
     components:{
@@ -596,7 +602,7 @@ export default {
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
           
           var coverImgList = []
-          if(res.data.coverPic!=''){
+          if(res.data.coverPic && res.data.coverPic!=''){
             coverImgList.push({'url':res.data.coverPic});
           }
           let detailImgList=[];
@@ -620,11 +626,12 @@ export default {
           
           this.detailImgList=detailImgList;
           this.coverImgList = coverImgList;
-          this.priceList = res.data.goods;
-          this.detailData = res.data;
+          this.detailData = Object.assign({},res.data);
+          this.detailData.goods = res.data.goods || [];
+          this.goods = res.data.goods || []
           this.detailData.devicesStrArray = devicesStrArray;
+          console.log('=======>',this.detailData)
         }).catch((err)=>{
-          console.log('getbasicData',err.message)
           this.$Notice.error({
               title:err.message
           });
@@ -646,10 +653,11 @@ export default {
           }
         })
         this.detailData.devicesStr = JSON.stringify(devicesStr) 
-        this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
         console.log('handleSubmit',this.detailData)
         this.$refs[name].validate((valid) => {
             if (valid) {
+              this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
+
                 _this.submitCreate();
              } else {
                  _this.$Notice.error({
@@ -672,7 +680,7 @@ export default {
         console.log('submitCreate2',picsStr)
 
         this.detailData.picsStr = JSON.stringify(picsStr);
-        this.detailData.goodsStr = JSON.stringify(this.detailData.goods) 
+        this.detailData.goodsStr = JSON.stringify(this.goods) 
         
         let formData = Object.assign({},this.detailData)
         delete formData.devices  
@@ -686,13 +694,15 @@ export default {
                     window.close();
                     window.opener.location.reload();
         }).catch((err)=>{
+          this.detailData.devicesStrArray = JSON.parse(this.detailData.devicesStrArray) 
+          console.log('===>err',this.detailData)
             this.$Notice.error({
                     title:err.message
                 });
         })
       },
-      setPriceList(){
-        var goods = this.detailData.goods;
+      setPriceList(arr){
+        var goods = arr;
         goods = goods.map(item=>{
           let obj = item;
           obj.guestPriceDecimal = this.detailData.guestPriceDecimal
@@ -705,6 +715,8 @@ export default {
           return obj;
         })
         this.detailData.goods = goods;
+        this.goods = goods;
+        console.log('======>',goods)
 
       },
       // 点击30天设置，校验首次配置项填写的是否正确，若无错设置价格日历
@@ -719,6 +731,7 @@ export default {
       },
       initPriceList(){
         let form = {};
+        let that = this;
         let {params}=this.$route;
         let configable = this.vaildConfig()
         if(configable){
@@ -737,9 +750,9 @@ export default {
         this.$http.post('post-krseat-price-config', form).then((res)=>{
             var code = res.data.code;
             if(code == 1){
-              this.setPriceList()
+              that.setPriceList(this.goods)
             }else{
-              this.detailData.goods = res.data.goods;
+              that.setPriceList(res.data.goods)
             }
         }).catch((err)=>{
           

@@ -166,7 +166,7 @@ var layoutScrollHeight=0;
             width: 120,
             align:'center',
             render:(h,params)=>{
-              return h('div', [
+              var btn = [
                 h('Button', {
                   props: {
                     type: 'text',
@@ -180,22 +180,27 @@ var layoutScrollHeight=0;
                       this.jumpEdit(params.row);
                     }
                   }
-                }, '编辑'),
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  },
-                  style: {
-                    color:'#2b85e4'
-                  },
-                  on: {
-                    click: () => {
-                      this.jumpCheck(params.row);
+                }, '编辑')
+              ]
+              if ( !!params.row.todayGood ) {
+                btn.push(
+                  h('Button', {
+                    props: {
+                      type: 'text',
+                      size: 'small'
+                    },
+                    style: {
+                      color:'#2b85e4'
+                    },
+                    on: {
+                      click: () => {
+                        this.jumpCheck(params.row);
+                      }
                     }
-                  }
-                }, '查看')
-              ]);
+                  }, '查看')
+                )
+              }
+              return h('div', btn);
             }
           }],
           openMessage:false,

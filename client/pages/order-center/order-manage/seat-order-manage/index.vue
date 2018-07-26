@@ -34,10 +34,10 @@ export default {
     },
    data(){
        return {
-           searchparams : {
-             page: 1,
-             pageSize: 50
-           },
+         searchparams : {
+           page: 1,
+           pageSize: 50
+         },
          left: '',
          width: '',
          sideBar: true,
@@ -50,6 +50,15 @@ export default {
            {
              title: '订单编号',
              key: 'orderNo',
+             render: (h, params) => {
+               return h('div', [
+                 h('div', {
+                   style: {
+                     minWidth: '200px'
+                   }
+                 }, params.row.orderNo)
+               ]);
+             }
            },
            {
              title: '预订的社区',
@@ -96,7 +105,7 @@ export default {
            {
              title: '订单状态',
              key: 'orderShowStatusName',
-             align:'center',
+             align:'center'
            },
            {
              title: '操作',
@@ -157,7 +166,7 @@ export default {
    methods:{
         submitSearchData(params){
             var beginTime =( params.cStartTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.cStartTime)))||"";
-            var endTime = (params.cEndTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.cEndTime)))||"";
+            var endTime = (params.cEndTime && dateUtils.dateToStr("YYYY-MM-DD 23:59:59", new Date(params.cEndTime)))||"";
 
             var timeObject ={
               cStartTime : beginTime,

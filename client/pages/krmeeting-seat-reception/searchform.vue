@@ -27,54 +27,27 @@
                 </RadioGroup>
             </FormItem>
             <div></div>
-            <!--<FormItem label="订单状态:"  class="form-item-status">-->
-                <!--<Select-->
-                    <!--v-model="formItem.orderShowStatus"-->
-                    <!--style="width:100px"-->
-                    <!--placeholder="请选择订单状态"-->
-                    <!--clearable-->
-                    <!--&gt;-->
-                    <!--<Option-->
-                        <!--v-for="item in meetingStatusOptions"-->
-                        <!--:value="item.name"-->
-                        <!--:key="item.name"-->
-                    <!--&gt;-->
-                        <!--{{ item.desc }}-->
-                    <!--</Option>-->
-                <!--</Select>-->
-            <!--</FormItem>-->
              <FormItem label="订单生成时间:" class="form-item-timer">
                 <DatePicker 
                     v-model="formItem.useStartTime"
                     type="datetime" 
-                    format="yyyy-MM-dd HH:mm"
-                    value="yyyy-MM-dd HH:mm"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    value="yyyy-MM-dd HH:mm:ss"
                     placeholder="开始日期和时间" 
-                    style="width: 140px"
-                    @on-change="dataChanged"
+                    style="width: 160px"
                 ></DatePicker>
                 
                 <span class="timer-span">至</span>
                 <DatePicker 
                     v-model="formItem.useEndTime"
                     type="datetime" 
-                    format="yyyy-MM-dd HH:mm"
-                    value="yyyy-MM-dd HH:mm"
+                    format="yyyy-MM-dd 23:59:59"
+                    value="yyyy-MM-dd 23:59:59"
                     placeholder="结束日期和时间" 
-                    style="width: 140px"
-                    @on-change="dataChanged"
+                    style="width: 160px"
                 ></DatePicker>
                 
             </FormItem>
-            <!--<FormItem label="" class="form-item-search">-->
-            <!---->
-                <!--<SearchForm-->
-                    <!--:searchFilter="searchFilter"-->
-                    <!--:openSearch = true-->
-                    <!--:notShowSearchIconProps = true-->
-                    <!--@serachFormDataChanged="changeSearchFormData"-->
-                <!--/> -->
-            <!--</FormItem>-->
             <Button type="primary" icon="ios-search" @click="submitSearchData">搜索</Button>
              
         </Form>
@@ -95,18 +68,8 @@ export default {
     },
    data(){
        return {
-           communityList : [],
-           formItem : {},
-           searchFilter:[
-               {
-                   label:'手机号',
-                   value:'reserverPhone'
-               },
-               {
-                   label:'订单编号',
-                   value:'orderNo'
-               }
-           ]
+         communityList: [],
+         formItem: {}
        }
    },
    props:[
@@ -131,23 +94,10 @@ export default {
                 });
             })
         },
-        
-       
-        changeSearchFormData(searchData){
-            for(var key in searchData ){
-                var param = {
-                    keyWordType : key,
-                    keyWord : searchData[key]
-                }
-            }
-            
-            var newObj = Object.assign({},this.formItem,param);
-            this.formItem = newObj;
-        },
         submitSearchData(){
             let _this =this;
-            var beginTime =new Date(_this.formItem.createBeginTime).getTime();
-            var endTime =new Date(_this.formItem.createEndTime).getTime();
+            var beginTime =new Date(_this.formItem.useStartTime).getTime();
+            var endTime =new Date(_this.formItem.useEndTime).getTime();
             if(beginTime && endTime && beginTime>endTime){
                 this.$Notice.warning({
                     title: '订单生成开始时间不能大于结束时间',
@@ -155,10 +105,17 @@ export default {
                 });
                 return;
             }
+
+          if ( !!this.formItem.phone ) {
+            var t = /^[1][3,4,5,7,8][0-9]{9}$/
+            if ( !t.test(this.formItem.phone) ) {
+              this.$Notice.warning({
+                title: '请输入正确格式的手机号'
+              });
+              return;
+            }
+          }
             this.$emit("submitSearchData",this.formItem);
-        },
-        dataChanged(){
-            // console.log("this.formItem",this.formItem);
         }
     }
  }
@@ -172,7 +129,7 @@ export default {
       width:260px;  
     }
     .form-item-timer{
-        width:405px; 
+        width:445px;
         
     }
     .form-item-timer .timer-span{

@@ -6,8 +6,8 @@
             :meetingStatusOptions ="meetingStatusOptions"
         />
         <div class="seat-table-box table-box" id="daily-inventory-table-list">
-            <div class="seat-seat-num">预订座位总数：20</div>
-            <Table border :columns="tilteAndStyle" :data="krMeetingList"></Table>
+            <!--<div class="seat-seat-num">预订座位总数：20</div>-->
+            <Table border :loading="loading" :columns="tilteAndStyle" :data="krMeetingList"></Table>
             <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
             <div :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="!!krMeetingList && krMeetingList.length>0">
                 <div style="display:inline-block;">

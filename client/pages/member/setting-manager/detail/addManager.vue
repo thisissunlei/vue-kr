@@ -12,6 +12,9 @@
                             <Input 
                                 v-model="formItem.mbrPhone" 
                                 placeholder="请输入手机号"
+                                :maxlength='11'
+                                type="number"
+                                
                             />
                         </FormItem>
                          <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
@@ -27,12 +30,15 @@
                                 <Input 
                                     v-model="formItem.mbrEmail" 
                                     placeholder="请输入邮箱"
+                                    type="email"
                                 />
                             </FormItem>
                             <FormItem label="身份证号" class="u-input" >
                                 <Input 
                                     v-model="formItem.mbrIdCardNo" 
-                                    placeholder="请输入邮箱"
+                                    placeholder="请输入身份证号"
+                                    :maxlength='18'
+                                    type="number"
                                 />
                             </FormItem>
                             <div class="u-label-text u-input">

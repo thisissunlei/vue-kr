@@ -121,7 +121,7 @@ export default {
            memberList:[],
            dateOptions:{
                disabledDate (date) {
-                    return date && date.valueOf() < Date.now() - 86400000;
+                   return date &&  Date.now() - 86400000 < date.valueOf() ;
                }
            }
         }

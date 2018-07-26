@@ -26,7 +26,7 @@
             
             if(!window.resourcesCode||!window.resourcesCode.length){
                 this.$http.get('getUserData',{forceUpdate:1}).then((response)=>{    
-                    this.data = response.data.resourcesCode;
+                    this.data = [].concat(response.data.resourcesCode);
                     window.resourcesCode = response.data.resourcesCode;
                 }).catch((error)=>{
                     this.$Notice.error({
@@ -34,7 +34,7 @@
                     });
                 })
             }else{
-                this.data=window.resourcesCode
+                this.data=[].concat(window.resourcesCode)
             }
             // setTimeout(function() {
             //     _this.data=window.resourcesCode||[];

@@ -54,7 +54,6 @@ import dateUtils from 'vue-dateutils';
                 })
                 return item;
             })
-            console.log('this.stationList=======',this.stationList)
            return{
             checkAll: checkAll,
             selectSeat:selectSeat,

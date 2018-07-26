@@ -707,12 +707,12 @@ export default {
         console.log('item.guestPriceDecimal',goods)
         god = goods.map(item=>{
           let obj = item;
-          obj.guestPriceDecimal = this.detailData.guestPriceDecimal
           obj.openQuantity = this.detailData.openQuantity
           obj.priceDecimal = this.detailData.priceDecimal
+            obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
           console.log('setPriceList=====',item.guestPriceDecimal)
           if(item.guestPriceDecimal){
-            obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
+            obj.guestPriceDecimal = this.detailData.guestPriceDecimal
             obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
           }
           return obj;

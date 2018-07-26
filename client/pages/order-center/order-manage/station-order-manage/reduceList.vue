@@ -66,7 +66,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract/>
+                <ApplyContract :requireChineseEnglish='false' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" @click="submitApply" :disabled="applyDisabled">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
@@ -106,7 +106,7 @@
                     pageSize:15,
                     customerName:"",
                 },
-
+                contractLanguage:'CHINESE',//合同语言类型
                 switchParams:{},
                 openMessage:false,
                 nullDisabled:false,
@@ -504,6 +504,10 @@
             closeApply(){
                 this.openApply=!this.openApply;
                 this.applyDisabled=false;
+            },
+            //中英文合同选择切换
+            onSelectApplyContract(contractLanguage){
+                this.contractLanguage=contractLanguage;
             }
         }
     }

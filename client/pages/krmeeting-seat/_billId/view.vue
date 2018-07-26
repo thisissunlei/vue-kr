@@ -373,6 +373,8 @@ export default {
     .item-content{
       font-size: 16px;
       color:#333;
+      display: inline-block;
+      margin-right: 5px;
     }
     .first-config{
       // opacity: 0.3;

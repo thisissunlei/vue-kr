@@ -88,6 +88,15 @@ export default {
              key: 'seatOrderExtInfo.linkPhone',
              width: 120,
              align:'center',
+             render:(h,params)=> {
+               let status
+               if ( !!params.row.seatOrderExtInfo && !!params.row.seatOrderExtInfo.linkPhone ) {
+                 status = params.row.seatOrderExtInfo.linkPhone
+               } else {
+                 status = ''
+               }
+               return h('span', {}, status)
+             }
            },
            {
              title: '订单生成时间',

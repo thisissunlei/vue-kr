@@ -72,7 +72,7 @@
           <div class="warn">首次配置，及30自然日之后的默认配置</div>
           <Row style="margin-bottom:35px">
             <Col class="col">
-               <FormItem label="开房数量（个）" style="width:120px" prop="openQuantity">
+               <FormItem label="开放数量（个）" style="width:120px" prop="openQuantity">
                   <Input 
                       v-model="detailData.openQuantity" 
                       placeholder=""

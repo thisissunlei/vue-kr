@@ -2,7 +2,13 @@
     <div class="g-member-online">
          <SectionTitle :title="`各社区会员线上化（${sectionTitle}）`" />
          <div class="u-search">
-
+             <DatePicker 
+                class="u-date-right" 
+                type="date" 
+                placeholder="日期" 
+                :value="tabParams.dataDate"
+                @on-change="changeDate"
+             />
          </div>
          <div class="u-table">
             <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
@@ -178,6 +184,11 @@ export default {
     .u-table{
         padding:20px 20px 0;
     }
+    .u-date-right{
+      float:right;
+      margin-top:14px;
+      width: 200px;
+  }
 }
 
 </style>

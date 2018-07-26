@@ -214,7 +214,13 @@
                    </FormItem>
                 </Col>
                 <Col  span="4" class="parice-col">
+                  <FormItem style="width:120px" 
+                   v-if="!item.guestPriceDecimal"
+                   >
+                    -
+                   </FormItem>
                    <FormItem style="width:120px" 
+                   v-if="item.guestPriceDecimal"
                    :prop="'goods.' + index + '.guestPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validateNumber, trigger: 'blur'}"
@@ -229,6 +235,7 @@
                 </Col>
                 <Col span="4" class="parice-col">
                    <FormItem style="width:120px" 
+                   v-if="item.guestPromotionPriceDecimal"
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validateNumber, trigger: 'blur'}">
@@ -238,6 +245,11 @@
                           :maxlength="maxPrice"
                           style="width:100px"
                       />
+                   </FormItem>
+                   <FormItem style="width:120px" 
+                   v-if="!item.guestPromotionPriceDecimal"
+                   >
+                     <span > -</span>
                    </FormItem>
                 </Col>
             </Row>
@@ -533,7 +545,7 @@ export default {
       },
       coverImgSuccess(file){
           this.detailData.coverPic=file.data.url;
-           this.$refs.detailData.validateField('coverPic') 
+          this.$refs.detailData.validateField('coverPic') 
       },
       detailImgsRemove(fileList){
           let imglist=[];
@@ -570,6 +582,8 @@ export default {
           
             this.deviceList = res.data;
           }).catch((err)=>{
+          console.log('getbasicData',err.message)
+
             this.$Notice.error({
                 title:err.message
             });
@@ -586,16 +600,23 @@ export default {
             coverImgList.push({'url':res.data.coverPic});
           }
           let detailImgList=[];
-          res.data.pics.map((item)=>{
-              let obj={};
-              obj.url=item.picUrl;
-              detailImgList.push(obj)
-          })
+          var devicesStrArray = []
+          if(res.data.pics.length){
+            res.data.pics.map((item)=>{
+                let obj={};
+                obj.url=item.picUrl;
+                detailImgList.push(obj)
+            })
+          }
+          if(res.data.devices.length){
+            devicesStrArray = res.data.devices.map(item=>{
+              return item.name;
+            })
+          }
+          
           res.data.published=JSON.stringify(res.data.published);
           res.data.pics=JSON.stringify(res.data.pics);
-          var devicesStrArray = res.data.devices.map(item=>{
-            return item.name;
-          })
+          
           
           this.detailImgList=detailImgList;
           this.coverImgList = coverImgList;
@@ -603,6 +624,7 @@ export default {
           this.detailData = res.data;
           this.detailData.devicesStrArray = devicesStrArray;
         }).catch((err)=>{
+          console.log('getbasicData',err.message)
           this.$Notice.error({
               title:err.message
           });
@@ -674,18 +696,37 @@ export default {
         goods = goods.map(item=>{
           let obj = item;
           obj.guestPriceDecimal = this.detailData.guestPriceDecimal
-          obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
           obj.openQuantity = this.detailData.openQuantity
           obj.priceDecimal = this.detailData.priceDecimal
-          obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal
+          if(item.guestPriceDecimal){
+            obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
+            obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
+          }
           return obj;
         })
         this.detailData.goods = goods;
 
       },
+      // 点击30天设置，校验首次配置项填写的是否正确，若无错设置价格日历
+      vaildConfig(){
+        let guest = isNaN(this.detailData.guestPriceDecimal) || !this.detailData.guestPriceDecimal
+        let guestDecimal = isNaN(this.detailData.guestPromotionPriceDecimal) || !this.detailData.guestPromotionPriceDecimal
+        let price = isNaN(this.detailData.priceDecimal) || !this.detailData.priceDecimal
+        let priceDecimal = isNaN(this.detailData.promotionPriceDecimal) || !this.detailData.promotionPriceDecimal
+        let openQuantity = isNaN(this.detailData.openQuantity) ||!this.detailData.openQuantity
+        let configable = guest||guestDecimal||price||priceDecimal||openQuantity;
+        return configable;
+      },
       initPriceList(){
         let form = {};
         let {params}=this.$route;
+        let configable = this.vaildConfig()
+        if(configable){
+          this.$Notice.error({
+            title:'请正确填写首次配置的内容'
+          });
+          return
+        }
         form.communityId=params.billId;
         form.guestPriceDecimal = this.detailData.guestPriceDecimal;
         form.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal;
@@ -694,13 +735,17 @@ export default {
         form.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
 
         this.$http.post('post-krseat-price-config', form).then((res)=>{
-            console.log('====',res.data) 
-            this.detailData.goods = res.data;
+            
+            if(code == 1){
+              this.setPriceList()
+            }else{
+              this.detailData.goods = res.data;
+            }
         }).catch((err)=>{
-          this.setPriceList()
-            // this.$Notice.error({
-            //     title:err.message
-            // });
+          
+            this.$Notice.error({
+                title:err.message
+            });
         })
       }
 

@@ -104,30 +104,30 @@ export default {
                         });
                 }
               },
-              {
-                  title: '操作',
-                  key: 'operation',
-                  align:'center',
-                  render:(h,params)=>{
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'text',
-                                    size: 'small'
-                                },
-                                style: {
-                                    color:'#2b85e4'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.jumpView(params.row)
-                                    }
-                                }
-                            }, '查看历史')
+            //   {
+            //       title: '操作',
+            //       key: 'operation',
+            //       align:'center',
+            //       render:(h,params)=>{
+            //             return h('div', [
+            //                 h('Button', {
+            //                     props: {
+            //                         type: 'text',
+            //                         size: 'small'
+            //                     },
+            //                     style: {
+            //                         color:'#2b85e4'
+            //                     },
+            //                     on: {
+            //                         click: () => {
+            //                             this.jumpView(params.row)
+            //                         }
+            //                     }
+            //                 }, '查看历史')
                             
-                        ]);  
-                    }
-              },
+            //             ]);  
+            //         }
+            //   },
            ],
            memberList:[],
            dateOptions:{

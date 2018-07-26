@@ -8,6 +8,7 @@
                 placeholder="日期" 
                 :value="tabParams.dataDate"
                 @on-change="changeDate"
+                :options="dateOptions"
              />
          </div>
          <div class="u-table">
@@ -118,6 +119,11 @@ export default {
               },
            ],
            memberList:[],
+           dateOptions:{
+               disabledDate (date) {
+                    return date && date.valueOf() < Date.now() - 86400000;
+               }
+           }
         }
     },
     mounted(){
@@ -169,10 +175,9 @@ export default {
             this.tabParams.orderRule=form.order.toUpperCase()
         },
         changeDate(form){
-            console.log('form',form)
             this.tabParams.dataDate=form;
-
-             //this.sectionTitle=`${oYear}年${oMoth}月${oDay}日`;
+            let time=String(form).split('-')
+            this.sectionTitle=`${time[0]}年${time[1]}月${time[2]}日`;
         }
     }
 }

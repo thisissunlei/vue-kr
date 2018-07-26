@@ -362,6 +362,7 @@ export default {
                                             title: '单价不得小于' + params.row.guidePrice
                                         })
                                     }
+                                   
                                     this.changePrice(params.index, price)
                                 }
                             }
@@ -437,12 +438,15 @@ export default {
     watch: {
         getStationFn: function () {
             if (this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate) {
+                console.log(111)
                 this.getRenewStation()
             }
             if (this.renewForm.customerId && this.renewForm.communityId) {
+                 console.log(2222)
                 this.getSignUser()
             }
             if (this.renewForm.communityId) {
+                console.log(33334)
                 this.getSaleTactics({ communityId: this.renewForm.communityId })
             }
         },
@@ -477,6 +481,7 @@ export default {
             } else {
                 this.priceError = false;
                 this.openPrice = !this.openPrice;
+                
                 this.selecedArr = this.selecedArr.map((item) => {
                     if (selectedStation.indexOf(item.seatId) != -1) {
                         item.originalPrice = Number(_this.price);
@@ -484,7 +489,7 @@ export default {
 
                     return item
                 })
-                console.log(this.selectAll,"jjjjjjjj",selectedDel)
+                conso.log(this.selecedArr,"oooooo")
                 this.selectedDel = [];
                 this.getStationAmount()
             }
@@ -512,6 +517,7 @@ export default {
             this.price = ''
         },
         changePrice(index, e) {
+            console.log(this.selecedArr,"nnnnnnn",index)
             this.selecedArr[index].originalPrice = e;
             this.getStationAmount()
         },
@@ -690,7 +696,7 @@ export default {
                       
                         return obj;
                     });
-                    console.log(obj,"nnnnnn")
+              
                     station.push(obj)
                 }
                 _this.stationListData = station;
@@ -787,7 +793,7 @@ export default {
             // 清除所选的工位
            
             if (this.selecedStation.length) {
-               
+               console.log('this.selecedStation',this.selecedStation,"lllll")
                 this.selecedStation = [];
                 this.selecedArr = [];
 
@@ -958,6 +964,7 @@ export default {
             });
             this.selecedStation = stationVos;
             this.selecedArr = stationVos;
+            console.log('stationVos',stationVos)
             this.getStationAmount()
 
         },
@@ -1074,6 +1081,7 @@ export default {
                 obj.originalPrice = item.oldPrice;
                 return obj;
             })
+            console.log('submitStation',this.selecedArr)
             var date = val[0].begin;
             date = new Date(date).getTime();
 
@@ -1082,7 +1090,8 @@ export default {
             this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(start));
           
             this.getStationAmount()
-            this.clearStation()
+            this.selecedStation = [];
+            // this.clearStation()
 
         },
         // clearStation() {
@@ -1092,7 +1101,7 @@ export default {
         // },
         getStationAmount() {
 
-            let val = this.selecedArr;
+            let val = [].concat(this.selecedArr);
             let _this = this;
             this.config()
             //工位原始结束日期，续租开始日期前一天
@@ -1122,14 +1131,14 @@ export default {
 
             }
           
-            this.selecedStation = station
-            console.log("99999999--11")
+            this.selecedStation = [].concat(station)
+          
             if (originalPrice) {
                 return
             }
-             console.log("99999999--")
+            
             if (val.length) {
-                console.log("99999999")
+              
                 this.$http.post('get-station-amount', params, r => {
                     let money = 0;
                     let list = [];
@@ -1157,7 +1166,7 @@ export default {
                         title: e.message
                     });
 
-                    console.log('error', e)
+                
                 })
             }
         },
@@ -1170,8 +1179,9 @@ export default {
             this.openStation = false;
         },
         onStationChange: function (val) {
-            
-            this.selecedArr = val;
+           
+            this.selecedArr = [].concat(val);
+             console.log(this.selecedArr,"pppppp")
         },
         getSaleTactics: function (params) {//获取优惠信息
             let list = [];

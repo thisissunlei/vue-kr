@@ -101,7 +101,12 @@ var layoutScrollHeight=0;
             width: 120,
             align:'center',
             render:(h,params)=> {
-              let status = params.row.todayGood.quantity ? params.row.todayGood.quantity : '-'
+              let status
+              if ( !!params.row.todayGood && !!params.row.todayGood.quantity ) {
+                status = params.row.todayGood.quantity
+              } else {
+                status = '-'
+              }
               return h('span', {}, status)
             }
           }, {
@@ -110,7 +115,12 @@ var layoutScrollHeight=0;
             width: 120,
             align:'center',
             render:(h,params)=> {
-              let status = params.row.todayGood.remainQuantity ? params.row.todayGood.remainQuantity : '-'
+              let status
+              if ( !!params.row.todayGood && !!params.row.todayGood.remainQuantity ) {
+                status = params.row.todayGood.remainQuantity
+              } else {
+                status = '-'
+              }
               return h('span', {}, status)
             }
           }, {
@@ -119,7 +129,12 @@ var layoutScrollHeight=0;
             width: 120,
             align:'center',
             render:(h,params)=> {
-              let status = params.row.todayGood.priceDecimal ? params.row.todayGood.priceDecimal : '-'
+              let status
+              if ( !!params.row.todayGood && !!params.row.todayGood.priceDecimal ) {
+                status = params.row.todayGood.priceDecimal
+              } else {
+                status = '-'
+              }
               return h('span', {}, status)
             }
           }, {
@@ -128,7 +143,12 @@ var layoutScrollHeight=0;
             width: 120,
             align:'center',
             render:(h,params)=> {
-              let status = params.row.todayGood.guestPriceDecimal ? params.row.todayGood.guestPriceDecimal : '-'
+              let status
+              if ( !!params.row.todayGood && !!params.row.todayGood.guestPriceDecimal ) {
+                status = params.row.todayGood.guestPriceDecimal
+              } else {
+                status = '-'
+              }
               return h('span', {}, status)
             }
           }, {

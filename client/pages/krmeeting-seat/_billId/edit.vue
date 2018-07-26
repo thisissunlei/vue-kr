@@ -601,14 +601,14 @@ export default {
           }
           let detailImgList=[];
           var devicesStrArray = []
-          if(res.data.pics.length){
+          if(res.data.pics){
             res.data.pics.map((item)=>{
                 let obj={};
                 obj.url=item.picUrl;
                 detailImgList.push(obj)
             })
           }
-          if(res.data.devices.length){
+          if(res.data.devices){
             devicesStrArray = res.data.devices.map(item=>{
               return item.name;
             })
@@ -735,11 +735,11 @@ export default {
         form.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
 
         this.$http.post('post-krseat-price-config', form).then((res)=>{
-            
+            var code = res.data.code;
             if(code == 1){
               this.setPriceList()
             }else{
-              this.detailData.goods = res.data;
+              this.detailData.goods = res.data.goods;
             }
         }).catch((err)=>{
           

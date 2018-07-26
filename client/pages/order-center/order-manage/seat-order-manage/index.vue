@@ -54,7 +54,6 @@ export default {
            {
              title: '预订的社区',
              key: 'communityName',
-             width: 200,
              align:'center',
            },
            {
@@ -97,14 +96,7 @@ export default {
            {
              title: '订单状态',
              key: 'orderShowStatusName',
-             width: 100,
              align:'center',
-//             render: (h, params) => {
-//               return h('div', [
-//
-//                 h('span', this.returnText(params.row.orderShowStatusName))
-//               ]);
-//             }
            },
            {
              title: '操作',

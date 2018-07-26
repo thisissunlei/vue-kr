@@ -5,7 +5,9 @@
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page"
-                :page-size="pageSize" @on-change="changePage"></Page>
+                :page-size="pageSize" @on-change="changePage"
+                :current="currentPage"
+                ></Page>
                 <div class="loading-box"  v-if="loading">
                     <Spin fix>
                         <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
@@ -34,6 +36,7 @@ export default {
         groupAllListShow : false,
         totalCount : 100,
         page : '',
+        currentPage :1,
         pageSize:15,
         searchData :{
             groupId: '',
@@ -107,6 +110,8 @@ export default {
            let _this =this;
            this.selectedAddItmes = [];
            this.searchData.page =1;
+           this.currentPage = 1;
+           console.log("currentPage",this.currentPage);
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
            this.getListData();
@@ -144,6 +149,7 @@ export default {
         },
         changePage(page){
             this.searchData.page =page;
+            this.currentPage = page;
             this.getListData();
         }
        

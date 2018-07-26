@@ -54,10 +54,10 @@ export default {
         groupAllListShow : false,
         totalCount : 0,
         page : '',
-        pageSize:25,
+        pageSize:15,
         searchData :{
             groupId: '',
-            pageSize:25,
+            pageSize:15,
             page : 1
         },
         loading : false,

@@ -8,6 +8,7 @@
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
                     :page-size="pageSize" 
                     @on-change="changePage"
+                    :current="currentPage"
                 >
                 </Page>
                 <div class="loading-box"  v-if="loading">
@@ -57,10 +58,11 @@ export default {
         groupAllListShow : false,
         totalCount : 0,
         page : '',
-        pageSize:25,
+        currentPage :1,
+        pageSize:15,
         searchData :{
             groupId: '',
-            pageSize:25,
+            pageSize:15,
             page:1
         },
         loading : false,
@@ -168,15 +170,15 @@ export default {
 
            let _this =this;
            this.searchData.page =1;
+           this.currentPage =1;
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
-                console.log("kfdkkdlkdfs=====>3");
            
            this.getListData();
 
        },
        getListData(){
-           console.log("---------")
+           
             let _this =this;
             let params = Object.assign({},this.searchData);
             var reqURL = this.groupLevel == "PARENT" ?  "get-son-group-list" :"get-father-group-list";
@@ -298,6 +300,7 @@ export default {
         },
         changePage(page){
             this.searchData.page =page;
+            this.currentPage = page;
             this.getListData();
         }
 

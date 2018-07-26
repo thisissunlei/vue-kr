@@ -365,7 +365,44 @@
                 </ul>
               </div>
             </div>
+          </div>
 
+          <div class="line-one">
+            <div class="box" style="flex:1/2">
+              <div class="header">
+                <div class="header-left" @click="openOverUnpaid('MEETING')">
+                  <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">
+                    合同逾期未操作 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
+                <div class="header-right" v-if="OverdueMeeting.length">
+                  <span :style="OverdueMeeting[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1Str}}</span><span style="font-size:14px">笔 </span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有逾期未生效或未作废的合同</div>
+              </div>
+              <div class="contents" v-if="OverdueMeeting.length">
+                <ul >
+                   <li v-for="item in OverdueMeeting" :key="item.id">
+                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
+                       </Tooltip>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+
+            <div class="box">
+            </div>
+
+          </div>
 
 
           </div>

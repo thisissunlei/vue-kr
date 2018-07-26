@@ -76,9 +76,12 @@ export default  {
     "corporation-list":{
       url:"/api/krspace-sso-web/dict/corporation/id-name",
       method:'get'
+    },
+    //发放
+    'ticket-provide': {
+      url: '/api/order/ csr-invoice/op/grant',
+      method: 'put'
     }
-    
-   
-   
+
 }
   

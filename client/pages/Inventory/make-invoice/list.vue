@@ -293,7 +293,16 @@
 
             // 发放按钮点击
             provideClick(item){
-              // this.$emit('provideDone', 'test')
+              this.$http.put('ticket-provide', {id: item.id}).then((res)=>{
+                this.openMessage=true;
+                this.MessageType="success";
+                this.warn='发放成功';
+                // this.$emit('provideDone', 'test');
+              }).catch((err)=>{
+                this.$Notice.error({
+                  title:err.message
+                });
+              })
             },
             //跳转查看页面
             // waitArrive(data){

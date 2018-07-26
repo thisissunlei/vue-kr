@@ -7,6 +7,7 @@
                 icon="ios-refresh-empty" 
                 class="fresh-btn"  
                 @click="freshReportInfo"
+                v-if="SecondeVersion"
             >
                 刷新设备上报信息
             </Button>
@@ -14,6 +15,12 @@
                 <div class="connect-info info-box">
                     <div class="item-info">
                         <span>硬件ID：</span><span>{{deviceVO.deviceId}}</span>
+                    </div>
+                    <div class="item-info" v-if="!SecondeVersion">
+                        <span>锁是否连接：</span><span>{{deviceDetail.lockConnected?"已连接":"未连接"}}</span>
+                    </div>
+                    <div class="item-info" v-if="!SecondeVersion">
+                        <span>屏幕是否连接：</span><span>{{deviceDetail.screenConnected?"已连接":"未连接"}}</span>
                     </div>
                     <div class="item-info" v-if="SecondeVersion">
                         <span>标记：</span><span>{{deviceVO.name}}</span>

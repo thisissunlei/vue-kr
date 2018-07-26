@@ -55,6 +55,8 @@
                     <Col class="col" v-if="formItem.titleType=='COMPANY'">
                         <FormItem label="注册地址" style="width:252px" prop="registerAddress">
                             <Input 
+                                type="textarea"
+                                :rows="4"
                                 :disabled="isReady" 
                                 v-model="formItem.registerAddress" 
                                 placeholder="请输入注册地址" 

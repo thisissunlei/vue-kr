@@ -6,7 +6,7 @@
               <FormItem label="上架状态：">
                   <RadioGroup v-model="tabForms.kmPublished" @on-change="changeKmPublished">
                       <Radio value="0" label="ON">已上架</Radio>
-                      <Radio value="1" label="WAIT">预上架</Radio>
+                      <!--<Radio value="1" label="WAIT">预上架</Radio>-->
                       <Radio value="2" label="NOT">下架</Radio>
                   </RadioGroup>
               </FormItem>

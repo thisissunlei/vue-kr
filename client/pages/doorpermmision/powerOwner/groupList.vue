@@ -167,7 +167,7 @@ export default {
        submitSearchData(data){
 
            let _this =this;
-           
+           this.searchData.page =1;
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
                 console.log("kfdkkdlkdfs=====>3");

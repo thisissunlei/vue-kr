@@ -3,14 +3,13 @@
       <div class="g-openlog-box">
             <SearchForm  @submitSearchData="submitSearchData" @addMember="addMember" />
             <div class="table-box">
-                <Table :columns="columns1" :data="memberList" size="small" @on-selection-change="selectedChange"></Table>
+                <Table :columns="columns1" :data="memberList" size="small" 
+                    @on-selection-change="selectedChange"
+                    :loading = "loading"
+                ></Table>
                 <Page :total="totalCount" size="small" show-total class-name="bottom-page" 
                 :page-size="pageSize" @on-change="changePage"></Page>
-                <div class="loading-box"  v-if="loading">
-                    <Spin fix>
-                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                    </Spin>
-                </div>
+                
             </div>
            
         
@@ -39,7 +38,7 @@ export default {
             pageSize:15,
             page :1
         },
-        loading : false,
+        loading : true,
         openTypeList :[],
         columns1: [
                     {
@@ -110,6 +109,7 @@ export default {
 
            let _this =this;
            this.selectedAddItmes = [];
+           this.searchData.page =1;
            var newObj = Object.assign({},_this.searchData,data);
            this.searchData = newObj;
            this.getListData();

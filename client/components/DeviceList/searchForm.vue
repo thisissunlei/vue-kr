@@ -48,7 +48,7 @@
                 <Input v-model="formItem.doorCode" size="large" placeholder="屏幕编号" @on-change="inputDoorCodeChanged"></Input>
             </FormItem>
            
-            <div class="float-right">
+            <div class="btn-box">
                 
                 <Button type="primary"  @click="addDeviceContinue" class="search-btn add-btn">添加并继续</Button>
                 <Button type="primary"  @click="addDeviceClose" class="search-btn">添加并关闭</Button>
@@ -216,17 +216,14 @@ export default{
    .add-btn{
        margin-right:10px;
    }
-   .float-right{
-        float : right;
+   .btn-box{
+        display : inline-block;
         
         .delete-relations{
             margin:32px 12px 0 0 ;
         }
    }
-   .btn-box{
-       width:100%;
-       height:20px;
-   }
+   
    .modal-box{
        padding : 40px 0 0 0 ;
    }

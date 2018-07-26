@@ -231,19 +231,9 @@ export default  {
       url: '/test/sync/listKdPaymentSummaryByPage',
       method: 'get'
     },
-    // 同步数据--预收数据导出
-    'export-advanced-collection-list': {
-      url: '/test/sync/paymentSummaries/export',
-      method: 'get'
-    },
     // 同步数据--应收数据
     'get-receivable-collection-list': {
       url: '/test/sync/listKdIncomeSummaryByPage',
-      method: 'get'
-    },
-    // 同步数据--应收数据导出
-    'export-receivable-collection-list': {
-      url: '/test/sync/incomeSummaries/export',
       method: 'get'
     }
 

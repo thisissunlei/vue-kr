@@ -1,12 +1,12 @@
 <template>
   <div class="g-bill">
     <div class="u-search">
-      <div style='display:inline-block;float:right;padding-right:20px;'>
+      <div style='display:inline-block;float:right;padding-right:20px;position:relative;'>
         <DatePicker type="date" v-model="tabParams.startTime" placeholder="开始时间" style="width: 130px"></DatePicker>
         <span style="margin:0 10px">至</span>
         <DatePicker type="date" v-model="tabParams.endTime" placeholder="结束时间"
                     style="width: 130px;margin-right: 20px"></DatePicker>
-        <div class="error" v-if="timeError != false">{{timeError}}</div>
+        <Alert class="error" type="error" v-if="timeError != false">{{timeError}}</Alert>
         <Input
             v-model="tabParams.customerName"
             placeholder="请输入客户名称"
@@ -73,23 +73,23 @@
         incomeType: {},
         columns: [
           {
-            title: '合同编号',
-            key: 'contractNumber',
-            align: 'center',
-          },
-          {
-            title: '订单编号',
-            key: 'coreBillNumber',
-            align: 'center'
-          },
-          {
-            title: 'OP系统社区编码',
-            key: 'costCenterNumber',
+            title: '客户编码 ',
+            key: 'asstActNumber',
             align: 'center',
           },
           {
             title: '金额',
             key: 'amount',
+            align: 'center'
+          },
+          {
+            title: '含税金额 ',
+            key: 'arAmount',
+            align: 'center',
+          },
+          {
+            title: '客户名称 ',
+            key: 'asstActName',
             align: 'center',
           },
           {
@@ -103,13 +103,38 @@
             align: 'center',
           },
           {
+            title: '普通销售/普通销售退',
+            key: 'bizTypeName',
+            align: 'center'
+          },
+          {
             title: '财务组织编码',
             key: 'companyNumber',
             align: 'center',
           },
           {
-            title: '币别',
+            title: '销售合同行号',
+            key: 'contractNumber',
+            align: 'center',
+          },
+          {
+            title: '核心单据号 ',
+            key: 'coreBillNumber',
+            align: 'center',
+          },
+          {
+            title: '成本中心',
+            key: 'costCenteNumber',
+            align: 'center',
+          },
+          {
+            title: '客户名称',
             key: 'currency',
+            align: 'center',
+          },
+          {
+            title: '物料编码 ',
+            key: 'materialNumber',
             align: 'center',
           },
           {
@@ -118,56 +143,28 @@
             align: 'center',
           },
           {
-            title: '付款账号',
-            key: 'payerAccountBank',
+            title: '不含税单价  ',
+            key: 'price',
             align: 'center',
           },
           {
-            title: '客户(供应商)名称',
-            key: 'payerName',
+            title: '数量',
+            key: 'quantity',
             align: 'center',
           },
           {
-            title: '客户（供应商）编码 ',
-            key: 'payerNumber',
+            title: '税额 ',
+            key: 'taxAmount',
             align: 'center',
           },
           {
-            title: '付款人类型',
-            key: 'payerType',
-            align: 'center',
-            render(h, obj) {
-              switch (obj.row.payerType) {
-                case 'PAYMENT':
-                  return h('span', {
-                    style: {
-                      color: '#FF6868'
-                    }
-                  }, '111');
-                  break;
-                case 'CUSTOMER':
-                  return h('span', {
-                    style: {
-                      color: '#666666'
-                    }
-                  }, '222');
-                  break;
-              }
-            }
-          },
-          {
-            title: '银行收款账号 ',
-            key: 'recAccountBank',
+            title: '含税单价 ',
+            key: 'taxPrice',
             align: 'center',
           },
           {
-            title: '收款类型',
-            key: 'recBillType',
-            align: 'center',
-          },
-          {
-            title: '结算方式',
-            key: 'settlementType',
+            title: '税率',
+            key: 'taxRate',
             align: 'center',
           },
           {
@@ -187,42 +184,19 @@
       Object.assign(this.tabParams, this.$route.query);
     },
     methods: {
-      // renderList() {
-      //   // this.getIncomeType();
-      //   let incomeType = this.incomeType;
-      //   let billtype = {
-      //     title: '收入类型',
-      //     key: 'incomeType',
-      //     align: 'center',
-      //     width: 120,
-      //     render(h, obj) {
-      //       return h('span', {}, incomeType[obj.row.incomeType]);
-      //     }
-      //   };
-      //   if (this.columns.length < 7) {
-      //     this.columns.splice(5, 0, billtype)
-      //   }
-      //
-      //
-      // },
-      // getIncomeType() {
-      //   this.$http.get('get-fee-type', '').then((res) => {
-      //     res.data.enums.map((item) => {
-      //       this.incomeType[item.code] = item.name;
-      //     })
-      //   }).catch((err) => {
-      //     this.$Notice.error({
-      //       title: err.message
-      //     });
-      //   })
-      // },
-      // onExport() {
-      //   console.log('导出')
-      // },
       getTableData(params) {
-        // this.renderList();
-        params = Object.assign(params, {page: this.page});
-        this.$http.get('get-advanced-collection-list', params).then((res) => {
+        let newParams = {};
+        for (let i in params) {
+          if (params[i]) {
+            if (i === 'startTime' || i === 'endTime') {
+              newParams[i] = dateUtils.dateToStr("YYYY-MM-DD", new Date(params[i]))
+            } else {
+              newParams[i] = params[i];
+            }
+          }
+        }
+        Object.assign(newParams, {page: this.page});
+        this.$http.get('get-receivable-collection-list', newParams).then((res) => {
           this.billList = res.data.items;
           this.totalCount = res.data.totalCount;
         }).catch((error) => {
@@ -235,18 +209,21 @@
         this.openMessage = data;
       },
       lowerSubmit() {
-        // let {customerName, startTime, endTime} = this.tabParams.customerName;
-        // this.page = 1;
-        // this.tabParams = {
-        //   page: 1,
-        //   pageSize: 20,
-        //   customerName,
-        //   startTime,
-        //   endTime
-        // };
+        if (this.tabParams.startTime && this.tabParams.endTime && new Date(this.tabParams.startTime).getTime() > new Date(this.tabParams.endTime).getTime()) {
+          this.timeError = '结束时间不得大于开始时间';
+          setTimeout(() => {
+            this.timeError = false;
+          }, 1000);
+          return;
+        }
         this.page = 1;
-        Object.assign(this.tabParams, {page: 1, pageSize: this.pageSize});
-        utils.addParams(this.tabParams);
+        const subParams = Object.assign({}, this.tabParams, {
+          page: 1,
+          pageSize: this.pageSize,
+          startTime: this.tabParams.startTime && dateUtils.dateToStr("YYYY-MM-DD", new Date(this.tabParams.startTime)) || '',
+          endTime: this.tabParams.endTime && dateUtils.dateToStr("YYYY-MM-DD", new Date(this.tabParams.endTime)) || ''
+        });
+        utils.addParams(subParams);
       },
       changePage(page) {
         this.tabParams.page = page;
@@ -254,12 +231,8 @@
         this.getTableData(this.tabParams);
       },
       exportTable() {
-        this.$http.get('export-advanced-collection-list', {}).then((res) => {
-        }).catch((error) => {
-          this.$Notice.error({
-            title: error.message
-          });
-        });
+        // todo
+        utils.commonExport({},'/test/sync/incomeSummaries/export');
       }
     }
 
@@ -299,8 +272,9 @@
     }
     .error {
       position: absolute;
-      right: 0px;
+      left: 50px;
       color: red;
+      z-index: 10;
     }
   }
 </style>

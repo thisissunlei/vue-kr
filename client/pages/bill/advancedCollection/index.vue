@@ -1,12 +1,12 @@
 <template>
   <div class="g-bill">
     <div class="u-search">
-      <div style='display:inline-block;float:right;padding-right:20px;'>
+      <div style='display:inline-block;float:right;padding-right:20px;position:relative;'>
         <DatePicker type="date" v-model="tabParams.startTime" placeholder="开始时间" style="width: 130px"></DatePicker>
         <span style="margin:0 10px">至</span>
         <DatePicker type="date" v-model="tabParams.endTime" placeholder="结束时间"
                     style="width: 130px;margin-right: 20px"></DatePicker>
-        <div class="error" v-if="timeError != false">{{timeError}}</div>
+        <Alert class="error" type="error" v-if="timeError != false">{{timeError}}</Alert>
         <Input
             v-model="tabParams.customerName"
             placeholder="请输入客户名称"
@@ -134,26 +134,8 @@
           },
           {
             title: '付款人类型',
-            key: 'payerType',
-            align: 'center',
-            render(h, obj) {
-              switch (obj.row.payerType) {
-                case 'PAYMENT':
-                  return h('span', {
-                    style: {
-                      color: '#FF6868'
-                    }
-                  }, '111');
-                  break;
-                case 'CUSTOMER':
-                  return h('span', {
-                    style: {
-                      color: '#666666'
-                    }
-                  }, '222');
-                  break;
-              }
-            }
+            key: 'payerTypeName',
+            align: 'center'
           },
           {
             title: '银行收款账号 ',
@@ -234,12 +216,8 @@
         this.getTableData(this.tabParams);
       },
       exportTable() {
-        this.$http.get('export-advanced-collection-list', {}).then((res) => {
-        }).catch((error) => {
-          this.$Notice.error({
-            title: error.message
-          });
-        });
+        //todo
+        utils.commonExport({},'/test/sync/paymentSummaries/export');
       }
     }
 
@@ -279,8 +257,9 @@
     }
     .error {
       position: absolute;
-      left: 700px;
+      left: 50px;
       color: red;
+      z-index: 10;
     }
   }
 </style>

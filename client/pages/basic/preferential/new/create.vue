@@ -1,51 +1,68 @@
 <template>
-    <div>
-        <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent">
+    <div class='discount-set-from-panel'>
+        <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent" class='discount-set-from'>
             <FormItem label="适用社区" prop="community">
                 <selectCommunities v-model="formItem.community" :multiple='true'></selectCommunities>
             </FormItem>
             <FormItem label="优惠类型" prop="discountType">
                 <Select :v-model="formItem.discountType">
-                    <Option v-for="(option, index) in discountList" :value="option.value" :key="option.value">{{option.label}}</Option>
+                    <Option v-for="(option, index) in discountTypeList" :value="option.value" :key="option.value">{{option.label}}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="创建日期" class="bill-search" prop="time">
-                <DatePicker v-model="formItem.cStartDate" type="date" placeholder="创建开始日期" style="width: 150px" />
-                <span class="u-date-txt" style='padding:0 20px'>至</span>
-                <DatePicker v-model="formItem.cEndDate" type="date" placeholder="创建结束日期" style="width: 150px" />
+            <FormItem label="折扣期间" class="bill-search" prop="time">
+                <DatePicker v-model="formItem.cStartDate" type="date" placeholder="开始日期" style="width: 140px" />
+                <span class="u-date-txt" style='padding:0 15px'>至</span>
+                <DatePicker v-model="formItem.cEndDate" type="date" placeholder="结束日期" style="width: 140px" />
                 <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>
             </FormItem>
-            <FormItem label="优惠列选" prop="sale">
-
-                <Table border :columns="columns" :data="saleList" @on-selection-change="selectChange"></Table>
-                <Input v-model="formItem.sale" placeholder="名称" style="width:252px;display:none"></Input>
+            <FormItem label="优惠方案" prop="discount">
+                <span style='padding:0 13px'>满</span>
+                <Input v-model="formItem.full" :number='true' style="width: 120px" />
+                <span style='padding:0 14px'>赠</span>
+                <Input v-model="formItem.extend" :number='true' style="width: 120px" />
             </FormItem>
-            <Button type="primary" @click="createSale">新建优惠</Button>
+            <FormItem label="折扣配置" class="form-item-discount" prop="discount">
+                <div class="form-item-discount-input">
+                    <Row class="row-discount" v-for='role in roleList' :key='role.id'>
+                        <Col class="col-discount-col1">{{role.name}}</Col>
+                        <Col class="col-discount-col2">
+                        <div>
+                            <span>最低</span>
+                            <Input :number='true' v-model="formItem.discount[role.name]" :placeholder="''+role.discount" />
+                            <span>折</span>
+                        </div>
+                        </Col>
+                    </Row>
+                </div>
+                <div class="form-item-discount-select">
+                    <Checkbox :indeterminate="indeterminate" :value="checkAll" @click.prevent.native="handleCheckAll">全选</Checkbox>
+                    <CheckboxGroup v-model="formItem.checkAllGroup" @on-change="checkAllGroupChange">
+                        <Checkbox v-for="role in roleList" :key='role.id' :label="role.name" class='form-item-discount-select-item'></Checkbox>
+                    </CheckboxGroup>
+                </div>
+            </FormItem>
+            <FormItem label="备注" class='form-item-remark'>
+                <Input v-model="formItem.remark" />
+            </FormItem>
+            <FormItem class="form-item-btn">
+                <Button class="btn" @click="handleCancle">取消</Button>
+                <Button type="primary" class="btn" @click="handleSubmit('formItem')">确定</Button>
+            </FormItem>
 
         </Form>
 
-        <Modal v-model="openSale" title="新建社区优惠" ok-text="确定" cancel-text="取消" width="460" :styles="{top: '20px'}">
-            <CreateSale ref="fromFieldNewSale" v-if="openSale" @newPageData="newSale" :editData.sync="editData" editStatus="create" />
-
-            <div slot="footer">
-                <Button type="primary" @click="onSubmitSale('formContent')">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
-            </div>
-        </Modal>
-        <discountSelect></discountSelect>
     </div>
 </template>
 <script>
 import CreateSale from './createSale.vue';
 // import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCommunities from './SelectCommunities.vue'
-import discountSelect from './discountSelect.vue'
 
 export default {
     components: {
         CreateSale,
         selectCommunities,
-        discountSelect
+
     },
     props: {
         editData: Object,
@@ -60,7 +77,10 @@ export default {
                 callback()
         };
         return {
-            discountList: [
+            indeterminate: true,
+            checkAll: false,
+
+            discountTypeList: [
                 {
                     label: '折扣',
                     value: 1
@@ -70,9 +90,34 @@ export default {
                     value: 2
                 }
             ],
+            roleList: [
+                {
+                    id: 1,
+                    name: '总部管理人员',
+                    discount: 7.5
+                },
+                {
+                    id: 2,
+                    name: '区域招商经理',
+                    discount: 8
+                },
+                {
+                    id: 3,
+                    name: '招商经理',
+                    discount: 8.5
+                },
+                {
+                    id: 4,
+                    name: '招商主管',
+                    discount: 9
+                },
+            ],
             saleForm: {},
             openSale: false,
-            formItem: {},
+            formItem: {
+                discount: {},
+                checkAllGroup: []
+            },
             ruleCustom: {
                 community: [
                     { required: true, validator: validateCummity, trigger: 'change' }
@@ -84,6 +129,9 @@ export default {
                     { required: true, message: '请填写时间' }
                 ],
                 sale: [
+                    { required: true, message: '请选择优惠类型' }
+                ],
+                discount: [
                     { required: true, message: '请选择优惠类型' }
                 ],
             },
@@ -124,6 +172,38 @@ export default {
     },
     watch: {},
     methods: {
+        checkAllGroupChange(data) {
+            if (data.length === 3) {
+                this.indeterminate = false;
+                this.checkAll = true;
+            } else if (data.length > 0) {
+                this.indeterminate = true;
+                this.checkAll = false;
+            } else {
+                this.indeterminate = false;
+                this.checkAll = false;
+            }
+        },
+        handleCheckAll() {
+            if (this.indeterminate) {
+                this.checkAll = false;
+            } else {
+                this.checkAll = !this.checkAll;
+            }
+            this.indeterminate = false;
+
+            if (this.checkAll) {
+                this.formItem.checkAllGroup = ['香蕉', '苹果', '西瓜'];
+            } else {
+                this.formItem.checkAllGroup = [];
+            }
+        },
+        handleSubmit() {
+
+        },
+        handleCancle() {
+
+        },
         deleteValue(index) {
             let arr = this.formItem.items.splice(index, 1)
         },
@@ -189,3 +269,62 @@ export default {
     }
 }
 </script>
+
+
+<style lang="less">
+.discount-set-from-panel {
+    .discount-set-from {
+        position: relative;
+        left: -25px;
+        .form-item-discount {
+            .ivu-form-item-content {
+                padding-top: 20px;
+                .form-item-discount-input {
+                    // position: relative;
+                    // left: -70px;
+                    width: 326px;
+                    .row-discount {
+                        margin: 15px 0;
+                        .col-discount-col1 {
+                            display: inline-block;
+                            width: 100px;
+                        }
+                        .col-discount-col2 {
+                            display: inline-block;
+                            div {
+                                span {
+                                    margin-left: 5px;
+                                    margin-right: 5px;
+                                }
+                                div {
+                                    display: inline-block;
+                                    width: 168px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .form-item-discount-select {
+                    .ivu-checkbox{
+                        margin-right: 10px;
+                    }
+                    .form-item-discount-select-item {
+                        display: block;
+                    }
+                }
+            }
+        }
+        .form-item-remark {
+            .ivu-form-item-label {
+                text-align: left;
+                padding: 10px 12px 10px 29px;
+            }
+        }
+        .form-item-btn {
+            .btn {
+                margin: 0 45px;
+            }
+        }
+    }
+}
+</style>

@@ -55,6 +55,9 @@ export default {
         modelValue: {
             get() {
                 return this.value
+            },
+            set(val){
+                
             }
         }
     },

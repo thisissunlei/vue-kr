@@ -51,17 +51,18 @@
    <!-- 新建 -->
      <Modal
         v-model="openCreate"
-        title="新建社区优惠"
+        id='create-discount-modal'
+        title="添加优惠"
         ok-text="确定"
         cancel-text="取消"
-        width="660"
+        width="500"
         :styles="{top: '20px'}"
      >  
         <Create ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="create" />
     
         <div slot="footer">
-            <Button type="primary" @click="onSubmit('formContent')">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
+            <!-- <Button type="primary" @click="onSubmit('formContent')">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button> -->
         </div>
     </Modal>
     <!-- 编辑 -->
@@ -450,5 +451,10 @@ export default {
     text-align: center;
     margin:40px auto 35px;
     font-size:14px;
+}
+#create-discount-modal{
+    .ivu-modal-footer{
+        display: none
+    }
 }
 </style>

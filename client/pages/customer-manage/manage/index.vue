@@ -219,7 +219,7 @@
                                             }
                                         }
                             }, '查看')];
-                            if(params.row.crmId){
+                            if(!params.row.crmId){
                                 arr.push(h(Buttons, 
                                             {
                                                 props: {

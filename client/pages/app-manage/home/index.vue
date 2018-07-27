@@ -27,6 +27,7 @@
 import SectionTitle from '~/components/SectionTitle';
 import RateImg  from './rateImg';
 import IconTip from '~/components/IconTip';
+import utils from '~/plugins/utils';
 
 export default {
     head() {
@@ -180,6 +181,12 @@ export default {
                 case 'conToWeekBefore':
                 orderLine='CTWB'
                 break;
+                case 'onlineRate':
+                orderLine='OLRT'
+                break;
+                case 'onlineUser':
+                orderLine='OLAV'
+                break;
             }
             this.tabParams.orderLine=orderLine;
             this.tabParams.orderRule=form.order.toUpperCase();
@@ -192,7 +199,8 @@ export default {
             this.getTableData(this.tabParams);
         },
         onExport(){
-
+            let form=Object({},this.tabParams);
+            utils.commonExport(form,'/api/krspace-op-web/app/operation/community/use-rate/export');
         }
     }
 }

@@ -19,7 +19,7 @@
              />
          </div>
          <div class="u-table">
-            <Table border  :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Table border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
             <Button  style="margin-top:30px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
          </div> 
     </div>
@@ -144,6 +144,13 @@ export default {
          this.getTableData(this.tabParams);
     },
     methods:{
+        rowClassName(row,index){
+            if(row.averageData=='1'){
+               return 'u-table-row'
+            }
+            return '';
+           
+        },
         getDay(num, str){
             let today = new Date();
             let nowTime = today.getTime();
@@ -227,6 +234,10 @@ export default {
       margin-top:14px;
       width: 200px;
   }
+  .u-table-row{
+      background: rgba(255,157,0,0.30);
+  }
+  
 }
 
 </style>

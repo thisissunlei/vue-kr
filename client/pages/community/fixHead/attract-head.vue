@@ -30,7 +30,7 @@
      height:40px;
      line-height:40px;
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:400;
   .slot-head-class{
         text-align: center;
         border-right:solid 1px #e9eaec;

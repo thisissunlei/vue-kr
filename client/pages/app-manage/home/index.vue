@@ -139,8 +139,16 @@ export default {
     },
     mounted(){
          this.tabParams.dataDate=this.getDay(-1, '-')
-        
-         this.getTableData(this.tabParams);
+         this.memberList=[
+             {
+                 conToOneDaybefore:'-12%'
+             },
+             {
+                 conToOneDaybefore:'+10%'
+             },
+            
+         ]
+         //this.getTableData(this.tabParams);
     },
     methods:{
         getDay(num, str){

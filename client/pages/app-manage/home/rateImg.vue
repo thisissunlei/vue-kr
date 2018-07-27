@@ -1,14 +1,12 @@
 <template>
-  <div class="g-tv-card" @click="click">
-      <div class="u-img">
-        <img :src="imgUrl" alt="">
-      </div>
-      <div class="u-txt">{{fileName}}</div>
+  <div :class="[textClass,'g-rate-img']" >
+      <span class="u-txt">{{detailInfo}}</span>
+      <span class="u-rate-img"></span>
   </div>
 </template>
 <script>
 export default {
-  name:'tvcard',
+  name:'rateImg',
   props:{
       detailInfo:{
           type:String
@@ -16,53 +14,76 @@ export default {
   },
   data(){
     return{
-        imgUrl:'',  
+        textClass:'' 
     }
   },
   mounted(){
-                        let regAdd=/\+/;
-                      let regReduce=/\-/;
-                      let imgClass="";
-                      let textClass="";
-
-                      if(regAdd.test()){
-                          textClass='u-add-rate'
-                      }
-                      if(regReduce.test()){
-                          textClass='u-reduce-rate'
-                      }
+    if(this.detailInfo){
+        this.getClass(this.detailInfo)
+		}
   },
+  watch: {
+			$props: {
+				deep: true,
+				handler(nextProps) {
+          if(this.detailInfo){
+              this.getClass(this.detailInfo)
+          }
+				
+				}
+			}
+
+	},
   methods:{
-    
+    getClass(value){      
+      let regAdd=/\+/;
+      let regReduce=/\-/;
+      if(regAdd.test(value)){
+          this.textClass='u-add-rate';
+      }
+      if(regReduce.test(value)){
+          this.textClass='u-reduce-rate'
+      }
+    }
   }
 
 }
 </script>
 <style lang="less">
-.g-tv-card{
-  height:80px;
-  padding:10px;
-  .u-img{
-    width:80px;
-    height:60px;
-    float:left;
-    img{
-      width:100%;
-      height:100%;
-      object-fit: contain;
+.g-rate-img{
+  .u-txt{
+      display: inline-block;
+  }
+  .u-rate-img{
+    width:6px;
+    height:10px;
+    display: inline-block;
+    padding-left: 10px;
+    vertical-align: -1px;
+  }
+  &.u-add-rate{
+    .u-txt{
+      color: #FF6868;
+    }
+    .u-rate-img{
+      background: url('./images/icon_arrow_up.svg') no-repeat center center;
+      background-size: 100% 100%;
+    }
+
+  }
+
+  &.u-reduce-rate{
+    .u-txt{
+      color: #7ED321;
+    }
+    .u-rate-img{
+      background: url('./images/icon_arrow_down.svg') no-repeat center center;
+      background-size: 100% 100%;
     }
   }
-  .u-txt{
-     float:left;
-     width:60%;
-     height: 60px;
-     line-height: 60px;
-     text-align: left;
-     padding-left:15px
-  }
-  
-
 }
+
+
 </style>
 
 

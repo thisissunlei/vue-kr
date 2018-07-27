@@ -37,7 +37,7 @@
             <div class="basic-info order-info">
                 <SectionTitle title="预订信息"></SectionTitle>
                 <div class="basic-info-box">
-                    <dl>
+                    <dl style="width: 100%;">
                         <dt>预订日期：</dt><dd style="color:#FF6868;">{{info.reserveDayStr || '-'}}</dd>
                     </dl>
                     <dl>

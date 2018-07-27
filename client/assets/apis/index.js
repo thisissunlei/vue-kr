@@ -22,7 +22,6 @@ import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply";
 import kingdee from "./kingdee";
 export default {
-  ...Kingdee,
   ...OrderApi,
   ...OrderManageApi,
   ...ContractCenter,

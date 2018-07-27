@@ -140,7 +140,7 @@
                     {{formItem.ticketTime   |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
                 <LabelText  :inline="inline" label="发放人员：">
-                    {{formItem.grantId}}
+                    {{formItem.grantUserName}}
                 </LabelText>
                 <LabelText  :inline="inline" label="发放时间：">
                     {{formItem.grantTime   |dateFormat('YYYY-MM-dd')}}

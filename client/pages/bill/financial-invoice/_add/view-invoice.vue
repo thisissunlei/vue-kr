@@ -166,7 +166,8 @@
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
-                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
+                    <Button class="view-btn" @click="makeSureClick(formItem)" :disabled="disabled" v-if="isReady && formItem.verifyStatus=='VERIFYING'">确认无误</Button>
+                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!isReady">保存并关闭</Button>
                     <Button class="view-btn" @click="rejectedSubmit" v-if="isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
                 </div>
             </FormItem>
@@ -527,6 +528,21 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
 
             },
+            makeSureClick(item) {
+              console.log(item)
+              let params = {
+                handleType:'affirm',
+                id :item.id,
+                rejectReason:''
+              }
+              this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                window.close();
+              }).catch((err)=>{
+                this.$Notice.error({
+                  title:err.message
+                });
+              })
+            }
         }
     }
 </script>

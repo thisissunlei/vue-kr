@@ -174,6 +174,7 @@
                    break;
                case 'waitProvide':
                    status.push('GRANT');
+                   break;
                default:
                    status.push('RETURNING,RECOVERYED');
                    break;
@@ -297,7 +298,9 @@
                 this.openMessage=true;
                 this.MessageType="success";
                 this.warn='发放成功';
-                // this.$emit('provideDone', 'test');
+                setTimeout(()=> {
+                  this.$emit('provideDone', 'waitReceive');
+                }, 1000);
               }).catch((err)=>{
                 this.$Notice.error({
                   title:err.message

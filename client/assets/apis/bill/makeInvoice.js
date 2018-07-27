@@ -79,7 +79,7 @@ export default  {
     },
     //发放
     'ticket-provide': {
-      url: '/api/order/ csr-invoice/op/grant',
+      url: '/api/order/csr-invoice/op/grant',
       method: 'put'
     }
 

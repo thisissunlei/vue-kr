@@ -134,7 +134,7 @@ function initListData(){
                                     that.makeSure(colData)
                                 }
                             }
-                        }, '确认'),
+                        }, '确认无误'),
                         h('Button', {
                             props: {
                                 type: 'text',

@@ -199,7 +199,7 @@ export default {
             this.getTableData(this.tabParams);
         },
         onExport(){
-            let form=Object({},this.tabParams);
+            let form=Object.assign({},this.tabParams);
             utils.commonExport(form,'/api/krspace-op-web/app/operation/community/use-rate/export');
         }
     }

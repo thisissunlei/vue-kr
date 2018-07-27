@@ -100,33 +100,51 @@ function transmissionReceivableCol(){
             align:'center',
         },
         {
-            title: '不含税单价',
-            key: 'price',
+            title: '付款账号',
+            key: 'payerAccountBank',
             align:'center',
         },
         {
+            title: '客户（供应商）编码',
+            key: 'payerNumber',
+            align:'center',
+        },
+        {
+            title: '付款人类型名称 ',
+            key: 'payerTypeName',
+            align:'center',
+        },
+        {
+            title: '银行收款账号',
+            key: 'recAccountBank',
+            align:'center',
+        },
+        {
+            title: '收款类型',
+            key: 'recBillType',
+            align:'center',
+        },
+        {
+            title: '备注',
+            key: 'remark',
+            align:'center',
+        },
+        {
+            title: '重复状态名称',
+            key: 'repeatStatusName',
+            align:'center',
+        },
+        {
+            title: '结算方式',
+            key: 'settlementType',
+            align:'center',
+        },{
             title: '同步记录id',
             key: 'syncDataId',
             align:'center',
-        },
-        {
+        },{
             title: '同步状态名称',
             key: 'syncStatusName',
-            align:'center',
-        },
-        {
-            title: '税额',
-            key: 'taxAmount',
-            align:'center',
-        },
-        {
-            title: '含税单价(正数)',
-            key: 'taxPrice',
-            align:'center',
-        },
-        {
-            title: '税率',
-            key: 'taxRate',
             align:'center',
         }
 

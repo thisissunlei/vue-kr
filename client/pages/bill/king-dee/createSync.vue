@@ -8,17 +8,17 @@
                 <DatePicker v-model="formItem.syncTime.endTime" type="date" placeholder="结束日期" style="width: 170px" />
             </FormItem>
             <FormItem label="选择社区" class='form-item'>
-                <selectCommunities :onchange="changeCommunity" style="display:inline-block;width:170px" />
+                <selectCommunities :test='formItem' :onchange="changeCommunity" :multiple='true' style="display:inline-block;width:400px" />
             </FormItem>
             <FormItem label="选择客户" class='form-item'>
-                <selectCustomers :onchange="changeCustomer" style="display:inline-block;width:170px" />
+                <selectCustomers :onchange="changeCustomer" :multiple='true' style="display:inline-block;width:400px" />
             </FormItem>
             <FormItem label="同步类型" prop="syncDataType" class='form-item'>
                 <Select v-model="formItem.syncDataType" style="width:170px">
                     <Option v-for="item in syncDataTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="备注" class="form-item form-item-remark">
+            <FormItem label="备注" prop="remark" class="form-item form-item-remark">
                 <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 5,maxRows: 5}" placeholder="备注..." />
             </FormItem>
 
@@ -34,9 +34,12 @@
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomersFinancial.vue'
+import selectCommunities from './SelectCommunities.vue'
+// import selectCommunities from '~/components/SelectCommunities.vue'
+// import selectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from './SelectCustomers.vue'
 
 export default {
     name: 'createSync',
@@ -58,6 +61,7 @@ export default {
             }
         };
         return {
+            syncId:'',
             formItem: { syncTime: {} },
             syncDataTypeList: [],
             ruleCustom: {
@@ -65,7 +69,10 @@ export default {
                     { required: true, validator: validateDate, trigger: 'change' }
                 ],
                 syncDataType: [
-                    { required: true, type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                    { required: true, message: '请选择同步类型', trigger: 'change' }
+                ],
+                remark: [
+                    { required: true, message: '请填写备注', trigger: 'change' }
                 ]
             },
         }
@@ -74,28 +81,65 @@ export default {
         this.getSyncDataTypeList();
     },
     methods: {
-        changeCommunity(val) {
-            this.formItem.communityIds = val;
-        },
-        changeCustomer(val) {
-            this.formItem.customerIds = val;
-        },
-        getSyncDataTypeList() {
-            this.$http.get('get-sync-data-type-list-enum', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
-            }).then((r) => {
-                this.syncDataTypeList = [].concat(r.data);
-            }).catch((e) => {
+        addKdSyncIncomeData(formItem) {
+          
+            let { remark, customerIds, communityIds, syncDataType,syncTime: { startTime, endTime } } = formItem;
+            let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
+            parmas.customerIds=JSON.stringify(parmas.customerIds)
+            parmas.communityIds=JSON.stringify(parmas.communityIds)
+            parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
+            parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
+            this.$http.post('post-creat-sync-data', parmas).then(r => {
+                console.log(r)
+            }).catch(error => {
+                console.log(error)
                 this.$Notice.error({
-                    title: e.message
+                    title: error.message
                 });
             })
+        },
+        changeCommunity(val) {
+            let arrInt=val.map(item=>Number(item))
+            this.formItem.communityIds = arrInt;
+        },
+        changeCustomer(val) {
+            let arrInt=val.map(item=>Number(item))
+            this.formItem.customerIds = arrInt;
+        },
+        getSyncDataTypeList() {
+            // this.$http.get('get-sync-data-type-list-enum', {
+            //     enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
+            // }).then((r) => {
+            //     this.syncDataTypeList = [].concat(r.data);
+            // }).catch((e) => {
+            //     this.$Notice.error({
+            //         title: e.message
+            //     });
+            // })
+            this.syncDataTypeList = [
+                {
+                    label: '应收',
+                    value: 'INCOME'
+                },
+                {
+                    label: '预收',
+                    value: 'PAYMENT'
+                },
+            ]
         },
         handleCancle() {
 
         },
         handleNext(formItem) {
-            debugger
+            this.$refs['formItem'].validate((valid) => {
+                if (valid) {
+                    this.addKdSyncIncomeData(formItem)
+                } else {
+                    this.$Notice.error({
+                        title: '请填写完整表单'
+                    });
+                }
+            })
         }
     }
 }

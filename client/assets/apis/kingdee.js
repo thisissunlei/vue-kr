@@ -14,5 +14,20 @@ export default {
     "get-sync-data-type-list-enum": {
         url: "/ben/api/krspace-sso-web/sys/enmu",
         method: "get"
-    }
+    },
+    //新建同步
+    'post-creat-sync-data':{
+        url: "/ben/sync/addKdSyncData",
+        method: "post"
+    },
+    //传输数据过滤
+    'get-sync-income-data-list':{
+        url: "/ben/sync/listKdSyncIncomeDataByPage",
+        method: "post"
+    },
+    //传输数据过滤
+    'get-sync-payment-data-list':{
+        url: "/ben/sync/listKdSyncPaymentDataByPage",
+        method: "post"
+    },
 };

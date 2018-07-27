@@ -12,6 +12,7 @@
                 class="u-date-right" 
                 type="date" 
                 placeholder="日期" 
+                :clearable="false"
                 :value="tabParams.dataDate"
                 @on-change="changeDate"
                 :options="dateOptions"

@@ -20,7 +20,7 @@
                   <Loading/>
               </div>
           </Table>
-          <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
+          <!--<SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>-->
           <div class='spin-position-fix' v-if="spinLoading">
               <Spin fix size="large"></Spin>
           </div>
@@ -82,6 +82,7 @@ var layoutScrollHeight=0;
             title: '社区',
             key: 'communityName',
             align:'center',
+            minWidth: 150,
             render:(h,params)=> {
               let status = params.row.communityName ? params.row.communityName : '-'
               return h('span', {}, status)
@@ -163,7 +164,7 @@ var layoutScrollHeight=0;
           }, {
             title: '操作',
             key: 'no',
-            width: 120,
+            minWidth: 120,
             align:'center',
             render:(h,params)=>{
               var btn = [
@@ -266,6 +267,7 @@ var layoutScrollHeight=0;
           },
           //滚动监听
           onScrollListener(){
+            var header = document.getElementsByClassName('ivu-table-header')
             var dom=document.getElementById('layout-content-main');
             var headDom=document.getElementById('slot-head-daily-inventory');
             if(headDom){
@@ -275,8 +277,12 @@ var layoutScrollHeight=0;
 
             if(dom.scrollTop>148){
               this.theHead = true;
+              header[0].style.position = 'fixed'
+              header[0].style.zIndex = '23'
+              header[0].style.top = '60px'
             }else{
               this.theHead = false;
+              header[0].style.position = 'static'
             }
 
             if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){

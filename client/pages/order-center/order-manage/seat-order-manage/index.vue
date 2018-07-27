@@ -7,7 +7,7 @@
         />
         <div class="seat-table-box table-box" id="daily-inventory-table-list">
             <Table border :loading="loading" :columns="tilteAndStyle" :data="krMeetingList"></Table>
-            <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
+            <!--<SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>-->
             <div :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="!!krMeetingList && krMeetingList.length>0">
                 <div style="display:inline-block;">
                     <Button type='primary'>共{{totalCount}}条</Button>
@@ -50,20 +50,13 @@ export default {
            {
              title: '订单编号',
              key: 'orderNo',
-             render: (h, params) => {
-               return h('div', [
-                 h('div', {
-                   style: {
-                     minWidth: '200px'
-                   }
-                 }, params.row.orderNo)
-               ]);
-             }
+             minWidth: 160
            },
            {
              title: '预订的社区',
              key: 'communityName',
              align:'center',
+             minWidth: 150
            },
            {
              title: '预订数量（个·天）',
@@ -114,7 +107,8 @@ export default {
            {
              title: '订单状态',
              key: 'orderShowStatusName',
-             align:'center'
+             align:'center',
+             minWidth: 100
            },
            {
              title: '操作',
@@ -237,6 +231,7 @@ export default {
             return cTime
         },
      onScrollListener() {
+       var header = document.getElementsByClassName('ivu-table-header')
        var dom=document.getElementById('layout-content-main');
        var headDom=document.getElementById('slot-head-daily-inventory');
        if(headDom){
@@ -245,8 +240,12 @@ export default {
        }
        if(dom.scrollTop > 200){
          this.theHead = true;
+         header[0].style.position = 'fixed'
+         header[0].style.zIndex = '23'
+         header[0].style.top = '60px'
        }else{
          this.theHead = false;
+         header[0].style.position = 'static'
        }
 
        if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){

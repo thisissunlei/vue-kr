@@ -8,7 +8,7 @@
         <div class="seat-table-box table-box" id="daily-inventory-table-list">
             <!--<div class="seat-seat-num">预订座位总数：20</div>-->
             <Table border :loading="loading" :columns="tilteAndStyle" :data="krMeetingList"></Table>
-            <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
+            <!--<SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>-->
             <div :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="!!krMeetingList && krMeetingList.length>0">
                 <div style="display:inline-block;">
                     <Button type='primary'>共{{totalCount}}条</Button>
@@ -71,6 +71,7 @@ export default {
              title: '预订的社区',
              key: 'communityName',
              align:'center',
+             minWidth: 150
            },
            {
              title: '预订座位数',
@@ -100,6 +101,7 @@ export default {
              title: '预订人所在社区',
              key: 'reserverCmt',
              align:'center',
+             minWidth: 150
            },
            {
              title: '操作',
@@ -224,6 +226,7 @@ export default {
           return cTime
         },
      onScrollListener() {
+       var header = document.getElementsByClassName('ivu-table-header')
        var dom=document.getElementById('layout-content-main');
        var headDom=document.getElementById('slot-head-daily-inventory');
        if(headDom){
@@ -232,8 +235,12 @@ export default {
        }
        if(dom.scrollTop > 200){
          this.theHead = true;
+         header[0].style.position = 'fixed'
+         header[0].style.zIndex = '23'
+         header[0].style.top = '60px'
        }else{
          this.theHead = false;
+         header[0].style.position = 'static'
        }
 
        if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){

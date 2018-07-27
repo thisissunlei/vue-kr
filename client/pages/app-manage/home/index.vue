@@ -138,17 +138,8 @@ export default {
         }
     },
     mounted(){
-         this.tabParams.dataDate=this.getDay(-1, '-')
-         this.memberList=[
-             {
-                 conToOneDaybefore:'-12%'
-             },
-             {
-                 conToOneDaybefore:'+10%'
-             },
-            
-         ]
-         //this.getTableData(this.tabParams);
+         this.tabParams.dataDate=this.getDay(-1, '-');
+         this.getTableData(this.tabParams);
     },
     methods:{
         getDay(num, str){
@@ -178,7 +169,7 @@ export default {
 
         },
         sortChange(form){
-            let orderLine;
+            let orderLine='';
             switch(form.key){
                 case 'conToOneDaybefore':
                 orderLine='CTOB'
@@ -198,6 +189,7 @@ export default {
             this.tabParams.dataDate=form;
             let time=String(form).split('-')
             this.sectionTitle=`${time[0]}年${time[1]}月${time[2]}日`;
+            this.getTableData(this.tabParams);
         },
         onExport(){
 

@@ -225,7 +225,7 @@
                     <span>-</span>
                    </FormItem>
                    <FormItem style="width:120px" 
-                   
+                   v-if="typeof(item.guestPriceDecimal)!='undefined' && (item.enableDateStr.indexOf('周六')<0 && item.enableDateStr.indexOf('周日')<0)"
                    :prop="'goods.' + index + '.guestPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}"
@@ -240,7 +240,7 @@
                 </Col>
                 <Col span="4" class="parice-col">
                    <FormItem style="width:120px" 
-                   
+                   v-if="typeof(item.guestPromotionPriceDecimal)!='undefined' && (item.enableDateStr.indexOf('周六')<0 && item.enableDateStr.indexOf('周日')<0)"
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}">
@@ -363,6 +363,7 @@ export default {
         detailData:{
           devices:[],
           goods:[],
+          devicesStrArray:[],
         },
         deviceList:[],
         goods:[]
@@ -504,16 +505,20 @@ export default {
             duration: 3
         });
         let _this = this;
-        let devicesStr = this.deviceList.filter(item=>{
-          if(this.detailData.devicesStrArray.indexOf(item.name) != -1){
-            return true;
-          }
-        })
-        this.detailData.devicesStr = JSON.stringify(devicesStr) 
+        
         this.$refs[name].validate((valid) => {
             if (valid) {
                 this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
             //   this.detailData.devicesStr = this.detailData.devicesStrArray
+
+
+                let devicesStr = this.deviceList.filter(item=>{
+                if(this.detailData.devicesStrArray.indexOf(item.name) != -1){
+                    return true;
+                }
+                })
+                 this.detailData.devicesStr = JSON.stringify(devicesStr) 
+
 
                 _this.submitCreate();
              } else {

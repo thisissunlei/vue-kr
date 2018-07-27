@@ -72,7 +72,7 @@ export default {
            },
            {
              title: '订单金额（元）',
-             key: 'totalAmountDecimal',
+             key: 'realCost',
              width: 100,
              align:'center',
            },

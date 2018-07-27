@@ -51,6 +51,9 @@
             <FormItem>
                 
                 <Button type="primary"  @click="addDeviceContinue" class="search-btn add-btn">添加并继续</Button>
+            </FormItem>
+            <FormItem>
+                
                 <Button type="primary"  @click="addDeviceClose" class="search-btn">添加并关闭</Button>
             </FormItem>
 
@@ -210,12 +213,13 @@ export default{
 <style lang="less" >
 .all-equipment-list-searchform{
     padding-left:20px;
+    .ivu-form-item{
+        margin-bottom:10px;
+    }
     .search-btn{
        margin:32px 0 0 0;
    }
-   .add-btn{
-       margin-right:10px;
-   }
+   
    .btn-box{
         display : inline-block;
         

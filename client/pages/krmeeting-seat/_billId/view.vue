@@ -37,7 +37,7 @@
         <div class="warn">首次配置，及30自然日之后的默认配置</div>
         <div class="detail-configs">
           <div class="detail-content">
-            <span class="detail-config">开房数量(个)</span>
+            <span class="detail-config">开放数量(个)</span>
             <span class="content">{{detailData.openQuantity || '-'}}</span>
           </div>
           <div class="detail-content">

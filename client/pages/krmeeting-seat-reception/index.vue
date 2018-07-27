@@ -178,7 +178,7 @@ export default {
 
         },
         toDetail(params){
-          window.open(`/order-center/order-manage/seat-order-manage/detail?orderId=${params.row.id}`,'_blank');
+          window.open(`/order-center/order-manage/seat-order-manage/detail?orderId=${params.row.orderId}`,'_blank');
         },
         getListData(){
           var params = this.searchparams;

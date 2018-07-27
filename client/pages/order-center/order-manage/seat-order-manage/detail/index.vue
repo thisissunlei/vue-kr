@@ -114,7 +114,7 @@ export default {
            },
            {
              title: '游客价（￥/个·天）',
-             key: 'price',
+             key: 'priceDecimal',
              align: 'center',
            },
            {
@@ -202,8 +202,8 @@ export default {
              totalPrice += Number(val.priceDecimal)*Number(val.quantity)
              totalAmountDecimal += Number(val.promotionPriceDecimal)*Number(val.quantity)
            })
-           this.totalPrice = totalPrice.toFixed(2)
-           this.totalAmountDecimal = totalAmountDecimal.toFixed(2)
+           this.totalPrice = totalPrice;
+           this.totalAmountDecimal = totalAmountDecimal;
          }
        }).catch((err) => {
          this.$Notice.error({
@@ -237,7 +237,7 @@ export default {
        })
      },
      setPrice(row) {
-       let price = (Number(row.promotionPriceDecimal)*Number(row.quantity)).toFixed(2)
+       let price = (Number(row.promotionPriceDecimal)*Number(row.quantity));
        return price.toString()
      }
    }

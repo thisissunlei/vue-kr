@@ -4,198 +4,129 @@ function transmissionAccountsCol(){
     
     return [
         {
-            title: '申请编号',
-            key: 'applyNo',
-            align:'center',
-            type:'VERIFYING,PASSED',
+            title: '金额',
+            key: 'amount',
+            align:'center'
         },
         {
-            title: '单位名称',
-            key: 'invoiceTitle',
-            align:'center',            
-            type:'VERIFYING,PASSED'
+            title: '税金额',
+            key: 'arAmount',
+            align:'center',
         },
         {
-            title: '单位类别',
+            title: '客户编码',
             align:'center',
-            key: 'titleType',
-            type:'VERIFYING,PASSED',
+            key: 'asstActNumber',
+        },
+        {
+            title: '业务日期',
+            key: 'bizDate',
+            align:'center',
+            
             render(tag, params){
-                let val= that.unitTypeToStr(params.row.titleType);
-                return val;
+                let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
+                return time;
             }
         },
         {
-            title: '纳税类型',
-            key: 'taxpayerType',
+            title: '业务员姓名',
+            key: 'bizPerson',
             align:'center',
-            type:'VERIFYING,PASSED',
-            render(tag, params){
-                let val= that.taxTypeToStr(params.row.taxpayerType);
-                return val;
-            }
         },
         {
-            title: '纳税人识别码',
-            key: 'taxpayerNumber',
-            align:'center',
-            type:'VERIFYING,PASSED',
-            render:(h,params)=>{
-                return params.row.taxpayerNumber || '--';
-            }
-        },
-        {
-            title: '注册地址',
-            key: 'registerAddress',
-            align:'center',
-            type:'VERIFYING,PASSED',
-            render:(h,params)=>{
-                return params.row.registerAddress || '-';
-            }
+            title: '普通销售/普通销售退 ',
+            key: 'bizTypeName',
+            align:'center'
 
         },
         {
-            title: '注册电话',
-            key: 'registerPhone',
+            title: '所在社区',
+            key: 'communityName',
             align:'center',
-            type:'VERIFYING,PASSED',
+           
         },
         {
-            title: '开户银行',
-            key: 'bank',
-            align:'center',
-            type:'VERIFYING,PASSED',
+            title: '财务组织编码',
+            key: 'companyNumber',
+            align:'center'
         },
         {
-            title: '银行账户',
-            key: 'bankAccount',
-            align:'center',
-            type:'VERIFYING,PASSED'
+            title: '销售合同行号',
+            key: 'contractNumber',
+            align:'center'
         },
         {
-            title: '提交时间',
-            key: 'ctime',
-            align:'center',
-            type:'VERIFYING',
-            render(tag, params){
-                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.ctime)):'-';
-                return time;
-            }
+            title: '核心单据号',
+            key: 'coreBillNumber',
+            align:'center'
         },
         {
-            title: '确认时间',
-            key: 'verifyTime',
-            align:'center',
-            type:'PASSED',
-            render(tag, params){
-                
-                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.verifyTime)):'-';
-                console.log(time,"llllllll")
-                return time;
-            }
+            title: '成本中心',
+            key: 'costCenteNumber',
+            align:'center'
         },
         {
-            title: '确认人员',
-            key: 'verifyUserName',
+            title: '币别',
+            key: 'currency',
             align:'center',
-            type:'PASSED'
         },
         {
-            title: '操作',
-            key: 'name',
+            title: '客户姓名',
+            key: 'customerName',
             align:'center',
-            type:'VERIFYING',
-            render:(h,params)=>{
-                let colData = params.row;
-                return h('div', [
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goView(colData)
-                                }
-                            }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.makeSure(colData)
-                                }
-                            }
-                        }, '确认'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.cancel(colData)
-                                }
-                            }
-                        }, '驳回')
-                       
-                ]);  
-              
-            }
         },
         {
-            title: '操作',
-            key: 'name',
+            title: '失败消息',
+            key: 'failedMsg',
             align:'center',
-            type:'PASSED',
-            render:(h,params)=>{
-                let colData = params.row;
-                return h('div', [
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goView(colData)
-                                }
-                            }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goEdit(colData)
-                                }
-                            }
-                        }, '编辑') 
-                ]);  
-              
-            }
+        },
+        {
+            title: '原始数据id',
+            key: 'incomeId',
+            align:'center',
+        },
+        {
+            title: '物料编码(OP系统的收入类型) ',
+            key: 'materialNumber',
+            align:'center',
+        },
+        {
+            title: '唯一交易编码(OP系统的交易ID)',
+            key: 'number',
+            align:'center',
+        },
+        {
+            title: '不含税单价',
+            key: 'price',
+            align:'center',
+        },
+        {
+            title: '同步记录id',
+            key: 'syncDataId',
+            align:'center',
+        },
+        {
+            title: '同步状态名称',
+            key: 'syncStatusName',
+            align:'center',
+        },
+        {
+            title: '税额',
+            key: 'taxAmount',
+            align:'center',
+        },
+        {
+            title: '含税单价(正数)',
+            key: 'taxPrice',
+            align:'center',
+        },
+        {
+            title: '税率',
+            key: 'taxRate',
+            align:'center',
         }
 
     ]
+
 }
 export default transmissionAccountsCol;

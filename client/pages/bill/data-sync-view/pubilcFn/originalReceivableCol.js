@@ -1,201 +1,56 @@
 import dateUtils from 'vue-dateutils';
 //原始回款数据
 function originalReceivableCol(){
-    
     return [
         {
-            title: '申请编号',
-            key: 'applyNo',
+            title: '日租金',
+            key: 'amount',
             align:'center',
-            type:'VERIFYING,PASSED',
+            
         },
         {
-            title: '单位名称',
-            key: 'invoiceTitle',
+            title: '所在社区',
+            key: 'communityName',
             align:'center',            
-            type:'VERIFYING,PASSED'
+           
         },
         {
-            title: '单位类别',
+            title: '客户姓名',
             align:'center',
-            key: 'titleType',
-            type:'VERIFYING,PASSED',
+            key: 'customerName',
+        },
+        {
+            title: '费用类型名称',
+            key: 'feeTypeName',
+            align:'center',
+        },
+        {
+            title: '发生日期',
+            key: 'occurDate',
+            align:'center',
             render(tag, params){
-                let val= that.unitTypeToStr(params.row.titleType);
-                return val;
-            }
-        },
-        {
-            title: '纳税类型',
-            key: 'taxpayerType',
-            align:'center',
-            type:'VERIFYING,PASSED',
-            render(tag, params){
-                let val= that.taxTypeToStr(params.row.taxpayerType);
-                return val;
-            }
-        },
-        {
-            title: '纳税人识别码',
-            key: 'taxpayerNumber',
-            align:'center',
-            type:'VERIFYING,PASSED',
-            render:(h,params)=>{
-                return params.row.taxpayerNumber || '--';
-            }
-        },
-        {
-            title: '注册地址',
-            key: 'registerAddress',
-            align:'center',
-            type:'VERIFYING,PASSED',
-            render:(h,params)=>{
-                return params.row.registerAddress || '-';
-            }
-
-        },
-        {
-            title: '注册电话',
-            key: 'registerPhone',
-            align:'center',
-            type:'VERIFYING,PASSED',
-        },
-        {
-            title: '开户银行',
-            key: 'bank',
-            align:'center',
-            type:'VERIFYING,PASSED',
-        },
-        {
-            title: '银行账户',
-            key: 'bankAccount',
-            align:'center',
-            type:'VERIFYING,PASSED'
-        },
-        {
-            title: '提交时间',
-            key: 'ctime',
-            align:'center',
-            type:'VERIFYING',
-            render(tag, params){
-                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.ctime)):'-';
+                let time=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.occurDate)):'-';
                 return time;
             }
         },
         {
-            title: '确认时间',
-            key: 'verifyTime',
+            title: '支付方式名称',
+            key: 'payWayName',
             align:'center',
-            type:'PASSED',
-            render(tag, params){
-                
-                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.verifyTime)):'-';
-                console.log(time,"llllllll")
-                return time;
-            }
         },
         {
-            title: '确认人员',
-            key: 'verifyUserName',
+            title: '备注 ',
+            key: 'remark',
             align:'center',
-            type:'PASSED'
+            
         },
         {
-            title: '操作',
-            key: 'name',
+            title: '同步状态名称',
+            key: 'syncStatusName',
             align:'center',
-            type:'VERIFYING',
-            render:(h,params)=>{
-                let colData = params.row;
-                return h('div', [
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goView(colData)
-                                }
-                            }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.makeSure(colData)
-                                }
-                            }
-                        }, '确认'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.cancel(colData)
-                                }
-                            }
-                        }, '驳回')
-                       
-                ]);  
-              
-            }
-        },
-        {
-            title: '操作',
-            key: 'name',
-            align:'center',
-            type:'PASSED',
-            render:(h,params)=>{
-                let colData = params.row;
-                return h('div', [
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goView(colData)
-                                }
-                            }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    that.goEdit(colData)
-                                }
-                            }
-                        }, '编辑') 
-                ]);  
-              
-            }
+            
         }
-
     ]
+
 }
 export default originalReceivableCol;

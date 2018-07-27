@@ -9,7 +9,7 @@
 					{{detailData.name}}
 				</LabelText>
 				<LabelText label="批次名称：">
-					{{detailData.communityName}}
+					{{detailData.id}}
 				</LabelText>
 				<LabelText label="同步数据数：">
 					{{detailData.syncDataCount}}
@@ -21,13 +21,13 @@
 					{{detailData.operatorName}}
 				</LabelText>
 				<LabelText label="同步方式：">
-					{{detailData.syncType || '-'}}
+					{{detailData.syncTypeName || '-'}}
 				</LabelText>
 				<LabelText label="同步状态：" >
-					{{detailData.syncStatus}}
+					{{detailData.syncStatusName|| '-'}}
 				</LabelText>
 				<LabelText label="同步数据类型：" >
-					{{detailData.syncDataType}}
+					{{detailData.syncDataTypeName|| '-'}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="过滤条件">
@@ -38,10 +38,25 @@
 					{{detailData.endTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="所选客户：">
-					{{detailData.customerNames}}
+					<div style="display:inline-block;vertical-align:top;margin-top:-5px;">
+						<span 
+							style="display:inline-block;padding:5px;"
+							v-for="(item,index) in detailData.customerNames"
+							::key="index"
+						>{{item}}</span>
+					</div>
+					
 				</LabelText>
 				<LabelText label="所选社区：">
-					{{detailData.communityNames}}
+					<div style="display:inline-block;vertical-align:top;margin-top:-5px;">
+						<span 
+							style="display:inline-block;padding: 5px;"
+							v-for="(item,index) in detailData.communityNames"
+							::key="index"
+						>{{item}}</span>
+					</div>
+					
+					
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="传输结果">
@@ -57,12 +72,44 @@
 					{{detailData.lastSyncUserName}}
 				</LabelText>
 			</DetailStyle>
-			<Tabs value="name1">
+			<Tabs value="original">
                 <TabPane label="原始数据" name="original">
-					 <Table border :columns="originalCol" :data="originalData"></Table>
+					<Table 
+						border 
+						:columns="type==1?originalAccountsCol:originalReceivableCol" 
+						:data="originalData"></Table>
+					
+					<div  style="margin: 10px;overflow: hidden;">
+						
+						<div style="float: right;">
+						
+							<Page 
+								:total="this.originalParams.total" 
+								:page-size="this.originalParams.pageSize" 
+								show-elevator 
+								show-total 
+								@on-change="originalChange"
+							></Page>
+						</div>
+					</div>
 				</TabPane>
                 <TabPane label="传输数据" name="transmission">
-					 <Table border :columns="transmissionCol" :data="transmissionData"></Table>
+					 <Table 
+					 	border :columns="type!=1?transmissionReceivableCol:transmissionAccountsCol" 
+					 	:data="transmissionData"></Table>
+					 <div  style="margin: 10px;overflow: hidden;">
+						
+						<div style="float: right;">
+						
+							<Page 
+								:total="this.transmissionParams.total" 
+								:page-size="this.transmissionParams.pageSize" 
+								show-elevator 
+								show-total 
+								@on-change="transmissionChange"
+							></Page>
+						</div>
+					</div>
 				</TabPane>
                 
             </Tabs>
@@ -96,21 +143,37 @@ export default {
 				
 			},
 			//原始应收
-			originalAccountsCol:this.fn.originalAccountsCol.call(this),
+			originalAccountsCol:fn.originalAccountsCol.call(this),
 			//原始回款
-			originalReceivableCol:this.fn.originalReceivableCol.call(this),
+			originalReceivableCol:fn.originalReceivableCol.call(this),
 			//传输应收
-			transmissionAccountsCol:this.fn.transmissionAccountsCol.call(this),
+			transmissionAccountsCol:fn.transmissionAccountsCol.call(this),
 			//传输回款
-			transmissionReceivableCol:this.fn.transmissionReceivableCol.call(this),
-			//原始应收返回数据
-			originalAccountsData:[],
-			//原始回款返回数据
-			originalReceivableData:[],
-			//传输应收返回数据
-			transmissionAccountsData:[],
-			//传输回款返回数据
-			transmissionReceivableData:[],
+			transmissionReceivableCol:fn.transmissionReceivableCol.call(this),
+			//原始数据
+			originalData:[],
+			
+			//传输数据
+			transmissionData:[],
+			/**
+			 * 1表示应收
+			 * 2表示预收
+			*/
+			type:this.$route.query.type||1,
+			syncDataId:this.$route.query.syncDataId||0,
+			//原始数据参数
+			originalParams:{
+				page:1,
+				pageSize:20,
+				syncDataId:this.$route.query.syncDataId||0,
+				total:0,
+			},
+			transmissionParams:{
+				page:1,
+				pageSize:20,
+				syncDataId:this.$route.query.syncDataId||0,
+				total:0,
+			}
 
 		}
 	},
@@ -119,23 +182,28 @@ export default {
 		GLOBALSIDESWITCH('false');
 		// GLOBALHEADERSET('订单合同')
 		this.getDetailData();
+		this.getData();
 	},
+	
 
 	methods: {
+		getData(){
+			if(this.type==1){
+				this.getOriginalAccountsData();
+				this.getTransmissionAccountsData();
+			}else{
+				this.getOriginalReceivableData();
+				this.getTransmissionReceivableData();
+			}
+		
+		},
 
 		//获取销售机会列表
-		getSalerChanceList(parms) {
-			let list = [];
-			let _this = this;
-			this.$http.get('get-salechance', parms, r => {
-				r.data.items.data.map(item => {
-					list.push({
-						label: item.name,
-						value: item.id
-					})
-				})
-				let obj = list.find(item => item.value == this.basicInfo.opportunityId)
-				this.opportunityStr = obj.label || '';
+		getDetailData() {
+			this.$http.get('getKingDeeDetail', {syncDataId:this.syncDataId}, r => {
+				
+				this.detailData = Object.assign({},r.data);
+				
 			}, error => {
 				this.$Notice.error({
 					title: error.message
@@ -143,52 +211,81 @@ export default {
 			}
 			)
 		},
+		//原始数据change
+		originalChange(e){
+			this.originalParams.page = e;
+			if(this.type == 1){
+				this.getOriginalAccountsData();
+			}else{
+				this.getOriginalReceivableData();
+			}
 
-		getDetailData() {
-			let { params } = this.$route;
-			let from = {
-				id: params.watchView
-			};
-			this.$http.get('join-bill-detail', from).then((response) => {
-				this.basicInfo = response.data;
-				let pars = {
-					customerId: this.basicInfo.customerId,
-					communityId: this.basicInfo.communityId,
-					receiveId: this.basicInfo.salerId,
-					orderId:this.basicInfo.id
-				}
-				this.getSalerChanceList(pars);
-				if (response.data.installments.length > 10) {
-					this.showButton = true;
-					this.showAll = false;
-					this.installments = response.data.installments.slice(0, 10)
-				} else {
-					this.installments = response.data.installments || [];
-				}
-				this.installmentAll = response.data.installments || [];
-				this.nullifyReason = response.data.invalidString;
-				this.nullifyRemark = response.data.remark;
-				this.capitalTreatment = response.data.tactiscAmount ? utils.smalltoBIG(response.data.tactiscAmount) : '';
-				this.capitalService = response.data.seatRentAmount ? utils.smalltoBIG(response.data.seatRentAmount) : '';
-				this.serviceData = response.data.orderSeatDetailVo || [];
-				this.treatmentData = response.data.contractTactics || [];
-				this.contractData = response.data.orderContractInfo ? response.data.orderContractInfo : [];
-			}).catch((error) => {
+		},
+		transmissionChange(){
+			this.transmissionParams.page = e;
+			if(this.type == 1){
+				this.getTransmissionAccountsData();
+			}else{
+				this.getTransmissionReceivableData();
+			}
+		},
+		//获取原始应收
+		getOriginalAccountsData(){
+			let params = Object.assign({},this.originalParams);
+			this.$http.get('getOriginalAccountsData', params, r => {
+				
+				this.originalData = [].concat(r.data.items);
+				this.originalParams.page = r.data.page;
+				this.originalParams.totalPages = r.data.totalPages;
+				
+			}, error => {
 				this.$Notice.error({
 					title: error.message
 				});
 			})
 		},
-		notAllList() {
-			let list = this.installmentAll
-			this.showAll = false;
-			this.installments = list.slice(0, 10)
+		//获取原始传输
+		getOriginalReceivableData(){
+			let params = Object.assign({},this.originalParams);
+			this.$http.get('getOriginalReceivableData', params, r => {
+				this.originalData = [].concat(r.data.items);
+				this.originalParams.page = r.data.page;
+				this.originalParams.totalPages = r.data.totalPages;
+			}, error => {
+				this.$Notice.error({
+					title: error.message
+				});
+			})
 		},
-		showAllList() {
-			let list = this.installmentAll
-			this.showAll = true;
-			this.installments = list;
+		//获取传输应收
+		getTransmissionAccountsData(){
+			let params = Object.assign({},this.transmissionParams);
+			this.$http.get('getTransmissionAccountsData', params, r => {
+				this.transmissionData = [].concat(r.data.items);
+				this.transmissionParams.page = r.data.page;
+				this.transmissionParams.totalPages = r.data.totalPages;
+			}, error => {
+				this.$Notice.error({
+					title: error.message
+				});
+			})
 		},
+		//获取传输回款
+		getTransmissionReceivableData(){
+			let params = Object.assign({},this.transmissionParams);
+			this.$http.get('getTransmissionReceivableData', params, r => {
+				this.transmissionData = [].concat(r.data.items);
+				this.transmissionParams.page = r.data.page;
+				this.transmissionParams.totalPages = r.data.totalPages;
+			}, error => {
+				this.$Notice.error({
+					title: error.message
+				});
+			})
+		}
+
+	
+		
 
 	}
 }
@@ -210,6 +307,10 @@ export default {
             border: 2px solid #499df1;
             margin-right: 20px;
         }
+	}
+	.ui-text{
+		max-width: 80%;
+    	// vertical-align: top;
 	}
 	.ivu-tabs-nav .ivu-tabs-tab{
 		width:50%;

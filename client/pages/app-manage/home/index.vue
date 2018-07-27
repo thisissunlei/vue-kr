@@ -190,7 +190,12 @@ export default {
                 break;
             }
             this.tabParams.orderLine=orderLine;
-            this.tabParams.orderRule=form.order.toUpperCase();
+            if(form.order=='normal'){
+               this.tabParams.orderRule='';
+            }else{
+                this.tabParams.orderRule=form.order.toUpperCase();
+            }
+            
             this.getTableData(this.tabParams);
         },
         changeDate(form){

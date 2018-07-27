@@ -22,7 +22,7 @@
             </Table>
         </div>
         <div  class='list-footer'>
-                <Buttons  type="primary"  label="导出"  checkAction='cmt_investment_excel' @click="submitExport"/>
+                <!-- <Buttons  type="primary"  label="导出"  checkAction='cmt_investment_excel' @click="submitExport"/> -->
                 <div style="float: right;">
                     <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
@@ -73,55 +73,102 @@ export default {
             attractColumns:[
                 {
                     title: '合同编号',
-                    key: 'name',
+                    key: 'serialNumber',
                     align:'center',
+                    render(tag, params){
+                        let time=params.row.serialNumber;
+                        if(time){
+                            return tag('span','*****')
+                        }else{
+                            return tag('span',{
+                                    style:{
+                                        color:'#499df1'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params.row)
+                                        }
+                                    }
+                            })
+                        }
+                    }
                 },
                 {
                     title: '客户名称',
-                    key: 'type',
+                    key: 'customName',
                     align:'center'
                 },
                 {
                     title: '合同类型',
-                    key: 'capacity',
+                    key: 'contractType',
                     align:'center',
                     width:90,
                 },
                 {
                     title: '销售员',
-                    key: 'quotedPrice',
+                    key: 'salerName',
                     align:'center',
                     width:80
                 },
                 {
                     title: '服务开始日',
-                    key: 'investmentStatusName',
+                    key: 'startDate',
                     align:'center',
-                    width:110
+                    width:110,
+                    render(tag, params){
+                        let time=params.row.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)):'-';
+                        return tag('span',time)
+                    }
                 },
                 {
                     title: '首付款金额',
-                    key: 'capacity',
+                    key: 'firstServiceFee',
                     align:'right',
                     width:90,
                 },
                 {
                     title: '首付款欠款金额',
-                    key: 'quotedPrice',
+                    key: 'firstServiceFeeDebt',
                     align:'right',
-                    width:100
+                    width:100,
+                    render(tag, params){
+                        let file=params.row.firstServiceFeeDebt;
+                        let ren=file=='0'?'未付清':(file=='1'?'已付清':'-');
+                        return tag('span',{
+                            style:{
+                                color:file=='0'?'red':''
+                            }
+                        },ren)
+                    }
                 },
                 {
                     title: '是否上传附件',
-                    key: 'capacity',
+                    key: 'haveAttachmentName',
                     align:'center',
                     width:100,
+                    render(tag, params){
+                        let file=params.row.haveAttachmentName;
+                        return tag('span',{
+                            style:{
+                                color:file=='否'?'red':''
+                            }
+                        },file)
+                    }
                 },
                 {
                     title: '逾期时长(服务开始日)',
-                    key: 'quotedPrice',
+                    key: 'overDays',
                     align:'center',
-                    width:130
+                    width:130,
+                    render(tag, params){
+                        let file=params.row.overDays;
+                        let end=file?file+'天':'-';
+                        return tag('span',{
+                            style:{
+                                color:file?'red':''
+                            }
+                        },end)
+                    }
                 }
             ],
             attractData:[]    
@@ -198,8 +245,8 @@ export default {
          this.tabForms=Object.assign({},this.tabForms,values);
          this.getListData(this.tabForms); 
       },
-      submitExport(){
-          utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/cmt-investment/list/export');
+      jumpView(params){
+         window.open(`/order-center/contract-manage/contract-list/list?serialNumber=${params.serialNumber}`,'_blank')
       },
       onPageChange(page){
          this.tabForms.page=page;

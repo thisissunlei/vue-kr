@@ -93,8 +93,16 @@ var layoutScrollHeight=0;
             width: 150,
             align:'center',
             render:(h,params)=> {
-              let status = params.row.kmStartTime ? params.row.kmStartTime : '-'
-              return h('span', {}, status)
+              let kmStartTime = params.row.kmStartTime ? params.row.kmStartTime : ''
+              let kmEndTime = params.row.kmEndTime ? params.row.kmEndTime : ''
+              if ( !!kmStartTime && !!kmEndTime ) {
+                return h('span', {}, kmStartTime + ' - ' + kmEndTime)
+              } else if ( !kmStartTime && !!kmEndTime ) {
+                return h('span', {}, kmEndTime)
+              } else if ( !!kmStartTime && !kmEndTime ) {
+                return h('span', {}, kmStartTime)
+              }
+
             }
           }, {
             title: '今日开放数量',

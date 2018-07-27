@@ -30,4 +30,20 @@ export default {
         url: "/ben/sync/listKdSyncPaymentDataByPage",
         method: "post"
     },
+    //同步所有
+    'post-sync-income-data-ids':{
+        url: "/ben/sync/startSyncIncomeDataAl",
+        method: "post"
+    },
+    //同步所有
+    'post-sync-payment-data-ids':{
+        url: "/ben/sync/startSyncPaymentDataAll",
+        method: "post"
+    },
+    //同步所有
+    'post-sync-select-data-ids':{
+        url: "/ben/sync/startSyncData",
+        method: "post"
+    },
+    
 };

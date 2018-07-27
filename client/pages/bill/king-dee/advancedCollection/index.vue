@@ -217,7 +217,7 @@
       },
       exportTable() {
         //todo
-        utils.commonExport({},'/test/sync/paymentSummaries/export');
+        utils.commonExport({},'/api/sync/paymentSummaries/export');
       }
     }
 

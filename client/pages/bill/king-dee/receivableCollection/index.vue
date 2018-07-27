@@ -232,7 +232,7 @@
       },
       exportTable() {
         // todo
-        utils.commonExport({},'/test/sync/incomeSummaries/export');
+        utils.commonExport({},'/api/sync/incomeSummaries/export');
       }
     }
 

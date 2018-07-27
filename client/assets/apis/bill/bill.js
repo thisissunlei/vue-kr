@@ -228,12 +228,12 @@ export default  {
   // todo: test改成api
     // 同步数据--预收数据
     'get-advanced-collection-list': {
-      url: '/test/sync/listKdPaymentSummaryByPage',
+      url: '/api/sync/listKdPaymentSummaryByPage',
       method: 'get'
     },
     // 同步数据--应收数据
     'get-receivable-collection-list': {
-      url: '/test/sync/listKdIncomeSummaryByPage',
+      url: '/api/sync/listKdIncomeSummaryByPage',
       method: 'get'
     }
 

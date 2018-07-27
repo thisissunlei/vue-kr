@@ -220,12 +220,12 @@
                 </Col>
                 <Col  span="4" class="parice-col">
                   <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPriceDecimal)=='undefined'"
+                   v-if="typeof(item.guestPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
                    >
-                    -
+                    <span>-</span>
                    </FormItem>
                    <FormItem style="width:120px" 
-                   v-if="item.guestPriceDecimal"
+                   
                    :prop="'goods.' + index + '.guestPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}"
@@ -240,7 +240,7 @@
                 </Col>
                 <Col span="4" class="parice-col">
                    <FormItem style="width:120px" 
-                   v-if="item.guestPromotionPriceDecimal"
+                   
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}">
@@ -252,9 +252,9 @@
                       />
                    </FormItem>
                    <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined'"
+                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
                    >
-                     <span > -</span>
+                     <span >-</span>
                    </FormItem>
                 </Col>
             </Row>

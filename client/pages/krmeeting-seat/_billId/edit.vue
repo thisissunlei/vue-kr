@@ -220,7 +220,7 @@
                 </Col>
                 <Col  span="4" class="parice-col">
                   <FormItem style="width:120px" 
-                   v-if="!item.guestPriceDecimal"
+                   v-if="typeof(item.guestPriceDecimal)=='undefined'"
                    >
                     -
                    </FormItem>
@@ -252,7 +252,7 @@
                       />
                    </FormItem>
                    <FormItem style="width:120px" 
-                   v-if="!item.guestPromotionPriceDecimal"
+                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined'"
                    >
                      <span > -</span>
                    </FormItem>
@@ -537,8 +537,8 @@ export default {
             this.$Notice.success({
                     title:'编辑成功'
                 });
-                    window.close();
-                    window.opener.location.reload();
+                    // window.close();
+                    // window.opener.location.reload();
         }).catch((err)=>{
           this.detailData.devicesStrArray = JSON.parse(this.detailData.devicesStrArray) 
           console.log('===>err',this.detailData)
@@ -558,7 +558,7 @@ export default {
           obj.quantity = this.detailData.openQuantity;
             obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
           console.log('setPriceList=====',item.guestPriceDecimal)
-          if(item.guestPriceDecimal){
+          if(typeof(item.guestPriceDecimal)!="undefined"){
             obj.guestPriceDecimal = this.detailData.guestPriceDecimal
             obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
           }

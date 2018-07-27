@@ -119,7 +119,7 @@ export default {
            },
            {
              title: '优惠价（￥/个·天）',
-             key: 'promotionPrice',
+             key: 'promotionPriceDecimal',
              align: 'center',
            },
            {
@@ -199,8 +199,8 @@ export default {
          let totalAmountDecimal = 0
          if ( !!this.info.details && this.info.details.length > 0 ) {
            this.info.details.forEach((val, i) => {
-             totalPrice += Number(val.price)*Number(val.quantity)
-             totalAmountDecimal += Number(val.promotionPrice)*Number(val.quantity)
+             totalPrice += Number(val.priceDecimal)*Number(val.quantity)
+             totalAmountDecimal += Number(val.promotionPriceDecimal)*Number(val.quantity)
            })
            this.totalPrice = totalPrice.toFixed(2)
            this.totalAmountDecimal = totalAmountDecimal.toFixed(2)
@@ -237,7 +237,7 @@ export default {
        })
      },
      setPrice(row) {
-       let price = (Number(row.promotionPrice)*Number(row.quantity)).toFixed(2)
+       let price = (Number(row.promotionPriceDecimal)*Number(row.quantity)).toFixed(2)
        return price.toString()
      }
    }

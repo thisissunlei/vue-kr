@@ -111,6 +111,10 @@ export default {
              title: '预订日期',
              key: 'enableDate',
              align: 'center',
+             render(tag, params){
+               let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.enableDate));
+               return time;
+             }
            },
            {
              title: '游客价（￥/个·天）',

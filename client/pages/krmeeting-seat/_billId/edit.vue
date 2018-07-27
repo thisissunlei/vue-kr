@@ -219,13 +219,15 @@
                    </FormItem>
                 </Col>
                 <Col  span="4" class="parice-col">
-                  <FormItem style="width:120px" 
+                  
+                   
+                   <FormItem style="width:120px" 
                    v-if="typeof(item.guestPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
                    >
                     <span>-</span>
                    </FormItem>
                    <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPriceDecimal)!='undefined' && (item.enableDateStr.indexOf('周六')<0 && item.enableDateStr.indexOf('周日')<0)"
+                   v-else
                    :prop="'goods.' + index + '.guestPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}"
@@ -239,8 +241,17 @@
                    </FormItem>
                 </Col>
                 <Col span="4" class="parice-col">
+                   
+
+                   
                    <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPromotionPriceDecimal)!='undefined' && (item.enableDateStr.indexOf('周六')<0 && item.enableDateStr.indexOf('周日')<0)"
+                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
+                   >
+                     <span >-</span>
+                   </FormItem>
+
+                   <FormItem style="width:120px" 
+                    v-else
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}">
@@ -251,11 +262,8 @@
                           style="width:100px"
                       />
                    </FormItem>
-                   <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
-                   >
-                     <span >-</span>
-                   </FormItem>
+
+
                 </Col>
             </Row>
           </div>

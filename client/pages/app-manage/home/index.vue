@@ -195,7 +195,7 @@ export default {
         changeDate(form){
             this.tabParams.dataDate=form;
             let time=String(form).split('-')
-            this.sectionTitle=`${time[0]}年${time[1]}月${time[2]}日`;
+            this.sectionTitle=`${time[1]}月${time[2]}日`;
             this.getTableData(this.tabParams);
         },
         onExport(){

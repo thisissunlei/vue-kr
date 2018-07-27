@@ -62,7 +62,7 @@
           </RadioGroup> 
         </FormItem>
         <FormItem label="散座配套" class="u-input"  prop="devicesStrArray">
-          <CheckboxGroup v-model="detailData.devicesStrArray">
+          <CheckboxGroup v-model="test" @on-change="changeCheckbox">
               <Checkbox v-for="item in deviceList" :label="item.name" :key="item.id">
                   <span>{{item.name}}</span>
               </Checkbox>
@@ -329,6 +329,7 @@ export default {
         category:'app/upgrade',
         coverImgList:[],
         detailImgList:[],
+        test:[],
         ruleCustom:{
           coverPic:[
             { required: true, message: '请上传封面图', trigger: 'change' }
@@ -355,13 +356,13 @@ export default {
             { required: true, message: '请选择', trigger: 'blur' }
           ],
           devicesStrArray:[
-            { required: true, type: 'array', min: 1, message: '请选择散座配套', trigger: 'change' },
+            { required: true, type: 'array', message: '请选择散座配套', trigger: 'change' },
           ]
         },
         priceList:[],
         detailData:{
           devices:[],
-          goods:[]
+          goods:[],
         },
         deviceList:[],
         goods:[]
@@ -408,6 +409,16 @@ export default {
           this.detailImgList = fileList
           this.detailData.pics=detailImgs;
       },
+
+
+        changeCheckbox(e){
+            this.detailData.devicesStrArray = this.test;
+            console.log(this.detailData.devicesStrArray);
+            console.log(e);
+        },
+
+
+
       detailImgsSuccess(response, file, fileList){
           let imglist=[].concat(this.imglist);
           fileList.map((item)=>{
@@ -446,7 +457,7 @@ export default {
         let { params } = this.$route;
         let communityId = params.billId;
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
-          
+          console.log("detail>>",res.data);
           var coverImgList = []
           if(res.data.coverPic && res.data.coverPic!=''){
             coverImgList.push({'url':res.data.coverPic});
@@ -475,7 +486,7 @@ export default {
           this.detailData = Object.assign({},res.data);
           this.detailData.goods = res.data.goods || [];
           this.goods = res.data.goods || []
-          this.detailData.devicesStrArray = devicesStrArray;
+          this.test = devicesStrArray;
           console.log('=======>',this.detailData)
         }).catch((err)=>{
           this.$Notice.error({
@@ -499,10 +510,10 @@ export default {
           }
         })
         this.detailData.devicesStr = JSON.stringify(devicesStr) 
-        console.log('handleSubmit',this.detailData)
         this.$refs[name].validate((valid) => {
             if (valid) {
-              this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
+                this.detailData.devicesStrArray = JSON.stringify(this.detailData.devicesStrArray) 
+            //   this.detailData.devicesStr = this.detailData.devicesStrArray
 
                 _this.submitCreate();
              } else {
@@ -537,8 +548,8 @@ export default {
             this.$Notice.success({
                     title:'编辑成功'
                 });
-                    // window.close();
-                    // window.opener.location.reload();
+                    window.close();
+                    window.opener.location.reload();
         }).catch((err)=>{
           this.detailData.devicesStrArray = JSON.parse(this.detailData.devicesStrArray) 
           console.log('===>err',this.detailData)

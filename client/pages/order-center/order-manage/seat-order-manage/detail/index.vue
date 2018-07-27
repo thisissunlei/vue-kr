@@ -66,7 +66,8 @@
                     <Table border :columns="tilteAndStyle" :data="info.details"></Table>
                     <ul>
                         <li>商品总价：</li>
-                        <li>{{totalPrice}}</li>
+                        <!--<li>{{totalPrice}}</li>-->
+                        <li>{{info.orderPromotionTotalDecimal || '-'}}</li>
                     </ul>
                     <!--<ul>-->
                         <!--<li>使用的优惠策略：</li>-->
@@ -74,7 +75,8 @@
                     <!--</ul>-->
                     <ul>
                         <li>订单金额：</li>
-                        <li>{{totalAmountDecimal}}</li>
+                        <!--<li>{{totalAmountDecimal}}</li>-->
+                        <li>{{info.realCost}}</li>
                     </ul>
                 </div>
             </div>

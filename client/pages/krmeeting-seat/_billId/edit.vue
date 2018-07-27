@@ -255,8 +255,8 @@
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
                     :rules="{validator: validatePrice, trigger: 'blur'}">
-                      <Input 
-                          v-model="item.guestPromotionPriceDecimal" 
+                      <Input
+                          v-model="item.guestPromotionPriceDecimal"
                           placeholder=""
                           :maxlength="maxPrice"
                           style="width:100px"
@@ -496,6 +496,7 @@ export default {
           this.detailData.goods = res.data.goods || [];
           this.goods = res.data.goods || []
           this.test = devicesStrArray;
+          this.detailData.devicesStrArray = devicesStrArray;
           console.log('=======>',this.detailData)
         }).catch((err)=>{
           this.$Notice.error({

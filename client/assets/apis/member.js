@@ -5,11 +5,6 @@ export default {
         url: '/api/krspace-op-web/customer/manager/list',
         method: 'get'
     },
-    //获取企业管理员详情--员工信息
-    'customer-manager-staff-list': {
-        url: 'api/krspace-op-web/customer/manager/staff/list',
-        method: 'get'
-    },
     //修改管理员
     'edit-customer-manager': {
         url: '/api/krspace-op-web/customer/manager/edit',
@@ -88,9 +83,36 @@ export default {
     },
     //获取企业管理员详情--获取管理的社区列表
     'get-manage-cmt-list': {
-        url: 'api/krspace-op-web/customer/manager/manage-cmt-list',
+        url: '/api/krspace-op-web/customer/manager/manage-cmt-list',
         method: 'get'
     },
+    
+    //获取企业管理员详情--在职员工列表
+    'get-customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/employees',
+        method: 'get'
+    },
+    //获取企业管理员详情--管理员列表
+    'get-customer-manager-admin': {
+        url: '/api/krspace-op-web/customer/manager/admin/list',
+        method: 'get'
+    },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-user-detail': {
+        url: '/api/krspace-op-web/customer/manager/user/detail',
+        method: 'get'
+    },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-csr-mbrtype-num': {
+        url: '/api/krspace-op-web/customer/manager/csr-mbrtype-num',
+        method: 'get'
+    },
+    //获取企业管理员详情--编辑会员信息
+    'customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/user/edit',
+        method: 'post'
+    },
+
     //客户会员--客户管理
     'get-customermanage-customer-type': {
         url: 'api/order/csr/source/type',

@@ -4,7 +4,7 @@
             <Form ref="formItemInvestment" :model="formItem" :rules="ruleDaily" label-position="left">
                       <div style="padding: 30px 10px 10px 20px;background:#fff;margin-top:20px;">
                           
-                            <Button type="primary"  @click="searchClick" style="">新增同步</Button>
+                            <Button type="primary"  @click="createSync" style="">新增同步</Button>
 
                             <!-- 开始时间 -->
                              <Form-item  class='priceForm' prop="startTime">
@@ -236,6 +236,10 @@ export default {
                 }
             })
            
+        },
+        //新增同步
+        createSync(){
+            this.$emit('createSync')
         }
     }
 }

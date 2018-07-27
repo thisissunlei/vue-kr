@@ -569,14 +569,6 @@ export default {
                     align:'center',
                     width:150, 
                     render(h,obj){
-                     var statusName=obj.row.goodsStatusName?obj.row.goodsStatusName:'-';
-                     var status=obj.row.goodsStatus;
-                     var colorClass='';
-                     if(status=='DISABLE'||status=='OFF'){
-                         colorClass='redClass'
-                     }else{
-                         colorClass=''
-                     }
                         var rowArray=obj.row.followStatus;
                         var row='';
                         let classN='row-current-more current-more-task table-null';
@@ -591,7 +583,13 @@ export default {
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
                                 var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+' ';
-                                 var staRender=item.goodsStatusName?item.goodsStatusName:'-';
+                                var staRender=item.goodsStatusName?item.goodsStatusName:'-';
+                                var colorClass='';
+                                if(item.goodsStatus=='DISABLE'||item.goodsStatus=='OFF'){
+                                    colorClass='redClass'
+                                }else{
+                                    colorClass=''
+                                }
                                 return h('div', [
 
                                     h('Tooltip', {
@@ -774,6 +772,7 @@ export default {
         cancelService(){
             this.serviceData={};
             this.newgoodForm={};
+            this.serviceId='';
             this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
@@ -897,7 +896,7 @@ export default {
          var form = new FormData();
 
         // console.log(this.tabForms.floor,"ppppp")
-         form.append('floors',this.floorStr);
+         form.append('floors','');
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
          var xhr = new XMLHttpRequest();

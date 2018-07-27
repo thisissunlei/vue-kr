@@ -1,12 +1,12 @@
 <template>
     <div>
        <Select
-            v-model="formItem.basicSpaceId"
+            v-model="formItem.roleId"
             style="width:250px;margin-left:70px;margin-top:30px;"
             placeholder="请选择角色"
             clearable
         >
-            <Option  v-for="item in roleList" :value="''+item.id"  :key="item.id" >{{ item.name }}</Option>
+            <Option  v-for="item in roleList" :value="''+item.roleId"  :key="item.roleId" >{{ item.roleName }}</Option>
         </Select>
         <div slot="footer" style="margin: 30px 0;text-align: center;">
                 <Button  type="primary" @click="submitRole">确认</Button>
@@ -18,18 +18,27 @@
 <script>
 
 export default {
-    components:{
-        
-    },
     data() {
         return{
            formItem:{
-               basicSpaceId:''
+               roleId:''
            },
            roleList:[] 
         }
     },
+    mounted(){
+        this.getDataList();
+    },
     methods:{
+       getDataList(){
+            this.$http.get('get-business-role').then((res)=>{
+                this.roleList=res.data.items;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+       },
        submitRole(){
            this.$emit('submit',this.formItem);
        },

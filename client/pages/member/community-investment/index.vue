@@ -9,9 +9,9 @@
              <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
-                        :current="page" 
+                        :current="params.page" 
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="params.pageSize" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -51,17 +51,20 @@
         data () {
             return {
             totalCount:0,
-            page:1,
-            pageSize:15,
 
             params:{
+                page:1,
                 pageSize:15,
+                accountName:'',
+                realName:'',
+                mobilePhone:'',
+                email:''
             },
             searchFilter:[
-                {label:'登录名',value:'123'},
-                {label:'姓名',value:'123'},
-                {label:'手机号',value:'123'},
-                {label:'邮箱',value:'123'}
+                {label:'登录名',value:'accountName'},
+                {label:'姓名',value:'realName'},
+                {label:'手机号',value:'mobilePhone'},
+                {label:'邮箱',value:'email'}
             ],
             openAwarded:false,
             accountList:[],
@@ -133,9 +136,9 @@
             this.getListData();
         },
         methods:{
-            getListData(params){
-                params = Object.assign({},params,this.params)
-                this.$http.get('account-list',params).then((res)=>{
+            getListData(){
+                let params = Object.assign({},this.params)
+                this.$http.get('business-bill-list',params).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
@@ -149,10 +152,11 @@
             },
             changePage(page){
                 this.params.page = page;
-                this.getListData(this.params)
+                this.getListData()
             },
             searchSubmit(params){
-                console.log('parm--',params);
+                this.params=Object.assign({},this.params,params);
+                this.getListData();
             },
             showRole(){
                 this.cancelRole();
@@ -161,7 +165,13 @@
                 this.openAwarded=!this.openAwarded;
             },
             submitRole(params){
-
+                this.$http.get('add-business-role',params).then((res)=>{
+                    this.cancelRole();
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             }
         }
     }

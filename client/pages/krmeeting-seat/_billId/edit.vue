@@ -194,7 +194,7 @@
                    <FormItem style="width:120px" 
                    :prop="'goods.' + index + '.priceDecimal'"
                     :key="item.id"
-                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                    :rules="{validator: validatePrice, trigger: 'blur'}"
                    >
                       <Input 
                           v-model="item.priceDecimal" 
@@ -208,7 +208,7 @@
                    <FormItem style="width:120px" 
                    :prop="'goods.' + index + '.promotionPriceDecimal'"
                     :key="item.id"
-                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                    :rules="{validator: validatePrice, trigger: 'blur'}"
                    >
                       <Input 
                           v-model="item.promotionPriceDecimal" 
@@ -228,7 +228,7 @@
                    v-if="item.guestPriceDecimal"
                    :prop="'goods.' + index + '.guestPriceDecimal'"
                     :key="item.id"
-                    :rules="{validator: validateNumber, trigger: 'blur'}"
+                    :rules="{validator: validatePrice, trigger: 'blur'}"
                    >
                       <Input 
                           v-model="item.guestPriceDecimal" 
@@ -243,7 +243,7 @@
                    v-if="item.guestPromotionPriceDecimal"
                     :prop="'goods.' + index + '.guestPromotionPriceDecimal'"
                     :key="item.id"
-                    :rules="{validator: validateNumber, trigger: 'blur'}">
+                    :rules="{validator: validatePrice, trigger: 'blur'}">
                       <Input 
                           v-model="item.guestPromotionPriceDecimal" 
                           placeholder=""
@@ -299,6 +299,17 @@ export default {
               callback();
           }
       };
+      const validatePrice = (rule, value, callback) => {
+        let str = value+'';
+          if(!str){
+            callback(new Error('请填写完整'));
+          }
+          if (isNaN(value) || value<=0) {
+              callback(new Error('请填写大于0的数字'));
+          }else {
+              callback();
+          }
+      };
       const validateConfig = (rule, value, callback) => {
           if(!value){
             callback(new Error('请填写完整'));
@@ -311,6 +322,7 @@ export default {
       return {
         devices:[],
         validateNumber:validateNumber,
+        validatePrice:validatePrice,
         max:5,
         maxPrice:10,
         formItem:{},
@@ -325,19 +337,19 @@ export default {
             { required: true, message: '请上传配图', trigger: 'change' }
           ],
           guestPromotionPriceDecimal:[
-            { required: true,validator: validateConfig,  trigger: 'blur' }
+            { required: true,validator: validatePrice,  trigger: 'blur' }
           ],
           openQuantity:[
             { required: true, validator: validateConfig,  trigger: 'blur' }
           ],
           priceDecimal:[
-            { required: true, validator: validateConfig, trigger: 'blur' }
+            { required: true, validator: validatePrice, trigger: 'blur' }
           ],
           promotionPriceDecimal:[
-            { required: true,validator: validateConfig,  trigger: 'blur' }
+            { required: true,validator: validatePrice,  trigger: 'blur' }
           ],
           guestPriceDecimal:[
-            { required: true,validator: validateConfig, trigger: 'blur' }
+            { required: true,validator: validatePrice, trigger: 'blur' }
           ],
           published:[
             { required: true, message: '请选择', trigger: 'blur' }

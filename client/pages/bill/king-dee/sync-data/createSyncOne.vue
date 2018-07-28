@@ -78,6 +78,7 @@ export default {
         }
     },
     mounted() {
+        GLOBALSIDESWITCH('false');
         this.getSyncDataTypeList();
     },
     methods: {
@@ -85,13 +86,13 @@ export default {
           
             let { remark, customerIds, communityIds, syncDataType,syncTime: { startTime, endTime } } = formItem;
             let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
-            parmas.customerIds=JSON.stringify(parmas.customerIds)
-            parmas.communityIds=JSON.stringify(parmas.communityIds)
+            parmas.customerIds=parmas.customerIds
+            parmas.communityIds=parmas.communityIds
             parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
             parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
             this.$http.post('post-creat-sync-data', parmas).then(r => {
-          
-                console.log(r)
+                this.syncId=r.data;
+                window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.formItem.syncTime.startTime}&endTime=${this.formItem.syncTime.endTime}`,'_blank')
             }).catch(error => {
                 console.log(error)
                 this.$Notice.error({
@@ -108,15 +109,6 @@ export default {
             this.formItem.customerIds = arrInt;
         },
         getSyncDataTypeList() {
-            // this.$http.get('get-sync-data-type-list-enum', {
-            //     enmuKey: 'com.krspace.pay.api.enums.wallet.TransferStatus'
-            // }).then((r) => {
-            //     this.syncDataTypeList = [].concat(r.data);
-            // }).catch((e) => {
-            //     this.$Notice.error({
-            //         title: e.message
-            //     });
-            // })
             this.syncDataTypeList = [
                 {
                     label: '应收',

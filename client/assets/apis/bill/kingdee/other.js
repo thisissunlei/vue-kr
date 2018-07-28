@@ -16,44 +16,68 @@ export default {
         method: "get"
     },
     //新建同步
-    'post-creat-sync-data':{
+    "post-creat-sync-data": {
         url: "/api/sync/addKdSyncData",
         method: "post"
     },
     //传输数据过滤
-    'get-sync-income-data-list':{
+    "get-sync-income-data-list": {
         url: "/api/sync/listKdSyncIncomeDataByPage",
         method: "post"
     },
     //传输数据过滤
-    'get-sync-payment-data-list':{
+    "get-sync-payment-data-list": {
         url: "/api/sync/listKdSyncPaymentDataByPage",
         method: "post"
     },
     //金蝶数据同步详情页
-    'getKingDeeDetail': {
-        url: '/api/sync/findSyncDataDetailById',
-        method: 'get'
+    getKingDeeDetail: {
+        url: "/api/sync/findSyncDataDetailById",
+        method: "get"
     },
     //原始应收数据
-    'getOriginalAccountsData': {
-        url: '/api/sync/listKdDataDetail1',
-        method: 'get'
+    getOriginalAccountsData: {
+        url: "/api/sync/listKdDataDetail1",
+        method: "get"
     },
     //原始传输数据
-    'getOriginalReceivableData': {
-        url: '/api/sync/listKdDataDetail2',
-        method: 'get'
+    getOriginalReceivableData: {
+        url: "/api/sync/listKdDataDetail2",
+        method: "get"
     },
     //传输数据应收数据
-    'getTransmissionAccountsData':{
-        url: '/api/sync/listKdSendData1',
-        method: 'get'
+    getTransmissionAccountsData: {
+        url: "/api/sync/listKdSendData1",
+        method: "get"
     },
     //传输数据回款数据
-    'getTransmissionReceivableData':{
-        url: '/api/sync/listKdSendData2',
-        method: 'get'
+    getTransmissionReceivableData: {
+        url: "/api/sync/listKdSendData2",
+        method: "get"
+    },
+    //传输数据过滤
+    "get-sync-income-data-list": {
+        url: "/ben/sync/listKdSyncIncomeDataByPage",
+        method: "post"
+    },
+    //传输数据过滤
+    "get-sync-payment-data-list": {
+        url: "/ben/sync/listKdSyncPaymentDataByPage",
+        method: "post"
+    },
+    //同步所有
+    "post-sync-income-data-ids": {
+        url: "/ben/sync/startSyncIncomeDataAl",
+        method: "post"
+    },
+    //同步所有
+    "post-sync-payment-data-ids": {
+        url: "/ben/sync/startSyncPaymentDataAll",
+        method: "post"
+    },
+    //同步所有
+    "post-sync-select-data-ids": {
+        url: "/ben/sync/startSyncData",
+        method: "post"
     }
-
-  }
+};

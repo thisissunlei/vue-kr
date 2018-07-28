@@ -6,9 +6,9 @@
                 <Row>
                     <Col span="6" class="col">
                     <FormItem label="日期区间">
-                        <DatePicker v-model="startTime" type="date" :disabled='true' placeholder="开始日期" style='width:114px' />
+                        <DatePicker v-model="startTime" type="date" :disabled='true' placeholder="开始日期" style='width:100px' />
                         <span class="u-date-txt" style='padding:0 5px'>至</span>
-                        <DatePicker v-model="endTime" type="date" :disabled='true' placeholder="结束日期" style='width:114px' />
+                        <DatePicker v-model="endTime" type="date" :disabled='true' placeholder="结束日期" style='width:100px' />
                     </FormItem>
                     </Col>
                     <Col span="6" class="col">
@@ -129,33 +129,34 @@ export default {
         SelectSaler
     },
     props: {
-        syncDataId: {
-            type: Number,
-            required: true,
-        },
-        syncType: {
-            type: String,
-            required: true,
-        },
-        startTime: {
-            type: String,
-            required: true,
-        },
-        endTime: {
-            type: String,
-            required: true,
-        },
+        // syncDataId: {
+        //     type: Number,
+        //     required: true,
+        // },
+        // syncType: {
+        //     type: String,
+        //     required: true,
+        // },
+        // startTime: {
+        //     type: String,
+        //     required: true,
+        // },
+        // endTime: {
+        //     type: String,
+        //     required: true,
+        // },
     },
     data() {
-        return { 
-            // syncDataId: 117,
-            // startTime: '',
-            // endTime: '', 
-            // syncType: 'INCOME',//当前同步的类型 INCOME|PAYMENT
+        return {
+            selectIdsInPages:[],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
+            syncDataId:'',
+            startTime: '',
+            endTime: '', 
+            syncType: 'INCOME',//当前同步的类型 INCOME|PAYMENT
             isAllSelect: false,//是否全选
             notSelectInAllSelectState: [],//全选状态下取消勾选的id集合
             selectedIdsInNotAllSelectState: [],//非全选模式下 已选择的id集合
-                    
+
             formItem: {},
             syncStateList: [
                 {
@@ -355,6 +356,8 @@ export default {
         }
     },
     mounted() {
+        GLOBALSIDESWITCH('false');
+        this.getRouterQueryParmas();
         this.getListData();
     },
     methods: {
@@ -374,6 +377,13 @@ export default {
         filterData(val) {
             this.data = this.data.filter(item => item.syncStatus === val)
         },
+        getRouterQueryParmas(){
+            let { query } = this.$route;
+            this.syncDataId=query.syncId
+            this.startTime=query.startTime
+            this.endTime=query.endTime
+            this.syncType=query.syncType
+        },
         getListData() {
             let parmas = {};
             parmas.page = 1;
@@ -391,7 +401,7 @@ export default {
 
             this.$http.post(api, parmas)
                 .then(r => {
-                    this.totalRecordCount = r.data.totalCount
+                    this.totalRecordCount = r.data.total
                     this.data = [].concat(r.data.items)
                 })
                 .then(() => {
@@ -400,7 +410,6 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
                     this.$Notice.error({
                         title: error.message
                     });
@@ -447,20 +456,20 @@ export default {
         handlePrivious() {
 
         },
-        handleSync() {
+        handleSync(formItem) {
             let api = ''
             let parmas = {};
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
                     let { bizPerson, syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = formItem
-                    params = { bizPerson, syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                    parmas = { bizPerson, syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {
                     api = 'post-sync-payment-data-ids'
                     let { number, bizPerson, syncStatus, payerType, coreBillNumber } = formItem
-                    params = { number, bizPerson, syncStatus, payerType, coreBillNumber }
+                    parmas = { number, bizPerson, syncStatus, payerType, coreBillNumber }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 }
@@ -469,7 +478,8 @@ export default {
                 parmas.syncDataId = this.syncDataId
                 parmas.dataIds = this.selectedIdsInNotAllSelectState
             }
-
+            console.log('api',api)
+            console.log('parmas',parmas)
             this.$http.post(api, parmas)
                 .then(r => {
                     this.isAllSelect = false

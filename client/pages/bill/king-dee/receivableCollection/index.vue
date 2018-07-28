@@ -60,11 +60,11 @@
         openMessage: false,
         warn: '',
         MessageType: '',
-        pageSize: 3,
+        pageSize: 20,
         page: 1,
         tabParams: {
           page: 1,
-          pageSize: 3,
+          pageSize: 20,
           customerName: '',
           startTime: '',
           endTime: ''
@@ -102,7 +102,6 @@
             title: '业务日期',
             key: 'bizDate',
             align: 'center',
-            width:70,
             render(tag, params){
                 let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
                 return time;

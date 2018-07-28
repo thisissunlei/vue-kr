@@ -111,6 +111,17 @@
                 <Button type="primary" class="btn" @click="handleSync(formItem)">开始同步</Button>
             </div>
         </div>
+        <Modal
+            v-model="openLoading"
+            title="等待同步中..."
+            :closable="false"
+            :mask-closable="false"
+        >
+            <div>
+                <Loading />
+            </div>
+            <div slot="footer"></div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -120,13 +131,15 @@ import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
 import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import SelectSaler from '~/components/SelectSaler.vue';
+import Loading from '~/components/Loading.vue';
 export default {
     name: 'filterData',
     components: {
         SectionTitle,
         selectCommunities,
         selectCustomers,
-        SelectSaler
+        SelectSaler,
+        Loading
     },
     props: {
         // syncDataId: {
@@ -158,7 +171,7 @@ export default {
             isAllSelect: false,//是否全选
             notSelectInAllSelectState: [],//全选状态下取消勾选的id集合
             selectedIdsInNotAllSelectState: [],//非全选模式下 已选择的id集合
-
+            openLoading:false,
             formItem: {},
             syncStateList: [
                 {
@@ -508,11 +521,13 @@ export default {
                 parmas.syncDataId = this.syncDataId
                 parmas.dataIds = this.selectedIdsInNotAllSelectState
             }
-            console.log('api', api)
-            console.log('parmas', parmas)
+           
             this.$http.post(api, parmas)
                 .then(r => {
                     this.isAllSelect = false
+                    this.openLoading = true;
+                    this.loopSuccess();
+                    // alert("8888888")
                 })
                 .catch(error => {
                     console.log(error)
@@ -522,6 +537,40 @@ export default {
                     });
                 })
 
+        },
+        //获取同步状态
+        loopSuccess(){
+            console.log("hhhhhh")
+            this.$http.get('get-sync-findSyncStatus-loop', {
+                syncDataId:this.$route.query.syncId,
+            })
+                .then(r => {
+                    console.log(r,"ppppppp")
+                    if(r.data.syncStatus=="ALREADY_SYNC"){
+                        this.openLoading = false;
+                        window.location.href = '/bill/king-dee/sync-data';
+                        return ;
+                    }
+                    if(r.data.syncStatus=='FAILED_SYNC'){
+                         this.openLoading = false;
+                        this.$Notice.error({
+                            title: '同步失败'
+                        });
+                        return ;
+                    }
+                    setTimeout(()=>{
+                        this.loopSuccess();
+                    },1000)
+                    // this.openLoading = false;
+                    // alert("8888888")
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.isAllSelect = false
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
         }
     }
 }

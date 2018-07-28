@@ -387,13 +387,7 @@ export default {
             this.syncType = query.syncType
         },
         getListData() {
-<<<<<<< HEAD
             let parmas = this.params
-=======
-            let parmas = {};
-            parmas.page = 1;
-           
->>>>>>> 83862f2e1c9b0361d754b83d275faec98feb86b7
             parmas.syncDataId = this.syncDataId;
             let api = 'get-sync-income-data-list'
             this.data = [];

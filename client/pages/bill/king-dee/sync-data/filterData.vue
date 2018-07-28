@@ -387,7 +387,7 @@ export default {
         getListData() {
             let parmas = {};
             parmas.page = 1;
-            parmas.pageSize = this.params.pageSize
+           
             parmas.syncDataId = this.syncDataId;
             let api = 'get-sync-income-data-list'
             this.data = [];

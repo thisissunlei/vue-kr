@@ -252,22 +252,22 @@ export default {
                                         }
                                     }
                                 }, '查看')];
-                        if(middle === 'NOT_SYNC'){
-                             ren.push(h('Button', {
-                                     props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.retry(params.row)
-                                        }
-                                    }
-                                }, '重试'));
-                        }
+                        // if(middle === 'NOT_SYNC'){
+                        //     ren.push(h('Button', {
+                        //             props: {
+                        //                 type: 'primary',
+                        //                 size: 'small'
+                        //             },
+                        //             style: {
+                        //                 marginRight: '5px'
+                        //             },
+                        //             on: {
+                        //                 click: () => {
+                        //                     this.retry(params.row)
+                        //                 }
+                        //             }
+                        //         }, '重试'));
+                        // }
                         return h('div',ren)
                     }
                 }

@@ -57,27 +57,27 @@ export default {
     },
     //传输数据过滤
     "get-sync-income-data-list": {
-        url: "/ben/sync/listKdSyncIncomeDataByPage",
+        url: "/api/sync/listKdSyncIncomeDataByPage",
         method: "post"
     },
     //传输数据过滤
     "get-sync-payment-data-list": {
-        url: "/ben/sync/listKdSyncPaymentDataByPage",
+        url: "/api/sync/listKdSyncPaymentDataByPage",
         method: "post"
     },
     //同步所有
     "post-sync-income-data-ids": {
-        url: "/ben/sync/startSyncIncomeDataAl",
+        url: "/api/sync/startSyncIncomeDataAl",
         method: "post"
     },
     //同步所有
     "post-sync-payment-data-ids": {
-        url: "/ben/sync/startSyncPaymentDataAll",
+        url: "/api/sync/startSyncPaymentDataAll",
         method: "post"
     },
     //同步所有
     "post-sync-select-data-ids": {
-        url: "/ben/sync/startSyncData",
+        url: "/api/sync/startSyncData",
         method: "post"
     }
 };

@@ -60,11 +60,11 @@
         openMessage: false,
         warn: '',
         MessageType: '',
-        pageSize: 20,
+        pageSize: 3,
         page: 1,
         tabParams: {
           page: 1,
-          pageSize: 20,
+          pageSize: 3,
           customerName: '',
           startTime: '',
           endTime: ''
@@ -191,10 +191,11 @@
             }
           }
         }
-        Object.assign(newParams, {page: this.page});
-        this.$http.get('get-advanced-collection-list', newParams).then((res) => {
+        let data = Object.assign(newParams, {page: this.page});
+      
+        this.$http.get('get-advanced-collection-list', data).then((res) => {
           this.billList = res.data.items;
-          this.totalCount = res.data.totalCount;
+          this.totalCount = res.data.total;
         }).catch((error) => {
           this.$Notice.error({
             title: error.message

@@ -9,7 +9,7 @@
       <Option  :value="'OPEN'" >关闭</Option>
 
       </Select>
-  <Input v-model="customerName" placeholder="按客户名称检索" style="width: 300px"> </Input>
+    <Input v-model="customerName" placeholder="按客户名称检索" style="width: 200px;margin:0px 10px;"> </Input>
     <Button type="info" @click="searchMethod" >搜索</Button>
    </div>
 </div>
@@ -29,7 +29,8 @@ export default {
     return {
       configStatus: "",
       customerName: '',
-      total: 0,
+	  total: 0,
+	  pageSize:3,
       page: 1,
       value: '',
       model1: '',
@@ -76,6 +77,7 @@ export default {
           title: '操作',
           key: 'name',
           render: (h, params) => {
+			  console.log(params.row,"ppppp")
             return h('span', {
               on: {
                 click: () => {
@@ -87,7 +89,7 @@ export default {
                 cursor: 'pointer',
 
               }
-            }, params.row.configStatus.value == 1 ? '关闭' : "打开")
+            }, params.row.configStatus != 'NO' ? '关闭' : "打开")
           }
         }
       ],
@@ -106,8 +108,6 @@ export default {
       this.page = param;
       this.listCommunityConfigByPage();
     },
-
-
     goAdd () {
       this.$router.push({ path: "/bill/king-dee/special-rental/addsynchrodata" })
 
@@ -115,20 +115,20 @@ export default {
     listCommunityConfigByPage () {
       let param = {
         page: this.page,
-        pageSize: 100,
+        pageSize: this.pageSize,
         configStatus: this.configStatus,
         customerName: this.customerName
       }
       this.$http.get('listCommunityConfigByPage', param).then((res) => {
         this.datalistCommunityConfigByPage = res.data.items
-        this.total = res.data.totalCount
+        this.total = res.data.total
       })
     },
     communityConfigStatusUpdate (param) {
       console.log(param)
       let param2 = {
-        configStatus: param.row.configStatus.value == 0?"NO":"OPEN",
-        id: param.row.communityId
+        configStatus: param.row.configStatus == 'OPEN'?"NO":"OPEN",
+        id: param.row.id
 
       }
       this.$http.post('communityConfigStatusUpdate', param2).then((res) => {
@@ -148,13 +148,13 @@ export default {
     communityConfigAdd () {
       let param = {
         page: this.page,
-        pageSize: 100
+        pageSize: this.pageSize
       }
       this.$http.get('communityConfigAdd', param).then((res) => {
         this.datalistCommunityConfigByPage = res.data.items
 
       })
-    }
+	}
   }
 
 }

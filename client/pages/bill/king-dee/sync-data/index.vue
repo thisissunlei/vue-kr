@@ -217,13 +217,13 @@ export default {
                         let middle=params.row.syncStatus;
                         let  ren = [
                              h('Button', {
-                                      props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
+                                       props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
                                     on: {
                                         click: () => {
                                             this.goDetail(params.row)

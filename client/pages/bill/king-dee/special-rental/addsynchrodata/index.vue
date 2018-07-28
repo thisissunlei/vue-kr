@@ -154,7 +154,7 @@ export default {
       this.$http.post('communityConfigAdd', this.formValidate).then((res) => {
 
           this.$Message.success('操作成功');
-          this.$router.push({ path: '/bill/synchrodata' })
+          this.$router.push({ path: '/bill/king-dee/special-rental/synchrodata' })
       }).catch((e)=>{
         this.$Message.error(e.message);
       })

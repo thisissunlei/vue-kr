@@ -20,7 +20,6 @@ import ProductGoods from './productGoods';
 import comment from './comment';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply";
-import kingdee from "./kingdee";
 export default {
   ...OrderApi,
   ...OrderManageApi,
@@ -44,5 +43,4 @@ export default {
   ...comment,
   ...DevTool,
   ...FinancialtransferApply,
-  ...kingdee
 }

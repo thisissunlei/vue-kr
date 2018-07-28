@@ -361,7 +361,6 @@ export default {
         },
         handleSelectChange(selection) {
             console.log(selection)
-            debugger;
         },
         handlePrivious() {
 

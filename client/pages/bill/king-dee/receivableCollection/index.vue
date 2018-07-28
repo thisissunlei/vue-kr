@@ -76,11 +76,15 @@
             title: '客户编码 ',
             key: 'asstActNumber',
             align: 'center',
+            width:100,
+            fixed:'left'
           },
           {
             title: '金额',
             key: 'amount',
-            align: 'center'
+            align: 'center',
+            width:100,
+            fixed:'left'
           },
           {
             title: '含税金额 ',
@@ -96,6 +100,10 @@
             title: '业务日期',
             key: 'bizDate',
             align: 'center',
+            render(tag, params){
+                let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
+                return time;
+            }
           },
           {
             title: '业务员姓名',
@@ -116,11 +124,13 @@
             title: '销售合同行号',
             key: 'contractNumber',
             align: 'center',
+            width:150
           },
           {
             title: '核心单据号 ',
             key: 'coreBillNumber',
             align: 'center',
+            width:150
           },
           {
             title: '成本中心',
@@ -136,11 +146,13 @@
             title: '物料编码 ',
             key: 'materialNumber',
             align: 'center',
+            width:150
           },
           {
             title: '唯一交易编码',
             key: 'number',
             align: 'center',
+            width:150
           },
           {
             title: '不含税单价  ',
@@ -171,6 +183,7 @@
             title: '备注',
             key: 'remark',
             align: 'center',
+            width:200
           }
         ]
 

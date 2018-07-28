@@ -109,7 +109,7 @@ export default {
 
 
     goAdd () {
-      this.$router.push({ path: "/bill/addsynchrodata" })
+      this.$router.push({ path: "/bill/king-dee/special-rental/addsynchrodata" })
 
     },
     listCommunityConfigByPage () {
@@ -120,7 +120,7 @@ export default {
         customerName: this.customerName
       }
       this.$http.get('listCommunityConfigByPage', param).then((res) => {
-        this.datalistCommunityConfigByPage = res.data
+        this.datalistCommunityConfigByPage = res.data.items
         this.total = res.data.totalCount
       })
     },

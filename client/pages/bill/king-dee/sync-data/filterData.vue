@@ -11,7 +11,7 @@
                         <DatePicker v-model="endTime" type="date" :disabled='true' placeholder="结束日期" style='width:100px' />
                     </FormItem>
                     </Col>
-                    <Col span="6" class="col">
+                    <!-- <Col span="6" class="col">
                     <FormItem label="测试用">
                         <Button type="primary" class="btn" @click="handleTest">测试用——切换同步类型</Button>
                     </FormItem>
@@ -20,7 +20,7 @@
                     <FormItem label="测试用">
                         <Button type="primary" class="btn" @click="handleTestNotCheckAll">测试用——切换全选</Button>
                     </FormItem>
-                    </Col>
+                    </Col> -->
                 </Row>
                 <div v-if="syncType==='INCOME'">
                     <Row>
@@ -195,11 +195,11 @@ export default {
             ],
             payerTypeList: [
                 {
-                    label: 'PAYMENT',
+                    label: '供应商',
                     value: 'PAYMENT'
                 },
                 {
-                    label: 'CUSTOMER',
+                    label: '客户',
                     value: 'CUSTOMER'
                 },
             ],
@@ -231,6 +231,7 @@ export default {
                     key: 'bizDate',
                     title: '业务日期',
                     align: 'center',
+                    width: 110,
                     render(h, params) {
                         let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.bizDate))
                         return h('span', time)
@@ -248,7 +249,7 @@ export default {
                 { key: 'coreBillNumber', align: 'center', title: '核心单据号' },
                 { key: 'costCenterNumber', align: 'center', title: '成本中心' },
                 { key: 'currency', align: 'center', title: '币别' },
-                { key: 'failedMsg', align: 'center', title: '失败消息' },
+
                 // { key: 'incomeId', title: '原始数据id' },
                 { key: 'materialNumber', align: 'center', title: '物料编码' },
                 { key: 'number', align: 'center', title: '唯一交易编码' },
@@ -257,15 +258,18 @@ export default {
                 {
                     key: 'syncStatus',
                     title: '同步状态',
+                    align: 'center',
                     render(h, params) {
                         return h('span', params.row.syncStatus.toUpperCase() === 'ALREADY_SYNC' ? '已同步' : '未同步')
                     }
                 },
                 { key: 'taxRate', align: 'center', title: '税率' },
                 { key: 'taxPrice', align: 'center', title: '含税单价' },
+                { key: 'failedMsg', align: 'center', title: '失败消息' },
                 {
                     key: 'remark',
                     title: '备注',
+                    align: 'center',
                     width: 80,
                     render(h, params) {
                         return h('Tooltip', {
@@ -306,26 +310,37 @@ export default {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
-                { key: 'amount', align: 'center', title: '金额' },
                 {
                     key: 'bizDate',
                     title: '业务日期',
+                    align: 'center',
+                    width: 110,
                     render(h, params) {
                         let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.bizDate))
                         return h('span', time)
                     }
                 },
+                { key: 'amount', align: 'center', title: '金额' },
+
                 { key: 'bizPerson', align: 'center', title: '业务员姓名' },
                 { key: 'companyNumber', align: 'center', title: '财务组织编码' },
                 { key: 'contractNumber', align: 'center', title: '合同编号' },
                 { key: 'coreBillNumber', align: 'center', title: '订单编号' },
                 { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码' },
                 { key: 'currency', align: 'center', title: '币别' },
-                { key: 'failedMsg', align: 'center', title: '失败消息' },
+
                 { key: 'number', align: 'center', title: '唯一交易编码' },
                 { key: 'payerAccountBank', align: 'center', title: '付款账号' },
                 { key: 'payerNumber', align: 'center', title: '客户（供应商）编码' },
-                { key: 'payerType', align: 'center', title: '付款人类型' },
+                {
+                    key: 'payerType',
+                    align: 'center',
+                    title: '付款人类型',
+                    render(h, params) {
+                        let payer = params.row.payerType;
+                        return h('span', payer.toUpperCase().trim() == 'CUSTOMER' ? '客户' : '供应商')
+                    }
+                },
                 { key: 'recAccountBank', align: 'center', title: '银行收款账号' },
                 { key: 'recBillType', align: 'center', title: '收款类型' },
                 { key: 'settlementType', align: 'center', title: '结算方式' },
@@ -338,6 +353,7 @@ export default {
                         return h('span', params.row.syncStatus.toUpperCase() === 'ALREADY_SYNC' ? '已同步' : '未同步')
                     }
                 },
+                { key: 'failedMsg', align: 'center', title: '失败消息' },
                 {
                     key: 'remark',
                     title: '备注',
@@ -439,7 +455,7 @@ export default {
                     if (this.isAllSelect) {
                         if (!this.unSelectIdsInPages[Number(this.currentPage)]) {
                             this.$refs.selection.selectAll(true);
-                        }                       
+                        }
                     }
                 })
                 .catch(error => {

@@ -76,30 +76,33 @@
             title: '合同编号',
             key: 'contractNumber',
             align: 'center',
-            width:100,
+            width:70,
             fixed:'left'
           },
           {
             title: '订单编号',
             key: 'coreBillNumber',
             align: 'center',
-            width:100,
+            width:70,
             fixed:'left'
           },
           {
             title: 'OP系统社区编码',
             key: 'costCenterNumber',
             align: 'center',
+            width:70,
           },
           {
             title: '金额',
             key: 'amount',
             align: 'center',
+            width:70,
           },
           {
             title: '业务日期',
             key: 'bizDate',
             align: 'center',
+            width:70,
             render(tag, params){
                 let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
                 return time;
@@ -109,41 +112,49 @@
             title: '业务员姓名',
             key: 'bizPerson',
             align: 'center',
+            width:70,
           },
           {
             title: '财务组织编码',
             key: 'companyNumber',
             align: 'center',
+            width:70,
           },
           {
             title: '币别',
             key: 'currency',
             align: 'center',
+            width:70,
           },
           {
             title: '唯一交易编码',
             key: 'number',
             align: 'center',
+            width:70,
           },
           {
             title: '付款账号',
             key: 'payerAccountBank',
             align: 'center',
+            width:70,
           },
           {
             title: '客户(供应商)名称',
             key: 'payerName',
             align: 'center',
+            width:70,
           },
           {
             title: '客户（供应商）编码 ',
             key: 'payerNumber',
             align: 'center',
+            width:70,
           },
           {
             title: '付款人类型',
             key: 'payerTypeName',
-            align: 'center'
+            align: 'center',
+            width:70,
           },
           {
             title: '银行收款账号 ',
@@ -155,11 +166,13 @@
             title: '收款类型',
             key: 'recBillType',
             align: 'center',
+            width:70,
           },
           {
             title: '结算方式',
             key: 'settlementType',
             align: 'center',
+            width:70,
           },
           {
             title: '备注',

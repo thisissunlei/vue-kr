@@ -182,6 +182,10 @@ export default {
                     label: '未同步',
                     value: 'NOT_SYNC'
                 },
+                {
+                    label: '同步失败',
+                    value: 'FAILED_SYNC'
+                },
             ],
             bizTypeList: [
                 {
@@ -260,7 +264,26 @@ export default {
                     title: '同步状态',
                     align: 'center',
                     render(h, params) {
-                        return h('span', params.row.syncStatus.toUpperCase() === 'ALREADY_SYNC' ? '已同步' : '未同步')
+                        let status = params.row.syncStatus.toUpperCase().trim();
+                        let ststusEnum = [
+                            {
+                                label: '已同步',
+                                value: 'ALREADY_SYNC'
+                            },
+                            {
+                                label: '未同步',
+                                value: 'NOT_SYNC'
+                            },
+                            {
+                                label: '同步失败',
+                                value: 'FAILED_SYNC'
+                            },]
+                        let label = '-';
+                        let item = ststusEnum.filter(s => s.value == status)
+                        if (item.length > 0) {
+                            label = item[0].label
+                        }
+                        return h('span', label)
                     }
                 },
                 { key: 'taxRate', align: 'center', title: '税率' },
@@ -341,7 +364,7 @@ export default {
                         return h('span', payer.toUpperCase().trim() == 'CUSTOMER' ? '客户' : '供应商')
                     }
                 },
-                { key: 'recAccountBank', align: 'center', title: '银行收款账号' },
+                { key: 'recAccountBank', align: 'center', title: '银行收款账号', width: 180 },
                 { key: 'recBillType', align: 'center', title: '收款类型' },
                 { key: 'settlementType', align: 'center', title: '结算方式' },
                 // { key: 'syncDataId', title: '同步记录id' },
@@ -350,9 +373,30 @@ export default {
                     align: 'center',
                     title: '同步状态',
                     render(h, params) {
-                        return h('span', params.row.syncStatus.toUpperCase() === 'ALREADY_SYNC' ? '已同步' : '未同步')
+                        let status = params.row.syncStatus.toUpperCase().trim();
+                        let ststusEnum = [
+                            {
+                                label: '已同步',
+                                value: 'ALREADY_SYNC'
+                            },
+                            {
+                                label: '未同步',
+                                value: 'NOT_SYNC'
+                            },
+                            {
+                                label: '同步失败',
+                                value: 'FAILED_SYNC'
+                            },]
+                        let label = '-';
+                        let item = ststusEnum.filter(s => s.value == status)
+                        if (item.length > 0) {
+                            label = item[0].label
+                        }
+                        return h('span', label)
                     }
+
                 },
+
                 { key: 'failedMsg', align: 'center', title: '失败消息' },
                 {
                     key: 'remark',
@@ -406,7 +450,8 @@ export default {
             this.isAllSelect = false;
         },
         filterData(val) {
-            this.data = this.data.filter(item => item.syncStatus === val)
+            this.params.page=1
+            this.getListData();
         },
         getRouterQueryParmas() {
             let { query } = this.$route;
@@ -416,14 +461,34 @@ export default {
             this.syncType = query.syncType
         },
         getListData() {
-            let parmas = this.params
+            let parmas = Object.assign({}, this.params)
             parmas.syncDataId = this.syncDataId;
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
+                let { bizPerson, syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = this.formItem
+                let p = { bizPerson, syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                p.syncDataId = this.syncDataId
+                if (this.isAllSelect) {
+                    p.ids = this.notSelectInAllSelectState
+                }
+                else {
+                    p.ids = this.selectedIdsInNotAllSelectState
+                }
+                parmas = Object.assign({}, parmas, p)
                 this.columns = [].concat(this.syncDataIncomeDetailColums)
                 api = 'get-sync-income-data-list'
             } else if (this.syncType === 'PAYMENT') {
+                let { number, bizPerson, syncStatus, payerType, coreBillNumber } = this.formItem
+                let p = { number, bizPerson, syncStatus, payerType, coreBillNumber }
+                p.syncDataId = this.syncDataId
+                if (this.isAllSelect) {
+                    p.ids = this.notSelectInAllSelectState
+                }
+                else {
+                    p.ids = this.selectedIdsInNotAllSelectState
+                }
+                parmas = Object.assign({}, parmas, p)
                 this.columns = [].concat(this.syncDataPaymentDetailColums)
                 api = 'get-sync-payment-data-list'
             }
@@ -468,7 +533,7 @@ export default {
         onPageChange(index) {
             let params = this.params;
             params.page = index;
-            this.getListData(params);
+            this.getListData();
             this.currentPage = index;
         },
         //切换为全选模式
@@ -535,7 +600,7 @@ export default {
             } else {
                 api = 'post-sync-select-data-ids'
                 parmas.syncDataId = this.syncDataId
-                parmas.dataIds = this.selectedIdsInNotAllSelectState
+                parmas.ids = this.selectedIdsInNotAllSelectState
             }
            
             this.$http.post(api, parmas)

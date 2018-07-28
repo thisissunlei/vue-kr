@@ -2,7 +2,7 @@
   <div class='data-sync'> 
     <div style="padding:5px"></div>
     <SectionTitle title="新增特殊出租方配置"></SectionTitle>
-    <div style=" border-bottom: 1px solid #ccc;margin:0 20px"></div>
+    
     <div  style="margin:20px;padding:10px 0;">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
 

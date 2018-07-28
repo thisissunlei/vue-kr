@@ -1,7 +1,7 @@
 <template>
 <div>
 <div style="height:50px;padding:10px 20px">
-   <Button type="info" class="button-left" @click="goAdd">新增</Button>
+   <Button type="primary" class="button-left" @click="goAdd">新增</Button>
    <div class="button-right">
     <Select v-model="configStatus" style="width:200px" placeholder="状态">
       <Option  :value="''" >全部状态</Option>
@@ -10,7 +10,7 @@
 
       </Select>
     <Input v-model="customerName" placeholder="按客户名称检索" style="width: 200px;margin:0px 10px;"> </Input>
-    <Button type="info" @click="searchMethod" >搜索</Button>
+    <Button type="primary" @click="searchMethod" >搜索</Button>
    </div>
 </div>
 <div style="padding:10px 20px">

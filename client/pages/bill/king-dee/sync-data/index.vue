@@ -770,7 +770,7 @@ cancelService(){
              //   params.floor = params.floor.length>1?' ':params.floor;
                 this.$http.get('king-getList',params).then((response)=>{
                     console.log('商品列表',response.data);
-                    this.totalCount=response.data.totalCount;
+                    this.totalCount=response.data.total;
                     this.attractData=response.data.items;           
                  //   this.name=response.data;    
                     this.loading=false;

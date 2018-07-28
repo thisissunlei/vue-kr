@@ -121,7 +121,8 @@ export default {
             ]
         },
         handleCancle() {
-
+            window.location.href = '/bill/king-dee/sync-data';
+            // this.$router.push({path:'/bill/king-dee/sync-data'})
         },
         handleNext(formItem) {
             this.$refs['formItem'].validate((valid) => {

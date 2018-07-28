@@ -239,7 +239,7 @@ export default {
         },
         //新增同步
         createSync(){
-            window.open('/bill/king-dee/sync-data/add','_blank')
+            window.open('/bill/king-dee/sync-data/createSyncOne','_blank')
         }
     }
 }

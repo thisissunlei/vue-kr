@@ -89,8 +89,8 @@ export default {
             parmas.communityIds=JSON.stringify(parmas.communityIds)
             parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
             parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
-            this.$http.post('post-creat-sync-data', formItem).then(r => {
-            // this.$http.post('post-creat-sync-data', parmas).then(r => {
+            this.$http.post('post-creat-sync-data', parmas).then(r => {
+          
                 console.log(r)
             }).catch(error => {
                 console.log(error)

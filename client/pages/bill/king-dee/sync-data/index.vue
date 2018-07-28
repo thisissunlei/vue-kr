@@ -149,7 +149,7 @@ export default {
                     title: '状态',
                     key: 'syncStatus',
                     align:'center',
-                    width:200,
+                   
                     render:(h, params)=>{
                          let ile= params.row.syncStatus;
                          let nes='';
@@ -164,7 +164,7 @@ export default {
                     title: '同步时间',
                     key: 'createTime',
                     align:'center',
-                    width:200,
+                    width:100,
                       render:(h, params)=>{
                          let ile= params.row.createTime;
                          ile = ile ? dateUtils.dateToStr('YYYY-MM-DD', new Date(ile)) : '';
@@ -178,19 +178,19 @@ export default {
                     title: '传输数据数',
                     key: 'syncDataCount',
                     align:'center',
-                    width:150,
+                    width:100,
                 },
                 {
                     title: '传输结果数',
                     key: 'successDataCount',
                     align:'center',
-                    width:150,
+                   width:100,
                 },
                 {
                     title: '数据类型',
                     key: 'syncDataType',
                     align:'center',
-                    width:150,
+             //       width:100,
                     render:(h, params)=>{
                         let ile= params.row.syncDataType;
                         let nes='';
@@ -205,7 +205,7 @@ export default {
                     title: '类型',
                     key: 'syncType',
                     align:'center',
-                    width:200,
+                    width:100,
                     render:(h, params)=>{
                         let ile= params.row.syncType;
                         let nes='';
@@ -220,7 +220,7 @@ export default {
                     title: '操作人',
                     key: 'operatorName',
                     align:'center',
-                    width:200,
+      //              width:100,
                  
                 },
                 {
@@ -228,7 +228,7 @@ export default {
                     key: 'remark',
                     className:'current-range',
                     align:'center',
-                    width:200, 
+      //              width:100, 
                  
                 },
                 {
@@ -238,9 +238,9 @@ export default {
                     render:(h,params)=>{
                         let middle=params.row.syncStatus;
                         let  ren = [
-                            h('Button', {
-                                    props: {
-                                        type: 'primary',
+                             h('Button', {
+                                      props: {
+                                        type: 'text',
                                         size: 'small'
                                     },
                                     style: {
@@ -252,22 +252,22 @@ export default {
                                         }
                                     }
                                 }, '查看')];
-                        if(middle === 'NOT_SYNC'){
-                            ren.push(h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.retry(params.row)
-                                        }
-                                    }
-                                }, '重试'));
-                        }
+                        // if(middle === 'NOT_SYNC'){
+                        //     ren.push(h('Button', {
+                        //             props: {
+                        //                 type: 'primary',
+                        //                 size: 'small'
+                        //             },
+                        //             style: {
+                        //                 marginRight: '5px'
+                        //             },
+                        //             on: {
+                        //                 click: () => {
+                        //                     this.retry(params.row)
+                        //                 }
+                        //             }
+                        //         }, '重试'));
+                        // }
                         return h('div',ren)
                     }
                 }
@@ -375,10 +375,7 @@ export default {
                 }); 
             })
         },
-
-    
-
-        cancelService(){
+cancelService(){
             this.serviceData={};
             this.newgoodForm={};
             this.serviceOpen=!this.serviceOpen;
@@ -773,7 +770,7 @@ export default {
              //   params.floor = params.floor.length>1?' ':params.floor;
                 this.$http.get('king-getList',params).then((response)=>{
                     console.log('商品列表',response.data);
-                    this.totalCount=response.data.totalCount;
+                    this.totalCount=response.data.total;
                     this.attractData=response.data.items;           
                  //   this.name=response.data;    
                     this.loading=false;

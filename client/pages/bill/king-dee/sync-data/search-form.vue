@@ -29,7 +29,7 @@
                                     <Select 
                                             v-model="formItem.syncDataType" 
                                             placeholder="应收回款类型" 
-                                            style="width: 200px; height: 30px;"
+                                            style="width: 136px; height: 30px;"
                                             clearable
                                         >
                                             <Option v-for="item in syncDataType" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -41,7 +41,7 @@
                                     <Select 
                                             v-model="formItem.syncStatus" 
                                             placeholder="状态过滤" 
-                                            style="width: 200px; height: 30px;"
+                                            style="width: 136px; height: 30px;"
                                             clearable
                                         >
                                             <Option v-for="item in syncStatus" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -53,7 +53,7 @@
                                     <Select 
                                             v-model="formItem.syncType" 
                                             placeholder="类型过滤" 
-                                            style="width: 200px; height: 30px;"
+                                            style="width: 136px; height: 30px;"
                                             clearable
                                         >
                                             <Option v-for="item in syncType" :value="item.value" :key="item.value">{{ item.label }}</Option>

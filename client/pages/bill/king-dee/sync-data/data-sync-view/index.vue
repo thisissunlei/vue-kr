@@ -42,7 +42,7 @@
 						<span 
 							style="display:inline-block;padding:5px;"
 							v-for="(item,index) in detailData.customerNames"
-							::key="index"
+							:key="index"
 						>{{item}}</span>
 					</div>
 					
@@ -52,7 +52,7 @@
 						<span 
 							style="display:inline-block;padding: 5px;"
 							v-for="(item,index) in detailData.communityNames"
-							::key="index"
+							:key="index"
 						>{{item}}</span>
 					</div>
 					
@@ -156,10 +156,10 @@ export default {
 			//传输数据
 			transmissionData:[],
 			/**
-			 * 1表示应收
-			 * 2表示预收
+			 * INCOME 表示应收
+			 * PAYMENT 表示回款
 			*/
-			type:this.$route.query.type||1,
+			type:this.$route.query.type||'INCOME',
 			syncDataId:this.$route.query.syncDataId||0,
 			//原始数据参数
 			originalParams:{
@@ -188,7 +188,7 @@ export default {
 
 	methods: {
 		getData(){
-			if(this.type==1){
+			if(this.type=='INCOME'){
 				this.getOriginalAccountsData();
 				this.getTransmissionAccountsData();
 			}else{
@@ -214,16 +214,16 @@ export default {
 		//原始数据change
 		originalChange(e){
 			this.originalParams.page = e;
-			if(this.type == 1){
+			if(this.type == 'INCOME'){
 				this.getOriginalAccountsData();
 			}else{
 				this.getOriginalReceivableData();
 			}
 
 		},
-		transmissionChange(){
+		transmissionChange(e){
 			this.transmissionParams.page = e;
-			if(this.type == 1){
+			if(this.type == 'INCOME'){
 				this.getTransmissionAccountsData();
 			}else{
 				this.getTransmissionReceivableData();
@@ -236,7 +236,7 @@ export default {
 				
 				this.originalData = [].concat(r.data.items);
 				this.originalParams.page = r.data.page;
-				this.originalParams.totalPages = r.data.totalPages;
+				this.originalParams.total = r.data.total;
 				
 			}, error => {
 				this.$Notice.error({
@@ -250,7 +250,7 @@ export default {
 			this.$http.get('getOriginalReceivableData', params, r => {
 				this.originalData = [].concat(r.data.items);
 				this.originalParams.page = r.data.page;
-				this.originalParams.totalPages = r.data.totalPages;
+				this.originalParams.total = r.data.total;
 			}, error => {
 				this.$Notice.error({
 					title: error.message
@@ -263,7 +263,7 @@ export default {
 			this.$http.get('getTransmissionAccountsData', params, r => {
 				this.transmissionData = [].concat(r.data.items);
 				this.transmissionParams.page = r.data.page;
-				this.transmissionParams.totalPages = r.data.totalPages;
+				this.transmissionParams.total = r.data.total;
 			}, error => {
 				this.$Notice.error({
 					title: error.message
@@ -276,7 +276,7 @@ export default {
 			this.$http.get('getTransmissionReceivableData', params, r => {
 				this.transmissionData = [].concat(r.data.items);
 				this.transmissionParams.page = r.data.page;
-				this.transmissionParams.totalPages = r.data.totalPages;
+				this.transmissionParams.total = r.data.total;
 			}, error => {
 				this.$Notice.error({
 					title: error.message

@@ -300,6 +300,7 @@ export default {
         }
     },
     mounted() {
+        GLOBALSIDESWITCH('false');
         this.getListData();
     },
     methods: {

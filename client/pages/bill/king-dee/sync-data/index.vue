@@ -3,7 +3,6 @@
         <div class="attract-search">
             <SearchForm 
               @searchClick="searchClick"
-            
             />
         </div>
         <SlotHead 
@@ -249,7 +248,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.row)
+                                            this.goDetail(params.row)
                                         }
                                     }
                                 }, '查看')];
@@ -269,8 +268,7 @@ export default {
                                     }
                                 }, '重试'));
                         }
-                        return h('div', ren
-                        )
+                        return h('div',ren)
                     }
                 }
             ],
@@ -313,7 +311,7 @@ export default {
         },
         methods:{
         goDetail(params){
-            window.open('/inventory/goods-library/goods-detail?goodsType='+params.goodsType+'&id='+params.id,'_blank')
+            window.open('/bill/king-dee/sync-data/data-sync-view?type='+params.syncDataType+'&syncDataId='+params.id,'_blank')
         },
         openSpace(){
             if(!this.statusData.length){

@@ -2,9 +2,9 @@
   <div class='data-sync'> 
     <div style="padding:5px"></div>
     <SectionTitle title="新增特殊出租方配置"></SectionTitle>
-    <div style=" border-bottom: 1px solid #ccc;margin:0 20px"></div>
+    
     <div  style="margin:20px;padding:10px 0;">
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
 
         <FormItem label="客户名称"  prop="customerId"  class="data_width">
         <Select v-model="formValidate.customerId" filterable>
@@ -55,10 +55,10 @@ export default {
         customerId: [
           { required: true, message: '请选择', trigger: 'change' }
         ],
-        cmtIds: [
+        communityId: [
           { required: true, message: '请选择', trigger: 'change' }
         ],
-        hostId: [
+        corporationId: [
           { required: true, message: '请选择', trigger: 'change' }
         ],
         remark: [
@@ -156,7 +156,9 @@ export default {
           this.$Message.success('操作成功');
           this.$router.push({ path: '/bill/king-dee/special-rental/synchrodata' })
       }).catch((e)=>{
-        this.$Message.error(e.message);
+        this.$Notice.error({
+          title: error.message
+        });
       })
     },
     getBack () {
@@ -184,8 +186,8 @@ export default {
   width: 500px;
 }
 .ivu-form{
-width: 50%;
-margin: 0 auto;
+  width: 50%;
+  margin: 0 auto;
 }
 .add-title {
   height: 35px;

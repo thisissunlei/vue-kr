@@ -1,7 +1,7 @@
 <template>
 <div>
 <div style="height:50px;padding:10px 20px">
-   <Button type="info" class="button-left" @click="goAdd">新增</Button>
+   <Button type="primary" class="button-left" @click="goAdd">新增</Button>
    <div class="button-right">
     <Select v-model="configStatus" style="width:200px" placeholder="状态">
       <Option  :value="''" >全部状态</Option>
@@ -10,27 +10,28 @@
 
       </Select>
     <Input v-model="customerName" placeholder="按客户名称检索" style="width: 200px;margin:0px 10px;"> </Input>
-    <Button type="info" @click="searchMethod" >搜索</Button>
+    <Button type="primary" @click="searchMethod" >搜索</Button>
    </div>
 </div>
 <div style="padding:10px 20px">
 <Table border :columns="columns1" :data="datalistCommunityConfigByPage"></Table>
 </div>
 <div style="padding:10px 20px;text-align:right">
-  <Page :total="total" @on-change="changePage" show-elevator></Page>
+  <Page :total="total" :page-size='pageSize' @on-change="changePage" show-elevator></Page>
 
 </div>
 </div>
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 export default {
   data () {
     return {
       configStatus: "",
       customerName: '',
 	  total: 0,
-	  pageSize:3,
+	  pageSize:20,
       page: 1,
       value: '',
       model1: '',
@@ -38,13 +39,16 @@ export default {
         {
           title: '状态',
           key: 'configStatus',
+          width:80,
+          align:'center',
           render: (h, params) => {
             return h("div", {
               style: {
                 width: '10px',
                 height: '10px',
                 borderRadius: '50%',
-                backgroundColor: params.row.configStatus.value == 1 ? 'green' : "red"
+                display:'inline-block',
+                backgroundColor: params.row.configStatus == 'OPEN' ? 'green' : "red"
               }
             }, '')
           }
@@ -63,7 +67,14 @@ export default {
         },
         {
           title: '配置时间',
-          key: 'createTime'
+          key: 'createTime',
+          render:(h, params)=>{
+                let ile= params.row.createTime;
+                ile = ile ? dateUtils.dateToStr('YYYY-MM-DD', new Date(ile)) : '';
+                  return h('div',{
+
+                },ile)
+          }
         },
         {
           title: '创建人',
@@ -76,6 +87,7 @@ export default {
         {
           title: '操作',
           key: 'name',
+          align:'center',
           render: (h, params) => {
 			  console.log(params.row,"ppppp")
             return h('span', {

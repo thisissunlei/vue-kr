@@ -465,9 +465,7 @@
         })
     }
     renderHanderAndSidebar();
-    window.addEventListener('load',function(){
-
-    })
+  
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
     global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部

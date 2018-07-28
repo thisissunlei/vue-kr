@@ -48,7 +48,7 @@ export default {
                 height: '10px',
                 borderRadius: '50%',
                 display:'inline-block',
-                backgroundColor: params.row.configStatus.value == 1 ? 'green' : "red"
+                backgroundColor: params.row.configStatus == 'OPEN' ? 'green' : "red"
               }
             }, '')
           }

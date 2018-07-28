@@ -148,10 +148,12 @@ export default {
     },
     data() {
         return {
-            selectIdsInPages:[],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
-            syncDataId:'',
+            currentPage: 1,
+            selectIdsInPages: [],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
+            unSelectIdsInPages: [],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
+            syncDataId: '',
             startTime: '',
-            endTime: '', 
+            endTime: '',
             syncType: 'INCOME',//当前同步的类型 INCOME|PAYMENT
             isAllSelect: false,//是否全选
             notSelectInAllSelectState: [],//全选状态下取消勾选的id集合
@@ -377,17 +379,15 @@ export default {
         filterData(val) {
             this.data = this.data.filter(item => item.syncStatus === val)
         },
-        getRouterQueryParmas(){
+        getRouterQueryParmas() {
             let { query } = this.$route;
-            this.syncDataId=query.syncId
-            this.startTime=query.startTime
-            this.endTime=query.endTime
-            this.syncType=query.syncType
+            this.syncDataId = query.syncId
+            this.startTime = query.startTime
+            this.endTime = query.endTime
+            this.syncType = query.syncType
         },
         getListData() {
-            let parmas = {};
-            parmas.page = 1;
-            parmas.pageSize = this.params.pageSize
+            let parmas = this.params
             parmas.syncDataId = this.syncDataId;
             let api = 'get-sync-income-data-list'
             this.data = [];
@@ -398,15 +398,35 @@ export default {
                 this.columns = [].concat(this.syncDataPaymentDetailColums)
                 api = 'get-sync-payment-data-list'
             }
-
+            console.log('parmas', parmas)
             this.$http.post(api, parmas)
                 .then(r => {
+                    this.selectIdsInPages.length = r.data.pages
+                    this.unSelectIdsInPages.length = r.data.pages
                     this.totalRecordCount = r.data.total
-                    this.data = [].concat(r.data.items)
+                    let data = [].concat(r.data.items)
+                    if (this.isAllSelect) {
+                        let unselected = this.unSelectIdsInPages[Number(this.currentPage)]
+                        if (unselected && unselected.length > 0) {
+                            data.map(item => {
+                                unselected.includes(item.id) ? item._checked = false : item._checked = true
+                            })
+                        }
+                    } else {
+                        let selected = this.selectIdsInPages[Number(this.currentPage)]
+                        if (selected && selected.length > 0) {
+                            data.map(item => {
+                                selected.includes(item.id) ? item._checked = true : item._checked = false
+                            })
+                        }
+                    }
+                    this.data = [].concat(data)
                 })
                 .then(() => {
                     if (this.isAllSelect) {
-                        this.$refs.selection.selectAll(true);
+                        if (!this.unSelectIdsInPages[Number(this.currentPage)]) {
+                            this.$refs.selection.selectAll(true);
+                        }                       
                     }
                 })
                 .catch(error => {
@@ -420,7 +440,7 @@ export default {
             let params = this.params;
             params.page = index;
             this.getListData(params);
-
+            this.currentPage = index;
         },
         //切换为全选模式
         handleSelectAll() {
@@ -443,6 +463,14 @@ export default {
         handleSelectCancel(selection, row) {
             if (this.isAllSelect) {
                 this.notSelectInAllSelectState.push(row.id)
+                let arr = this.unSelectIdsInPages[Number(this.currentPage)]
+                if (arr) {
+                    arr.push(row.id)
+                }
+                else {
+                    this.unSelectIdsInPages[Number(this.currentPage)] = []
+                    this.unSelectIdsInPages[Number(this.currentPage)].push(row.id)
+                }
                 console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
             }
         },
@@ -450,8 +478,10 @@ export default {
         handleSelectChange(selection) {
             if (!this.isAllSelect) {
                 this.selectedIdsInNotAllSelectState = selection.map(item => item.id)
+                this.selectIdsInPages[Number(this.currentPage)] = [].concat(this.selectedIdsInNotAllSelectState)
                 console.log("selectedIdsInNotAllSelectState", this.selectedIdsInNotAllSelectState)
             }
+
         },
         handlePrivious() {
 
@@ -478,8 +508,8 @@ export default {
                 parmas.syncDataId = this.syncDataId
                 parmas.dataIds = this.selectedIdsInNotAllSelectState
             }
-            console.log('api',api)
-            console.log('parmas',parmas)
+            console.log('api', api)
+            console.log('parmas', parmas)
             this.$http.post(api, parmas)
                 .then(r => {
                     this.isAllSelect = false

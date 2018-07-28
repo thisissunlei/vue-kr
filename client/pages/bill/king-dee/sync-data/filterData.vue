@@ -11,7 +11,7 @@
                         <DatePicker v-model="endTime" type="date" :disabled='true' placeholder="结束日期" style='width:100px' />
                     </FormItem>
                     </Col>
-                    <Col span="6" class="col">
+                    <!-- <Col span="6" class="col">
                     <FormItem label="测试用">
                         <Button type="primary" class="btn" @click="handleTest">测试用——切换同步类型</Button>
                     </FormItem>
@@ -20,7 +20,7 @@
                     <FormItem label="测试用">
                         <Button type="primary" class="btn" @click="handleTestNotCheckAll">测试用——切换全选</Button>
                     </FormItem>
-                    </Col>
+                    </Col> -->
                 </Row>
                 <div v-if="syncType==='INCOME'">
                     <Row>

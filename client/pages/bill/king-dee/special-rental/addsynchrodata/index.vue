@@ -1,32 +1,32 @@
 <template>
-  <div>
+  <div class='data-sync'> 
     <div style="padding:5px"></div>
     <div class="add-title">新增特殊出租方配置</div>
     <div style=" border-bottom: 1px solid #ccc;margin:0 20px"></div>
-    <div  style="margin:0 20px;padding:10px 0;">
+    <div  style="margin:20px;padding:10px 0;">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
 
-        <FormItem label="客户名称"  prop="customerId">
+        <FormItem label="客户名称"  prop="customerId"  class="data_width">
         <Select v-model="formValidate.customerId" filterable>
                 <Option v-for="item in customerOptions" :value="''+item.id" :key="item.id">{{ item.company }}</Option>
             </Select>
         </FormItem>
 
-         <FormItem label="社区名称"  prop="communityId">
+         <FormItem label="社区名称"  prop="communityId" class="data_width">
           <Select v-model="formValidate.communityId" filterable>
                 <Option v-for="item in options1" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </FormItem>
 
-        <FormItem label="出租方名称" prop="corporationId">
+        <FormItem label="出租方名称" prop="corporationId" class="data_width">
             <Select v-model="formValidate.corporationId" filterable>
                 <Option v-for="item in options2" :value="''+item.id" :key="item.id">{{ item.corporationName }}</Option>
             </Select>
         </FormItem>
 
 
-        <FormItem label="备注" prop="remark">
-            <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="备注"></Input>
+        <FormItem label="备注" prop="remark" class="data_width" > 
+            <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 5,maxRows: 5}" placeholder="备注"></Input>
         </FormItem>
         <FormItem>
             <Button type="ghost" @click="getBack" >取消</Button>
@@ -178,7 +178,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.data-sync{
+  .data_width{
+  width: 500px;
+}
+.ivu-form{
+  margin-left:-250px;
+  position: relative;
+  left:50%;
+
+}
 .add-title {
   height: 35px;
   line-height: 35px;
@@ -187,5 +197,6 @@ export default {
   margin: 5px 20px;
 
   border-left: 5px solid rgb(119, 173, 232);
+}
 }
 </style>

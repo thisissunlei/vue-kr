@@ -1,7 +1,7 @@
 <template>
   <div class='data-sync'> 
     <div style="padding:5px"></div>
-    <div class="add-title">新增特殊出租方配置</div>
+    <SectionTitle title="新增特殊出租方配置"></SectionTitle>
     <div style=" border-bottom: 1px solid #ccc;margin:0 20px"></div>
     <div  style="margin:20px;padding:10px 0;">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-
+import SectionTitle from '~/components/SectionTitle.vue'
 export default {
   created () {
     this.getCusomerList()
@@ -46,7 +46,7 @@ export default {
     this.getCusomer()
   },
   components: {
-
+      SectionTitle
   },
   data () {
     return {
@@ -184,10 +184,8 @@ export default {
   width: 500px;
 }
 .ivu-form{
-  margin-left:-250px;
-  position: relative;
-  left:50%;
-
+width: 50%;
+margin: 0 auto;
 }
 .add-title {
   height: 35px;

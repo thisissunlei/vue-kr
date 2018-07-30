@@ -198,17 +198,19 @@ export default {
                 let len=res.data.length;
                 if(len&&len>1){
                     this.communityList.unshift({id:' ',name:'全部社区'})
-                }
-                this.formItem.communityId=len?this.communityList[0].id:'';
-                this.formItemOld=Object.assign({},this.formItem);
-                if(params.communityId){
-                    this.formItem.cityId=params.cityId;
-                    this.formItem.communityId=params.communityId;
-                }
-
+                }    
                 if(this.num==1){
+                    if(!params.communityId){
+                        this.formItem.communityId=len?this.communityList[0].id:'';
+                        this.formItemOld=Object.assign({},this.formItem);
+                        console.log('old--',this.formItemOld);
+                    }else{
+                        this.formItem.communityId=params.communityId;
+                    }
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
                     this.$emit('initData',this.formItem);
+                }else{
+                    this.formItem.communityId=len?this.communityList[0].id:'';
                 }
             }).catch((error)=>{
                 this.$Notice.error({
@@ -222,6 +224,9 @@ export default {
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data;
                 this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                if(params.cityId){
+                    this.formItem.cityId =params.cityId;
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -238,7 +243,9 @@ export default {
         },
         //清除
         clearClick(){
+            console.log('[----',this.formItemOld);
             this.formItem=Object.assign({},this.formItemOld);
+            console.log('cle---',this.formItem);
             this.$emit('clearClick',this.formItem);
         },
         //回车

@@ -243,8 +243,7 @@ export default {
          dateArray.map((item,index)=>{
             this.tabForms[item]=utils.dateCompatible(this.tabForms[item])
          })
-         //this.$router.replace({path:'/inventory/overdue-no-operation',query:this.tabForms});
-         utils.addParams(this.tabForms);
+         this.$router.replace({path:'/inventory/overdue-no-operation',query:this.tabForms});
       },
       searchClick(values){
           this.commonUtileParams(values);

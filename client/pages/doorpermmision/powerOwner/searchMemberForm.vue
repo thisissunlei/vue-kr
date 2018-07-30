@@ -35,7 +35,7 @@
                 <Input v-model="formItem.name" size="large" placeholder="姓名" @on-change="inputNameChanged"></Input>
             </FormItem>
             <FormItem label="电话号：">
-                <Input v-model="formItem.phone" size="large" placeholder="手机号" @on-change="inputPhoneChanged"></Input>
+                <Input v-model="formItem.phone" size="large" placeholder="电话号" @on-change="inputPhoneChanged"></Input>
             </FormItem>
            
             

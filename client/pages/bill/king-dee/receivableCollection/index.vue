@@ -76,14 +76,14 @@
             title: '客户编码 ',
             key: 'asstActNumber',
             align: 'center',
-            width:70,
+            width:120,
             fixed:'left'
           },
           {
             title: '金额',
             key: 'amount',
             align: 'center',
-            width:70,
+            width:120,
             fixed:'left',
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.amount))
@@ -93,7 +93,9 @@
             title: '含税金额 ',
             key: 'arAmount',
             align: 'center',
-            width:70,
+            //fixed:'left',
+            width:120,
+           
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.arAmount))
                          }
@@ -102,12 +104,14 @@
             title: '客户名称 ',
             key: 'asstActName',
             align: 'center',
-             width:70,
+             width:120,
+         //    fixed:'left',
           },
           {
             title: '业务日期',
             key: 'bizDate',
             align: 'center',
+            width:120,
             render(tag, params){
                 let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
                 return time;
@@ -117,61 +121,61 @@
             title: '业务员姓名',
             key: 'bizPerson',
             align: 'center',
-            width:70,
+            width:120,
           },
           {
             title: '普通销售/普通销售退',
             key: 'bizTypeName',
             align: 'center',
-            width:70,
+            width:120,
           },
           {
             title: '财务组织编码',
             key: 'companyNumber',
             align: 'center',
-            width:70,
+           width:120,
           },
           {
             title: '销售合同行号',
             key: 'contractNumber',
             align: 'center',
-            width:70
+           width:120,
           },
           {
             title: '核心单据号 ',
             key: 'coreBillNumber',
             align: 'center',
-            width:70
+            width:120,
           },
           {
             title: '成本中心',
             key: 'costCenteNumber',
             align: 'center',
-            width:70,
+            width:120,
           },
           {
             title: '货币类型',
             key: 'currency',
             align: 'center',
-            width:70,
+           width:120,
           },
           {
             title: '物料编码 ',
             key: 'materialNumber',
             align: 'center',
-            width:70
+           width:120,
           },
           {
             title: '唯一交易编码',
             key: 'number',
             align: 'center',
-            width:70
+            width:120,
           },
           {
             title: '不含税单价  ',
             key: 'price',
             align: 'center',
-            width:70,
+            width:120,
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.price))
                          }
@@ -180,7 +184,7 @@
             title: '数量',
             key: 'quantity',
             align: 'center',
-            width:70,
+            width:120,
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.quantity))
                          }
@@ -189,7 +193,7 @@
             title: '税额 ',
             key: 'taxAmount',
             align: 'center',
-            width:70,
+            width:120,
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.taxAmount))
                          }
@@ -198,7 +202,7 @@
             title: '含税单价 ',
             key: 'taxPrice',
             align: 'center',
-            width:70,
+            width:120,
             render:function(h,params){
                             return h('span',{},utils.thousand(params.row.taxPrice))
                          }
@@ -207,13 +211,13 @@
             title: '税率',
             key: 'taxRate',
             align: 'center',
-            width:70,
+            width:120,
           },
           {
             title: '备注',
             key: 'remark',
             align: 'center',
-            width:200
+           width:120,
           }
         ]
 

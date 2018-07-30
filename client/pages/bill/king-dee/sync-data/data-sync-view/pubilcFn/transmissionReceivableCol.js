@@ -130,7 +130,7 @@ function transmissionReceivableCol(){
             align:'center',
         },
         {
-            title: '重复状态名称',
+            title: '是否重复',
             key: 'repeatStatusName',
             align:'center',
         },
@@ -143,7 +143,7 @@ function transmissionReceivableCol(){
             key: 'syncDataId',
             align:'center',
         },{
-            title: '同步状态名称',
+            title: '同步状态',
             key: 'syncStatusName',
             align:'center',
         }

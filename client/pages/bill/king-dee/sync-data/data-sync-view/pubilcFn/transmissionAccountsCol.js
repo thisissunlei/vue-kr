@@ -106,7 +106,7 @@ function transmissionAccountsCol(){
             align:'center',
         },
         {
-            title: '同步状态名称',
+            title: '同步状态',
             key: 'syncStatusName',
             align:'center',
         },

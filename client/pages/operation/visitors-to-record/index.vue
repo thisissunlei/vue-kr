@@ -3,9 +3,9 @@
     <SectionTitle title="预约参观"></SectionTitle>
     <div class="buttons" style="margin-top:20px;">
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitExport'>新建</Button>
+        <Button type='primary' @click='openNew'>新建</Button>
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitExport'>导入</Button>
+        <Button type='primary' @click='submitImport'>导入</Button>
         <span style="display:inline-block;width:20px"></span>
         <Button type='primary' @click='submitExport'>导出</Button>
         
@@ -39,7 +39,42 @@
         :warn="warn"
         @changeOpen="onMessageChange"
     />
-
+    <Modal v-model="openCreate" title="新建" ok-text="保存" width="70%" cancel-text="取消" class-name="vertical-center-modal">
+        <Create  @on-result-change="onResultChange" v-if="openCreate"
+        ref="goodsNewPage"/>
+        <div slot="footer">
+            <Button type="primary" @click="submitStation">确定</Button>
+        </div>
+    </Modal>
+    <Modal v-model="showEdit" title="编辑" ok-text="保存" width="70%" cancel-text="取消" class-name="vertical-center-modal">
+        <Edit  @on-result-change="onResultChange" v-if="showEdit"
+        ref="goodsEditPage" :editData="editRow"/>
+        <div slot="footer">
+            <Button type="primary" @click="submitEditStation">确定</Button>
+        </div>
+    </Modal>
+    <Modal v-model="showImport" title="编辑" ok-text="保存" width="200" cancel-text="取消" class-name="vertical-center-modal">
+        <div class="content" style="text-align:center">
+            <Upload
+                ref="upload"
+                name="file"
+                :before-upload="handleUpload"
+                action="/api/krspace-pay/pay-record/importBankFlow"
+                :with-credentials="IsCookie"
+            >
+                <div class="u-upload-content">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>请选择上传文件</p>
+                    <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
+                </div>
+            </Upload>
+            
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="download">下载模板</Button>
+            <Button type="primary" @click="uploadSubmit">确定</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 
@@ -49,9 +84,12 @@ import ToolTip from '~/components/ToolTip';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SearchForm from './searchForm';
+import Create from './create.vue';
+import Edit from './edit.vue';
 import Message from '~/components/Message';
 import Loading from '~/components/Loading';
 import SectionTitle from '~/components/SectionTitle.vue'
+    import Buttons from '~/components/Buttons';
 
 var layoutScrollHeight=0;
     export default {
@@ -61,7 +99,10 @@ var layoutScrollHeight=0;
             Message,
             ToolTip,
             Loading,
-            SectionTitle
+            SectionTitle,
+            Create,
+            Buttons,
+            Edit
         },
         head() {
             return {
@@ -69,7 +110,10 @@ var layoutScrollHeight=0;
             }
         },
         data () {
-            return {  
+            return { 
+                showImport:true,
+                showEdit :false,
+                openCreate:false,
                 dailyOldData:[],
                 totalCount:0,
                 loading:true,
@@ -99,26 +143,35 @@ var layoutScrollHeight=0;
                     {
                         title: '电话',
                         key: 'mobile',
-                        width:110,
+                        width:120,
                         align:'center',
                     },
                     {
                         title: '一级来源',
                         key: 'channelTypeStr',
-                        width:70,
+                        width:100,
                         align:'center',
+                        render(h,params){
+                            return params.row.channelTypeStr?params.row.channelTypeStr:'--'
+                        }
                     },
                     {
                         title: '二级来源',
                         align:'center',
-                        width:80,
+                        width:100,
                         key: 'channelName',
+                        render(h,params){
+                            return params.row.channelName?params.row.channelName:'--'
+                        }
                     },
                     {
                         title: '官网预约参数',
                         align:'center',
                         width:110,
                         key: 'promoCode',
+                        render(h,params){
+                            return params.row.promoCode?params.row.promoCode:'--'
+                        }
                     },
                     {
                         title: '预约城市',
@@ -135,16 +188,23 @@ var layoutScrollHeight=0;
                     {
                         title: '参观日期',
                         align:'center',
-                        width:100,
+                        width:110,
                         key: 'appiontTime',
+                        render(h,params){
+                            var ren=params.row.appiontTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.appiontTime)):'-';
+                            return ren
+
+                        }
                     },
                     {
                         title: '创建时间',
                         align:'center',
-                        width:130,
+                        width:110,
                         key: 'cTime',
                         render(h,params){
-                            
+                            var ren=params.row.cTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.cTime)):'-';
+                            return ren
+
                         }
                     },
                     // {
@@ -185,11 +245,14 @@ var layoutScrollHeight=0;
                         align:'center',
                         width:80,
                         key: 'visitNum',
+                        render(h,params){
+                            return params.row.visitNum?params.row.visitNum:'--'
+                        }
                     },
                     {
                         title: '优惠券（6免0.5，12免1）',
                         align:'center',
-                        width:80,
+                        width:150,
                         key: 'couponTypeStr',
                     },
                     {
@@ -202,13 +265,45 @@ var layoutScrollHeight=0;
 
                         title: '操作',
                         align:'center',
-                        width:80,
-                        key: 'rentDays',
+                        width:100,
+                        render:(tag,params)=>{
+                           var btnRender=[
+                               tag(Buttons, {
+                                   props: {
+                                        type: 'text',
+                                        checkAction:'seat_order_view',
+                                        label:'编辑',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.edit(params.row)
+                                        }
+                                    }
+                                }),tag(Buttons, {
+                                   props: {
+                                        type: 'text',
+                                        checkAction:'seat_order_view',
+                                        label:'删除',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.delete(params.row)
+                                        }
+                                    }
+                                })];
+                           return tag('div',btnRender);  
+                        }
                     },
                 ],
                 openMessage:false,
                 MessageType:'',
-                warn:''
+                warn:'',
+                submitData:{},
+                editRow:{},
+                file: null,
+                IsCookie:true,
             }
         },
         mounted(){
@@ -217,7 +312,6 @@ var layoutScrollHeight=0;
                 this.getCommonParam(); 
             }   
             var height = document.body.clientHeight-200;
-            console.log('mounted',height)
             this.height = height;
 
         },
@@ -228,6 +322,23 @@ var layoutScrollHeight=0;
             }
         },
         methods:{
+            delete(row){
+                this.$http.post('delete-csr-clue', {id:row.id}).then((res)=>{
+                    this.tabForms=Object.assign({},{page:1,pageSize:15});
+                    this.endParams=Object.assign({},this.tabForms);
+                    this.getData(this.tabForms)
+
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                })
+            },
+            edit(row){
+                this.editRow = row;
+                this.showEdit = !this.showEdit;
+                console.log('edit',row)
+            },
             getCommonParam(){
                 this.tabForms.page=1;
                 this.dailyOldData=[];
@@ -237,19 +348,20 @@ var layoutScrollHeight=0;
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.endParams=Object.assign({},this.tabForms);
-                utils.addParams(this.tabForms);
+                this.getData(this.tabForms)
+
 
             },
             //清空
             clearClick(formItem){
                 this.tabForms=Object.assign({},formItem);
                 this.endParams=Object.assign({},this.tabForms);
-                utils.addParams(this.tabForms);
+                this.getData(this.tabForms)
             },
             //数据变化
             dataParams(data){
                 this.endParams=Object.assign({},data);
-                // this.getData(this.endParams);
+                this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
@@ -276,12 +388,85 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/order/operation/imtPutaway/list-excel');
+                utils.commonExport(this.tabForms,'/api/order/csr-clue/export');
             },
             changePage(page){
                 this.tabForms.page = page;
                 this.getData(this.tabForms)
-            }
+            },
+            onResultChange(data){
+                this.submitData = data;
+            },
+            openNew(){
+                this.openCreate = !this.openCreate
+            },
+            save(params){
+                params.appiontTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.appiontTime))
+                this.$http.post('save-csr-clue', params).then((res)=>{
+                    this.openCreate = false
+                    this.showEdit = false;
+                    this.tabForms=Object.assign({},{page:1,pageSize:15});
+                    this.endParams=Object.assign({},this.tabForms);
+                    this.getData(this.tabForms)
+
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                }) 
+            },
+            submitStation(){
+                let newPage=this.$refs.goodsNewPage.$refs;
+                newPage['formItemDaily'].validate((valid) => {
+                    if (valid) {
+                       this.save(this.submitData)
+                    }else{
+                        this.$Notice.error({
+                            title: message
+                        });
+                    }
+                }) 
+
+            },
+            submitEditStation(){
+                let newPage=this.$refs.goodsEditPage.$refs;
+                newPage['formItemDaily'].validate((valid) => {
+                    if (valid) {
+                       this.save(this.submitData)
+                    }else{
+                        this.$Notice.error({
+                            title: message
+                        });
+                    }
+                })
+            },
+            uploadSubmit(){
+                var data=new FormData();
+                data.append('file',this.file);
+                this.$http.post('impot-csr-clue', data).then((res)=>{
+                    this.showImport = false;
+                    this.tabForms=Object.assign({},{page:1,pageSize:15});
+                    this.endParams=Object.assign({},this.tabForms);
+                    this.getData(this.tabForms)
+                }).catch((err)=>{
+                    this.submitDisabled=false;
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            submitImport(){
+                this.showImport = !this.howImport
+            },
+            download(){
+                utils.commonExport('','/api/order/csr-clue/download-excel');
+            },
+
+            handleUpload (file) {
+                console.log(file,"kkkk")
+                this.file = file;
+                return false;
+            },
         }
     }
 </script>

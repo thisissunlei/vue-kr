@@ -188,7 +188,10 @@ export default {
                     name:' ',
                     startAppiontTime:'',
                 },
-                formItemOld:{},
+                formItemOld:{
+                    page:1,
+                    pageSize:15
+                },
                 ruleDaily: {
                     mobile:[
                         { validator: validatephone, trigger: 'change' }

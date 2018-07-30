@@ -204,6 +204,23 @@ export default  {
         url: '/api/order/csr-clue/list',
         method: 'get'
     },
+    // 新建预约
+    'save-csr-clue': {
+        url: '/api/order/csr-clue/save',
+        method: 'post'
+    },
+    // 删除预约
+    'delete-csr-clue': {
+        url: '/api/order/csr-clue/delete',
+        method: 'post'
+    },
+    'impot-csr-clue': {
+        url: '/api/order/csr-clue/impot',
+        method: 'post'
+    },
+     
+    
+
      
 
 }

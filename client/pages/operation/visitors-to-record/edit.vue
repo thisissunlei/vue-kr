@@ -80,6 +80,7 @@
                                 v-model="formItem.cityId" 
                                 placeholder="预约城市" 
                                 style="width: 120px;"
+                                @on-change="cityChange"
                             >
                                 <Option 
                                     v-for="item in cityList" 
@@ -172,15 +173,16 @@
 import dateUtils from 'vue-dateutils';
 
 export default {
-    props:{
-       identify:{
-           type:String,
-           default:''
-       }
+    props: {
+        editData:{
+            type:Object,
+            default:{}
+        }
     },
     components:{
     },
     updated(){
+        console.log('updated=====',this.formItem)
             this.$emit('on-result-change',this.formItem);
     },
     data() {
@@ -199,13 +201,7 @@ export default {
                 width:120,
                 cityList:[],
                 params :{}, 
-                formItem:{
-                    channelType:'',
-                    cityId:'',
-                    channelId:'',
-                    communityId:'',
-                    mobile:'',
-                },
+                formItem:{},
                 formItemOld:{},
                 ruleDaily: {
                     mobile:[
@@ -251,12 +247,15 @@ export default {
     },
     mounted(){
         this.params=this.$route.query;
+        this.editData.appiontTime = new Date(this.editData.appiontTime)
+        this.editData.communityId = this.editData.communityId+''
+        this.editData.channelId = this.editData.channelId+''
+        this.formItem=Object.assign({},this.editData);
         this.getCityList();
         this.getFirstChannle()
         this.getSecondChannle()
         this.getVisitstatus()
         this.getCommunityList()
-        this.$emit('initData',this.formItem);
     },
     methods:{
         //社区接口
@@ -311,38 +310,6 @@ export default {
                 });
             })
         },
-        //搜索
-        searchClick(){
-            this.$refs['formItemDaily'].validate((valid) => {
-                if (valid) {
-                    this.$emit('searchClick',this.formItem);
-                }
-            })
-        },
-        //清除
-        clearClick(){
-            this.formItem=Object.assign({},this.formItemOld);
-            this.floorList = []
-            this.$emit('clearClick',this.formItem);
-        },
-        //回车
-        onKeyEnter(){
-            this.searchClick();
-        },
-        //检查输入字符串字节长度
-        fucCheckLength(strTemp) {
-            var i,sum;
-            sum=0;
-            var length = strTemp.length ;
-            for(i=0;i<length;i++) {
-                if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
-                    sum=sum+1;
-                }else {
-                    sum=sum+2;
-                }
-            }
-            return sum;
-        },
         cityChange(param){
             if(param){
                 if(param !== this.params.cityId){
@@ -351,13 +318,6 @@ export default {
                 this.getCommunityList(param)  
             }
 
-            
-        },
-        communityChange(param){
-            if(param){
-                this.params = {}
-                this.getFloorList(param);
-            }
             
         },
         

@@ -198,19 +198,15 @@ export default {
                 let len=res.data.length;
                 if(len&&len>1){
                     this.communityList.unshift({id:' ',name:'全部社区'})
-                }    
+                }  
+                this.formItem.communityId=len?this.communityList[0].id:'';
+                this.formItemOld=Object.assign({},this.formItem);
+                if(params.communityId){
+                    this.formItem.communityId=params.communityId;
+                }
                 if(this.num==1){
-                    if(!params.communityId){
-                        this.formItem.communityId=len?this.communityList[0].id:'';
-                        this.formItemOld=Object.assign({},this.formItem);
-                        console.log('old--',this.formItemOld);
-                    }else{
-                        this.formItem.communityId=params.communityId;
-                    }
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
                     this.$emit('initData',this.formItem);
-                }else{
-                    this.formItem.communityId=len?this.communityList[0].id:'';
                 }
             }).catch((error)=>{
                 this.$Notice.error({
@@ -255,6 +251,7 @@ export default {
         //城市change事件
         cityChange(param){
             this.num++;
+            console.log('oamr---',param);
             this.getCommunityList(param)
         }
     }

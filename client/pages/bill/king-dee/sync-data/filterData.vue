@@ -26,12 +26,12 @@
                     <Row>
                         <Col span="6" class="col">
                         <FormItem label="业务员姓名">
-                            <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @blur='filterData' />
+                            <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="财务组织编码">
-                            <Input v-model="formItem.companyNumber" placeholder="财务组织编码" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.companyNumber" placeholder="财务组织编码" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
@@ -45,17 +45,17 @@
                     <Row>
                         <Col span="6" class="col">
                         <FormItem label='物料编码'>
-                            <Input v-model="formItem.materialNumber" placeholder="物料编码" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.materialNumber" placeholder="物料编码" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="核心单据号">
-                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="销售合同号">
-                            <Input v-model="formItem.contractNumber" placeholder="销售合同号" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.contractNumber" placeholder="销售合同号" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                     </Row>
@@ -64,12 +64,12 @@
                     <Row>
                         <Col span="6" class="col">
                         <FormItem label="业务员姓名">
-                            <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="唯一交易编码">
-                            <Input v-model="formItem.number" placeholder="唯一交易编码" class="form-item-input" @blur='filterData'/>
+                            <Input v-model="formItem.number" placeholder="唯一交易编码" class="form-item-input" @on-blur='filterData'/>
                         </FormItem>
                         </Col>
                     </Row>
@@ -83,7 +83,7 @@
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="核心单据号">
-                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @blur='filterData' />
+                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
                     </Row>

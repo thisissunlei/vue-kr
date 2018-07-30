@@ -118,7 +118,7 @@ export default {
                 syncType:[
                         {value:' ',label:'全部'},
                         {value:'AUTO',label:'定时'},
-                        {value:'Manual',label:'手动'},
+                        {value:'MANUAL',label:'手动'},
                 ],
                 formItemOld:{},
                 ruleDaily: {

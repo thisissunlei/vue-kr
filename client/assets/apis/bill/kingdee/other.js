@@ -79,5 +79,10 @@ export default {
     "post-sync-select-data-ids": {
         url: "/api/sync/startSyncData",
         method: "post"
+    },
+    //检测师是否接受
+    "get-sync-findSyncStatus-loop":{
+        url: "/api/sync/findSyncStatus",
+        method: "get"
     }
 };

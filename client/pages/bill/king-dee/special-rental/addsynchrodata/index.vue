@@ -155,7 +155,8 @@ export default {
 
           this.$Message.success('操作成功');
           this.$router.push({ path: '/bill/king-dee/special-rental/synchrodata' })
-      }).catch((e)=>{
+      }).catch((error)=>{
+
         this.$Notice.error({
           title: error.message
         });
@@ -165,12 +166,15 @@ export default {
       this.$router.push({ path: '/bill/synchrodata' })
     },
     handleSubmit (name) {
+      console.log("00000000")
       this.$refs[name].validate((valid) => {
         if (valid) {
+          console.log("1111111")
           this.communityConfigAdd()
 
         } else {
-          this.$Message.error('操作失败');
+          console.log("---------")
+          // this.$Message.error('操作失败');
         }
       })
     },

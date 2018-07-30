@@ -2,149 +2,176 @@
     <div class='daily-search-form'>
         
         <div class="daily-header">
-            <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
+            <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left" >
+                <Row>
+                    <Col class="col">
 
-                <div style="white-space: nowrap;">
-                    <Form-item label="姓名" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="姓名"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
-                    <Form-item label="电话" class='daily-form' prop="mobile"> 
-                        <i-input 
-                            v-model="formItem.mobile" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="电话"
-                        />
-                    </Form-item>
-                    <Form-item class='daily-form'>
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;">一级来源</span>
-                        <Select 
-                            v-model="formItem.channelType" 
-                            placeholder="一级来源" 
-                            style="width: 90px;margin-right:20px;"
-                        >
-                            <Option 
-                                v-for="item in firstList" 
-                                :value="item.value" 
-                                :key="item.value"
+                        <Form-item  class='daily-form' > 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">姓名</span>
+                            <i-input 
+                                v-model="formItem.cname" 
+                                style="width: 120px;"
+                                placeholder="姓名"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item  class='daily-form' prop="mobile"> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">电话</span>
+                            <i-input 
+                                v-model="formItem.mobile" 
+                                style="width: 120px;"
+                                placeholder="电话"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item class='daily-form' >
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">一级来源</span>
+                            <Select 
+                                v-model="formItem.channelType" 
+                                placeholder="一级来源" 
+                                style="width: 120px;"
                             >
-                                {{ item.label }}
-                            </Option>
-                        </Select> 
-                    </Form-item>
-                    <Form-item class='daily-form'>
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;">二级来源</span>
-                        <Select 
-                            v-model="formItem.channelId" 
-                            placeholder="二级来源" 
-                            style="width: 90px;margin-right:20px;"
-                        >
-                            <Option 
-                                v-for="item in secondList" 
-                                :value="item.value" 
-                                :key="item.value"
+                                <Option 
+                                    v-for="item in firstList" 
+                                    :value="item.value" 
+                                    :key="item.value"
+                                >
+                                    {{ item.label }}
+                                </Option>
+                            </Select> 
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item class='daily-form'>
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">二级来源</span>
+                            <Select 
+                                v-model="formItem.channelId" 
+                                placeholder="二级来源" 
+                                style="width: 120px;"
                             >
-                                {{ item.label }}
-                            </Option>
-                        </Select> 
-                    </Form-item>
+                                <Option 
+                                    v-for="item in secondList" 
+                                    :value="item.value" 
+                                    :key="item.value"
+                                >
+                                    {{ item.label }}
+                                </Option>
+                            </Select> 
+                        </Form-item>
+                     </Col>
+                    <Col class="col">
+                        <Form-item  class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">官网预约参数</span>
+                            <i-input 
+                                v-model="formItem.promoCode" 
+                                style="width: 120px;"
+                                placeholder="官网预约参数"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        
+                        <Form-item  class='daily-form' prop="customerName">
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">预约城市</span>
 
-                    <Form-item label="官网预约参数" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="官网预约参数"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
-                    
-                    <Form-item label="预约城市" class='daily-form' prop="customerName">
-                        <Select 
-                            v-model="formItem.cityId" 
-                            placeholder="预约城市" 
-                            style="width: 90px;margin-right:20px;"
-                        >
-                            <Option 
-                                v-for="item in cityList" 
-                                :value="''+item.cityId" 
-                                :key="item.cityId"
+                            <Select 
+                                v-model="formItem.cityId" 
+                                placeholder="预约城市" 
+                                style="width: 120px;"
                             >
-                                {{ item.cityName }}
-                            </Option>
-                        </Select>
-                    </Form-item>
-                    <Form-item label="预约社区" class='daily-form' prop="customerName">
-                        <Select 
-                            v-model="formItem.communityId" 
-                            placeholder="预约社区" 
-                            style="width: 90px;margin-right:20px;"
-                        >
-                            <Option 
-                                v-for="item in communityList" 
-                                :value="''+item.id" 
-                                :key="item.id"
+                                <Option 
+                                    v-for="item in cityList" 
+                                    :value="''+item.cityId" 
+                                    :key="item.cityId"
+                                >
+                                    {{ item.cityName }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item  class='daily-form' prop="customerName">
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">预约社区</span>
+
+                            <Select 
+                                v-model="formItem.communityId" 
+                                placeholder="预约社区" 
+                                style="width: 120px;"
                             >
-                                {{ item.name }}
-                            </Option>
-                        </Select>
-                    </Form-item>
+                                <Option 
+                                    v-for="item in communityList" 
+                                    :value="''+item.id" 
+                                    :key="item.id"
+                                >
+                                    {{ item.name }}
+                                </Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
 
+                        <Form-item  class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">参观日期</span>
 
-                    <Form-item label="参观日期" class='daily-form'> 
-                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.startAppiontTime"  style="width: 90px;margin-right:10px;">
-                        </DatePicker>
-                    </Form-item>
+                            <DatePicker type="date" placeholder="开始时间" v-model="formItem.startAppiontTime"  style="width: 120px;">
+                            </DatePicker>
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item  class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">推介人姓名</span>
 
-                    <Form-item label="推介人姓名" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="推介人姓名"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
+                            <i-input 
+                                v-model="formItem.refreeName" 
+                                style="width: 120px;"
+                                placeholder="推介人姓名"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
 
-                    <Form-item label="推介人电话" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="推介人电话"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
+                        <Form-item class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">推介人电话</span>
 
-                    <Form-item label="拜访数量" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="拜访数量"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
+                            <i-input 
+                                v-model="formItem.refreePhone" 
+                                style="width: 120px;"
+                                placeholder="推介人电话"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item  class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">拜访数量</span>
 
-                    <Form-item label="备注" class='daily-form'> 
-                        <i-input 
-                            v-model="formItem.name" 
-                            style="width: 90px;margin-right:15px"
-                            placeholder="备注"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
+                            <i-input 
+                                v-model="formItem.visitNum" 
+                                style="width: 120px;"
+                                placeholder="拜访数量"
+                            />
+                        </Form-item>
+                    </Col>
+                    <Col class="col">
+                        <Form-item class='daily-form'> 
+                            <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">备注</span>
+
+                            <i-input 
+                                v-model="formItem.remake" 
+                                style="width: 120px;"
+                                placeholder="备注"
+                            />
+                        </Form-item> 
+                    </Col>
+                </Row>  
+                <div class="buttons">
+                    <Button type="primary" @click="searchClick">搜索</Button>
+                    <span style="display:inline-block;width:20px"></span>
+                    <Button type="ghost" @click="searchClick">取消</Button>
+                </div> 
                     
-
-                </div>
-
-                    
-                 
-
-                     
-                    
-                <Button type="primary" @click="searchClick">搜索</Button>
-                <Button type="ghost" @click="searchClick">取消</Button>
+                
 
             </Form>
         </div>
@@ -174,6 +201,7 @@ export default {
                 }
             };
             return { 
+                width:120,
                 cityList:[],
                 params :{}, 
                 formItem:{
@@ -320,6 +348,13 @@ export default {
 
 <style lang='less'>
      .daily-search-form{
+        .col{
+            width:45%;
+            display: inline-block;
+        }
+        .buttons{
+            text-align:center;
+        }
          .daily-header{
             padding: 30px 10px 10px 20px;
             .ivu-form .ivu-form-item-label{

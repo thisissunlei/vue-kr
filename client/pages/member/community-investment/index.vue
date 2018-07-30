@@ -63,11 +63,7 @@
 
             params:{
                 page:1,
-                pageSize:15,
-                accountName:'',
-                realName:'',
-                mobilePhone:'',
-                email:''
+                pageSize:15
             },
             searchFilter:[
                 {label:'登录名',value:'accountName'},
@@ -156,17 +152,9 @@
                 this.getListData()
             },
             searchSubmit(params){
-                // let newParams={
-                //     accountName:'',
-                //     realName:'',
-                //     mobilePhone:'',
-                //     email:''
-                // }
-                // for(var item in params){
-                //     newParams[item]=params[item];
-                // }
                 params.page=1;
-                this.params=Object.assign({},this.params,params);
+                params.pageSize=15;
+                this.params=Object.assign({},params);
                 this.getListData();
             },
             showRole(param){

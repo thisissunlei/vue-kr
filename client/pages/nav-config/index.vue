@@ -156,7 +156,7 @@ export default {
             groupList:[],
             columns: getColumns.columns.call(this),
             dataTable: [],
-            pageSize:10,
+            pageSize:20,
             page:1
         }
     },

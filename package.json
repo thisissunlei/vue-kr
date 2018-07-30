@@ -5,8 +5,13 @@
   "author": "张屈 <joneyphair@qq.com>",
   "private": true,
   "scripts": {
+<<<<<<< HEAD
     "nuxt":"nuxt",
     "dev": "cross-env NODE_ENV=development node -max_old_space_size=4096 server/index.js",
+=======
+    "nuxt": "nuxt",
+    "dev": "cross-env NODE_ENV=development node --max_old_space_size=4096 server/index.js",
+>>>>>>> master
     "dev:test": "cross-env NODE_ENV=test node  server/index.js",
     "dev:test01": "cross-env NODE_ENV=test01 node  --max_old_space_size=4096 server/index.js",
     "dev:test02": "cross-env NODE_ENV=test02 node  --max_old_space_size=4096 server/index.js",

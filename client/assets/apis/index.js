@@ -19,7 +19,10 @@ import KrmeetingRoom from "./krmeetingRoom";
 import ProductGoods from './productGoods';
 import comment from './comment';
 import DevTool from './devTool';
-import FinancialtransferApply from "./financialtransferApply";
+import FinancialtransferApply from "./financialtransferApply.js";
+import KrmeetingSeat from "./krmeetingSeat.js";
+
+
 export default {
   ...OrderApi,
   ...OrderManageApi,
@@ -43,4 +46,5 @@ export default {
   ...comment,
   ...DevTool,
   ...FinancialtransferApply,
+  ...KrmeetingSeat
 }

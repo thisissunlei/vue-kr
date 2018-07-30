@@ -1,11 +1,6 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-<<<<<<< HEAD
-
-=======
 const pluginsDomain  = require('./config/plugins.env')[process.env.NODE_ENV].plugins;
-console.log( process.env.NODE_ENV,"ppppppp")
->>>>>>> feature/添加project项目
 module.exports = {
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 700000 },

@@ -58,13 +58,13 @@ export default {
                   title: '线上化率',
                   key: 'onlineRate',
                   align:'center',
-                  sortable:true,
+                  sortable:'custom',
               },
               {
                   title: '对比前日',
                   key: 'conToOneDaybefore',
                   align:'center',
-                  sortable:true,
+                  sortable:'custom',
                   render:(h,obj)=>{
                      
                         return h(RateImg ,{
@@ -78,7 +78,7 @@ export default {
                   title: '对比周初',
                   key: 'conToWeekStart',
                   align:'center',
-                  sortable:true,
+                  sortable:'custom',
                   render:(h,obj)=>{
                        return h(RateImg ,{
                             props: {
@@ -91,13 +91,13 @@ export default {
                   title: '日均上线会员数（当周）',
                   key: 'onlineUser',
                   align:'center',
-                  sortable:true,
+                  sortable:'custom',
               },
               {
                   title: '同比前周',
                   key: 'conToWeekBefore',
                   align:'center',
-                  sortable:true,
+                  sortable:'custom',
                   render:(h,obj)=>{
                        return h(RateImg ,{
                             props: {

@@ -1,6 +1,6 @@
 <template>
-  <div class="g-openlog">
-      <div class="g-openlog-box">
+  <div class="g-device-list">
+      <div class="g-device-list-box">
             <SearchForm  @submitSearchData="submitSearchData" @addDevice="addDevice" />
             <div class="table-box">
                 <Table :columns="columns1" :data="deviceList" size="small" @on-selection-change="selectedChange"></Table>
@@ -164,13 +164,7 @@ export default {
 }
 </script>
 <style lang="less">
-    .g-openlog{
-        height: 100%;
-        overflow: scroll;
-        .g-openlog-box{
-            // overflow: scroll;
-        }
-    }
+   
     .table-box{
         padding: 0 10px 10px 10px;
         .ivu-table-cell{

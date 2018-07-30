@@ -1,6 +1,6 @@
 <template>
-  <div class="g-openlog">
-      <div class="g-openlog-box">
+  <div class="g-group-list">
+      <div class="g-group-list-box">
             <SearchForm  @submitSearchData="submitSearchData" @addGroups="addGroups" />
             <div class="table-box">
                 <Table :columns="columns1" :data="openLogList" size="small" @on-selection-change="selectedChange"></Table>

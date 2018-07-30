@@ -1,5 +1,5 @@
 <template>
-  <div class="g-openlog">
+  <div class="g-member-list">
       <div class="g-openlog-box">
             <SearchForm  @submitSearchData="submitSearchData" @addMember="addMember" />
             <div class="table-box">
@@ -161,7 +161,6 @@ export default {
 <style lang="less">
     .g-openlog{
         height: 100%;
-        overflow: scroll;
         .g-openlog-box{
             // overflow: scroll;
         }

@@ -293,13 +293,7 @@ export default {
 }
 </script>
 <style lang="less">
-    .g-openlog{
-        height: 100%;
-        overflow: scroll;
-        .g-openlog-box{
-            // overflow: scroll;
-        }
-    }
+   
     .table-box{
         padding: 0 10px 10px 10px;
         .ivu-table-cell{

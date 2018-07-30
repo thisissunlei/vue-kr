@@ -278,7 +278,6 @@ export default {
 <style lang="less">
     .g-openlog{
         height: 100%;
-        overflow: scroll;
         .g-openlog-box{
             // overflow: scroll;
         }

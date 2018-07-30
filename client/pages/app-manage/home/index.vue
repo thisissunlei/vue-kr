@@ -227,7 +227,7 @@ export default {
         padding:0 20px;
     }
     .u-table{
-        padding:20px 20px 0;
+        padding:20px 20px 30px;
     }
     .u-date-right{
       float:right;

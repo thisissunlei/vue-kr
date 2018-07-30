@@ -139,7 +139,7 @@
             title: '付款账号',
             key: 'payerAccountBank',
             align: 'center',
-       //     width:170,
+            width:170,
           },
           {
             title: '客户(供应商)名称',

@@ -21,6 +21,8 @@ import comment from './comment.js';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
 import doorPermmision from './doorPermmision.js';
+import KrmeetingSeat from "./krmeetingSeat.js";
+
 
 export default {
   ...OrderApi,
@@ -45,5 +47,6 @@ export default {
   ...comment,
   ...DevTool,
   ...FinancialtransferApply,
-  ...doorPermmision
+  ...doorPermmision,
+  ...KrmeetingSeat
 }

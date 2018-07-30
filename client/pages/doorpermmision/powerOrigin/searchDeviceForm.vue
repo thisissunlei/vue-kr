@@ -42,10 +42,10 @@
             </FormItem>
             
             <FormItem label="屏幕标题：">
-                <Input v-model="formItem.title" size="large" placeholder="姓名" @on-change="inputTitleChanged"></Input>
+                <Input v-model="formItem.title" size="large" placeholder="屏幕标题" @on-change="inputTitleChanged"></Input>
             </FormItem>
             <FormItem label="屏幕编号：">
-                <Input v-model="formItem.doorCode" size="large" placeholder="手机号" @on-change="inputDoorCodeChanged"></Input>
+                <Input v-model="formItem.doorCode" size="large" placeholder="屏幕编号" @on-change="inputDoorCodeChanged"></Input>
             </FormItem>
            
             

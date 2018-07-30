@@ -77,6 +77,21 @@ export default {
                         title: '组名称',
                         key: 'name',
                         align:'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('span', {
+                                    style:{
+                                        color: this.groupLevel=='PARENT'?'#2d8cf0':'#495060',
+                                        cursor : this.groupLevel=='PARENT'?'pointer':'',
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.seeDeviceGroupPermmision(params.row)
+                                        }
+                                    }
+                                }, params.row.name)
+                            ]);
+                        }
                         
                     },
                     {
@@ -143,7 +158,6 @@ export default {
        this.searchData.groupId = this.$route.query.groupid;
        this.groupName = this.$route.query.groupname;
        this.groupLevel = this.$route.query.groupLevel;
-        console.log("kfdkkdlkdfs=====>2");
 
        this.getListData();
        this.getSmartHardwareDict();
@@ -302,6 +316,10 @@ export default {
             this.searchData.page =page;
             this.currentPage = page;
             this.getListData();
+        },
+        seeDeviceGroupPermmision(params){
+            window.open(`/doorpermmision/powerOrigin?groupid=${params.id}&groupname=${params.name}&groupLevel=${params.groupLevel}`,'_blank')
+            
         }
 
 
@@ -347,6 +365,9 @@ export default {
         .bottom-page{
             float:right;
             margin:10px;
+        }
+        .nameClass{
+            color:red;
         }
     }
 </style>

@@ -174,7 +174,6 @@ export default {
        },
        getListData(){
 
-           console.log("searchData",this.searchData);
 
             let _this =this;
             let params = Object.assign({},this.searchData,{date:new Date()});
@@ -262,7 +261,6 @@ export default {
             this.sendAjaxReq(url,params,StatuParam);
         },
         sendAjaxReq(url,params,StatuParam){
-            console.log("params~~~~~~~",params)
             this.$http.post(url, params).then((response) => {
                 this.getListData();
                 this.$Message.success('添加成功');

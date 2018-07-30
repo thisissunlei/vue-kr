@@ -149,8 +149,8 @@ export default {
     data() {
         return {
             currentPage: 1,
-            selectIdsInPages: [],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
-            unSelectIdsInPages: [],//记录每一页勾选的状态 [[id1,id2],[id3,id4]]
+            selectIdsInPages: [],//记录每一页勾选的状态ids [[id1,id2],[id3,id4]]
+            unSelectIdsInPages: [],//记录每一页取消勾选的状态ids [[id1,id2],[id3,id4]]
             syncDataId: '',
             startTime: '',
             endTime: '',
@@ -587,7 +587,7 @@ export default {
             } else {
                 api = 'post-sync-select-data-ids'
                 parmas.syncDataId = this.syncDataId
-                parmas.ids = this.selectedIdsInNotAllSelectState
+                parmas.dataIds = this.selectedIdsInNotAllSelectState
             }
             console.log('api', api)
             console.log('parmas', parmas)

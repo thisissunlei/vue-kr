@@ -1,6 +1,6 @@
 <template>
     <div class="com-select-community">
-        <Select v-model="models" clearable filterable @on-change="changeContent" :placeholder="value" :disabled="disabled" :multiple='multiple'>
+        <Select v-model="models" clearable filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
             <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>

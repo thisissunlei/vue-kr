@@ -84,13 +84,19 @@
             key: 'amount',
             align: 'center',
             width:70,
-            fixed:'left'
+            fixed:'left',
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.amount))
+                         }
           },
           {
             title: '含税金额 ',
             key: 'arAmount',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.arAmount))
+                         }
           },
           {
             title: '客户名称 ',
@@ -144,7 +150,7 @@
             width:70,
           },
           {
-            title: '客户名称',
+            title: '货币类型',
             key: 'currency',
             align: 'center',
             width:70,
@@ -166,24 +172,36 @@
             key: 'price',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.price))
+                         }
           },
           {
             title: '数量',
             key: 'quantity',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.quantity))
+                         }
           },
           {
             title: '税额 ',
             key: 'taxAmount',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.taxAmount))
+                         }
           },
           {
             title: '含税单价 ',
             key: 'taxPrice',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.taxPrice))
+                         }
           },
           {
             title: '税率',

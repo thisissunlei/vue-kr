@@ -97,6 +97,9 @@
             key: 'amount',
             align: 'center',
             width:70,
+            render:function(h,params){
+                            return h('span',{},utils.thousand(params.row.amount))
+                         }
           },
           {
             title: '业务日期',
@@ -121,7 +124,7 @@
             width:70,
           },
           {
-            title: '币别',
+            title: '货币类型',
             key: 'currency',
             align: 'center',
             width:70,

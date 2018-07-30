@@ -199,6 +199,12 @@ export default  {
         url: '/api/order/csr-clue/visitstatus',
         method: 'get'
     },
+    //预约参观列表
+    'get-csr-clue-list': {
+        url: '/api/order/csr-clue/list',
+        method: 'get'
+    },
+     
 
 }
   

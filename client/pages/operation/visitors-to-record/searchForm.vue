@@ -46,7 +46,7 @@
                         <DatePicker type="date" placeholder="开始时间" v-model="formItem.endAppiontTime" style="width: 90px;margin-left:10px;margin-right:20px;">
                         </DatePicker>
                     </Form-item>
-                    <Form-item label="是否联系" class='daily-form'> 
+                   <!--  <Form-item label="是否联系" class='daily-form'> 
                         <Select 
                             v-model="formItem.floor" 
                             placeholder="是否联系" 
@@ -61,7 +61,7 @@
                             </Option>
                         </Select>
                     </Form-item>
-
+ -->
                     <Form-item label="姓名" class='daily-form'> 
                         <i-input 
                             v-model="formItem.name" 
@@ -116,7 +116,7 @@
                         <DatePicker type="date" placeholder="开始时间" v-model="formItem.cEndTime" style="width: 90px;margin-left:10px;margin-right:20px;">
                         </DatePicker>
                     </Form-item>
-                    <Form-item label="是否到访" class='daily-form'> 
+                   <!--  <Form-item label="是否到访" class='daily-form'> 
                         <Select 
                             v-model="formItem.floor" 
                             placeholder="是否到访" 
@@ -130,7 +130,7 @@
                                 {{ item.label }}
                             </Option>
                         </Select>
-                    </Form-item>
+                    </Form-item> -->
 
                     <Form-item label="电话" class='daily-form' prop="mobile"> 
                         <i-input 
@@ -208,6 +208,7 @@ export default {
         this.getSecondChannle()
         this.getVisitstatus()
         this.getCommunityList()
+        this.$emit('initData',this.formItem);
     },
     methods:{
 

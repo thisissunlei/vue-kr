@@ -118,7 +118,7 @@ var layoutScrollHeight=0;
                         title: '官网预约参数',
                         align:'center',
                         width:110,
-                        key: 'startDate',
+                        key: 'promoCode',
                     },
                     {
                         title: '预约城市',
@@ -147,50 +147,56 @@ var layoutScrollHeight=0;
                             
                         }
                     },
-                    {
-                        title: '是否联系',
-                        align:'center',
-                        width:110,
-                        key: 'endDate',
-                    },
-                    {
-                        title: '是否到访',
-                        align:'center',
-                        width:80,
-                        key: 'rentDays',
-                        render(h,params){
-                            return params.row.rentDays+'天'
-                        }
-                    },
-                    {
-                        title: '终端来源',
-                        align:'center',
-                        width:80,
-                        key: 'rentDays',
-                    },
+                    // {
+                    //     title: '是否联系',
+                    //     align:'center',
+                    //     width:110,
+                    //     key: 'endDate',
+                    // },
+                    // {
+                    //     title: '是否到访',
+                    //     align:'center',
+                    //     width:80,
+                    //     key: 'rentDays',
+                    //     render(h,params){
+                    //         return params.row.rentDays+'天'
+                    //     }
+                    // },
                     {
                         title: '推介人姓名',
                         align:'center',
                         width:80,
-                        key: 'rentDays',
+                        key: 'refreePhone',
+                        render(h,params){
+                            return params.row.refreePhone?params.row.refreePhone:'--'
+                        }
                     },
                     {
                         title: '推介人电话',
                         align:'center',
                         width:130,
-                        key: 'rentDays',
+                        key: 'refreeName',
+                        render(h,params){
+                            return params.row.refreeName?params.row.refreeName:'--'
+                        }
                     },
                     {
                         title: '拜访人数',
                         align:'center',
                         width:80,
-                        key: 'rentDays',
+                        key: 'visitNum',
+                    },
+                    {
+                        title: '优惠券（6免0.5，12免1）',
+                        align:'center',
+                        width:80,
+                        key: 'couponTypeStr',
                     },
                     {
                         title: '是否注册会员',
                         align:'center',
                         width:80,
-                        key: 'rentDays',
+                        key: 'registeredMem',
                     },
                     {
 
@@ -250,8 +256,7 @@ var layoutScrollHeight=0;
                 this.dataParams(this.tabForms);
             },
             getData(params){
-                // getImtPutawayList
-                this.$http.get('getImtPutawayList', params).then((res)=>{
+                this.$http.get('get-csr-clue-list', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;

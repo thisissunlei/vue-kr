@@ -111,7 +111,7 @@ var layoutScrollHeight=0;
         },
         data () {
             return { 
-                showImport:true,
+                showImport:false,
                 showEdit :false,
                 openCreate:false,
                 dailyOldData:[],

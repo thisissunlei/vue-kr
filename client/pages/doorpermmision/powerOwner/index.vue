@@ -28,6 +28,11 @@ export default {
       SectionTitle,DoorGroupList,
       GroupList,MemberList
    },
+   head () {
+            return {
+                title: "权限授予详情"
+            }
+    },
    data(){
      return{
         groupLevel : '',

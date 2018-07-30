@@ -27,6 +27,11 @@ export default {
       SectionTitle,DoorGroupList,
       GroupList,DeviceList
    },
+   head () {
+            return {
+                title: "已有权限详情"
+            }
+    },
    data(){
      return{
         groupLevel : '',

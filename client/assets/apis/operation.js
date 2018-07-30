@@ -184,5 +184,21 @@ export default  {
         url: '/api/krspace-finance-web/operation/city-cmt-list',
         method: 'get'
     },
+    // 获取一级来源
+    'get-channleType-list': {
+        url: '/api/order/csr-clue/channleType',
+        method: 'get'
+    },
+    // 获取二级来源
+    'get-csrsource-list': {
+        url: '/api/order/csr-clue/csrsource',
+        method: 'get'
+    },
+    //拜访美剧
+    'get-visitstatus-list': {
+        url: '/api/order/csr-clue/visitstatus',
+        method: 'get'
+    },
+
 }
   

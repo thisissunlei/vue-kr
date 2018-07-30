@@ -113,7 +113,8 @@
                 tableParams:{
                     page:1,
                     pageSize:15,
-                    invoiceStatusList:''
+                    invoiceStatusList:'',
+                    role: 'operate'
                 },
                 editItem:{},
                 postList:[

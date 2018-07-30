@@ -131,6 +131,7 @@ import utils from '~/plugins/utils';
                     page:1,
                     pageSize:15,
                     totalCount:0,
+                    role: 'finance'
                 },
                 backData:{
                     id:0,

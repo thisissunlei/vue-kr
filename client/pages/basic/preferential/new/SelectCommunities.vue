@@ -96,7 +96,6 @@ export default {
                 });
                 _this.loading = false;
                 _this.options = list;
-                console.log('社区列表',list)
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message

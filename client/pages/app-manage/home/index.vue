@@ -200,7 +200,13 @@ export default {
             if(form.order=='normal'){
                this.tabParams.orderRule='';
             }else{
-                this.tabParams.orderRule=form.order.toUpperCase();
+                if(form.order=='asc'){
+                    this.tabParams.orderRule='DESC';
+                }
+                if(form.order=='desc'){
+                    this.tabParams.orderRule='ASC';
+                }
+               
             }
             
             this.getTableData(this.tabParams);

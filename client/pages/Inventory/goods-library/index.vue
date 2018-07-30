@@ -500,24 +500,13 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                         var bacsk=params.row.suiteTypeName;
-                         var devel=params.row.locationTypeName;
-                         var colorClass='redClas' ; 
-                          return h('div', [
-                                        h('span',{
-                                          attrs: {
-
-                                              class:colorClass
-                                        }
-                                        },devel),
-                                        h('span',{
-                                          
-                                        attrs: {
-                                                class:colorClass
-                                            }
-
-                                        },bacsk),
-                                    ])                               
+                         var bacsk=params.row.suiteTypeName?params.row.suiteTypeName:'';
+                         var devel=params.row.locationTypeName?params.row.locationTypeName:'';
+                         let des=params.row.descr?params.row.descr:'';
+                         return h('div', [
+                                h('span',devel+' '+bacsk),
+                                h('div',des),
+                         ])                               
                     }
                 },
                 {

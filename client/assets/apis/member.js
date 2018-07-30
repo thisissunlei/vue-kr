@@ -108,17 +108,17 @@ export default {
     },
     //招商账户权限列表
     'business-bill-list': {
-        url: 'api/krspace-sso-web/erp/ssoUser/business/list',
+        url: '/song/api/krspace-sso-web/sso/ssoUser/business/list',
         method: 'get'
     },
     //获取授予招商权限的列表
     'get-business-role': {
-        url: 'api/krspace-sso-web/erp/ssoUser/business/role/list',
+        url: '/song/api/krspace-sso-web/sso/ssoUser/business/role/list',
         method: 'get'
     },
     //授予招商角色
     'add-business-role': {
-        url: 'api/krspace-sso-web/erp/ssoUser/business/role/',
+        url: '/song/api/krspace-sso-web/sso/ssoUser/business/role/',
         method: 'post'
     }
 } 

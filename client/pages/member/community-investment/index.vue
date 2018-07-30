@@ -2,10 +2,14 @@
 <div class="customer-assets">
    <SectionTitle title="招商角色配置"></SectionTitle>
         <div class="div-search">
-            <SearchFormInput :searchFilter="searchFilter" @onSubmit="searchSubmit"/>
+            <SearchFormInput :searchFilter="searchFilter" :onSubmit="searchSubmit"/>
         </div>
         <div class="table-list">
-            <Table  border :columns="columns" :data="accountList" />
+            <Table  border :columns="columns" :data="accountList" :loading="loading" >
+                <div slot="loading">
+                    <Loading/>
+                </div>
+            </Table>
              <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
@@ -27,6 +31,7 @@
             class-name="no-footer"
             >
             <Awarded 
+             v-if="openAwarded"
              @cancel="cancelRole"
              @submit="submitRole"
             />
@@ -40,17 +45,21 @@
     import SearchFormInput from '~/components/SearchForm';
     import utils from '~/plugins/utils';
     import Awarded from './awarded';
+    import Loading from '~/components/Loading';
 
     export default {
         name: 'customerAssets',
         components:{
             SectionTitle,
             SearchFormInput,
-            Awarded
+            Awarded,
+            Loading
         },
         data () {
             return {
+            id:'',
             totalCount:0,
+            loading:false,
 
             params:{
                 page:1,
@@ -72,38 +81,28 @@
                     
                     {
                         title: '登录名',
-                        key: 'customerId',
+                        key: 'accountName',
                         align:'center',
                     },
                     {
                         title: '姓名',
-                        key: 'customerName',
+                        key: 'name',
                         align:'center',
                     },
                     {
                         title: '手机号',
-                        key: 'balance',
-                        align:'center',
-                        render:function(h,params){
-                            
-                            return h('span',{},utils.thousand((params.row.balance/100).toFixed(2)))
-                         }
+                        key: 'phone',
+                        align:'center'
                     },
                     {
                         title: '电子邮箱',
-                        key: 'deposit',
-                        align:'center',
-                        render:function(h,params){
-                            return h('span',{},utils.thousand((params.row.deposit/100).toFixed(2)))
-                         }
+                        key: 'email',
+                        align:'center'
                     },
                     {
                         title: '帐号角色',
-                        key: 'lockDeposit',
-                        align:'center',
-                        render:function(h,params){
-                            return h('span',{},utils.thousand((params.row.lockDeposit/100).toFixed(2)))
-                         }
+                        key: 'rolesString',
+                        align:'center'
                     },
                     {
                         title: '操作',
@@ -137,10 +136,12 @@
         },
         methods:{
             getListData(){
+                this.loading=true;
                 let params = Object.assign({},this.params)
                 this.$http.get('business-bill-list',params).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.loading=false;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -155,18 +156,31 @@
                 this.getListData()
             },
             searchSubmit(params){
+                // let newParams={
+                //     accountName:'',
+                //     realName:'',
+                //     mobilePhone:'',
+                //     email:''
+                // }
+                // for(var item in params){
+                //     newParams[item]=params[item];
+                // }
+                params.page=1;
                 this.params=Object.assign({},this.params,params);
                 this.getListData();
             },
-            showRole(){
+            showRole(param){
+                this.id=param.id;
                 this.cancelRole();
             },
             cancelRole(){
                 this.openAwarded=!this.openAwarded;
             },
             submitRole(params){
-                this.$http.get('add-business-role',params).then((res)=>{
+                params.id=this.id;
+                this.$http.post('add-business-role',params).then((res)=>{
                     this.cancelRole();
+                    this.getListData();
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

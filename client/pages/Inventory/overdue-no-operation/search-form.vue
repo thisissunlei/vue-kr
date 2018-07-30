@@ -5,7 +5,7 @@
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;"> 
-                        <Form-item label="商品名称" class='daily-form' prop="CustomerName">
+                        <Form-item label="商品名称" class='daily-form' prop="customerName">
                             <i-input 
                                 v-model="formItem.customerName" 
                                 placeholder="请输入商品名称"
@@ -17,11 +17,10 @@
                         <Form-item label="是否上传附件" class='daily-form'> 
                             <Select 
                                 v-model="formItem.hasAttachment" 
-                                placeholder="全部" 
+                                placeholder="请选择是否上传附件" 
                                 style="width: 200px"
-                                multiple
                             >
-                                <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in fileList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </Form-item>
 
@@ -65,11 +64,10 @@
                     <Form-item label="欠款金额" class='daily-form'> 
                         <Select 
                             v-model="formItem.payAll" 
-                            placeholder="全部" 
+                            placeholder="请输入金额" 
                             style="width: 200px"
-                            multiple
                         >
-                            <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in payList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
                     </Form-item>
 
@@ -120,6 +118,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 export default {
     props:{
        identify:{
@@ -130,7 +129,7 @@ export default {
     data() {
             //商品名称
             const validateName = (rule, value, callback) => {
-                if(value&&str.length>20){
+                if(value&&value.length>20){
                     callback('名称最多20长度');
                 }else{
                     callback();
@@ -147,27 +146,34 @@ export default {
                     callback();
                 }
             };
+            
 
             return { 
                 loading:false, 
                 formItem:{
-                    name:'',
-                    communityId:'',
+                    customerName:'',
+                    communityId:' ',
                     cityId:'',
                     overDaysMin:'',
-                    overDaysMax:'',   
+                    overDaysMax:'', 
+                    startDate:'',
+                    endDate:'',
+                    payAll:'',
+                    hasAttachment:''
                 },
                 communityList:[],
                 cityList:[],
-                inventoryList:[
-                    {value:'AVAILABLE',label:'未招商'},
-                    {value:'INVITING',label:'招商中'},
-                    {value:'RENTING',label:'已招商'},
-                    {value:'DISABLED',label:'不可招商'}
+                fileList:[
+                    {value:'1',label:'是'},
+                    {value:'0',label:'否'}
+                ],
+                payList:[
+                    {value:'0',label:'未付清'},
+                    {value:'1',label:'已付清'}
                 ],
                 formItemOld:{},
                 ruleInvestment: {
-                    name:[
+                    customerName:[
                         { validator: validateName, trigger: 'change' }
                     ],
                     overDaysMin: [
@@ -176,23 +182,34 @@ export default {
                     overDaysMax: [
                         { validator: validateTime, trigger: 'change' }
                     ]
-                }
+                },
+                num:0
             }
     },
     mounted(){
         this.getCityList();
-        var _this=this;
-        setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            _this.formItemOld=Object.assign({},this.formItem);
-        },500);
     },
     methods:{
         //社区接口
         getCommunityList(id){
+            let params=Object.assign({},this.$route.query);
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
-                this.formItem.communityId=res.data.length?res.data[0].id:'';
+                let len=res.data.length;
+                if(len&&len>1){
+                    this.communityList.unshift({id:' ',name:'全部社区'})
+                }
+                this.formItem.communityId=len?this.communityList[0].id:'';
+                this.formItemOld=Object.assign({},this.formItem);
+                if(params.communityId){
+                    this.formItem.cityId=params.cityId;
+                    this.formItem.communityId=params.communityId;
+                }
+
+                if(this.num==1){
+                    this.formItem = Object.assign({},this.formItem,this.$route.query);
+                    this.$emit('initData',this.formItem);
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -201,6 +218,7 @@ export default {
         },
         //城市接口
         getCityList(){
+            let params=Object.assign({},this.$route.query);
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data;
                 this.formItem.cityId=res.data.length?res.data[0].cityId:'';
@@ -229,6 +247,7 @@ export default {
         },
         //城市change事件
         cityChange(param){
+            this.num++;
             this.getCommunityList(param)
         }
     }

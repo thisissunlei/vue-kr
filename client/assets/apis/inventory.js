@@ -76,7 +76,7 @@ export default  {
     },
     //每日库存-平面图
     'getInventoryMap': {
-        url: '/api/krspace-finance-web/cmt/floor-graph/list',
+        url: '/song/api/krspace-finance-web/cmt/floor-graph/list',
         method: 'get'
     },
     // 即将进场
@@ -91,7 +91,7 @@ export default  {
     },
     //商品列表
     'getGoodsList': {
-        url: '/api/order/goods/list',
+        url: '/song/api/order/goods/list',
         method: 'get'
     },
     //商品库枚举

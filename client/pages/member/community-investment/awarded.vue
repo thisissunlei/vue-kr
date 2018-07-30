@@ -6,7 +6,7 @@
             placeholder="请选择角色"
             clearable
         >
-            <Option  v-for="item in roleList" :value="''+item.roleId"  :key="item.roleId" >{{ item.roleName }}</Option>
+            <Option  v-for="item in roleList" :value="''+item.id"  :key="item.id" >{{ item.name }}</Option>
         </Select>
         <div slot="footer" style="margin: 30px 0;text-align: center;">
                 <Button  type="primary" @click="submitRole">确认</Button>
@@ -32,7 +32,7 @@ export default {
     methods:{
        getDataList(){
             this.$http.get('get-business-role').then((res)=>{
-                this.roleList=res.data.items;
+                this.roleList=res.data;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

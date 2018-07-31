@@ -73,13 +73,6 @@
         incomeType: {},
         columns: [
           {
-            title: '合同编号',
-            key: 'contractNumber',
-            align: 'center',
-            width:120,
-            fixed:'left'
-          },
-          {
             title: '订单编号',
             key: 'coreBillNumber',
             align: 'center',
@@ -90,9 +83,21 @@
             title: 'OP系统社区编码',
             key: 'costCenterNumber',
             align: 'center',
+            fixed:'left',
             width:120,
           },
           {
+            title: '业务日期',
+            key: 'bizDate',
+            align: 'center',
+            fixed:'left',
+            width:170,
+            render(tag, params){
+                let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
+                return time;
+            }
+          },
+           {
             title: '金额',
             key: 'amount',
             align: 'center',
@@ -102,14 +107,10 @@
                          }
           },
           {
-            title: '业务日期',
-            key: 'bizDate',
+            title: '合同编号',
+            key: 'contractNumber',
             align: 'center',
-            width:170,
-            render(tag, params){
-                let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
-                return time;
-            }
+            width:120,
           },
           {
             title: '业务员姓名',
@@ -181,7 +182,8 @@
             title: '备注',
             key: 'remark',
             align: 'center',
-            width:200,
+            fixed:'right',
+            width:250,
             
           }
         ]

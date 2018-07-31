@@ -127,16 +127,17 @@ export default {
                     title: '状态',
                     key: 'syncStatus',
                     align:'center',
-                   
-                    render:(h, params)=>{
-                         let ile= params.row.syncStatus;
-                         let nes='';
-                         nes = ile === 'NOT_SYNC'?'失败':'成功';
-                          return h('div',{
-                            
-                          },nes)
-
-                    }
+                    render: (h, params) => {
+                    return h("div", {
+                        style: {
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        display:'inline-block',
+                        backgroundColor: params.row.syncStatus == 'NOT_SYNC' ? 'red' : "green"
+                        }
+                    }, '')
+                    },
                 },
                 {
                     title: '同步时间',
@@ -162,13 +163,13 @@ export default {
                     title: '传输结果数',
                     key: 'successDataCount',
                     align:'center',
-                   width:100,
+                    width:100,
                 },
                 {
                     title: '数据类型',
                     key: 'syncDataType',
                     align:'center',
-             //       width:100,
+             //      width:100,
                     render:(h, params)=>{
                         let ile= params.row.syncDataType;
                         let nes='';

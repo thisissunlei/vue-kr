@@ -5,8 +5,8 @@
    <div class="button-right">
     <Select v-model="configStatus" style="width:200px" placeholder="状态">
       <Option  :value="''" >全部状态</Option>
-      <Option  :value="'NO'" >打开</Option>
-      <Option  :value="'OPEN'" >关闭</Option>
+      <Option  :value="'OPEN'" >打开</Option>
+      <Option  :value="'NO'" >关闭</Option>
 
       </Select>
     <Input v-model="customerName" placeholder="按客户名称检索" style="width: 200px;margin:0px 10px;"> </Input>

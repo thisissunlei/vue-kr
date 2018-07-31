@@ -1,4 +1,5 @@
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 //原始应收数据
 function originalAccountsCol(){
     
@@ -7,7 +8,9 @@ function originalAccountsCol(){
             title: '日租金',
             key: 'amount',
             align:'center',
-            
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.amount))
+             }
         },
         {
             title: '账单id',

@@ -1,4 +1,5 @@
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 //原始回款数据
 function originalReceivableCol(){
     return [
@@ -6,7 +7,9 @@ function originalReceivableCol(){
             title: '日租金',
             key: 'amount',
             align:'center',
-            
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.amount))
+             }
         },
         {
             title: '所在社区',

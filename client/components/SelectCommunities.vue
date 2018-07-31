@@ -1,6 +1,6 @@
 <template>
     <div class="com-select-community">
-        <Select v-model="models" clearable filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
+        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
             <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -13,20 +13,12 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:["onchange","test","value","disabled","multiple"],
+        props:["onchange","test","value","disabled"],
 
         // props:{
         //     onchange:Function,
         //     test:Object,
         //     value:String,
-        //     multiple:{
-        //         type:Boolean,
-        //         default:false
-        //     },
-        //     disabled:{
-        //         type:Boolean,
-        //         default:false
-        //     },
         // },
         data () {
             return {
@@ -34,8 +26,7 @@ import http from '~/plugins/http.js';
                 loading1:false,
                 options1:[],
                 labelInValue:true,
-                clearable:true,
-                models:[]
+                clearable:true
             };
         },
 

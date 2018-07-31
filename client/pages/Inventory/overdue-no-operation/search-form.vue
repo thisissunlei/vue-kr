@@ -26,34 +26,8 @@
 
                         <Form-item class="priceForm community-form" style="margin-right: 20px;">
                             <span class="attract-font" style="margin-right:27px;">社<span style="display:inline-block;width:26px;"></span>区</span>
-                            <Select 
-                                v-model="formItem.cityId" 
-                                placeholder="请输入城市" 
-                                style="width: 90px;margin-right:20px;"
-                                @on-change="cityChange"
-                            >
-                                <Option 
-                                    v-for="item in cityList" 
-                                    :value="item.cityId" 
-                                    :key="item.cityId"
-                                >
-                                    {{ item.cityName }}
-                                </Option>
-                            </Select>
-                            <Select 
-                                    v-model="formItem.communityId" 
-                                    placeholder="请输入社区" 
-                                    style="width: 174px;"
-                                >
-                                    <Option 
-                                        v-for="item in communityList" 
-                                        :value="item.id" 
-                                        :key="item.id"
-                                    >
-                                        {{ item.name }}
-                                    </Option>
-                            </Select>
-                           
+                            <div style="display:inline-block;"><SelectCity v-model="formItem.cityId" :styles="{width:90+'px',marginRight:'20px'}"/></div>
+                            <div style="display:inline-block;"><SelectCommunity v-model="formItem.communityId" :params="cityParams" :styles="{width:174+'px'}" :isRouteParams="$route.query" @init="communityInit"/></div> 
                         </Form-item>
                         <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
@@ -92,7 +66,7 @@
 
                     <div class="daily-form" style="margin-right:22px;">
                         <span class="attract-font" style="padding-top:7px;margin-right:16px;">服务开始日</span>
-                        <Form-item  class="priceForm">
+                        <Form-item  class="priceForm" prop="startDate">
                             <DatePicker 
                                 v-model="formItem.startDate" 
                                 placeholder="请输入开始日期"
@@ -100,7 +74,7 @@
                             />
                         </Form-item>
                         <span class="attract-line">至</span>
-                        <Form-item  class="priceForm">
+                        <Form-item  class="priceForm" prop="endDate">
                             <DatePicker 
                                     v-model="formItem.endDate" 
                                     placeholder="请输入结束日期"
@@ -119,7 +93,13 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
+import SelectCity from '~/components/SelectCommon/SelectCity';
+import SelectCommunity from '~/components/SelectCommon/SelectCommunity';
 export default {
+    components:{
+      SelectCity,
+      SelectCommunity
+    },
     props:{
        identify:{
            type:String,
@@ -146,10 +126,22 @@ export default {
                     callback();
                 }
             };
+
+            //租期天数
+            const validateDate = (rule, value, callback) => {
+                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            };
             
 
             return { 
                 loading:false, 
+                cityParams:{
+                    cityId:''
+                },
                 formItem:{
                     customerName:'',
                     communityId:' ',
@@ -161,6 +153,7 @@ export default {
                     payAll:'',
                     hasAttachment:''
                 },
+                formItemOld:{},
                 communityList:[],
                 cityList:[],
                 fileList:[
@@ -171,7 +164,6 @@ export default {
                     {value:'0',label:'未付清'},
                     {value:'1',label:'已付清'}
                 ],
-                formItemOld:{},
                 ruleInvestment: {
                     customerName:[
                         { validator: validateName, trigger: 'change' }
@@ -181,53 +173,48 @@ export default {
                     ],
                     overDaysMax: [
                         { validator: validateTime, trigger: 'change' }
+                    ],
+                    startDate:[
+                        { validator: validateDate, trigger: 'change' }
+                    ],
+                    endDate:[
+                        { validator: validateDate, trigger: 'change' }
                     ]
                 },
-                num:0
+                cityNum:0,
+                communityNum:0
             }
     },
     mounted(){
-        this.getCityList();
+        this.formItemOld=Object.assign({},this.formItem);
+        let rou=this.$route.query;
+        if(rou.cityId){
+            this.formItem=Object.assign({},rou);
+        }
+    },
+    computed: {
+      cityId() {
+    　　　　return this.formItem.cityId
+    　},
+      communityId(){
+          return this.formItem.communityId
+      }
+    },
+    watch:{
+      cityId:function(val){
+          this.cityParams=Object.assign({},{cityId:val})
+      },
+      communityId:function(val) {
+          let rou=this.$route.query;
+          this.communityNum++;
+          if(this.communityNum==1){
+              this.$emit('initData',this.formItem);
+          }
+      }
     },
     methods:{
-        //社区接口
-        getCommunityList(id){
-            let params=Object.assign({},this.$route.query);
-            this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
-                let len=res.data.length;
-                if(len&&len>1){
-                    this.communityList.unshift({id:' ',name:'全部社区'})
-                }  
-                this.formItem.communityId=len?this.communityList[0].id:'';
-                this.formItemOld=Object.assign({},this.formItem);
-                if(params.communityId){
-                    this.formItem.communityId=params.communityId;
-                }
-                if(this.num==1){
-                    this.formItem = Object.assign({},this.formItem,this.$route.query);
-                    this.$emit('initData',this.formItem);
-                }
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
-        //城市接口
-        getCityList(){
-            let params=Object.assign({},this.$route.query);
-            this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data;
-                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
-                if(params.cityId){
-                    this.formItem.cityId =params.cityId;
-                }
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
+        communityInit(params){
+            this.formItemOld=Object.assign({},this.formItemOld,params);
         },
         //搜索
         searchClick(){
@@ -239,20 +226,12 @@ export default {
         },
         //清除
         clearClick(){
-            console.log('[----',this.formItemOld);
             this.formItem=Object.assign({},this.formItemOld);
-            console.log('cle---',this.formItem);
             this.$emit('clearClick',this.formItem);
         },
         //回车
         onKeyEnter(){
             this.searchClick();
-        },
-        //城市change事件
-        cityChange(param){
-            this.num++;
-            console.log('oamr---',param);
-            this.getCommunityList(param)
         }
     }
 }

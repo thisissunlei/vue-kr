@@ -176,6 +176,11 @@ export default  {
     'goods-detail': {
         url: '/api/krspace-finance-web/cmt/goods/detail',
         method: 'get'
+    },
+    //合同逾期未操作
+    'contract-no-operation': {
+        url: '/song/api/order/operation/ovedue/contract/list',
+        method: 'get'
     }
   }
   

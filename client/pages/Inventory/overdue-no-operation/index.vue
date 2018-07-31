@@ -222,10 +222,13 @@ export default {
             }
       },
       initData(formItem){
-         this.tabForms=Object.assign({},formItem,this.tabForms);
+         formItem.page=1;
+         formItem.pageSize=100;
+         this.tabForms=Object.assign({},formItem);
          this.getListData(this.tabForms);
       },
       getListData(params){
+           //contract-no-operation
            this.loading=true;
            this.$http.get('community-investment-list', params).then((response)=>{
                 this.totalCount=response.data.totalCount;

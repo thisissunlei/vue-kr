@@ -59,7 +59,7 @@
                 ref="upload"
                 name="file"
                 :before-upload="handleUpload"
-                action="/api/krspace-pay/pay-record/importBankFlow"
+                action="/api/order/csr-clue/impot"
                 :with-credentials="IsCookie"
             >
                 <div class="u-upload-content">
@@ -446,6 +446,8 @@ var layoutScrollHeight=0;
             uploadSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
+                data.isPut = true;
+                console.log(data,"===",this.file)
                 this.$http.post('impot-csr-clue', data).then((res)=>{
                     this.showImport = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});

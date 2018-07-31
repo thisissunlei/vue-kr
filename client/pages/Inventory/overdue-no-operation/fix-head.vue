@@ -49,7 +49,7 @@
             width:110px;
         }
         &:nth-child(9){
-            width:130px;
+            width:135px;
         }
         &:nth-child(1){
             width:100%;

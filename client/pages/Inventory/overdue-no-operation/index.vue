@@ -97,7 +97,7 @@ export default {
                 },
                 {
                     title: '客户名称',
-                    key: 'customName',
+                    key: 'customerName',
                     align:'center'
                 },
                 {
@@ -129,16 +129,16 @@ export default {
                     width:90,
                 },
                 {
-                    title: '首付款欠款金额',
+                    title: '首付款欠款情况',
                     key: 'firstServiceFeeDebt',
                     align:'right',
                     width:100,
                     render(tag, params){
-                        let file=params.row.firstServiceFeeDebt;
-                        let ren=file=='0'?'未付清':(file=='1'?'已付清':'-');
+                        let file=params.row.payAll;
+                        let ren=file?'已付清':'未支付';
                         return tag('span',{
                             style:{
-                                color:file=='0'?'red':''
+                                color:file?'':'red'
                             }
                         },ren)
                     }
@@ -158,10 +158,10 @@ export default {
                     }
                 },
                 {
-                    title: '逾期时长(服务开始日)',
+                    title: '逾期时长(服务开始日起)',
                     key: 'overDays',
                     align:'center',
-                    width:130,
+                    width:135,
                     render(tag, params){
                         let file=params.row.overDays;
                         let end=file?file+'天':'-';
@@ -233,7 +233,7 @@ export default {
            this.loading=true;
            this.$http.get('contract-no-operation', params).then((response)=>{
                 this.totalCount=response.data.totalCount;
-                this.attractData=response.data;
+                this.attractData=response.data.items;
                 this.loading=false;
             }).catch((error)=>{
                 this.openMessage=true;

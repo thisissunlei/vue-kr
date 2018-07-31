@@ -7,7 +7,8 @@
             <p>③  日均上线会员数（当周）：已选中日期所在周的平均值（当周登录APP会员总数/截止该日当周总天数）；</p>
             <p>④  同比前周：当周日均上线会员数与上周7天日均上线会员数的浮动值；</p>
          </IconTip>
-         <div class="u-search">
+         <div :class="[isFixed?'u-search-fixed':'','u-search']" >
+             <Button  style="float:left;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
              <DatePicker 
                 class="u-date-right" 
                 type="date" 
@@ -20,7 +21,6 @@
          </div>
          <div class="u-table">
             <Table border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
-            <Button  style="margin-top:30px;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
          </div> 
     </div>
 </template>
@@ -48,6 +48,7 @@ export default {
             tabParams:{
                dataDate:'',
             },
+            isFixed:false,
             Columns:[
               {
                   title: '社区',
@@ -142,6 +143,20 @@ export default {
     mounted(){
          this.tabParams.dataDate=this.getDay(-1, '-');
          this.getTableData(this.tabParams);
+        //   var _this = this;
+        //     window.onscroll = function(){ 
+        //        let top= document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+               
+        //        console.log('top----->>>>',top)
+            
+        //         if(top> 100 ){
+        //             _this.isFixed=true;
+        //         }else{
+        //             _this.isFixed=false;
+                    
+        //         }
+              
+        //    }
     },
     methods:{
         rowClassName(row,index){
@@ -237,12 +252,19 @@ export default {
     }
     .u-date-right{
       float:right;
-      margin-top:14px;
       width: 200px;
   }
   .u-table-row{
       background: rgba(255,157,0,0.30);
   }
+  .u-search-fixed{
+       width:100%;
+       position:fixed;
+       top:0;
+       left:0;
+       z-index:777;
+  }
+  
   
 }
 

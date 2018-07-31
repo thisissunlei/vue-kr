@@ -370,30 +370,30 @@
           <div class="line-one">
             <div class="box" style="flex:1/2">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('MEETING')">
+                <div class="header-left" @click="openOverNo()">
                   <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">
                     合同逾期未操作 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>
-                <div class="header-right" v-if="OverdueMeeting.length">
-                  <span :style="OverdueMeeting[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1Str}}</span><span style="font-size:14px">笔 </span>
+                <div class="header-right" v-if="OverdueOperationList.length">
+                  <span :style="overdueNo?'color: #FF6868;':''">{{overdueNo}}</span><span style="font-size:14px">份</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
+              <div class="contents" style="text-align:center" v-if="!OverdueOperationList.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">没有逾期未生效或未作废的合同</div>
               </div>
-              <div class="contents" v-if="OverdueMeeting.length">
+              <div class="contents" v-if="OverdueOperationList.length">
                 <ul >
-                   <li v-for="item in OverdueMeeting" :key="item.id">
-                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
-                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
+                   <li v-for="item in OverdueOperationList" :key="item.id">
+                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openOverNoDetail(item)">{{item.serialNumber}}</div>
                        </Tooltip>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
-                      <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
+                      <span class="table-cell" :style="item.payAll?'text-align:right;':'text-align:right;color:red;'">{{item.payAll?'已付清':'未支付'}}</span>
+                      <span class="table-cell" style="text-align:right">{{item.overDays?'逾'+item.overDays+'天':'-'}}</span>
                   </li>        
                 </ul>
               </div>
@@ -432,13 +432,15 @@ export default {
        list:[],
        DueList:[],
        unpaidList:[],
+       OverdueOperationList:[],
        OverduePrint:[],
        OverdueStation:[],
        OverdueMeeting:[],
        appointment:[],
        nappointment:[],
        pageData:{},
-       visitNum:0
+       visitNum:0,
+       overdueNo:''
      }
   },
   components:{
@@ -545,6 +547,17 @@ export default {
 				this.$http.get('unpaidList',data).then((res)=>{         
             console.log('起租未付',res.data)
              this.unpaidList=res.data.items;
+				}).catch((err)=>{
+					this.$Notice.error({
+						title:err.message
+					});
+				})
+      },
+      //合同逾期未操作
+      getOverdueOperation(data){ 
+				this.$http.get('contract-no-operation',data).then((res)=>{         
+             this.overdueNo=res.data.totalCount;
+             this.OverdueOperationList=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -660,6 +673,7 @@ export default {
         this.getComingList(data);
         this.getDueList(data);
         this.getunpaidList(data);
+        this.getOverdueOperation(data);
         //this.getAnappointmentListList();
         var obj=Object.assign({},data,{startTime:dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date())})
         this.getAnappointmentList(obj);
@@ -690,6 +704,12 @@ export default {
     },
     openDetail(id){
        window.open('/bill/list/detail/'+id,'_blank')
+    },
+    openOverNo(){
+       window.open('/inventory/overdue-no-operation?pageSize=100&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
+    },
+    openOverNoDetail(item){
+       window.open('/order-center/contract-manage/contract-list/list?serialNumber='+item.serialNumber,'_blank')
     }
   }
  }

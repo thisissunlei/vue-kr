@@ -179,7 +179,7 @@ export default  {
     },
     //合同逾期未操作
     'contract-no-operation': {
-        url: '/song/api/order/operation/ovedue/contract/list',
+        url: '/song/api/krspace-op-web/operation/ovedue/contract/list',
         method: 'get'
     }
   }

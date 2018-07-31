@@ -45,6 +45,7 @@ import utils from '~/plugins/utils';
 import SlotHead from './fix-head';
 import Buttons from '~/components/Buttons';
 import SectionTitle from '~/components/SectionTitle';
+import dateUtils from 'vue-dateutils';
 
 export default {
     components:{
@@ -75,21 +76,22 @@ export default {
                     title: '合同编号',
                     key: 'serialNumber',
                     align:'center',
-                    render(tag, params){
+                    render:(tag, params)=>{
                         let time=params.row.serialNumber;
-                        if(time){
+                        if(!time){
                             return tag('span','*****')
                         }else{
                             return tag('span',{
                                     style:{
-                                        color:'#499df1'
+                                        color:'#499df1',
+                                        cursor:'pointer'
                                     },
                                     on: {
                                         click: () => {
                                             this.jumpView(params.row)
                                         }
                                     }
-                            })
+                            },time)
                         }
                     }
                 },
@@ -102,7 +104,7 @@ export default {
                     title: '合同类型',
                     key: 'contractType',
                     align:'center',
-                    width:90,
+                    width:100,
                 },
                 {
                     title: '销售员',
@@ -228,11 +230,10 @@ export default {
          this.getListData(this.tabForms);
       },
       getListData(params){
-           //contract-no-operation
            this.loading=true;
-           this.$http.get('community-investment-list', params).then((response)=>{
+           this.$http.get('contract-no-operation', params).then((response)=>{
                 this.totalCount=response.data.totalCount;
-                this.attractData=response.data.items;
+                this.attractData=response.data;
                 this.loading=false;
             }).catch((error)=>{
                 this.openMessage=true;

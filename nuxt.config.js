@@ -21,6 +21,9 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
+    script: [
+      { src: pluginsDomain + '/plugins/nav/nav.1.0.0.js' }
+    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: pluginsDomain + '/plugins/public/images/favicon.ico' }
     ]

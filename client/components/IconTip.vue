@@ -1,4 +1,3 @@
-
 <template>
 <div class="ui-icon-tip">
 	<div class="u-icon"></div>

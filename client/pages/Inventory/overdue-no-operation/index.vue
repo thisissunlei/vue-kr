@@ -78,7 +78,8 @@ export default {
                     align:'center',
                     render:(tag, params)=>{
                         let time=params.row.serialNumber;
-                        if(!time){
+                        let checkAction=params.row.hasAuth;
+                        if(!checkAction){
                             return tag('span','*****')
                         }else{
                             return tag('span',{

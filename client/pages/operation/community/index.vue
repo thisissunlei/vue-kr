@@ -314,9 +314,10 @@
               <div class="contents" v-if="OverdueOperationList.length">
                 <ul >
                    <li v-for="item in OverdueOperationList" :key="item.id">
-                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell">      
+                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell" v-if="item.hasAuth">      
                          <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openOverNoDetail(item)">{{item.serialNumber}}</div>
                        </Tooltip>
+                          <div v-if="!item.hasAuth" class="ellipsis">*****</div>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>

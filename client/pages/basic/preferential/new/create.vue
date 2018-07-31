@@ -1,12 +1,12 @@
 <template>
     <div class='discount-set-from-panel'>
         <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent" class='discount-set-from'>
-            <FormItem label="适用社区" prop="community">
-                <selectCommunities v-model="formItem.community"></selectCommunities>
+            <FormItem label="适用社区" prop="communityId">
+                <selectCommunities v-model="formItem.communityId"></selectCommunities>
             </FormItem>
             <FormItem label="优惠类型" prop="discountType">
                 <Select v-model="formItem.discountType" @on-change='handleSelectDiscountTypeChange'>
-                    <Option v-for="(option, index) in discountTypeList" :value="option.value" :key="option.value">{{option.label}}</Option>
+                    <Option v-for="(option, index) in discountTypeList" :value="option.value" :key="option.value">{{option.desc}}</Option>
                 </Select>
             </FormItem>
             <FormItem label="折扣期间" class="bill-search" prop="time">
@@ -20,14 +20,10 @@
                 <span style='padding:0 14px'>赠</span>
                 <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" />
             </FormItem>
-            <!-- <FormItem label="折扣配置" class="form-item-discount" prop="discountSet">
-                <SelectDiscount v-show="!showRent" :roleList='roleList' v-model="formItem.discountSet.discountList"></SelectDiscount>
-                <RentFree v-show="showRent" :roleList='roleList' v-model="formItem.discountSet.rentFreeList"></RentFree>
-            </FormItem> -->
-            <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
+            <FormItem label="折扣配置" v-if="!showRent" class="form-item-discount" prop="discountList">
                 <SelectDiscount :roleList='roleList' v-model="formItem.discountList"></SelectDiscount>
             </FormItem>
-            <FormItem label="折扣配置" v-show="showRent" class="form-item-discount" prop="rentFreeList">
+            <FormItem label="折扣配置" v-if="showRent" class="form-item-discount" prop="rentFreeList">
                 <RentFree :roleList='roleList' v-model="formItem.rentFreeList"></RentFree>
             </FormItem>
             <FormItem label="备注" class='form-item-remark'>
@@ -47,6 +43,7 @@ import CreateSale from './createSale.vue';
 import selectCommunities from './SelectCommunities.vue'
 import RentFree from './rentFree.vue'
 import SelectDiscount from './discountSelect.vue'
+import dateUtils from 'vue-dateutils';
 
 export default {
     components: {
@@ -102,7 +99,7 @@ export default {
         const validateDiscountList = (rule, value, callback) => {
             if (value.length == 0) {
                 callback('至少勾选一个级别')
-            } else if (checkDiscountExtexnd(value)) {
+            } else if (!checkDiscountExtexnd(value)) {
                 callback('折扣输入有误，应该大于0小于10')
             } else if (checkDiscount(value)) {
                 callback()
@@ -112,7 +109,7 @@ export default {
         };
         var checkDiscountExtexnd = function (obj) {
             let values = Object.values(obj).map(key => Number(key))
-            let arr = values.filter(item => item < 10 && item > 0)
+            let arr = values.filter(item => item > 10 || item <= 0)
             if (arr == null || arr.length > 0) {
                 return false
             }
@@ -130,7 +127,6 @@ export default {
             if (maxLevel + 1 - minLevel != keys.length) {
                 return false
             } else {
-                debugger
                 let i = 0;
                 for (i = 0; i < keys.length; i++) {
                     if (i != keys.length - 1) {
@@ -187,7 +183,7 @@ export default {
                 scheme: {},
             },
             ruleCustom: {
-                community: [
+                communityId: [
                     { required: true, validator: validateCummity, trigger: 'change' }
                 ],
                 discountType: [
@@ -215,14 +211,20 @@ export default {
         }
     },
     mounted() {
-        this.formItem.discountType = 1
+        this.formItem.discountType = 'DISCOUNT'
+        this.getDiscountTypeList();
         this.getRoleRightList();
     },
     methods: {
         getDiscountTypeList() {
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferType'
+                enmuKey: 'com.krspace.order.api.enums.discount.DiscountType'
             }).then((r) => {
+                let data = r.data;
+                let arr = data.filter(item => item.value != 'BEFORE_FREE')
+                if (arr != null && arr.length > 0) {
+                    this.discountTypeList = [].concat(arr)
+                }
                 // this.discountTypeList = [].concat({ value: 'ALL', desc: '全部' }, r.data);
             }).catch((e) => {
                 this.$Notice.error({
@@ -231,38 +233,93 @@ export default {
             })
         },
         getRoleRightList() {
-            // this.$http.get('get-discount-rights', '').then((r) => {
-            //     let data = r.data;
-            //     let list = [];
-            //     let keys = Object.keys(data);
-            //     keys.map((key, index) => {
-            //         if (data.hasOwnProperty(key)) {
-            //             let obj = {}
-            //             obj.name = data[key];
-            //             obj.level = index + 1;
-            //             obj.id == key;
-            //             obj.discount = ''
-            //             list.push(obj)
-            //         }
-            //     })
-            //     this.roleList = list
-            // }).catch((e) => {
-            //     this.$Notice.error({
-            //         title: e.message
-            //     });
-            // })
+            this.$http.get('get-discount-rights', '').then((r) => {
+                let data = r.data;
+                let list = [];
+                let keys = Object.keys(data);
+                keys.map((key, index) => {
+                    if (data.hasOwnProperty(key)) {
+                        let obj = {}
+                        obj.name = data[key];
+                        obj.level = index + 1;
+                        obj.id = key;
+                        obj.discount = ''
+                        list.push(obj)
+                    }
+                })
+                this.roleList = list
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
         },
         handleSelectDiscountTypeChange(val) {
-            if (val === 1)
+            if (val === 'DISCOUNT')
                 this.showRent = false;
             else
                 this.showRent = true;
         },
         handleSubmit(formItem) {
             console.log(formItem)
-        },
-        handleCancle() {
 
+            // communityId	社区id		
+            // discountType	优惠类型		
+            // endDate	结束时间		
+            // present	赠送		
+            // remark	备注		
+            // rightDetail		string	[{"rightType":"HQ_MANAGER","discount":1.1}]
+            // startDate	开始时间		
+            // target
+
+            this.$refs['formContent'].validate((valid) => {
+                if (valid) {
+                    this.doSubmit(formItem);
+                }
+            })
+        },
+        doSubmit(formItem) {
+            let { communityId, discountType, time: { startDate, endDate }, remark } = formItem
+            let parmas = { communityId, discountType, startDate, endDate, remark }
+            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD", new Date(parmas.startDate)) : ''
+            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD", new Date(parmas.endDate)) : ''
+            if (this.showRent) {
+                parmas.target = formItem.target
+                parmas.present = formItem.present
+                parmas.rightDetail = JSON.stringify(formItem.rentFreeList)
+            }
+            else {
+                let res = {};
+
+                let obj = formItem.discountList
+                Object.keys(obj).map(item => {
+                    let temp = this.roleList.filter(r => {
+                        return r.level == Number(item)
+                    })
+                    if (temp != null && temp.length > 0) {
+                        res[temp[0].id] = obj[item]
+                    }
+                })
+                parmas.rightDetail = res;
+            }
+
+            // post-add-discount
+            debugger
+            this.$http.post('post-add-discount', parmas).then((response) => {
+                this.$Message.success('添加成功');
+                setTimeout(() => {
+                    window.close()
+                    window.opener.location.reload()
+                }, 1000)
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: error.message
+                });
+            })
+        },
+
+        handleCancle() {
+            this.$emit('closeAddModal')
         }
 
     }

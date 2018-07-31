@@ -27,12 +27,14 @@ export default {
     },
     // 优惠列表接口
     "get-discont-list": {
-        url: "/api/krspace-op-web/cmt/discount/list",
+        // url: "/api/krspace-op-web/cmt/discount/list",
+        url: "/ben/cmt/discount/list",
         method: "get"
     },
     //添加折扣配置
     "post-add-discount": {
-        url: "/api/krspace-op-web/cmt/discount/add",
+        // url: "/api/krspace-op-web/cmt/discount/add",
+        url: "/ben/cmt/discount/add",
         method: "post"
     },
     //获取级别权限类型
@@ -41,4 +43,9 @@ export default {
         url: "/ben/cmt/discount/getRight",
         method: "get"
     },
+    "put-stop-discount": {
+        // url: "/ben/api/krspace-op-web/cmt/discount/getRight",
+        url: "/ben/cmt/discount/stop",
+        method: "put"
+    }
 };

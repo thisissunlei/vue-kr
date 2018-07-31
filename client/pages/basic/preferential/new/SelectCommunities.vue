@@ -41,8 +41,8 @@ export default {
             default: false
         },
         value: {
-            type: Array,
-            default: () => []
+            type: [Array,String]
+           
         }
     },
     data() {

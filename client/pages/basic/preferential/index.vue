@@ -13,7 +13,7 @@
             <span style="padding:0 10px"></span>
             <div style="display:inline-block;width:400px;">
                 <CheckboxGroup style="font-size:12px" v-model="status" @on-change="checkAllGroupChange">状态：
-                    <Checkbox v-for='(option, index) in stateList' :key='option.value' :label="option.value">{{option.label}}</Checkbox>
+                    <Checkbox v-for='(option, index) in stateList' :key='option.value' :label="option.value">{{option.desc}}</Checkbox>
                 </CheckboxGroup>
             </div>
             <div class='u-create'>
@@ -32,14 +32,13 @@
 
         <!-- 新建 -->
         <Modal v-model="openCreate" id='create-discount-modal' title="添加优惠" ok-text="确定" cancel-text="取消" width="500" :styles="{top: '20px'}">
-            <Create ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData" editStatus="create" />
-
+            <Create ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData" editStatus="create" @closeAddModal="openCreate=false"/>
             <div slot="footer">
             </div>
         </Modal>
         <!-- 编辑 -->
-        <Modal v-model="openEdit" title="编辑参数" ok-text="确定" cancel-text="取消" width="660" :styles="{top: '20px'}">
-
+        <Modal v-model="openEdit" title="确定要停用?" ok-text="确定" cancel-text="取消" width="300" :styles="{top: '20px'}">
+            <div style='font-size:14px'>停用将让此优惠立即失效，不可撤销。</div>
             <div slot="footer">
                 <Button type="primary" @click="editSubmit('formContent')">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>
@@ -70,6 +69,7 @@ export default {
     },
     data() {
         return {
+            currentID: '',
             status: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
             communityList: [],
@@ -96,41 +96,60 @@ export default {
             columns: [
                 {
                     title: '优惠方案',
-                    key: 'descName',
+                    key: 'discountScheme',
                     align: 'center',
                 },
                 {
                     title: '优惠类型',
-                    key: 'name',
-                    align: 'center'
+                    key: 'discountType',
+                    align: 'center',
+                    render: (h, params) => {
+                        let str = ''
+                        if (params.row.discountType == 'DISCOUNT') {
+                            str = '折扣'
+                        } else if (params.row.discountType == 'AFTER_FREE') {
+                            str = '后免租'
+                        }
+                        return h('span', str)
+                    }
                 },
                 {
                     title: '社区名称',
-                    key: 'cmtName',
+                    key: 'communityName',
                     align: 'center'
                 },
                 {
                     title: '有效期开始',
-                    key: 'validStart',
+                    key: 'startDate',
                     align: 'center',
                     render: (h, params) => {
-                        let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.validStart))
+                        let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate))
                         return h('div', date)
                     }
                 },
                 {
                     title: '有效期结束',
-                    key: 'validEnd',
+                    key: 'endDate',
                     align: 'center',
                     render: (h, params) => {
-                        let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.validEnd))
+                        let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate))
                         return h('div', date)
                     }
                 },
                 {
                     title: '权限',
-                    key: 'cmtName',
-                    align: 'center'
+                    key: 'rightContent',
+                    align: 'center',
+                    render: (h, params) => {
+                        let lines = [];
+                        let content = params.row.rightContent.split(';')
+                        content.map(item => {
+                            lines.push(
+                                h('p', item)
+                            )
+                        })
+                        return h('div', lines)
+                    }
                 },
                 {
                     title: '创建日期',
@@ -143,7 +162,7 @@ export default {
                 },
                 {
                     title: '创建人',
-                    key: 'username',
+                    key: 'createrName',
                     align: 'center',
                 },
                 {
@@ -153,15 +172,17 @@ export default {
                 },
                 {
                     title: '状态',
-                    key: 'validEnd',
+                    key: 'statusName',
                     align: 'center',
                     render: (h, params) => {
-                        let today = new Date().getTime();
-                        let result;
                         let style;
-                        result = today > (params && params.row.validEnd) ? '失效' : '有效';
-                        if (result === '失效') {
+                        let result = params.row.statusName
+                        if (result === '已失效') {
                             style = 'color: red'
+                        } else if (result === '生效中') {
+                            style = 'color: #495060'
+                        } else if (result === '未开始') {
+                            style = 'color: green'
                         }
                         return h('span', { style: style }, result)
                     }
@@ -172,10 +193,8 @@ export default {
                     align: 'center',
                     width: 110,
                     render: (h, params) => {
-                        let today = new Date().getTime();
-                        let result;
+                        let result = params.row.isStop;
                         let style;
-                        result = today > (params && params.row.validEnd)
                         if (result) {
                             return h('div', '-')
                         } else {
@@ -216,21 +235,18 @@ export default {
     },
     methods: {
         getStateList() {
-            let list = [
-                {
-                    label: '未开始',
-                    value: 0
-                },
-                {
-                    label: '生效中',
-                    value: 1
-                },
-                {
-                    label: '已失效',
-                    value: 2
-                }
-            ]
-            this.stateList = [].concat(list)
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.order.api.enums.discount.DiscountStatus'
+            }).then((r) => {
+                let data = r.data;
+                this.stateList = [].concat(data)
+                // this.discountTypeList = [].concat({ value: 'ALL', desc: '全部' }, r.data);
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+
         },
         getCmtList() {
             this.$http.get('join-bill-community', '').then((response) => {
@@ -253,13 +269,13 @@ export default {
             })
         },
         checkAllGroupChange() {
-            let params = Object.assign({}, this.params, { status: JSON.stringify(this.status) }, { communityId: this.communityId })
+            let params = Object.assign({}, this.params, { statusList:this.status.join(',')}, { communityId: this.communityId })
             this.getTableData(params)
         },
         getTableData(params) {
             // 
-            // this.$http.get('get-discont-list', params).then((res) => {
-            this.$http.get('get-sale-list', params).then((res) => {
+            this.$http.get('get-discont-list', params).then((res) => {
+                // this.$http.get('get-sale-list', params).then((res) => {
                 this.tableData = res.data.items;
                 this.totalCount = res.data.totalCount;
             }).catch((err) => {
@@ -315,44 +331,17 @@ export default {
                 }
             })
         },
-        editSubmit(name) {
-            var newPageRefs = this.$refs.fromFieldNewPage.$refs;
-            var isSubmit = true;
-            newPageRefs[name].validate((valid, data) => {
-                if (!valid) {
+        editSubmit() {
+            this.$http.put('put-stop-discount', { id: this.currentID }).then((res) => {
+                this.openEdit = false;
+                this.$Message.success('操作成功');
+                this.getTableData('')
 
-                    isSubmit = false
-                } else {
-                    this.parameterData.enableFlag = this.parameterData.flag;
-
-                    // 校验json表单
-                    if (this.parameterData.paramType == 'JSON') {
-                        for (let key in this.parameterData.paramVal) {
-                            if (!key || !this.parameterData.paramVal[key]) {
-                                isSubmit = false;
-                            }
-                        }
-                    }
-                    if (!isSubmit) {
-                        this.$Notice.error({
-                            title: '请填写完 参数'
-                        });
-                        return;
-                    }
-
-                    this.parameterData.items = '';
-                    this.parameterData.paramVal = (this.parameterData.paramType == 'JSON' && typeof this.parameterData.paramVal != 'string') ? JSON.stringify(this.parameterData.paramVal) : this.parameterData.paramVal
-
-                    this.$http.post('saveParamData', this.parameterData).then((res) => {
-                        this.openEdit = false;
-                        this.getTableData(this.params)
-                    }).catch((err) => {
-                        this.$Notice.error({
-                            title: err.message
-                        });
-                    })
-
-                }
+            }).catch((err) => {
+                this.openEdit = false;
+                this.$Notice.error({
+                    title: err.message
+                });
             })
         },
         cancelEdit() {
@@ -388,8 +377,10 @@ export default {
         //停用
         handleStopDiscount(item) {
             this.editData = item;
+            this.currentID = item.id;
             this.parameterData = item;
             this.openEdit = true;
+
         },
 
     }

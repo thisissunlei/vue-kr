@@ -29,10 +29,10 @@ export default {
     methods: {
         handleInputKeyUp(val) {
             let value = val.currentTarget.value.replace(/[^\d.]/g, '');
-            // let dotIndex = value.indexOf('.');
-            // if (dotIndex!=-1&&value.length==dotIndex+3) {
-            //     value = value.substring(0,dotIndex +2)
-            // }           
+            let dotIndex = value.indexOf('.');
+            if (dotIndex!=-1&&value.length==dotIndex+3) {
+                value = value.substring(0,dotIndex +2)
+            }           
             return val.currentTarget.value = value
         },
         handleInputBlur() {

@@ -120,7 +120,7 @@
                 postList:[
                   {
                     id:'SHUNFENG',
-                    name:'顺风快递'
+                    name:'顺丰快递'
                   },
                   {
                     id:'YUANTONG',

@@ -15,14 +15,14 @@ function transmissionReceivableCol(){
             title: 'OP系统的社区编码',
             key: 'costCenteNumber',
             align:'center',
-            fixed:'left',
+         // fixed:'left',
             width:150,
         },
         {
             title: '客户（供应商）编码',
             key: 'payerNumber',
             align:'center',
-            fixed:'left',
+        //    fixed:'left',
             width:150,
         },
         {
@@ -165,14 +165,14 @@ function transmissionReceivableCol(){
             title: '备注',
             key: 'remark',
             align:'center',
-            fixed:'right',
+         //   fixed:'right',
             width:150,
         },
         {
             title: '失败消息',
             key: 'failedMsg',
             align:'center',
-            fixed:'right',
+          // fixed:'right',
             width:150,
         },
         {

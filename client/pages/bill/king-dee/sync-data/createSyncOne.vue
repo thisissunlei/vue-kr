@@ -30,6 +30,17 @@
 
             </FormItem>
         </Form>
+         <Modal
+            v-model="openLoading"
+            title="等待拉取中..."
+            :closable="false"
+            :mask-closable="false"
+        >
+            <div>
+                <Loading />
+            </div>
+            <div slot="footer"></div>
+        </Modal>
     </div>
 </template>
 
@@ -40,13 +51,15 @@ import selectCommunities from './SelectCommunities.vue'
 // import selectCommunities from '~/components/SelectCommunities.vue'
 // import selectCustomers from '~/components/SelectCustomers.vue'
 import selectCustomers from './SelectCustomers.vue'
+import Loading from '~/components/Loading.vue'
 
 export default {
     name: 'createSync',
     components: {
         SectionTitle,
         selectCommunities,
-        selectCustomers
+        selectCustomers,
+        Loading,
     },
     data() {
         const validateDate = (rule, value, callback) => {
@@ -61,6 +74,7 @@ export default {
             }
         };
         return {
+            openLoading:false,
             syncId:'',
             disabled_next:false,
             formItem: { syncTime: {} },
@@ -83,18 +97,86 @@ export default {
         this.getSyncDataTypeList();
     },
     methods: {
+    //获取同步状态
+        loopSuccess(){
+            console.log("sssss");
+            this.$http.get('get-sync-findSyncStatus-loop', {
+                syncDataId:this.syncId,
+            })
+                .then(r => {
+                    console.log(r,"ppppppp");
+                    if(r.data.pullStatus=="ALREADY_PULL"){
+                        this.openLoading = false;
+                        window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.formItem.syncTime.startTime}&endTime=${this.formItem.syncTime.endTime}`,'_blank');
+                      //  window.location.href = '/bill/king-dee/sync-data';
+                        return ;
+                    }
+                   if(r.data.pullStatus=='FAILED_PULL'){
+                         this.openLoading = false;
+                        this.$Notice.error({
+                            title: '拉取失败'
+                        });
+                        return ;
+                    }
+                    if(r.data.pullStatus=='NOT_PULL'){
+                         this.openLoading = false;
+                        this.$Notice.error({
+                            title: '未拉取'
+                        });
+                        return ;
+                    }
+                    setTimeout(()=>{
+                        this.loopSuccess();
+                    },1000)
+                    // this.openLoading = false;
+                    // alert("8888888")
+                })
+                .catch(error => {
+                    console.log(error)
+                 //   this.isAllSelect = false
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+        },
+
         addKdSyncIncomeData(formItem) {
             let { remark, customerIds, communityIds, syncDataType,syncTime: { startTime, endTime } } = formItem;
             let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
-            parmas.customerIds=parmas.customerIds
-            parmas.communityIds=parmas.communityIds
+            parmas.customerIds=parmas.customerIds;
+            parmas.communityIds=parmas.communityIds;
+            this.syncStartTime =  parmas.startTime;
+            this.syncEndTime = parmas.endTime;
+            console.log(this.syncStartTime, this.syncEndTime,'uuhhhuuhhuhuhhu' );
+
             parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
             parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
+            console.log(parmas.startTime,  parmas.endTime,'u22222222');
             this.$http.post('post-creat-sync-data', parmas).then(r => {
                 this.syncId=r.data;
-                window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.formItem.syncTime.startTime}&endTime=${this.formItem.syncTime.endTime}`,'_blank')
+                 this.openLoading = true;
+                // console.log(11111111)
+                 this.loopSuccess();
+                 
+            //     this.$http.post(api, parmas)
+
+
+                // .then(r => {
+                //     this.isAllSelect = false
+                //     this.openLoading = true;
+                //     this.loopSuccess();
+                //     // alert("8888888")
+                // })
+                // .catch(error => {
+                //     console.log(error)
+                //     this.isAllSelect = false
+                //     this.$Notice.error({
+                //         title: error.message
+                //     });
+                // })
             }).catch(error => {
                 console.log(error)
+                console.log(222222222)
                 this.$Notice.error({
                     title: error.message
                 });

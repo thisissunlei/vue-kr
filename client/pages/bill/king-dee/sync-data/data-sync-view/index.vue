@@ -76,7 +76,7 @@
                 <TabPane label="原始数据" name="original">
 					<Table 
 						border 
-						:columns="type==1?originalAccountsCol:originalReceivableCol" 
+						:columns="type=='INCOME'?originalAccountsCol:originalReceivableCol" 
 						:data="originalData"></Table>
 					
 					<div  style="margin: 10px;overflow: hidden;">
@@ -95,7 +95,7 @@
 				</TabPane>
                 <TabPane label="传输数据" name="transmission">
 					 <Table 
-					 	border :columns="type!=1?transmissionReceivableCol:transmissionAccountsCol" 
+					 	border :columns="type!='INCOME'?transmissionReceivableCol:transmissionAccountsCol" 
 					 	:data="transmissionData"></Table>
 					 <div  style="margin: 10px;overflow: hidden;">
 						

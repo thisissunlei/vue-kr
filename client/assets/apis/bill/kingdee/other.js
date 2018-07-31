@@ -80,7 +80,7 @@ export default {
         url: "/api/sync/startSyncData",
         method: "post"
     },
-    //检测师是否接受
+    //检测是否接受
     "get-sync-findSyncStatus-loop":{
         url: "/api/sync/findSyncStatus",
         method: "get"

@@ -140,13 +140,13 @@ export default {
                     },
                 },
                 {
-                    title: '同步时间',
+                    title: '创建时间',
                     key: 'createTime',
                     align:'center',
                     width:100,
                       render:(h, params)=>{
                          let ile= params.row.createTime;
-                         ile = ile ? dateUtils.dateToStr('YYYY-MM-DD', new Date(ile)) : '';
+                         ile = ile ? dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS', new Date(ile)) : '';
                            return h('div',{
           
                           },ile)

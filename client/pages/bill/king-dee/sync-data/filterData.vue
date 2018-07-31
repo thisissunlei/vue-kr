@@ -88,7 +88,7 @@
                         </Col>
                     </Row>
                 </div>
-                <Row>
+                <!-- <Row>
                     <Col span="6" class="col">
                     <FormItem label="同步状态">
                         <Select v-model="formItem.syncStatus" placeholder="同步状态" class="form-item-input" @on-change='filterData'>
@@ -96,7 +96,7 @@
                         </Select>
                     </FormItem>
                     </Col>
-                </Row>
+                </Row> -->
             </Form>
         </div>
         <div class="table-zone">
@@ -107,7 +107,7 @@
         </div>
         <div class="btn-zone">
             <div style="float: right;z-index:99">
-                <Button type="primary" class="btn" @click="handlePrivious">上一步</Button>
+                <!-- <Button type="primary" class="btn" @click="handlePrivious">上一步</Button> -->
                 <Button type="primary" class="btn" @click="handleSync(formItem)">开始同步</Button>
             </div>
         </div>
@@ -175,12 +175,12 @@ export default {
             formItem: {},
             syncStateList: [
                 {
-                    label: '已同步',
-                    value: 'ALREADY_SYNC'
-                },
-                {
                     label: '未同步',
                     value: 'NOT_SYNC'
+                },
+                {
+                    label: '已同步',
+                    value: 'ALREADY_SYNC'
                 },
                 {
                     label: '同步失败',
@@ -509,8 +509,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let {  syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = this.formItem
-                let p = {  syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = this.formItem
+                let p = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -522,8 +522,8 @@ export default {
                 this.columns = [].concat(this.syncDataIncomeDetailColums)
                 api = 'get-sync-income-data-list'
             } else if (this.syncType === 'PAYMENT') {
-                let { number,  syncStatus, payerType, coreBillNumber } = this.formItem
-                let p = { number, syncStatus, payerType, coreBillNumber }
+                let { number,   payerType, coreBillNumber } = this.formItem
+                let p = { number,  payerType, coreBillNumber }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -620,23 +620,23 @@ export default {
             }
 
         },
-        handlePrivious() {
+        // handlePrivious() {
 
-        },
+        // },
         handleSync(formItem) {
             let api = ''
             let parmas = {};
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let { syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = formItem
-                    parmas = {  syncStatus, companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                    let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = formItem
+                    parmas = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {
                     api = 'post-sync-payment-data-ids'
-                    let { number,  syncStatus, payerType, coreBillNumber } = formItem
-                    parmas = { number,  syncStatus, payerType, coreBillNumber }
+                    let { number,  payerType, coreBillNumber } = formItem
+                    parmas = { number,   payerType, coreBillNumber }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 }

@@ -15,12 +15,12 @@ import http from '~/plugins/http.js';
 export default {
     // props:["onchange","test","value","disabled"],
     name: 'selectCommunity',
-    model:{
-        prop:'value',
-        event:'input'
+    model: {
+        prop: 'value',
+        event: 'input'
     },
     props: {
-        multiple:{
+        multiple: {
             type: Boolean,
             default: false
         },
@@ -41,8 +41,8 @@ export default {
             default: false
         },
         value: {
-            type:Array,
-            default:()=>[]
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -56,8 +56,8 @@ export default {
             get() {
                 return this.value
             },
-            set(val){
-                
+            set(val) {
+
             }
         }
     },

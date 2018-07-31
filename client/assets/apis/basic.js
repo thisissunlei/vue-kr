@@ -29,5 +29,16 @@ export default {
     "get-discont-list": {
         url: "/api/krspace-op-web/cmt/discount/list",
         method: "get"
-    }
+    },
+    //添加折扣配置
+    "post-add-discount": {
+        url: "/api/krspace-op-web/cmt/discount/add",
+        method: "post"
+    },
+    //获取级别权限类型
+    "get-discount-rights": {
+        // url: "/ben/api/krspace-op-web/cmt/discount/getRight",
+        url: "/ben/cmt/discount/getRight",
+        method: "get"
+    },
 };

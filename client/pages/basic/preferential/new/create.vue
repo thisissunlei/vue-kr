@@ -2,7 +2,7 @@
     <div class='discount-set-from-panel'>
         <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent" class='discount-set-from'>
             <FormItem label="适用社区" prop="community">
-                <selectCommunities v-model="formItem.community" :multiple='true'></selectCommunities>
+                <selectCommunities v-model="formItem.community"></selectCommunities>
             </FormItem>
             <FormItem label="优惠类型" prop="discountType">
                 <Select v-model="formItem.discountType" @on-change='handleSelectDiscountTypeChange'>
@@ -10,19 +10,25 @@
                 </Select>
             </FormItem>
             <FormItem label="折扣期间" class="bill-search" prop="time">
-                <DatePicker v-model="formItem.time.startTime" type="date" placeholder="开始日期" style="width: 140px" />
+                <DatePicker v-model="formItem.time.startDate" type="date" placeholder="开始日期" style="width: 140px" />
                 <span class="u-date-txt" style='padding:0 15px'>至</span>
-                <DatePicker v-model="formItem.time.endTime" type="date" placeholder="结束日期" style="width: 140px" />
+                <DatePicker v-model="formItem.time.endDate" type="date" placeholder="结束日期" style="width: 140px" />
             </FormItem>
             <FormItem label="优惠方案" prop="scheme" v-if="showRent">
                 <span style='padding:0 13px'>满</span>
-                <Input v-model="formItem.scheme.full" :number='true' placeholder="1-36" style="width: 120px" />
+                <Input v-model="formItem.scheme.target" :number='true' placeholder="1-36" style="width: 120px" />
                 <span style='padding:0 14px'>赠</span>
-                <Input v-model="formItem.scheme.extend" :number='true' placeholder="1-12" style="width: 120px" />
+                <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" />
             </FormItem>
-            <FormItem label="折扣配置" class="form-item-discount" prop="discountSet">
+            <!-- <FormItem label="折扣配置" class="form-item-discount" prop="discountSet">
                 <SelectDiscount v-show="!showRent" :roleList='roleList' v-model="formItem.discountSet.discountList"></SelectDiscount>
                 <RentFree v-show="showRent" :roleList='roleList' v-model="formItem.discountSet.rentFreeList"></RentFree>
+            </FormItem> -->
+            <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
+                <SelectDiscount :roleList='roleList' v-model="formItem.discountList"></SelectDiscount>
+            </FormItem>
+            <FormItem label="折扣配置" v-show="showRent" class="form-item-discount" prop="rentFreeList">
+                <RentFree :roleList='roleList' v-model="formItem.rentFreeList"></RentFree>
             </FormItem>
             <FormItem label="备注" class='form-item-remark'>
                 <Input v-model="formItem.remark" />
@@ -62,37 +68,79 @@ export default {
                 callback()
         };
         const validateDate = (rule, value, callback) => {
-            if (!value.startTime) {
+            if (!value.startDate) {
                 callback("请输入开始日期")
-            } else if (!value.endTime) {
+            } else if (!value.endDate) {
                 callback("请输入结束日期")
-            } else if (value.startTime > value.endTime) {
+            } else if (value.startDate > value.endDate) {
                 callback('开始日期不能大于结束日期')
             } else {
                 callback()
             }
         };
-        //full extend
+        //target present
         const validatescheme = (rule, value, callback) => {
-            if (isNaN(value.full) || isNaN(value.extend)) {
+            if (isNaN(value.target) || isNaN(value.present)) {
                 callback("请输入数字")
-            } else if (value.full > 36 || value.extend > 12) {
+            } else if (value.target > 36 || value.present > 12) {
                 callback('输入有误')
-            } else if (value.full < 0 || value.extend < 0) {
+            } else if (value.target < 0 || value.present < 0) {
                 callback('输入有误')
-            } else if (value.extend > value.full) {
+            } else if (value.present > value.target) {
                 callback('输入有误')
             } else {
                 callback()
             }
         };
-        const validateDiscountSet = (rule, value, callback) => {
-            debugger
-            if (value.rentFreeList.length == 0) {
+        const validateRentFreeList = (rule, value, callback) => {
+            if (value.length == 0) {
                 callback('至少勾选一个级别')
             } else {
                 callback()
             }
+        };
+        const validateDiscountList = (rule, value, callback) => {
+            if (value.length == 0) {
+                callback('至少勾选一个级别')
+            } else if (checkDiscountExtexnd(value)) {
+                callback('折扣输入有误，应该大于0小于10')
+            } else if (checkDiscount(value)) {
+                callback()
+            } else {
+                callback('上级折扣权限不能低于下级')
+            }
+        };
+        var checkDiscountExtexnd = function (obj) {
+            let values = Object.values(obj).map(key => Number(key))
+            let arr = values.filter(item => item < 10 && item > 0)
+            if (arr == null || arr.length > 0) {
+                return false
+            }
+            return true
+        };
+        var checkDiscount = function (obj) {
+
+            let keys = Object.keys(obj).map(key => Number(key))
+            let values = Object.values(obj).map(key => Number(key))
+            let maxLevel = Math.max.apply(null, keys)
+            let minLevel = Math.min.apply(null, keys)
+            if (minLevel != 1) {
+                return false
+            }
+            if (maxLevel + 1 - minLevel != keys.length) {
+                return false
+            } else {
+                debugger
+                let i = 0;
+                for (i = 0; i < keys.length; i++) {
+                    if (i != keys.length - 1) {
+                        if (values[i] > values[i + 1]) {
+                            return false
+                        }
+                    }
+                }
+            }
+            return true;
         };
         return {
             showRent: false,
@@ -134,12 +182,9 @@ export default {
             ],
             formItem: {
                 time: {},
+                discountList: {},
+                rentFreeList: [],
                 scheme: {},
-                discountSet: {
-                    discountList: [],
-                    rentFreeList: []
-                }
-
             },
             ruleCustom: {
                 community: [
@@ -160,24 +205,52 @@ export default {
                 scheme: [
                     { required: true, validator: validatescheme, trigger: 'change' }
                 ],
-                discountSet: [
-                    { required: true, type: 'array', validator: validateDiscountSet, trigger: 'change' }
-                ]
+                rentFreeList: [
+                    { required: true, type: 'array', validator: validateRentFreeList, trigger: 'change' }
+                ],
+                discountList: [
+                    { required: true, validator: validateDiscountList, trigger: 'blur' }
+                ],
             }
         }
     },
-    watch: {
-        rentFreeList() {
-            // console.log('免租列表——', this.rentFreeList)
-        }
-    },
     mounted() {
-        this.formItem.discountType = 2
+        this.formItem.discountType = 1
+        this.getRoleRightList();
     },
     methods: {
-        handleSelectChange(data) {
-            debugger
-            this.formItem.rentFreeList = data;
+        getDiscountTypeList() {
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.TransferType'
+            }).then((r) => {
+                // this.discountTypeList = [].concat({ value: 'ALL', desc: '全部' }, r.data);
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
+        getRoleRightList() {
+            // this.$http.get('get-discount-rights', '').then((r) => {
+            //     let data = r.data;
+            //     let list = [];
+            //     let keys = Object.keys(data);
+            //     keys.map((key, index) => {
+            //         if (data.hasOwnProperty(key)) {
+            //             let obj = {}
+            //             obj.name = data[key];
+            //             obj.level = index + 1;
+            //             obj.id == key;
+            //             obj.discount = ''
+            //             list.push(obj)
+            //         }
+            //     })
+            //     this.roleList = list
+            // }).catch((e) => {
+            //     this.$Notice.error({
+            //         title: e.message
+            //     });
+            // })
         },
         handleSelectDiscountTypeChange(val) {
             if (val === 1)

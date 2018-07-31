@@ -1,6 +1,6 @@
 <template>
     <div class="form-item-discount-select">
-        <Checkbox :indeterminate="indeterminate" :value="checkAll" @on-change="handleCheckAll">全选</Checkbox>
+        <Checkbox :indeterminate="indeterminate" v-model="checkAll" @click.native="handleCheckAll">全选</Checkbox>
         <CheckboxGroup v-model="checkList" @on-change="checkAllGroupChange">
             <Checkbox v-for="role in roleList" :key='role.id' :label="role.name" class='form-item-discount-select-item'></Checkbox>
         </CheckboxGroup>
@@ -53,7 +53,6 @@ export default {
             this.$emit('input', this.checkList)
         },
         handleCheckAll() {
-            debugger
             if (this.indeterminate) {
                 this.checkAll = false;
             } else {
@@ -65,8 +64,9 @@ export default {
             } else {
                 this.checkList = [];
             }
+            debugger
             this.$emit('input', this.checkList)
-
+            this.$forceUpdate()
         },
         sortSelectData(data) {
             console.log('checkAllGroupChange_data', data)

@@ -158,11 +158,12 @@ export default {
     },
     methods:{
         rowClassName(row,index){
-            console.log('row-----',row)
             if(row.averageData==1){
                return 'u-table-row'
+            }else{
+                return '';
             }
-            return '';
+            
         },
         getDay(num, str){
             let today = new Date();
@@ -252,9 +253,9 @@ export default {
       float:right;
       width: 200px;
   }
-  .u-table-row{
-      background: rgba(255,157,0,0.30);
-  }
+ .ivu-table .u-table-row td{
+    background: rgba(255,157,0,0.30);
+ }
   .u-search-fixed{
        width:83.59%;
        position:fixed;

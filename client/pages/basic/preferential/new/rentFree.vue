@@ -1,6 +1,6 @@
 <template>
     <div class="form-item-discount-select">
-        <Checkbox :indeterminate="indeterminate" v-model="checkAll" @click.native="handleCheckAll">全选</Checkbox>
+        <Checkbox :indeterminate="indeterminate" v-model="checkAll" @click.prevent.native="handleCheckAll">全选</Checkbox>
         <CheckboxGroup v-model="checkList" @on-change="checkAllGroupChange">
             <Checkbox v-for="role in roleList" :key='role.id' :label="role.name" class='form-item-discount-select-item'></Checkbox>
         </CheckboxGroup>
@@ -39,6 +39,7 @@ export default {
             this.mapName2Level = obj
         },
         checkAllGroupChange(data) {
+            console.log('data',data)
             if (data.length === this.roleList.length) {
                 this.indeterminate = false;
                 this.checkAll = true;
@@ -62,14 +63,11 @@ export default {
             if (this.checkAll) {
                 this.checkList = [].concat(this.roleList.map(item => item.name));
             } else {
-                this.checkList = [];
+                this.checkList=[]
             }
-            debugger
             this.$emit('input', this.checkList)
-            this.$forceUpdate()
         },
         sortSelectData(data) {
-            console.log('checkAllGroupChange_data', data)
             let levels = [];
             data.map(item => levels.push(this.mapName2Level[item]));
             let max = Math.max.apply(null, levels)

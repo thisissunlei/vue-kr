@@ -24,7 +24,8 @@
                 <SelectDiscount :roleList='roleList' v-model="formItem.discountList"></SelectDiscount>
             </FormItem>
             <FormItem label="折扣配置" v-if="showRent" class="form-item-discount" prop="rentFreeList">
-                <RentFree :roleList='roleList' v-model="formItem.rentFreeList"></RentFree>
+                <RentFree :roleList='roleList' v-model="formItem.rentFreeList" @input='handleRentFreeInput'></RentFree>
+                <div v-if='showError' class="ivu-form-item-error-tip">至少勾选一个级别</div>
             </FormItem>
             <FormItem label="备注" class='form-item-remark'>
                 <Input v-model="formItem.remark" />
@@ -139,6 +140,7 @@ export default {
             return true;
         };
         return {
+            showError:false,
             showRent: false,
             discountTypeList: [
                 {
@@ -211,7 +213,8 @@ export default {
         }
     },
     mounted() {
-        this.formItem.discountType = 'DISCOUNT'
+        // this.formItem.discountType = 'DISCOUNT'
+        this.formItem.discountType = 2
         this.getDiscountTypeList();
         this.getRoleRightList();
     },
@@ -254,11 +257,26 @@ export default {
                 });
             })
         },
+
+        handleRentFreeInput(list) {
+            if (this.formItem.rentFreeList.length==0) {
+                this.showError=true
+            }
+            else{
+                this.showError=false
+            }
+        },
         handleSelectDiscountTypeChange(val) {
+            // let nodelist = document.querySelectorAll('.ivu-form-item-error-tip')
+            // Array.prototype.forEach.call(nodelist, function (node) {
+            //     // node.parentNode.removeChild(node)
+            //     node.style.display = "none";
+            // });
             if (val === 'DISCOUNT')
                 this.showRent = false;
             else
                 this.showRent = true;
+
         },
         handleSubmit(formItem) {
             console.log(formItem)
@@ -271,12 +289,16 @@ export default {
         doSubmit(formItem) {
             let { communityId, discountType, time: { startDate, endDate }, remark } = formItem
             let parmas = { communityId, discountType, startDate, endDate, remark }
-            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(parmas.startDate)) : ''
-            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(parmas.endDate)) : ''
+            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
+            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
             if (this.showRent) {
-                parmas.target = formItem.target
-                parmas.present = formItem.present
-                parmas.rightDetail = JSON.stringify(formItem.rentFreeList)
+                parmas.target = formItem.scheme.target
+                parmas.present = formItem.scheme.present;
+                let arr=[];
+                formItem.rentFreeList.map(item=>{
+                    arr.push(this.roleList.find(r=>r.name==item).id)
+                })
+                parmas.rightDetail = JSON.stringify(arr)
             }
             else {
                 let res = {};
@@ -290,7 +312,7 @@ export default {
                         res[temp[0].id] = obj[item]
                     }
                 })
-                parmas.rightDetail =JSON.stringify(res);
+                parmas.rightDetail = JSON.stringify(res);
             }
 
             // post-add-discount
@@ -307,7 +329,7 @@ export default {
         },
 
         handleCancle(reload) {
-            this.$emit('closeAddModal',reload)
+            this.$emit('closeAddModal', reload)
         }
 
     }

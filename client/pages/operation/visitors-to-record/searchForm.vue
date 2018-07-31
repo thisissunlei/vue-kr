@@ -190,7 +190,7 @@ export default {
                 },
                 formItemOld:{
                     page:1,
-                    pageSize:15
+                    pageSize:10
                 },
                 ruleDaily: {
                     mobile:[

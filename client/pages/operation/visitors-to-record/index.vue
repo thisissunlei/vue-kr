@@ -167,7 +167,7 @@ var layoutScrollHeight=0;
                     {
                         title: '官网预约参数',
                         align:'center',
-                        width:110,
+                        width:160,
                         key: 'promoCode',
                         render(h,params){
                             return params.row.promoCode?params.row.promoCode:'--'
@@ -176,12 +176,12 @@ var layoutScrollHeight=0;
                     {
                         title: '预约城市',
                         align:'center',
-                        width:70,
+                        width:90,
                         key: 'cityName'
                     },
                     {
                         title: '预约社区',
-                        width:90,
+                        width:120,
                         align:'center',
                         key: 'communityName',
                     },
@@ -199,7 +199,7 @@ var layoutScrollHeight=0;
                     {
                         title: '创建时间',
                         align:'center',
-                        width:110,
+                        width:160,
                         key: 'cTime',
                         render(h,params){
                             var ren=params.row.cTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.cTime)):'-';
@@ -223,18 +223,18 @@ var layoutScrollHeight=0;
                     //     }
                     // },
                     {
-                        title: '推介人姓名',
+                        title: '推介人电话',
                         align:'center',
-                        width:80,
+                        width:140,
                         key: 'refreePhone',
                         render(h,params){
                             return params.row.refreePhone?params.row.refreePhone:'--'
                         }
                     },
                     {
-                        title: '推介人电话',
+                        title: '推介人姓名',
                         align:'center',
-                        width:130,
+                        width:110,
                         key: 'refreeName',
                         render(h,params){
                             return params.row.refreeName?params.row.refreeName:'--'
@@ -243,7 +243,7 @@ var layoutScrollHeight=0;
                     {
                         title: '拜访人数',
                         align:'center',
-                        width:80,
+                        width:90,
                         key: 'visitNum',
                         render(h,params){
                             return params.row.visitNum?params.row.visitNum:'--'
@@ -252,20 +252,20 @@ var layoutScrollHeight=0;
                     {
                         title: '优惠券（6免0.5，12免1）',
                         align:'center',
-                        width:150,
+                        width:200,
                         key: 'couponTypeStr',
                     },
                     {
                         title: '是否注册会员',
                         align:'center',
-                        width:80,
+                        width:120,
                         key: 'registeredMem',
                     },
                     {
 
                         title: '操作',
                         align:'center',
-                        width:100,
+                        width:140,
                         render:(tag,params)=>{
                            var btnRender=[
                                tag(Buttons, {
@@ -273,7 +273,7 @@ var layoutScrollHeight=0;
                                         type: 'text',
                                         checkAction:'seat_order_view',
                                         label:'编辑',
-                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },
                                     on: {
                                         click: () => {
@@ -285,7 +285,7 @@ var layoutScrollHeight=0;
                                         type: 'text',
                                         checkAction:'seat_order_view',
                                         label:'删除',
-                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },
                                     on: {
                                         click: () => {
@@ -337,7 +337,6 @@ var layoutScrollHeight=0;
             edit(row){
                 this.editRow = row;
                 this.showEdit = !this.showEdit;
-                console.log('edit',row)
             },
             getCommonParam(){
                 this.tabForms.page=1;
@@ -376,6 +375,10 @@ var layoutScrollHeight=0;
                     this.loading=false;
                     this.spinLoading=false;
                     this.dailyOldData=this.tableList;
+                    this.$nextTick(() => {
+                        var div = document.getElementsByClassName('ivu-table-body')[0]
+                        div.scrollTop = 0;
+                    }) 
 
                 }).catch((error)=>{
                     this.openMessage=true;
@@ -463,7 +466,6 @@ var layoutScrollHeight=0;
             },
 
             handleUpload (file) {
-                console.log(file,"kkkk")
                 this.file = file;
                 return false;
             },

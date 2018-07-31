@@ -247,10 +247,19 @@ export default {
     },
     mounted(){
         this.params=this.$route.query;
-        this.editData.appiontTime = new Date(this.editData.appiontTime);
-        this.editData.communityId = this.editData.communityId+'';
-        this.editData.channelId = this.editData.channelId+'';
-        this.editData.cityId = this.editData.cityId+'';
+        if(this.editData.appiontTime){
+            this.editData.appiontTime = new Date(this.editData.appiontTime);
+        }
+        if(this.editData.communityId){
+            this.editData.communityId = this.editData.communityId+'';
+        }
+        if(this.editData.channelId){
+            this.editData.channelId = this.editData.channelId+'';
+        }
+        if(this.editData.cityId){
+            this.editData.cityId = this.editData.cityId+'';
+        }
+        
         this.formItem=Object.assign({},this.editData);
         this.getCityList();
         this.getFirstChannle()

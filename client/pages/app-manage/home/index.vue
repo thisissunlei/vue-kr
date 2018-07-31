@@ -144,19 +144,19 @@ export default {
         this.tabParams.dataDate=this.getDay(-1, '-');
         this.getTableData(this.tabParams);
         let memberHome=document.getElementById('layout-content-main');
-        memberHome.addEventListener("scroll",this.scrollFn);
+        var _this=this;
+        memberHome.addEventListener("scroll",function(){
+             let top=memberHome.scrollTop
+            if(top>50){
+                _this.isFixed=true;
+            }else{
+                _this.isFixed=false;
+                
+            }
+        },false);
          
     },
     methods:{
-        scrollFn(){
-            let top=memberHome.scrollTop
-            if(top>50){
-                this.isFixed=true;
-            }else{
-                this.isFixed=false;
-                
-            }
-        },
         rowClassName(row,index){
             if(row.averageData==1){
                return 'u-table-row'
@@ -235,10 +235,6 @@ export default {
             utils.commonExport(form,'/api/krspace-op-web/app/operation/community/use-rate/export');
         }
     },
-    destroyed(){
-        let memberHome=document.getElementById('layout-content-main');
-        memberHome.removeEventListener("scroll",this.scrollFn);
-    }
 }
 </script>
 

@@ -212,7 +212,7 @@ export default{
 </script>
 <style lang="less" >
 .all-equipment-list-searchform{
-    padding-left:20px;
+    padding-left:0px;
     .ivu-form-item{
         margin-bottom:10px;
     }

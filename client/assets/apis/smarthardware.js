@@ -118,9 +118,16 @@ export default  {
         method: 'get'
     },
 
+
      //温湿度变化
      'temperaturehumiditymaplist':{
         url: '/api/iot-platform/device-status-log/list',
+        method: 'get'
+    },
+
+    //获取公司列表数据
+    'get-samrt-hard-company-list':{
+        url: 'api/iot-platform/customer/select-items',
         method: 'get'
     },
     

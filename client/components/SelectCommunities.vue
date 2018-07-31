@@ -13,21 +13,21 @@
 import http from '~/plugins/http.js';
 
     export default {
-        // props:["onchange","test","value","disabled","multiple"],
+        props:["onchange","test","value","disabled","multiple"],
 
-        props:{
-            onchange:Function,
-            test:Object,
-            value:String,
-            multiple:{
-                type:Boolean,
-                default:false
-            },
-            disabled:{
-                type:Boolean,
-                default:false
-            },
-        },
+        // props:{
+        //     onchange:Function,
+        //     test:Object,
+        //     value:String,
+        //     multiple:{
+        //         type:Boolean,
+        //         default:false
+        //     },
+        //     disabled:{
+        //         type:Boolean,
+        //         default:false
+        //     },
+        // },
         data () {
             return {
                 community:'',

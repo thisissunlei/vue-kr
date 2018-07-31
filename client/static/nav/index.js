@@ -373,9 +373,6 @@
                         }
                     }
                     var activeRouter = '';
-                    if(child.name == "即将到期" || child.name == '逾期未付'){
-                        console.log(router,'---------',href)
-                    }
                     if(router.indexOf('krspace.cn')!=-1){
                         var port = location.port?':'+location.port:'';
                         activeRouter = router.split('krspace.cn'+port)[1];
@@ -442,6 +439,16 @@
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
+        if(typeof(Storage)!=="undefined"){
+            if (sessionStorage.clickcount){
+                sessionStorage.clickcount=Number(sessionStorage.clickcount)+1;
+            }
+            else
+            {
+                sessionStorage.clickcount=1;
+            }
+            document.getElementById("result").innerHTML="在这个会话中你已经点击了该按钮 " + sessionStorage.clickcount + " 次 ";
+        }
         
         // console.log("pppppp------",dom)
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){

@@ -254,7 +254,7 @@ export default {
       width: 200px;
   }
  .ivu-table .u-table-row td{
-    background: rgba(255,157,0,0.30);
+    background: rgba(255,157,0,0.30) !important;
  }
   .u-search-fixed{
        width:83.59%;

@@ -80,6 +80,7 @@
                                 v-model="formItem.cityId" 
                                 placeholder="预约城市" 
                                 style="width: 120px;"
+                                @on-change="cityChange"
                             >
                                 <Option 
                                     v-for="item in cityList" 
@@ -261,8 +262,7 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
-           let params =Object.assign({},this.params);
-            this.$http.get('getDailyCommunity').then((res)=>{
+            this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -344,9 +344,10 @@ export default {
             return sum;
         },
         cityChange(param){
+            console.log('cityChange',param)
             if(param){
-                if(param !== this.params.cityId){
-                  this.params = {}  
+                if(param !== this.formItem.cityId){
+                  this.formItem.communityId = '' 
                 }
                 this.getCommunityList(param)  
             }

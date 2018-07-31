@@ -145,6 +145,9 @@ var layoutScrollHeight=0;
                         key: 'mobile',
                         width:120,
                         align:'center',
+                        render(h,params){
+                            return params.row.mobile?params.row.mobile:'--'
+                        }
                     },
                     {
                         title: '一级来源',
@@ -177,13 +180,19 @@ var layoutScrollHeight=0;
                         title: '预约城市',
                         align:'center',
                         width:90,
-                        key: 'cityName'
+                        key: 'cityName',
+                        render(h,params){
+                            return params.row.cityName?params.row.cityName:'--'
+                        }
                     },
                     {
                         title: '预约社区',
                         width:120,
                         align:'center',
                         key: 'communityName',
+                        render(h,params){
+                            return params.row.communityName?params.row.communityName:'--'
+                        }
                     },
                     {
                         title: '参观日期',

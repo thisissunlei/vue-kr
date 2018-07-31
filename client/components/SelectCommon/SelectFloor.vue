@@ -30,8 +30,7 @@ export default {
         },
         //是否要全部
         isGetAll:{
-            type:Boolean,
-            default:false
+            type:Boolean
         }
     },
     data() {
@@ -68,37 +67,41 @@ export default {
                     value=list[0].value;
                 }   
             }else{
-                value=list.length?list[0].value:'';
+                let value=list.length?list[0].value:'';
             } 
             return value
         },
         //获取销售机会列表
         getSalerChanceList() {
+            if(!(this.params.communityId.trim())){
+                this.salerOptions=[];
+                return ;
+            }
             let list = [];
-            this.$http.get('getDailyCommunity',{cityId:this.params.cityId}).then((res)=>{
+            this.$http.get('getDailyFloor',{communityId:this.params.communityId}).then((res)=>{
                 res.data.map(item => {
                     list.push({
-                        label: ''+item.name,
-                        value: ''+item.id
+                        label: ''+item.floorName,
+                        value: ''+item.floor
                     })
                 })
                 let len=list.length;
                 let rou=this.$route.query;
                 if(len>1&&this.isGetAll){
-                    list.unshift({value:' ',label:'全部社区'})
+                    list.unshift({value:' ',label:'全部楼层'})
                 }
-                this.salerOptions = [].concat(list); 
+                this.salerOptions = [].concat(list);  
 
                 if(rou.cityId&&this.num<1){
-                    this.modelValue=rou.communityId;
+                    this.modelValue=rou.floor;
                 }else {
                     this.modelValue=this.sortValue(list);
                 }
 
                 //针对点击搜索清除按钮
                 let initParams={
-                    cityId:this.params.cityId,
-                    communityId:this.modelValue
+                    communityId:this.params.communityId,
+                    floor:this.modelValue
                 }
                 if(this.num<1&&!rou.cityId){
                     this.$emit('init',initParams)

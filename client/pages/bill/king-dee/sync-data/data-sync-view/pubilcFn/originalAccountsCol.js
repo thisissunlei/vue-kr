@@ -50,7 +50,7 @@ function originalAccountsCol(){
         },
         {
             title: '收入类型',
-            key: 'incomeTypeName',
+            key: 'incomeTypeDesc',
             align:'center',
             
         },

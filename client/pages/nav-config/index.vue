@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" sshow-elevator :current="page" :size="20" @on-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" :page-size="20" @on-change="changePage" ></Page>
                 </div>
             </div>
       </div>

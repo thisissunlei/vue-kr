@@ -12,7 +12,7 @@
             </div>
             <span style="padding:0 10px"></span>
             <div style="display:inline-block;width:400px;">
-                <CheckboxGroup style="font-size:12px" v-model="status" @on-change="checkAllGroupChange">状态：
+                <CheckboxGroup style="font-size:12px" v-model="statusList" @on-change="checkAllGroupChange">状态：
                     <Checkbox v-for='(option, index) in stateList' :key='option.value' :label="option.value">{{option.desc}}</Checkbox>
                 </CheckboxGroup>
             </div>
@@ -66,7 +66,7 @@ export default {
     data() {
         return {
             currentID: '',
-            status: [],//优惠可用状态
+            statusList: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
             communityList: [],
             communityId: '',
@@ -247,8 +247,20 @@ export default {
             })
         },
         checkAllGroupChange() {
-            let params = Object.assign({}, this.params, { statusList: this.status.join(',') }, { communityId: this.communityId })
+            let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
             this.getTableData(params)
+            // utils.addParams(params);
+            console.log(params)
+            let url = window.location.href.split('?')[0];
+
+            var where = [];
+            for (var field in params) {
+                if (params.hasOwnProperty(field)) {
+                    where.push(`${field}=${params[field]}`);
+                }
+            }
+            url = url + "?" + where.join('&');
+            window.history.pushState(params, '', url)
         },
         getTableData(params) {
             // 

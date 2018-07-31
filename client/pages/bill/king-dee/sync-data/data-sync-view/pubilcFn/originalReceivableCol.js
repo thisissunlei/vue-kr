@@ -4,7 +4,7 @@ import utils from '~/plugins/utils';
 function originalReceivableCol(){
     return [
         {
-            title: '日租金',
+            title: '回款金额',
             key: 'amount',
             align:'center',
             render:function(h,params){

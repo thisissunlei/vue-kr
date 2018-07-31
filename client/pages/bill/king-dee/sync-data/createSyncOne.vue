@@ -118,13 +118,13 @@ export default {
                         });
                         return ;
                     }
-                    if(r.data.pullStatus=='NOT_PULL'){
-                         this.openLoading = false;
-                        this.$Notice.error({
-                            title: '未拉取'
-                        });
-                        return ;
-                    }
+                    // if(r.data.pullStatus=='NOT_PULL'){
+                    //      this.openLoading = false;
+                    //     this.$Notice.error({
+                    //         title: '未拉取'
+                    //     });
+                    //     return ;
+                    // }
                     setTimeout(()=>{
                         this.loopSuccess();
                     },1000)

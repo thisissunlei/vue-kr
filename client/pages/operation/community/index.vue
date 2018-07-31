@@ -296,6 +296,37 @@
 
           <!-- @click="clappointment" -->
           <div class="line-one">
+            <div class="box" style="flex:1/2">
+              <div class="header">
+                <div class="header-left" @click="openOverNo()">
+                  <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">
+                    合同逾期未操作 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
+                <div class="header-right" v-if="OverdueOperationList.length">
+                  <span :style="overdueNo?'color: #FF6868;':''">{{overdueNo}}</span><span style="font-size:14px">份</span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!OverdueOperationList.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有逾期未生效或未作废的合同</div>
+              </div>
+              <div class="contents" v-if="OverdueOperationList.length">
+                <ul >
+                   <li v-for="item in OverdueOperationList" :key="item.id">
+                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openOverNoDetail(item)">{{item.serialNumber}}</div>
+                       </Tooltip>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell" :style="item.payAll?'text-align:right;':'text-align:right;color:red;'">{{item.payAll?'已付清':'未支付'}}</span>
+                      <span class="table-cell" style="text-align:right">{{item.overDays?'逾'+item.overDays+'天':'-'}}</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+
             <div class="box">
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
@@ -326,6 +357,9 @@
                 </ul>
               </div>
             </div>
+          </div>
+
+          <div class="line-one">
             <!-- @click="openVisitor暂没有访客(入驻会员在APP上邀请来的)" -->
             <div class="box">
               <div class="header">
@@ -365,41 +399,8 @@
                 </ul>
               </div>
             </div>
-          </div>
 
-          <div class="line-one">
-            <div class="box" style="flex:1/2">
-              <div class="header">
-                <div class="header-left" @click="openOverNo()">
-                  <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">
-                    合同逾期未操作 <span class="header-left-all" style="font-size:14px;">全部 ></span>
-                  </Tooltip>
-                </div>
-                <div class="header-right" v-if="OverdueOperationList.length">
-                  <span :style="overdueNo?'color: #FF6868;':''">{{overdueNo}}</span><span style="font-size:14px">份</span>
-                </div>
-              </div>
-              <div class="contents" style="text-align:center" v-if="!OverdueOperationList.length">
-                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有逾期未生效或未作废的合同</div>
-              </div>
-              <div class="contents" v-if="OverdueOperationList.length">
-                <ul >
-                   <li v-for="item in OverdueOperationList" :key="item.id">
-                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell">      
-                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openOverNoDetail(item)">{{item.serialNumber}}</div>
-                       </Tooltip>
-                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
-                          <div  class="ellipsis">{{item.customerName}}</div>
-                      </Tooltip>
-                      <span class="table-cell" :style="item.payAll?'text-align:right;':'text-align:right;color:red;'">{{item.payAll?'已付清':'未支付'}}</span>
-                      <span class="table-cell" style="text-align:right">{{item.overDays?'逾'+item.overDays+'天':'-'}}</span>
-                  </li>        
-                </ul>
-              </div>
-            </div>
-
-            <div class="box">
+            <div class="boxNull">
             </div>
 
           </div>

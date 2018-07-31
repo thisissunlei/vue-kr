@@ -548,7 +548,6 @@ import utils from '~/plugins/utils';
 
             },
             makeSureClick(item) {
-              console.log(item)
               let params = {
                 handleType:'affirm',
                 id :item.id,

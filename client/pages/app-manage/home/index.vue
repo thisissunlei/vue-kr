@@ -141,30 +141,28 @@ export default {
         }
     },
     mounted(){
-         this.tabParams.dataDate=this.getDay(-1, '-');
-         this.getTableData(this.tabParams);
-        //   var _this = this;
-        //     window.onscroll = function(){ 
-        //        let top= document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-               
-        //        console.log('top----->>>>',top)
-            
-        //         if(top> 100 ){
-        //             _this.isFixed=true;
-        //         }else{
-        //             _this.isFixed=false;
-                    
-        //         }
-              
-        //    }
+        this.tabParams.dataDate=this.getDay(-1, '-');
+        this.getTableData(this.tabParams);
+        let memberHome=document.getElementById('layout-content-main');
+        var _this=this;
+        memberHome.addEventListener("scroll", function(){
+            let top=memberHome.scrollTop
+            if(top>50){
+                _this.isFixed=true;
+            }else{
+                _this.isFixed=false;
+                
+            }
+        });
+         
     },
     methods:{
         rowClassName(row,index){
-            if(row.averageData=='1'){
+            console.log('row-----',row)
+            if(row.averageData==1){
                return 'u-table-row'
             }
             return '';
-           
         },
         getDay(num, str){
             let today = new Date();
@@ -243,9 +241,9 @@ export default {
 <style lang="less">
 .g-member-online{
     .u-search{
-        height:32px;
-        margin:16px 0;
-        padding:0 20px;
+        height:64px;
+        padding:16px 20px;
+        box-sizing: border-box;
     }
     .u-table{
         padding:20px 20px 30px;
@@ -258,11 +256,13 @@ export default {
       background: rgba(255,157,0,0.30);
   }
   .u-search-fixed{
-       width:100%;
+       width:83.59%;
        position:fixed;
-       top:0;
-       left:0;
+       top:60px;
+       right:14px;
        z-index:777;
+       background:#fff;
+       border-bottom: 1px solid #E8E9E9;
   }
   
   

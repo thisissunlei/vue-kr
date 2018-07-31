@@ -40,12 +40,12 @@ function transmissionAccountsCol(){
                 return time;
             }
         },
-        {
-            title: '业务员姓名',
-            key: 'bizPerson',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '业务员姓名',
+        //     key: 'bizPerson',
+        //     align:'center',
+        //     width:150,
+        // },
         {
             title: '普通销售/普通销售退 ',
             key: 'bizTypeName',
@@ -82,24 +82,19 @@ function transmissionAccountsCol(){
             align:'center',
             width:150,
         },
-        {
-            title: '货币类型',
-            key: 'currency',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '货币类型',
+        //     key: 'currency',
+        //     align:'center',
+        //     width:150,
+        // },
         {
             title: '客户姓名',
             key: 'customerName',
             align:'center',
             width:150,
         },
-        {
-            title: '失败消息',
-            key: 'failedMsg',
-            align:'center',
-            width:150,
-        },
+       
         {
             title: '原始数据id',
             key: 'incomeId',
@@ -127,18 +122,13 @@ function transmissionAccountsCol(){
                 return h('span',{},utils.thousand(params.row.price))
              }
         },
-        {
-            title: '同步记录id',
-            key: 'syncDataId',
-            align:'center',
-            width:120,
-        },
-        {
-            title: '同步状态',
-            key: 'syncStatusName',
-            align:'center',
-            width:120,
-        },
+        // {
+        //     title: '同步记录id',
+        //     key: 'syncDataId',
+        //     align:'center',
+        //     width:120,
+        // },
+        
         {
             title: '税额',
             key: 'taxAmount',
@@ -159,8 +149,21 @@ function transmissionAccountsCol(){
             key: 'taxRate',
             align:'center',
             width:120,
-        }
-
+        },
+        {
+            title: '同步状态',
+            key: 'syncStatusName',
+            align:'center',
+            fixed:'right',
+            width:120,
+        },
+        {
+            title: '失败消息',
+            key: 'failedMsg',
+            align:'center',
+            fixed:'right',
+            width:200,
+        },
     ]
 
 }

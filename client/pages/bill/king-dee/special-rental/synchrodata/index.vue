@@ -78,7 +78,7 @@ export default {
         },
         {
           title: '创建人',
-          key: 'createUserId'
+          key: 'operatorName'
         },
         {
           title: '备注',

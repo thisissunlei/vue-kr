@@ -25,7 +25,7 @@
             <FormItem class="form-item-btn">
                 <div class="btn-container">
                     <Button type="primary" class="btn" @click="handleCancle">取消</Button>
-                    <Button type="primary" class="btn" @click="handleNext(formItem)">下一步</Button>
+                    <Button type="primary" class="btn" @click="handleNext(formItem)" :disabled ="disabled_next" >下一步</Button>
                 </div>
 
             </FormItem>
@@ -62,6 +62,7 @@ export default {
         };
         return {
             syncId:'',
+            disabled_next:false,
             formItem: { syncTime: {} },
             syncDataTypeList: [],
             ruleCustom: {
@@ -83,7 +84,6 @@ export default {
     },
     methods: {
         addKdSyncIncomeData(formItem) {
-          
             let { remark, customerIds, communityIds, syncDataType,syncTime: { startTime, endTime } } = formItem;
             let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
             parmas.customerIds=parmas.customerIds
@@ -127,6 +127,7 @@ export default {
         handleNext(formItem) {
             this.$refs['formItem'].validate((valid) => {
                 if (valid) {
+                    this.disabled_next = true;
                     this.addKdSyncIncomeData(formItem)
                 } else {
                     this.$Notice.error({

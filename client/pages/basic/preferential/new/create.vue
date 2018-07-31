@@ -30,7 +30,7 @@
                 <Input v-model="formItem.remark" />
             </FormItem>
             <FormItem class="form-item-btn">
-                <Button class="btn" @click="handleCancle">取消</Button>
+                <Button class="btn" @click="handleCancle(false)">取消</Button>
                 <Button type="primary" class="btn" @click="handleSubmit(formItem)">确定</Button>
             </FormItem>
 
@@ -262,16 +262,6 @@ export default {
         },
         handleSubmit(formItem) {
             console.log(formItem)
-
-            // communityId	社区id		
-            // discountType	优惠类型		
-            // endDate	结束时间		
-            // present	赠送		
-            // remark	备注		
-            // rightDetail		string	[{"rightType":"HQ_MANAGER","discount":1.1}]
-            // startDate	开始时间		
-            // target
-
             this.$refs['formContent'].validate((valid) => {
                 if (valid) {
                     this.doSubmit(formItem);
@@ -281,8 +271,8 @@ export default {
         doSubmit(formItem) {
             let { communityId, discountType, time: { startDate, endDate }, remark } = formItem
             let parmas = { communityId, discountType, startDate, endDate, remark }
-            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD", new Date(parmas.startDate)) : ''
-            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD", new Date(parmas.endDate)) : ''
+            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(parmas.startDate)) : ''
+            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(parmas.endDate)) : ''
             if (this.showRent) {
                 parmas.target = formItem.target
                 parmas.present = formItem.present
@@ -300,17 +290,15 @@ export default {
                         res[temp[0].id] = obj[item]
                     }
                 })
-                parmas.rightDetail = res;
+                parmas.rightDetail =JSON.stringify(res);
             }
 
             // post-add-discount
+            console.log(parmas)
             debugger
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
-                setTimeout(() => {
-                    window.close()
-                    window.opener.location.reload()
-                }, 1000)
+                this.handleCancle(true);
             }).catch((error) => {
                 this.$Notice.error({
                     title: error.message
@@ -318,8 +306,8 @@ export default {
             })
         },
 
-        handleCancle() {
-            this.$emit('closeAddModal')
+        handleCancle(reload) {
+            this.$emit('closeAddModal',reload)
         }
 
     }

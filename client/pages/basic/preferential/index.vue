@@ -23,28 +23,26 @@
         <div class="u-table">
             <Table border :columns="columns" :data="tableData" stripe></Table>
             <div style="margin: 10px 0 ;overflow: hidden">
-                <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
-                    <Page :current="page" :total="totalCount" :page-size="pageSize" @on-change="changePage" show-total show-elevator></Page>
+                    <Page :current="page" :total="totalCount" :page-size="params.pageSize" @on-change="changePage" show-total show-elevator></Page>
                 </div>
             </div>
         </div>
 
         <!-- 新建 -->
         <Modal v-model="openCreate" id='create-discount-modal' title="添加优惠" ok-text="确定" cancel-text="取消" width="500" :styles="{top: '20px'}">
-            <Create ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData" editStatus="create" @closeAddModal="openCreate=false"/>
+            <Create ref="fromFieldNewPage" v-if="openCreate" @closeAddModal="handleAddModal" />
             <div slot="footer">
             </div>
         </Modal>
-        <!-- 编辑 -->
-        <Modal v-model="openEdit" title="确定要停用?" ok-text="确定" cancel-text="取消" width="300" :styles="{top: '20px'}">
+        <!-- 停用 -->
+        <Modal v-model="openStop" title="确定要停用?" ok-text="确定" cancel-text="取消" width="300" :styles="{top: '20px'}">
             <div style='font-size:14px'>停用将让此优惠立即失效，不可撤销。</div>
             <div slot="footer">
-                <Button type="primary" @click="editSubmit('formContent')">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>
+                <Button type="primary" @click="submitStop('formContent')">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="cancelStop">取消</Button>
             </div>
         </Modal>
-        <Message :type="MessageType" :openMessage="openMessage" :warn="warn" @changeOpen="onChangeOpen"></Message>
     </div>
 </template>
 
@@ -53,17 +51,15 @@
 
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
-import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import Create from './new/create.vue';
 import CreateSale from './new/createSale.vue';
 
 
 export default {
-    name: 'Meeting',
+    name: 'DiscountList',
     components: {
         SectionTitle,
-        Message,
         CreateSale,
         Create
     },
@@ -74,25 +70,15 @@ export default {
             stateList: [],//优惠可用状态列表 
             communityList: [],
             communityId: '',
-            editData: {},
-            parameterData: {},
             openCreate: false,
-            openEdit: false,
+            openStop: false,
             totalCount: 1,
             tableData: [],
-            pageSize: 15,
             page: 1,
             params: {
                 page: 1,
                 pageSize: 15
             },
-            saleForm: {},
-            openMessage: false,
-            warn: '',
-            MessageType: '',
-            msg: '',
-            //假数据
-            dataItem: [],
             columns: [
                 {
                     title: '优惠方案',
@@ -218,16 +204,9 @@ export default {
                     }
                 }
             ]
+        }
+    },
 
-        }
-    },
-    watch: {
-        openEdit() {
-            if (!this.openEdit) {
-                this.editData = {}
-            }
-        }
-    },
     created() {
         this.getTableData(this.params);
         this.getCmtList();
@@ -240,7 +219,6 @@ export default {
             }).then((r) => {
                 let data = r.data;
                 this.stateList = [].concat(data)
-                // this.discountTypeList = [].concat({ value: 'ALL', desc: '全部' }, r.data);
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message
@@ -269,13 +247,12 @@ export default {
             })
         },
         checkAllGroupChange() {
-            let params = Object.assign({}, this.params, { statusList:this.status.join(',')}, { communityId: this.communityId })
+            let params = Object.assign({}, this.params, { statusList: this.status.join(',') }, { communityId: this.communityId })
             this.getTableData(params)
         },
         getTableData(params) {
             // 
             this.$http.get('get-discont-list', params).then((res) => {
-                // this.$http.get('get-sale-list', params).then((res) => {
                 this.tableData = res.data.items;
                 this.totalCount = res.data.totalCount;
             }).catch((err) => {
@@ -291,66 +268,25 @@ export default {
         cancelCreate() {
             this.openCreate = false;
         },
-        onSubmit(name) {
-            //校验表单
-            var newPageRefs = this.$refs.fromFieldNewPage.$refs;
-            var isSubmit = true;
-            newPageRefs[name].validate((valid, data) => {
-                if (!valid) {
 
-                    isSubmit = false
-                } else {
-
-                    this.parameterData.items = '';
-                    this.parameterData.paramVal = this.parameterData.paramType == 'JSON' ? JSON.stringify(this.parameterData.paramVal) : this.parameterData.paramVal
-                    // 校验json表单
-                    if (this.parameterData.paramType == 'JSON') {
-                        for (let key in this.parameterData.paramVal) {
-                            if (!key || !this.parameterData.paramVal[key]) {
-                                isSubmit = false;
-                            }
-                        }
-                    }
-                    this.parameterData.enableFlag = this.parameterData.flag;
-                    if (!isSubmit) {
-                        this.$Notice.error({
-                            title: '请填写完 参数'
-                        });
-                        return;
-                    }
-                    // 提交数据
-                    this.$http.post('saveParamData', this.parameterData).then((res) => {
-                        this.getTableData()
-                        this.openCreate = false;
-                    }).catch((err) => {
-                        this.$Notice.error({
-                            title: err.message
-                        });
-                    })
-
-                }
-            })
-        },
-        editSubmit() {
+        submitStop() {
             this.$http.put('put-stop-discount', { id: this.currentID }).then((res) => {
-                this.openEdit = false;
+                this.openStop = false;
                 this.$Message.success('操作成功');
                 this.getTableData('')
 
             }).catch((err) => {
-                this.openEdit = false;
+                this.openStop = false;
                 this.$Notice.error({
                     title: err.message
                 });
             })
         },
-        cancelEdit() {
-            this.openEdit = false;
+        cancelStop() {
+            this.openStop = false;
             this.editData = {}
         },
-        onChangeOpen() {
-            console.log('changeOpen')
-        },
+
         changeContent(value) {
             this.params.communityId = value;
             this.params.status = JSON.stringify(this.status);
@@ -363,26 +299,20 @@ export default {
             this.page = page;
             this.getTableData(this.params);
         },
-        showEdit(item) {
-
-            this.editData = item;
-            this.parameterData = item;
-            this.openEdit = true;
-        },
-        newPageDataChange(data) {
-            if (data) {
-                this.parameterData = data;
-            }
-        },
         //停用
         handleStopDiscount(item) {
             this.editData = item;
             this.currentID = item.id;
             this.parameterData = item;
-            this.openEdit = true;
-
+            this.openStop = true;
         },
-
+        handleAddModal(reload) {
+            this.openCreate = false
+            debugger
+            if (reload) {
+                this.getTableData();
+            }
+        }
     }
 
 }

@@ -225,9 +225,6 @@ export default {
                     communityId:[
                         {  message: '请选择预约社区', trigger: 'change'}
                     ],
-                    appiontTime:[
-                        {  type: 'date',message: '请选择参观时间', trigger: 'change'}
-                    ],
                     refreeName:[
                         {  message: '请填写推介人姓名', trigger: 'blur'}
                     ],
@@ -271,7 +268,7 @@ export default {
         //社区接口
         getCommunityList(id){
            let params =Object.assign({},this.params);
-            this.$http.get('getDailyCommunity').then((res)=>{
+            this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -321,9 +318,10 @@ export default {
             })
         },
         cityChange(param){
+            console.log('cityChange',param)
             if(param){
-                if(param !== this.params.cityId){
-                  this.params = {}  
+                if(param !== this.formItem.cityId){
+                  this.formItem.communityId = '' 
                 }
                 this.getCommunityList(param)  
             }

@@ -292,7 +292,7 @@ export default {
 </script>
 
 
-<style lang="less" >
+<style lang="less" scoped>
 .g-data-sync-view {
     // margin:-10px;
     .m-detail-header {
@@ -324,7 +324,13 @@ export default {
         padding: 30px 24px;
         .ivu-table-wrapper {
             margin-bottom: 30px;
-        }
+		}
+		.ui-detail-layout:nth-of-type(1),.ui-detail-layout:nth-of-type(2){
+			padding-bottom:50px;
+			margin-bottom: 20px;
+			border-bottom: 1px solid #e8e9e9;
+			
+		}
     }
     .table-button {
         text-align: center;

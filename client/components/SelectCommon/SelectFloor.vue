@@ -119,6 +119,7 @@ export default {
 
 <style lang="less">
 .com-select-chance {
+    display:inline-block;
     ::-webkit-input-placeholder {
         color: #666;
     }

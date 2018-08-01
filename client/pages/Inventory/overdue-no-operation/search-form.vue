@@ -26,8 +26,8 @@
 
                         <Form-item class="priceForm community-form" style="margin-right: 20px;">
                             <span class="attract-font" style="margin-right:27px;">社<span style="display:inline-block;width:26px;"></span>区</span>
-                            <div style="display:inline-block;"><SelectCity v-model="formItem.cityId" :styles="{width:90+'px',marginRight:'20px'}"/></div>
-                            <div style="display:inline-block;"><SelectCommunity v-model="formItem.communityId" :params="cityParams" :styles="{width:174+'px'}"  @init="communityInit" :isGetAll="isGetAll"/></div> 
+                            <SelectCity v-model="formItem.cityId" :styles="{width:90+'px',marginRight:'20px'}"/>
+                            <SelectCommunity v-model="formItem.communityId" :params="cityParams" :styles="{width:174+'px'}"  @init="communityInit" :isGetAll="isGetAll"/>
                         </Form-item>
                         <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>

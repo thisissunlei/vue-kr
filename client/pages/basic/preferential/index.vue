@@ -131,7 +131,7 @@ export default {
                         let content = params.row.rightContent.split(';')
                         content.map(item => {
                             lines.push(
-                                h('p', item)
+                                h('p', { style: 'margin: 2px 1px' }, item)
                             )
                         })
                         return h('div', lines)
@@ -154,7 +154,36 @@ export default {
                 {
                     title: '备注',
                     key: 'remark',
-                    align: 'center'
+                    align: 'center',
+                    width: 120,
+                    render: (h, params) => {
+                        let str = params.row.remark
+                        if (str) {
+                            return h('Tooltip', {
+                                props: {
+                                    placement: 'top'
+                                }
+                            }, [
+                                    h('div', {
+                                        style: {
+                                            width: "100px",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap"
+                                        }
+                                    }, str),
+                                    h('div', {
+                                        style: {
+                                            wordWrap: "break-word",
+                                            with: '100px',
+                                            whiteSpace: "normal"
+                                        },
+                                        slot: 'content'
+                                    }, str)
+                                ]
+                            )
+                        }
+                    }
                 },
                 {
                     title: '状态',
@@ -179,7 +208,7 @@ export default {
                     align: 'center',
                     width: 110,
                     render: (h, params) => {
-                        let result = params.row.isStop;
+                        let result = params.row.statusName == '已失效';
                         let style;
                         if (result) {
                             return h('div', '-')
@@ -251,8 +280,9 @@ export default {
             this.getTableData(params)
             // utils.addParams(params);
             console.log(params)
-            let url = window.location.href.split('?')[0];
 
+            return
+            let url = window.location.href.split('?')[0];
             var where = [];
             for (var field in params) {
                 if (params.hasOwnProperty(field)) {
@@ -261,6 +291,7 @@ export default {
             }
             url = url + "?" + where.join('&');
             window.history.pushState(params, '', url)
+
         },
         getTableData(params) {
             // 
@@ -301,7 +332,7 @@ export default {
 
         changeContent(value) {
             this.params.communityId = value;
-            this.params.status = JSON.stringify(this.status);
+            this.params.statusList = JSON.stringify(this.statusList);
             this.params.page = 1;
             this.page = 1;
             this.getTableData(this.params);

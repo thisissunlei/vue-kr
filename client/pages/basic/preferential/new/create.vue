@@ -1,5 +1,5 @@
 <template>
-    <div class='discount-set-from-panel'>
+    <div class='discount-set-from-panel' id='discount-set-from-panel'>
         <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent" class='discount-set-from'>
             <FormItem label="适用社区" prop="communityId">
                 <selectCommunities v-model="formItem.communityId"></selectCommunities>
@@ -14,19 +14,22 @@
                 <span class="u-date-txt" style='padding:0 15px'>至</span>
                 <DatePicker v-model="formItem.time.endDate" type="date" placeholder="结束日期" style="width: 140px" />
             </FormItem>
-            <FormItem label="优惠方案" prop="scheme" v-if="showRent">
+            <FormItem label="优惠方案" prop="scheme" v-show="showRent">
                 <span style='padding:0 13px'>满</span>
                 <Input v-model="formItem.scheme.target" :number='true' placeholder="1-36" style="width: 120px" />
                 <span style='padding:0 14px'>赠</span>
                 <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" />
             </FormItem>
-            <FormItem label="折扣配置" v-if="!showRent" class="form-item-discount" prop="discountList">
+
+            <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
                 <SelectDiscount :roleList='roleList' v-model="formItem.discountList"></SelectDiscount>
             </FormItem>
-            <FormItem label="折扣配置" v-if="showRent" class="form-item-discount" prop="rentFreeList">
+
+            <FormItem label="折扣配置" v-show="showRent" class="form-item-discount" prop="rentFreeList">
                 <RentFree :roleList='roleList' v-model="formItem.rentFreeList" @input='handleRentFreeInput'></RentFree>
                 <div v-if='showError' class="ivu-form-item-error-tip">至少勾选一个级别</div>
             </FormItem>
+
             <FormItem label="备注" class='form-item-remark'>
                 <Input v-model="formItem.remark" />
             </FormItem>
@@ -140,7 +143,7 @@ export default {
             return true;
         };
         return {
-            showError:false,
+            showError: false,
             showRent: false,
             discountTypeList: [
                 {
@@ -213,8 +216,8 @@ export default {
         }
     },
     mounted() {
-        // this.formItem.discountType = 'DISCOUNT'
-        this.formItem.discountType = 2
+        this.formItem.discountType = 'DISCOUNT'
+        // this.formItem.discountType = 2
         this.getDiscountTypeList();
         this.getRoleRightList();
     },
@@ -259,31 +262,47 @@ export default {
         },
 
         handleRentFreeInput(list) {
-            if (this.formItem.rentFreeList.length==0) {
-                this.showError=true
+            if (this.formItem.rentFreeList.length == 0) {
+                this.showError = true
             }
-            else{
-                this.showError=false
+            else {
+                this.showError = false
             }
         },
         handleSelectDiscountTypeChange(val) {
-            // let nodelist = document.querySelectorAll('.ivu-form-item-error-tip')
-            // Array.prototype.forEach.call(nodelist, function (node) {
-            //     // node.parentNode.removeChild(node)
-            //     node.style.display = "none";
-            // });
             if (val === 'DISCOUNT')
                 this.showRent = false;
             else
                 this.showRent = true;
-
         },
         handleSubmit(formItem) {
-            console.log(formItem)
+            console.log('formItem',formItem)
             this.$refs['formContent'].validate((valid) => {
-                if (valid) {
-                    this.doSubmit(formItem);
-                }
+                setTimeout(() => {//校验后 ivu-form-item-error-tip dom生成需要时间
+                    let pass = true
+                    if (!valid) {
+                        let nodelist = document.querySelectorAll('#discount-set-from-panel .ivu-form-item-error')
+                        Array.prototype.forEach.call(nodelist, function (node) {
+                            console.log(node.style.display)
+                            if (pass) {
+                                if (node.style.display == "none") {
+                                    pass = true
+                                }
+                                else {
+                                    pass = false
+                                }
+                            }
+                        });
+                    }
+                    if (pass) {
+                        this.doSubmit(formItem);
+                    }
+                    else {
+                        this.$Notice.error({
+                            title: '请填写完表单'
+                        });
+                    }
+                }, 300);
             })
         },
         doSubmit(formItem) {
@@ -294,15 +313,14 @@ export default {
             if (this.showRent) {
                 parmas.target = formItem.scheme.target
                 parmas.present = formItem.scheme.present;
-                let arr=[];
-                formItem.rentFreeList.map(item=>{
-                    arr.push(this.roleList.find(r=>r.name==item).id)
+                let arr = [];
+                formItem.rentFreeList.map(item => {
+                    arr.push(this.roleList.find(r => r.name == item).id)
                 })
                 parmas.rightDetail = JSON.stringify(arr)
             }
             else {
                 let res = {};
-
                 let obj = formItem.discountList
                 Object.keys(obj).map(item => {
                     let temp = this.roleList.filter(r => {
@@ -316,8 +334,8 @@ export default {
             }
 
             // post-add-discount
-            console.log(parmas)
-            debugger
+            console.log('add_discount', parmas)
+
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
                 this.handleCancle(true);

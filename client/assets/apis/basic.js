@@ -40,7 +40,7 @@ export default {
     //获取级别权限类型
     "get-discount-rights": {
         // url: "/ben/api/krspace-op-web/cmt/discount/getRight",
-        url: "/ben/cmt/discount/getRight",
+        url: "/ben/cmt/discount/rights",
         method: "get"
     },
     "put-stop-discount": {

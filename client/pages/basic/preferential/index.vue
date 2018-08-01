@@ -267,7 +267,7 @@ export default {
                 });
                 list.unshift({
                     label: '全部',
-                    value: ' '
+                    value: ''
                 })
                 this.communityList = list;
             }).catch((error) => {
@@ -279,10 +279,9 @@ export default {
         checkAllGroupChange() {
             let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
             this.getTableData(params)
-            // utils.addParams(params);
             console.log(params)
 
-            // return
+            return
             let url = window.location.href.split('?')[0];
             var where = [];
             for (var field in params) {
@@ -295,7 +294,6 @@ export default {
 
         },
         getTableData(params) {
-            // 
             this.$http.get('get-discont-list', params).then((res) => {
                 this.tableData = res.data.items;
                 this.totalCount = res.data.totalCount;
@@ -352,7 +350,6 @@ export default {
         },
         handleAddModal(reload) {
             this.openCreate = false
-            debugger
             if (reload) {
                 this.getTableData();
             }

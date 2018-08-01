@@ -9,7 +9,7 @@
                     <Option v-for="(option, index) in discountTypeList" :value="option.value" :key="option.value">{{option.desc}}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="折扣期间" class="bill-search" prop="time">
+            <FormItem label="优惠期间" class="bill-search" prop="time">
                 <DatePicker v-model="formItem.time.startDate" type="date" placeholder="开始日期" style="width: 140px" />
                 <span class="u-date-txt" style='padding:0 15px'>至</span>
                 <DatePicker v-model="formItem.time.endDate" type="date" placeholder="结束日期" style="width: 140px" />
@@ -85,7 +85,7 @@ export default {
                 callback("请输入数字")
             } else if (value.target > 36 || value.present > 12) {
                 callback('输入有误')
-            } else if (value.target < 0 || value.present < 0) {
+            } else if (value.target < 1 || value.present < 1) {
                 callback('输入有误')
             } else if (value.present > value.target) {
                 callback('输入有误')

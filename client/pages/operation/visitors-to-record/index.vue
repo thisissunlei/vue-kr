@@ -376,21 +376,20 @@ var layoutScrollHeight=0;
                 this.dataParams(this.tabForms);
             },
             getData(params){
-                console.log('=======',params)
-                if(params.cEndTime!=''){
+                if(params.cEndTime instanceof Date){
                     console.log('getData',params.cEndTime)
                     params.cEndTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.cEndTime))
                 }
                     
 
-                if( params.cStartTime!=''){
+                if(params.cStartTime instanceof Date){
                     params.cStartTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.cStartTime))
                 }
-                if(params.startAppiontTime!=''){
+                if(params.startAppiontTime instanceof Date){
                     params.startAppiontTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.startAppiontTime))
                     console.log('getData--startAppiontTime',params.startAppiontTime)
                 }
-                if(params.endAppiontTime!=''){
+                if(params.endAppiontTime instanceof Date){
                     params.endAppiontTime =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.endAppiontTime))
                 }
                 this.$http.get('get-csr-clue-list', params).then((res)=>{

@@ -5,6 +5,16 @@ function originalAccountsCol(){
     
     return [
         {
+            title: '客户姓名',
+            key: 'customerName',
+            align:'center',
+        },
+        {
+            title: '所在社区',
+            key: 'communityName',
+            align:'center',
+        },
+        {
             title: '日租金',
             key: 'amount',
             align:'center',
@@ -23,21 +33,13 @@ function originalAccountsCol(){
         //     align:'center',
         //     key: 'communityId',
         // },
-        {
-            title: '所在社区',
-            key: 'communityName',
-            align:'center',
-        },
+       
         // {
         //     title: '操作人',
         //     key: 'operatorName',
         //     align:'center'
         // },
-        {
-            title: '客户姓名',
-            key: 'customerName',
-            align:'center',
-        },
+       
         {
             title: '收入确认日期 ',
             key: 'dealDate',

@@ -39,12 +39,12 @@ export default {
     },
     //获取级别权限类型
     "get-discount-rights": {
-        url: "/ben/api/krspace-order-web/cmt/discount/rights",
+        url: "/api/krspace-order-web/cmt/discount/rights",
         // url: "/ben/cmt/discount/rights",
         method: "get"
     },
     "put-stop-discount": {
-        url: "/ben/api/krspace-order-web/cmt/discount/stop",
+        url: "/api/krspace-order-web/cmt/discount/stop",
         // url: "/ben/cmt/discount/stop",
         method: "put"
     }

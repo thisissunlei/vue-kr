@@ -296,7 +296,7 @@
 
           <!-- @click="clappointment" -->
           <div class="line-one">
-            <div class="box" style="flex:1/2">
+            <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverNo()">
                   <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">

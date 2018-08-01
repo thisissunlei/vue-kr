@@ -217,7 +217,8 @@
             title: '备注',
             key: 'remark',
             align: 'center',
-           width:120,
+            fixed:'right',
+            width:250,
           }
         ]
 

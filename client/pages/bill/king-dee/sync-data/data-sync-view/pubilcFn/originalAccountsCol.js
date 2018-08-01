@@ -1,24 +1,13 @@
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 //原始应收数据
 function originalAccountsCol(){
     
     return [
         {
-            title: '日租金',
-            key: 'amount',
+            title: '客户姓名',
+            key: 'customerName',
             align:'center',
-            
-        },
-        {
-            title: '账单id',
-            key: 'billId',
-            align:'center',            
-           
-        },
-        {
-            title: '社区id',
-            align:'center',
-            key: 'communityId',
         },
         {
             title: '所在社区',
@@ -26,15 +15,31 @@ function originalAccountsCol(){
             align:'center',
         },
         {
-            title: '操作人',
-            key: 'operatorName',
-            align:'center'
-        },
-        {
-            title: '客户姓名',
-            key: 'customerName',
+            title: '日租金',
+            key: 'amount',
             align:'center',
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.amount))
+             }
         },
+        // {
+        //     title: '账单id',
+        //     key: 'billId',
+        //     align:'center',            
+           
+        // },
+        // {
+        //     title: '社区id',
+        //     align:'center',
+        //     key: 'communityId',
+        // },
+       
+        // {
+        //     title: '操作人',
+        //     key: 'operatorName',
+        //     align:'center'
+        // },
+       
         {
             title: '收入确认日期 ',
             key: 'dealDate',
@@ -47,7 +52,7 @@ function originalAccountsCol(){
         },
         {
             title: '收入类型',
-            key: 'incomeTypeName',
+            key: 'incomeTypeDesc',
             align:'center',
             
         },
@@ -57,17 +62,17 @@ function originalAccountsCol(){
             align:'center',
             
         },
-        {
-            title: '同步状态',
-            key: 'syncStatusName',
-            align:'center',
+        // {
+        //     title: '同步状态',
+        //     key: 'syncStatusName',
+        //     align:'center',
             
-        },
-        {
-            title: '版本号',
-            key: 'version',
-            align:'center',
-        }
+        // },
+        // {
+        //     title: '版本号',
+        //     key: 'version',
+        //     align:'center',
+        // }
     ]
 
 }

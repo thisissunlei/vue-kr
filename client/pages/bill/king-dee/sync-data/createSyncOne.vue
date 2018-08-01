@@ -25,11 +25,22 @@
             <FormItem class="form-item-btn">
                 <div class="btn-container">
                     <Button type="primary" class="btn" @click="handleCancle">取消</Button>
-                    <Button type="primary" class="btn" @click="handleNext(formItem)">下一步</Button>
+                    <Button type="primary" class="btn" @click="handleNext(formItem)" :disabled ="disabled_next" >下一步</Button>
                 </div>
 
             </FormItem>
         </Form>
+         <Modal
+            v-model="openLoading"
+            title="等待拉取中..."
+            :closable="false"
+            :mask-closable="false"
+        >
+            <div>
+                <Loading />
+            </div>
+            <div slot="footer"></div>
+        </Modal>
     </div>
 </template>
 
@@ -40,28 +51,39 @@ import selectCommunities from './SelectCommunities.vue'
 // import selectCommunities from '~/components/SelectCommunities.vue'
 // import selectCustomers from '~/components/SelectCustomers.vue'
 import selectCustomers from './SelectCustomers.vue'
+import Loading from '~/components/Loading.vue'
 
 export default {
     name: 'createSync',
     components: {
         SectionTitle,
         selectCommunities,
-        selectCustomers
+        selectCustomers,
+        Loading,
     },
     data() {
+
         const validateDate = (rule, value, callback) => {
+            let start = value.startTime && dateUtils.dateToStr("YYYY-MM", value.startTime);
+            let end = value.endTime && dateUtils.dateToStr("YYYY-MM", value.endTime);
+         //   console.log(start,end,123);
             if (!value.startTime) {
                 callback("请输入开始日期")
             } else if (!value.endTime) {
                 callback("请输入结束日期")
             } else if (value.startTime > value.endTime) {
                 callback('开始日期不能大于结束日期')
-            } else {
+            } 
+            else if (start !== end) {
+                callback('选择日期不能跨月')
+            }else {
                 callback()
             }
         };
         return {
+            openLoading:false,
             syncId:'',
+            disabled_next:false,
             formItem: { syncTime: {} },
             syncDataTypeList: [],
             ruleCustom: {
@@ -82,19 +104,89 @@ export default {
         this.getSyncDataTypeList();
     },
     methods: {
+    //获取同步状态
+        loopSuccess(){
+            console.log("sssss");
+            this.$http.get('get-sync-findSyncStatus-loop', {
+                syncDataId:this.syncId,
+            })
+                .then(r => {
+                    console.log(r,"ppppppp");
+                    if(r.data.pullStatus=="ALREADY_PULL"){
+                        this.openLoading = false;
+                        window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
+                      //  window.location.href = '/bill/king-dee/sync-data';
+                        return ;
+                    }
+                   if(r.data.pullStatus=='FAILED_PULL'){
+                         this.openLoading = false;
+                         this.disabled_next = false;
+                         this.$Notice.error({
+                            title: '拉取失败'
+                        });
+                        return ;
+                    }
+                    // if(r.data.pullStatus=='NOT_PULL'){
+                    //      this.openLoading = false;
+                    //     this.$Notice.error({
+                    //         title: '未拉取'
+                    //     });
+                    //     return ;
+                    // }
+                    setTimeout(()=>{
+                        this.loopSuccess();
+                    },1000)
+                    // this.openLoading = false;
+                    // alert("8888888")
+                })
+                .catch(error => {
+                    console.log(error)
+                 //   this.isAllSelect = false
+                    this.$Notice.error({
+                        title: error.message
+                    });
+                })
+        },
+
         addKdSyncIncomeData(formItem) {
-          
             let { remark, customerIds, communityIds, syncDataType,syncTime: { startTime, endTime } } = formItem;
             let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
-            parmas.customerIds=parmas.customerIds
-            parmas.communityIds=parmas.communityIds
+            parmas.customerIds=parmas.customerIds;
+            parmas.communityIds=parmas.communityIds;
+
+            this.syncStartTime = dateUtils.dateToStr("YYYY-MM-dd", parmas.startTime);
+            this.syncEndTime = dateUtils.dateToStr("YYYY-MM-dd", parmas.endTime);
+
+           // console.log(this.syncStartTime, this.syncEndTime,'1111111111111' );
+            
             parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
             parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
+           // console.log(parmas.startTime,  parmas.endTime,'u22222222');
             this.$http.post('post-creat-sync-data', parmas).then(r => {
                 this.syncId=r.data;
-                window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.formItem.syncTime.startTime}&endTime=${this.formItem.syncTime.endTime}`,'_blank')
+                 this.openLoading = true;
+                // console.log(11111111)
+                 this.loopSuccess();
+                 
+            //     this.$http.post(api, parmas)
+
+
+                // .then(r => {
+                //     this.isAllSelect = false
+                //     this.openLoading = true;
+                //     this.loopSuccess();
+                //     // alert("8888888")
+                // })
+                // .catch(error => {
+                //     console.log(error)
+                //     this.isAllSelect = false
+                //     this.$Notice.error({
+                //         title: error.message
+                //     });
+                // })
             }).catch(error => {
                 console.log(error)
+                console.log(222222222)
                 this.$Notice.error({
                     title: error.message
                 });
@@ -127,6 +219,7 @@ export default {
         handleNext(formItem) {
             this.$refs['formItem'].validate((valid) => {
                 if (valid) {
+                    this.disabled_next = true;
                     this.addKdSyncIncomeData(formItem)
                 } else {
                     this.$Notice.error({

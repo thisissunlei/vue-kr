@@ -12,7 +12,11 @@ export default {
         roleList: {
             type: Array,
             default: () => []
-        }
+        },
+        value: {
+            type: Array,
+            default: () => []
+        },
     },
     data() {
         return {
@@ -39,7 +43,7 @@ export default {
             this.mapName2Level = obj
         },
         checkAllGroupChange(data) {
-            console.log('data',data)
+            console.log('data', data)
             if (data.length === this.roleList.length) {
                 this.indeterminate = false;
                 this.checkAll = true;
@@ -63,7 +67,7 @@ export default {
             if (this.checkAll) {
                 this.checkList = [].concat(this.roleList.map(item => item.name));
             } else {
-                this.checkList=[]
+                this.checkList = []
             }
             this.$emit('input', this.checkList)
         },

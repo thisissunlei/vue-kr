@@ -39,14 +39,14 @@
         :warn="warn"
         @changeOpen="onMessageChange"
     />
-    <Modal v-model="openCreate" title="新建" ok-text="保存" width="70%" cancel-text="取消" class-name="vertical-center-modal">
+    <Modal v-model="openCreate" title="新建" ok-text="保存" width="650" cancel-text="取消" class-name="vertical-center-modal">
         <Create  @on-result-change="onResultChange" v-if="openCreate"
         ref="goodsNewPage"/>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
         </div>
     </Modal>
-    <Modal v-model="showEdit" title="编辑" ok-text="保存" width="70%" cancel-text="取消" class-name="vertical-center-modal">
+    <Modal v-model="showEdit" title="编辑" ok-text="保存" width="650" cancel-text="取消" class-name="vertical-center-modal">
         <Edit  @on-result-change="onResultChange" v-if="showEdit"
         ref="goodsEditPage" :editData="editRow"/>
         <div slot="footer">
@@ -376,6 +376,23 @@ var layoutScrollHeight=0;
                 this.dataParams(this.tabForms);
             },
             getData(params){
+                console.log('=======',params)
+                if(params.cEndTime!=''){
+                    console.log('getData',params.cEndTime)
+                    params.cEndTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.cEndTime))
+                }
+                    
+
+                if( params.cStartTime!=''){
+                    params.cStartTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.cStartTime))
+                }
+                if(params.startAppiontTime!=''){
+                    params.startAppiontTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.startAppiontTime))
+                    console.log('getData--startAppiontTime',params.startAppiontTime)
+                }
+                if(params.endAppiontTime!=''){
+                    params.endAppiontTime =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.endAppiontTime))
+                }
                 this.$http.get('get-csr-clue-list', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;

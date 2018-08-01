@@ -37,7 +37,7 @@
 
                     <Form-item label="欠款金额" class='daily-form'> 
                         <Select 
-                            v-model="formItem.payAll" 
+                            v-model="formItem.contractPayStatus" 
                             placeholder="请输入金额" 
                             style="width: 200px"
                         >
@@ -151,7 +151,7 @@ export default {
                     overDaysMax:'', 
                     startDate:'',
                     endDate:'',
-                    payAll:'',
+                    contractPayStatus:'',
                     hasAttachment:''
                 },
                 formItemOld:{},
@@ -162,8 +162,9 @@ export default {
                     {value:'0',label:'否'}
                 ],
                 payList:[
-                    {value:'0',label:'未付清'},
-                    {value:'1',label:'已付清'}
+                    {value:'PART_PAID',label:'未付清'},
+                    {value:'PAID_OFF',label:'已付清'},
+                    {value:'UNPAID',label:'未支付'}
                 ],
                 ruleInvestment: {
                     customerName:[

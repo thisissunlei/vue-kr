@@ -6,7 +6,11 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="onCustomerChange"/>
+                      <selectCustomers 
+                        url="get-customers-order-currency"
+                        name="formItem.customerId" 
+                        :onchange="onCustomerChange"
+                    />
                     </FormItem>
                 </Col>
                 

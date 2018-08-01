@@ -359,7 +359,7 @@
         sidebarNavs.childList.map(function (item) {
             let iconName = item.iconUrl ? item.iconUrl : '';
             if (item.hasOwnProperty('childList') && item.childList.length) {
-                html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.name + '</span></div>';
+                html += '<div class="g-nav-item"><div class="g-nav-item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.name + '</span></div>';
 
                 html += '<ul>';
                 item.childList.map(function (child) {

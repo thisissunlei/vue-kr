@@ -20,7 +20,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'http://img.krspace.cn/common/favicon_new.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' }
     ],
     script: pluginsDomain
     

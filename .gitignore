@@ -1,16 +1,21 @@
 
+.vscode
 dist
 .idea
 build
 .nuxt
 npm-debug.log
 npm-debug.log.*
-
 *.DS_STORE
-
 *.DS_Store
 node_modules
 yarn.lock
 npm-debug.log
 package.json
+.idea/inspectionProfiles/Project_Default.xml
+.idea/kr-vue.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
 .idea

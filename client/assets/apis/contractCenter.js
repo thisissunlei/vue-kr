@@ -50,5 +50,15 @@ export default {
     'contract-batch-file': {
         url: '/api/krspace-erp-web/wf/station/contract/pigeonhole/update',
         method: 'post'
+    },
+    // 中英文合同接口-专用条款列表
+    'get-other-agree-list': {
+        url: '/api/krspace-erp-web/wf/station/contract/other-agree/list',
+        method: 'get'
+    },
+    // 中英文合同接口-新增专用条款
+    'post-other-agree-list': {
+        url: '/api/krspace-erp-web/wf/station/contract/other-agree/add',
+        method: 'post'
     }
 }

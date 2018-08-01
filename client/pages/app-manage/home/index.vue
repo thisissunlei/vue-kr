@@ -18,6 +18,7 @@
                     :value="tabParams.dataDate"
                     @on-change="changeDate"
                     :options="dateOptions"
+                    :editable="false"
                 />
              </div>
          </div>

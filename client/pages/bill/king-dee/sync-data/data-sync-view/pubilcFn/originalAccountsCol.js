@@ -12,27 +12,27 @@ function originalAccountsCol(){
                 return h('span',{},utils.thousand(params.row.amount))
              }
         },
-        {
-            title: '账单id',
-            key: 'billId',
-            align:'center',            
+        // {
+        //     title: '账单id',
+        //     key: 'billId',
+        //     align:'center',            
            
-        },
-        {
-            title: '社区id',
-            align:'center',
-            key: 'communityId',
-        },
+        // },
+        // {
+        //     title: '社区id',
+        //     align:'center',
+        //     key: 'communityId',
+        // },
         {
             title: '所在社区',
             key: 'communityName',
             align:'center',
         },
-        {
-            title: '操作人',
-            key: 'operatorName',
-            align:'center'
-        },
+        // {
+        //     title: '操作人',
+        //     key: 'operatorName',
+        //     align:'center'
+        // },
         {
             title: '客户姓名',
             key: 'customerName',
@@ -60,17 +60,17 @@ function originalAccountsCol(){
             align:'center',
             
         },
-        {
-            title: '同步状态',
-            key: 'syncStatusName',
-            align:'center',
+        // {
+        //     title: '同步状态',
+        //     key: 'syncStatusName',
+        //     align:'center',
             
-        },
-        {
-            title: '版本号',
-            key: 'version',
-            align:'center',
-        }
+        // },
+        // {
+        //     title: '版本号',
+        //     key: 'version',
+        //     align:'center',
+        // }
     ]
 
 }

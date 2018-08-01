@@ -113,7 +113,7 @@
         </div>
         <Modal
             v-model="openLoading"
-            title="等待同步中..."
+            :title="titleMessage"
             :closable="false"
             :mask-closable="false"
         >
@@ -173,6 +173,7 @@ export default {
             selectedIdsInNotAllSelectState: [],//非全选模式下 已选择的id集合
             openLoading:false,
             formItem: {},
+            titleMessage:'等待同步中....',
             syncStateList: [
                 {
                     label: '未同步',
@@ -671,15 +672,23 @@ export default {
                 .then(r => {
                     console.log(r,"ppppppp")
                     if(r.data.syncStatus=="ALREADY_SYNC"){
+                        this.titleMessage = '同步成功';
+                        setTimeout(()=>{
                         this.openLoading = false;
                         window.location.href = '/bill/king-dee/sync-data';
+                        },2000);
                         return ;
                     }
                     if(r.data.syncStatus=='FAILED_SYNC'){
-                         this.openLoading = false;
-                        this.$Notice.error({
-                            title: '同步失败'
-                        });
+                        this.titleMessage = '同步失败';
+                         setTimeout(()=>{
+                        this.openLoading = false;
+                        window.location.reload();
+                        },2000);
+                        // this.openLoading = false;
+                        // this.$Notice.error({
+                        //     title: '同步失败'
+                        // });
                         return ;
                     }
                     setTimeout(()=>{

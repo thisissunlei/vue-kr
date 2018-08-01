@@ -67,7 +67,7 @@ export default {
     },
     //同步所有
     "post-sync-income-data-ids": {
-        url: "/api/sync/startSyncIncomeDataAl",
+        url: "/api/sync/startSyncIncomeDataAll",
         method: "post"
     },
     //同步所有

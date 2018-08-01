@@ -62,14 +62,21 @@ export default {
         Loading,
     },
     data() {
+
         const validateDate = (rule, value, callback) => {
+            let start = value.startTime && dateUtils.dateToStr("YYYY-MM", value.startTime);
+            let end = value.endTime && dateUtils.dateToStr("YYYY-MM", value.endTime);
+         //   console.log(start,end,123);
             if (!value.startTime) {
                 callback("请输入开始日期")
             } else if (!value.endTime) {
                 callback("请输入结束日期")
             } else if (value.startTime > value.endTime) {
                 callback('开始日期不能大于结束日期')
-            } else {
+            } 
+            else if (start !== end) {
+                callback('选择日期不能跨月')
+            }else {
                 callback()
             }
         };
@@ -107,7 +114,7 @@ export default {
                     console.log(r,"ppppppp");
                     if(r.data.pullStatus=="ALREADY_PULL"){
                         this.openLoading = false;
-                        window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.formItem.syncTime.startTime}&endTime=${this.formItem.syncTime.endTime}`,'_blank');
+                        window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
                       //  window.location.href = '/bill/king-dee/sync-data';
                         return ;
                     }
@@ -145,13 +152,15 @@ export default {
             let parmas = { remark, customerIds, communityIds,syncDataType, startTime, endTime };
             parmas.customerIds=parmas.customerIds;
             parmas.communityIds=parmas.communityIds;
-            this.syncStartTime =  parmas.startTime;
-            this.syncEndTime = parmas.endTime;
-            console.log(this.syncStartTime, this.syncEndTime,'uuhhhuuhhuhuhhu' );
 
+            this.syncStartTime = dateUtils.dateToStr("YYYY-MM-dd", parmas.startTime);
+            this.syncEndTime = dateUtils.dateToStr("YYYY-MM-dd", parmas.endTime);
+
+           // console.log(this.syncStartTime, this.syncEndTime,'1111111111111' );
+            
             parmas.startTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00", parmas.startTime);
             parmas.endTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",parmas.endTime);
-            console.log(parmas.startTime,  parmas.endTime,'u22222222');
+           // console.log(parmas.startTime,  parmas.endTime,'u22222222');
             this.$http.post('post-creat-sync-data', parmas).then(r => {
                 this.syncId=r.data;
                  this.openLoading = true;

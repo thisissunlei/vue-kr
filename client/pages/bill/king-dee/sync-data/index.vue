@@ -143,7 +143,7 @@ export default {
                     title: '创建时间',
                     key: 'createTime',
                     align:'center',
-                    width:100,
+                    width:200,
                       render:(h, params)=>{
                          let ile= params.row.createTime;
                          ile = ile ? dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS', new Date(ile)) : '';

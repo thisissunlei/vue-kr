@@ -4,12 +4,9 @@ import utils from '~/plugins/utils';
 function originalReceivableCol(){
     return [
         {
-            title: '回款金额',
-            key: 'amount',
+            title: '客户姓名',
             align:'center',
-            render:function(h,params){
-                return h('span',{},utils.thousand(params.row.amount))
-             }
+            key: 'customerName',
         },
         {
             title: '所在社区',
@@ -18,14 +15,12 @@ function originalReceivableCol(){
            
         },
         {
-            title: '客户姓名',
+            title: '回款金额',
+            key: 'amount',
             align:'center',
-            key: 'customerName',
-        },
-        {
-            title: '费用类型名称',
-            key: 'feeTypeName',
-            align:'center',
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.amount))
+             }
         },
         {
             title: '发生日期',
@@ -35,6 +30,11 @@ function originalReceivableCol(){
                 let time=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.occurDate)):'-';
                 return time;
             }
+        },
+        {
+            title: '费用类型名称',
+            key: 'feeTypeName',
+            align:'center',
         },
         {
             title: '支付方式名称',

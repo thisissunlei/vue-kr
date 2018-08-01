@@ -440,17 +440,32 @@
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
         if(typeof(Storage)!=="undefined"){
-            if (sessionStorage.clickcount){
-                sessionStorage.clickcount=Number(sessionStorage.clickcount)+1;
+            if (sessionStorage.navs){
+                navUtils.navs = [].concat(sessionStorage.navs);
+                navUtils.user = Object.assign(sessionStorage.user);
+                routerRefresh();
+                return ;
             }
-            else
-            {
-                sessionStorage.clickcount=1;
-            }
-            document.getElementById("result").innerHTML="在这个会话中你已经点击了该按钮 " + sessionStorage.clickcount + " 次 ";
+            
         }
+        getDataAll()
         
-        // console.log("pppppp------",dom)
+        // // console.log("pppppp------",dom)
+        // http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+        //     var navs = [].concat(response.data);
+        //     routerRefresh();
+        //     http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
+                
+        //         var user = response.data.userInfo;
+        //         window.resourcesCode = response.data.resourcesCode;
+        //         navUtils.navs = [].concat(navUtils.navs,navs);
+        //         navUtils.user = Object.assign(user);
+        //         routerRefresh();
+        //     })
+           
+        // })
+    }
+    function getDataAll(){
         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
             routerRefresh();
@@ -459,12 +474,17 @@
                 var user = response.data.userInfo;
                 window.resourcesCode = response.data.resourcesCode;
                 navUtils.navs = [].concat(navUtils.navs,navs);
-                navUtils.user = Object.assign(user);
+                navUtils.user = Object.assign({},user);
+                if(typeof(Storage)!=="undefined"){
+                    sessionStorage.navs = [].concat(navUtils.navs,navs);
+                    sessionStorage.user = Object.assign({},user);
+                }
                 routerRefresh();
             })
            
         })
     }
+    
     renderHanderAndSidebar();
     window.addEventListener('load',function(){
 

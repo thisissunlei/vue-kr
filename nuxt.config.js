@@ -1,6 +1,6 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const pluginsDomain = require('./config/plugins.env');
 
 module.exports = {
   srcDir: 'client/',
@@ -21,7 +21,9 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: 'http://img.krspace.cn/common/favicon_new.ico' }
-    ]
+    ],
+    script: pluginsDomain
+    
   },
 
   plugins: [

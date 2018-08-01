@@ -126,6 +126,7 @@ export default {
                     title: '权限',
                     key: 'rightContent',
                     align: 'center',
+                    width: 120,
                     render: (h, params) => {
                         let lines = [];
                         let content = params.row.rightContent.split(';')
@@ -281,7 +282,7 @@ export default {
             // utils.addParams(params);
             console.log(params)
 
-            return
+            // return
             let url = window.location.href.split('?')[0];
             var where = [];
             for (var field in params) {
@@ -332,7 +333,7 @@ export default {
 
         changeContent(value) {
             this.params.communityId = value;
-            this.params.statusList = JSON.stringify(this.statusList);
+            this.params.statusList = this.statusList.join(',');
             this.params.page = 1;
             this.page = 1;
             this.getTableData(this.params);

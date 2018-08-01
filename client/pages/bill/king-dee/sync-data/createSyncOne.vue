@@ -114,6 +114,7 @@ export default {
                     console.log(r,"ppppppp");
                     if(r.data.pullStatus=="ALREADY_PULL"){
                         this.openLoading = false;
+                         this.$Notice.success('拉取成功');
                         window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
                       //  window.location.href = '/bill/king-dee/sync-data';
                         return ;
@@ -122,7 +123,7 @@ export default {
                          this.openLoading = false;
                          this.disabled_next = false;
                          this.$Notice.error({
-                            title: '拉取失败'
+                            title: r.data.failedMsg
                         });
                         return ;
                     }

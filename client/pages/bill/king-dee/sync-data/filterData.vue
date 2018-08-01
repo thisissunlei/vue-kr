@@ -375,7 +375,7 @@ export default {
                     align: 'center',
                     width: 110,
                     render(h, params) {
-                        let time = dateUtils.dateToStr("YYYY.MM.DD", new Date(params.row.bizDate))
+                        let time = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(params.row.bizDate))
                         return h('span', time)
                     }
                 },
@@ -389,7 +389,7 @@ export default {
                 { key: 'companyNumber', align: 'center', title: '财务组织编码',width:120, },
                 { key: 'contractNumber', align: 'center', title: '合同编号',width:120, },
                 { key: 'coreBillNumber', align: 'center', title: '订单编号' ,width:120,},
-                { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码',width:120, },
+                { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码',width:180, },
              //   { key: 'currency', align: 'center', title: '币别' },
 
                 { key: 'number', align: 'center', title: '唯一交易编码',width:120, },
@@ -582,7 +582,7 @@ export default {
         },
         //切换为全选模式
         handleSelectAll() {
-            this.isAllSelect = true;
+            this.isAllSelect = !this.isAllSelect;
             this.notSelectInAllSelectState = [];
         },
         //全选模式下  勾选单项时触发
@@ -673,6 +673,7 @@ export default {
                     console.log(r,"ppppppp")
                     if(r.data.syncStatus=="ALREADY_SYNC"){
                         this.titleMessage = '同步成功';
+                        this.$Notice.success('同步成功');
                         setTimeout(()=>{
                         this.openLoading = false;
                         window.location.href = '/bill/king-dee/sync-data';
@@ -681,9 +682,13 @@ export default {
                     }
                     if(r.data.syncStatus=='FAILED_SYNC'){
                         this.titleMessage = '同步失败';
-                         setTimeout(()=>{
+                        this.$Notice.error({
+                            title: r.data.failedMsg
+                        });
+                     setTimeout(()=>{
                         this.openLoading = false;
-                        window.location.reload();
+                        this.$router.replace({path:'/bill/king-dee/sync-data/data-sync-view',query:{type:this.syncType,syncDataId:this.syncDataId}});
+                      //  window.location.reload();
                         },2000);
                         // this.openLoading = false;
                         // this.$Notice.error({

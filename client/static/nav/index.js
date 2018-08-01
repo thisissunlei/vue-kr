@@ -75,6 +75,12 @@
             }
             alias = '';
         }
+        if(type && type == 'project'){
+            if(nowType == 'project'){
+                return router;
+            }
+            alias = '/project/#'
+        }
         if(type && type == "member"){
             alias = '/';
             hostname =  'memberadmin.krspace.cn';
@@ -86,6 +92,8 @@
     function getNowType(router){
         if(router.indexOf('new/#/') !=-1){
             return 'admin'
+        }else if(router.indexOf('project/#/') !=-1){
+            return 'project'
         }else {
             return 'vue';
         }
@@ -112,8 +120,8 @@
             if (port) {
                 port = ":" + port;
             }
-            if (location.hash.indexOf("#/") != -1) {
-                str = location.hash.split("#/")[1]
+            if (location.hash.indexOf("#") != -1) {
+                str = location.hash.split("#")[1]
                 href = every.url;
             } else {
                 href = location.protocol + "//" + location.hostname + port + every.url;

@@ -204,6 +204,9 @@ export default {
     watch:{
       cityId:function(val){
           this.cityParams=Object.assign({},{cityId:val})
+          if(!(this.formItem.communityId.trim())&&this.$route.query.cityId){
+              this.$emit('initData',this.formItem);
+          }
       },
       communityId:function(val) {
           let rou=this.$route.query;

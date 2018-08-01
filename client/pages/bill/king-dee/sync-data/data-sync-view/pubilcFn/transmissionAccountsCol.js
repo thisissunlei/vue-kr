@@ -52,24 +52,24 @@ function transmissionAccountsCol(){
             align:'center',
             width:150,
         },
-        {
-            title: '所在社区',
-            key: 'communityName',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '所在社区',
+        //     key: 'communityName',
+        //     align:'center',
+        //     width:150,
+        // },
         {
             title: '财务组织编码',
             key: 'companyNumber',
             align:'center',
             width:150,
         },
-        {
-            title: '销售合同行号',
-            key: 'contractNumber',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '销售合同行号',
+        //     key: 'contractNumber',
+        //     align:'center',
+        //     width:150,
+        // },
         {
             title: '核心单据号',
             key: 'coreBillNumber',
@@ -78,7 +78,7 @@ function transmissionAccountsCol(){
         },
         {
             title: '成本中心',
-            key: 'costCenteNumber',
+            key: 'costCenterNumber',
             align:'center',
             width:150,
         },

@@ -673,7 +673,7 @@ export default {
                     console.log(r,"ppppppp")
                     if(r.data.syncStatus=="ALREADY_SYNC"){
                         this.titleMessage = '同步成功';
-                        this.$Notice.success('同步成功');
+                        this.$Notice.success({title:'同步成功'});
                         setTimeout(()=>{
                         this.openLoading = false;
                         window.location.href = '/bill/king-dee/sync-data';

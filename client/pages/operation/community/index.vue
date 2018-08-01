@@ -62,7 +62,7 @@
                 <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
               </span>
               <span class="number">
-                <span class="title">合同未生效</span>
+                <span class="title">已起租未生效</span>
                 <span class="num"  v-if="tab=='all'" style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSeatsNum}}</span>
                 <span class="num" v-if="tab=='office'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectFixStationsNum}}</span>

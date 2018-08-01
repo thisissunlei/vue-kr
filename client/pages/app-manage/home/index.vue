@@ -7,17 +7,19 @@
             <p>③  日均上线会员数（当周）：已选中日期所在周的平均值（当周登录APP会员总数/截止该日当周总天数）；</p>
             <p>④  同比前周：当周日均上线会员数与上周7天日均上线会员数的浮动值；</p>
          </IconTip>
-         <div :class="[isFixed?'u-search-fixed':'','u-search']" >
-             <Button  style="float:left;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
-             <DatePicker 
-                class="u-date-right" 
-                type="date" 
-                placeholder="日期" 
-                :clearable="false"
-                :value="tabParams.dataDate"
-                @on-change="changeDate"
-                :options="dateOptions"
-             />
+         <div :class="[isFixed?'u-search-fixed':'']" >
+             <div class="u-search">
+                <Button  style="float:left;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
+                <DatePicker 
+                    class="u-date-right" 
+                    type="date" 
+                    placeholder="日期" 
+                    :clearable="false"
+                    :value="tabParams.dataDate"
+                    @on-change="changeDate"
+                    :options="dateOptions"
+                />
+             </div>
          </div>
          <div class="u-table">
             <Table border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
@@ -256,13 +258,19 @@ export default {
     background: rgba(255,157,0,0.30) !important;
  }
   .u-search-fixed{
-       width:83.59%;
+       width:100%;
        position:fixed;
        top:60px;
        right:14px;
        z-index:777;
-       background:#fff;
-       border-bottom: 1px solid #E8E9E9;
+       padding-left:210px;
+       box-sizing: border-box;
+       .u-search{
+         background:#fff;
+         width:100%;
+         border-bottom: 1px solid #E8E9E9;
+         
+       }
   }
   
   

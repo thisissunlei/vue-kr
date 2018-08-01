@@ -57,8 +57,8 @@ function originalAccountsCol(){
             
         },
         {
-            title: '同步记录id',
-            key: 'syncDataId',
+            title: '原始数据id',
+            key: 'incomeId',
             align:'center',
             
         },

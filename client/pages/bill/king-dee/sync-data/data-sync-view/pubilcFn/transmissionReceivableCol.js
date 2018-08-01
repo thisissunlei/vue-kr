@@ -11,13 +11,13 @@ function transmissionReceivableCol(){
             fixed:'left',
             width:150,
         },
-        {
-            title: 'OP系统的社区编码',
-            key: 'costCenteNumber',
-            align:'center',
-         // fixed:'left',
-            width:150,
-        },
+        // {
+        //     title: 'OP系统的社区编码',
+        //     key: 'costCenteNumber',
+        //     align:'center',
+        //  // fixed:'left',
+        //     width:150,
+        // },
         {
             title: '客户（供应商）编码',
             key: 'payerNumber',
@@ -82,12 +82,12 @@ function transmissionReceivableCol(){
             align:'center',
             width:150,
         },
-        {
-            title: '合同编号',
-            key: 'contractNumber',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '合同编号',
+        //     key: 'contractNumber',
+        //     align:'center',
+        //     width:150,
+        // },
         
         // {
         //     title: '币别',
@@ -118,12 +118,12 @@ function transmissionReceivableCol(){
             align:'center',
             width:150,
         },
-        {
-            title: '付款账号',
-            key: 'payerAccountBank',
-            align:'center',
-            width:150,
-        },
+        // {
+        //     title: '付款账号',
+        //     key: 'payerAccountBank',
+        //     align:'center',
+        //     width:150,
+        // },
        
         {
             title: '付款人类型名称 ',
@@ -139,7 +139,7 @@ function transmissionReceivableCol(){
         },
         {
             title: '收款类型',
-            key: 'recBillType',
+            key: 'recBillTypeDesc',
             align:'center',
             width:150,
         },
@@ -151,7 +151,7 @@ function transmissionReceivableCol(){
         },
         {
             title: '结算方式',
-            key: 'settlementType',
+            key: 'settlementTypeDesc',
             align:'center',
             width:150,
         },

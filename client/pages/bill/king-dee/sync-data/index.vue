@@ -128,13 +128,15 @@ export default {
                     key: 'syncStatus',
                     align:'center',
                     render: (h, params) => {
+                    let result = params.row.syncStatus;
+                    result = result === 'FAILED_SYNC'?'red':result === 'ALREADY_SYNC' ? 'green':'yellow';
                     return h("div", {
                         style: {
                         width: '10px',
                         height: '10px',
                         borderRadius: '50%',
                         display:'inline-block',
-                        backgroundColor: params.row.syncStatus == 'NOT_SYNC' ? 'red' : "green"
+                        backgroundColor: result,
                         }
                     }, '')
                     },

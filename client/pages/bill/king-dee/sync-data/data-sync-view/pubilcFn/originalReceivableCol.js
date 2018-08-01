@@ -48,11 +48,17 @@ function originalReceivableCol(){
             
         },
         {
-            title: '同步状态名称',
-            key: 'syncStatusName',
+            title:'原始数据id',
+            key: 'paymentId',
             align:'center',
             
-        }
+        },
+        // {
+        //     title: '同步状态名称',
+        //     key: 'syncStatusName',
+        //     align:'center',
+            
+        // }
     ]
 
 }

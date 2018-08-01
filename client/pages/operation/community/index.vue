@@ -328,7 +328,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" :style="item.payAll?'text-align:right;':'text-align:right;color:red;'">{{item.payAll?'已付清':'未支付'}}</span>
+                      <span class="table-cell" :style="item.contractPayStatus=='PAID_OFF'?'text-align:right;':'text-align:right;color:red;'">{{item.contractPayStatusName}}</span>
                       <span class="table-cell" style="text-align:right">{{item.overDays?'逾'+item.overDays+'天':'-'}}</span>
                   </li>        
                 </ul>

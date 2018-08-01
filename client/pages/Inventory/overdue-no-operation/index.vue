@@ -135,13 +135,13 @@ export default {
                     align:'right',
                     width:100,
                     render(tag, params){
-                        let file=params.row.payAll;
-                        let ren=file?'已付清':'未支付';
+                        let file=params.row.contractPayStatus;
+                        let fileName=params.row.contractPayStatusName;
                         return tag('span',{
                             style:{
-                                color:file?'':'red'
+                                color:file=='PAID_OFF'?'':'red'
                             }
-                        },ren)
+                        },fileName)
                     }
                 },
                 {

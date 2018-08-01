@@ -2,15 +2,20 @@
 <div class="g-setting-manager">
         <SectionTitle :title='"全部企业（"+totalCount+"）"' ></SectionTitle>
         <div class="u-search" >
-                 <div class="u-search-list" style="margin-left:30px;">
-                    <SearchForm 
-                        placeholder="请输入公司名称"
-                        inputName="csrName"
-                        :openSearch="true"
-                        @serachFormDataChanged="changeCompany"
-                        :onSubmit="lowerSubmit"
-                    />
-                </div>
+                 <!--<div class="u-search-list" style="margin-left:30px;">-->
+                    <!--<SearchForm-->
+                        <!--placeholder="请输入公司名称"-->
+                        <!--inputName="csrName"-->
+                        <!--:openSearch="true"-->
+                        <!--@serachFormDataChanged="changeCompany"-->
+                        <!--:onSubmit="lowerSubmit"-->
+                    <!--/>-->
+                <!--</div>-->
+                <Input v-model="Params.csrName" placeholder="请输入公司名称" style="width: 200px;margin-left:30px;float:right" @on-click="lowerSubmit">
+                  <Button slot="append" @click="lowerSubmit">
+                    <Icon type="ios-search" style="color:#2d8cf0;display:inline-block;width:100%;height:100%;"></Icon>
+                  </Button>
+                </Input>
                 <div class="u-search-list">
                         <span class="u-search-label">社区</span>
                         <Select 

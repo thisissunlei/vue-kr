@@ -80,6 +80,7 @@
                                 v-model="formItem.cityId" 
                                 placeholder="预约城市" 
                                 style="width: 120px;"
+                                @on-change="cityChange"
                             >
                                 <Option 
                                     v-for="item in cityList" 
@@ -215,31 +216,31 @@ export default {
                         { required: true, message: '请填写姓名', trigger: 'blur' }
                     ],
                     channelType:[
-                        { required: true, message: '请选择一级来源', trigger: 'change'}
+                        {  message: '请选择一级来源', trigger: 'change'}
                     ],
                     channelId:[
-                        { required: true, message: '请选择二级来源', trigger: 'change'}
+                        {  message: '请选择二级来源', trigger: 'change'}
                     ],
                     promoCode:[
-                        { required: true, message: '请填写官网预约参数', trigger: 'blur'}
+                        {  message: '请填写官网预约参数', trigger: 'blur'}
                     ],
                     cityId:[
-                        { required: true, message: '请选择预约城市', trigger: 'change'}
+                        {  message: '请选择预约城市', trigger: 'change'}
                     ],
                     communityId:[
-                        { required: true, message: '请选择预约社区', trigger: 'change'}
+                        {  message: '请选择预约社区', trigger: 'change'}
                     ],
                     appiontTime:[
-                        { required: true, type: 'date',message: '请选择参观时间', trigger: 'change'}
+                        {  type: 'date',message: '请选择参观时间', trigger: 'change'}
                     ],
                     refreeName:[
-                        { required: true, message: '请填写推介人姓名', trigger: 'blur'}
+                        {  message: '请填写推介人姓名', trigger: 'blur'}
                     ],
                     refreePhone:[
-                        { required: true,validator: validatephone,  trigger: 'blur'}
+                        { validator: validatephone,  trigger: 'blur'}
                     ],
                     visitNum:[
-                        { required: true,message: '请填写拜访人数', trigger: 'blur'}
+                        { message: '请填写拜访人数', trigger: 'blur'}
                     ],
                 },
                 firstList:[],
@@ -261,8 +262,7 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
-           let params =Object.assign({},this.params);
-            this.$http.get('getDailyCommunity').then((res)=>{
+            this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -345,8 +345,8 @@ export default {
         },
         cityChange(param){
             if(param){
-                if(param !== this.params.cityId){
-                  this.params = {}  
+                if(param !== this.formItem.cityId){
+                  this.formItem.communityId = '' 
                 }
                 this.getCommunityList(param)  
             }

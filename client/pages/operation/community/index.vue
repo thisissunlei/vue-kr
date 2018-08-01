@@ -164,6 +164,7 @@
               </div>
             </div>
           </div>
+
           <div class="line-one">
            <div class="box">
               <div class="header">
@@ -231,6 +232,7 @@
               </div>
             </div>
           </div>
+          
           <div class="line-one">
             <div class="box">
               <div class="header">
@@ -407,7 +409,7 @@
                 </ul>
               </div>
             </div>
-            
+
 
           </div>
 

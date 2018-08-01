@@ -6,32 +6,29 @@
                 <Row>
                     <Col class="col">
 
-                        <Form-item  class='daily-form' prop='name'> 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">姓名</span>
+                        <Form-item  class='daily-form' prop='name' label="姓名"> 
                             <i-input 
                                 v-model="formItem.name" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="姓名"
                             />
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item  class='daily-form' prop="mobile"> 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">电话</span>
+                        <Form-item  class='daily-form' prop="mobile" label="电话"> 
                             <i-input 
                                 v-model="formItem.mobile" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="电话"
                             />
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item class='daily-form' prop="channelType">
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">一级来源</span>
+                        <Form-item class='daily-form' prop="channelType" label="一级来源">
                             <Select 
                                 v-model="formItem.channelType" 
                                 placeholder="一级来源" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                             >
                                 <Option 
                                     v-for="item in firstList" 
@@ -44,12 +41,11 @@
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item class='daily-form' prop="channelId">
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">二级来源</span>
+                        <Form-item class='daily-form' prop="channelId" label="二级来源">
                             <Select 
                                 v-model="formItem.channelId" 
                                 placeholder="二级来源" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                             >
                                 <Option 
                                     v-for="item in secondList" 
@@ -62,25 +58,22 @@
                         </Form-item>
                      </Col>
                     <Col class="col">
-                        <Form-item  class='daily-form' prop="promoCode"> 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">官网预约参数</span>
+                        <Form-item  class='daily-form' prop="promoCode" label="官网预约参数"> 
                             <i-input 
                                 v-model="formItem.promoCode" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="官网预约参数"
                             />
                         </Form-item>
                     </Col>
                     <Col class="col">
                         
-                        <Form-item  class='daily-form' prop="cityId">
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">预约城市</span>
-
+                        <Form-item  class='daily-form' prop="cityId" label="预约城市">
                             <Select 
                                 v-model="formItem.cityId" 
                                 placeholder="预约城市" 
-                                style="width: 120px;"
                                 @on-change="cityChange"
+                                style="width: 150px;"
                             >
                                 <Option 
                                     v-for="item in cityList" 
@@ -93,13 +86,11 @@
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item  class='daily-form' prop="communityId">
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">预约社区</span>
-
+                        <Form-item  class='daily-form' prop="communityId" label="预约社区">
                             <Select 
                                 v-model="formItem.communityId" 
                                 placeholder="预约社区" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                             >
                                 <Option 
                                     v-for="item in communityList" 
@@ -113,50 +104,41 @@
                     </Col>
                     <Col class="col">
 
-                        <Form-item  class='daily-form' prop="appiontTime"> 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">参观日期</span>
-
-                            <DatePicker type="date" placeholder="开始时间" v-model="formItem.appiontTime"  style="width: 120px;">
+                        <Form-item  class='daily-form' prop="appiontTime" label="参观日期"> 
+                            <DatePicker type="date" placeholder="开始时间" v-model="formItem.appiontTime"  style="width: 150px;">
                             </DatePicker>
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item  class='daily-form' > 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">推介人姓名</span>
-
+                        <Form-item  class='daily-form' label="推介人姓名"> 
                             <i-input 
                                 v-model="formItem.refreeName" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="推介人姓名"
                             />
                         </Form-item>
                     </Col>
                     <Col class="col">
 
-                        <Form-item class='daily-form' > 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">推介人电话</span>
-
+                        <Form-item class='daily-form' label="推介人电话" prop="refreePhone"> 
                             <i-input 
                                 v-model="formItem.refreePhone" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="推介人电话"
                             />
                         </Form-item>
                     </Col>
                     <Col class="col">
-                        <Form-item  class='daily-form' > 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">拜访数量</span>
-
+                        <Form-item  class='daily-form' label="拜访数量"> 
                             <i-input 
                                 v-model="formItem.visitNum" 
-                                style="width: 120px;"
+                                style="width: 150px;"
                                 placeholder="拜访数量"
                             />
                         </Form-item>
                     </Col>
                     <Col>
-                        <Form-item class='daily-form'> 
-                            <span style="color:#333;font-weight: 200;display: inline-block;padding-top:7px;margin-right:11px;width:90px;text-align:right">备注</span>
+                        <Form-item class='daily-form' label="备注"> 
                             <Input v-model="formItem.remake" type="textarea" :autosize="{minRows: 2,maxRows:5}" placeholder="备注"
                             style="width: 200px;"/>
                         </Form-item> 
@@ -187,9 +169,7 @@ export default {
     data() {
             const validatephone = (rule, value, callback) => {
                 let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                if(!value){
-                    callback(new Error('请填写此项内容'));
-                }else if (value&&!phone.test(value)) {
+                if (value&&!phone.test(value)) {
                     callback(new Error('请填写正确的联系方式'));
                 }else{
                     callback()
@@ -231,7 +211,7 @@ export default {
                         {  message: '请选择预约社区', trigger: 'change'}
                     ],
                     appiontTime:[
-                        {  type: 'date',message: '请选择参观时间', trigger: 'change'}
+                        {   required: true,type: 'date',message: '请选择参观时间', trigger: 'change'}
                     ],
                     refreeName:[
                         {  message: '请填写推介人姓名', trigger: 'blur'}
@@ -344,7 +324,6 @@ export default {
             return sum;
         },
         cityChange(param){
-            console.log('cityChange',param)
             if(param){
                 if(param !== this.formItem.cityId){
                   this.formItem.communityId = '' 
@@ -368,19 +347,16 @@ export default {
 
 <style lang='less'>
       #create-book{
+        width:600px;
+        margin-left:35px;
         .col{
-            width:45%;
+            width:32%;
             display: inline-block;
         }
         .buttons{
             text-align:center;
         }
          .daily-header{
-        }
-     }
-     #create-book{
-        .ivu-form-item-error-tip{
-            left:100px;
         }
      }
 </style>

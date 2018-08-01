@@ -69,7 +69,7 @@ export default {
             statusList: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
             communityList: [],
-            communityId: '',
+            communityId: ' ',
             openCreate: false,
             openStop: false,
             totalCount: 1,
@@ -126,13 +126,13 @@ export default {
                     title: '权限',
                     key: 'rightContent',
                     align: 'center',
-                    width: 120,
+                    width: 140,
                     render: (h, params) => {
                         let lines = [];
                         let content = params.row.rightContent.split(';')
                         content.map(item => {
                             lines.push(
-                                h('p', { style: 'margin: 2px 1px' }, item)
+                                h('p', { style: 'margin: 4px 1px' }, item)
                             )
                         })
                         return h('div', lines)
@@ -279,10 +279,9 @@ export default {
         checkAllGroupChange() {
             let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
             this.getTableData(params)
-            // utils.addParams(params);
             console.log(params)
 
-            // return
+            return
             let url = window.location.href.split('?')[0];
             var where = [];
             for (var field in params) {
@@ -295,7 +294,6 @@ export default {
 
         },
         getTableData(params) {
-            // 
             this.$http.get('get-discont-list', params).then((res) => {
                 this.tableData = res.data.items;
                 this.totalCount = res.data.totalCount;
@@ -352,7 +350,6 @@ export default {
         },
         handleAddModal(reload) {
             this.openCreate = false
-            debugger
             if (reload) {
                 this.getTableData();
             }

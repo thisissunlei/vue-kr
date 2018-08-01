@@ -19,6 +19,7 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     } 
     
     contentDom.innerHTML = obj.str;
+    tirDom.style.maxWidth = obj.width + 'px';
     tirDetail=tirDom.getBoundingClientRect();
     contentDom=document.getElementById('gantt-chart-tool-tip-content'+selectId);
     
@@ -51,7 +52,6 @@ function poptipOver(every,all,canvas,scroll,discount,isIcon) {
     }
      
     //计算位置赋值
-    //tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
     if(isIcon=='icon'){
@@ -107,6 +107,7 @@ function getToolTipContent(thatData,discount) {
     let startDate = data.item.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.item.startDate)) : '';
     let endDate = data.item.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.item.endDate)) : '';
     let property=data.item.property?data.item.property:'';
+    let desc=data.item.propertyDesc?data.item.propertyDesc:'';
     let status=data.item.inventStatus;
     
     let nameStr='';
@@ -125,7 +126,7 @@ function getToolTipContent(thatData,discount) {
     }
     
     if(data.item.belongType=='SPACE'){
-        proStr='<div>商品属性：' + property + '</div>';
+        proStr='<div>商品属性：' + property +' '+desc+ '</div>';
         priceStr='<div>工位单价：' + disUnitPrice + '</div>';
     }else{
         let typeName=data.item.goodsType=='OPEN'?'固定办公桌':'移动办公桌'

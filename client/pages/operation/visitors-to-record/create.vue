@@ -176,6 +176,17 @@ export default {
 
                 }
             };
+            const mobile = (rule, value, callback) => {
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (!value) {
+                    callback(new Error('请填写联系方式'));
+                }else if (value&&!phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
+                }
+            };
             return { 
                 width:120,
                 cityList:[],
@@ -190,7 +201,7 @@ export default {
                 formItemOld:{},
                 ruleDaily: {
                     mobile:[
-                        { required: true,validator: validatephone, trigger: 'change' }
+                        { required: true,validator: mobile, trigger: 'change' }
                     ],
                     name: [
                         { required: true, message: '请填写姓名', trigger: 'blur' }

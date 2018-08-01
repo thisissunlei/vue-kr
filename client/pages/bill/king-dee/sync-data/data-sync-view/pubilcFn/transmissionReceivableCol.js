@@ -70,12 +70,12 @@ function transmissionReceivableCol(){
         //     align:'center'
 
         // },
-        {
-            title: '所在社区',
-            key: 'communityName',
-            align:'center',
-             width:150,
-        },
+        // {
+        //     title: '所在社区',
+        //     key: 'communityName',
+        //     align:'center',
+        //      width:150,
+        // },
         {
             title: '财务组织编码',
             key: 'companyNumber',

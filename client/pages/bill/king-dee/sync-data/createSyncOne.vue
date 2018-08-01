@@ -120,7 +120,8 @@ export default {
                     }
                    if(r.data.pullStatus=='FAILED_PULL'){
                          this.openLoading = false;
-                        this.$Notice.error({
+                         this.disabled_next = false;
+                         this.$Notice.error({
                             title: '拉取失败'
                         });
                         return ;

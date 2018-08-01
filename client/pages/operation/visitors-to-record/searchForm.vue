@@ -40,10 +40,10 @@
 
 
                     <Form-item label="参观日期" class='daily-form'> 
-                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.startAppiontTime"  style="width: 90px;margin-right:10px;">
+                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.startAppiontTime"  style="width: 120px;margin-right:10px;">
                         </DatePicker>
                         <span>至</span>    
-                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.endAppiontTime" style="width: 90px;margin-left:10px;margin-right:20px;">
+                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.endAppiontTime" style="width: 120px;margin-left:10px;margin-right:20px;">
                         </DatePicker>
                     </Form-item>
                    <!--  <Form-item label="是否联系" class='daily-form'> 
@@ -110,10 +110,10 @@
 
 
                     <Form-item label="创建日期" class='daily-form'> 
-                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.cStartTime"  style="width: 90px;margin-right:10px;">
+                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.cStartTime"  style="width: 120px;margin-right:10px;">
                         </DatePicker>
                         <span>至</span>    
-                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.cEndTime" style="width: 90px;margin-left:10px;margin-right:20px;">
+                        <DatePicker type="date" placeholder="开始时间" v-model="formItem.cEndTime" style="width: 120px;margin-left:10px;margin-right:20px;">
                         </DatePicker>
                     </Form-item>
                    <!--  <Form-item label="是否到访" class='daily-form'> 
@@ -179,7 +179,7 @@ export default {
                 formItem:{
                     channelType:' ',
                     cityId:'',
-                    cEndTime:' ',
+                    cEndTime:'',
                     cStartTime:'',
                     channelId:'',
                     communityId:' ',

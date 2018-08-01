@@ -76,7 +76,7 @@ export default  {
     },
     //每日库存-平面图
     'getInventoryMap': {
-        url: '/song/api/krspace-finance-web/cmt/floor-graph/list',
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
         method: 'get'
     },
     // 即将进场
@@ -91,7 +91,7 @@ export default  {
     },
     //商品列表
     'getGoodsList': {
-        url: '/song/api/order/goods/list',
+        url: '/api/order/goods/list',
         method: 'get'
     },
     //商品库枚举
@@ -179,7 +179,7 @@ export default  {
     },
     //合同逾期未操作
     'contract-no-operation': {
-        url: '/song/api/krspace-op-web/operation/ovedue/contract/list',
+        url: '/api/krspace-op-web/operation/ovedue/contract/list',
         method: 'get'
     }
   }

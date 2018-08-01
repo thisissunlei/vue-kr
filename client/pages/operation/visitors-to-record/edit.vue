@@ -198,8 +198,8 @@ export default {
                     name: [
                         { required: true, message: '请填写姓名', trigger: 'blur' }
                     ],
-                    appiontTime:[
-                        { required: true, message: '请选择参观日期', trigger: 'change'}
+                   appiontTime:[
+                        {   required: true,type: 'date',message: '请选择参观时间', trigger: 'change'}
                     ],
                     channelId:[
                         {  message: '请选择二级来源', trigger: 'change'}

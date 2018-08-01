@@ -1,5 +1,5 @@
 <template>
-    <div class='slot-head-attract-investment'>
+    <div class='slot-head-overdue-nooperation'>
         <div
             class='slot-head-class'
             v-for="item in data"
@@ -14,14 +14,14 @@
    export default {
     data() {
         return{
-            data:['商品名称','商品类型','工位数量','商品定价','招商状态','签约价','签约单价','折扣','合同开始','合同结束','租期','渠道来源','销售员']
+            data:['合同编号','客户名称','合同类型','销售员','服务开始日','首付款金额','首付款欠款金额','是否上传附件','逾期时长(服务开始日)']
         }
     }
 }
 </script>
 
 <style lang='less' scoped>
-.slot-head-attract-investment{
+.slot-head-overdue-nooperation{
      position: fixed;
      top:60px;
      display: -moz-box; 
@@ -36,14 +36,20 @@
         border-right:solid 1px #e9eaec;
         border-bottom:solid 1px #e9eaec;
         font-weight: 700;
-        &:nth-child(2),&:nth-child(9),&:nth-child(10),&:nth-child(13){
+        &:nth-child(3),&:nth-child(7),&:nth-child(8){
             width:100px;
         }
-        &:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(7),&:nth-child(11){
+        &:nth-child(6){
             width:90px;
         }
-        &:nth-child(8),&:nth-child(3){
-            width:60px;
+        &:nth-child(4){
+            width:80px;
+        }
+        &:nth-child(5){
+            width:110px;
+        }
+        &:nth-child(9){
+            width:135px;
         }
         &:nth-child(1){
             width:100%;
@@ -52,7 +58,7 @@
             box-flex:1;
             border-left: solid 1px #e9eaec;
         }
-        &:nth-child(12){
+        &:nth-child(2){
             width:100%;
             -moz-box-flex: 1; 
             -webkit-box-flex: 1; 

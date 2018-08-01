@@ -69,7 +69,7 @@ export default {
             statusList: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
             communityList: [],
-            communityId: '',
+            communityId: ' ',
             openCreate: false,
             openStop: false,
             totalCount: 1,
@@ -126,13 +126,13 @@ export default {
                     title: '权限',
                     key: 'rightContent',
                     align: 'center',
-                    width: 120,
+                    width: 140,
                     render: (h, params) => {
                         let lines = [];
                         let content = params.row.rightContent.split(';')
                         content.map(item => {
                             lines.push(
-                                h('p', { style: 'margin: 2px 1px' }, item)
+                                h('p', { style: 'margin: 4px 1px' }, item)
                             )
                         })
                         return h('div', lines)
@@ -267,7 +267,7 @@ export default {
                 });
                 list.unshift({
                     label: '全部',
-                    value: ''
+                    value: ' '
                 })
                 this.communityList = list;
             }).catch((error) => {

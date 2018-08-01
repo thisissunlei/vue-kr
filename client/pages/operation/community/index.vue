@@ -124,7 +124,9 @@
                 </ul>
               </div>
             </div>
+          </div>
 
+          <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOver">
@@ -194,6 +196,9 @@
                 </ul>
               </div>
             </div>
+          </div>
+          
+          <div class="line-one">
              <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('CONTRACT')">
@@ -258,9 +263,9 @@
                 </ul>
               </div>
             </div>
-
-
-
+          </div>
+          
+          <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('PRINT')">
@@ -327,7 +332,9 @@
                 </ul>
               </div>
             </div>
-
+          </div>
+          
+          <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
@@ -400,9 +407,7 @@
                 </ul>
               </div>
             </div>
-
-            <div class="boxNull">
-            </div>
+            
 
           </div>
 

@@ -159,8 +159,12 @@
     background-size: cover;
   }
   .line-one{
-    display: flex;
+    //display: flex;
+    width:50%;
+    vertical-align: top;
     margin-bottom: 20px;
+    padding-right:21px;
+    display:inline-block;
   }
   .ellipsis{
     overflow:hidden;
@@ -168,20 +172,15 @@
     text-overflow:ellipsis;
   }
   .line-one .box{
-    flex:1;
+    //flex:1;
     height:255px;
-    margin-right: 21px;
+    //margin-right: 21px;
     background-color: #fff;
     border-radius: 4px;
     //overflow: hidden;
     &:hover{
       box-shadow: 6px 5px  20px rgba(224, 222, 229, .5)
     }
-  }
-  .line-one .boxNull{
-    flex:1;
-    height:255px;
-    margin-right: 21px;
   }
   .line-one .box .header{
       height:52px;

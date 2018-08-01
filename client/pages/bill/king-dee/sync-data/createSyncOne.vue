@@ -115,7 +115,8 @@ export default {
                     if(r.data.pullStatus=="ALREADY_PULL"){
                         this.openLoading = false;
                          this.$Notice.success('拉取成功');
-                        window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
+                         this.$router.replace({path:'/bill/king-dee/sync-data/filterData',query:{syncId:this.syncId,syncType:this.formItem.syncDataType,startTime:this.syncStartTime,endTime:this.syncEndTime}});
+                    //    window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
                       //  window.location.href = '/bill/king-dee/sync-data';
                         return ;
                     }

@@ -129,7 +129,7 @@ export default {
                     align:'center',
                     render: (h, params) => {
                     let result = params.row.syncStatus;
-                    result = result === 'FAILED_SYNC'?'red':result === 'ALREADY_SYNC' ? 'green':'yellow';
+                    result = result === 'FAILED_SYNC'?'red':result === 'ALREADY_SYNC' ? 'green':'#e0e013e8';
                     return h("div", {
                         style: {
                         width: '10px',

@@ -13,19 +13,22 @@
                 @on-click="tabsClick"
             >
             <!-- waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn -->
-                <TabPane label="待签收" name="waitArrive"> 
+                <TabPane label="待社区签收" name="waitArrive">
                     <List v-if="type == 'waitArrive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
-                <TabPane label="待邮寄" name="waitMail" >
+                <TabPane label="待社区邮寄" name="waitMail" >
                     <List v-if="type == 'waitMail'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
-                <TabPane label="待领取" name="waitReceive" >
+                <TabPane label="待社区发放" name="waitProvide" >
+                    <List v-if="type == 'waitProvide'" :type="type" :searchForm="searchForm" @provideDone="tabsClick"/>
+                </TabPane>
+                <TabPane label="待客户领取" name="waitReceive" >
                     <List v-if="type == 'waitReceive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
-                <TabPane label="已领取" name="alreadyReceive">
+                <TabPane label="客户已领取" name="alreadyReceive">
                     <List v-if="type == 'alreadyReceive'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
-                <TabPane label="待退还" name="waitReturn">
+                <TabPane label="待社区收回" name="waitReturn">
                     <List v-if="type == 'waitReturn'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
             </Tabs>

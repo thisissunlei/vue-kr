@@ -14,11 +14,10 @@
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
                     <Icon type="information-circled"></Icon>
-                    <span>移除确认</span>
+                    <span>取消确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>将设备删除后，当前组将失去移除的设备的权限</p>
-                    <p>确定移除吗？</p>
+                    <p>确定取消授权吗？</p>
                 </div>
                 <div slot="footer">
                     <Button type="error" size="large" long  @click="confirmDelete">确认</Button>

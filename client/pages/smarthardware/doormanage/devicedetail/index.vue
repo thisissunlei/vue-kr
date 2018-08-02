@@ -15,7 +15,7 @@
                 type="primary" 
                 class="fresh-btn"  
                 @click="freshQrImage"
-                v-if="SecondeVersion"
+                v-if="!SecondeVersion"
             >
                 <img src="./images/qr.svg" class="btn-qr">
 
@@ -81,14 +81,14 @@
                         <span>厂家：</span><span>{{deviceDetail.makerName}}</span>
                     </div>
                     <div class="item-info">
-                        <span>二维码有效期：</span><span>{{this.returnDate(deviceDetail.qrExpireAt)}}</span>
+                        <span>二维码有效期：</span><span>{{this.returnDate(qrExpireAt)}}</span>
                     </div>
                     <div class="block-line">
-                        <span>二维码地址：</span><span>{{deviceDetail.qrImgUrl}}</span>
+                        <span>二维码地址：</span><span>{{qrImgUrl}}</span>
                     </div>
                     <div class="block-line">
                         <span>二维码：</span>
-                        <img :src="deviceDetail.qrImgUrl" class="qrStyle"/>
+                        <img :src="qrImgUrl" class="qrStyle" v-if="qrImgUrl"/>
                     </div>
                     <div class="block-line">
                         <span>备注：</span><span>{{deviceDetail.memo}}</span>
@@ -113,6 +113,9 @@ export default {
          deviceVO : {},
          SecondeVersion : true,
          showPageAll :false,
+         qrExpireAt : '',
+         qrImgUrl : '',
+
      }
    },
    created(){
@@ -149,6 +152,8 @@ export default {
                 }else{
                     this.deviceVO= res.data;
                     this.deviceDetail = res.data;
+                    this.qrImgUrl = res.data.qrImgUrl||'';
+                    this.qrExpireAt = res.data.qrExpireAt;
                 }
             }).catch((error)=>{
                 _this.$Notice.error({
@@ -204,12 +209,14 @@ export default {
         freshQrImage(){
 
             var param ={deviceId :this.deviceVO.deviceId }
-            this.$http.get('get-door-new-qr',params).then((res)=>{
+            this.$http.put('get-door-new-qr',param).then((res)=>{
                 
-                document.getElementById('json-str-report').innerHTML= _this.syntaxHighlight(res.data.reported);
+                this.qrImgUrl = res.data.qrImgUrl;
+                this.qrExpireAt = res.data.qrExpireAt;
+               
                    
             }).catch((error)=>{
-                _this.$Notice.error({
+                this.$Notice.error({
                     title:error.message
                 });
             })

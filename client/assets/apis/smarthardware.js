@@ -133,7 +133,7 @@ export default  {
 
     //生成一代门禁二维码
     'get-door-new-qr':{
-        url: 'apis/iot-platform/door-device/actions/generate-qr-code',
+        url: 'api/iot-platform/door-device/actions/generate-qr-code',
         method: 'get'
     },
     

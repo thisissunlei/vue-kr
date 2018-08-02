@@ -6,7 +6,7 @@
                 <TabPane label="设备" icon="ipad" v-if="groupLevel=='NORMAL'">
                     <DeviceList v-if="groupLevel=='NORMAL'"/>
                 </TabPane>
-                <TabPane label="组" icon="folder" v-if="groupLevel=='PARENT'" >
+                <TabPane label="设备组" icon="folder" v-if="groupLevel=='PARENT'" >
                     <GroupList v-if="groupLevel=='PARENT'"/>
                 </TabPane>
             </Tabs>
@@ -127,7 +127,7 @@ export default {
    computed: {
 
        title : function(){
-                return "已有权限详情（组名称："+ this.groupName + "）"
+                return (this.groupLevel=="NORMAL"?'设备组':'复合组') + "已有权限详情（组名称："+ this.groupName + "）"
        }
    },
    methods:{

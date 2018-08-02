@@ -41,6 +41,13 @@
                             </Select>
                         </FormItem>
                         </Col>
+                        <Col span="6" class="col">
+                        <FormItem label="重复状态">
+                            <Select v-model="formItem.repeatStatus" class="form-item-input" @on-change='filterData'>
+                                <Option v-for="item in repeatStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem>
+                        </Col>
                     </Row>
                     <Row>
                         <Col span="6" class="col">
@@ -86,6 +93,11 @@
                             <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
+                         <FormItem label="重复状态">
+                            <Select v-model="formItem.repeatStatus" class="form-item-input" @on-change='filterData'>
+                                <Option v-for="item in repeatStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem>
                     </Row>
                 </div>
                 <!-- <Row>
@@ -174,6 +186,16 @@ export default {
             openLoading:false,
             formItem: {},
             titleMessage:'等待同步中....',
+            repeatStatusList:[
+                {
+                    label: '重复',
+                    value: 'IS_REPEAT'
+                },
+                {
+                    label: '非重复',
+                    value: 'NO_REPEAT'
+                },
+            ],
             syncStateList: [
                 {
                     label: '未同步',
@@ -479,20 +501,31 @@ export default {
         this.getRouterQueryParmas();
         this.getListData();
     },
+    watch:{
+         isAllSelect:function(newVal,old){
+              if(newVal !== old ){
+                  // 重置本地状态 
+                  this.selectIdsInPages = [];
+                  this.unSelectIdsInPages = [];
+                  this.notSelectInAllSelectState = [];
+                  this.selectedIdsInNotAllSelectState=[];
+              } 
+            },
+    },
     methods: {
-        handleTest() {
-            if (this.syncType === 'INCOME') {
-                this.syncType = 'PAYMENT'
-                this.syncDataId = 81
-            } else {
-                this.syncType = 'INCOME'
-                this.syncDataId = 117
-            }
-            this.getListData()
-        },
-        handleTestNotCheckAll() {
-            this.isAllSelect = false;
-        },
+        // handleTest() {
+        //     if (this.syncType === 'INCOME') {
+        //         this.syncType = 'PAYMENT'
+        //         this.syncDataId = 81
+        //     } else {
+        //         this.syncType = 'INCOME'
+        //         this.syncDataId = 117
+        //     }
+        //     this.getListData()
+        // },
+        // handleTestNotCheckAll() {
+        //     this.isAllSelect = false;
+        // },
         filterData(val) {
             this.params.page=1
             this.getListData();
@@ -510,8 +543,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = this.formItem
-                let p = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus } = this.formItem
+                let p = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -523,8 +556,8 @@ export default {
                 this.columns = [].concat(this.syncDataIncomeDetailColums)
                 api = 'get-sync-income-data-list'
             } else if (this.syncType === 'PAYMENT') {
-                let { number,   payerType, coreBillNumber } = this.formItem
-                let p = { number,  payerType, coreBillNumber }
+                let { number,   payerType, coreBillNumber,repeatStatus } = this.formItem
+                let p = { number,  payerType, coreBillNumber,repeatStatus }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -580,25 +613,27 @@ export default {
             this.getListData();
             this.currentPage = index;
         },
-        //切换为全选模式
+        //切换为全选模式   只有被选为true的时候触发 
         handleSelectAll() {
-            this.isAllSelect = !this.isAllSelect;
+            this.isAllSelect = true;
+            console.log(this.isAllSelect,'只有全选状态置为true的时候才触发');
             this.notSelectInAllSelectState = [];
         },
-        //全选模式下  勾选单项时触发
+        //全选模式下  勾选单项时触发  被选为true的时候 触发 
         handleSelect(selection, row) {
-            if (this.isAllSelect) {
+             console.log('选中单项被选中时才触发');
+            if (this.isAllSelect) {  // 先取消 之后再选中 
                 let id = row.id;
                 let index = this.notSelectInAllSelectState.findIndex(item => item == id)
                 if (index != -1) {
                     this.notSelectInAllSelectState.splice(index, 1)
                     console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
                 }
-
             }
         },
-        //全选模式下 取消勾选某一项
+        //全选模式下 取消勾选某一项   取消选中的时候触发 
         handleSelectCancel(selection, row) {
+            console.log('取消单项时触发');
             if (this.isAllSelect) {
                 this.notSelectInAllSelectState.push(row.id)
                 let arr = this.unSelectIdsInPages[Number(this.currentPage)]
@@ -614,6 +649,10 @@ export default {
         },
         // 非全选模式下
         handleSelectChange(selection) {
+             console.log('只要发生变化就会触发',selection);
+             if(!!selection.length){
+                 this.isAllSelect = false;
+             }
             if (!this.isAllSelect) {
                 this.selectedIdsInNotAllSelectState = selection.map(item => item.id)
                 this.selectIdsInPages[Number(this.currentPage)] = [].concat(this.selectedIdsInNotAllSelectState)
@@ -630,14 +669,14 @@ export default {
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber } = formItem
-                    parmas = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber }
+                    let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus } = formItem
+                    parmas = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {
                     api = 'post-sync-payment-data-ids'
-                    let { number,  payerType, coreBillNumber } = formItem
-                    parmas = { number,   payerType, coreBillNumber }
+                    let { number, payerType, coreBillNumber,repeatStatus } = formItem
+                    parmas = { number, payerType, coreBillNumber,repeatStatus }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 }

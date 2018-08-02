@@ -139,6 +139,12 @@
                 <LabelText  :inline="inline" label="开票时间：">
                     {{formItem.ticketTime   |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
+                <LabelText  :inline="inline" label="发放人员：">
+                    {{formItem.grantUserName}}
+                </LabelText>
+                <LabelText  :inline="inline" label="发放时间：">
+                    {{formItem.grantTime   |dateFormat('YYYY-MM-dd')}}
+                </LabelText>
             </Card>
         </div>
    </div>	

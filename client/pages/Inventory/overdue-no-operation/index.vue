@@ -127,11 +127,22 @@ export default {
                     title: '首付款金额',
                     key: 'firstServiceFee',
                     align:'right',
-                    width:90,
+                    className:'statusClass',
+                    width:100,
+                    render(tag, params){
+                        var end='';      
+                        if(params.row.firstServiceFee){
+                            end='¥'+utils.thousand(params.row.firstServiceFee);
+                        }else{
+                            end='-';
+                        }
+                        return <span >{end}</span>;
+                    }
                 },
                 {
                     title: '首付款欠款情况',
                     key: 'firstServiceFeeDebt',
+                    className:'statusClass',
                     align:'right',
                     width:100,
                     render(tag, params){
@@ -293,6 +304,11 @@ export default {
         .overdue-no-table{
             .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
                 background-color: #f6f6f6;
+            }
+        }
+        .statusClass{
+            .ivu-table-cell{
+                padding:0 5px;
             }
         }
      }

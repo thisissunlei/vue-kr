@@ -5,40 +5,42 @@
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;"> 
-                        <Form-item label="商品名称" class='daily-form' prop="customerName">
+                        <Form-item class="priceForm community-form" style="margin-right: 20px;">
+                            <span class="attract-font" style="margin-right:10px;">社<span style="display:inline-block;width:26px;"></span>区</span>
+                            <SelectCity v-model="formItem.cityId" :styles="{width:90+'px',marginRight:'20px'}"/>
+                            <div class='operation-community'><SelectCommunity v-model="formItem.communityId" :params="cityParams" :styles="{width:90+'px'}"  @init="communityInit" :isGetAll="isGetAll"/></div>
+                        </Form-item>
+
+                        <Form-item label="客户名称" class='daily-form' prop="customerName">
                             <i-input 
                                 v-model="formItem.customerName" 
-                                placeholder="请输入商品名称"
+                                placeholder="请输入"
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
 
-                        <Form-item label="是否上传附件" class='daily-form'> 
+                        <Form-item label="是否上传附件" class='daily-form' style="margin-right:172px;"> 
                             <Select 
                                 v-model="formItem.hasAttachment" 
-                                placeholder="请选择是否上传附件" 
-                                style="width: 200px"
+                                placeholder="请选择" 
+                                clearable
+                                style="width: 130px"
                             >
                                 <Option v-for="item in fileList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </Form-item>
 
-                        <Form-item class="priceForm community-form" style="margin-right: 20px;">
-                            <span class="attract-font" style="margin-right:27px;">社<span style="display:inline-block;width:26px;"></span>区</span>
-                            <SelectCity v-model="formItem.cityId" :styles="{width:90+'px',marginRight:'20px'}"/>
-                            <SelectCommunity v-model="formItem.communityId" :params="cityParams" :styles="{width:174+'px'}"  @init="communityInit" :isGetAll="isGetAll"/>
-                        </Form-item>
                         <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
 
                 <!-- 第二行-->
                 <div style="white-space: nowrap;">
 
-                    <Form-item label="欠款金额" class='daily-form'> 
+                    <Form-item label="欠款情况" class='daily-form'> 
                         <Select 
                             v-model="formItem.contractPayStatus" 
-                            placeholder="请输入金额" 
+                            placeholder="请选择" 
                             clearable
                             style="width: 200px"
                         >
@@ -47,11 +49,12 @@
                     </Form-item>
 
                     <div class="daily-form">
-                        <span class="attract-font" style="padding-top:7px;margin-right:38px;">逾期时长</span>
+                        <span class="attract-font" style="padding-top:7px;margin-right:12px;">逾期时长</span>
                         <Form-item  class="priceForm" prop="overDaysMin">
                             <i-input 
                                 v-model="formItem.overDaysMin" 
                                 style="width: 90px"
+                                placeholder="天数" 
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -60,17 +63,18 @@
                             <i-input 
                                 v-model="formItem.overDaysMax" 
                                 style="width: 90px"
+                                placeholder="天数" 
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
                     </div>
 
                     <div class="daily-form" style="margin-right:22px;">
-                        <span class="attract-font" style="padding-top:7px;margin-right:16px;">服务开始日</span>
+                        <span class="attract-font" style="padding-top:7px;margin-right:23px;">服务开始日</span>
                         <Form-item  class="priceForm" prop="startDate">
                             <DatePicker 
                                 v-model="formItem.startDate" 
-                                placeholder="请输入开始日期"
+                                placeholder="开始日期"
                                 style="width: 130px"
                             />
                         </Form-item>
@@ -78,7 +82,7 @@
                         <Form-item  class="priceForm" prop="endDate">
                             <DatePicker 
                                     v-model="formItem.endDate" 
-                                    placeholder="请输入结束日期"
+                                    placeholder="结束日期"
                                     style="width: 130px"
                             />
                         </Form-item>
@@ -292,6 +296,14 @@ export default {
             }
             .ivu-tooltip-inner{
                 white-space: normal;
+            }
+            .operation-community{
+                 display:inline-block;
+                .ivu-select-input{
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
             }
         }
      }

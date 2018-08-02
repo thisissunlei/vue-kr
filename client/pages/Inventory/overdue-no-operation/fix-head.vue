@@ -36,11 +36,8 @@
         border-right:solid 1px #e9eaec;
         border-bottom:solid 1px #e9eaec;
         font-weight: 700;
-        &:nth-child(3),&:nth-child(7),&:nth-child(8){
+        &:nth-child(3),&:nth-child(7),&:nth-child(8),&:nth-child(6){
             width:100px;
-        }
-        &:nth-child(6){
-            width:90px;
         }
         &:nth-child(4){
             width:80px;

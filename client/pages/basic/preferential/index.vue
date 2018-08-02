@@ -6,7 +6,7 @@
             <span style="padding:0 10px"></span>
             <div style="display:inline-block;width:200px;">
                 社区：
-                <Select v-model="communityId" @on-change="changeContent" filterable clearable style="width:150px">
+                <Select v-model="communityId" @on-change="changeCommunity" filterable clearable style="width:150px">
                     <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
                 </Select>
             </div>
@@ -84,12 +84,13 @@ export default {
                     title: '优惠方案',
                     key: 'discountScheme',
                     align: 'center',
+                    width: 120,
                 },
                 {
                     title: '优惠类型',
                     key: 'discountType',
                     align: 'center',
-                    width:100,
+                    width: 100,
                     render: (h, params) => {
                         let str = ''
                         if (params.row.discountType == 'DISCOUNT') {
@@ -109,7 +110,7 @@ export default {
                     title: '有效期开始',
                     key: 'startDate',
                     align: 'center',
-                    width:105,
+                    // width: 105,
                     render: (h, params) => {
                         let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate))
                         return h('div', date)
@@ -119,7 +120,7 @@ export default {
                     title: '有效期结束',
                     key: 'endDate',
                     align: 'center',
-                    width:105,
+                    // width: 105,
                     render: (h, params) => {
                         let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate))
                         return h('div', date)
@@ -129,7 +130,7 @@ export default {
                     title: '权限',
                     key: 'rightContent',
                     align: 'center',
-                    width: 150,
+                    minWidth: 160,
                     render: (h, params) => {
                         let lines = [];
                         let content = params.row.rightContent.split(';')
@@ -145,7 +146,7 @@ export default {
                     title: '创建日期',
                     key: 'ctime',
                     align: 'center',
-                    width:140,
+                    // width: 140,
                     render: (h, params) => {
                         let date = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(params.row.ctime))
                         return h('div', date)
@@ -155,7 +156,7 @@ export default {
                     title: '创建人',
                     key: 'createrName',
                     align: 'center',
-                    width:80
+                    width: 80
                 },
                 {
                     title: '备注',
@@ -195,7 +196,7 @@ export default {
                     title: '状态',
                     key: 'statusName',
                     align: 'center',
-                    width:70,
+                    width: 70,
                     render: (h, params) => {
                         let style;
                         let result = params.row.statusName
@@ -282,22 +283,21 @@ export default {
                 });
             })
         },
-        checkAllGroupChange() {
-            let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
-            this.getTableData(params)
-            console.log(params)
 
-            return
-            let url = window.location.href.split('?')[0];
-            var where = [];
-            for (var field in params) {
-                if (params.hasOwnProperty(field)) {
-                    where.push(`${field}=${params[field]}`);
-                }
-            }
-            url = url + "?" + where.join('&');
-            window.history.pushState(params, '', url)
+        submitStop() {
+            this.$http.put('put-stop-discount', { id: this.currentID }).then((res) => {
+                this.openStop = false;
+                this.$Message.success('操作成功');
+                this.communityId = ' ',
+                    this.statusList = [],
+                    this.getTableData(this.params)
 
+            }).catch((err) => {
+                this.openStop = false;
+                this.$Notice.error({
+                    title: err.message
+                });
+            })
         },
         getTableData(params) {
             this.$http.get('get-discont-list', params).then((res) => {
@@ -308,50 +308,25 @@ export default {
                     title: err.message
                 });
             })
-
         },
-        onCreate() {
-            this.openCreate = true;
-        },
-        cancelCreate() {
-            this.openCreate = false;
-        },
-
-        submitStop() {
-            this.$http.put('put-stop-discount', { id: this.currentID }).then((res) => {
-                this.openStop = false;
-                this.$Message.success('操作成功');
-                this.getTableData('')
-
-            }).catch((err) => {
-                this.openStop = false;
-                this.$Notice.error({
-                    title: err.message
-                });
-            })
-        },
-        cancelStop() {
-            this.openStop = false;
-            this.editData = {}
-        },
-
-        changeContent(value) {
-            this.params.communityId = value;
-            this.params.statusList = this.statusList.join(',');
-            this.params.page = 1;
+        changeCommunity(value) {
             this.page = 1;
-            this.getTableData(this.params);
+            let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: value })
+            this.getTableData(params);
         },
         changePage(page) {
-            this.params.page = page;
             this.page = page;
-            this.getTableData(this.params);
+            let params = Object.assign({}, this.params, { page: page }, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
+            this.getTableData(params);
+        },
+        checkAllGroupChange() {
+            this.page = 1;
+            let params = Object.assign({}, this.params, { statusList: this.statusList.join(',') }, { communityId: this.communityId })
+            this.getTableData(params)
         },
         //停用
         handleStopDiscount(item) {
-            this.editData = item;
             this.currentID = item.id;
-            this.parameterData = item;
             this.openStop = true;
         },
         handleAddModal(reload) {
@@ -359,7 +334,16 @@ export default {
             if (reload) {
                 this.getTableData();
             }
-        }
+        },
+        cancelStop() {
+            this.openStop = false;
+        },
+        onCreate() {
+            this.openCreate = true;
+        },
+        cancelCreate() {
+            this.openCreate = false;
+        },
     }
 
 }

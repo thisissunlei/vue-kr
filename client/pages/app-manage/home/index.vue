@@ -242,6 +242,10 @@ export default {
 </script>
 
 <style lang="less">
+#layout-content_id{
+  padding-right:17px;
+  box-sizing: border-box;
+}
 .g-member-online{
     .u-search{
         height:64px;
@@ -265,6 +269,7 @@ export default {
        right:14px;
        z-index:777;
        padding-left:210px;
+       padding-right:17px;
        box-sizing: border-box;
        .u-search{
          background:#fff;

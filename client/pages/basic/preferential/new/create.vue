@@ -16,9 +16,11 @@
             </FormItem>
             <FormItem label="优惠方案" prop="scheme" v-show="showRent">
                 <span style='padding:0 13px'>满</span>
-                <Input v-model="formItem.scheme.target" :number='true' placeholder="1-36" style="width: 120px" />
+                <InputNumber v-model="formItem.scheme.target" :max="36" :min="1" placeholder="1-36" style="width: 120px" />
+                <!-- <Input v-model="formItem.scheme.target" :number='true' placeholder="1-36" style="width: 120px" /> -->
                 <span style='padding:0 14px'>赠</span>
-                <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" />
+                <InputNumber v-model="formItem.scheme.present" :max="12" :min="1" placeholder="1-12" style="width: 120px" />
+                <!-- <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" /> -->
             </FormItem>
 
             <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
@@ -31,11 +33,13 @@
             </FormItem>
 
             <FormItem label="备注" class='form-item-remark'>
-                <Input v-model="formItem.remark" />
+                <!-- <Input v-model="formItem.remark" /> -->
+                <Input v-model="formItem.remark" :maxlength="100" type="textarea" :autosize="{minRows: 3,maxRows:3}" style="width:100%;" placeholder="备注..." />
+                <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/100":0+"/100"}}</div>
             </FormItem>
             <FormItem class="form-item-btn">
-                <Button class="btn" @click="handleCancle(false)">取消</Button>
                 <Button type="primary" class="btn" @click="handleSubmit(formItem)">确定</Button>
+                <Button class="btn" @click="handleCancle(false)">取消</Button>
             </FormItem>
 
         </Form>
@@ -83,12 +87,12 @@ export default {
         const validatescheme = (rule, value, callback) => {
             if (isNaN(value.target) || isNaN(value.present)) {
                 callback("请输入数字")
-            } else if (value.target > 36 || value.present > 12) {
-                callback('输入有误')
-            } else if (value.target < 1 || value.present < 1) {
-                callback('输入有误')
+            } else if (value.target > 36 ||value.target < 1 ) {
+                callback('输入有误,有效范围1-36')
+            } else if ( value.present > 12|| value.present < 1) {
+                callback('输入有误,有效范围1-12')
             } else if (value.present > value.target) {
-                callback('输入有误')
+                callback('输入有误，后者不能大于前者')
             } else {
                 callback()
             }
@@ -101,8 +105,9 @@ export default {
             }
         };
         const validateDiscountList = (rule, value, callback) => {
-            if (value.length == 0) {
-                callback('至少勾选一个级别')
+            debugger
+            if (Object.keys(value).length == 0) {
+                callback('至少输入一个级别')
             } else if (!checkDiscountExtexnd(value)) {
                 callback('折扣输入有误，应该大于0小于10')
             } else if (checkDiscount(value)) {
@@ -112,15 +117,16 @@ export default {
             }
         };
         var checkDiscountExtexnd = function (obj) {
+            debugger
             let values = Object.values(obj).map(key => Number(key))
-            let arr = values.filter(item => item > 10 || item <= 0)
+            let arr = values.filter(item => item >= 10 || item <= 0)
             if (arr == null || arr.length > 0) {
                 return false
             }
             return true
         };
         var checkDiscount = function (obj) {
-
+            debugger
             let keys = Object.keys(obj).map(key => Number(key))
             let values = Object.values(obj).map(key => Number(key))
             let maxLevel = Math.max.apply(null, keys)
@@ -185,7 +191,10 @@ export default {
                 time: {},
                 discountList: {},
                 rentFreeList: [],
-                scheme: {},
+                scheme: {
+                    present: 1,
+                    target: 1
+                },
             },
             ruleCustom: {
                 communityId: [
@@ -210,7 +219,7 @@ export default {
                     { required: true, type: 'array', validator: validateRentFreeList, trigger: 'change' }
                 ],
                 discountList: [
-                    { required: true, validator: validateDiscountList, trigger: 'blur' }
+                    { required: true, validator: validateDiscountList,trigger: 'blur'}
                 ],
             }
         }
@@ -276,7 +285,7 @@ export default {
                 this.showRent = true;
         },
         handleSubmit(formItem) {
-            console.log('formItem',formItem)
+            console.log('formItem', formItem)
             this.$refs['formContent'].validate((valid) => {
                 setTimeout(() => {//校验后 ivu-form-item-error-tip dom生成需要时间
                     let pass = true
@@ -400,7 +409,7 @@ export default {
         }
         .form-item-remark {
             .ivu-form-item-label {
-                text-align: left;
+                text-align: right;
                 padding: 10px 12px 10px 29px;
             }
         }

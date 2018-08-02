@@ -89,6 +89,7 @@ export default {
                     title: '优惠类型',
                     key: 'discountType',
                     align: 'center',
+                    width:100,
                     render: (h, params) => {
                         let str = ''
                         if (params.row.discountType == 'DISCOUNT') {
@@ -108,6 +109,7 @@ export default {
                     title: '有效期开始',
                     key: 'startDate',
                     align: 'center',
+                    width:105,
                     render: (h, params) => {
                         let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.startDate))
                         return h('div', date)
@@ -117,6 +119,7 @@ export default {
                     title: '有效期结束',
                     key: 'endDate',
                     align: 'center',
+                    width:105,
                     render: (h, params) => {
                         let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.endDate))
                         return h('div', date)
@@ -126,7 +129,7 @@ export default {
                     title: '权限',
                     key: 'rightContent',
                     align: 'center',
-                    width: 140,
+                    width: 150,
                     render: (h, params) => {
                         let lines = [];
                         let content = params.row.rightContent.split(';')
@@ -142,8 +145,9 @@ export default {
                     title: '创建日期',
                     key: 'ctime',
                     align: 'center',
+                    width:140,
                     render: (h, params) => {
-                        let date = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.ctime))
+                        let date = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(params.row.ctime))
                         return h('div', date)
                     }
                 },
@@ -151,6 +155,7 @@ export default {
                     title: '创建人',
                     key: 'createrName',
                     align: 'center',
+                    width:80
                 },
                 {
                     title: '备注',
@@ -190,6 +195,7 @@ export default {
                     title: '状态',
                     key: 'statusName',
                     align: 'center',
+                    width:70,
                     render: (h, params) => {
                         let style;
                         let result = params.row.statusName
@@ -207,7 +213,7 @@ export default {
                     title: '操作',
                     key: 'operation',
                     align: 'center',
-                    width: 110,
+                    width: 60,
                     render: (h, params) => {
                         let result = params.row.statusName == '已失效';
                         let style;

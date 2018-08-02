@@ -418,7 +418,7 @@ var layoutScrollHeight=0;
                 utils.commonExport(this.tabForms,'/api/order/operation/due/list-excel');
             },
             //滚动监听
-        onScrollListener(){            
+        onScrollListener(){
             var dom=document.getElementById('layout-content-main');
             var headDom=document.getElementById('slot-head-daily-inventory');
             if(headDom){

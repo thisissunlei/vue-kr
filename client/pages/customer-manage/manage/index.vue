@@ -204,8 +204,8 @@
                         align:'center',
                         width:90,
                         render:(h,params)=>{
-                            return h('div', [
-                                    h('Button', {
+                           
+                            var arr = [ h('Button', {
                                         props: {
                                             type: 'text',
                                             size: 'small'
@@ -218,21 +218,25 @@
                                                 this.showDetail(params.row)
                                             }
                                         }
-                            }, '查看'),
-                            h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            checkAction:'seat_order_view',
-                                            label:'编辑',
-                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openEditFun(params.row)
-                                            }
-                                        }
-                            }, '编辑'),
-                         ]);
+                            }, '查看')];
+                            if(!params.row.crmId){
+                                arr.push(h(Buttons, 
+                                            {
+                                                props: {
+                                                    type: 'text',
+                                                    checkAction:'seat_order_view',
+                                                    label:'编辑',
+                                                    styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openEditFun(params.row)
+                                                    }
+                                                }
+                                            }, '编辑'))
+                            }
+
+                            return h('div',arr);
 
                         
                         }

@@ -43,6 +43,7 @@
 
             		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
             	</div>
+				<OrderManagement v-if="selectedTab=='stagingBill'" :customerId="customerId" class="tab-texts"/>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
         </div>
@@ -59,6 +60,7 @@
     import Waiting from './waiting.vue'; 
 	import Basic from './basic/index.vue'; 
 	import JoinInfo from './joinInfo.vue'; 
+	import OrderManagement from './orderManagement'
 
 	export default {
 		name:'customerAssetsDetail',
@@ -68,7 +70,8 @@
 			Assets,
 			Waiting,
 			Basic,
-			JoinInfo
+			JoinInfo,
+			OrderManagement
 		},
 		data (){
 
@@ -92,6 +95,9 @@
 				},{
 					name:'账户信息',
 					code:'account'
+				},{
+					name:'分期账单',
+					code:'stagingBill'
 				},{
 					name:'更多',
 					code:'more'
@@ -121,9 +127,9 @@
 		methods:{
 			selectTab(name){
 				console.log('selectTab',name);
-				if(name=='order'){
-					window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
-				}
+				// if(name=='order'){
+				// 	window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+				// }
 				this.selectedTab = name
 			},
 			getBasicInfo(){

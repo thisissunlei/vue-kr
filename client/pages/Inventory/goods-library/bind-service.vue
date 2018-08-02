@@ -1,21 +1,21 @@
 
 <template>
     <div>
-     <Form ref="formItemService" :model="formItem" :rules="ruleService" label-position="left">
+     <Form ref="formItemService" :model="formItem" :rules="ruleService" label-position="left" style="margin-left: 20px;">
         <Form-item prop="enable">
             <RadioGroup v-model="formItem.enable" @on-change="radioChange">
                     <Radio label="ok">
-                        这是个新房间/工位（需硬件的同事协助才可完成绑定）
+                        这个房间/工位是全新的，创建一个新物理空间（新的空间需重新绑定设备）
                     </Radio>
                     <Radio label="no">
-                        从现有的房间/工位的设备权限中选择（立即绑定）
+                        从现有的物理空间中选择
                     </Radio>
             </RadioGroup>
         </Form-item>
         <Form-item  prop="basicSpaceId" v-if="isHave"> 
             <Select
                 v-model="formItem.basicSpaceId"
-                style="width:250px;margin-left:20px;"
+                style="width:250px;"
                 placeholder="请选择房间"
                 filterable
                 clearable

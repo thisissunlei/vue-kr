@@ -39,6 +39,7 @@
                         <Select 
                             v-model="formItem.contractPayStatus" 
                             placeholder="请输入金额" 
+                            clearable
                             style="width: 200px"
                         >
                             <Option v-for="item in payList" :value="item.value" :key="item.value">{{ item.label }}</Option>

@@ -106,18 +106,18 @@
                             return h('span',{},utils.thousand(params.row.amount))
                          }
           },
-          {
-            title: '合同编号',
-            key: 'contractNumber',
-            align: 'center',
-            width:120,
-          },
-          {
-            title: '业务员姓名',
-            key: 'bizPerson',
-            align: 'center',
-            width:170,
-          },
+          // {
+          //   title: '合同编号',
+          //   key: 'contractNumber',
+          //   align: 'center',
+          //   width:120,
+          // },
+          // {
+          //   title: '业务员姓名',
+          //   key: 'bizPerson',
+          //   align: 'center',
+          //   width:170,
+          // },
           {
             title: '财务组织编码',
             key: 'companyNumber',
@@ -136,12 +136,12 @@
             align: 'center',
             width:170,
           },
-          {
-            title: '付款账号',
-            key: 'payerAccountBank',
-            align: 'center',
-            width:170,
-          },
+          // {
+          //   title: '付款账号',
+          //   key: 'payerAccountBank',
+          //   align: 'center',
+          //   width:170,
+          // },
           {
             title: '客户(供应商)名称',
             key: 'payerName',

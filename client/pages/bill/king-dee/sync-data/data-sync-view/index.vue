@@ -14,6 +14,9 @@
 				<LabelText label="同步数据数：">
 					{{detailData.syncDataCount}}
 				</LabelText>
+				<LabelText label="成功结果数：">
+					{{detailData.successDataCount}}
+				</LabelText>
 				<LabelText label="同步时间：">
 					{{detailData.createTime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
@@ -59,7 +62,7 @@
 					
 				</LabelText>
 			</DetailStyle>
-			<DetailStyle info="传输结果">
+			<!-- <DetailStyle info="传输结果">
 				
 				<LabelText label="重试次数：" style="font-weight:bold;">
 					{{detailData.tryCount}}
@@ -71,7 +74,7 @@
                 <LabelText label="重试操作人：" style="font-weight:bold;">
 					{{detailData.lastSyncUserName}}
 				</LabelText>
-			</DetailStyle>
+			</DetailStyle> -->
 			<Tabs value="original">
                 <TabPane label="原始数据" name="original">
 					<Table 

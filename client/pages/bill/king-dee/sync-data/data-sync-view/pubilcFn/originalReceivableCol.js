@@ -27,7 +27,7 @@ function originalReceivableCol(){
             key: 'occurDate',
             align:'center',
             render(tag, params){
-                let time=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.occurDate)):'-';
+                let time=params.row.occurDate? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.occurDate)):'-';
                 return time;
             }
         },

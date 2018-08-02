@@ -114,7 +114,7 @@ export default {
                     console.log(r,"ppppppp");
                     if(r.data.pullStatus=="ALREADY_PULL"){
                         this.openLoading = false;
-                         this.$Notice.success('拉取成功');
+                          this.$Notice.success({title:'拉取成功'});
                          this.$router.replace({path:'/bill/king-dee/sync-data/filterData',query:{syncId:this.syncId,syncType:this.formItem.syncDataType,startTime:this.syncStartTime,endTime:this.syncEndTime}});
                     //    window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
                       //  window.location.href = '/bill/king-dee/sync-data';
@@ -188,7 +188,7 @@ export default {
                 // })
             }).catch(error => {
                 console.log(error)
-                console.log(222222222)
+              //  console.log(222222222)
                 this.$Notice.error({
                     title: error.message
                 });

@@ -60,10 +60,6 @@ export default {
         SelectDiscount,
         RentFree
     },
-    props: {
-        editData: Object,
-        editStatus: String,
-    },
     data() {
         const validateCummity = (rule, value, callback) => {
             if (value == null || value.length == 0) {

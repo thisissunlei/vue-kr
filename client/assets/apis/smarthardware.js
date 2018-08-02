@@ -130,6 +130,12 @@ export default  {
         url: 'api/iot-platform/customer/select-items',
         method: 'get'
     },
+
+    //生成一代门禁二维码
+    'get-door-new-qr':{
+        url: 'apis/iot-platform/door-device/actions/generate-qr-code',
+        method: 'get'
+    },
     
     
 

@@ -5,7 +5,7 @@ function initListData(){
             title: '申请编号',
             key: 'applyNum',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive,waitReturn',
             render:(h,params)=>{
                 return h('div',{
                     style: {
@@ -22,16 +22,16 @@ function initListData(){
         {
             title: '社区名称',
             key: 'communityName',
-            align:'center',            
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
+            align:'center',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '发票抬头',
             key: 'invoiceTitle',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive,waitReturn',
             render:(h,params)=>{
-               
+
                 let {qualificationVO} =  params.row;
                 if(!qualificationVO){
                     return '';
@@ -43,7 +43,7 @@ function initListData(){
             title: '纳税人识别号',
             key: 'taxpayerNumber',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive',
             render:(h,params)=>{
                 let {qualificationVO} =  params.row;
                 if(!qualificationVO){
@@ -56,16 +56,16 @@ function initListData(){
             title: '发票规格',
             key: 'invoiceTypeName',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '发票内容',
             key: 'invoiceDetailList',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive,waitReturn',
             render:(h,obj)=>{
                 var arr=[];
-              
+
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
                     return '--';
                 }
@@ -92,10 +92,10 @@ function initListData(){
             title: '开票金额',
             key: 'invoiceDetailList',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive',
+            type:'waitArrive,waitMail,waitProvide,waitReceive,alreadyReceive',
             render:(h,obj)=>{
                 var arr=[];
-              
+
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
                     return '--';
                 }
@@ -158,7 +158,7 @@ function initListData(){
             key: 'invoiceCount',
             align:'center',
             width:70,
-            type:'waitArrive,waitMail,waitReceive'
+            type:'waitArrive,waitMail,waitProvide,waitReceive'
         },
         {
             title: '开票时间',
@@ -180,16 +180,16 @@ function initListData(){
                 let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                 return time;
             }
-            
+
         },
-       
+
         {
             title: '操作',
             key: 'name',
             align:'center',
             type:'waitArrive',
             render:(h,params)=>{
-               
+
                 return h('div', [
                         h('Button', {
                             props: {
@@ -205,8 +205,8 @@ function initListData(){
                                 }
                             }
                         }, '签收')
-                ]);  
-              
+                ]);
+
             }
         },
         {
@@ -215,7 +215,7 @@ function initListData(){
             align:'center',
             type:'waitMail',
             render:(h,params)=>{
-               
+
                 return h('div', [
                         h('Button', {
                             props: {
@@ -231,9 +231,35 @@ function initListData(){
                                 }
                             }
                         }, '邮寄')
-                ]);  
-              
+                ]);
+
             }
+        },
+        {
+          title: '操作',
+          key: 'name',
+          align:'center',
+          type:'waitProvide',
+          render:(h,params)=>{
+
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small'
+                },
+                style: {
+                  color:'#2b85e4'
+                },
+                on: {
+                  click: () => {
+                    this.provideClick(params.row)
+                  }
+                }
+              }, '发放')
+            ]);
+
+          }
         },
         {
             title: '操作',
@@ -256,9 +282,9 @@ function initListData(){
                                     this.goView(colData)
                                 }
                             }
-                        }, '查看') 
+                        }, '查看')
                 ];
-                
+
                 if(colData.invoiceStatus != 'RECOVERYED'){
                     arr.push(h('Button', {
                             props: {
@@ -291,9 +317,9 @@ function initListData(){
                             }
                         }, '收回'),)
                 }
-               
-                return h('div',arr );  
-              
+
+                return h('div',arr );
+
             }
         }
 

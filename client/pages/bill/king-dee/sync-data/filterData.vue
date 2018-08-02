@@ -93,11 +93,13 @@
                             <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
+                         <Col span="6" class="col">
                          <FormItem label="重复状态">
                             <Select v-model="formItem.repeatStatus" class="form-item-input" @on-change='filterData'>
                                 <Option v-for="item in repeatStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
+                        </Col>
                     </Row>
                 </div>
                 <!-- <Row>
@@ -650,7 +652,7 @@ export default {
         // 非全选模式下
         handleSelectChange(selection) {
              console.log('只要发生变化就会触发',selection);
-             if(!!selection.length){
+             if(!selection.length){
                  this.isAllSelect = false;
              }
             if (!this.isAllSelect) {

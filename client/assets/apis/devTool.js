@@ -13,5 +13,12 @@ export default {
         url: "/api/krspace-op-web/member/csr-default-list",
         // url: "ben/member/csr-default-list",
         method: "get"
-    }
+    },
+     //运维工具数据获取
+     "get-operations-list": {
+        url: "/api/krspace-sso-web/sso/tool/quicknav/list",
+        // url: "ben/member/csr-default-list",
+        method: "get"
+    },
+    
 };

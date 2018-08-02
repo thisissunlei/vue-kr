@@ -70,7 +70,7 @@ export default {
   methods: {
     getOptionList() {
       let params = {
-        enmuKey: 'com.krspace.op.api.enums.seatorder.InvalidType',
+        enmuKey: 'com.krspace.order.api.enums.seatorder.InvalidType',
         // enmuKey: 'com.krspace.erp.api.enums.pm.PmDepartment'
       };
       this.$http

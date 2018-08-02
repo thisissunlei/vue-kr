@@ -39,38 +39,38 @@ import http from '~/plugins/http.js';
 
 export default {
     props: {
-        type:'',
+        type: '',
         defaultValue: 0,
-        showType:{
-            type:Boolean,
+        showType: {
+            type: Boolean,
 
         },
         clearable: {
             type: Boolean,
             default: false,
         },
-        disabled:{type:Boolean,default:false},
+        disabled: { type: Boolean, default: false },
         // placeholder: '请选择',
 
         orderitems: {
             type: Object
         },
-        disabled:{
-            type:Boolean,
-            default:true
+        disabled: {
+            type: Boolean,
+            default: true
         }
-        
+
     },
     data() {
         return {
             labelinvalue: true,
             // disabled: false,
             saler: '',
-            showValue:''+this.defaultValue,
+            showValue: '' + this.defaultValue,
             loading1: false,
-            isRender:false,
-
-            show:this.showType,
+            isRender: false,
+            isNewUser:false,
+            show: this.showType,
 
             salerOptions: [
                 {
@@ -94,7 +94,7 @@ export default {
     // },
     watch: {
         // disabled() {
-         
+
         //     if (disabled) {
         //         this.disabled = false;
         //     } else {
@@ -102,16 +102,20 @@ export default {
         //     }
         // },
         orderitems() {
+            console.log(this.orderitems, "....")
             this.getSalerChanceList();
-           
+
         },
-        defaultValue(){
-            this.showValue = this.defaultValue;
-             console.log(this.showValue,"-----")
+        defaultValue() {
+            if (this.defaultValue==undefined) {
+                this.defaultValue=''
+            }
+            this.showValue = '' + this.defaultValue;
+            console.log(this.showValue, "-----")
         },
-        showType(){
+        showType() {
             this.show = this.showType;
-            
+
         },
         // defaultValue(){
         //   
@@ -120,6 +124,8 @@ export default {
         // }
     },
     mounted() {
+        console.log(this.showValue, "mmmmmmm")
+
     },
     methods: {
         changeContent(item) {
@@ -129,7 +135,7 @@ export default {
             } else {
                 v = item.value
             }
-            console.log("vvvvvvv",v)
+            console.log("vvvvvvv", v)
             this.$emit('onChange', v);
         },
         //获取销售机会列表
@@ -137,34 +143,41 @@ export default {
             let parms = {
                 customerId: this.orderitems.customerId,
                 communityId: this.orderitems.communityId,
-                receiveId: this.orderitems.salerId
+                receiveId: this.orderitems.salerId,
+                orderId: this.orderitems.orderId
             }
+            console.log("kkkk")
             if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
             let list = [];
             let _this = this;
-
+            console.log("jjjjjj")
             http.get('get-salechance', parms, r => {
-              
+
                 r.data.items.data.map(item => {
                     list.push({
-                        label: item.name,
+                        label: item.name || '   ',
                         value: item.id
                     })
                 })
                 list.unshift({ label: '不绑定机会', value: -1 })
                 _this.salerOptions = [].concat(list);
-
+                console.log(_this.showValue, "mmmm", _this.salerOptions)
                 let parms = {
                     count: list.length - 1,
                     isNewUser: r.data.items.isNewUser,
                     list: list
                 }
-                if(list.length ==2&&this.type != 'edit' && r.data.items.isNewUser){
-                    this.showValue = ''+list[1].value;
-                     this.$emit('onChange',  this.showValue);
-                }else{
-                    this.showValue = '';
-                }
+                this.isNewUser=parms.isNewUser
+                setTimeout(() => {
+
+                    if (list.length == 2 && this.type != 'edit' && r.data.items.isNewUser) {
+                        this.showValue = '' + list[1].value;
+                        this.$emit('onChange', this.showValue);
+                    } else {
+                        // this.showValue = '';
+                    }
+                }, 200)
+
                 this.$emit('gotChanceList', parms);
             }, error => {
                 this.$Notice.error({

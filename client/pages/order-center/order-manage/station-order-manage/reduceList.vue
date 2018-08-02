@@ -46,15 +46,11 @@
                 </div>
             </Modal>
 
-            <Modal
-                v-model="openNullify"
-                title="提示信息"
-                width="500"
-            >
-                <Nullify/>
+            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+                <Nullify v-if="openNullify" :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
                 <div slot="footer">
-                    <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                    <!-- <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
                 </div>
             </Modal>
 
@@ -70,7 +66,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract/>
+                <ApplyContract :requireChineseEnglish='false' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" @click="submitApply" :disabled="applyDisabled">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
@@ -110,7 +106,7 @@
                     pageSize:15,
                     customerName:"",
                 },
-
+                contractLanguage:'CHINESE',//合同语言类型
                 switchParams:{},
                 openMessage:false,
                 nullDisabled:false,
@@ -361,6 +357,10 @@
 
 
         methods:{
+            refershJoinList(params) {
+                this.getListData(this.params);
+                this.openNullify = false;
+            },
             getListData(params){
                  this.$http.get('reduce-bill-list', params).then((response)=>{
                      this.totalCount=response.data.totalCount;
@@ -504,6 +504,10 @@
             closeApply(){
                 this.openApply=!this.openApply;
                 this.applyDisabled=false;
+            },
+            //中英文合同选择切换
+            onSelectApplyContract(contractLanguage){
+                this.contractLanguage=contractLanguage;
             }
         }
     }

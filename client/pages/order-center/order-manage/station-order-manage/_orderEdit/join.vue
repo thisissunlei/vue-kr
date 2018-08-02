@@ -243,7 +243,7 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-
+import SelectChance from '~/components/SelectSaleChance.vue';
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
 import SelectChance from '~/components/SelectSaleChance.vue';
@@ -271,6 +271,7 @@ export default {
         };
 
         return {
+            orderId:'',
             chancedisabled:true,
             salerdisabled:true,
             cummunitydisabled:true,
@@ -282,7 +283,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: {},
+            orderitems: '',
             showSaleChance: true,
             showFree: false,
             openStation: false,
@@ -506,6 +507,7 @@ export default {
             obj.communityId = this.formItem.communityId;
             obj.salerId = this.formItem.salerId;
             obj.saleChanceId = this.formItem.saleChanceId;
+            obj.orderId=this.orderId
             this.saleChanceId = this.formItem.saleChanceId;
             this.defaultChanceID = this.formItem.saleChanceId;
             this.orderitems = Object.assign({}, obj);
@@ -539,7 +541,8 @@ export default {
                     let parms = {
                     customerId: this.formItem.customerId,
                     communityId: this.formItem.communityId,
-                    receiveId: this.formItem.salerId
+                    receiveId: this.formItem.salerId,
+                    orderId:this.orderId
                 }
                 let list = [];
                 let _this = this;
@@ -641,6 +644,7 @@ export default {
             let from = {
                 id: params.orderEdit
             };
+            this.orderId=from.id;
             this.$http.get('join-bill-detail', from, r => {
                 let data = r.data;
                 _this.orderType = data.orderType == 'INCREASE' ? '增租' : '入驻';
@@ -654,6 +658,7 @@ export default {
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
                     return obj;
                 })
+                
                 _this.originStationList = data.orderSeatDetailVo;
                 _this.stationData = {
                     submitData: data.orderSeatDetailVo,
@@ -1209,6 +1214,7 @@ export default {
             obj.customerId = this.formItem.customerId;
             obj.communityId = this.formItem.communityId;
             obj.salerId = this.formItem.salerId;
+            obj.orderId=this.orderId
             this.orderitems = Object.assign({}, obj);
         },
         handleGotChancelist(parms) {

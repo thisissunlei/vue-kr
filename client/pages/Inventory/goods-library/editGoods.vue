@@ -94,7 +94,7 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-                      <div>启用状态、绑定设备、平面图配置可在列表中直接点击操作</div>
+                      <div>启用状态、物理空间、平面图配置可在列表中直接点击操作</div>
             </Form>   
         </template>
 <script>
@@ -124,16 +124,14 @@ import dateUtils from 'vue-dateutils';
             };
             //面积
              const validarea = (rule, value, callback) => {
-               var reg = /^\+?[1-9]\d*$/;
+                var reg=/^(([1-9]{1}[0-9]{0,3})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,3}\.\d{1,2}))$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>999){
-                    callback('最大999面积');
+                    callback('小于10000的数字,最多2位小数');
                 }else{
                     callback();
                 }
-                  };
-                      //商品定价
+            };
+            //商品定价
             const validateOrder = (rule, value, callback) => {
                 var reg = /^\+?[0-9]\d*$/;
                 if(value&&!reg.test(value)){

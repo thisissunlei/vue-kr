@@ -1,7 +1,7 @@
 <template>
     <div class="m-bill-wrap">
         <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-            <Tab-pane label="未付清账单dddd" name="wait">
+            <Tab-pane label="未付清账单" name="wait">
                 <WaitList 
                     :mask="key" 
                     :billType="billType" 

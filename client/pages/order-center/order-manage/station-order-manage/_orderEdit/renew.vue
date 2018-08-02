@@ -232,6 +232,7 @@ export default {
             }
         };
         return {
+            orderId:'',
             chancedisabled:true,
             salerdisabled:true,
             cummunitydisabled:true,
@@ -445,8 +446,8 @@ export default {
     methods: {
                 //获取销售机会列表
         getSalerChanceList() {
-        let chanceid=this.renewForm.saleChanceId;
-            if(chanceid){
+        // let chanceid=this.renewForm.saleChanceId;
+            if(this.defaultChanceID){
                 this.chancedisabled=true
                 return;
             }
@@ -454,13 +455,14 @@ export default {
                     let parms = {
                     customerId: this.renewForm.customerId,
                     communityId: this.renewForm.communityId,
-                    receiveId: this.renewForm.salerId
+                    receiveId: this.renewForm.salerId,
+                    orderId:this.orderId
                 }
                 let list = [];
                 let _this = this;
 
                 this.$http.get('get-salechance', parms, r => {
-                    debugger;
+                    // debugger;
                     if (r.data.items.data.length==0) {                       
                         _this.remindinfoNewUser = false
                         _this.remindinfo = true
@@ -555,6 +557,7 @@ export default {
             let from = {
                 id: params.orderEdit
             };
+            this.orderId=from.id;
             this.$http.get('join-bill-detail', from, r => {
                 let data = r.data;
                 let money = 0;
@@ -569,6 +572,12 @@ export default {
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
                     return obj;
                 })
+                 _this.orderitems = Object.assign({}, {
+                     customerId:data.customerId,
+                     communityId:data.communityId,
+                     salerId:data.salerId
+                 });
+                 console.log(this.orderitems,"oooooo")
                 _this.getSaleTactics({ communityId: data.communityId })
                 _this.renewForm.customerId = JSON.stringify(data.customerId);
                 _this.customerName = data.customerName;
@@ -592,6 +601,7 @@ export default {
                 _this.depositAmount = data.deposit + '';
                 _this.renewForm.firstPayTime = data.firstPayTime;
                 // _this.getStationAmount()
+                _this.defaultChanceID = data.opportunityId||'';
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
 
@@ -691,7 +701,7 @@ export default {
             renewForm.customerId = this.renewForm.customerId;
             renewForm.communityId = this.renewForm.communityId;
             renewForm.salerId = this.renewForm.salerId;
-            renewForm.opportunityId = this.renewForm.saleChanceId;//销售机会ID
+            renewForm.opportunityId = this.renewForm.saleChanceId||'';//销售机会ID
             renewForm.rentAmount = this.renewForm.rentAmount;
             renewForm.signDate = signDate;
             renewForm.startDate = start;
@@ -699,7 +709,9 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
+
             this.$http.post('save-renew', renewForm).then(r => {
+        
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
                 // window.close();
                 window.opener.location.reload();
@@ -800,7 +812,7 @@ export default {
             if (!value || value === 0 || value == -1) {
                 this.renewForm.saleChanceId = '';
             } else {
-                this.renewForm.saleChanceId = value;
+                this.renewForm.saleChanceId = value||'';
             }
         },
         validSaleChance() {
@@ -809,10 +821,11 @@ export default {
             obj.customerId = this.renewForm.customerId;
             obj.communityId = this.renewForm.communityId;
             obj.salerId = this.renewForm.salerId;
+            obj.orderId=this.orderId
             this.orderitems = Object.assign({}, obj);
         },
          handleGotChancelist(parms) {
-             debugger;
+            
              return;
             if (parms.isNewUser) {
                 this.remindinfo = false

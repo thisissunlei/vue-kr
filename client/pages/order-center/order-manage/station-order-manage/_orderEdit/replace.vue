@@ -1632,7 +1632,9 @@
                     obj.seatType = item.seatType;
                     return obj;
                 })
-                let price = item.signPrice.split('元')[0]
+                // let price = item.signPrice.split('元')[0]
+                let price = item.price;
+                // price=price.replace(/\,/g,'')
                 let params = {
                     codeName:item.name,
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
@@ -1653,6 +1655,7 @@
                 })
             },
             changePrice(index,price){
+               
                 this.selecedStationList = this.selecedStationList.map((item,i)=>{
                     item.seatNum = item.name;
                     if(i == index){
@@ -1662,6 +1665,7 @@
                     }
                     return item
                 })
+                console.log()
                 this.getStationAmount()
             },
             getStationAmount(list){
@@ -1682,7 +1686,7 @@
                     if(item.originalPrice === ''){
                         originalPrice = true;
                     }
-                    obj.floor = item.whereFloor;
+                   
                     return obj;
                 })
                 if(originalPrice){
@@ -1775,6 +1779,7 @@
                     oldSeats:JSON.stringify(this.selectedOldStation),
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     realEndDate:time,
+                    //欢哥说必要，但是没用
                     orderId:10718
 
                 }

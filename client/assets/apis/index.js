@@ -20,6 +20,9 @@ import ProductGoods from './productGoods.js';
 import comment from './comment.js';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
+import doorPermmision from './doorPermmision.js';
+import KrmeetingSeat from "./krmeetingSeat.js";
+
 
 export default {
   ...OrderApi,
@@ -43,5 +46,7 @@ export default {
   ...ProductGoods,
   ...comment,
   ...DevTool,
-  ...FinancialtransferApply
+  ...FinancialtransferApply,
+  ...doorPermmision,
+  ...KrmeetingSeat
 }

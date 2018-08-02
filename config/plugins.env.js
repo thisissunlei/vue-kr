@@ -25,9 +25,17 @@ const envs = {
     },
 }
 const pluginsDomain  = envs[process.env.NODE_ENV].plugins+'/plugins';
-const files = [
-    {src:pluginsDomain+'/nav/nav.1.0.0.js'}
+const jsFiles = [
+//    {src: pluginsDomain+'/nav/1.0.0/nav.js'},
+//    {src: pluginsDomain+'/echarts/4.1.0/echarts.min.js'},
+]
+const cssFiles = [
+    pluginsDomain+'/public/css/main.css',
+   
 ]
 
-module.exports = files;
+module.exports = {
+    jsFiles,
+    cssFiles
+};
 

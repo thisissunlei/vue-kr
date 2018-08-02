@@ -57,9 +57,7 @@
         var alias = '/new/#';
         var hostname = location.hostname;
         var port = location.port || '';
-        if(router.indexOf('http://')!=-1||router.indexOf('https://')!=-1){
-            return router;
-        }
+        
         var nowType = getNowType(getRouter());
        
         if (port) {
@@ -77,6 +75,14 @@
             }
             alias = '';
         }
+        if(type && type == 'project'){
+           
+            alias = '/project/#'
+        }
+        if(type && type == 'product'){
+           
+            alias = '/product/#'
+        }
         if(type && type == "member"){
             alias = '/';
             hostname =  'memberadmin.krspace.cn';
@@ -88,6 +94,8 @@
     function getNowType(router){
         if(router.indexOf('new/#/') !=-1){
             return 'admin'
+        }else if(router.indexOf('project/#/') !=-1){
+            return 'project'
         }else {
             return 'vue';
         }
@@ -114,8 +122,8 @@
             if (port) {
                 port = ":" + port;
             }
-            if (location.hash.indexOf("#/") != -1) {
-                str = location.hash.split("#/")[1]
+            if (location.hash.indexOf("#") != -1) {
+                str = location.hash.split("#")[1]
                 href = every.url;
             } else {
                 href = location.protocol + "//" + location.hostname + port + every.url;
@@ -373,6 +381,9 @@
                         }
                     }
                     var activeRouter = '';
+                    if(child.name == "即将到期" || child.name == '逾期未付'){
+                        console.log(router,'---------',href)
+                    }
                     if(router.indexOf('krspace.cn')!=-1){
                         var port = location.port?':'+location.port:'';
                         activeRouter = router.split('krspace.cn'+port)[1];
@@ -435,38 +446,31 @@
     }
   
     
-    global.vueNavRender = function(dom,contentDom){
+    function vueNavRender(dom,contentDom){
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        if(typeof(Storage)!=="undefined"){
-            if (sessionStorage.navs){
-                navUtils.navs = [].concat(sessionStorage.navs);
-                navUtils.user = Object.assign(sessionStorage.user);
+        if(typeof(Storage)!=="undefined")
+	    {
+            if (sessionStorage.user){
+                navUtils.navs = JSON.parse(sessionStorage.navs);
+                navUtils.user = JSON.parse(sessionStorage.user);
                 routerRefresh();
-                return ;
+                return;
             }
-            
-        }
-        getDataAll()
-        
-        // // console.log("pppppp------",dom)
-        // http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
-        //     var navs = [].concat(response.data);
-        //     routerRefresh();
-        //     http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
-                
-        //         var user = response.data.userInfo;
-        //         window.resourcesCode = response.data.resourcesCode;
-        //         navUtils.navs = [].concat(navUtils.navs,navs);
-        //         navUtils.user = Object.assign(user);
-        //         routerRefresh();
-        //     })
            
-        // })
+        }
+        // sessionStorage.navs = 12222
+        getNavData();
     }
-    function getDataAll(){
-        http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+    // window.onload = function(){
+        vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
+    // }
+    
+    renderHanderAndSidebar();
+    function getNavData(){
+         // console.log("pppppp------",dom)
+         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
             var navs = [].concat(response.data);
             routerRefresh();
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
@@ -475,26 +479,18 @@
                 window.resourcesCode = response.data.resourcesCode;
                 navUtils.navs = [].concat(navUtils.navs,navs);
                 navUtils.user = Object.assign({},user);
-                if(typeof(Storage)!=="undefined"){
-                    sessionStorage.navs = [].concat(navUtils.navs,navs);
-                    sessionStorage.user = Object.assign({},user);
-                }
+                sessionStorage.navs = JSON.stringify([].concat(navUtils.navs,navs));
+                sessionStorage.user =   JSON.stringify(Object.assign({},user));
                 routerRefresh();
             })
            
         })
     }
-    
-    renderHanderAndSidebar();
-    window.addEventListener('load',function(){
-
-    })
+  
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
     global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部
     global.LISTENSIDEBAROPEN = listenSidebarOpen;//监听开关
-    // global.GLOBALHEADERSET = Router.setDefaultHeader;
-
-    // Router.init();
+   
     
 })(window);

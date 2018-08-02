@@ -1,7 +1,7 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const pluginsDomain = require('./config/plugins.env');
-
+console.log(pluginsDomain,'+++++++++',pluginsDomain.jsFiles);
 module.exports = {
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 700000 },
@@ -22,9 +22,11 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' }
     ],
-    script: pluginsDomain
+    
+    script: pluginsDomain.jsFiles
     
   },
+  css: pluginsDomain.cssFiles,
 
   plugins: [
     { src: '~plugins/iview', ssr: true },

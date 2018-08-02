@@ -9,8 +9,9 @@
 
   <link rel="stylesheet" href="/nav/nav.css">
   <link rel="stylesheet" href="/icomoon/style.css">
-  {{ HEAD }}
-  <!-- <script src="/plugins/nav/index.js"></script> -->
+
+  
+ 
   <script src="/pdf/pdf.js"></script>
   <script src="/go/go.js"></script>
   <script src="/echarts/echarts.min.js"></script>
@@ -22,9 +23,13 @@
  
 </head>
 <body>
-
-  {{APP}}
+    <div id="_layout_box_hander" ></div>
+    <div id="layout-content_id" class="layout-content" style="paddingLeft:180px;">
+      {{APP}}
+    </div>
 
 </body>
+{{ HEAD }}
+<script src="/nav/index.js"></script>
 
 </html>

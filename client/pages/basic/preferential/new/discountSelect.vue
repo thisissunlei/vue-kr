@@ -16,18 +16,18 @@
 <script>
 
 export default {
-    model:{
-        prop:'value',
-        event:'input'
+    model: {
+        prop: 'value',
+        event: 'input'
     },
     props: {
         roleList: {
             type: Array,
             default: () => []
         },
-        value:{
-            type:Object,
-            default:()=>{}
+        value: {
+            type: Object,
+            default: () => { }
         }
     },
     data() {
@@ -47,9 +47,13 @@ export default {
         handleInputBlur() {
             let obj = Object.assign({}, this.discount)
             let keys = Object.keys(obj);
-            let toDel = keys.filter(key => obj[key] == false);
-            toDel.map(key => {
-                delete obj[key];
+            keys.map(key => {
+                if (obj[key] == false) {
+                    delete obj[key];
+                }
+                else {
+                    obj[key] = Number(obj[key].toString().match(/^\d+(?:\.\d)?/))
+                }
             })
             debugger
             this.discount = Object.assign({}, obj)

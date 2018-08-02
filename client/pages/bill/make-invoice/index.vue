@@ -41,6 +41,7 @@
     import SearchFrom from './search-from';
     import utils from '~/plugins/utils';
     import List from './list';
+    import dateUtils from 'vue-dateutils';
     export default {
        
         components:{
@@ -96,6 +97,12 @@
                 }
                 if(params.endTime){
                     params.endTime = new Date(params.endTime).getTime();
+                }
+                if (params.applyStartDate) {
+                  params.applyStartDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(params.applyStartDate));
+                }
+                if (params.applyEndDate) {
+                  params.applyEndDate =  dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(params.applyEndDate));
                 }
                 
                 utils.addParams(params);

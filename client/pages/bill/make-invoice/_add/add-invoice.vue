@@ -76,7 +76,7 @@
                             <Input 
                                 :disabled="isReady || disabled" 
                                 v-model="formItem.registerPhone" 
-                                placeholder="请输入注册电话" 
+                                placeholder="请输入注册电话"
                             />
                         </FormItem>
                     </Col>
@@ -86,7 +86,7 @@
                             <Input 
                                 :disabled="isReady || disabled" 
                                 v-model="formItem.bank" 
-                                placeholder="请输入开户银行" 
+                                placeholder="请输入开户银行"
                             />
                         </FormItem>
                     </Col>

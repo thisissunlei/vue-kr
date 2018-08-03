@@ -48,6 +48,25 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <div class="m-customer-info">
+              <DetailStyle info="客户主管理员信息">
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:red;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{123}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{123}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{123}}
+                        </LabelText>
+                  </div>
+                </Row>
+              </DetailStyle>  
+            </div>
             <DetailStyle info="租赁信息">
                 <Row style="margin-bottom:30px">
                     <Col class="col">
@@ -243,6 +262,7 @@ import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
+import LabelText from '~/components/LabelText';
 
 
 
@@ -263,6 +283,7 @@ export default {
             }
         };
         return {
+            isAddEdit:true,
             chanceDisable:false,
             remindinfoNewUser: false,
             remindinfo: false,
@@ -495,7 +516,8 @@ export default {
         SelectSaler,
         planMap,
         SelectChance,
-        ListAndMap
+        ListAndMap,
+        LabelText
     },
     mounted() {
         GLOBALSIDESWITCH("false");
@@ -534,6 +556,9 @@ export default {
         }
     },
     methods: {
+        addEditOpen(){
+
+        },
         submitPrice() {
             let price = false;
             let _this = this;
@@ -1534,4 +1559,29 @@ export default {
         color: #ed3f14;
     }
 }
+.create-new-order{
+     .m-customer-info{
+         position:relative;
+         .ui-labeltext{
+             width: 50%;
+             max-width: 450px;
+             padding-left:0;
+             height:auto;
+             margin-bottom:0;
+             .ui-text{
+                 margin-bottom: 10px;
+             }
+             .ui-label{
+                 font-size: 12px;
+                 color: #495060;
+                 font-weight:400;
+             }
+         }
+         .info-button{
+             position: absolute;
+             top: -8px;
+             right:414px;
+         }
+     }
+ }
 </style>

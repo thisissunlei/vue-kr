@@ -69,6 +69,11 @@
                 </div>
                 <div v-if="syncType==='PAYMENT'">
                     <Row>
+                        <Col span="6" class="col">
+                        <FormItem label="核心单据号">
+                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
+                        </FormItem>
+                        </Col>
                         <!-- <Col span="6" class="col">
                         <FormItem label="业务员姓名">
                             <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @on-blur='filterData'/>
@@ -88,11 +93,7 @@
                             </Select>
                         </FormItem>
                         </Col>
-                        <Col span="6" class="col">
-                        <FormItem label="核心单据号">
-                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
-                        </FormItem>
-                        </Col>
+                        
                         <Col span="6" class="col">
                         <FormItem label="重复状态">
                             <Select v-model="formItem.repeatStatus" class="form-item-input" @on-change='filterData'>
@@ -249,12 +250,12 @@ export default {
                     title: '重复状态',
                     align: 'center',
                     width: 120,
-                    fixed: 'left',
+                  //  fixed: 'left',
                     render(h, params) {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
-                { key: 'asstActNumber', align: 'center', title: '客户编码', width: 120, fixed: 'left', },
+                { key: 'asstActNumber', align: 'center', title: '客户编码', width: 120,  },
                 {
                     key: 'bizDate',
                     title: '业务日期',
@@ -265,31 +266,28 @@ export default {
                         return h('span', time)
                     }
                 },
-                {                    key: 'price', align: 'center', title: '不含税单价', width: 120,
+                {  key: 'price', align: 'center', title: '不含税单价', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.price))
                     },
                 },
                 { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
-                {                    key: 'arAmount', align: 'center', title: '含税金额', width: 120,
+                {     key: 'arAmount', align: 'center', title: '含税金额', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.arAmount))
                     }
                 },
-                {                    key: 'amount', align: 'center', title: '金额', width: 120,
+                {  key: 'amount', align: 'center', title: '金额', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.amount))
                     }
                 },
-                {                    key: 'taxAmount', align: 'center', title: '税额', width: 120,
+                {   key: 'taxAmount', align: 'center', title: '税额', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.taxAmount))
                     }
                 },
-
-                //  { key: 'bizPerson', align: 'center', title: '业务员姓名' },
                 { key: 'bizType', align: 'center', title: '销售类型', width: 120, },
-                { key: 'contractNumber', align: 'center', title: '销售合同行号', width: 120, },
                 { key: 'coreBillNumber', align: 'center', title: '核心单据号', width: 120, },
                 { key: 'costCenterNumber', align: 'center', title: '成本中心', width: 120, },
                 //  { key: 'currency', align: 'center', title: '币别' },
@@ -343,7 +341,7 @@ export default {
                     key: 'remark',
                     title: '备注',
                     align: 'center',
-                    fixed: 'right',
+                 //   fixed: 'right',
                     width: 250,
                     render(h, params) {
                         return h('Tooltip', {

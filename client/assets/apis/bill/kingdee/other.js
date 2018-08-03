@@ -80,9 +80,34 @@ export default {
         url: "/api/sync/startSyncData",
         method: "post"
     },
-    //检测是否接受
+    //检测是否接受  
     "get-sync-findSyncStatus-loop":{
         url: "/api/sync/findSyncStatus",
         method: "get"
-    }
+    },
+    // 应收数据统计    
+    "get-sync-prepaid-settlement":{
+        url: "/api/sync/listIncomeStatisticByPage",
+        method: "get"
+    },
+     // 回款数据统计    
+     "get-sync-received-settlement":{
+        url: "/api/sync/listPaymentStatisticByPage",
+        method: "get"
+    },
+    // 枚举费用类型     
+    "get-enum-sync-feetype":{
+        url: "/api/sync/enumsMap/sync/FeeType",
+        method: "get"
+    },
+    // 枚举付款方式    
+    "get-enum-sync-PayWay":{
+        url: "/api/sync/enumsMap/sync/PayWay",
+        method: "get"
+    },
+    // 枚举主体性质 
+    "get-enum-sync-NatureType":{
+        url: "/api/sync/enumsMap/sync/TaxNatureType",
+        method: "get"
+    },
 };

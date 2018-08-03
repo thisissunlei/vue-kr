@@ -564,8 +564,8 @@
     }
 </script>
 
-<style lang='less' scoped>
-   .m-join-list{
+<style lang='less'>
+.m-join-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;
@@ -601,7 +601,7 @@
             margin: 10px 20px;
             overflow: hidden;
         }
-   }
+
    .m-bill-search{
         display:inline-block;
         height:22px;
@@ -627,4 +627,5 @@
      .u-nullify{
          text-decoration: line-through;
      }
+}
 </style>

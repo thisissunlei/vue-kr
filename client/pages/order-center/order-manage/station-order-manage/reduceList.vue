@@ -515,8 +515,8 @@
     }
 </script>
 
-<style lang='less' scoped>
-   .m-reduce-list{
+<style lang='less'>
+.m-reduce-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;
@@ -541,7 +541,7 @@
         .list-table{
             margin:20px;
             margin-top:0px;
-            /deep/ .col-operate{
+            .col-operate{
                 .ivu-table-cell{
                     padding-left: 0;
                     padding-right: 0
@@ -552,7 +552,7 @@
             margin: 10px 20px;
             overflow: hidden;
         }
-   }
+
    .m-bill-search{
         display:inline-block;
         height:22px;
@@ -578,4 +578,5 @@
      .u-nullify{
          text-decoration: line-through;
      }
+}
 </style>

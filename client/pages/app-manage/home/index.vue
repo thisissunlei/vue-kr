@@ -22,7 +22,7 @@
             </div>
         
          <div class="u-table">
-            <Table  height="730" border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Table  :height="Height" border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
          </div> 
     </div>
 </template>
@@ -139,13 +139,15 @@ export default {
                disabledDate (date) {
                    return date &&  Date.now() - 86400000 < date.valueOf() ;
                }
-           }
+           },
+           Height:100,
         }
     },
     mounted(){
         this.tabParams.dataDate=this.getDay(-1, '-');
         this.getTableData(this.tabParams);
-      
+        let height= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        this.Height=height-300;
     },
     methods:{
         rowClassName(row,index){

@@ -30,8 +30,20 @@
                         </FormItem>
                         </Col> -->
                         <Col span="6" class="col">
-                        <FormItem label="财务组织编码">
+                        <!-- <FormItem label="财务组织编码">
                             <Input v-model="formItem.companyNumber" placeholder="财务组织编码" class="form-item-input" @on-blur='filterData' />
+                        </FormItem> -->
+                         <FormItem label="主体">
+                              <Select 
+                                v-model="formItem.corporationId" 
+                                placeholder="选择出租方主体" 
+                                class="form-item-input" 
+                                @on-change='filterData'
+                                filterable
+                                clearable
+                            >
+                                <Option v-for="item in fileList" :value="item.id" :key="item.id">{{ item.corporationName }}</Option>
+                            </Select> 
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
@@ -60,11 +72,11 @@
                             <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
-                        <Col span="6" class="col">
+                        <!-- <Col span="6" class="col">
                         <FormItem label="销售合同号">
                             <Input v-model="formItem.contractNumber" placeholder="销售合同号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
-                        </Col>
+                        </Col> -->
                     </Row>
                 </div>
                 <div v-if="syncType==='PAYMENT'">
@@ -183,6 +195,7 @@ export default {
             selectedIdsInNotAllSelectState: [],//非全选模式下 已选择的id集合
             openLoading: false,
             formItem: {},
+            fileList:[],
             titleMessage: '等待同步中....',
             repeatStatusList: [
                 {
@@ -250,7 +263,6 @@ export default {
                     title: '重复状态',
                     align: 'center',
                     width: 120,
-                  //  fixed: 'left',
                     render(h, params) {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
@@ -468,7 +480,6 @@ export default {
                     title: '备注',
                     align: 'center',
                     width: 250,
-                    fixed: 'right',
                     render(h, params) {
                         return h('Tooltip', {
                             // props: {
@@ -500,6 +511,7 @@ export default {
         GLOBALSIDESWITCH('false');
         this.getRouterQueryParmas();
         this.getListData();
+        this.getMainBody();
     },
     watch: {
         isAllSelect: function (newVal, old) {
@@ -526,6 +538,16 @@ export default {
         // handleTestNotCheckAll() {
         //     this.isAllSelect = false;
         // },
+         // 主体 
+        getMainBody(){
+            this.$http.get('krspace-op-web-fna-corporation').then((response)=>{
+              this.fileList = response.data;
+            }).catch((error)=>{
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
+            })
+        },
         filterData(val) {
             this.params.page = 1
             this.getListData();
@@ -543,8 +565,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus } = this.formItem
-                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus }
+                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = this.formItem
+                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -697,8 +719,8 @@ export default {
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus } = formItem
-                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus }
+                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = formItem
+                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {

@@ -37,6 +37,8 @@
                                 v-model="formItem.corporationId" 
                                 placeholder="选择出租方主体" 
                                 style="width: 225px"
+                                filterable
+                                clearable
                             >
                                 <Option v-for="item in fileList" :value="item.id" :key="item.id">{{ item.corporationName }}</Option>
                             </Select> 

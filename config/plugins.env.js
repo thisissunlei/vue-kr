@@ -28,9 +28,9 @@ const pluginsDomain  = envs[process.env.NODE_ENV].plugins+'/plugins';
 const jsFiles = [
    {src: pluginsDomain+'/nav/1.0.0/nav.js'},
    {src: pluginsDomain+'/echarts/4.1.0/echarts.min.js'},
+   {src: pluginsDomain+'/go/1.8.14/go.js'},
 ]
 const cssFiles = [
-    
     { rel: 'stylesheet', href: pluginsDomain+'/public/css/main.css' },
     { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' }
 ]

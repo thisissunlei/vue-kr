@@ -7,23 +7,22 @@
             <p>③  日均上线会员数（当周）：已选中日期所在周的平均值（当周登录APP会员总数/截止该日当周总天数）；</p>
             <p>④  同比前周：当周日均上线会员数与上周7天日均上线会员数的浮动值；</p>
          </IconTip>
-         <div :class="[isFixed?'u-search-fixed':'']" >
-             <div class="u-search">
-                <Button  style="float:left;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
-                <DatePicker 
-                    class="u-date-right" 
-                    type="date" 
-                    placeholder="日期" 
-                    :clearable="false"
-                    :value="tabParams.dataDate"
-                    @on-change="changeDate"
-                    :options="dateOptions"
-                    :editable="false"
-                />
-             </div>
-         </div>
+            <div class="u-search">
+            <Button  style="float:left;" type="primary" @click="onExport">导出(共{{totalCount}}条)</Button>
+            <DatePicker 
+                class="u-date-right" 
+                type="date" 
+                placeholder="日期" 
+                :clearable="false"
+                :value="tabParams.dataDate"
+                @on-change="changeDate"
+                :options="dateOptions"
+                :editable="false"
+            />
+            </div>
+        
          <div class="u-table">
-            <Table border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Table  height="430" border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
          </div> 
     </div>
 </template>
@@ -146,18 +145,7 @@ export default {
     mounted(){
         this.tabParams.dataDate=this.getDay(-1, '-');
         this.getTableData(this.tabParams);
-        let memberHome=document.getElementById('layout-content-main');
-        var _this=this;
-        memberHome.addEventListener("scroll",function(){
-             let top=memberHome.scrollTop
-            if(top>50){
-                _this.isFixed=true;
-            }else{
-                _this.isFixed=false;
-                
-            }
-        },false);
-         
+      
     },
     methods:{
         rowClassName(row,index){
@@ -242,42 +230,27 @@ export default {
 </script>
 
 <style lang="less">
-#layout-content_id{
-  padding-right:17px;
-  box-sizing: border-box;
-}
+
 .g-member-online{
     .u-search{
         height:64px;
-        padding:16px 20px;
+        padding:4px 20px 0;
         box-sizing: border-box;
     }
     .u-table{
-        padding:20px 20px 30px;
+        padding:0 20px 30px;
     }
     .u-date-right{
       float:right;
       width: 200px;
-  }
+    }
+    .ui-icon-tip{
+        display: inline-block;
+    }
  .ivu-table .u-table-row td{
     background: rgba(255,157,0,0.30) !important;
  }
-  .u-search-fixed{
-       width:100%;
-       position:fixed;
-       top:60px;
-       right:14px;
-       z-index:777;
-       padding-left:210px;
-       padding-right:17px;
-       box-sizing: border-box;
-       .u-search{
-         background:#fff;
-         width:100%;
-         border-bottom: 1px solid #E8E9E9;
-         
-       }
-  }
+  
   
   
 }

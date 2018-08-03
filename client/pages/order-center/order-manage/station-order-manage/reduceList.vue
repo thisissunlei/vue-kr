@@ -264,6 +264,8 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
+                        width:76,
+                        className:'col-operate',
                         render:(tag,params)=>{
                            var btnRender=[
                                tag(Buttons, {
@@ -539,6 +541,12 @@
         .list-table{
             margin:20px;
             margin-top:0px;
+            /deep/ .col-operate{
+                .ivu-table-cell{
+                    padding-left: 0;
+                    padding-right: 0
+                }
+            }
         }
         .list-footer{
             margin: 10px 20px;

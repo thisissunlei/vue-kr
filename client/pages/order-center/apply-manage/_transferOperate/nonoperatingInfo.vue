@@ -178,6 +178,7 @@ export default {
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
                 // this.getFeeAmount();
+                var list = [];
                 this.receivedApplyInfo.detailList.map(item => {
                     list.push({
                         feeType: item.transferFeeType,

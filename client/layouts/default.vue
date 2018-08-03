@@ -1,5 +1,6 @@
 
 <template>
+    <div style="padding:15px;">
     <div class="layout"  :class="{'layout-hide-text': spanLeft < 5}">
  
             <Row type="flex">
@@ -13,10 +14,12 @@
                    
                 </Col>
             </Row>
+        
+
+    </div>
         <div class="layout-copy">
              &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
         </div>
-
     </div>
 </template>
 

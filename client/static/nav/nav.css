@@ -11,13 +11,9 @@
   }
 
   .layout-content{
-      min-height: 500px;
-      margin: 15px;
-      overflow: hidden;
-      border-radius: 4px;
-      padding-bottom: 20px;
-      padding-top: 63px;
-      padding-left: 180px;
+        
+        padding-top: 63px;
+       
   }
   .layout-content-main{
        min-height: 200px;

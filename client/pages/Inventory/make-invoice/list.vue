@@ -113,13 +113,14 @@
                 tableParams:{
                     page:1,
                     pageSize:15,
-                    invoiceStatusList:''
+                    invoiceStatusList:'',
+                    role: 'operate'
                 },
                 editItem:{},
                 postList:[
                   {
                     id:'SHUNFENG',
-                    name:'顺风快递'
+                    name:'顺丰快递'
                   },
                   {
                     id:'YUANTONG',
@@ -171,6 +172,9 @@
                    break;
                case 'alreadyReceive':
                    status.push('RECEIVED');
+                   break;
+               case 'waitProvide':
+                   status.push('GRANT');
                    break;
                default:
                    status.push('RETURNING,RECOVERYED');
@@ -288,8 +292,24 @@
               this.editItem = item;
 
             },
+
+            // 发放按钮点击
+            provideClick(item){
+              this.$http.put('ticket-provide', {id: item.id}).then((res)=>{
+                this.openMessage=true;
+                this.MessageType="success";
+                this.warn='发放成功';
+                setTimeout(()=> {
+                  this.$emit('provideDone', 'waitReceive');
+                }, 1000);
+              }).catch((err)=>{
+                this.$Notice.error({
+                  title:err.message
+                });
+              })
+            },
             //跳转查看页面
-            // goView(data){
+            // waitArrive(data){
             //   window.open(`/publicPage/make-invoice/${data.id}/view-detail`,data.id);
 
             // },

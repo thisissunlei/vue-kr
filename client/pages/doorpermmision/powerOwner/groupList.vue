@@ -20,11 +20,10 @@
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
                     <Icon type="information-circled"></Icon>
-                    <span>移除确认</span>
+                    <span>取消确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>移除后，当前组将不再授予移除的复合组的权限</p>
-                    <p>确定移除吗？</p>
+                    <p>确定取消授权吗？</p>
                 </div>
                 <div slot="footer">
                     <Button type="error" size="large" long  @click="confirmDelete">确定</Button>
@@ -125,7 +124,7 @@ export default {
                         }
                     },
                     {
-                        title: '解除父子关系',
+                        title: '操作',
                         key: 'phone',
                         align:'center',
                         render: (h, params) => {
@@ -242,7 +241,6 @@ export default {
            this.showTipOrNot();
        },
        deleteRelations(){
-           console.log("this.selectedItems",this.selectedItems,this.selectedItems.length)
            if(this.selectedItems.length<1){
                this.$Message.warning("请选择要移除的组");
                return;
@@ -267,7 +265,6 @@ export default {
             this.$http.delete('delete-father-son-relation', params).then((response) => {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
-                console.log("kfdkkdlkdfs=====>");
                 this.getListData();
                 this.$Message.success('移除成功');
                 this.selectedItems = [];
@@ -300,7 +297,6 @@ export default {
 
             this.$http.post(url, params).then((response) => {
                 this.searchData.time = new Date();
-                console.log("kfdkkdlkdfs=====>1");
 
                 this.getListData();
                 this.$Message.success('添加成功');

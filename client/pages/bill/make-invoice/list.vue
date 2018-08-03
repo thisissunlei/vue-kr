@@ -131,6 +131,7 @@ import utils from '~/plugins/utils';
                     page:1,
                     pageSize:15,
                     totalCount:0,
+                    role: 'finance'
                 },
                 backData:{
                     id:0,
@@ -171,13 +172,13 @@ import utils from '~/plugins/utils';
                    status.push('APPLYING');
                    break;
                case 'alreadyMake':
-                   status.push('INVOICED','SIGNED_POST','SIGNED','RECEIVED');
+                   status.push('INVOICED','SIGNED_POST','SIGNED','RECEIVED', 'GRANT');
                    break;
                case 'returnMake':
                    status.push('FORREOPN');
                    break;
                default:
-                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','FORREOPN');
+                   status.push('APPLYING','INVOICED','SIGNED_POST','SIGNED','RECEIVED','FORREOPN', 'GRANT');
                    break;
            } 
            var str='';

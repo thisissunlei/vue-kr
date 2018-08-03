@@ -20,6 +20,7 @@ import ProductGoods from './productGoods';
 import comment from './comment';
 import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
+import doorPermmision from './doorPermmision.js';
 import KrmeetingSeat from "./krmeetingSeat.js";
 
 
@@ -46,5 +47,6 @@ export default {
   ...comment,
   ...DevTool,
   ...FinancialtransferApply,
+  ...doorPermmision,
   ...KrmeetingSeat
 }

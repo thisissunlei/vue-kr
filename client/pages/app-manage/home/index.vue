@@ -22,7 +22,7 @@
             </div>
         
          <div class="u-table">
-            <Table  height="430" border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Table  height="730" border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
          </div> 
     </div>
 </template>

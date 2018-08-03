@@ -590,7 +590,7 @@
         .list-table{
             margin:20px;
             margin-top:0px;
-            /deep/ .col-operate{
+            .col-operate{
                 .ivu-table-cell{
                     padding-left: 0;
                     padding-right: 0

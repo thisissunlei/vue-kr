@@ -21,7 +21,6 @@ const envs = {
         'plugins':'http://dev02.krspace.cn',
     },
     'production':{
-<<<<<<< HEAD
         'plugins':'',
     },
 }
@@ -32,7 +31,7 @@ const jsFiles = [
    {src: 'https://web.krspace.cn/kr-op/go/1.8.14/go.js'},
 ]
 const cssFiles = [
-    {rel:'stylesheet', herf: 'https://web.krspace.cn/kr-op/iview/2.8.0/styles/iview.css'},
+    // {rel:'stylesheet', herf: 'https://web.krspace.cn/kr-op/iview/2.8.0/styles/iview.css'},
     { rel: 'stylesheet', href: pluginsDomain+'/public/css/main.css' },
     { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' }
 ]
@@ -41,11 +40,4 @@ module.exports = {
     jsFiles,
     cssFiles
 };
-=======
-        'plugins':'http://op.krspace.cn',
-    },
-}
-
-module.exports = envs;
->>>>>>> master
 

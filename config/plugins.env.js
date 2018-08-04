@@ -21,6 +21,7 @@ const envs = {
         'plugins':'http://dev02.krspace.cn',
     },
     'production':{
+<<<<<<< HEAD
         'plugins':'',
     },
 }
@@ -40,4 +41,11 @@ module.exports = {
     jsFiles,
     cssFiles
 };
+=======
+        'plugins':'http://op.krspace.cn',
+    },
+}
+
+module.exports = envs;
+>>>>>>> master
 

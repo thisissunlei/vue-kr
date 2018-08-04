@@ -1,7 +1,11 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+<<<<<<< HEAD
 const pluginsDomain = require('./config/plugins.env');
 // console.log(pluginsDomain,'+++++++++',pluginsDomain.jsFiles)
+=======
+const pluginsDomain  = require('./config/plugins.env')[process.env.NODE_ENV].plugins;
+>>>>>>> master
 module.exports = {
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 700000 },
@@ -11,6 +15,9 @@ module.exports = {
   },
   router: {
     base: '/'
+  },
+  env: {
+    NODE_ENV: process.env.NODE_ENV
   },
   head: {
     title: '氪空间管理后台',
@@ -23,6 +30,7 @@ module.exports = {
     
     script: pluginsDomain.jsFiles
     
+
   },
   // css: ['~assets/css/main.css'],
   // css: pluginsDomain.cssFiles,

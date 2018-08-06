@@ -6,7 +6,7 @@
                 <TabPane label="个人" icon="person" >
                     <MemberList />
                 </TabPane>
-                <TabPane label="组" icon="folder" v-if="groupLevel=='NORMAL'">
+                <TabPane label="复合组" icon="folder" v-if="groupLevel=='NORMAL'">
                     <GroupList v-if="groupLevel=='NORMAL'"/>
                 </TabPane>
                 

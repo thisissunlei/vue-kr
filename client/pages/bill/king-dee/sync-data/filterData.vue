@@ -35,7 +35,7 @@
                         </FormItem> -->
                          <FormItem label="主体">
                               <Select 
-                                v-model="formItem.corporationId" 
+                                v-model="formItem.companyNumber" 
                                 placeholder="选择出租方主体" 
                                 class="form-item-input" 
                                 @on-change='filterData'
@@ -565,8 +565,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = this.formItem
-                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
+                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber } = this.formItem
+                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -719,8 +719,8 @@ export default {
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = formItem
-                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
+                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber } = formItem
+                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {

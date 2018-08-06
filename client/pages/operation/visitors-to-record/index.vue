@@ -75,6 +75,16 @@
             <Button type="primary" @click="uploadSubmit">确定</Button>
         </div>
     </Modal>
+    <Modal v-model="showDelete" title="提示" ok-text="保存" width="300" cancel-text="取消" class-name="vertical-center-modal">
+        <div class="content" style="text-align:left;font-size:16px;margin-top:15px">
+            是否删除本条数据？
+            
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="deleteRow">确定</Button>
+            <Button type="ghost" @click="cancelDelete">取消</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 
@@ -298,7 +308,7 @@ var layoutScrollHeight=0;
                                     },
                                     on: {
                                         click: () => {
-                                            this.delete(params.row)
+                                            this.deleteOpen(params.row)
                                         }
                                     }
                                 })];
@@ -313,6 +323,8 @@ var layoutScrollHeight=0;
                 editRow:{},
                 file: null,
                 IsCookie:true,
+                showDelete:false,
+                deleteData:{}
             }
         },
         mounted(){
@@ -331,8 +343,16 @@ var layoutScrollHeight=0;
             }
         },
         methods:{
-            delete(row){
-                this.$http.post('delete-csr-clue', {id:row.id}).then((res)=>{
+            deleteOpen(row){
+                this.deleteData = row;
+                this.showDelete = true;
+            },
+            cancelDelete(){
+                this.showDelete = false;
+            },
+            deleteRow(){
+                this.$http.post('delete-csr-clue', {id:this.deleteData.id}).then((res)=>{
+                    this.showDelete = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});
                     this.endParams=Object.assign({},this.tabForms);
                     this.getData(this.tabForms)

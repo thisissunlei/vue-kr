@@ -52,7 +52,7 @@ import selectCommunities from './SelectCommunities.vue'
 // import selectCustomers from '~/components/SelectCustomers.vue'
 import selectCustomers from './SelectCustomers.vue'
 import Loading from '~/components/Loading.vue'
-
+var t;
 export default {
     name: 'createSync',
     components: {
@@ -113,20 +113,27 @@ export default {
                 .then(r => {
                     console.log(r,"ppppppp");
                     if(r.data.pullStatus=="ALREADY_PULL"){
-                        this.openLoading = false;
-                          this.$Notice.success({title:'拉取成功'});
+                         clearTimeout(t);
+                         this.openLoading = false;
+                         this.$Notice.success({title:'拉取成功'});
                          this.$router.replace({path:'/bill/king-dee/sync-data/filterData',query:{syncId:this.syncId,syncType:this.formItem.syncDataType,startTime:this.syncStartTime,endTime:this.syncEndTime}});
                     //    window.open(`/bill/king-dee/sync-data/filterData?syncId=${this.syncId}&syncType=${this.formItem.syncDataType}&startTime=${this.syncStartTime}&endTime=${this.syncEndTime}`,'_blank');
                       //  window.location.href = '/bill/king-dee/sync-data';
                         return ;
                     }
-                   if(r.data.pullStatus=='FAILED_PULL'){
+                   else if(r.data.pullStatus=='FAILED_PULL'){
+                         clearTimeout(t);
                          this.openLoading = false;
                          this.disabled_next = false;
                          this.$Notice.error({
                             title: r.data.failedMsg
                         });
                         return ;
+                    }
+                    else{
+                        t = setTimeout(()=>{
+                        this.loopSuccess();
+                    },1000)
                     }
                     // if(r.data.pullStatus=='NOT_PULL'){
                     //      this.openLoading = false;
@@ -135,14 +142,13 @@ export default {
                     //     });
                     //     return ;
                     // }
-                    setTimeout(()=>{
-                        this.loopSuccess();
-                    },1000)
+                   
                     // this.openLoading = false;
                     // alert("8888888")
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log(error);
+                    clearTimeout(t);
                  //   this.isAllSelect = false
                     this.$Notice.error({
                         title: error.message

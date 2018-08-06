@@ -134,7 +134,7 @@
         </div>
         <div class="btn-zone">
             <div style="float: right;z-index:99">
-                <!-- <Button type="primary" class="btn" @click="handlePrivious">上一步</Button> -->
+                <Button type="primary" class="btn" @click="handlePrivious">上一步</Button>
                 <Button type="primary" class="btn" @click="handleSync(formItem)">开始同步</Button>
             </div>
         </div>
@@ -565,8 +565,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber } = this.formItem
-                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber }
+                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus } = this.formItem
+                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -710,17 +710,17 @@ export default {
             }
 
         },
-        // handlePrivious() {
-
-        // },
+        handlePrivious() {
+            this.$router.push({path:'/bill/king-dee/sync-data/createSyncOne'});
+        },
         handleSync(formItem) {
             let api = ''
             let parmas = {};
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber } = formItem
-                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,companyNumber }
+                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus } = formItem
+                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {
@@ -741,7 +741,6 @@ export default {
                     this.isAllSelect = false
                     this.openLoading = true;
                     this.loopSuccess();
-                    // alert("8888888")
                 })
                 .catch(error => {
                     console.log(error)

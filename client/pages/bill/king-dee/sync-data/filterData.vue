@@ -199,11 +199,11 @@ export default {
             titleMessage: '等待同步中....',
             repeatStatusList: [
                 {
-                    label: '重复',
+                    label: '是',
                     value: 'IS_REPEAT'
                 },
                 {
-                    label: '非重复',
+                    label: '否',
                     value: 'NO_REPEAT'
                 },
             ],
@@ -267,7 +267,25 @@ export default {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
+                {
+                    key: 'communityName',
+                    title: '社区名称',
+                    align: 'center',
+                    width: 120,
+                },
                 { key: 'asstActNumber', align: 'center', title: '客户编码', width: 120,  },
+                 {
+                    key: 'customerName',
+                    title: '客户姓名',
+                    align: 'center',
+                    width: 120,
+                },
+                {
+                    key: 'companyNumberName',
+                    title: '财务组织名单',
+                    align: 'center',
+                    width: 120,
+                },
                 {
                     key: 'bizDate',
                     title: '业务日期',
@@ -284,6 +302,12 @@ export default {
                     },
                 },
                 { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
+                  {
+                    key: 'materialNumberDesc',
+                    title: '物料编码(收入类型)描述',
+                    align: 'center',
+                    width: 150,
+                },
                 {     key: 'arAmount', align: 'center', title: '含税金额', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.arAmount))
@@ -397,12 +421,32 @@ export default {
                     align: 'center',
                     title: '重复状态',
                     width: 120,
-                    fixed: 'left',
+                //    fixed: 'left',
                     render(h, params) {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
-                { key: 'payerNumber', align: 'center', title: '客户（供应商）编码', fixed: 'left', width: 120, },
+                
+                 {
+                    key: 'communityName',
+                    title: '社区名称',
+                    align: 'center',
+                    width: 120,
+                },
+                  { key: 'payerNumber', align: 'center', title: '客户（供应商）编码', width: 120, },
+                 {
+                    key: 'customerName',
+                    title: '客户姓名',
+                    align: 'center',
+                    width: 120,
+                },
+                {
+                    key: 'companyNumberName',
+                    title: '财务组织名单',
+                    align: 'center',
+                    width: 120,
+                },
+
                 {
                     key: 'bizDate',
                     title: '业务日期',
@@ -413,7 +457,7 @@ export default {
                         return h('span', time)
                     }
                 },
-                {                    key: 'amount', align: 'center', title: '金额', width: 120,
+                {  key: 'amount', align: 'center', title: '金额', width: 120,
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.amount))
                     }
@@ -421,14 +465,18 @@ export default {
 
                 // { key: 'bizPerson', align: 'center', title: '业务员姓名' },
                 { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
-                { key: 'contractNumber', align: 'center', title: '合同编号', width: 120, },
+              //  { key: 'contractNumber', align: 'center', title: '合同编号', width: 120, },
                 { key: 'coreBillNumber', align: 'center', title: '订单编号', width: 120, },
                 { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码', width: 180, },
                 //   { key: 'currency', align: 'center', title: '币别' },
-
+                {
+                    key: 'materialNumberDesc',
+                    title: '物料编码(收入类型)描述',
+                    align: 'center',
+                    width: 150,
+                },
                 { key: 'number', align: 'center', title: '唯一交易编码', width: 120, },
-                { key: 'payerAccountBank', align: 'center', title: '付款账号', width: 120, },
-
+               // { key: 'payerAccountBank', align: 'center', title: '付款账号', width: 120, },
                 {
                     key: 'payerType',
                     align: 'center',
@@ -615,7 +663,7 @@ export default {
                     //     }
                     // }
                     this.data = [].concat(data)
-                    console.log(this.data.map(item=>item.id))
+                  //  console.log(this.data.map(item=>item.id))
                 })
                 .then(() => {
                     if (this.isAllSelect) {
@@ -665,7 +713,7 @@ export default {
         //切换为全选模式   只有被选为true的时候触发 
         handleSelectAll() {
             this.isAllSelect = true;
-            console.log(this.isAllSelect, '只有全选状态置为true的时候才触发');
+          //  console.log(this.isAllSelect, '只有全选状态置为true的时候才触发');
             this.notSelectInAllSelectState = [];
         },
         //全选模式下  勾选单项时触发  被选为true的时候 触发 
@@ -676,7 +724,7 @@ export default {
                 let index = this.notSelectInAllSelectState.findIndex(item => item == id)
                 if (index != -1) {
                     this.notSelectInAllSelectState.splice(index, 1)
-                    console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
+                //    console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
                 }
             }
         },
@@ -693,8 +741,8 @@ export default {
                     this.unSelectIdsInPages[Number(this.currentPage)] = []
                     this.unSelectIdsInPages[Number(this.currentPage)].push(row.id)
                 }
-                console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
-                console.log("unSelectIdsInPages", this.unSelectIdsInPages)
+                // console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
+                // console.log("unSelectIdsInPages", this.unSelectIdsInPages)
             }
         },
         // 非全选模式下

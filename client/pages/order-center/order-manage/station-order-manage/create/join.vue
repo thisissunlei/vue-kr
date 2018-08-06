@@ -48,25 +48,27 @@
                     </Col>
                 </Row>
             </DetailStyle>
-            <div class="m-customer-info">
+            <!--苏岭增加客户主管理员开始-->
+            <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
                 <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
                 <Row style="margin-bottom:30px">                
                     <div v-if="!isAddEdit" style="margin-bottom:20px;color:red;">主管理员信息必填，请点击右上角按钮添加</div>
                     <div v-if="isAddEdit">
                         <LabelText label="管理员手机号" :inline="true"  type="star">
-                            {{123}}
+                            {{customerInfo.phone}}
                         </LabelText>
                         <LabelText label="管理员姓名" :inline="true" type="star">
-                            {{123}}
+                            {{customerInfo.name}}
                         </LabelText>
                         <LabelText label="管理员电子邮箱" :inline="true" type="star">
-                            {{123}}
+                            {{customerInfo.email}}
                         </LabelText>
                   </div>
                 </Row>
               </DetailStyle>  
             </div>
+            <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="租赁信息">
                 <Row style="margin-bottom:30px">
                     <Col class="col">
@@ -244,6 +246,25 @@
             </div>
         </Modal>
 
+     <!--苏岭增加客户主管理员开始-->
+        <Modal
+            v-model="isAddManager"
+            title="主管理员变更"
+            width="665"
+        >
+            <AddManager  
+                v-if="isAddManager"
+                :customerId="formItem.customerId"
+                @formData="getformData"
+                @submitFn="getFunction"
+            />
+            <div slot="footer">
+                    <Button type="primary" @click="addManagerSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="addEditOpen">取消</Button>
+            </div>
+        </Modal>
+    <!--苏岭增加客户主管理员结束-->
+
     </div>
 </template>
 
@@ -263,6 +284,7 @@ import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
 import LabelText from '~/components/LabelText';
+import AddManager from '../addAdministrator';
 
 
 
@@ -283,7 +305,14 @@ export default {
             }
         };
         return {
-            isAddEdit:true,
+            //苏岭
+            customerInfo:{},
+            isManager:false,
+            submitManager:null,
+            isAddManager:false,
+            isAddEdit:false,
+            //苏岭结束
+
             chanceDisable:false,
             remindinfoNewUser: false,
             remindinfo: false,
@@ -517,7 +546,8 @@ export default {
         planMap,
         SelectChance,
         ListAndMap,
-        LabelText
+        LabelText,
+        AddManager
     },
     mounted() {
         GLOBALSIDESWITCH("false");
@@ -556,9 +586,52 @@ export default {
         }
     },
     methods: {
-        addEditOpen(){
-
+        //苏岭增加客户主管理员开始
+        addManagerSubmit(params){
+            this.submitManager && this.submitManager(this.managerSubmit);
         },
+        managerSubmit(){
+			let Params=Object.assign({},this.formData);
+            Params.customerId=this.formItem.customerId;
+            Params.communityId=this.formItem.communityId;
+			var _this=this;
+			this.$http.post('store-change-manager', Params).then((res)=>{
+				this.isAddManager=false;
+				this.getCount();
+				this.$Notice.success({
+					title:'变更管理员成功'
+				});
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        addEditOpen(){
+           this.isAddManager=!this.isAddManager;
+        },
+        getformData(form){
+			this.formData=form;
+        },
+        getFunction(form){
+			this.submitManager=form;
+        },
+        validIsManager(){
+            this.isManager =this.formItem.customerId && this.formItem.communityId;
+            let params={};
+            params.customerId=this.formItem.customerId;
+            params.communityId=this.formItem.communityId;
+			var _this=this;
+			this.$http.get('order-search-manager',params).then((res)=>{
+                this.isAddEdit=res.data.hasChiefManager;
+                this.customerInfo=Object.assign({},res.data);
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        //苏岭增加客户主管理员结束
         submitPrice() {
             let price = false;
             let _this = this;
@@ -1078,6 +1151,8 @@ export default {
             this.clearStation();
             this.getFloor = +new Date();
             this.validSaleChance();
+            //苏岭
+            this.validIsManager();
         },
         clearStation: function () {
             // 清除所选的工位
@@ -1114,6 +1189,9 @@ export default {
             
             this.validSaleChance();
             this.clearStation()
+
+            //苏岭
+            this.validIsManager();
 
         },
         changeSaler(value) {

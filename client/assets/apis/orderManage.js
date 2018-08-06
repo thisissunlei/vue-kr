@@ -81,11 +81,28 @@ export default {
     "order-first-payed": {
         url: "/api/krspace-finance-web/order-seat/check-order-payed",
         method: "get"
-    }
+    },
 
     // //订单合同是否首付款
     // "order-first-payed": {
     //     url: "/api/krspace-op-web/order-seat/orderStatus",
     //     method: "get"
     // }
+    //苏岭添加开始
+    //下单页面查询主管理员
+    "order-search-manager": {
+        url: "/api/krspace-op-web/customer/manager/order/user",
+        method: "get"
+    },
+    //保存：保存变更的主管理员数据
+    "store-change-manager": {
+        url: "/api/krspace-op-web/customer/manager/order/user",
+        method: "post"
+    },
+    //搜索：手机号查询会员
+    "search-phone-member": {
+        url: "/api/krspace-op-web/customer/manager/user/detail",
+        method: "get"
+    }
+    //苏岭添加结束
 };

@@ -14,11 +14,10 @@
            <Modal v-model="showTips" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
                     <Icon type="information-circled"></Icon>
-                    <span>移除确认</span>
+                    <span>取消确认</span>
                 </p>
                 <div style="text-align:center">
-                    <p>将设备删除后，当前组将失去移除的设备的权限</p>
-                    <p>确定移除吗？</p>
+                    <p>确定取消授权吗？</p>
                 </div>
                 <div slot="footer">
                     <Button type="error" size="large" long  @click="confirmDelete">确认</Button>
@@ -122,7 +121,7 @@ export default {
                                             this.remove(params.row)
                                         }
                                     }
-                                }, '移除')
+                                }, '取消授权')
                             ]);
                         }
                     },
@@ -204,7 +203,7 @@ export default {
        },
        deleteRelations(){
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要移除的设备");
+               this.$Message.warning("请选择设备");
                return;
            }
            this.showTipOrNot();
@@ -227,7 +226,7 @@ export default {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();
-                this.$Message.success('移除成功');
+                this.$Message.success('取消授权成功');
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })

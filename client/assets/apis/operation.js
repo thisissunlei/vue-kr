@@ -184,5 +184,10 @@ export default  {
         url: '/api/krspace-finance-web/operation/city-cmt-list',
         method: 'get'
     },
+    //会员七天线上化--会员线上化率
+    'get-operation-community-use-rate': {
+        url: '/api/krspace-op-web/app/operation/community/use-rate',
+        method: 'get'
+    },
 }
   

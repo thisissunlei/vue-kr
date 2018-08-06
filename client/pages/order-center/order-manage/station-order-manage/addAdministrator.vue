@@ -16,7 +16,7 @@
                             />
                         </FormItem>
                         <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
-                        <!-- <div v-if="ifShow">        -->
+                        <div v-if="ifShow">       
                             <FormItem label="姓名" class="u-input" prop="mbrName">
                                 <Input 
                                     v-model="formItem.mbrName" 
@@ -30,7 +30,7 @@
                                     type="email"
                                 />
                             </FormItem>
-                        <!-- </div> -->
+                        </div>
                     </div>
                 </div>
             </Form>

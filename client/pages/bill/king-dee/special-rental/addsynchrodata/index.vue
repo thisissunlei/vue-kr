@@ -118,6 +118,7 @@ export default {
     },
 
     getCusomer (name) {
+
       let params = {
         communityName: name
       }
@@ -149,10 +150,7 @@ export default {
       }
     },
     communityConfigAdd () {
-
-
       this.$http.post('communityConfigAdd', this.formValidate).then((res) => {
-
           this.$Message.success('操作成功');
           this.$router.push({ path: '/bill/king-dee/special-rental/synchrodata' })
       }).catch((error)=>{
@@ -163,18 +161,15 @@ export default {
       })
     },
     getBack () {
-      this.$router.push({ path: '/bill/synchrodata' })
+      this.$router.push({ path: '/bill/king-dee/special-rental/synchrodata' })
     },
     handleSubmit (name) {
-      console.log("00000000")
       this.$refs[name].validate((valid) => {
         if (valid) {
-          console.log("1111111")
           this.communityConfigAdd()
-
         } else {
           console.log("---------")
-          // this.$Message.error('操作失败');
+        //   this.$Message.error('操作失败');
         }
       })
     },

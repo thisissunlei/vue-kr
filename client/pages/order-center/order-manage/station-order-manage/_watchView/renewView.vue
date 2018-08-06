@@ -33,6 +33,17 @@
 					{{nullifyRemark}}
 				</LabelText>
 			</DetailStyle>
+			<DetailStyle info="客户主管理员信息">
+				<LabelText label="管理员手机号：">
+					{{basicInfo.userPhone}}
+				</LabelText>
+				<LabelText label="管理员姓名：">
+					{{basicInfo.userName}}
+				</LabelText>
+				<LabelText label="管理员电子邮箱：">
+					{{basicInfo.userMail}}
+				</LabelText>
+			</DetailStyle>
 			<DetailStyle info="续租信息">
 				<LabelText label="续租开始日期：">
 					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}

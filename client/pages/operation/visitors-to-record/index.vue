@@ -3,7 +3,7 @@
     <SectionTitle title="预约参观"></SectionTitle>
     <div class="buttons" style="margin-top:20px;">
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='openNew'>新建</Button>
+        <Buttons type="primary" label='新建' @click="openNew" checkAction='csrclue_visit_save_edit'/>
         <span style="display:inline-block;width:20px"></span>
         <Buttons type="primary" label='导入' @click="submitImport" checkAction='csrclue_visit_execle'/>
         <span style="display:inline-block;width:20px"></span>

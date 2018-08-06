@@ -5,9 +5,9 @@
         <span style="display:inline-block;width:20px"></span>
         <Button type='primary' @click='openNew'>新建</Button>
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitImport'>导入</Button>
+        <Buttons type="primary" label='导入' @click="submitImport" checkAction='csrclue_visit_execle'/>
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitExport'>导出</Button>
+        <Buttons type="primary" label='导出' @click="submitExport" checkAction='csrclue_visit_execle'/>
         
     </div>
     <SearchForm 
@@ -280,7 +280,7 @@ var layoutScrollHeight=0;
                                tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'seat_order_view',
+                                        checkAction:'csrclue_visit_save_edit',
                                         label:'编辑',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },
@@ -292,7 +292,7 @@ var layoutScrollHeight=0;
                                 }),tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'seat_order_view',
+                                        checkAction:'csrclue_visit_delete',
                                         label:'删除',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },

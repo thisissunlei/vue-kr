@@ -336,7 +336,7 @@
             </div>
           </div>
           
-          <div class="line-one">
+          <!-- <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
@@ -367,7 +367,7 @@
                 </ul>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="line-one">
             <!-- @click="openVisitor暂没有访客(入驻会员在APP上邀请来的)" -->

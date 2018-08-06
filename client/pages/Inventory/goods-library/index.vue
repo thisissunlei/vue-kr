@@ -425,7 +425,7 @@ export default {
             newgoodForm:{},
             tabForms:{
                 page:1,
-                pageSize:200
+                pageSize:100
             },
             theHead:false,
             sideBar:true,

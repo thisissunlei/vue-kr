@@ -2,7 +2,7 @@
 <div class="g-member-manager-list">
          <div class="u-search-box">
              <div class="u-search-list" style="margin-left:30px;">
-                  <SearchForm 
+                  <SearchForm
                         placeholder="请输入搜索关键词"
                         :openSearch="true"
                         :onSubmit="lowerSubmit"
@@ -15,20 +15,20 @@
                         </div>
                         <div class="u-tip-content u-show">
                             <div class="u-icon-trigon"></div>
-                           <p>1.  若该管理员登录过APP或官网-会员中心，系统认定为其“已激活”；</p> 
-                           <p> 2.  若管理员一直未激活，请注意提醒Ta ，避免无法接收企业账单、管理企业等情况。</p> 
+                           <p>1.  若该管理员登录过APP或官网-会员中心，系统认定为其“已激活”；</p>
+                           <p> 2.  若管理员一直未激活，请注意提醒Ta ，避免无法接收企业账单、管理企业等情况。</p>
                         </div>
                     </div> -->
-                   
+
             </div>
 		</div>
         <Table border :columns="list" :data="listInfo"></Table>
         <div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
             <div style="float: right;">
-                <Page   
-                    :total="totalCount" 
+                <Page
+                    :total="totalCount"
                     :page-size="pageSize"
-                    show-total 
+                    show-total
                     show-elevator
                     @on-change="changePage"
                 ></Page>
@@ -49,6 +49,7 @@ export default {
         openSetManager:Function,
         reload:Function,
         ifReload:Boolean,
+      openSetMajor: Function
     },
     data(){
         return{
@@ -99,18 +100,23 @@ export default {
 								style:{
 									color:'#666666'
 								}
-						 },'在职员工') 
+						 },'在职员工')
 						 break;
 						 default:
 						 return h('span',{
 							style:{
 								color:'#FE7749'
-							} 
+							}
 						 },'非企业员工');
 					 }
-					
+
 				 }
 				},
+        {
+          title: '管理员身份',
+          key: 'managerTypeName',
+          align:'center'
+        },
 				{
 				 title: '入驻社区',
                  key: 'enterCmtName',
@@ -135,29 +141,63 @@ export default {
 				// 	return manager;
 				//   }
 				// },
-				
+
 				{
 				 title: '操作',
                  key: 'operation',
 				 align:'center',
 				 render:(h,obj)=>{
-					  return h('div', [
-						h('Button', {
-							props: {
-								type: 'text',
-								size: 'small'
-							},
-							style: {
-								color:'#2b85e4'
-							},
-							on: {
-								click: () => {
-									this.setManager(obj.row)
-								}
-							}
-						}, '设置管理员')
-						
-					]);
+				   // switch(obj.row.managerType) {
+             // case 1:
+             //   return h('div', [
+             //     h('Button', {
+             //       props: {
+             //         type: 'text',
+             //         size: 'small'
+             //       },
+             //       style: {
+             //         color:'#2b85e4'
+             //       },
+             //       on: {
+             //         click: () => {
+             //           this.setManager(obj.row)
+             //         }
+             //       }
+             //     }, '设置管理员')
+             //   ]);
+             //   break;
+             // case 2:
+               return h('div', [
+                 h('Button', {
+                   props: {
+                     type: 'text',
+                     size: 'small'
+                   },
+                   style: {
+                     color:'#2b85e4'
+                   },
+                   on: {
+                     click: () => {
+                       this.changeMajor(obj.row)
+                     }
+                   }
+                 }, '变更主管理员'),
+                 h('Button', {
+                   props: {
+                     type: 'text',
+                     size: 'small'
+                   },
+                   style: {
+                     color:'#2b85e4'
+                   },
+                   on: {
+                     click: () => {
+                       this.setManager(obj.row)
+                     }
+                   }
+                 }, '查看授权书')
+               ])
+           // }
 				 }
 				},
 			],
@@ -204,7 +244,11 @@ export default {
             this.itemDetail=Object.assign({},params);
             this.openSetManager && this.openSetManager(this.itemDetail)
         },
-        
+      changeMajor(params) {
+        this.itemDetail=Object.assign({},params);
+        this.openSetMajor && this.openSetMajor(this.itemDetail)
+      }
+
     }
 }
 </script>
@@ -221,10 +265,10 @@ export default {
         float:right;
         line-height:30px;
         position: relative;
-       
+
         span{
           font-size: 12px;
-          color: #666666;  
+          color: #666666;
         }
         .u-tip-icon{
             width:13px;
@@ -250,7 +294,7 @@ export default {
             left:-102px;
             top:40px;
             z-index: 900;
-           
+
            .u-icon-trigon{
                 width:0;
                 height:0;
@@ -260,7 +304,7 @@ export default {
                 top:-12px;
                 left:50%;
                 transform: translateX(-50%);
-                
+
            }
         }
         .u-tip-txt{
@@ -268,9 +312,9 @@ export default {
              &:hover+.u-show{
                 display: inline-block;
 
-            } 
+            }
         }
-       
+
     }
 }
 </style>

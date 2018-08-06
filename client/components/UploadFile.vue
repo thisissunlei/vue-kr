@@ -34,7 +34,7 @@
 			<div 
 				style="color: rgb(43, 133, 228);padding: 2px 7px;cursor: pointer;display:inlie-block;" 
 				@click = "switchList" 
-			
+
 			>上传附件</div>
 			
 			<div class = "list-box" v-show = "isOpenList">

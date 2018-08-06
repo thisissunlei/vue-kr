@@ -9,32 +9,32 @@
                     <div class="u-part-line" v-if="ifShow"></div>
                     <div class="u-part-content">
                          <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="mbrPhone">
-                            <Input 
-                                v-model="formItem.mbrPhone" 
+                            <Input
+                                v-model="formItem.mbrPhone"
                                 placeholder="请输入手机号"
                                 :maxlength='11'
-                                
+
                             />
                         </FormItem>
                          <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
                         <div class="u-error-tip" v-if="ifError">该手机号尚未成为氪空间注册用户，继续“添加管理员”后会自动为TA创建账号</div>
-                        <div v-if="ifShow">       
+                        <div v-if="ifShow">
                             <FormItem label="姓名" class="u-input" prop="mbrName">
-                                <Input 
-                                    v-model="formItem.mbrName" 
+                                <Input
+                                    v-model="formItem.mbrName"
                                     placeholder="请输入姓名"
                                 />
                             </FormItem>
                             <FormItem label="邮箱" class="u-input" prop="mbrEmail">
-                                <Input 
-                                    v-model="formItem.mbrEmail" 
+                                <Input
+                                    v-model="formItem.mbrEmail"
                                     placeholder="请输入邮箱"
                                     type="email"
                                 />
                             </FormItem>
                             <FormItem label="身份证号" class="u-input" >
-                                <Input 
-                                    v-model="formItem.mbrIdCardNo" 
+                                <Input
+                                    v-model="formItem.mbrIdCardNo"
                                     placeholder="请输入身份证号"
                                     :maxlength='18'
                                     @on-change="cardChange"
@@ -120,8 +120,8 @@ export default {
                 ],
           },
           companyType:'',
-         
-             
+
+
         }
     },
     mounted() {
@@ -132,9 +132,9 @@ export default {
             let card=this.formItem.mbrIdCardNo;
             let reg = /^\+?[1-9]\d*$/;
             if(card&&!reg.test(card)) {
-                  this.ifCard=true;  
+                  this.ifCard=true;
             }else{
-                 this.ifCard=false;  
+                 this.ifCard=false;
             }
         },
         searchInfo(){
@@ -165,7 +165,7 @@ export default {
                 })
                 this.checkAllGroup=arr;
                 this.formItem.cmtIds=arr.join(',');
-               
+
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -196,14 +196,14 @@ export default {
               this.checkAllGroup=[].concat(checkList);
               this.checkList=checkList.join(',');
               this.ifCheckError=false;
-              
+
            }else{
                this.checkAllGroup=[];
                this.checkList="";
                this.ifCheckError=true;
            }
            this.formItem.cmtIds=this.checkList;
-              
+
         },
         handleSubmit:function(callback) {
 			let message = '请填写完表单';
@@ -217,8 +217,8 @@ export default {
             }else{
                  this.ifCheckError=false;
             }
-            
-          
+
+
 			this.$refs.formItems.validate((valid) => {
 				if (valid && this.formItem.cmtIds) {
                     callback && callback();
@@ -259,7 +259,7 @@ export default {
                 }
             }
 
-        }    
+        }
         .u-error-check{
             color:#ed3f14;
             font-size: 14px;
@@ -292,7 +292,7 @@ export default {
             border: 1px solid #333333;
             display: inline-block;
             margin-right:15px;
-        
+
         }
         .u-part-title{
            display: inline-block;
@@ -347,7 +347,7 @@ export default {
                 line-height: 40px;
             }
         }
-        
+
     }
 }
 </style>

@@ -11,7 +11,7 @@
                         <!--:onSubmit="lowerSubmit"-->
                     <!--/>-->
                 <!--</div>-->
-                <Input v-model="Params.csrName" placeholder="请输入公司名称" style="width: 200px;margin-left:30px;float:right" @on-click="lowerSubmit">
+                <Input v-model="Params.csrName" placeholder="请输入公司名称" style="width: 160px;margin-left:30px;float:right" @on-click="lowerSubmit">
                   <Button slot="append" @click="lowerSubmit">
                     <Icon type="ios-search" style="color:#2d8cf0;display:inline-block;width:100%;height:100%;"></Icon>
                   </Button>
@@ -20,7 +20,7 @@
                         <span class="u-search-label">社区</span>
                         <Select 
                             v-model="Params.cmtId" 
-                            style="width:200px"
+                            style="width:160px"
                             placeholder="请选择社区" 
                             clearable
                             filterable
@@ -37,7 +37,7 @@
                     <span class="u-search-label">是否已设管理员</span>
                     <Select 
                         v-model="Params.manager" 
-                        style="width:200px"
+                        style="width:150px"
                         placeholder="请选择" 
                         clearable
                         filterable
@@ -49,6 +49,22 @@
                         <Option v-for="item in typeList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
                     </Select>
                  </div>
+          <div class="u-search-list" >
+            <span class="u-search-label">是否已设主管理员</span>
+            <Select
+                v-model="Params.chiefManager"
+                style="width:150px"
+                placeholder="请选择"
+                clearable
+                filterable
+                label-in-value
+                remote
+                :label="Params.majorName"
+                @on-change="changeMajor"
+            >
+              <Option v-for="item in typeList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+            </Select>
+          </div>
         </div>
         <div class="u-table">
             <Table  border :columns="tableHeader" :data="tableData" ></Table>
@@ -124,6 +140,8 @@ export default {
                 manager:'',
                 communityName:'',
                 managerName:'',
+                chiefManager: '',
+                majorName: ''
             },
             itemDetail:{},
             searchData:{},
@@ -148,10 +166,16 @@ export default {
                     }
                 },
                 {
-                    title: '已设置管理员数量',
+                    title: '管理员数量',
                     key: 'managerNum',
                     align:'center',
                     width:120
+                },
+                {
+                  title: '主管理员数量',
+                  key: 'chiefManagerNum',
+                  align:'center',
+                  width:120
                 },
                 {
                     title: '操作',
@@ -174,7 +198,7 @@ export default {
                                         }
                                     }
                                 }, '设置管理员')
-                            ]);  
+                            ]);
                     }
                 },
             ]
@@ -196,7 +220,7 @@ export default {
         var _this=this;
         this.Params=Object.assign({},params);
         this.Params.managerName=managerType[params.manager];
-       
+        this.Params.majorName = managerType[params.chiefManager] || '';
     },
     methods:{
         changeCommunity(form){
@@ -209,6 +233,11 @@ export default {
              this.Params.managerName=form.label;
             utils.addParams(this.Params);
         },
+      changeMajor(form) {
+        this.Params.chiefManager=form.value;
+        this.Params.majorName=form.label;
+        utils.addParams(this.Params);
+      },
         changeCompany(form){
             this.Params.csrName=form;
         },

@@ -35,6 +35,7 @@
 							:mask="key"
 							:reload="getCount"
 							:openSetManager="hideTip"
+							:openSetMajor="openSetMajor"
 							:ifReload="ifReload"
 						/>
 					</Tab-pane>
@@ -86,6 +87,24 @@
 			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
       </div>
     </Modal>
+	<Modal
+			v-model="isChangeMajor"
+			title="主管理员变更"
+			ok-text="确定"
+			cancel-text="取消"
+			width="665"
+	>
+		<ChangeMajor
+				v-if="isChangeMajor"
+				:detail="itemDetail"
+				:majorComList="majorComList"
+				:closeMajor="closeMajor"
+				:changeMajor="changeMajor"
+				@formData="getformData"
+		/>
+		<div slot="footer">
+		</div>
+	</Modal>
 </div>
 </template>
 <script>
@@ -98,6 +117,7 @@ import CommunityManage from './communityManage';
 import ManagerList from './managerList';
 import EmployeeList from './employeeList';
 import AddManager from './addManager';
+import ChangeMajor from './changeMajor';
 
 export default {
 	components:{
@@ -107,7 +127,8 @@ export default {
 		CommunityManage,
 		ManagerList,
 		EmployeeList,
-		AddManager
+		AddManager,
+    ChangeMajor
 	},
 	data(){
 		return{
@@ -193,11 +214,18 @@ export default {
 
 				//  }
                 // }
+        {
+          title: '该社区主管理员数量',
+          key: 'chiefManagerNum',
+          align:'center',
+        }
 			],
 			companyList:[],
 			tipTitle:'',
 			formData:{},
 			submitManager:null,
+      isChangeMajor: false,
+			majorComList: []
 		}
 	},
 	mounted:function(){
@@ -249,6 +277,26 @@ export default {
 			}
 			
 			this.openTip=!this.openTip;
+		},
+    openSetMajor(form) {
+      if(form){
+        this.itemDetail=form;
+        let params={
+          csrId:this.$route.params.csrId,
+          mbrId:form.mbrId,
+        };
+        this.$http.get('get-manage-cmt-list', params).then((res)=>{
+          this.majorComList=res.data.cmtList || [];
+          this.isChangeMajor = true;
+        }).catch((err)=>{
+          this.$Notice.error({
+            title:err.message
+          });
+        })
+      }
+		},
+		closeMajor() {
+      this.isChangeMajor = false;
 		},
 		tipSubmit(){
 			let {params}=this.$route;
@@ -305,6 +353,17 @@ export default {
 		},
 		addManagerSubmit(){
 			this.submitManager && this.submitManager(this.managerSubmit);
+		},
+		changeMajor() {
+      var _this=this;
+      this.ifReload=true;
+      this.isChangeMajor=false;
+      this.$Notice.success({
+        title:'变更主管理员成功'
+      });
+      setTimeout(function(){
+        _this.ifReload=false
+      },500)
 		}
 		
 

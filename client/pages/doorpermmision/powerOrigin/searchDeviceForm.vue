@@ -52,7 +52,7 @@
             <div class="float-right">
                 
                 <Button type="primary"  @click="addDevice" class="delete-relations" icon="ios-plus-outline">{{groupLevel=="PARENT"?"添加":"添加"}}</Button>
-                <Button type="error"  @click="deleteRelations" class="delete-relations" icon="ios-minus-outline">移除</Button>
+                <Button type="error"  @click="deleteRelations" class="delete-relations" icon="ios-minus-outline">取消授权</Button>
             </div>
 
         </Form>

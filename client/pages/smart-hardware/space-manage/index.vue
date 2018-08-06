@@ -4,6 +4,11 @@
         <div class="u-search" >
             <Button type="primary" @click="showCreate">新建空间</Button>
             <div class="u-select-content">
+                <div class="space-name-input">
+                    <Input v-model="spaceName"  placeholder="请输入空间名称" 
+                        @on-change="spaceNameSearch"
+                    />
+                </div>
                 <div class="u-select-first">
                     <RadioGroup v-model="hasParent"
                         @on-change="hasParentChanged"
@@ -127,14 +132,17 @@ export default {
    },
     data(){
         return{
+            parentText:'',
             hasParent :'所有',
             page:1,
             pageSize:15,
             totalCount:0,
+            spaceName :'',
             tabParams:{
                 page:1,
                 pageSize:15,
                 hasParent : "",
+                name : ''
             },
             formData:"",
             openCreate:false,
@@ -216,13 +224,27 @@ export default {
                   title: '父空间名称',
                   key: 'parentName',
                   align:'center',
-                  render(h, obj){
-                    if(obj.row.parentName){
-                        return obj.row.parentName;
+                  render:(h,obj)=>{
+                        return h('div',{}, 
+                        [
+                            
+                            h('Tooltip',
+                                {
+                                props: {
+                                    placement: 'top',
+                                    content : this.parentText
+                                },
+                                on:{
+                                    "on-popper-show" : ()=>{
+                                        this.returnToolTipText(obj.row)
+                                    }
+                                }
+                            }, 
+                                obj.row.parentName||'/'
+                            ),
+                        ]);
+                        
                     }
-                    return "/";
-
-                  }
                 },
                 {
                   title: '创建人',
@@ -322,6 +344,22 @@ export default {
         this.getCommunityList();
     },
     methods:{
+        returnToolTipText(param){
+            if(!param.parentName){
+                this.parentText = '';
+                return;
+            }
+            var param = {id : param.parentId}
+            this.$http.get('get-space-edit-info', param).then((res)=>{
+                this.parentText =  res.data.communityName + res.data.floor+"层";
+
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            });
+
+        },
         openDelete(params){
            if(params){
               this.detail=params
@@ -465,7 +503,6 @@ export default {
             window.open(`/smart-hardware/space-manage/${param.id}/son-space?name=${param.name}&communityId=${param.communityId}`)
         },
         hasParentChanged(param){
-            console.log("param",param);
             if(param == "有父空间"){
                 this.tabParams.hasParent = true;
             }else if(param == "无父空间"){
@@ -475,7 +512,14 @@ export default {
             }
             this.getTableData(this.tabParams);
 
-        }
+        },
+        spaceNameSearch(event){
+            var value = event.target.value;
+            this.tabParams.name=value;
+            this.getTableData(this.tabParams);
+            
+        },
+       
     }
 }
 </script>
@@ -495,11 +539,16 @@ export default {
     }
     .u-select-content{
         float:right;
-        width:710px;
+        width:880px;
         .u-select{
            float:left;
            width:150px;
            margin-left:10px;
+        }
+        .space-name-input{
+            margin-right: 10px;
+            display: inline-block;
+            float: left;
         }
         .u-select-first{
             float: left;

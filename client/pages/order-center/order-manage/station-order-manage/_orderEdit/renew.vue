@@ -1515,7 +1515,7 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {

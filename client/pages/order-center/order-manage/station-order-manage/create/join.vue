@@ -596,8 +596,8 @@ export default {
             Params.communityId=this.formItem.communityId;
 			var _this=this;
 			this.$http.post('store-change-manager', Params).then((res)=>{
-				this.isAddManager=false;
-				this.getCount();
+                this.isAddManager=false;
+                this.customerInfo=Object.assign({},this.formData);
 				this.$Notice.success({
 					title:'变更管理员成功'
 				});
@@ -1630,7 +1630,7 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {

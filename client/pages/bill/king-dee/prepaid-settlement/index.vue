@@ -114,20 +114,20 @@ export default {
                 },
                 {
                     title: '结算方式',
-                    key: 'settlementType',
+                    key: 'settlementTypeDesc',
                     align:'center',
               //      width:90,
                 },
                 {
                     title: '收款类型',
-                    key: 'recBillType',
+                    key: 'recBillTypeDesc',
                     align:'center',
                  
                 },
                 {
                     title: '备注',
                     key: 'remark',
-               
+                    align:'center',
                 },
             ],
             attractData:[]    

@@ -106,7 +106,6 @@ export default {
     methods: {
     //获取同步状态
         loopSuccess(){
-            console.log("sssss");
             this.$http.get('get-sync-findSyncStatus-loop', {
                 syncDataId:this.syncId,
             })

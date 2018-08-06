@@ -133,7 +133,7 @@ export default {
 	name: 'JoinView',
 	head() {
 		return {
-			title: '工位订单详情'
+			title: '查看数据详情'
 		}
 	},
 	components: {

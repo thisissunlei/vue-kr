@@ -45,12 +45,13 @@
                         </Form-item>
 
                         <Form-item label="客户" class='daily-form' >
-                            <i-input 
+                            <!-- <i-input 
                                 v-model="formItem.customerId" 
                                 placeholder="请输入客户名称"
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
-                            />
+                            /> -->
+                             <selectCustomers value="请输入客户名称"  :onchange="changeCustomer"     style="display:inline-block;width:200px" />
                         </Form-item>     
                         <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
@@ -130,11 +131,13 @@ import utils from '~/plugins/utils';
 import Message from '~/components/Message';
 import SelectCity from '~/components/SelectCommon/SelectCity';
 import SelectCommunity from '~/components/SelectCommon/SelectCommunity';
+import selectCustomers from '~/components/SelectCustomers.vue';
 export default {
     components:{
       SelectCity,
       SelectCommunity,
-      Message
+      Message,
+      selectCustomers
     },
     props:{
        identify:{
@@ -259,6 +262,9 @@ export default {
                 this.MessageType="error";
                 this.warn=error.message;
             })
+        },
+        changeCustomer(val) {
+            this.formItem.customerId = val;
         },
         //  主体性质
         gettaxNatureType(){

@@ -30,8 +30,20 @@
                         </FormItem>
                         </Col> -->
                         <Col span="6" class="col">
-                        <FormItem label="财务组织编码">
-                            <Input v-model="formItem.companyNumber" placeholder="财务组织编码" class="form-item-input" @on-blur='filterData'/>
+                        <!-- <FormItem label="财务组织编码">
+                            <Input v-model="formItem.companyNumber" placeholder="财务组织编码" class="form-item-input" @on-blur='filterData' />
+                        </FormItem> -->
+                         <FormItem label="主体">
+                              <Select 
+                                v-model="formItem.corporationId" 
+                                placeholder="选择出租方主体" 
+                                class="form-item-input" 
+                                @on-change='filterData'
+                                filterable
+                                clearable
+                            >
+                                <Option v-for="item in fileList" :value="item.id" :key="item.id">{{ item.corporationName }}</Option>
+                            </Select> 
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
@@ -52,23 +64,28 @@
                     <Row>
                         <Col span="6" class="col">
                         <FormItem label='物料编码'>
-                            <Input v-model="formItem.materialNumber" placeholder="物料编码" class="form-item-input" @on-blur='filterData'/>
+                            <Input v-model="formItem.materialNumber" placeholder="物料编码" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
                         <Col span="6" class="col">
                         <FormItem label="核心单据号">
-                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData'/>
+                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
-                        <Col span="6" class="col">
+                        <!-- <Col span="6" class="col">
                         <FormItem label="销售合同号">
-                            <Input v-model="formItem.contractNumber" placeholder="销售合同号" class="form-item-input" @on-blur='filterData'/>
+                            <Input v-model="formItem.contractNumber" placeholder="销售合同号" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
-                        </Col>
+                        </Col> -->
                     </Row>
                 </div>
                 <div v-if="syncType==='PAYMENT'">
                     <Row>
+                        <Col span="6" class="col">
+                        <FormItem label="核心单据号">
+                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
+                        </FormItem>
+                        </Col>
                         <!-- <Col span="6" class="col">
                         <FormItem label="业务员姓名">
                             <Input v-model="formItem.bizPerson" placeholder="业务员姓名" class="form-item-input" @on-blur='filterData'/>
@@ -76,7 +93,7 @@
                         </Col> -->
                         <Col span="6" class="col">
                         <FormItem label="唯一交易编码">
-                            <Input v-model="formItem.number" placeholder="唯一交易编码" class="form-item-input" @on-blur='filterData'/>
+                            <Input v-model="formItem.number" placeholder="唯一交易编码" class="form-item-input" @on-blur='filterData' />
                         </FormItem>
                         </Col>
                     </Row>
@@ -88,13 +105,9 @@
                             </Select>
                         </FormItem>
                         </Col>
+                        
                         <Col span="6" class="col">
-                        <FormItem label="核心单据号">
-                            <Input v-model="formItem.coreBillNumber" placeholder="核心单据号" class="form-item-input" @on-blur='filterData' />
-                        </FormItem>
-                        </Col>
-                         <Col span="6" class="col">
-                         <FormItem label="重复状态">
+                        <FormItem label="重复状态">
                             <Select v-model="formItem.repeatStatus" class="form-item-input" @on-change='filterData'>
                                 <Option v-for="item in repeatStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -125,12 +138,7 @@
                 <Button type="primary" class="btn" @click="handleSync(formItem)">开始同步</Button>
             </div>
         </div>
-        <Modal
-            v-model="openLoading"
-            :title="titleMessage"
-            :closable="false"
-            :mask-closable="false"
-        >
+        <Modal v-model="openLoading" :title="titleMessage" :closable="false" :mask-closable="false">
             <div>
                 <Loading />
             </div>
@@ -185,10 +193,11 @@ export default {
             isAllSelect: false,//是否全选
             notSelectInAllSelectState: [],//全选状态下取消勾选的id集合
             selectedIdsInNotAllSelectState: [],//非全选模式下 已选择的id集合
-            openLoading:false,
+            openLoading: false,
             formItem: {},
-            titleMessage:'等待同步中....',
-            repeatStatusList:[
+            fileList:[],
+            titleMessage: '等待同步中....',
+            repeatStatusList: [
                 {
                     label: '重复',
                     value: 'IS_REPEAT'
@@ -247,19 +256,18 @@ export default {
                     type: 'selection',
                     width: 60,
                     align: 'center',
-                    fixed:'left',
+                    fixed: 'left',
                 },
                 {
                     key: 'repeatStatus',
                     title: '重复状态',
                     align: 'center',
-                    width:120,
-                    fixed:'left',
+                    width: 120,
                     render(h, params) {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
-                 { key: 'asstActNumber', align: 'center', title: '客户编码',width:120,fixed:'left', },
+                { key: 'asstActNumber', align: 'center', title: '客户编码', width: 120,  },
                 {
                     key: 'bizDate',
                     title: '业务日期',
@@ -270,49 +278,46 @@ export default {
                         return h('span', time)
                     }
                 },
-                { key: 'price', align: 'center', title: '不含税单价',width:120,
-                 render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.price))
-                         },
+                {  key: 'price', align: 'center', title: '不含税单价', width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.price))
+                    },
                 },
-                { key: 'companyNumber', align: 'center', title: '财务组织编码',width:120, },
-                { key: 'arAmount', align: 'center', title: '含税金额',width:120, 
-                render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.arAmount))
-                         }
+                { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
+                {     key: 'arAmount', align: 'center', title: '含税金额', width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.arAmount))
+                    }
                 },
-                { key: 'amount', align: 'center', title: '金额',width:120, 
-                 render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.amount))
-                         }
+                {  key: 'amount', align: 'center', title: '金额', width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.amount))
+                    }
                 },
-                { key: 'taxAmount', align: 'center', title: '税额' ,width:120, 
-                 render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.taxAmount))
-                         }
+                {   key: 'taxAmount', align: 'center', title: '税额', width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.taxAmount))
+                    }
                 },
-               
-              //  { key: 'bizPerson', align: 'center', title: '业务员姓名' },
-                { key: 'bizType', align: 'center', title: '销售类型',width:120,  },
-                { key: 'contractNumber', align: 'center', title: '销售合同行号',width:120,  },
-                { key: 'coreBillNumber', align: 'center', title: '核心单据号' ,width:120, },
-                { key: 'costCenterNumber', align: 'center', title: '成本中心',width:120,  },
-              //  { key: 'currency', align: 'center', title: '币别' },
+                { key: 'bizType', align: 'center', title: '销售类型', width: 120, },
+                { key: 'coreBillNumber', align: 'center', title: '核心单据号', width: 120, },
+                { key: 'costCenterNumber', align: 'center', title: '成本中心', width: 120, },
+                //  { key: 'currency', align: 'center', title: '币别' },
 
                 // { key: 'incomeId', title: '原始数据id' },
-                { key: 'materialNumber', align: 'center', title: '物料编码',width:120,  },
-                { key: 'number', align: 'center', title: '唯一交易编码',width:120,  },
-                { key: 'quantity', align: 'center', title: '数量' ,width:120, },
+                { key: 'materialNumber', align: 'center', title: '物料编码', width: 120, },
+                { key: 'number', align: 'center', title: '唯一交易编码', width: 120, },
+                { key: 'quantity', align: 'center', title: '数量', width: 120, },
                 // { key: 'syncDataId', title: '同步记录id' },
-                { key: 'taxRate', align: 'center', title: '税率' ,width:120, },
-                { 
+                { key: 'taxRate', align: 'center', title: '税率', width: 120, },
+                {
                     key: 'taxPrice',
-                     align: 'center', 
-                     title: '含税单价',
-                     width:120,
-                     render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.taxPrice))
-                         }
+                    align: 'center',
+                    title: '含税单价',
+                    width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.taxPrice))
+                    }
                 },
                 // {
                 //     key: 'syncStatus',
@@ -342,13 +347,13 @@ export default {
                 //         }
                 //         return h('span', label)
                 //     }
-               // },
-               // { key: 'failedMsg', align: 'center', title: '失败消息' ,width:120, fixed:'right'},
+                // },
+                // { key: 'failedMsg', align: 'center', title: '失败消息' ,width:120, fixed:'right'},
                 {
                     key: 'remark',
                     title: '备注',
                     align: 'center',
-                    fixed:'right',
+                 //   fixed: 'right',
                     width: 250,
                     render(h, params) {
                         return h('Tooltip', {
@@ -380,19 +385,24 @@ export default {
                     type: 'selection',
                     width: 60,
                     align: 'center',
-                    fixed:'left',
+                    fixed: 'left',
                 },
+                // {
+                //     width: 100,
+                //     key: 'id',
+                //     fixed: 'left',
+                // },
                 {
                     key: 'repeatStatus',
                     align: 'center',
                     title: '重复状态',
-                    width:120,
-                    fixed:'left',
+                    width: 120,
+                    fixed: 'left',
                     render(h, params) {
                         return h('span', params.row.repeatStatus.toUpperCase() === 'IS_REPEAT' ? '是' : '否')
                     }
                 },
-                 { key: 'payerNumber', align: 'center', title: '客户（供应商）编码',fixed:'left',width:120, },
+                { key: 'payerNumber', align: 'center', title: '客户（供应商）编码', fixed: 'left', width: 120, },
                 {
                     key: 'bizDate',
                     title: '业务日期',
@@ -403,35 +413,35 @@ export default {
                         return h('span', time)
                     }
                 },
-                { key: 'amount', align: 'center', title: '金额',width:120,
-                render:function(h,params){
-                            return h('span',{},utils.thousand(params.row.amount))
-                         }
+                {                    key: 'amount', align: 'center', title: '金额', width: 120,
+                    render: function (h, params) {
+                        return h('span', {}, utils.thousand(params.row.amount))
+                    }
                 },
 
-               // { key: 'bizPerson', align: 'center', title: '业务员姓名' },
-                { key: 'companyNumber', align: 'center', title: '财务组织编码',width:120, },
-                { key: 'contractNumber', align: 'center', title: '合同编号',width:120, },
-                { key: 'coreBillNumber', align: 'center', title: '订单编号' ,width:120,},
-                { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码',width:180, },
-             //   { key: 'currency', align: 'center', title: '币别' },
+                // { key: 'bizPerson', align: 'center', title: '业务员姓名' },
+                { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
+                { key: 'contractNumber', align: 'center', title: '合同编号', width: 120, },
+                { key: 'coreBillNumber', align: 'center', title: '订单编号', width: 120, },
+                { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码', width: 180, },
+                //   { key: 'currency', align: 'center', title: '币别' },
 
-                { key: 'number', align: 'center', title: '唯一交易编码',width:120, },
-                { key: 'payerAccountBank', align: 'center', title: '付款账号',width:120, },
-               
+                { key: 'number', align: 'center', title: '唯一交易编码', width: 120, },
+                { key: 'payerAccountBank', align: 'center', title: '付款账号', width: 120, },
+
                 {
                     key: 'payerType',
                     align: 'center',
                     title: '付款人类型',
-                    width:120,
+                    width: 120,
                     render(h, params) {
                         let payer = params.row.payerType;
                         return h('span', payer.toUpperCase().trim() == 'CUSTOMER' ? '客户' : '供应商')
                     }
                 },
                 { key: 'recAccountBank', align: 'center', title: '银行收款账号', width: 180 },
-                { key: 'recBillType', align: 'center', title: '收款类型',width:120, },
-                { key: 'settlementType', align: 'center', title: '结算方式' ,width:120,},
+                { key: 'recBillType', align: 'center', title: '收款类型', width: 120, },
+                { key: 'settlementType', align: 'center', title: '结算方式', width: 120, },
                 // { key: 'syncDataId', title: '同步记录id' },
                 // {
                 //     key: 'syncStatus',
@@ -464,13 +474,12 @@ export default {
 
                 // },
 
-           //     { key: 'failedMsg', align: 'center', title: '失败消息' ,width:120, fixed:'right'},
+                //     { key: 'failedMsg', align: 'center', title: '失败消息' ,width:120, fixed:'right'},
                 {
                     key: 'remark',
                     title: '备注',
                     align: 'center',
                     width: 250,
-                    fixed:'right',
                     render(h, params) {
                         return h('Tooltip', {
                             // props: {
@@ -479,10 +488,10 @@ export default {
                         }, [
                                 h('div', {
                                     style: {
-                                     //   width: "40px",
-                                     //   overflow: "hidden",
-                                     //   textOverflow: "ellipsis",
-                                     //   whiteSpace: "nowrap"
+                                        //   width: "40px",
+                                        //   overflow: "hidden",
+                                        //   textOverflow: "ellipsis",
+                                        //   whiteSpace: "nowrap"
                                     }
                                 }, params.row.remark || '-'),
                                 h('div', {
@@ -502,17 +511,18 @@ export default {
         GLOBALSIDESWITCH('false');
         this.getRouterQueryParmas();
         this.getListData();
+        this.getMainBody();
     },
-    watch:{
-         isAllSelect:function(newVal,old){
-              if(newVal !== old ){
-                  // 重置本地状态 
-                  this.selectIdsInPages = [];
-                  this.unSelectIdsInPages = [];
-                  this.notSelectInAllSelectState = [];
-                  this.selectedIdsInNotAllSelectState=[];
-              } 
-            },
+    watch: {
+        isAllSelect: function (newVal, old) {
+            if (newVal !== old) {
+                // 重置本地状态 
+                this.selectIdsInPages = [];
+                this.unSelectIdsInPages = [];
+                this.notSelectInAllSelectState = [];
+                this.selectedIdsInNotAllSelectState = [];
+            }
+        },
     },
     methods: {
         // handleTest() {
@@ -528,8 +538,18 @@ export default {
         // handleTestNotCheckAll() {
         //     this.isAllSelect = false;
         // },
+         // 主体 
+        getMainBody(){
+            this.$http.get('krspace-op-web-fna-corporation').then((response)=>{
+              this.fileList = response.data;
+            }).catch((error)=>{
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
+            })
+        },
         filterData(val) {
-            this.params.page=1
+            this.params.page = 1
             this.getListData();
         },
         getRouterQueryParmas() {
@@ -545,8 +565,8 @@ export default {
             let api = 'get-sync-income-data-list'
             this.data = [];
             if (this.syncType === 'INCOME') {
-                let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus } = this.formItem
-                let p = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus }
+                let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = this.formItem
+                let p = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -558,8 +578,8 @@ export default {
                 this.columns = [].concat(this.syncDataIncomeDetailColums)
                 api = 'get-sync-income-data-list'
             } else if (this.syncType === 'PAYMENT') {
-                let { number,   payerType, coreBillNumber,repeatStatus } = this.formItem
-                let p = { number,  payerType, coreBillNumber,repeatStatus }
+                let { number, payerType, coreBillNumber, repeatStatus } = this.formItem
+                let p = { number, payerType, coreBillNumber, repeatStatus }
                 p.syncDataId = this.syncDataId
                 if (this.isAllSelect) {
                     p.ids = this.notSelectInAllSelectState
@@ -571,18 +591,52 @@ export default {
                 this.columns = [].concat(this.syncDataPaymentDetailColums)
                 api = 'get-sync-payment-data-list'
             }
-            console.log('parmas', parmas)
+            // console.log('parmas', parmas)
             this.$http.post(api, parmas)
                 .then(r => {
                     this.selectIdsInPages.length = r.data.pages
                     this.unSelectIdsInPages.length = r.data.pages
                     this.totalRecordCount = r.data.total
                     let data = [].concat(r.data.items)
+                    // if (this.isAllSelect) {
+                    //     console.log('this.unSelectIdsInPages',this.unSelectIdsInPages)
+                    //     let unselected = this.unSelectIdsInPages[Number(this.currentPage)]
+                    //     if (unselected && unselected.length > 0) {
+                    //         data.map(item => {
+                    //             unselected.includes(item.id) ? item._checked = false : item._checked = true
+                    //         })
+                    //     }
+                    // } else {
+                    //     let selected = this.selectIdsInPages[Number(this.currentPage)]
+                    //     if (selected && selected.length > 0) {
+                    //         data.map(item => {
+                    //             selected.includes(item.id) ? item._checked = true : item._checked = false
+                    //         })
+                    //     }
+                    // }
+                    this.data = [].concat(data)
+                    console.log(this.data.map(item=>item.id))
+                })
+                .then(() => {
                     if (this.isAllSelect) {
+                        let arr = this.unSelectIdsInPages[Number(this.currentPage)];
+                        if (!arr || !arr.length) {
+                            this.$refs.selection.selectAll(true);
+                        }
+                    }
+                }).then(() => {
+                    let data = [].concat(this.data)
+                    if (this.isAllSelect) {
+                        console.log('this.unSelectIdsInPages', this.unSelectIdsInPages)
                         let unselected = this.unSelectIdsInPages[Number(this.currentPage)]
                         if (unselected && unselected.length > 0) {
                             data.map(item => {
                                 unselected.includes(item.id) ? item._checked = false : item._checked = true
+                            })
+                        }
+                        else {
+                            data.map(item => {
+                                item._checked = true
                             })
                         }
                     } else {
@@ -594,13 +648,6 @@ export default {
                         }
                     }
                     this.data = [].concat(data)
-                })
-                .then(() => {
-                    if (this.isAllSelect) {
-                        if (!this.unSelectIdsInPages[Number(this.currentPage)]) {
-                            this.$refs.selection.selectAll(true);
-                        }
-                    }
                 })
                 .catch(error => {
                     this.$Notice.error({
@@ -618,12 +665,12 @@ export default {
         //切换为全选模式   只有被选为true的时候触发 
         handleSelectAll() {
             this.isAllSelect = true;
-            console.log(this.isAllSelect,'只有全选状态置为true的时候才触发');
+            console.log(this.isAllSelect, '只有全选状态置为true的时候才触发');
             this.notSelectInAllSelectState = [];
         },
         //全选模式下  勾选单项时触发  被选为true的时候 触发 
         handleSelect(selection, row) {
-             console.log('选中单项被选中时才触发');
+            console.log('选中单项被选中时才触发');
             if (this.isAllSelect) {  // 先取消 之后再选中 
                 let id = row.id;
                 let index = this.notSelectInAllSelectState.findIndex(item => item == id)
@@ -647,14 +694,15 @@ export default {
                     this.unSelectIdsInPages[Number(this.currentPage)].push(row.id)
                 }
                 console.log("notSelectInAllSelectState", this.notSelectInAllSelectState)
+                console.log("unSelectIdsInPages", this.unSelectIdsInPages)
             }
         },
         // 非全选模式下
         handleSelectChange(selection) {
-             console.log('只要发生变化就会触发',selection);
-             if(!selection.length){
-                 this.isAllSelect = false;
-             }
+            console.log('只要发生变化就会触发', selection);
+            if (!selection.length) {
+                this.isAllSelect = false;
+            }
             if (!this.isAllSelect) {
                 this.selectedIdsInNotAllSelectState = selection.map(item => item.id)
                 this.selectIdsInPages[Number(this.currentPage)] = [].concat(this.selectedIdsInNotAllSelectState)
@@ -671,14 +719,14 @@ export default {
             if (this.isAllSelect) {
                 if (this.syncType === 'INCOME') {
                     api = 'post-sync-income-data-ids'
-                    let {  companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus } = formItem
-                    parmas = {   companyNumber, bizType, materialNumber, coreBillNumber, contractNumber,repeatStatus }
+                    let { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId } = formItem
+                    parmas = { companyNumber, bizType, materialNumber, coreBillNumber, contractNumber, repeatStatus,corporationId }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 } else if (this.syncType === 'PAYMENT') {
                     api = 'post-sync-payment-data-ids'
-                    let { number, payerType, coreBillNumber,repeatStatus } = formItem
-                    parmas = { number, payerType, coreBillNumber,repeatStatus }
+                    let { number, payerType, coreBillNumber, repeatStatus } = formItem
+                    parmas = { number, payerType, coreBillNumber, repeatStatus }
                     parmas.syncDataId = this.syncDataId
                     parmas.ids = this.notSelectInAllSelectState
                 }
@@ -687,7 +735,7 @@ export default {
                 parmas.syncDataId = this.syncDataId
                 parmas.dataIds = this.selectedIdsInNotAllSelectState
             }
-           
+
             this.$http.post(api, parmas)
                 .then(r => {
                     this.isAllSelect = false
@@ -705,41 +753,41 @@ export default {
 
         },
         //获取同步状态
-        loopSuccess(){
+        loopSuccess() {
             console.log("hhhhhh")
             this.$http.get('get-sync-findSyncStatus-loop', {
-                syncDataId:this.$route.query.syncId,
+                syncDataId: this.$route.query.syncId,
             })
                 .then(r => {
-                    console.log(r,"ppppppp")
-                    if(r.data.syncStatus=="ALREADY_SYNC"){
+                    console.log(r, "ppppppp")
+                    if (r.data.syncStatus == "ALREADY_SYNC") {
                         this.titleMessage = '同步成功';
-                        this.$Notice.success({title:'同步成功'});
-                        setTimeout(()=>{
-                        this.openLoading = false;
-                        window.location.href = '/bill/king-dee/sync-data';
-                        },2000);
-                        return ;
+                        this.$Notice.success({ title: '同步成功' });
+                        setTimeout(() => {
+                            this.openLoading = false;
+                            window.location.href = '/bill/king-dee/sync-data';
+                        }, 2000);
+                        return;
                     }
-                    if(r.data.syncStatus=='FAILED_SYNC'){
+                    if (r.data.syncStatus == 'FAILED_SYNC') {
                         this.titleMessage = '同步失败';
                         this.$Notice.error({
                             title: r.data.failedMsg
                         });
-                     setTimeout(()=>{
-                        this.openLoading = false;
-                        this.$router.replace({path:'/bill/king-dee/sync-data/data-sync-view',query:{type:this.syncType,syncDataId:this.syncDataId}});
-                      //  window.location.reload();
-                        },2000);
+                        setTimeout(() => {
+                            this.openLoading = false;
+                            this.$router.replace({ path: '/bill/king-dee/sync-data/data-sync-view', query: { type: this.syncType, syncDataId: this.syncDataId } });
+                            //  window.location.reload();
+                        }, 2000);
                         // this.openLoading = false;
                         // this.$Notice.error({
                         //     title: '同步失败'
                         // });
-                        return ;
+                        return;
                     }
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         this.loopSuccess();
-                    },1000)
+                    }, 1000)
                     // this.openLoading = false;
                     // alert("8888888")
                 })

@@ -218,7 +218,6 @@ export default  {
         url: '/api/order/csr-clue/impot',
         method: 'post'
     },
-     
     //会员七天线上化--会员线上化率
     'get-operation-community-use-rate': {
         url: '/api/krspace-op-web/app/operation/community/use-rate',

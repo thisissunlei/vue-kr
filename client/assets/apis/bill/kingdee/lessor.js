@@ -11,9 +11,9 @@ export default {
         url:'/api/sync/communityConfigAdd',
         method:'post'
     },
+    // 获取出租方主体   
     'krspace-op-web-fna-corporation':{
         url:'api/krspace-op-web/fna-corporation-list',
         method:'get',
-  
       },
 }

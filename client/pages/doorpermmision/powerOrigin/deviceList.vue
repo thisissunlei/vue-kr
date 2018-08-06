@@ -121,7 +121,7 @@ export default {
                                             this.remove(params.row)
                                         }
                                     }
-                                }, '移除')
+                                }, '取消授权')
                             ]);
                         }
                     },
@@ -203,7 +203,7 @@ export default {
        },
        deleteRelations(){
            if(this.selectedItems.length<1){
-               this.$Message.warning("请选择要移除的设备");
+               this.$Message.warning("请选择设备");
                return;
            }
            this.showTipOrNot();
@@ -226,7 +226,7 @@ export default {
                 this.showTipOrNot();
                 this.searchData.time = new Date().getTime();
                 this.getListData();
-                this.$Message.success('移除成功');
+                this.$Message.success('取消授权成功');
             }).catch((error) => {
                 this.$Message.warning(error.message);
             })

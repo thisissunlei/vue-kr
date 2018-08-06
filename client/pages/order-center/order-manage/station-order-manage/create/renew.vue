@@ -286,6 +286,7 @@ export default {
             submitManager:null,
             isAddManager:false,
             isAddEdit:false,
+            userId:'',
             //苏岭结束
 
             chanceDisable:false,
@@ -518,7 +519,8 @@ export default {
             Params.communityId=this.renewForm.communityId;
 			var _this=this;
 			this.$http.post('store-change-manager', Params).then((res)=>{
-				this.isAddManager=false;
+                this.isAddManager=false;
+                this.userId=res.data.userId;
 				this.customerInfo=Object.assign({},this.formData);
 				this.$Notice.success({
 					title:'变更管理员成功'
@@ -711,6 +713,9 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
+            //苏岭开始
+            formItem.userId=this.userId;
+            //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';
                 // 欢哥让删掉列表刷新

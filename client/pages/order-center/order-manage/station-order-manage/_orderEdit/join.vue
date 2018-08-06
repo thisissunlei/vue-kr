@@ -318,6 +318,7 @@ export default {
             submitManager:null,
             isAddManager:false,
             isAddEdit:false,
+            userId:'',
             //苏岭结束
 
             orderId:'',
@@ -587,6 +588,7 @@ export default {
             this.submitManager && this.submitManager(this.managerSubmit);
         },
         managerSubmit(){
+            this.userId='';
 			let Params=Object.assign({},this.formData);
             Params.customerId=this.formItem.customerId;
             Params.communityId=this.formItem.communityId;
@@ -594,6 +596,7 @@ export default {
 			this.$http.post('store-change-manager', Params).then((res)=>{
                 this.isAddManager=false;
                 this.customerInfo=Object.assign({},this.formData);
+                this.userId=res.data.userId;
 				this.$Notice.success({
 					title:'变更管理员成功'
 				});
@@ -896,6 +899,9 @@ export default {
             formItem.endDate = end;
             let _this = this;
             this.disabled = true;
+            //苏岭开始
+            formItem.userId=this.userId||data.userId;
+            //苏岭结束
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
                 // window.close();

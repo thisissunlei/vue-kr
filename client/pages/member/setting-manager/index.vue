@@ -219,21 +219,25 @@ export default {
           
         var _this=this;
         this.Params=Object.assign({},params);
-        this.Params.managerName=managerType[params.manager];
+        this.Params.managerName=managerType[params.manager] || '';
         this.Params.majorName = managerType[params.chiefManager] || '';
+        this.page=Number(params.page) || 1;
     },
     methods:{
         changeCommunity(form){
+          this.Params.page = 1;
             this.Params.cmtId=form.value;
             this.Params.communityName=form.label;
             utils.addParams(this.Params);
         },
         changeManager(form){
+          this.Params.page = 1;
             this.Params.manager=form.value;
              this.Params.managerName=form.label;
             utils.addParams(this.Params);
         },
       changeMajor(form) {
+        this.Params.page = 1;
         this.Params.chiefManager=form.value;
         this.Params.majorName=form.label;
         utils.addParams(this.Params);
@@ -269,12 +273,13 @@ export default {
         },
         lowerSubmit(){
                 this.page=1;
-                let Params={
-                    page:1,
-                    pageSize:15,
-                    csrName:this.Params.csrName
-                }
-                this.Params=Object.assign({},Params);
+                // let Params={
+                //     page:1,
+                //     pageSize:15,
+                //     csrName:this.Params.csrName
+                // }
+                // this.Params=Object.assign({},Params);
+                this.Params.page = 1;
                 utils.addParams(this.Params);
         },
         showSearch (params) {

@@ -17,7 +17,7 @@
       identify='daily'
     />
     <div class='enter-filed-table'>
-        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData">            
+        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData" style="max-width:1024px">            
             <div slot="loading">
                     <Loading/>
             </div> 
@@ -333,6 +333,9 @@ var layoutScrollHeight=0;
                 this.getCommonParam(); 
             }   
             var height = document.body.clientHeight-200;
+            if(height>760){
+                height=760;
+            }
             this.height = height;
 
         },

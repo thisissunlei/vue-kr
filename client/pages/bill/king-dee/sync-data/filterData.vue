@@ -466,15 +466,9 @@ export default {
                 // { key: 'bizPerson', align: 'center', title: '业务员姓名' },
                 { key: 'companyNumber', align: 'center', title: '财务组织编码', width: 120, },
               //  { key: 'contractNumber', align: 'center', title: '合同编号', width: 120, },
-                { key: 'coreBillNumber', align: 'center', title: '订单编号', width: 120, },
+                { key: 'coreBillNumber', align: 'center', title: '核心单据号', width: 120, },
                 { key: 'costCenterNumber', align: 'center', title: 'OP系统的社区编码', width: 180, },
                 //   { key: 'currency', align: 'center', title: '币别' },
-                {
-                    key: 'materialNumberDesc',
-                    title: '物料编码(收入类型)描述',
-                    align: 'center',
-                    width: 150,
-                },
                 { key: 'number', align: 'center', title: '唯一交易编码', width: 120, },
                // { key: 'payerAccountBank', align: 'center', title: '付款账号', width: 120, },
                 {
@@ -488,8 +482,8 @@ export default {
                     }
                 },
                 { key: 'recAccountBank', align: 'center', title: '银行收款账号', width: 180 },
-                { key: 'recBillType', align: 'center', title: '收款类型', width: 120, },
-                { key: 'settlementType', align: 'center', title: '结算方式', width: 120, },
+                { key: 'recBillTypeDesc', align: 'center', title: '收款类型', width: 120, },
+                { key: 'settlementTypeDesc', align: 'center', title: '结算方式', width: 120, },
                 // { key: 'syncDataId', title: '同步记录id' },
                 // {
                 //     key: 'syncStatus',
@@ -639,7 +633,12 @@ export default {
                 this.columns = [].concat(this.syncDataPaymentDetailColums)
                 api = 'get-sync-payment-data-list'
             }
-            // console.log('parmas', parmas)
+            // 祛除值为空的 删选条件 
+            for(var key in parmas){
+                if(!parmas[key]){
+                    delete parmas[key]
+                }
+            }
             this.$http.post(api, parmas)
                 .then(r => {
                     this.selectIdsInPages.length = r.data.pages

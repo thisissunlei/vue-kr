@@ -106,7 +106,7 @@ export default {
                     key: 'arAmount',
                     align:'center',
                     render(h, params){
-                        return h('span', {}, utils.thousand(params.row.amount))
+                        return h('span', {}, utils.thousand(params.row.arAmount))
                        
                     }
                 },
@@ -118,7 +118,11 @@ export default {
                  {
                     title: '金额(不含税)',
                     key: 'amount', 
-                    align:'center'
+                    align:'center',
+                    render(h, params){
+                        return h('span', {}, utils.thousand(params.row.amount))
+                       
+                    }
                 },
                 {
                     title: '月份',

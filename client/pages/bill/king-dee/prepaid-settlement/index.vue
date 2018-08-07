@@ -114,9 +114,8 @@ export default {
                 },
                 {
                     title: '结算方式',
-                    key: 'settlementTypeDesc',
+                    key: 'payWayDesc',
                     align:'center',
-              //      width:90,
                 },
                 {
                     title: '收款类型',

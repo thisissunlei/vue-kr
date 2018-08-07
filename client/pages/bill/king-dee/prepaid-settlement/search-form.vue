@@ -58,7 +58,7 @@
                 <div style="white-space: nowrap;">
     
                      <div class="daily-form" style="margin-right:22px;">
-                        <span class="attract-font" style="padding-top:7px;margin-right:16px;">回款日期</span>
+                        <span class="attract-font" style="padding-top:7px;margin-right:16px;">发生日期</span>
                         <Form-item  class="priceForm" prop="startTime">
                             <DatePicker 
                                 v-model="formItem.startTime" 
@@ -144,17 +144,37 @@ export default {
        }
     },
     data() {
-            //商品名称
-            const validateDate = (rule, value, callback) => {
-                if(this.formItem.startTime>this.formItem.endTime){
+            //开始
+            const validateDate1 = (rule, value, callback) => {
+                if((this.formItem.startTime&&this.formItem.endTime&&this.formItem.startTime>this.formItem.endTime)){ 
                     callback('后者需大于前者');
-                }else{
+                }
+                else if(!this.formItem.startTime && this.formItem.endTime){
+                    callback('请输入开始日期');
+                }
+               else if(this.formItem.startTime&&!this.formItem.endTime){
+                    this.$refs.formItemInvestment.validateField('endTime'); 
+                }
+                else{
                     callback();
                 }
             };
            
-            
-
+            //结束
+            const validateDate2 = (rule, value, callback) => {
+                if((this.formItem.startTime&&this.formItem.endTime&&this.formItem.startTime>this.formItem.endTime)){ 
+                    callback('后者需大于前者');
+                }
+                else if(this.formItem.startTime && !this.formItem.endTime){
+                    callback('请输入结束日期');
+                }else if(!this.formItem.startTime&&this.formItem.endTime){
+                    this.$refs.formItemInvestment.validateField('startTime'); 
+                }
+                else{
+                    callback();
+                }
+            };
+           
             return { 
                 MessageType:'',
                 warn:'',
@@ -185,10 +205,10 @@ export default {
                 incomeList:[],
                 ruleInvestment: {
                     startTime:[
-                        { validator: validateDate, trigger: 'change' }
+                        { validator: validateDate1, trigger: 'change' }
                     ],
                     endTime:[
-                        { validator: validateDate, trigger: 'change' }
+                        { validator: validateDate2, trigger: 'change' }
                     ]
                 },
                 cityNum:0,

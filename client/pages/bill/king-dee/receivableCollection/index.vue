@@ -149,15 +149,9 @@
           },
           {
             title: '成本中心',
-            key: 'costCenteNumber',
+            key: 'costCenterNumber',
             align: 'center',
             width:120,
-          },
-          {
-            title: '货币类型',
-            key: 'currency',
-            align: 'center',
-           width:120,
           },
           {
             title: '物料编码 ',

@@ -600,6 +600,7 @@ export default {
                 this.isAddManager=false;
                 this.customerInfo=Object.assign({},this.formData);
                 this.userId=res.data.userId;
+                this.isAddEdit=true;
 				this.$Notice.success({
 					title:'变更管理员成功'
 				});

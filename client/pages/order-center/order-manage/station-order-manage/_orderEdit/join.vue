@@ -596,6 +596,7 @@ export default {
 			this.$http.post('store-change-manager', Params).then((res)=>{
                 this.isAddManager=false;
                 this.customerInfo=Object.assign({},this.formData);
+                this.isAddEdit=true;
                 this.userId=res.data.userId;
 				this.$Notice.success({
 					title:'变更管理员成功'

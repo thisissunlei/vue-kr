@@ -1,22 +1,25 @@
 
 <template>
+    <div style="padding:15px;">
     <div class="layout"  :class="{'layout-hide-text': spanLeft < 5}">
-        <div id="_layout_box_hander" ></div>
+ 
             <Row type="flex">
                 <Col :span="spanRight">
-                    <div id="layout-content_id" class="layout-content" style="paddingLeft:180px;">
+                   
                         <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
                            
                             <nuxt/>
                             
                         </div>
-                    </div>
+                   
                 </Col>
             </Row>
+        
+
+    </div>
         <div class="layout-copy">
              &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
         </div>
-
     </div>
 </template>
 
@@ -36,7 +39,7 @@
             }
         },
         mounted(){
-            vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
+            
             this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;
             window.onresize=function(){
@@ -47,13 +50,6 @@
             
             }
         
-        },
-        methods:{
-            getIcon(){
-                console.log(window.location,"ppppp")
-                return 'http://img.krspace.cn/common/favicon_new.ico';
-            }
-            
         }
         
     }

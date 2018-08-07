@@ -208,6 +208,11 @@ export default {
 							return params.row.discountNum
 						}
 					}
+				},
+				{
+					title: '优惠添加人',
+					key: 'discountAddPsn',
+					align: 'center',					
 				}
 			],
 

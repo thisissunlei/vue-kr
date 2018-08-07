@@ -525,6 +525,11 @@
                         key: 'saleNum',
                         align: 'center'
                     },
+				    {
+				    	title: '优惠添加人',
+				    	key: 'discountAddPsn',
+				    	align: 'center',					
+				    },
                     {
                         title: '签约价',
                         key: 'discountedPrice',

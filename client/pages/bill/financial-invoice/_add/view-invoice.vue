@@ -69,7 +69,7 @@
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.registerPhone" 
-                                placeholder="请输入注册电话" 
+                                placeholder=""
                             />
                         </FormItem>
                         
@@ -79,7 +79,7 @@
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bank" 
-                                placeholder="请输入开户银行" 
+                                placeholder=""
                             />
                         </FormItem>
                         
@@ -89,7 +89,7 @@
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bankAccount" 
-                                placeholder="请输入银行账户" 
+                                placeholder=""
                             />
                         </FormItem>
                         
@@ -166,13 +166,26 @@
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
-                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
-                    <Button class="view-btn" @click="rejectedSubmit" v-if="isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
+                    <Button class="view-btn" @click="makeSureClick(formItem)" :disabled="disabled" v-if="isReady && formItem.verifyStatus=='VERIFYING'">确认无误</Button>
+                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!isReady">保存并关闭</Button>
+                    <Button class="view-btn" @click="cancel" v-if="isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
                 </div>
             </FormItem>
 
         </Form>
-
+        <Modal
+            v-model="openReject"
+            title="驳回理由"
+            width="500"
+        >
+            <div  v-if="openReject">
+                <span style="height:30px;display:inline-block;">驳回理由:</span><Input v-model="rejectReason" type="textarea" :rows="4" placeholder="请输入驳回理由" />
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="rejectedSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="cancel">取消</Button>
+            </div>
+        </Modal>
         
     </div>
 </template>
@@ -336,7 +349,9 @@ import utils from '~/plugins/utils';
                 taxUrlName:[],
                 eyeIndex:0,
                 imgData:[],
-
+                openReject:false,
+                editItem: {},
+                rejectReason:''
             }
         },
         head() {
@@ -405,15 +420,20 @@ import utils from '~/plugins/utils';
             downImg(url,id){
                 utils.downImg(url);
             },
+          cancel(item){
+            this.editItem = item;
+            this.openReject = !this.openReject;
+          },
             rejectedSubmit(){
                 let param = Object.assign({},this.$route.query);
                 let params = {
                     handleType:'reject',
                     id :param.id,
+                    rejectReason:this.rejectReason
                 }
                 this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
                     window.close();
-                window.opener.location.reload(); 
+                window.opener.location.reload();
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -527,6 +547,20 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
 
             },
+            makeSureClick(item) {
+              let params = {
+                handleType:'affirm',
+                id :item.id,
+                rejectReason:''
+              }
+              this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                window.close();
+              }).catch((err)=>{
+                this.$Notice.error({
+                  title:err.message
+                });
+              })
+            }
         }
     }
 </script>

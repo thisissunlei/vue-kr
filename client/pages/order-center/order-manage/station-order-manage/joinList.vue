@@ -306,6 +306,8 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
+                        width:76,
+                        className:'col-operate',
                         render:(tag,params)=>{
                            var btnRender=[
                                tag(Buttons, {
@@ -599,8 +601,8 @@
 
 </script>
 
-<style lang='less' scoped>
-   .m-join-list{
+<style lang='less' >
+.m-join-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;
@@ -629,12 +631,18 @@
             //     padding-left: 10px;
             //     padding-right: 10px;
             // }
+            .col-operate{
+                .ivu-table-cell{
+                    padding-left: 0;
+                    padding-right: 0
+                }
+            }
         }
         .list-footer{
             margin: 10px 20px;
             overflow: hidden;
         }
-   }
+   
    .m-bill-search{
         display:inline-block;
         height:22px;
@@ -660,4 +668,5 @@
      .u-nullify{
          text-decoration: line-through;
      }
+}
 </style>

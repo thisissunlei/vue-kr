@@ -124,6 +124,7 @@ export default {
             }
         };
         return {
+            isEdit:false,
             UIShowAble: {
                 editBtn: false,//true显示
                 approveBtn: false,
@@ -197,19 +198,20 @@ export default {
                 this.formItem.communityIdIn = this.receivedApplyInfo.detailList[0].communityIdIn;
                 this.formItem.communityIdOut = this.receivedApplyInfo.detailList[0].communityIdOut;
                 this.formItem.customerId = this.receivedApplyInfo.customerId;
-                this.getMaxAmount().then(() => {
-                    let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
-                    let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
-                    this.formItem = Object.assign({}, this.formItem, obj)
+                this.formItem.transferAmount=this.receivedApplyInfo.detailList[0].transferAmount;
+                // this.getMaxAmount().then(() => {
+                //     let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
+                //     let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
+                //     this.formItem = Object.assign({}, this.formItem, obj)
 
 
-                    this.getCusomerList(obj.customerId).then(
-                        () => {
-                            this.communitiesOut = [].concat(this.communities)
-                            this.communitiesIn = [].concat(this.communities)
-                        }
-                    )
-                });
+                //     this.getCusomerList(obj.customerId).then(
+                //         () => {
+                //             this.communitiesOut = [].concat(this.communities)
+                //             this.communitiesIn = [].concat(this.communities)
+                //         }
+                //     )
+                // });
 
             }).then(() => {
                 this.checkRights();
@@ -297,7 +299,9 @@ export default {
         },
         changeCommunityOut(commOut) {
             this.communitiesIn = [].concat(this.communities).filter(item => item.value != commOut)
-            this.getMaxAmount();
+            if(this.isEdit){
+                this.getMaxAmount();  
+            }
         },
         onGetCmtsList(list) {
             this.communities = [].concat(list);
@@ -338,6 +342,7 @@ export default {
             this.communitiesOut = list.filter(item => item.value !== this.formItem.communityIdIn)
         },
         handleEdit() {
+            this.isEdit=true
             let obj = {
                 customer: false,
                 cummunityIn: false,

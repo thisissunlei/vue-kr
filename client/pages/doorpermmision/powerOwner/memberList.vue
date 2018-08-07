@@ -19,7 +19,7 @@
                     <span>确认删除</span>
                 </p>
                 <div style="text-align:center">
-                    <p>如果把会员从该组删除，会员将失去该组内所有设备权限</p>
+                    <p>如果把会员从该组删除，会员将失去该组设备权限</p>
                     <p>确定删除吗？</p>
                 </div>
                 <div slot="footer">

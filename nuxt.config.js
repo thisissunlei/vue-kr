@@ -22,19 +22,10 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
-<<<<<<< HEAD
     link:pluginsDomain.cssFiles,
     
     script: pluginsDomain.jsFiles
     
-=======
-    script: [
-      { src: pluginsDomain + '/plugins/nav/nav.1.0.0.js' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: pluginsDomain + '/plugins/public/images/favicon.ico' }
-    ]
->>>>>>> feature/lyh/去掉机会判断
   },
   // css: ['~assets/css/main.css'],
   // css: pluginsDomain.cssFiles,

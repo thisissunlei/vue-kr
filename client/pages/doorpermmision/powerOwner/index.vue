@@ -130,11 +130,8 @@ export default {
    computed: {
 
        title : function(){
-           if(this.groupLevel!=="PARENT"){
-                return "权限授予详情（组名称："+ this.groupName + "）"
-           }else{
-                return "已有权限详情（组名称："+ this.groupName + "）"
-           }
+            return "权限授予详情（组名称："+ this.groupName + "）"
+          
        }
    },
    methods:{

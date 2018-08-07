@@ -49,7 +49,8 @@ export default {
         openSetManager:Function,
         reload:Function,
         ifReload:Boolean,
-      openSetMajor: Function
+      openSetMajor: Function,
+      openCheck: Function
     },
     data(){
         return{
@@ -192,7 +193,7 @@ export default {
                    },
                    on: {
                      click: () => {
-                       this.setManager(obj.row)
+                       this.checkAuth(obj.row)
                      }
                    }
                  }, '查看授权书')
@@ -247,6 +248,9 @@ export default {
       changeMajor(params) {
         this.itemDetail=Object.assign({},params);
         this.openSetMajor && this.openSetMajor(this.itemDetail)
+      },
+      checkAuth(params) {
+        this.openCheck && this.openCheck(params);
       }
 
     }

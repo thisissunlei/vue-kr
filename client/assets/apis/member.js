@@ -127,5 +127,11 @@ export default {
     'edit-customer':{
         url: 'api/order/csr/customer/actions/update',
         method: 'post' 
+    },
+    // 查看授权书
+    'check-certificate': {
+      // todo: test
+        url: ' test/krspace-op-web/customer/manager/certificate/list',
+        method: 'get'
     }
 } 

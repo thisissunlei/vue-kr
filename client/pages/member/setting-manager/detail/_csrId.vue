@@ -37,6 +37,7 @@
 							:openSetManager="hideTip"
 							:openSetMajor="openSetMajor"
 							:ifReload="ifReload"
+              :openCheck="openCheck"
 						/>
 					</Tab-pane>
 					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
@@ -105,6 +106,25 @@
 		<div slot="footer">
 		</div>
 	</Modal>
+  <Modal
+      v-model="isCheck"
+      title="查看授权书"
+      ok-text="确定"
+      cancel-text=""
+      width="665"
+  >
+    <div class="checkBox">
+      <div v-for="(item,index) in checkContent" :key="index">
+        <span class="checkLeft">{{item.certifyCmtName}}</span>
+        <a :href="item.authUrl" class="checkRight" target="_blank">{{item.certifyNo}}</a>
+      </div>
+    </div>
+    <div slot="footer" style="text-align: center;">
+      <Button type="primary" @click="closeCheck" size="large">
+        确定
+      </Button>
+    </div>
+  </Modal>
 </div>
 </template>
 <script>
@@ -225,7 +245,9 @@ export default {
 			formData:{},
 			submitManager:null,
       isChangeMajor: false,
-			majorComList: []
+			majorComList: [],
+      isCheck: false,
+      checkContent: []
 		}
 	},
 	mounted:function(){
@@ -364,10 +386,25 @@ export default {
       setTimeout(function(){
         _this.ifReload=false
       },500)
-		}
+		},
+    openCheck(params) {
+      this.$http.get('check-certificate', {
+        customerId: params.mbrId
+      }).then((res)=>{
+        this.isCheck = true;
+        this.checkContent = res.data;
+      }).catch((err)=>{
+        this.$Notice.error({
+          title:err.message
+        });
+      });
+    },
+    closeCheck() {
+		  this.isCheck = false;
+    }
 		
 
-	},
+	}
 	
 
 
@@ -460,9 +497,16 @@ export default {
         }
        
     }
-
 }
 .u-tip{
 	text-align: center;
+}
+.checkBox {
+  font-size: 14px;
+  line-height: 35px;
+  padding: 0 40px;
+  .checkRight {
+    float: right;
+  }
 }
 </style>

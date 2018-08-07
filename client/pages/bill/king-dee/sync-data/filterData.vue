@@ -641,30 +641,20 @@ export default {
             }
             this.$http.post(api, parmas)
                 .then(r => {
+                    if(!r.data.pages){
+                        this.$Notice.warning({
+                        title: r.data
+                    });
+                  //  return;
+                    }
                     this.selectIdsInPages.length = r.data.pages
                     this.unSelectIdsInPages.length = r.data.pages
                     this.totalRecordCount = r.data.total
                     let data = [].concat(r.data.items)
-                    // if (this.isAllSelect) {
-                    //     console.log('this.unSelectIdsInPages',this.unSelectIdsInPages)
-                    //     let unselected = this.unSelectIdsInPages[Number(this.currentPage)]
-                    //     if (unselected && unselected.length > 0) {
-                    //         data.map(item => {
-                    //             unselected.includes(item.id) ? item._checked = false : item._checked = true
-                    //         })
-                    //     }
-                    // } else {
-                    //     let selected = this.selectIdsInPages[Number(this.currentPage)]
-                    //     if (selected && selected.length > 0) {
-                    //         data.map(item => {
-                    //             selected.includes(item.id) ? item._checked = true : item._checked = false
-                    //         })
-                    //     }
-                    // }
                     this.data = [].concat(data)
-                  //  console.log(this.data.map(item=>item.id))
                 })
                 .then(() => {
+                    console.log(22322);
                     if (this.isAllSelect) {
                         let arr = this.unSelectIdsInPages[Number(this.currentPage)];
                         if (!arr || !arr.length) {

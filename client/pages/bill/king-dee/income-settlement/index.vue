@@ -162,7 +162,9 @@ export default {
     methods:{
         // 导出
         exportTable() {
-        utils.commonExport({},'/api/sync/listIncomeStatisticExport');
+        // 添加参数
+       let params = Object.assign({},this.tabForms);
+        utils.commonExport(params,'/api/sync/listIncomeStatisticExport');
       },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.overdue-no-table')[0];
@@ -208,6 +210,7 @@ export default {
                 param.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date( param.startTime ));
                 param.endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(param.endTime));
             }
+            this.tabForms=Object.assign({},param);
            this.$http.get('get-sync-prepaid-settlement', param).then((response)=>{
                 this.totalCount=response.data.total;
                 this.attractData=response.data.items;

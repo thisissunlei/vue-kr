@@ -51,7 +51,7 @@
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             /> -->
-                             <selectCustomers value="请输入客户名称"  :onchange="changeCustomer"     style="display:inline-block;width:200px" />
+                             <selectCustomers value="请输入客户名称"  v-model="formItem.customerId"  style="display:inline-block;width:200px" />
                         </Form-item>     
                         <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
@@ -131,7 +131,7 @@ import utils from '~/plugins/utils';
 import Message from '~/components/Message';
 import SelectCity from '~/components/SelectCommon/SelectCity';
 import SelectCommunity from '~/components/SelectCommon/SelectCommunity';
-import selectCustomers from '~/components/SelectCustomers.vue';
+import selectCustomers from '~/components/newSelectCustomers.vue';
 export default {
     components:{
       SelectCity,
@@ -219,40 +219,13 @@ export default {
     },
     mounted(){
         this.formItemOld=Object.assign({},this.formItem);
-        // let rou=this.$route.query;
-        // if(rou.cityId){
-        //     this.formItem=Object.assign({},rou);
-        // };
+       
         this.getMainBody();
         this.gettaxNatureType();
         this.getIncomeType();
         this.getCity();
         this.$emit('initData',this.formItem);
     },
-    // computed: {
-    //   cityId() {
-    // 　　　　return this.formItem.cityId
-    // 　},
-    //   communityId(){
-    //       return this.formItem.communityId
-    //   }
-    // },
-    // watch:{
-    //     // 监听 cityid 和 communityid
-    //   cityId:function(val){
-    //       this.cityParams=Object.assign({},{cityId:val})
-    //       if(!(this.formItem.communityId.trim())&&this.$route.query.cityId){
-    //           this.$emit('initData',this.formItem);
-    //       }
-    //   },
-    //   communityId:function(val) {
-    //       let rou=this.$route.query;
-    //       this.communityNum++;
-    //       if(this.communityNum==1){
-    //           this.$emit('initData',this.formItem);
-    //       }
-    //   }
-    // },
     methods:{
         // city
         getCity(){
@@ -334,8 +307,7 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
-          //  this.$emit('clearClick',this.formItem);
-
+           // this.changeCustomer('');
         },
         //回车
         onKeyEnter(){

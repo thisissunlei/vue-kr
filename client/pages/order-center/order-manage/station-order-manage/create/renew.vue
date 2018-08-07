@@ -542,6 +542,9 @@ export default {
         },
         validIsManager(){
             this.isManager =this.renewForm.customerId && this.renewForm.communityId;
+            if(!this.isManager){
+                return ;
+            }
             let params={};
             params.customerId=this.renewForm.customerId;
             params.communityId=this.renewForm.communityId;

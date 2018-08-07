@@ -620,6 +620,9 @@ export default {
         },
         validIsManager(){
             this.isManager =this.formItem.customerId && this.formItem.communityId;
+            if(!this.isManager){
+                return ;
+            }
             let params={};
             params.customerId=this.formItem.customerId;
             params.communityId=this.formItem.communityId;

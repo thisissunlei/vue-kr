@@ -57,9 +57,9 @@
                   </Tooltip>   
                 </div>
                 <span class="title" v-if="tab!='all'">在租</span> 
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">已起租未生效</span>

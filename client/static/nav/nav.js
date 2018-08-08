@@ -1,5 +1,5 @@
 (function (global) {
-
+    console.log('init-------')
     // var NavItems = getNavs();
     var menuCode = [];
     var navUtils = {
@@ -19,7 +19,6 @@
         bodyDom:'',
         contentDom:'',
         menuBtnBacks:[],
-        closeRoutrs:[],
     
     }
     //侧栏按钮
@@ -53,32 +52,25 @@
         if (port) {
             port = ":" + port;
         }
-        if(router.indexOf('http://')!=-1&&router.indexOf('https://')!=-1){
-				return  router;
-		}
         if(type && type == 'admin'){
-            if(nowType == 'admin'){
-                return router;
-            }
+           
             alias = '/new/#'
+            return '/new/#'+router;
         }
         if (type && type == "vue") {
-            if(nowType == 'vue'){
-                return router;
-            }
             alias = '';
+            return router;
         }
         if(type && type == 'project'){
-            if(nowType == 'project'){
-                return router;
-            }
+           
+            
             alias = '/project/#'
+            return '/project/#'+router;
         }
         if(type && type == 'product'){
-            if(nowType == 'product'){
-                return router;
-            }
+    
             alias = '/product/#'
+            return '/product/#'+router;
         }
         if(type && type == "member"){
             alias = '/';
@@ -102,7 +94,6 @@
     function setDefaultHeader(value) {
         setTimeout(function(){
             var j_li = document.getElementsByName(value)[0];
-            console.log(j_li,"kkkkk")
             if(j_li){
                 j_li.setAttribute("class", "active");
             }else{
@@ -208,15 +199,20 @@
         var showSidebar = 'block';
         var menuName = 'menu-btn menu-btn-open';
         var router = getRouter();
+        // console.log(navUtils.closeRoutrs,"pppppppppp")
         for(let i=0;i<navUtils.closeRoutrs.length;i++){
             if(router == navUtils.closeRoutrs[i]){
-                navUtils.contentDom.style.paddingLeft = "0px";
+                if(navUtils.contentDom){
+                    navUtils.contentDom.style.paddingLeft = "0px";
+                }
+               
                 showSidebar = 'none';
                 menuName = 'menu-btn menu-btn-close';
-            
+               
                break;
             }
         }
+        
        
         
         var html = '<div class="app-header">' +
@@ -317,7 +313,7 @@
         
         
         var otherActive = 'normal';
-        console.log(navs,"ooooo")
+    
         navs.map(function (item, index) {
             var href = "";
             let oldHref =''; 
@@ -411,6 +407,7 @@
 
     //路由发生变化
     function routerRefresh() {
+        
         var navs = [].concat(navUtils.navs);
         var router = getRouter();
         var activeData = getClickNav([].concat(navs), router);
@@ -422,9 +419,11 @@
     };
 
     function pushCloseRoutrs(flag){
+       
         if(flag == 'false'){
             navUtils.closeRoutrs.push(getRouter());
         }
+        routerRefresh();
         // renderHanderAndSidebar();
        
     }
@@ -453,8 +452,8 @@
     }
   
     
-    function vueNavRender(dom,contentDom){
-        console.log(dom,"--------",dom)
+   global.vueNavRender =  function (dom,contentDom){
+    //    console.log("dddd",dom,contentDom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
         if(typeof(Storage)!=="undefined")
@@ -471,10 +470,11 @@
         getNavData();
     }
     // window.onload = function(){
-        vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
+        // vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
     // }
+    window.addEventListener('hashchange',routerRefresh);
     
-    renderHanderAndSidebar();
+    // renderHanderAndSidebar();
     function getNavData(){
          // console.log("pppppp------",dom)
          http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){

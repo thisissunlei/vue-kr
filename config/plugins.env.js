@@ -26,9 +26,10 @@ const envs = {
 }
 const pluginsDomain  = envs[process.env.NODE_ENV].plugins+'/plugins';
 const jsFiles = [
-   {src: pluginsDomain+'/nav/1.0.0/nav.js'},
-   {src: 'https://web.krspace.cn/kr-op/echarts/4.1.0/echarts.min.js'},
-   {src: 'https://web.krspace.cn/kr-op/go/1.8.14/go.js'},
+    {src: pluginsDomain+'/nav/nav.1.0.0.js'},
+    // {src:'/nav/nav.js'},
+    {src: 'https://web.krspace.cn/kr-op/echarts/4.1.0/echarts.min.js'},
+    {src: 'https://web.krspace.cn/kr-op/go/1.8.14/go.js'},
 ]
 const cssFiles = [
     // {rel:'stylesheet', herf: 'https://web.krspace.cn/kr-op/iview/2.8.0/styles/iview.css'},

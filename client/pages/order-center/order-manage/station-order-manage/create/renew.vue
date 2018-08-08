@@ -421,11 +421,6 @@ export default {
 
         }
     },
-    head() {
-        return {
-            title: '新建续租服务订单管理'
-        }
-    },
     components: {
         SectionTitle,
         SelectCommunities,

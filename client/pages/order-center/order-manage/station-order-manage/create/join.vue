@@ -486,11 +486,6 @@ export default {
 
         }
     },
-    head() {
-        return {
-            title: '新建订单'
-        }
-    },
     components: {
         SectionTitle,
         selectCommunities,

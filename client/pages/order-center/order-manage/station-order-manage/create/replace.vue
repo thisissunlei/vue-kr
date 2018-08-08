@@ -808,12 +808,6 @@
 
             }
         },
-
-        head() {
-            return {
-                title: '新建换租订单'
-            }
-        },
         components: {
             SectionTitle,
             SelectSaler,

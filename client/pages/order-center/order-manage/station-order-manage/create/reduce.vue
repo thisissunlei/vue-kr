@@ -187,11 +187,6 @@ import utils from '~/plugins/utils';
 
            }
         },
-        head() {
-            return {
-                title: '新建减租服务订单管理'
-            }
-        },
         components: {
             SectionTitle,
             selectCommunities,

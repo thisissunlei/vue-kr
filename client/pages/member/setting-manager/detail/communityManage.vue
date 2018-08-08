@@ -58,6 +58,9 @@ export default {
                 }else{
                      this.checkAll=false; 
                 }
+                let checkList=[].concat(this.checkAllGroup);
+                this.checkList=checkList.join(',');
+                this.$emit('checkData',this.checkList)
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

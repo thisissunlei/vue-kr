@@ -504,6 +504,7 @@
            
         })
     }
+    renderHanderAndSidebar();
   
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏

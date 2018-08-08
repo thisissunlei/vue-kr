@@ -2,29 +2,29 @@ Arguments:
   /Users/mac/.nvm/versions/node/v10.7.0/bin/node /usr/local/bin/yarn
 
 PATH: 
-  /Users/mac/.nvm/versions/node/v10.7.0/bin:~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/songkk/kr-dev:/Users/songkk/kr-dev/bin
 
 Yarn version: 
-  1.6.0
+  1.7.0
 
 Node version: 
-  10.7.0
+  9.2.0
 
 Platform: 
   darwin x64
 
 Trace: 
   Error: http://krnpm.corp.krspace.cn/@nuxtjs%2faxios: no such package available
-      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:65327:18)
-      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:133155:22)
-      at Request.emit (events.js:182:13)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:134138:10)
-      at Request.emit (events.js:182:13)
-      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:134058:12)
-      at Object.onceWrapper (events.js:273:13)
-      at IncomingMessage.emit (events.js:187:15)
-      at endReadableNT (_stream_readable.js:1081:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:65656:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:134675:22)
+      at Request.emit (events.js:159:13)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:135658:10)
+      at Request.emit (events.js:159:13)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:135578:12)
+      at Object.onceWrapper (events.js:254:19)
+      at IncomingMessage.emit (events.js:164:20)
+      at endReadableNT (_stream_readable.js:1054:12)
+      at _combinedTickCallback (internal/process/next_tick.js:138:11)
 
 npm manifest: 
   {
@@ -34,7 +34,7 @@ npm manifest:
     "author": "张屈 <joneyphair@qq.com>",
     "private": true,
     "scripts": {
-      "nuxt": "nuxt",
+      "nuxt":"nuxt",
       "dev": "cross-env NODE_ENV=development node --max_old_space_size=4096 server/index.js",
       "dev:test": "cross-env NODE_ENV=test node  server/index.js",
       "dev:test01": "cross-env NODE_ENV=test01 node  server/index.js",

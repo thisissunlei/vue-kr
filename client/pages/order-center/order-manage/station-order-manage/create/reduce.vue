@@ -79,6 +79,11 @@ import utils from '~/plugins/utils';
 
 
     export default {
+        head () {
+            return {
+                title: "新建减租订单-氪空间后台管理系统"
+            }
+        },
         data() {
 
            return{

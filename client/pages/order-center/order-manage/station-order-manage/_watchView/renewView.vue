@@ -101,7 +101,7 @@ export default {
 	name: 'RenewView',
 	head() {
 		return {
-			title: '续租详情'
+			title: "查看续租订单详情-氪空间后台管理系统"
 		}
 	},
 	components: {

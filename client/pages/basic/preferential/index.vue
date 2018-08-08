@@ -92,6 +92,11 @@ export default {
             Message,
             CreateSale,
             Create
+        },  
+        head () {
+            return {
+                title: "工位折扣-氪空间后台管理系统"
+            }
         },
         data () {
             return {

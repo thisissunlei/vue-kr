@@ -226,6 +226,11 @@ import SelectChance from '~/components/SelectSaleChance.vue';
 
 
 export default {
+    head () {
+        return {
+            title: "新建续租订单-氪空间后台管理系统"
+        }
+    },
     data() {
         const validateFirst = (rule, value, callback) => {
             if (value === '') {

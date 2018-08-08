@@ -251,7 +251,11 @@ import ListAndMap from '../listAndMap';
 
 export default {
 
-
+    head () {
+        return {
+            title: "新建入驻订单-氪空间后台管理系统"
+        }
+    },
     data() {
         const validateFirst = (rule, value, callback) => {
             if (value === '') {

@@ -92,7 +92,12 @@ export default {
     Discount,
     Loading,
     Configuration
-  },
+  },  
+    head () {
+        return {
+            title: "库存平面图-氪空间后台管理系统"
+        }
+    },
   data(){
     return{
        openTime:false,

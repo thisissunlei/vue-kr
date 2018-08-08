@@ -66,7 +66,7 @@ export default {
     },
     head () {
         return {
-            title: "管家管理"
+            title: "管家管理-氪空间后台管理系统"
         }
     },
     data () {

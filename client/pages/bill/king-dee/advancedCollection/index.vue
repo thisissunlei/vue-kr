@@ -69,6 +69,7 @@
           startTime: '',
           endTime: ''
         },
+        oldParam:{},
         billList: [],
         incomeType: {},
         columns: [
@@ -210,7 +211,7 @@
           }
         }
         let data = Object.assign(newParams, {page: this.page});
-      
+        this.oldParam = data;
         this.$http.get('get-advanced-collection-list', data).then((res) => {
           this.billList = res.data.items;
           this.totalCount = res.data.total;
@@ -247,7 +248,7 @@
       },
       exportTable() {
         //todo
-        utils.commonExport({},'/api/sync/paymentSummaries/export');
+        utils.commonExport(this.oldParam,'/api/sync/paymentSummaries/export');
       }
     }
 

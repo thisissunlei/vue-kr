@@ -62,6 +62,7 @@
         MessageType: '',
         pageSize: 20,
         page: 1,
+        oldParam:{},
         tabParams: {
           page: 1,
           pageSize: 20,
@@ -238,9 +239,10 @@
           }
         }
         let data = Object.assign(newParams, {page: this.page,pageSize:this.pageSize});
+        this.oldParam = data;
         this.$http.get('get-receivable-collection-list', data).then((res) => {
           this.billList = res.data.items;
-          this.totalCount = res.data.totalCount;
+          this.totalCount = res.data.total;
         }).catch((error) => {
           this.$Notice.error({
             title: error.message
@@ -274,7 +276,7 @@
       },
       exportTable() {
         // todo
-        utils.commonExport({},'/api/sync/incomeSummaries/export');
+        utils.commonExport(this.oldParam,'/api/sync/incomeSummaries/export');
       }
     }
 

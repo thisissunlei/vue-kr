@@ -115,15 +115,7 @@
                         </Col>
                     </Row>
                 </div>
-                <!-- <Row>
-                    <Col span="6" class="col">
-                    <FormItem label="同步状态">
-                        <Select v-model="formItem.syncStatus" placeholder="同步状态" class="form-item-input" @on-change='filterData'>
-                            <Option v-for="item in syncStateList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                    </Col>
-                </Row> -->
+               
             </Form>
         </div>
         <div class="table-zone">
@@ -164,22 +156,6 @@ export default {
         Loading
     },
     props: {
-        // syncDataId: {
-        //     type: Number,
-        //     required: true,
-        // },
-        // syncType: {
-        //     type: String,
-        //     required: true,
-        // },
-        // startTime: {
-        //     type: String,
-        //     required: true,
-        // },
-        // endTime: {
-        //     type: String,
-        //     required: true,
-        // },
     },
     data() {
         return {
@@ -484,39 +460,6 @@ export default {
                 { key: 'recAccountBank', align: 'center', title: '银行收款账号', width: 180 },
                 { key: 'recBillTypeDesc', align: 'center', title: '收款类型', width: 120, },
                 { key: 'settlementTypeDesc', align: 'center', title: '结算方式', width: 120, },
-                // { key: 'syncDataId', title: '同步记录id' },
-                // {
-                //     key: 'syncStatus',
-                //     align: 'center',
-                //     title: '同步状态',
-                //     fixed:'right',
-                //     width:120,
-                //     render(h, params) {
-                //         let status = params.row.syncStatus.toUpperCase().trim();
-                //         let ststusEnum = [
-                //             {
-                //                 label: '已同步',
-                //                 value: 'ALREADY_SYNC'
-                //             },
-                //             {
-                //                 label: '未同步',
-                //                 value: 'NOT_SYNC'
-                //             },
-                //             {
-                //                 label: '同步失败',
-                //                 value: 'FAILED_SYNC'
-                //             },]
-                //         let label = '-';
-                //         let item = ststusEnum.filter(s => s.value == status)
-                //         if (item.length > 0) {
-                //             label = item[0].label
-                //         }
-                //         return h('span', label)
-                //     }
-
-                // },
-
-                //     { key: 'failedMsg', align: 'center', title: '失败消息' ,width:120, fixed:'right'},
                 {
                     key: 'remark',
                     title: '备注',
@@ -529,12 +472,6 @@ export default {
                             // }
                         }, [
                                 h('div', {
-                                    style: {
-                                        //   width: "40px",
-                                        //   overflow: "hidden",
-                                        //   textOverflow: "ellipsis",
-                                        //   whiteSpace: "nowrap"
-                                    }
                                 }, params.row.remark || '-'),
                                 h('div', {
                                     style: {
@@ -567,19 +504,6 @@ export default {
         },
     },
     methods: {
-        // handleTest() {
-        //     if (this.syncType === 'INCOME') {
-        //         this.syncType = 'PAYMENT'
-        //         this.syncDataId = 81
-        //     } else {
-        //         this.syncType = 'INCOME'
-        //         this.syncDataId = 117
-        //     }
-        //     this.getListData()
-        // },
-        // handleTestNotCheckAll() {
-        //     this.isAllSelect = false;
-        // },
          // 主体 
         getMainBody(){
             this.$http.get('krspace-op-web-fna-corporation').then((response)=>{
@@ -602,6 +526,7 @@ export default {
             this.syncType = query.syncType
         },
         getListData() {
+            let result_data;
             let parmas = Object.assign({}, this.params)
             parmas.syncDataId = this.syncDataId;
             let api = 'get-sync-income-data-list'
@@ -641,11 +566,12 @@ export default {
             }
             this.$http.post(api, parmas)
                 .then(r => {
-                    if(!r.data.pages){
+                    result_data = !r.data.pages;
+                    if(result_data){
                         this.$Notice.warning({
                         title: r.data
                     });
-                  //  return;
+                    return;
                     }
                     this.selectIdsInPages.length = r.data.pages
                     this.unSelectIdsInPages.length = r.data.pages
@@ -654,15 +580,20 @@ export default {
                     this.data = [].concat(data)
                 })
                 .then(() => {
-                    console.log(22322);
+                     if(result_data){
+                         return;
+                    };
                     if (this.isAllSelect) {
                         let arr = this.unSelectIdsInPages[Number(this.currentPage)];
                         if (!arr || !arr.length) {
                             this.$refs.selection.selectAll(true);
                         }
-                    }
+                    }    
                 }).then(() => {
-                    let data = [].concat(this.data)
+                    if(result_data){
+                         return;
+                    };
+                    let data = [].concat(this.data);
                     if (this.isAllSelect) {
                         console.log('this.unSelectIdsInPages', this.unSelectIdsInPages)
                         let unselected = this.unSelectIdsInPages[Number(this.currentPage)]
@@ -790,12 +721,12 @@ export default {
         },
         //获取同步状态
         loopSuccess() {
-            console.log("hhhhhh")
+           
             this.$http.get('get-sync-findSyncStatus-loop', {
                 syncDataId: this.$route.query.syncId,
             })
                 .then(r => {
-                    console.log(r, "ppppppp")
+                  
                     if (r.data.syncStatus == "ALREADY_SYNC") {
                         this.titleMessage = '同步成功';
                         this.$Notice.success({ title: '同步成功' });

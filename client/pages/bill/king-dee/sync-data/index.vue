@@ -51,6 +51,11 @@ import dateUtils from 'vue-dateutils';
 import Buttons from '~/components/Buttons';
 export default {
         name:'Join',
+        head() {
+		return {
+			title: '同步数据 - 氪空间后台管理系统'
+		}
+	},
        components:{
                 Loading,
                 SearchForm,
@@ -200,17 +205,13 @@ export default {
                 {
                     title: '操作人',
                     key: 'operatorName',
-                    align:'center',
-      //              width:100,
-                 
+                    align:'center',   
                 },
                 {
                     title: '备注',
                     key: 'remark',
                     className:'current-range',
                     align:'center',
-      //              width:100, 
-                 
                 },
                 {
                     title: '操作',

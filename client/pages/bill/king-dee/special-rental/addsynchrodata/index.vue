@@ -40,6 +40,11 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 export default {
+  head() {
+		return {
+			title: '新增出租方'
+		}
+	},
   created () {
     this.getCusomerList()
     this.getCusomerList2()

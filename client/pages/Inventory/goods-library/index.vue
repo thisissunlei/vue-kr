@@ -42,7 +42,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :current='tabForms.page' :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :total="totalCount" :current='tabForms.page' :page-size='tabForms.pageSize' show-total show-elevator show-sizer :page-size-opts="pageArray" placement="top" @on-change="onPageChange" @on-page-size-change="pageSizeChange"/>
                 </div>
             </div>
         </div>
@@ -372,6 +372,7 @@ export default {
             },
           data() {
                 return{
+            pageArray:[100,200,500],
             editOpen:false,
             priceOpen:false,
             spaceOpen:false,
@@ -499,24 +500,13 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                         var bacsk=params.row.suiteTypeName;
-                         var devel=params.row.locationTypeName;
-                         var colorClass='redClas' ; 
-                          return h('div', [
-                                        h('span',{
-                                          attrs: {
-
-                                              class:colorClass
-                                        }
-                                        },devel),
-                                        h('span',{
-                                          
-                                        attrs: {
-                                                class:colorClass
-                                            }
-
-                                        },bacsk),
-                                    ])                               
+                         var bacsk=params.row.suiteTypeName?params.row.suiteTypeName:'';
+                         var devel=params.row.locationTypeName?params.row.locationTypeName:'';
+                         let des=params.row.descr?params.row.descr:'';
+                         return h('div', [
+                                h('span',devel+' '+bacsk),
+                                h('div',des),
+                         ])                               
                     }
                 },
                 {
@@ -856,9 +846,15 @@ export default {
          this.$http.post(url,data).then((response)=>{ 
               this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.serviceOpen=!this.serviceOpen;
               this.newmodal=false;
               this.editOpen=false;
+              this.openMessage=true;
+              this.MessageType='success';
+              this.warn="编辑成功";
+              if(!this.isAdd){
+                  this.serviceOpen=!this.serviceOpen;
+                  this.warn="新建成功";
+              }
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";
@@ -1179,8 +1175,11 @@ export default {
                 this.tabForms=Object.assign({},this.tabForms,{page:page})
             },
             onMessageChange(data){
-            this.openMessage=data;
+                this.openMessage=data;
             },
+            pageSizeChange(size){
+                this.tabForms=Object.assign({},this.tabForms,{pageSize:size})
+            }
         }
 }
 </script>

@@ -91,17 +91,17 @@ export default {
     //苏岭添加开始
     //下单页面查询主管理员
     "order-search-manager": {
-        url: "/song/api/krspace-op-web/customer/manager/order/user",
+        url: "/api/krspace-op-web/customer/manager/order/user",
         method: "get"
     },
     //保存：保存变更的主管理员数据
     "store-change-manager": {
-        url: "/song/api/krspace-op-web/customer/manager/order/user",
+        url: "/api/krspace-op-web/customer/manager/order/user",
         method: "post"
     },
     //搜索：手机号查询会员
     "search-phone-member": {
-        url: "/song/api/krspace-op-web/customer/manager/user/detail",
+        url: "/api/krspace-op-web/customer/manager/user/detail",
         method: "get"
     }
     //苏岭添加结束

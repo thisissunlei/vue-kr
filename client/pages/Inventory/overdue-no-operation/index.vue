@@ -56,6 +56,11 @@ export default {
        Buttons,
        SectionTitle
     },
+    head() {
+        return {
+            title: '合同逾期未操作-氪空间后台管理系统'
+        }
+    },
     data() {
         return{
             warn:'',

@@ -55,6 +55,11 @@
             Awarded,
             Loading
         },
+        head() {
+            return {
+                title: '招商角色配置-氪空间后台管理系统'
+            }
+        },
         data () {
             return {
             id:'',

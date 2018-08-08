@@ -22,9 +22,14 @@ import dateUtils from 'vue-dateutils';
 
 
 export default {
-   components:{
-      SectionTitle,SearchForm
-   },
+    components:{
+        SectionTitle,SearchForm
+    },
+    head() {
+        return {
+            title: '开票记录-氪空间后台管理系统'
+        }
+    },
    data(){
      return{
         tableScrollTop : 0,

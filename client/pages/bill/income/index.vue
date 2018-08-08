@@ -83,7 +83,7 @@ import utils from '~/plugins/utils';
         },
         head () {
             return {
-                title: "应收管理"
+                title: "应收-氪空间后台管理系统"
             }
         },
         data () {

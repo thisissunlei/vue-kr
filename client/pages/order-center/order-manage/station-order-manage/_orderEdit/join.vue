@@ -318,7 +318,8 @@ export default {
             submitManager:null,
             isAddManager:false,
             isAddEdit:false,
-            userId:'',
+            managerId:'',
+            oldManagerId:'',
             //苏岭结束
 
             orderId:'',
@@ -588,7 +589,7 @@ export default {
             this.submitManager && this.submitManager(this.managerSubmit);
         },
         managerSubmit(){
-            this.userId='';
+            this.managerId='';
 			let Params=Object.assign({},this.formData);
             Params.customerId=this.formItem.customerId;
             Params.communityId=this.formItem.communityId;
@@ -597,7 +598,7 @@ export default {
                 this.isAddManager=false;
                 this.customerInfo=Object.assign({},this.formData);
                 this.isAddEdit=true;
-                this.userId=res.data.userId;
+                this.managerId=res.data.managerId;
 				this.$Notice.success({
 					title:'变更管理员成功'
 				});
@@ -807,7 +808,8 @@ export default {
                 // _this.validSaleChance();
                 _this.getSalerChanceList();
                 //苏岭开始
-                this.isAddEdit=data.userId?true:false;
+                this.isAddEdit=data.managerId?true:false;
+                this.oldManagerId=data.managerId;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
             }, e => {
@@ -901,7 +903,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.userId=this.userId||data.userId;
+            formItem.managerId=this.managerId||this.oldManagerId;
             //苏岭结束
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';

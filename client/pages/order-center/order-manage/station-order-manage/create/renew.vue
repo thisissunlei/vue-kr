@@ -286,7 +286,7 @@ export default {
             submitManager:null,
             isAddManager:false,
             isAddEdit:false,
-            userId:'',
+            managerId:'',
             //苏岭结束
 
             chanceDisable:false,
@@ -520,7 +520,7 @@ export default {
 			var _this=this;
 			this.$http.post('store-change-manager', Params).then((res)=>{
                 this.isAddManager=false;
-                this.userId=res.data.userId;
+                this.managerId=res.data.managerId;
                 this.customerInfo=Object.assign({},this.formData);
                 this.isAddEdit=true;
 				this.$Notice.success({
@@ -718,7 +718,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.userId=this.userId;
+            formItem.managerId=this.managerId;
             //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';

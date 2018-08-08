@@ -311,7 +311,7 @@ export default {
             submitManager:null,
             isAddManager:false,
             isAddEdit:false,
-            userId:'',
+            managerId:'',
             //苏岭结束
 
             chanceDisable:false,
@@ -599,7 +599,7 @@ export default {
 			this.$http.post('store-change-manager', Params).then((res)=>{
                 this.isAddManager=false;
                 this.customerInfo=Object.assign({},this.formData);
-                this.userId=res.data.userId;
+                this.managerId=res.data.managerId;
                 this.isAddEdit=true;
 				this.$Notice.success({
 					title:'变更管理员成功'
@@ -794,7 +794,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.userId=this.userId;
+            formItem.managerId=this.managerId;
             //苏岭结束
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';

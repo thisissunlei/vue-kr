@@ -7,9 +7,9 @@
                         输入需要设为主管理员的账号，可以为非企业员工客户旧的主管理员将会在本订单合同生效后自动失效
                     </div>
                     <div class="u-part-content">
-                         <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="mbrPhone">
+                         <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="phone">
                             <Input 
-                                v-model="formItem.mbrPhone" 
+                                v-model="formItem.phone" 
                                 placeholder="请输入手机号"
                                 :maxlength='11'
                                 
@@ -17,15 +17,15 @@
                         </FormItem>
                         <Button type="primary" class="u-search-btn"  @click="searchInfo">搜索</Button>
                         <div v-if="ifShow">       
-                            <FormItem label="姓名" class="u-input" prop="mbrName">
+                            <FormItem label="姓名" class="u-input" prop="name">
                                 <Input 
-                                    v-model="formItem.mbrName" 
+                                    v-model="formItem.name" 
                                     placeholder="请输入姓名"
                                 />
                             </FormItem>
-                            <FormItem label="邮箱" class="u-input" prop="mbrEmail">
+                            <FormItem label="邮箱" class="u-input" prop="email">
                                 <Input 
-                                    v-model="formItem.mbrEmail" 
+                                    v-model="formItem.email" 
                                     placeholder="请输入邮箱"
                                     type="email"
                                 />
@@ -70,20 +70,18 @@ export default {
             communityList:[],
             ifShow:false,
             formItem:{
-               cmtIds:'',
-               mbrPhone:'',
-               mbrName:'',
-               mbrEmail:'',
-               mbrIdCardNo:''
+               phone:'',
+               name:'',
+               email:'',
             },
             ruleCustom:{
-                mbrPhone:[
+                phone:[
                     {validator:validatePhone,required: true,  trigger:'change' }
                 ],
-                mbrName:[
+                name:[
                     { required: true, message: '请输入姓名', trigger: 'change' }
                 ],
-                mbrEmail:[
+                email:[
                     {required: true, message: '请输入邮箱', trigger: 'change' }
                 ],
           }       
@@ -94,7 +92,7 @@ export default {
     },
     methods:{
         searchInfo(){
-            let phone=this.formItem.mbrPhone;
+            let phone=this.formItem.phone;
             let form={
               mbrPhone: phone ,
               customerId:this.customerId

@@ -73,7 +73,7 @@ export default {
                                 }, params.row.seatNames || '-'),
                                 h('div', {
                                     style: {
-                                        wordWrap: "break-word"
+                                        whiteSpace: "normal"
                                     },
                                     slot: 'content'
                                 }, params.row.seatNames || '-')

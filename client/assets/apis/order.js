@@ -126,12 +126,14 @@ export default {
     },
     //优惠选项communityId
     "sale-tactics": {
-        url: "/api/krspace-op-web/sale-tactics?",
+        // url: "/api/krspace-op-web/sale-tactics?",
+        url: "/api/krspace-order-web/cmt/discount/sale-tactics?",
         method: "get"
     },
     //计算优惠
     "count-sale": {
-        url: "/api/krspace-op-web/count-order-sale",
+        // url: "/api/krspace-op-web/count-order-sale",
+        url: "/api/krspace-order-web/cmt/discount/count-order-sale",
         method: "post"
     },
     //获取可选择的续租工位
@@ -212,7 +214,8 @@ export default {
     },
     // 获取社区优惠信息接口
     "get-free-sale": {
-        url: "/api/krspace-op-web/cmt-free-sale",
+        // url: "/api/krspace-op-web/cmt-free-sale",
+        url: "/api/krspace-order-web/cmt/discount/cmt-free-sale",
         method: "get"
     },
     // step3->服务费明细(免租下列表)
@@ -222,7 +225,8 @@ export default {
     },
     // 输入免租天数以后获取免租开始时间
     "get-free-start-date": {
-        url: "/api/krspace-op-web/free-start-date",
+        // url: "/api/krspace-op-web/free-start-date",
+        url: "/api/krspace-order-web/cmt/discount/free-start-date",
         method: "post"
     },
     // step4->换租详情

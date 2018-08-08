@@ -56,7 +56,7 @@ export default {
   },
   head () {
         return {
-            title: "推送管理"
+            title: "推送管理-氪空间后台管理系统"
         }
  },
   data(){

@@ -114,6 +114,11 @@ import Buttons from '~/components/Buttons';
 import Community from './community'
 
 export default {
+        head () {
+            return {
+                title: "计算器配置-氪空间后台管理系统"
+            }
+        },
         components:{
             SectionTitle,
             Message,

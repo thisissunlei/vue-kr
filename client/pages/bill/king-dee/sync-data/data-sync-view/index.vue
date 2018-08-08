@@ -28,9 +28,12 @@
 				</LabelText>
 				<LabelText label="同步状态：" >
 					{{detailData.syncStatusName|| '-'}}
-				</LabelText>
+				</LabelText>  
 				<LabelText label="同步数据类型：" >
 					{{detailData.syncDataTypeName|| '-'}}
+				</LabelText>
+				<LabelText label="失败原因：" >
+					{{detailData.failedMsg|| '-'}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="过滤条件">

@@ -4,7 +4,7 @@
         <div class="search-zone">
             <Form ref="formItem" :model="formItem" class="form-search">
                 <Row>
-                    <Col span="6" class="col">
+                    <Col span="7" class="col">
                     <FormItem label="日期区间">
                         <DatePicker v-model="startTime" type="date" :disabled='true' placeholder="开始日期" style='width:100px' />
                         <span class="u-date-txt" style='padding:0 5px'>至</span>

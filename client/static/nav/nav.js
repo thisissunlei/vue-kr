@@ -74,12 +74,6 @@
             }
             alias = '/project/#'
         }
-        if(type && type == 'product'){
-            if(nowType == 'product'){
-                return router;
-            }
-            alias = '/product/#'
-        }
         if(type && type == "member"){
             alias = '/';
             hostname =  'memberadmin.krspace.cn';
@@ -453,63 +447,36 @@
     }
   
     
-    function vueNavRender(dom,contentDom){
-        console.log(dom,"--------",dom)
+    global.vueNavRender = function(dom,contentDom){
+        // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        if(typeof(Storage)!=="undefined")
-	    {
-            if (sessionStorage.user){
-                navUtils.navs = JSON.parse(sessionStorage.navs);
-                navUtils.user = JSON.parse(sessionStorage.user);
-                routerRefresh();
-                return;
-            }
-           
-        }
-        // sessionStorage.navs = 12222
-        getNavData();
-    }
-    // window.onload = function(){
-        vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
-    // }
-    
-    renderHanderAndSidebar();
-    function getNavData(){
-         // console.log("pppppp------",dom)
-         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
-            var navs = [{
-                iconUrl: "icon-card",
-              
-                name: "首页",
-             
-                showFlag: "YES",
-                sideFoldFlag: "YES",
-               
-                topFoldFlag: "YES",
-                url: "/"
-            }].concat(response.data);
+        
+        // console.log("pppppp------",dom)
+        http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+            var navs = [].concat(response.data);
             routerRefresh();
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;
                 window.resourcesCode = response.data.resourcesCode;
-                navUtils.navs = [].concat(navs);
-                navUtils.user = Object.assign({},user);
-                sessionStorage.navs = JSON.stringify([].concat(navs));
-                sessionStorage.user =   JSON.stringify(Object.assign({},user));
-                
+                navUtils.navs = [].concat(navUtils.navs,navs);
+                navUtils.user = Object.assign(user);
                 routerRefresh();
             })
            
         })
     }
     renderHanderAndSidebar();
-  
+    window.addEventListener('load',function(){
+
+    })
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
     global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部
     global.LISTENSIDEBAROPEN = listenSidebarOpen;//监听开关
-   
+    // global.GLOBALHEADERSET = Router.setDefaultHeader;
+
+    // Router.init();
     
 })(window);

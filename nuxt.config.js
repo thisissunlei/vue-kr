@@ -26,7 +26,6 @@ module.exports = {
     
     script: pluginsDomain.jsFiles
     
-
   },
   // css: ['~assets/css/main.css'],
   // css: pluginsDomain.cssFiles,

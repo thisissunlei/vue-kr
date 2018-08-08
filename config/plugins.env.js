@@ -1,6 +1,6 @@
 const envs = {
     'development':{
-        'plugins':'http://optest04.krspace.cn',
+        'plugins':'http://optest03.krspace.cn',
     },
     'test01':{
         'plugins':'http://optest01.krspace.cn',

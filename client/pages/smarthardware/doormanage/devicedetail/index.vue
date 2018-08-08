@@ -149,12 +149,14 @@ export default {
                         document.getElementById('json-str-report').innerHTML= this.deviceVO.reported && _this.syntaxHighlight(this.deviceVO.reported) || '无上报信息';
                         document.getElementById('json-str-desired').innerHTML= this.deviceVO.desired && _this.syntaxHighlight(this.deviceVO.desired)|| '无影子信息';
                     }
+                    
                 }else{
                     this.deviceVO= res.data;
                     this.deviceDetail = res.data;
-                    this.qrImgUrl = res.data.qrImgUrl||'';
-                    this.qrExpireAt = res.data.qrExpireAt;
+                    
                 }
+                this.qrImgUrl = res.data.qrImgUrl||'';
+                this.qrExpireAt = res.data.qrExpireAt;
             }).catch((error)=>{
                 _this.$Notice.error({
                     title:error.message

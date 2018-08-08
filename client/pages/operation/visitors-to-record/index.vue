@@ -3,11 +3,11 @@
     <SectionTitle title="预约参观"></SectionTitle>
     <div class="buttons" style="margin-top:20px;">
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='openNew'>新建</Button>
+        <Buttons type="primary" label='新建' @click="openNew" checkAction='csrclue_visit_save_edit'/>
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitImport'>导入</Button>
+        <Buttons type="primary" label='导入' @click="submitImport" checkAction='csrclue_visit_execle'/>
         <span style="display:inline-block;width:20px"></span>
-        <Button type='primary' @click='submitExport'>导出</Button>
+        <Buttons type="primary" label='导出' @click="submitExport" checkAction='csrclue_visit_execle'/>
         
     </div>
     <SearchForm 
@@ -17,7 +17,7 @@
       identify='daily'
     />
     <div class='enter-filed-table'>
-        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData">            
+        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData" style="max-width:1024px">            
             <div slot="loading">
                     <Loading/>
             </div> 
@@ -73,6 +73,16 @@
         <div slot="footer">
             <Button type="primary" @click="download">下载模板</Button>
             <Button type="primary" @click="uploadSubmit">确定</Button>
+        </div>
+    </Modal>
+    <Modal v-model="showDelete" title="提示" ok-text="保存" width="300" cancel-text="取消" class-name="vertical-center-modal">
+        <div class="content" style="text-align:left;font-size:16px;margin-top:15px">
+            是否删除本条数据？
+            
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="deleteRow">确定</Button>
+            <Button type="ghost" @click="cancelDelete">取消</Button>
         </div>
     </Modal>
   </div>
@@ -280,7 +290,7 @@ var layoutScrollHeight=0;
                                tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'seat_order_view',
+                                        checkAction:'csrclue_visit_save_edit',
                                         label:'编辑',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },
@@ -292,13 +302,13 @@ var layoutScrollHeight=0;
                                 }),tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'seat_order_view',
+                                        checkAction:'csrclue_visit_delete',
                                         label:'删除',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;display:inline-block;'
                                     },
                                     on: {
                                         click: () => {
-                                            this.delete(params.row)
+                                            this.deleteOpen(params.row)
                                         }
                                     }
                                 })];
@@ -313,6 +323,8 @@ var layoutScrollHeight=0;
                 editRow:{},
                 file: null,
                 IsCookie:true,
+                showDelete:false,
+                deleteData:{}
             }
         },
         mounted(){
@@ -321,6 +333,9 @@ var layoutScrollHeight=0;
                 this.getCommonParam(); 
             }   
             var height = document.body.clientHeight-200;
+            if(height>760){
+                height=760;
+            }
             this.height = height;
 
         },
@@ -331,8 +346,16 @@ var layoutScrollHeight=0;
             }
         },
         methods:{
-            delete(row){
-                this.$http.post('delete-csr-clue', {id:row.id}).then((res)=>{
+            deleteOpen(row){
+                this.deleteData = row;
+                this.showDelete = true;
+            },
+            cancelDelete(){
+                this.showDelete = false;
+            },
+            deleteRow(){
+                this.$http.post('delete-csr-clue', {id:this.deleteData.id}).then((res)=>{
+                    this.showDelete = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});
                     this.endParams=Object.assign({},this.tabForms);
                     this.getData(this.tabForms)

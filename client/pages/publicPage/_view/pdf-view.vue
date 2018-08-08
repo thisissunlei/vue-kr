@@ -59,6 +59,11 @@ export default {
     KrPdf,
     Message
   },
+  head() {
+      return {
+          title: "pdf查看-氪空间后台管理系统"
+      }
+  },
   data(){
     return {
       isCachet:false,

@@ -88,6 +88,11 @@ export default {
         SectionTitle,
         HighSearch,
         SearchForm,
+    },  
+    head () {
+        return {
+            title: "客户管理员-氪空间后台管理系统"
+        }
     },
     data(){
         return{

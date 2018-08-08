@@ -382,7 +382,7 @@ export default {
   name:'List',
   head(){
     return {
-      title: '运营主页'
+      title: '运营主页-氪空间后台管理系统'
     }
   },
   data(){

@@ -121,6 +121,11 @@
             SwitchCustomer,
             Message,
             EditCustomer
+        },    
+        head () {
+            return {
+                title: "客户管理-氪空间后台管理系统"
+            }
         },
         data () {
             return {

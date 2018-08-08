@@ -35,7 +35,7 @@ import utils from '~/plugins/utils';
 export default {
     head() {
         return {
-            title: '会员线上化'
+            title: '会员线上化-氪空间后台管理系统'
         }
     },
     components:{

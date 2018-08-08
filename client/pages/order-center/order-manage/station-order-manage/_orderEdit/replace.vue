@@ -825,7 +825,7 @@
 
         head() {
             return {
-                title: '编辑换租订单'
+                title: "编辑换租订单-氪空间后台管理系统"
             }
         },
         components: {

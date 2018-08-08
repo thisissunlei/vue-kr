@@ -527,7 +527,7 @@
                     },
 				    {
 				    	title: '优惠添加人',
-				    	key: 'discountAddPsn',
+				    	key: 'addUserName',
 				    	align: 'center',					
 				    },
                     {

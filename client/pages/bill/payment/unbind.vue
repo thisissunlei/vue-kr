@@ -118,11 +118,6 @@ export default {
         props:{
             mask:String
         },
-        head () {
-            return {
-                title: "回款管理"
-            }
-        },
         data () {
             return {
                 form:'form',

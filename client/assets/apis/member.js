@@ -2,7 +2,8 @@
 export default {
     //企业管理员列表
     'customer-manager-list': {
-        url: '/api/krspace-op-web/customer/manager/list',
+        //todo: test
+        url: '/test/krspace-op-web/customer/manager/list',
         method: 'get'
     },
     //修改管理员
@@ -78,7 +79,8 @@ export default {
     },
     //获取企业管理员详情--企业信息
     'customer-community-enter-info': {
-        url: '/api/krspace-op-web/customer/manager/community/enter-info',
+        // todo: test
+        url: '/test/krspace-op-web/customer/manager/community/enter-info',
         method: 'get'
     },
     //获取企业管理员详情--获取管理的社区列表
@@ -94,7 +96,8 @@ export default {
     },
     //获取企业管理员详情--管理员列表
     'get-customer-manager-admin': {
-        url: '/api/krspace-op-web/customer/manager/admin/list',
+        // todo: test
+        url: '/test/krspace-op-web/customer/manager/admin/list',
         method: 'get'
     },
     //获取企业管理员详情--根据手机号查询会员信息
@@ -131,7 +134,13 @@ export default {
     // 查看授权书
     'check-certificate': {
       // todo: test
-        url: ' test/krspace-op-web/customer/manager/certificate/list',
+        url: 'test/krspace-op-web/customer/manager/certificate/list',
         method: 'get'
+    },
+    // 下载授权书模板
+  // todo: test
+    'download-certificate': {
+        url: 'test/krspace-op-web/sys/down-file',
+        method: 'post'
     }
 } 

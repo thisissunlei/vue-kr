@@ -148,26 +148,26 @@ export default {
                  key: 'operation',
 				 align:'center',
 				 render:(h,obj)=>{
-				   // switch(obj.row.managerType) {
-             // case 1:
-             //   return h('div', [
-             //     h('Button', {
-             //       props: {
-             //         type: 'text',
-             //         size: 'small'
-             //       },
-             //       style: {
-             //         color:'#2b85e4'
-             //       },
-             //       on: {
-             //         click: () => {
-             //           this.setManager(obj.row)
-             //         }
-             //       }
-             //     }, '设置管理员')
-             //   ]);
-             //   break;
-             // case 2:
+				   switch(obj.row.managerType) {
+             case 'COMMON_MANAGER':
+               return h('div', [
+                 h('Button', {
+                   props: {
+                     type: 'text',
+                     size: 'small'
+                   },
+                   style: {
+                     color:'#2b85e4'
+                   },
+                   on: {
+                     click: () => {
+                       this.setManager(obj.row)
+                     }
+                   }
+                 }, '设置管理员')
+               ]);
+               break;
+             case 'CHIEF_MANAGER':
                return h('div', [
                  h('Button', {
                    props: {
@@ -198,10 +198,10 @@ export default {
                    }
                  }, '查看授权书')
                ])
-           // }
+           }
 				 }
-				},
-			],
+				}
+			]
         }
     },
     mounted(){

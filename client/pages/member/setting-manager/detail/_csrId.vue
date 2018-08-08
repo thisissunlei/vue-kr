@@ -116,7 +116,7 @@
     <div class="checkBox">
       <div v-for="(item,index) in checkContent" :key="index">
         <span class="checkLeft">{{item.certifyCmtName}}</span>
-        <a :href="item.authUrl" class="checkRight" target="_blank">{{item.certifyNo}}</a>
+        <p class="checkRight linked" @click="downloadAuth(item.certifyNo)">{{item.certifyNo}}</p>
       </div>
     </div>
     <div slot="footer" style="text-align: center;">
@@ -401,8 +401,15 @@ export default {
     },
     closeCheck() {
 		  this.isCheck = false;
+    },
+    downloadAuth(id) {
+      this.$http.post('download-certificate', {id}).then((res) => {
+      }).catch((err) => {
+        this.$Notice.error({
+          title: err.message
+        });
+      })
     }
-		
 
 	}
 	

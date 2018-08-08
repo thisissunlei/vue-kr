@@ -4,7 +4,7 @@
       <Form ref="formItems" :model="formItem" :rules="ruleCustom" label-position="top">
         <div v-show="status === 1" class="majorContent">
           <p>正在将主管理员从 {{detail.mbrName}} 变更为其他账号</p>
-          <p>变更需提交盖章的 <a :href="authUrl">《主管理员变更授权书》</a></p>
+          <p>变更需提交盖章的 <span class="linked" @click="downloadCertificate">《主管理员变更授权书》</span></p>
           <p>新签合同时如有修改，合同生效后也会自动变更。</p>
           <p class="hasMarginTop">请选择需要变更的社区</p>
           <div class="u-community-check-list">
@@ -69,7 +69,7 @@
         </div>
         <div v-show="status === 3" class="majorContent">
           <p>请上传客户盖章后的主管理员变更授权书</p>
-          <p style="margin-top:5px"><a :href="authUrl">下载授权书模板</a></p>
+          <p style="margin-top:5px"><span class="linked">下载授权书模板</span></p>
 
 
           <div style="display:inline-block;">
@@ -154,7 +154,6 @@
         },
         companyType: '',
         status: 1,
-        authUrl: '',
         inputId: 'upload-file',
         uploadText: '上传附件',
         fileName: '',
@@ -288,6 +287,7 @@
           this.$Notice.error({
             title: message
           });
+          return;
         }
         let form = new FormData();
         if (Object.keys(this.formItem).length) {
@@ -301,23 +301,21 @@
 
         var xhrfile = new XMLHttpRequest();
         xhrfile.timeout = 600000;
+        let _this = this;
         xhrfile.onreadystatechange = function() {
           if (xhrfile.readyState === 4) {
             var fileResponse = xhrfile.response;
             if (xhrfile.status === 200) {
               if (fileResponse && fileResponse.code > 0) {
-                this.$Notice.success({
-                  title:'设置管理员成功'
-                });
-                this.changeMajor();
-                this.closeMajor();
+                _this.changeMajor();
+                _this.closeMajor();
               } else {
-                this.$Notice.error({
+                _this.$Notice.error({
                   title: fileResponse.message
                 });
               }
             } else{
-              this.$Notice.error({
+              _this.$Notice.error({
                 title: fileResponse.message
               });
             }
@@ -325,12 +323,23 @@
         };
 
         xhrfile.onerror = function error(err) {
-
+          this.$Notice.error({
+            title: err
+          });
         };
 
-        xhrfile.open('POST', '/api/krspace-finance-web/customer/manager/chiefmanager/edit', true);
+        // todo: test
+        xhrfile.open('POST', '/test/krspace-finance-web/customer/manager/chiefmanager/edit', true);
         xhrfile.responseType = 'json';
         xhrfile.send(form);
+      },
+      downloadCertificate() {
+        this.$http.post('download-certificate', {id: 125640}).then((res) => {
+        }).catch((err) => {
+          this.$Notice.error({
+            title: err.message
+          });
+        })
       }
     },
     updated: function () {
@@ -515,6 +524,10 @@
       bottom: -40px;
       right: 10px;
     }
+  }
+  .linked {
+    color: #2d8cf0;
+    cursor: pointer;
   }
 </style>
 

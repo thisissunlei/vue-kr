@@ -428,7 +428,7 @@ export default {
 
             },
             onCollection(){
-                window.open('./payment/collection','_blank');
+                window.open('/bill/payment/collection','_blank');
             }
 
 

@@ -50,6 +50,11 @@
 
   export default {
     name: 'income',
+    head() {
+		return {
+			title: '预收汇总 - 氪空间后台管理系统'
+		}
+	},
     components: {
       Message
     },

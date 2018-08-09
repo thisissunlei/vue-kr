@@ -26,6 +26,11 @@
 <script>
 import dateUtils from 'vue-dateutils';
 export default {
+  head() {
+		return {
+			title: '特殊出租方配置 - 氪空间后台管理系统'
+		}
+	},
   data () {
     return {
       configStatus: "",

@@ -51,6 +51,11 @@ import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 
 export default {
+      head() {
+		return {
+			title: '预收结算 - 氪空间后台管理系统'
+		}
+	},
     components:{
        Loading,
        SearchForm,

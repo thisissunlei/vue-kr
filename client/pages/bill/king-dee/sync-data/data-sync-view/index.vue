@@ -35,6 +35,9 @@
 				<LabelText label="失败原因：" >
 					{{detailData.failedMsg|| '-'}}
 				</LabelText>
+				<LabelText label="备注：" >
+					{{detailData.remark|| '-'}}
+				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="过滤条件">
 				<LabelText label="开始时间：">
@@ -65,19 +68,6 @@
 					
 				</LabelText>
 			</DetailStyle>
-			<!-- <DetailStyle info="传输结果">
-				
-				<LabelText label="重试次数：" style="font-weight:bold;">
-					{{detailData.tryCount}}
-				</LabelText>
-				
-				<LabelText label="最后重试时间：" style="font-weight:bold;">
-					{{detailData.lastSyncTime| dateFormat('YYYY-MM-dd')}}
-				</LabelText>
-                <LabelText label="重试操作人：" style="font-weight:bold;">
-					{{detailData.lastSyncUserName}}
-				</LabelText>
-			</DetailStyle> -->
 			<Tabs value="original">
                 <TabPane label="原始数据" name="original">
 					<Table 
@@ -136,7 +126,7 @@ export default {
 	name: 'JoinView',
 	head() {
 		return {
-			title: '查看数据详情'
+			title: '查看同步数据详情'
 		}
 	},
 	components: {

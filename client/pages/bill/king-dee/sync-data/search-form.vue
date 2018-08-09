@@ -114,6 +114,7 @@ export default {
                     {value:' ',label:'全部'},
                     {value:'ALREADY_SYNC',label:'已经同步'},
                     {value:'NOT_SYNC',label:'未同步'},
+                    {value:'FAILED_SYNC',label:'同步失败'},
                 ],
                 syncType:[
                         {value:' ',label:'全部'},

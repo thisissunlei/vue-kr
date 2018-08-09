@@ -3,6 +3,7 @@
     <SectionTitle title="社区优惠配置"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button> 
+        <!-- <Button type="primary" @click="onCreate" >新建社区优惠</Button>  -->
         <span style="padding:0 10px"></span> 
         <div style="display:inline-block;width:400px;">
             选择社区：

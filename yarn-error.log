@@ -1,24 +1,30 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn
+  /Users/mac/.nvm/versions/node/v10.7.0/bin/node /usr/local/bin/yarn
 
 PATH: 
-  ~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:~/.composer/vendor/bin:/usr/local/etc/nginx/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/songkk/kr-dev:/Users/songkk/kr-dev/bin
 
 Yarn version: 
-  1.6.0
+  1.7.0
 
 Node version: 
-  8.11.1
+  9.2.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@nuxtjs%2faxios: ETIMEDOUT
-      at Timeout._onTimeout (/usr/local/lib/node_modules/yarn/lib/cli.js:133819:19)
-      at ontimeout (timers.js:482:11)
-      at tryOnTimeout (timers.js:317:5)
-      at Timer.listOnTimeout (timers.js:277:5)
+  Error: http://krnpm.corp.krspace.cn/@nuxtjs%2faxios: no such package available
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:65656:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:134675:22)
+      at Request.emit (events.js:159:13)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:135658:10)
+      at Request.emit (events.js:159:13)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:135578:12)
+      at Object.onceWrapper (events.js:254:19)
+      at IncomingMessage.emit (events.js:164:20)
+      at endReadableNT (_stream_readable.js:1054:12)
+      at _combinedTickCallback (internal/process/next_tick.js:138:11)
 
 npm manifest: 
   {
@@ -28,11 +34,12 @@ npm manifest:
     "author": "张屈 <joneyphair@qq.com>",
     "private": true,
     "scripts": {
-      "dev": "cross-env NODE_ENV=development node  server/index.js",
+      "nuxt":"nuxt",
+      "dev": "cross-env NODE_ENV=development node --max_old_space_size=4096 server/index.js",
       "dev:test": "cross-env NODE_ENV=test node  server/index.js",
       "dev:test01": "cross-env NODE_ENV=test01 node  server/index.js",
-      "dev:test02": "cross-env NODE_ENV=test02 node  server/index.js",
-      "dev:test03": "cross-env NODE_ENV=test03 node  server/index.js",
+      "dev:test02": "cross-env NODE_ENV=test02 node  --max-old-space-size=4096 server/index.js",
+      "dev:test03": "cross-env NODE_ENV=test03 node  --max-old-space-size=4096 server/index.js",
       "dev:test04": "cross-env NODE_ENV=test04 node  server/index.js",
       "build": "nuxt build",
       "start": "cross-env NODE_ENV=production node  server/index.js",
@@ -62,17 +69,17 @@ npm manifest:
       "nodemon": "1.12.5",
       "react": "^16.2.0",
       "scmp": "2.0.0",
-      "vue": "2.5.16",
+      "vue": "2.5.13",
       "vue-dateutils": "1.0.8",
       "vue-loader": "^13.7.0",
-      "vue-server-renderer": "2.5.16",
-      "vue-template-compiler": "2.5.16"
+      "vue-server-renderer": "2.5.13",
+      "vue-template-compiler": "2.5.13"
     },
     "dependencies": {
       "@nuxtjs/axios": "4.5.0",
       "husky": "^0.14.3",
       "iview": "2.8.0",
-      "nuxt": "1.2.1",
+      "nuxt": "1.0.0-rc11",
       "pdfjs-dist": "^2.0.281",
       "promise-polyfill": "7.0.0",
       "source-map-support": "^0.4.15",

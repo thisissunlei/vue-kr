@@ -191,7 +191,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -225,7 +225,7 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                    <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                     <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -259,7 +259,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -293,7 +293,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>

@@ -46,6 +46,7 @@
     import utils from '~/plugins/utils';
     import Awarded from './awarded';
     import Loading from '~/components/Loading';
+    import Buttons from '~/components/Buttons';
 
     export default {
         name: 'customerAssets',
@@ -53,7 +54,8 @@
             SectionTitle,
             SearchFormInput,
             Awarded,
-            Loading
+            Loading,
+            Buttons
         },
         head() {
             return {
@@ -111,22 +113,19 @@
                         align:'center',
                         width:90,
                         render:(h,params)=>{
-                            return h('div', [
-                                    h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showRole(params.row)
-                                            }
+                           return h(Buttons,{
+                                   props: {
+                                        type: 'text',
+                                        checkAction:'Investment_role_button',
+                                        label:'授予',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showRole(params.row)
                                         }
-                            }, '授予'),
-                         ]);       
+                                    }
+                            })
                        }
                     }
                 ]

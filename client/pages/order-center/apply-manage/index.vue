@@ -39,7 +39,7 @@ export default {
     },
     head() {
         return {
-            title: '开票系统'
+            title: '资金转移-氪空间后台管理系统'
         }
     },
     data() {

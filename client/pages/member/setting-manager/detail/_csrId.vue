@@ -108,7 +108,12 @@ export default {
 		ManagerList,
 		EmployeeList,
 		AddManager
-	},
+	}, 
+	head () {
+    	return {
+    	    title: "设置企业管理员-氪空间后台管理系统"
+    	}
+ 	},
 	data(){
 		return{
 			activeKey:'manager',

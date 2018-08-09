@@ -58,6 +58,11 @@ export default {
        Message,
        SlotHead,
        Buttons
+    },  
+    head () {
+        return {
+            title: "社区招商情况-氪空间后台管理系统"
+        }
     },
     data() {
         return{

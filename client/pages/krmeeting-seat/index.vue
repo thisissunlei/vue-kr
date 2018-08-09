@@ -49,11 +49,11 @@ import Message from '~/components/Message';
 import SlotHead from './slotHead';
 import Loading from '~/components/Loading';
 var layoutScrollHeight=0;
-    export default {
+    export default {  
       head () {
-        return {
-          title: "散座"
-        }
+          return {
+              title: "散座商品-氪空间后台管理系统"
+          }
       },
       components:{
         SectionTitle,

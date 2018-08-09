@@ -67,6 +67,11 @@ export default {
       SearchForm,
       HighSearch
   },
+    head() {
+        return {
+            title: '会员福利-氪空间后台管理系统'
+        }
+    },
   data(){
       return{
            pageSize:15,

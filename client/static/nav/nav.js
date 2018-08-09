@@ -14,7 +14,17 @@
         activeHander:'',
         
         user:{},
-        navs:[],
+        navs:[{
+            iconUrl: "icon-card",
+          
+            name: "首页",
+         
+            showFlag: "YES",
+            sideFoldFlag: "YES",
+           
+            topFoldFlag: "YES",
+            url: "/"
+        }],
         navNum: 8,
         bodyDom:'',
         contentDom:'',
@@ -53,9 +63,6 @@
         if (port) {
             port = ":" + port;
         }
-        if(router.indexOf('http://')!=-1&&router.indexOf('https://')!=-1){
-				return  router;
-		}
         if(type && type == 'admin'){
             if(nowType == 'admin'){
                 return router;
@@ -74,12 +81,6 @@
             }
             alias = '/project/#'
         }
-        if(type && type == 'product'){
-            if(nowType == 'product'){
-                return router;
-            }
-            alias = '/product/#'
-        }
         if(type && type == "member"){
             alias = '/';
             hostname =  'memberadmin.krspace.cn';
@@ -93,8 +94,6 @@
             return 'admin'
         }else if(router.indexOf('project/#/') !=-1){
             return 'project'
-        }else if(router.indexOf('product/#/') !=-1){
-            return 'product'
         }else {
             return 'vue';
         }
@@ -213,11 +212,9 @@
                 navUtils.contentDom.style.paddingLeft = "0px";
                 showSidebar = 'none';
                 menuName = 'menu-btn menu-btn-close';
-            
                break;
             }
         }
-       
         
         var html = '<div class="app-header">' +
 
@@ -275,9 +272,6 @@
         
         
         document.getElementById(exitBtnId).onclick = function(){
-            sessionStorage.navs = '';
-            sessionStorage.user = '';
-           
             var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
                 xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
                 xhr.responseType = 'json';
@@ -286,6 +280,7 @@
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                         let redirectUrl = encodeURIComponent(window.location.href);
                         window.location.href = `/new/login.html?RU=${redirectUrl}`;
+                        // window.location.href = "/new/login.html";
                         if (j_account_box.style.display == 'block') {
                             j_account_box.style.display = 'none';
                         }
@@ -317,7 +312,6 @@
         
         
         var otherActive = 'normal';
-        console.log(navs,"ooooo")
         navs.map(function (item, index) {
             var href = "";
             let oldHref =''; 
@@ -331,7 +325,6 @@
             }
             oldHref = '"url":"'+oldHref+'"'
             href = setHref(item.type, href)
-           
             //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
                 if(index>7 && activeStr.indexOf(oldHref)!=-1){
@@ -343,7 +336,6 @@
             html += '<li name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
-        
         if (navs.length && navs.length > navUtils.navNum) {
             more += '</ul>';
             html +=
@@ -387,7 +379,9 @@
                         }
                     }
                     var activeRouter = '';
-                  
+                    if(child.name == "即将到期" || child.name == '逾期未付'){
+                        console.log(router,'---------',href)
+                    }
                     if(router.indexOf('krspace.cn')!=-1){
                         var port = location.port?':'+location.port:'';
                         activeRouter = router.split('krspace.cn'+port)[1];
@@ -439,11 +433,8 @@
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code < 0) {
                     let redirectUrl = encodeURIComponent(window.location.href);
-                    sessionStorage.navs = '';
-                    sessionStorage.user = '';
-                  
                     window.location.href = `/new/login.html?RU=${redirectUrl}`;
-                
+                    // window.location = '/new/login.html';
                     return;
                 }
                 callback(xhr.response)
@@ -453,63 +444,36 @@
     }
   
     
-    function vueNavRender(dom,contentDom){
-        console.log(dom,"--------",dom)
+    global.vueNavRender = function(dom,contentDom){
+        // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        if(typeof(Storage)!=="undefined")
-	    {
-            if (sessionStorage.user){
-                navUtils.navs = JSON.parse(sessionStorage.navs);
-                navUtils.user = JSON.parse(sessionStorage.user);
-                routerRefresh();
-                return;
-            }
-           
-        }
-        // sessionStorage.navs = 12222
-        getNavData();
-    }
-    // window.onload = function(){
-        vueNavRender(document.getElementById('_layout_box_hander'),document.getElementById('layout-content_id'))
-    // }
-    
-    renderHanderAndSidebar();
-    function getNavData(){
-         // console.log("pppppp------",dom)
-         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
-            var navs = [{
-                iconUrl: "icon-card",
-              
-                name: "首页",
-             
-                showFlag: "YES",
-                sideFoldFlag: "YES",
-               
-                topFoldFlag: "YES",
-                url: "/"
-            }].concat(response.data);
+        
+        // console.log("pppppp------",dom)
+        http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+            var navs = [].concat(response.data);
             routerRefresh();
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
                 var user = response.data.userInfo;
                 window.resourcesCode = response.data.resourcesCode;
-                navUtils.navs = [].concat(navs);
-                navUtils.user = Object.assign({},user);
-                sessionStorage.navs = JSON.stringify([].concat(navs));
-                sessionStorage.user =   JSON.stringify(Object.assign({},user));
-                
+                navUtils.navs = [].concat(navUtils.navs,navs);
+                navUtils.user = Object.assign(user);
                 routerRefresh();
             })
            
         })
     }
     renderHanderAndSidebar();
-  
+    window.addEventListener('load',function(){
+
+    })
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
     global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部
     global.LISTENSIDEBAROPEN = listenSidebarOpen;//监听开关
-   
+    // global.GLOBALHEADERSET = Router.setDefaultHeader;
+
+    // Router.init();
     
 })(window);

@@ -1,6 +1,6 @@
 <template>
     <div class="attract-investment">
-        <SectionTitle title="回款数据统计"/>
+        <SectionTitle title="预收数据统计"/>
         <div class="attract-search">
             <SearchForm 
               @searchClick="searchClick"

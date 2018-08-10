@@ -458,7 +458,7 @@ export default {
                     }
                 },
                 { key: 'recAccountBank', align: 'center', title: '银行收款账号', width: 180 },
-                { key: 'recBillTypeDesc', align: 'center', title: '收款类型', width: 120, },
+                { key: 'entrysRecBillNumberDesc', align: 'center', title: '收款类型', width: 120, },
                 { key: 'settlementTypeDesc', align: 'center', title: '结算方式', width: 120, },
                 {
                     key: 'remark',

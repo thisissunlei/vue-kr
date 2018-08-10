@@ -1,5 +1,5 @@
 <template>
-  <div class="g-device-detail-box">
+  <div class="g-device-detail-box" v-if="showPageAll">
       <SectionTitle title="硬件设备详情"></SectionTitle>
       <div class="g-device-detail">
             <Button 
@@ -10,6 +10,16 @@
                 v-if="SecondeVersion"
             >
                 刷新设备上报信息
+            </Button>
+            <Button 
+                type="primary" 
+                class="fresh-btn"  
+                @click="freshQrImage"
+                v-if="!SecondeVersion"
+            >
+                <img src="./images/qr.svg" class="btn-qr">
+
+                重新生成二维码
             </Button>
             <div class="device-detail-info">
                 <div class="connect-info info-box">
@@ -71,14 +81,14 @@
                         <span>厂家：</span><span>{{deviceDetail.makerName}}</span>
                     </div>
                     <div class="item-info">
-                        <span>二维码有效期：</span><span>{{this.returnDate(deviceDetail.qrExpireAt)}}</span>
+                        <span>二维码有效期：</span><span>{{this.returnDate(qrExpireAt)}}</span>
                     </div>
                     <div class="block-line">
-                        <span>二维码地址：</span><span>{{deviceDetail.qrImgUrl}}</span>
+                        <span>二维码地址：</span><span>{{qrImgUrl}}</span>
                     </div>
                     <div class="block-line">
                         <span>二维码：</span>
-                        <img :src="deviceDetail.qrImgUrl" class="qrStyle"/>
+                        <img :src="qrImgUrl" class="qrStyle" v-if="qrImgUrl"/>
                     </div>
                     <div class="block-line">
                         <span>备注：</span><span>{{deviceDetail.memo}}</span>
@@ -102,6 +112,10 @@ export default {
          deviceDetail : {},
          deviceVO : {},
          SecondeVersion : true,
+         showPageAll :false,
+         qrExpireAt : '',
+         qrImgUrl : '',
+
      }
    },
    created(){
@@ -110,6 +124,7 @@ export default {
    mounted(){
        GLOBALSIDESWITCH("false");
        this.getdeviceDetail();
+       this.showPageAll = true;
    },
    methods:{
        
@@ -131,13 +146,17 @@ export default {
                     this.deviceDetail = res.data;
                     this.deviceVO= res.data.deviceVO || {};
                     if(res.data.deviceVO){
-                        document.getElementById('json-str-report').innerHTML= _this.syntaxHighlight(this.deviceVO.reported);
-                        document.getElementById('json-str-desired').innerHTML= _this.syntaxHighlight(this.deviceVO.desired);
+                        document.getElementById('json-str-report').innerHTML= this.deviceVO.reported && _this.syntaxHighlight(this.deviceVO.reported) || '无上报信息';
+                        document.getElementById('json-str-desired').innerHTML= this.deviceVO.desired && _this.syntaxHighlight(this.deviceVO.desired)|| '无影子信息';
                     }
+                    
                 }else{
                     this.deviceVO= res.data;
                     this.deviceDetail = res.data;
+                    
                 }
+                this.qrImgUrl = res.data.qrImgUrl||'';
+                this.qrExpireAt = res.data.qrExpireAt;
             }).catch((error)=>{
                 _this.$Notice.error({
                     title:error.message
@@ -188,6 +207,21 @@ export default {
                 return "无"
             }
             return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(timestamp))
+        },
+        freshQrImage(){
+
+            var param ={deviceId :this.deviceVO.deviceId }
+            this.$http.put('get-door-new-qr',param).then((res)=>{
+                
+                this.qrImgUrl = res.data.qrImgUrl;
+                this.qrExpireAt = res.data.qrExpireAt;
+               
+                   
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
         }
       
       
@@ -207,6 +241,11 @@ export default {
             .fresh-btn{
                 margin-left:5px;
                 
+            }
+            .btn-qr{
+                width: 13px;
+                vertical-align: text-bottom;
+                margin-right: 2px;
             }
             .info-box{
                 margin: 20px 0 ;
@@ -229,8 +268,8 @@ export default {
                         font-size:14px;
                     }
                     .qrStyle{
-                        width:50px;
-                        height:50px;
+                        width:80px;
+                        height:80px;
                     }
                 }
                 .json-str{

@@ -57,12 +57,12 @@
                   </Tooltip>   
                 </div>
                 <span class="title" v-if="tab!='all'">在租</span> 
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);display:inline-block;">{{pageData.rentMoveStationsNum}}</span>
               </span>
               <span class="number">
-                <span class="title">合同未生效</span>
+                <span class="title">已起租未生效</span>
                 <span class="num"  v-if="tab=='all'" style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSeatsNum}}</span>
                 <span class="num" v-if="tab=='office'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectFixStationsNum}}</span>
@@ -124,7 +124,9 @@
                 </ul>
               </div>
             </div>
+          </div>
 
+          <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOver">
@@ -162,6 +164,7 @@
               </div>
             </div>
           </div>
+
           <div class="line-one">
            <div class="box">
               <div class="header">
@@ -188,12 +191,15 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
             </div>
+          </div>
+          
+          <div class="line-one">
              <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('CONTRACT')">
@@ -219,13 +225,14 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                    <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                     <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
             </div>
           </div>
+          
           <div class="line-one">
             <div class="box">
               <div class="header">
@@ -252,15 +259,15 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
             </div>
-
-
-
+          </div>
+          
+          <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('PRINT')">
@@ -286,7 +293,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right;flex:1.5;">{{item.debtStr}}元</span>
                       <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -296,6 +303,40 @@
 
           <!-- @click="clappointment" -->
           <div class="line-one">
+            <div class="box">
+              <div class="header">
+                <div class="header-left" @click="openOverNo()">
+                  <Tooltip content="已经过了服务开始日但是仍未生效或作废的合同" placement="top">
+                    合同逾期未操作 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
+                <div class="header-right" v-if="OverdueOperationList.length">
+                  <span :style="overdueNo?'color: #FF6868;':''">{{overdueNo}}</span><span style="font-size:14px">份</span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!OverdueOperationList.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有逾期未生效或未作废的合同</div>
+              </div>
+              <div class="contents" v-if="OverdueOperationList.length">
+                <ul >
+                   <li v-for="item in OverdueOperationList" :key="item.id">
+                      <Tooltip :content="item.serialNumber" placement="top-start" class="table-cell" v-if="item.hasAuth">      
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openOverNoDetail(item)">{{item.serialNumber}}</div>
+                       </Tooltip>
+                      <div v-if="!item.hasAuth" class="ellipsis table-cell">*****</div>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell" :style="item.contractPayStatus=='PAID_OFF'?'text-align:right;':'text-align:right;color:red;'">{{item.contractPayStatusName}}</span>
+                      <span class="table-cell" style="text-align:right">{{item.overDays?'逾'+item.overDays+'天':'-'}}</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- <div class="line-one">
             <div class="box">
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
@@ -326,6 +367,9 @@
                 </ul>
               </div>
             </div>
+          </div> -->
+
+          <div class="line-one">
             <!-- @click="openVisitor暂没有访客(入驻会员在APP上邀请来的)" -->
             <div class="box">
               <div class="header">
@@ -367,6 +411,8 @@
             </div>
 
 
+          </div>
+
 
           </div>
         </div>
@@ -395,13 +441,15 @@ export default {
        list:[],
        DueList:[],
        unpaidList:[],
+       OverdueOperationList:[],
        OverduePrint:[],
        OverdueStation:[],
        OverdueMeeting:[],
        appointment:[],
        nappointment:[],
        pageData:{},
-       visitNum:0
+       visitNum:0,
+       overdueNo:''
      }
   },
   components:{
@@ -508,6 +556,17 @@ export default {
 				this.$http.get('unpaidList',data).then((res)=>{         
             console.log('起租未付',res.data)
              this.unpaidList=res.data.items;
+				}).catch((err)=>{
+					this.$Notice.error({
+						title:err.message
+					});
+				})
+      },
+      //合同逾期未操作
+      getOverdueOperation(data){ 
+				this.$http.get('contract-no-operation',data).then((res)=>{         
+             this.overdueNo=res.data.totalCount;
+             this.OverdueOperationList=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -623,6 +682,7 @@ export default {
         this.getComingList(data);
         this.getDueList(data);
         this.getunpaidList(data);
+        this.getOverdueOperation(data);
         //this.getAnappointmentListList();
         var obj=Object.assign({},data,{startTime:dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date())})
         this.getAnappointmentList(obj);
@@ -653,6 +713,12 @@ export default {
     },
     openDetail(id){
        window.open('/bill/list/detail/'+id,'_blank')
+    },
+    openOverNo(){
+       window.open('/inventory/overdue-no-operation?pageSize=100&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
+    },
+    openOverNoDetail(item){
+       window.open('/order-center/contract-manage/contract-list/list?serialNumber='+item.serialNumber,'_blank')
     }
   }
  }

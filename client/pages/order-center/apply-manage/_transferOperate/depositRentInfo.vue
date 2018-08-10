@@ -177,7 +177,17 @@ export default {
                 this.isFinancialSide = this.receivedApplyInfo.financialSide;
                 this.transferStatus = this.receivedApplyInfo.transferStatusName;
                 this.formItem = Object.assign({}, { customerId: obj.customerId }, { communityIn: obj.communityId }, { communityId: obj.communityId }, { remark: obj.applyMemo }, { detailList: obj.detailList })
-                this.getFeeAmount();
+                // this.getFeeAmount();
+                var list = [];
+                this.receivedApplyInfo.detailList.map(item => {
+                    list.push({
+                        feeType: item.transferFeeType,
+                        feeTypeName: item.transferFeeTypeName,
+                        amount: item.transferAmount,
+                        maxAmount: item.transferAmount
+                    })
+                })
+                this.feeTypeArray = [].concat(list);
             }
             ).then(() => {
                 this.checkRights()

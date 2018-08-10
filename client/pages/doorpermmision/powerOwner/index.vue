@@ -6,7 +6,7 @@
                 <TabPane label="个人" icon="person" >
                     <MemberList />
                 </TabPane>
-                <TabPane label="组" icon="folder" v-if="groupLevel=='NORMAL'">
+                <TabPane label="复合组" icon="folder" v-if="groupLevel=='NORMAL'">
                     <GroupList v-if="groupLevel=='NORMAL'"/>
                 </TabPane>
                 
@@ -130,11 +130,8 @@ export default {
    computed: {
 
        title : function(){
-           if(this.groupLevel!=="PARENT"){
-                return "权限授予详情（组名称："+ this.groupName + "）"
-           }else{
-                return "已有权限详情（组名称："+ this.groupName + "）"
-           }
+            return "权限授予详情（组名称："+ this.groupName + "）"
+          
        }
    },
    methods:{

@@ -138,13 +138,13 @@ function transmissionReceivableCol(){
             width:150,
         },
         {
-            title: '预收|退预收',
+            title: '收款类型',
             key: 'recBillTypeDesc',
             align:'center',
             width:150,
         },
         {
-            title: '收款类型',
+            title: '收款科目',
             key: 'entrysRecBillNumberDesc',
             align:'center',
             width:150,

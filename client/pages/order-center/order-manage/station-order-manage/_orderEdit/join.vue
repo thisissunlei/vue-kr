@@ -810,6 +810,7 @@ export default {
                 //苏岭开始
                 this.isAddEdit=data.managerId?true:false;
                 this.oldManagerId=data.managerId;
+                this.isManager=(data.communityId&&data.customerId)?true:false;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
             }, e => {

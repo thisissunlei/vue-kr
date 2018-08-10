@@ -147,12 +147,12 @@ export default {
     //入驻新建提交
     "save-join": {
         // url: "/ben/api/krspace-op-web/order-seat-add",
-        url: "/song/api/op/order-seat-add",
+        url: "/api/op/order-seat-add",
         method: "post"
     },
     //续驻新建提交
     "save-renew": {
-        url: "/song/api/krspace-op-web/order-seat-continue",
+        url: "/api/krspace-op-web/order-seat-continue",
         method: "post"
     },
     "save-reduce": {

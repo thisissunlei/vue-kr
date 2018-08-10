@@ -61,7 +61,7 @@
               <DetailStyle info="客户主管理员信息">
                 <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
                 <Row style="margin-bottom:30px">                
-                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:red;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
                     <div v-if="isAddEdit">
                         <LabelText label="管理员手机号" :inline="true"  type="star">
                             {{customerInfo.phone}}

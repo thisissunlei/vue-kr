@@ -18,7 +18,7 @@ export default {
     //入驻订单列表－详情
     "join-bill-detail": {
         // url: "/api/krspace-op-web/order-seat-add/show",
-        url: "/api/op/order-seat-add/show",
+        url: "/song/api/op/order-seat-add/show",
         method: "get"
     },
     //减租订单列表－详情
@@ -101,7 +101,7 @@ export default {
     },
     //搜索：手机号查询会员
     "search-phone-member": {
-        url: "/song/api/krspace-op-web/customer/manager/user/detail",
+        url: "/song/api/krspace-op-web/customer/manager/user/phone",
         method: "get"
     }
     //苏岭添加结束

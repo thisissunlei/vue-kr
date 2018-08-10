@@ -35,13 +35,13 @@
 			</DetailStyle>
 			<DetailStyle info="客户主管理员信息">
 				<LabelText label="管理员手机号：">
-					{{basicInfo.userPhone}}
+					{{basicInfo.phone}}
 				</LabelText>
 				<LabelText label="管理员姓名：">
-					{{basicInfo.userName}}
+					{{basicInfo.name}}
 				</LabelText>
 				<LabelText label="管理员电子邮箱：">
-					{{basicInfo.userMail}}
+					{{basicInfo.email}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="续租信息">

@@ -33,8 +33,10 @@ const jsFiles = [
 ]
 const cssFiles = [
     // {rel:'stylesheet', herf: 'https://web.krspace.cn/kr-op/iview/2.8.0/styles/iview.css'},
+    {rel:'stylesheet',href:pluginsDomain+'/nav/1.0.0/nav.css'},
     { rel: 'stylesheet', href: pluginsDomain+'/public/css/main.css' },
-    { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' }
+    { rel: 'icon', type: 'image/x-icon', href: '/plugins/public/images/favicon.ico' },
+    
 ]
 
 module.exports = {

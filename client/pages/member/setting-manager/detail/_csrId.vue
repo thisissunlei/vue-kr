@@ -26,21 +26,26 @@
 				<p slot="title" class="card-title">
 					企业成员信息
 				</p>
-				<div class="u-add-manager">
-					<Button type="primary" @click="openAddManager">添加管理员</Button>
-				</div>
 				<Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-					<Tab-pane :label="`管理员(${count.adminNum})`" name="manager">
-						<ManagerList 
+					<Tab-pane :label="`主管理员(${count.chiefManagerNum || 0})`" name="major">
+						<MajorList
+								:mask="key"
+								:reload="getCount"
+								:openSetMajor="openSetMajor"
+								:ifReload="ifReload"
+								:openCheck="openCheck"
+						/>
+					</Tab-pane>
+					<Tab-pane :label="`管理员(${count.adminNum || 0})`" name="manager">
+						<ManagerList
 							:mask="key"
 							:reload="getCount"
 							:openSetManager="hideTip"
-							:openSetMajor="openSetMajor"
 							:ifReload="ifReload"
-              :openCheck="openCheck"
+							:openAddManager="openAddManager"
 						/>
 					</Tab-pane>
-					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
+					<Tab-pane :label="`在职员工(${count.employeesNum || 0})`" name="employee">
 						<EmployeeList 
 							:mask="key"
 							:reload="getCount"
@@ -116,7 +121,7 @@
     <div class="checkBox">
       <div v-for="(item,index) in checkContent" :key="index">
         <span class="checkLeft">{{item.certifyCmtName}}</span>
-        <p class="checkRight linked" @click="downloadAuth(item.certifyNo)">{{item.certifyNo}}</p>
+        <p class="checkRight linked" @click="downloadAuth(item.authFileId)">{{item.certifyNo}}</p>
       </div>
     </div>
     <div slot="footer" style="text-align: center;">
@@ -138,6 +143,8 @@ import ManagerList from './managerList';
 import EmployeeList from './employeeList';
 import AddManager from './addManager';
 import ChangeMajor from './changeMajor';
+import MajorList from './majorList';
+import utils from '~/plugins/utils';
 
 export default {
 	components:{
@@ -148,11 +155,12 @@ export default {
 		ManagerList,
 		EmployeeList,
 		AddManager,
-    ChangeMajor
+    ChangeMajor,
+    MajorList
 	},
 	data(){
 		return{
-			activeKey:'manager',
+			activeKey:'major',
 			key:'',
 			detail:{},
 			openTip:false,
@@ -168,6 +176,7 @@ export default {
 			count:{
 				adminNum:0,
 				employeesNum:0,
+        chiefManagerNum: 0
 			},
 			itemDetail:{},
 			companyInfo:{},
@@ -308,7 +317,7 @@ export default {
           mbrId:form.mbrId,
         };
         this.$http.get('get-manage-cmt-list', params).then((res)=>{
-          this.majorComList=res.data.cmtList || [];
+          this.majorComList=res.data.cmtList && res.data.cmtList.filter(i => (i.isManager === 2)) || [];
           this.isChangeMajor = true;
         }).catch((err)=>{
           this.$Notice.error({
@@ -389,7 +398,7 @@ export default {
 		},
     openCheck(params) {
       this.$http.get('check-certificate', {
-        customerId: params.mbrId
+        mbrId: params.mbrId
       }).then((res)=>{
         this.isCheck = true;
         this.checkContent = res.data;
@@ -403,7 +412,10 @@ export default {
 		  this.isCheck = false;
     },
     downloadAuth(id) {
-      this.$http.post('download-certificate', {id}).then((res) => {
+      this.$http.post('get-station-contract-pdf-url', {
+        id
+      }).then((res) => {
+        utils.downFile(res.data)
       }).catch((err) => {
         this.$Notice.error({
           title: err.message
@@ -515,5 +527,9 @@ export default {
   .checkRight {
     float: right;
   }
+}
+.linked {
+	color: #2d8cf0;
+	cursor: pointer;
 }
 </style>

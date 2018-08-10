@@ -1,8 +1,10 @@
 <template>
 <div class="g-member-manager-list">
          <div class="u-search-box">
-             <div class="u-search-list" style="margin-left:30px;">
-                  <SearchForm
+             <div class="u-search-list">
+               <Button type="primary" @click="openFatherAddManager" style="float:left;">添加管理员</Button>
+               <span class="contentTips">管理员可在APP中查看账单、支付账单，可在官网添加会员、移除会员、分配会员门禁权限、申请和领取发票。</span>
+               <SearchForm
                         placeholder="请输入搜索关键词"
                         :openSearch="true"
                         :onSubmit="lowerSubmit"
@@ -49,8 +51,7 @@ export default {
         openSetManager:Function,
         reload:Function,
         ifReload:Boolean,
-      openSetMajor: Function,
-      openCheck: Function
+      openAddManager: Function
     },
     data(){
         return{
@@ -113,11 +114,6 @@ export default {
 
 				 }
 				},
-        {
-          title: '管理员身份',
-          key: 'managerTypeName',
-          align:'center'
-        },
 				{
 				 title: '入驻社区',
                  key: 'enterCmtName',
@@ -148,60 +144,26 @@ export default {
                  key: 'operation',
 				 align:'center',
 				 render:(h,obj)=>{
-				   switch(obj.row.managerType) {
-             case 'COMMON_MANAGER':
-               return h('div', [
-                 h('Button', {
-                   props: {
-                     type: 'text',
-                     size: 'small'
-                   },
-                   style: {
-                     color:'#2b85e4'
-                   },
-                   on: {
-                     click: () => {
-                       this.setManager(obj.row)
-                     }
-                   }
-                 }, '设置管理员')
-               ]);
-               break;
-             case 'CHIEF_MANAGER':
-               return h('div', [
-                 h('Button', {
-                   props: {
-                     type: 'text',
-                     size: 'small'
-                   },
-                   style: {
-                     color:'#2b85e4'
-                   },
-                   on: {
-                     click: () => {
-                       this.changeMajor(obj.row)
-                     }
-                   }
-                 }, '变更主管理员'),
-                 h('Button', {
-                   props: {
-                     type: 'text',
-                     size: 'small'
-                   },
-                   style: {
-                     color:'#2b85e4'
-                   },
-                   on: {
-                     click: () => {
-                       this.checkAuth(obj.row)
-                     }
-                   }
-                 }, '查看授权书')
-               ])
-           }
+					  return h('div', [
+						h('Button', {
+							props: {
+								type: 'text',
+								size: 'small'
+							},
+							style: {
+								color:'#2b85e4'
+							},
+							on: {
+								click: () => {
+									this.setManager(obj.row)
+								}
+							}
+						}, '设置')
+
+					]);
 				 }
-				}
-			]
+				},
+			],
         }
     },
     mounted(){
@@ -245,12 +207,9 @@ export default {
             this.itemDetail=Object.assign({},params);
             this.openSetManager && this.openSetManager(this.itemDetail)
         },
-      changeMajor(params) {
-        this.itemDetail=Object.assign({},params);
-        this.openSetMajor && this.openSetMajor(this.itemDetail)
-      },
-      checkAuth(params) {
-        this.openCheck && this.openCheck(params);
+      openFatherAddManager() {
+          this.openAddManager && this.openAddManager();
+          console.log(this);
       }
 
     }
@@ -320,6 +279,13 @@ export default {
         }
 
     }
+  .contentTips {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 12px;
+    width: 500px;
+    float: left;
+  }
 }
 </style>
 

@@ -69,7 +69,7 @@
         </div>
         <div v-show="status === 3" class="majorContent">
           <p>请上传客户盖章后的主管理员变更授权书</p>
-          <p style="margin-top:5px"><span class="linked">下载授权书模板</span></p>
+          <p style="margin-top:5px" @click="downloadCertificate"><span class="linked">下载授权书模板</span></p>
 
 
           <div style="display:inline-block;">
@@ -101,6 +101,7 @@
 </template>
 <script>
   import LabelText from '~/components/LabelText';
+  import utils from '~/plugins/utils';
 
   export default {
     components: {
@@ -161,7 +162,7 @@
       }
     },
     mounted() {
-      let tempCheck = this.majorComList && this.majorComList.length && this.majorComList.map(i => i.cmtId);
+      let tempCheck = this.majorComList && this.majorComList.length && this.majorComList.map(i => i.cmtId) || [];
       let str = [].concat(tempCheck).join(',');
       this.checkAllGroup = tempCheck;
       this.checkList = str;
@@ -302,7 +303,7 @@
         var xhrfile = new XMLHttpRequest();
         xhrfile.timeout = 600000;
         let _this = this;
-        xhrfile.onreadystatechange = function() {
+        xhrfile.onreadystatechange = function () {
           if (xhrfile.readyState === 4) {
             var fileResponse = xhrfile.response;
             if (xhrfile.status === 200) {
@@ -314,9 +315,9 @@
                   title: fileResponse.message
                 });
               }
-            } else{
+            } else {
               _this.$Notice.error({
-                title: fileResponse.message
+                title: '上传失败，请稍后重试'
               });
             }
           }
@@ -334,7 +335,11 @@
         xhrfile.send(form);
       },
       downloadCertificate() {
-        this.$http.post('download-certificate', {id: 125640}).then((res) => {
+        this.$http.post('contract-list-get-pdf-url', {
+          requestId: 8118,
+          contractType: 'NOSEAL'
+        }).then((res) => {
+          utils.downFile(res.data)
         }).catch((err) => {
           this.$Notice.error({
             title: err.message
@@ -525,6 +530,7 @@
       right: 10px;
     }
   }
+
   .linked {
     color: #2d8cf0;
     cursor: pointer;

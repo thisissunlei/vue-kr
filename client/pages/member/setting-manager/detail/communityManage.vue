@@ -1,14 +1,17 @@
 <template>
     <div class="g-community-manage">
-        <div class="u-tip">
-            温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可；
+        <div class="u-tip" style="text-align:left">
+            温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可；通过主管理员方式获得的管理权限不能在此取消，请前往主管理员页面操作；取消全部勾选后将失去管理员身份
         </div>
         <div class="u-community-check-list">
             <div class="u-all-check">
                 <Checkbox v-model="checkAll" @on-change="onCheckAll" >全选</Checkbox>
             </div>
-            <CheckboxGroup v-model="checkAllGroup" @on-change="checkGroupChange">
+            <CheckboxGroup v-model="checkAllGroup" @on-change="checkGroupChange" style="display: inline-block">
                 <Checkbox v-for="item in communityList" :key="item.cmtId" :label="item.cmtId">{{item.cmtName}}</Checkbox>
+            </CheckboxGroup>
+            <CheckboxGroup v-model="majorVal" style="display: inline-block">
+                <Checkbox v-for="item in majorComList" :key="item.cmtId" :label="item.cmtId" disabled>{{item.cmtName}}</Checkbox>
             </CheckboxGroup>
         </div>
     </div>
@@ -28,7 +31,8 @@ export default {
             checkAll:false,
             checkAllGroup:[],
             checkList:"",
-
+            majorComList: [],
+            majorVal: []
         }
     },
     created(){
@@ -45,19 +49,25 @@ export default {
                 mbrId:this.detail.mbrId,
             }
             this.$http.get('get-manage-cmt-list', form).then((res)=>{
-                this.communityList=res.data.cmtList;
+                const filterArr = res.data.cmtList && res.data.cmtList.filter(i => (i.isManager !== 2)) || [];
+                const majorArr = res.data.cmtList && res.data.cmtList.filter(i => (i.isManager === 2)) || [];
+                this.communityList = filterArr;
+                this.majorComList = majorArr;
+                this.majorVal = majorArr.map(i => i.cmtId);
                 let arr=[];
-                res.data.cmtList.map((item)=>{
+                filterArr.map((item)=>{
                     if(item.isManager=="1"){
                        arr.push(item.cmtId);
                     }
-                })
+                });
                 this.checkAllGroup=arr;
+                this.checkList=arr.join(',');
                 if(this.checkAllGroup.length==this.communityList.length){
                      this.checkAll=true; 
                 }else{
                      this.checkAll=false; 
                 }
+                this.$emit('checkData',this.checkList)
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

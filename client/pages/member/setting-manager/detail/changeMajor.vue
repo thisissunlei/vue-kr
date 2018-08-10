@@ -329,8 +329,7 @@
           });
         };
 
-        // todo: test
-        xhrfile.open('POST', '/test/krspace-finance-web/customer/manager/chiefmanager/edit', true);
+        xhrfile.open('POST', '/api/krspace-finance-web/customer/manager/chiefmanager/edit', true);
         xhrfile.responseType = 'json';
         xhrfile.send(form);
       },

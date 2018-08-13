@@ -130,7 +130,7 @@ export default {
         props:{
             mask:String
         },
-      
+        
         data () {
             return {
                 form:'form',

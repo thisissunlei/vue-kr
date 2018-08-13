@@ -58,6 +58,27 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!--苏岭增加客户主管理员开始-->
+            <div class="m-customer-info" v-if="isManager">
+              <DetailStyle info="客户主管理员信息">
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{customerInfo.phone}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{customerInfo.name}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{customerInfo.email}}
+                        </LabelText>
+                  </div>
+                </Row>
+              </DetailStyle>  
+            </div>
+            <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">
                     <Col class="col">
@@ -200,6 +221,25 @@
                 <Button @click="cancelPrice">取消</Button>
             </div>
         </Modal>
+
+        <!--苏岭增加客户主管理员开始-->
+        <Modal
+            v-model="isAddManager"
+            title="主管理员变更"
+            width="665"
+        >
+            <AddManager  
+                v-if="isAddManager"
+                :customerId="renewForm.customerId"
+                @formData="getformData"
+                @submitFn="getFunction"
+            />
+            <div slot="footer">
+                    <Button type="primary" @click="addManagerSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="addEditOpen">取消</Button>
+            </div>
+        </Modal>
+    <!--苏岭增加客户主管理员结束-->
     </div>
 </template>
 
@@ -216,6 +256,8 @@ import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
+import LabelText from '~/components/LabelText';
+import AddManager from '../addAdministrator';
 
 
 
@@ -232,6 +274,16 @@ export default {
             }
         };
         return {
+            //苏岭
+            customerInfo:{},
+            isManager:false,
+            submitManager:null,
+            isAddManager:false,
+            isAddEdit:false,
+            managerId:'',
+            oldManagerId:'',
+            //苏岭结束
+
             orderId:'',
             chancedisabled:true,
             salerdisabled:true,
@@ -426,7 +478,9 @@ export default {
         SelectSaler,
         stationList,
         planMap,
-        SelectChance
+        SelectChance,
+        LabelText,
+        AddManager
     },
     mounted() {
         this.getDetailData();
@@ -444,6 +498,40 @@ export default {
         },
     },
     methods: {
+        //苏岭增加客户主管理员开始
+        addManagerSubmit(params){
+            this.submitManager && this.submitManager(this.managerSubmit);
+        },
+        managerSubmit(){
+            this.managerId='';
+			let Params=Object.assign({},this.formData);
+            Params.customerId=this.renewForm.customerId;
+            Params.communityId=this.renewForm.communityId;
+			var _this=this;
+			this.$http.post('store-change-manager', Params).then((res)=>{
+                this.isAddManager=false;
+                this.customerInfo=Object.assign({},this.formData);
+                this.isAddEdit=true;
+                this.managerId=res.data.managerId;
+				this.$Notice.success({
+					title:'变更管理员成功'
+				});
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        addEditOpen(){
+           this.isAddManager=!this.isAddManager;
+        },
+        getformData(form){
+			this.formData=form;
+        },
+        getFunction(form){
+			this.submitManager=form;
+        },
+        //苏岭增加客户主管理员结束
                 //获取销售机会列表
         getSalerChanceList() {
         // let chanceid=this.renewForm.saleChanceId;
@@ -637,6 +725,12 @@ export default {
                 }, 500)
                 _this.getStationFn = +new Date();
                 _this.getSalerChanceList();
+                 //苏岭开始
+                this.isAddEdit=data.managerId?true:false;
+                this.oldManagerId=data.managerId;
+                this.isManager=(data.communityId&&data.customerId)?true:false;
+                this.customerInfo=Object.assign({},data);
+                //苏岭结束
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -709,7 +803,9 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
-
+            //苏岭开始
+            formItem.managerId=this.managerId||this.oldManagerId;
+            //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
         
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
@@ -1515,11 +1611,38 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {
         color: #ed3f14;
     }
 }
+//苏岭开始
+.create-new-order{
+     .m-customer-info{
+         position:relative;
+         .ui-labeltext{
+             width: 50%;
+             max-width: 450px;
+             padding-left:0;
+             height:auto;
+             margin-bottom:0;
+             .ui-text{
+                 margin-bottom: 10px;
+             }
+             .ui-label{
+                 font-size: 12px;
+                 color: #495060;
+                 font-weight:400;
+             }
+         }
+         .info-button{
+             position: absolute;
+             top: -8px;
+             right:414px;
+         }
+     }
+ }
+ //苏岭结束
 </style>

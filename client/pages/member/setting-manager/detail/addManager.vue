@@ -5,7 +5,7 @@
                 <div class="u-part">
                     <div class="u-part-number">1</div>
                     <div class="u-part-title">确认会员信息</div>
-                    <div class="u-part-tip">温馨提示：您可以添加非本企业员工作为管理员，此类管理员不占用会员名额</div>
+                    <div class="u-part-tip"><span style="color:red;">请与客户确认无误后再添加</span>，如添加非企业员工则不占用会员名额</div>
                     <div class="u-part-line" v-if="ifShow"></div>
                     <div class="u-part-content">
                         <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="mbrPhone">

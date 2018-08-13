@@ -57,7 +57,7 @@
                     <div class="u-part-number">2</div>
                     <div class="u-part2-line"></div>
                     <div class="u-part-title">管理的社区</div>
-                    <div class="u-part-tip">温馨提示：如需取消该员工管理员身份，将所有社区取消勾选并点击“确认”即可</div>
+                    <div class="u-part-tip" style="padding-left:45px;text-indent:0px;">通过主管理员方式获得的管理权限不能在此取消，请前往主管理员员页面操作；取消全部勾选后将失去管理员身份</div>
                     <div class="u-error-check" v-if="ifCheckError">请选择要管理的社区</div>
                      <div class="u-community-check-list">
                         <div class="u-all-check">

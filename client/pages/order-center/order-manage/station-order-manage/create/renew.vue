@@ -553,6 +553,7 @@ export default {
 			this.$http.get('order-search-manager',params).then((res)=>{
                 this.isAddEdit=res.data.hasChiefManager;
                 this.customerInfo=Object.assign({},res.data);
+                this.managerId=res.data.managerId?res.data.managerId:'';
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

@@ -123,13 +123,13 @@ export default {
                     label:'全部'
                 },
                 {
-                    value:0,
-                    label:'未设置'
+                  value:1,
+                  label:'有'
                 },
                 {
-                    value:1,
-                    label:'已设置'
-                },
+                    value:0,
+                    label:'无'
+                }
             ],
             communityList:[],
             Params:{
@@ -197,7 +197,7 @@ export default {
                                             this.openSetting(params.row)
                                         }
                                     }
-                                }, '设置管理员')
+                                }, '详情')
                             ]);
                     }
                 },
@@ -209,8 +209,8 @@ export default {
         this.getTableData(this.$route.query);
         let managerType={
             '-1':'全部',
-            '0':'未设置',
-            '1' :'已设置'
+            '1' :'有',
+            '0':'无'
         }
          if(!this.$route.query.csrName){
                  this.$route.query.csrName=""

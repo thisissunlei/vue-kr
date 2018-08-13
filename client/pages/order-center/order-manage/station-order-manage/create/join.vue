@@ -874,10 +874,10 @@ export default {
                     obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validStart))
                 }
                 obj.validEnd = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validEnd))
-
+                obj.rightType=item.rightType;
                 return obj;
             })
-
+            
             this.getSaleAmount(saleList);
             // return complete;
         },
@@ -1095,7 +1095,10 @@ export default {
             this.formItem.items[itemIndex].tacticsName = itemName;
             this.formItem.items[itemIndex].tacticsId = itemId;
             let items = [];
+            let _this=this
             items = this.formItem.items.map((item) => {
+                let obj= _this.youhui.find(y=>y.id==item.tacticsId)
+                item.rightType=obj.rightType;
                 if (item.value == 'qianmian') {
                     item.validStart = this.formItem.startDate;
                     item.discount = '';
@@ -1504,6 +1507,7 @@ export default {
                         obj.value = item.tacticsType + '';
                         obj.id = item.tacticsId;
                         obj.name = item.tacticsName;
+                        obj.rightType=item.rightType;
                         if (item.tacticsType == 1) {
                             maxDiscount[item.tacticsName] = obj.discount;
                         }

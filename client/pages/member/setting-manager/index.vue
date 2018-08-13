@@ -34,7 +34,7 @@
                         </Select>
                 </div>
                 <div class="u-search-list" >
-                    <span class="u-search-label">是否已设管理员</span>
+                    <span class="u-search-label">有无管理员</span>
                     <Select 
                         v-model="Params.manager" 
                         style="width:150px"
@@ -50,7 +50,7 @@
                     </Select>
                  </div>
           <div class="u-search-list" >
-            <span class="u-search-label">是否已设主管理员</span>
+            <span class="u-search-label">有无主管理员</span>
             <Select
                 v-model="Params.chiefManager"
                 style="width:150px"

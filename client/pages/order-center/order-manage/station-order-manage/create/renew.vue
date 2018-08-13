@@ -719,7 +719,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.managerId=this.managerId;
+            renewForm.managerId=this.managerId;
             //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';

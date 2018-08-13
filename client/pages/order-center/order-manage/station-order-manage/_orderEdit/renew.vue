@@ -804,7 +804,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.managerId=this.managerId||this.oldManagerId;
+            renewForm.managerId=this.managerId||this.oldManagerId;
             //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
         

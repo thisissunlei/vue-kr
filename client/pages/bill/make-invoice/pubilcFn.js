@@ -196,6 +196,51 @@ function initListData(){
             type:'waitMake,alreadyMake,returnMake'
         },
         {
+            title: '注册地址',
+          
+            align:'center',
+            type:'waitMake',
+            render(tag,params){
+                if(params.row.qualificationVO && params.row.qualificationVO.registerAddress){
+                    return  params.row.qualificationVO.registerAddress
+                }
+                return '-';
+            }
+        },
+        {
+            title: '注册电话',
+            align:'center',
+            type:'waitMake',
+            render(tag,params){
+                if(params.row.qualificationVO && params.row.qualificationVO.registerPhone){
+                    return  params.row.qualificationVO.registerPhone
+                }
+                return '-';
+            }   
+        },
+        {
+            title: '开户银行',
+            align:'center',
+            type:'waitMake',
+            render(tag,params){
+                if(params.row.qualificationVO && params.row.qualificationVO.bank){
+                    return  params.row.qualificationVO.bank;
+                }
+                return '-'
+            }
+        },
+        {
+            title: '银行账户',
+            align:'center',
+            type:'waitMake',
+            render(tag,params){
+                if(params.row.qualificationVO && params.row.qualificationVO.bankAccount){
+                    return  params.row.qualificationVO.bankAccount;
+                }
+                return '-'
+            }
+        },
+        {
             title: '开票状态',
             key: 'invoiceStatusName',
             align:'center',

@@ -101,7 +101,7 @@ export default {
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY/MM/DD HH:mm", new Date(obj.row.startAt))+"———"+dateUtils.dateToStr("YYYY/MM/DD HH:mm", new Date(obj.row.endAt)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.startAt))+"——"+dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.endAt)))
                             ]);
                             
                         }

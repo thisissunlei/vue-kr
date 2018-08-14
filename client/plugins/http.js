@@ -64,8 +64,9 @@ function check401(res) {
      const redirectUrl = encodeURIComponent(window.location.href);
      if(typeof(Storage)!=="undefined"){
         if(sessionStorage.user){
-          sessionStorage.navs = '';
-                sessionStorage.user = '';
+            sessionStorage.navs = '';
+            sessionStorage.user = '';
+            sessionStorage.scrollTop = 0;
         }
         
       }

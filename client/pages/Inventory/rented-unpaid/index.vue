@@ -55,7 +55,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '已起租未付'
+                title: '已起租未付-氪空间后台管理系统'
             }
         },
         data () {

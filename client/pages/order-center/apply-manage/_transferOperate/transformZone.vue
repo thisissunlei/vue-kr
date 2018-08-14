@@ -54,6 +54,11 @@ import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 // import selectCustomers from '~/components/SelectCustomers.vue'
 import BlanceInputEdit from './blanceEdit.vue'
 export default {
+    head() {
+        return {
+            title: '转社区-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,

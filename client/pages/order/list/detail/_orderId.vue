@@ -80,7 +80,7 @@ export default {
 	},
 	head () {
             return {
-                title: "会议室订单详情"
+                title: "会议室订单详情-氪空间后台管理系统"
             }
         },
 	data(){

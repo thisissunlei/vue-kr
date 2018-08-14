@@ -18,6 +18,11 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 
 export default {
+    head () {
+        return {
+            title: "运维工具-氪空间后台管理系统"
+        }
+    },
     components:{
 		DetailStyle,
 		SectionTitle

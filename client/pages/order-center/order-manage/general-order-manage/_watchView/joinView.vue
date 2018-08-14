@@ -71,11 +71,11 @@ export default {
 		LabelText
 	},
 
-	head() {
+    head () {
         return {
-            title:'订单详情'
+            title: "查看订单详情-氪空间后台管理系统"
         }
-	},
+    },
 	
 	data(){
 		return{

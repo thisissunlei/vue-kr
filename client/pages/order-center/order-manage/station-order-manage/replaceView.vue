@@ -67,6 +67,9 @@
                 <LabelText :inline="inline" label="首付款日期：">
                     {{formItem.firstPayTime  |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
+                <LabelText :inline="inline" label="优惠添加人：" v-if="formItem.addUserName">
+                    {{formItem.addUserName}}
+                </LabelText>
             </Card>
             <span class="space"></span>
             <Card id="step-four">
@@ -421,6 +424,7 @@ export default {
 
 	methods:{
 		editCard(value){
+            console.log('editCards，换租查看 新工位信息编辑')
 			this.$emit("editCards", value); 
 		},
 		submit(){

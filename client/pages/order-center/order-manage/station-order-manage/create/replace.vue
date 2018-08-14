@@ -1011,6 +1011,8 @@
                 
             },
             editCard(value){
+                console.log("editCard 3");
+                
                 this.orderStatus = 'create';
                 this.status = value;
             },

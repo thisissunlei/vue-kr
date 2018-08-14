@@ -89,7 +89,7 @@ export default {
                     title: '商品类型',
                     key: 'type',
                     align:'center',
-                    width:100,
+                    width:80,
                 },
                 {
                     title: '工位数量',
@@ -101,13 +101,13 @@ export default {
                     title: '商品定价',
                     key: 'quotedPrice',
                     align:'right',
-                    width:90
+                    width:80
                 },
                 {
                     title: '招商状态',
                     key: 'investmentStatusName',
                     align:'center',
-                    width:90,
+                    width:80,
                     render(tag, params){
                         var ren=params.row.investmentStatusName?params.row.investmentStatusName:'-'
                         return <span style={params.row.investmentStatus=='AVAILABLE'?'color:red':''}>{ren}</span>
@@ -117,7 +117,7 @@ export default {
                     title: '签约价',
                     key: 'orderList',
                     className:'current-range',
-                    width:90,
+                    width:80,
                     align:'right',
                     render(h,obj){
                         return publicFn.mergeCell(h,obj.row.orderList,'price')
@@ -127,7 +127,7 @@ export default {
                     title: '签约单价',
                     key: 'orderList',
                     className:'current-range',
-                    width:90,
+                    width:80,
                     align:'right',
                     render(h,obj){
                         return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
@@ -297,11 +297,15 @@ export default {
         .current-range{
             .ivu-table-cell{ 
                 .ivu-tooltip{
-                    .row-current-more{
-                        padding: 15px 0 10px 0;
-                    }
-                    .noBorder{
-                        border-bottom:none;
+                    width:100%;
+                    .ivu-tooltip-rel{
+                        width:100%;
+                        .row-current-more{
+                            padding: 15px 0 10px 0;
+                        }
+                        .noBorder{
+                            border-bottom:none;
+                        }
                     }
                 }
             }

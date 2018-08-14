@@ -155,7 +155,7 @@ var Map = function (elementId, configs) {
     DC.stationStatus = {
             '1': {
                 status: 'join',
-                mark: '已入住',
+                mark: '已入驻',
                 textColor: '#fff',
                 backgroundColor: '#499df1',
             },

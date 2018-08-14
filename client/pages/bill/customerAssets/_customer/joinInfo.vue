@@ -72,7 +72,7 @@ export default {
                         }
                     },
                     {
-                        title: '入住状态',
+                        title: '入驻状态',
                         key: 'status',
                         width:200,
                         align:'center',

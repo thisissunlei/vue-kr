@@ -1,7 +1,6 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const pluginsDomain = require('./config/plugins.env');
-// console.log(pluginsDomain,'+++++++++',pluginsDomain.jsFiles)
+const pluginsDomain  = require('./config/plugins.env')[process.env.NODE_ENV].plugins;
 module.exports = {
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 700000 },
@@ -22,19 +21,18 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
-    link:pluginsDomain.cssFiles,
-    
-    script: pluginsDomain.jsFiles
-    
-
+    // script: [
+    //   { src: pluginsDomain + '/plugins/nav/nav.1.0.0.js' }
+    // ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: pluginsDomain + '/plugins/public/images/favicon.ico' }
+    ]
   },
-  // css: ['~assets/css/main.css'],
-  // css: pluginsDomain.cssFiles,
 
   plugins: [
     { src: '~plugins/iview', ssr: true },
   ],
-  
+  css: ['~assets/css/main.css'],
   loading: { color: '#000000' },
   build: {
     vendor: ['iview'],

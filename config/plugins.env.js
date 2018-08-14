@@ -1,6 +1,6 @@
 const envs = {
     'development':{
-        'plugins':'http://optest04.krspace.cn',
+        'plugins':'http://optest03.krspace.cn',
     },
     'test01':{
         'plugins':'http://optest01.krspace.cn',
@@ -21,9 +21,10 @@ const envs = {
         'plugins':'http://dev02.krspace.cn',
     },
     'production':{
-        'plugins':'',
+        'plugins':'http://op.krspace.cn',
     },
 }
+<<<<<<< HEAD
 const pluginsDomain  = envs[process.env.NODE_ENV].plugins+'/plugins';
 const jsFiles = [
     {src: pluginsDomain+'/nav/1.0.0/nav.js'},
@@ -43,4 +44,7 @@ module.exports = {
     jsFiles,
     cssFiles
 };
+=======
+>>>>>>> feature/lyh/添加title
 
+module.exports = envs;

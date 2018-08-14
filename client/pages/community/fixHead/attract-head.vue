@@ -27,23 +27,27 @@
      display: -moz-box; 
      display: -webkit-box; 
      display: box; 
-     height:40px;
-     line-height:40px;
+     //height:40px;
+     //line-height:40px;
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:400;
   .slot-head-class{
         text-align: center;
         border-right:solid 1px #e9eaec;
         border-bottom:solid 1px #e9eaec;
         font-weight: 700;
-        &:nth-child(2),&:nth-child(9),&:nth-child(10),&:nth-child(13){
+        padding: 10px 0;
+        &:nth-child(9),&:nth-child(10),&:nth-child(13){
             width:100px;
         }
-        &:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(7),&:nth-child(11){
+        &:nth-child(11){
             width:90px;
         }
         &:nth-child(8),&:nth-child(3){
             width:60px;
+        }
+        &:nth-child(5),&:nth-child(4),&:nth-child(2),&:nth-child(6),&:nth-child(7){
+            width:80px;
         }
         &:nth-child(1){
             width:100%;

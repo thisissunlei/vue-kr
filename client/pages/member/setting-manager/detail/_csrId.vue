@@ -397,8 +397,10 @@ export default {
       },500)
 		},
     openCheck(params) {
+      let customerId=this.$route.params.csrId;
       this.$http.get('check-certificate', {
-        mbrId: params.mbrId
+        mbrId: params.mbrId,
+				customerId
       }).then((res)=>{
         this.isCheck = true;
         this.checkContent = res.data;

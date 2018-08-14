@@ -334,11 +334,10 @@
         xhrfile.send(form);
       },
       downloadCertificate() {
-        this.$http.post('contract-list-get-pdf-url', {
-          requestId: 8118,
-          contractType: 'NOSEAL'
+        this.$http.post('get-station-contract-pdf-url', {
+          id: 126268
         }).then((res) => {
-          utils.downFile(res.data)
+          utils.downFileBlank(res.data)
         }).catch((err) => {
           this.$Notice.error({
             title: err.message

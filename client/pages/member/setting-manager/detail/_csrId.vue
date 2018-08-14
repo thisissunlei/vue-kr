@@ -417,7 +417,7 @@ export default {
       this.$http.post('get-station-contract-pdf-url', {
         id
       }).then((res) => {
-        utils.downFile(res.data)
+        utils.downFileBlank(res.data)
       }).catch((err) => {
         this.$Notice.error({
           title: err.message

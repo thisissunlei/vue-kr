@@ -335,7 +335,7 @@
       },
       downloadCertificate() {
         this.$http.post('get-station-contract-pdf-url', {
-          id: 126268
+          id: 127390
         }).then((res) => {
           utils.downFileBlank(res.data)
         }).catch((err) => {

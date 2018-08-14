@@ -85,6 +85,11 @@ import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import OperateLog from './operateLog.vue'
 
 export default {
+     head() {
+        return {
+            title: '转社区详情-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,

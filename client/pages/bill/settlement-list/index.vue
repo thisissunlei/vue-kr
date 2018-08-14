@@ -83,7 +83,7 @@
         },
          head() {
             return {
-                title: '结算单管理'
+                title: '结算单-氪空间后台管理系统'
             }
         },
         data () {

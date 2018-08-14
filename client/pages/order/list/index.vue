@@ -121,7 +121,7 @@ export default {
         },
         head () {
             return {
-                title: "会议室订单管理"
+                title: "APP会议室订单-氪空间后台管理系统"
             }
         },
         data () {

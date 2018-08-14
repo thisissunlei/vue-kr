@@ -73,7 +73,7 @@ export default {
     },
     head () {
         return {
-            title: "推送详情"
+            title: "推送详情-氪空间后台管理系统"
         }
     },
 	data(){

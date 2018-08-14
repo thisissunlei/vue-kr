@@ -22,9 +22,9 @@ import ReplaceList from './replaceList';
 
 export default {
     name: 'List',
-    head() {
+    head () {
         return {
-            title: '订单管理'
+            title: "工位订单-氪空间后台管理系统"
         }
     },
     data() {

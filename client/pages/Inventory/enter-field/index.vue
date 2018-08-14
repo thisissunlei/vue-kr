@@ -55,7 +55,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '即将进场'
+                title: '即将进场-氪空间后台管理系统'
             }
         },
         data () {

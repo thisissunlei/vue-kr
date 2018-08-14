@@ -71,7 +71,7 @@ export default {
 	},
 	head () {
 		return {
-			title: "回款详情"
+			title: "回款详情-氪空间后台管理系统"
 		}
     },
 	data(){

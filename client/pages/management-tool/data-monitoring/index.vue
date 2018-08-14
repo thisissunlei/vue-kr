@@ -21,7 +21,11 @@
 <script>
 import List from './list';
 export default {
-
+     head () {
+        return {
+            title: "订单数据监控-氪空间后台管理系统"
+        }
+    },
     components: {
         List
     },

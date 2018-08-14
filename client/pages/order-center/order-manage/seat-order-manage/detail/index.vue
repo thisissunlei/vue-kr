@@ -101,7 +101,7 @@ export default {
    name:'krmeetingdetail',
     head () {
             return {
-                title: "散座订单详情"
+                title: "散座订单详情-氪空间后台管理系统"
             }
     },
    data(){

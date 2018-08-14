@@ -4,7 +4,7 @@
             <Form ref="formItems" :model="formItem" :rules="ruleCustom"  label-position="top">
                 <div class="u-part">
                     <div class="u-part-title">
-                        输入需要设为主管理员的账号，可以为非企业员工客户旧的主管理员将会在本订单合同生效后自动失效
+                        管理员可在APP中查看和支付账单，可在官网添加会员、分配会员、门禁权限、申请发票等，<span style="color:red;">请与客户确认无误后再填写</span>
                     </div>
                     <div class="u-part-content">
                          <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="phone">
@@ -99,7 +99,8 @@ export default {
             }
             this.$http.get('search-phone-member', form).then((res)=>{
                 let data=Object.assign({},res.data);
-                this.formItem=Object.assign({},data);
+                this.formItem.name=data.name;
+                this.formItem.email=data.email;
                 this.ifShow=true;      
 			}).catch((err)=>{
 				this.$Notice.error({

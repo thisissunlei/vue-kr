@@ -85,7 +85,7 @@ export default {
         },
         head () {
             return {
-                title: "交易流水"
+                title: "交易流水-氪空间后台管理系统"
             }
         },
         data () {

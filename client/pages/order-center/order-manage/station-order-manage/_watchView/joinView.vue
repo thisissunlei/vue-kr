@@ -112,7 +112,7 @@ export default {
 	name: 'JoinView',
 	head() {
 		return {
-			title: '工位订单详情'
+			title: "查看入驻订单详情-氪空间后台管理系统"
 		}
 	},
 	components: {

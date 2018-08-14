@@ -134,6 +134,11 @@ export default {
        
      }
    },
+    head () {
+        return {
+            title: '电视图库管理-氪空间后台管理系统'
+        }          
+    },
    created(){
 
    },

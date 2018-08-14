@@ -112,7 +112,7 @@ export default {
 	name: 'RenewView',
 	head() {
 		return {
-			title: '续租详情'
+			title: "查看续租订单详情-氪空间后台管理系统"
 		}
 	},
 	components: {
@@ -335,7 +335,6 @@ export default {
 				id: params.watchView
 			};
 			this.$http.get('join-bill-detail', from).then((response) => {
-				debugger;
 				this.basicInfo = response.data;
 				let pars = {
 					customerId: this.basicInfo.customerId,

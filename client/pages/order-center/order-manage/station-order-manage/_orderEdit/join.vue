@@ -533,7 +533,7 @@ export default {
     },
     head() {
         return {
-            title: '编辑订单'
+            title: "编辑入驻订单-氪空间后台管理系统"
         }
     },
     components: {

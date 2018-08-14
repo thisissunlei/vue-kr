@@ -269,6 +269,11 @@ import AddManager from '../addAdministrator';
 
 
 export default {
+    head () {
+        return {
+            title: "新建续租订单-氪空间后台管理系统"
+        }
+    },
     data() {
         const validateFirst = (rule, value, callback) => {
             if (value === '') {
@@ -468,11 +473,6 @@ export default {
 
         }
     },
-    head() {
-        return {
-            title: '新建续租服务订单管理'
-        }
-    },
     components: {
         SectionTitle,
         SelectCommunities,
@@ -553,6 +553,7 @@ export default {
 			this.$http.get('order-search-manager',params).then((res)=>{
                 this.isAddEdit=res.data.hasChiefManager;
                 this.customerInfo=Object.assign({},res.data);
+                this.managerId=res.data.managerId?res.data.managerId:'';
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

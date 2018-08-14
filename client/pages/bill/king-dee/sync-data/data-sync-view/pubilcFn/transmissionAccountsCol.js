@@ -5,113 +5,110 @@ function transmissionAccountsCol(){
     
     return [
         {
-            title: '金额',
-            key: 'amount',
+            title: '已传递',
+            key: 'syncStatusName',
             align:'center',
             fixed:'left',
-            width:150,
+            width:120,
             render:function(h,params){
-                return h('span',{},utils.thousand(params.row.amount))
+                let status = params.row.syncStatusName;
+                if(status ==='已经同步'){
+                    return h('span',{style:{color:'red'}},status)
+                }
+                return h('span',{},status)
              }
         },
         {
-            title: '税金额',
+            title: '社区名称',
+            key: 'communityName',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '主体',
+            key: 'companyNumberName',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '主体ID',
+            key: 'companyNumber',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '客户',
+            key: 'customerName',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '客户ID',
+            key: 'asstActNumber',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '收入类型',
+            key: 'materialNumberDesc',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '收入ID',
+            key: 'materialNumber',
+            align:'center',
+            width:120,
+        },
+        {
+            title: '金额（含税）',
             key: 'arAmount',
             align:'center',
-            width:150,
-            fixed:'left',
+            width:120,
             render:function(h,params){
                 return h('span',{},utils.thousand(params.row.arAmount))
              }
         },
         {
-            title: '客户编码',
+            title: '税率',
+            key: 'taxRate',
             align:'center',
-            key: 'asstActNumber',
-            width:150,
+            width:120,
+        },
+
+        {
+            title: '税额',
+            key: 'taxAmount',
+            align:'center',
+            width:120,
         },
         {
-            title: '业务日期',
+            title: '金额（不含税）',
+            key: 'amount',
+            align:'center',
+            width:120,
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.amount))
+             }
+        },
+        {
+            title: '确认日期',
             key: 'bizDate',
             align:'center',
             width:150,
             render(tag, params){
                 let time=params.row.bizDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.bizDate)):'-';
-                return time;
+                return tag('span',time)
             }
         },
-        // {
-        //     title: '业务员姓名',
-        //     key: 'bizPerson',
-        //     align:'center',
-        //     width:150,
-        // },
         {
-            title: '普通销售/普通销售退 ',
-            key: 'bizTypeName',
+            title: '含税单价',
+            key: 'taxPrice',
             align:'center',
-            width:150,
-        },
-        // {
-        //     title: '所在社区',
-        //     key: 'communityName',
-        //     align:'center',
-        //     width:150,
-        // },
-        {
-            title: '财务组织编码',
-            key: 'companyNumber',
-            align:'center',
-            width:150,
-        },
-        // {
-        //     title: '销售合同行号',
-        //     key: 'contractNumber',
-        //     align:'center',
-        //     width:150,
-        // },
-        {
-            title: '核心单据号',
-            key: 'coreBillNumber',
-            align:'center',
-            width:150,
-        },
-        {
-            title: '成本中心',
-            key: 'costCenterNumber',
-            align:'center',
-            width:150,
-        },
-        // {
-        //     title: '货币类型',
-        //     key: 'currency',
-        //     align:'center',
-        //     width:150,
-        // },
-        {
-            title: '客户姓名',
-            key: 'customerName',
-            align:'center',
-            width:150,
-        },
-       
-        {
-            title: '原始数据id',
-            key: 'incomeId',
-            align:'center',
-            width:150,
-        },
-        {
-            title: '物料编码(OP系统的收入类型) ',
-            key: 'materialNumber',
-            align:'center',
-            width:150,
-        },
-        {
-            title: '唯一交易编码(OP系统的交易ID)',
-            key: 'number',
-            align:'center',
-            width:150,
+            width:120,
+            render:function(h,params){
+                return h('span',{},utils.thousand(params.row.taxPrice))
+             }
         },
         {
             title: '不含税单价',
@@ -122,47 +119,36 @@ function transmissionAccountsCol(){
                 return h('span',{},utils.thousand(params.row.price))
              }
         },
-        // {
-        //     title: '同步记录id',
-        //     key: 'syncDataId',
-        //     align:'center',
-        //     width:120,
-        // },
-        
         {
-            title: '税额',
-            key: 'taxAmount',
+            title: '数量',
             align:'center',
-            width:120,
+            key: 'quantity',
+            width:150,
         },
         {
-            title: '含税单价(正数)',
-            key: 'taxPrice',
+            title: '销售类型',
             align:'center',
-            width:120,
-            render:function(h,params){
-                return h('span',{},utils.thousand(params.row.taxPrice))
-             }
+            key: 'bizTypeName',
+            width:150,
         },
         {
-            title: '税率',
-            key: 'taxRate',
+            title: '核心单据号',
+            key: 'coreBillNumber',
             align:'center',
-            width:120,
+            width:150,
         },
         {
-            title: '同步状态',
-            key: 'syncStatusName',
+            title: '唯一交易编码',
+            key: 'number',
             align:'center',
+            width:150,
+        },
+        {
+            title: '备注',
+            align:'center',
+            key: 'remark',
             fixed:'right',
-            width:120,
-        },
-        {
-            title: '失败消息',
-            key: 'failedMsg',
-            align:'center',
-            fixed:'right',
-            width:200,
+            width:150,
         },
     ]
 

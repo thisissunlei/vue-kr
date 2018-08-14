@@ -80,6 +80,11 @@ import OperateLog from './operateLog.vue'
 import BlanceInputGroup from './blanceEdit.1.vue'
 
 export default {
+     head() {
+        return {
+            title: '释放服务保证金详情-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,

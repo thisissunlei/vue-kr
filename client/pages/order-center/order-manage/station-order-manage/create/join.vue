@@ -293,7 +293,11 @@ import AddManager from '../addAdministrator';
 
 export default {
 
-
+    head () {
+        return {
+            title: "新建入驻订单-氪空间后台管理系统"
+        }
+    },
     data() {
         const validateFirst = (rule, value, callback) => {
             if (value === '') {
@@ -533,11 +537,6 @@ export default {
 
         }
     },
-    head() {
-        return {
-            title: '新建订单'
-        }
-    },
     components: {
         SectionTitle,
         selectCommunities,
@@ -631,6 +630,7 @@ export default {
 			this.$http.get('order-search-manager',params).then((res)=>{
                 this.isAddEdit=res.data.hasChiefManager;
                 this.customerInfo=Object.assign({},res.data);
+                this.managerId=res.data.managerId?res.data.managerId:'';
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

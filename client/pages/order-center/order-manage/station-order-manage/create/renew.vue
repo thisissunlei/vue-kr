@@ -553,6 +553,7 @@ export default {
 			this.$http.get('order-search-manager',params).then((res)=>{
                 this.isAddEdit=res.data.hasChiefManager;
                 this.customerInfo=Object.assign({},res.data);
+                this.managerId=res.data.managerId?res.data.managerId:'';
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -718,7 +719,7 @@ export default {
             let _this = this;
             this.disabled = true;
             //苏岭开始
-            formItem.managerId=this.managerId;
+            renewForm.managerId=this.managerId;
             //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';

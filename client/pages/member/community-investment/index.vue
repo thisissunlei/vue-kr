@@ -2,6 +2,15 @@
 <div class="customer-assets">
    <SectionTitle title="招商角色配置"></SectionTitle>
         <div class="div-search">
+            <Select
+                v-model="params.roleId"
+                style="width:250px;"
+                placeholder="请选择角色"
+                clearable
+                @on-change="roleChange"
+            >
+                <Option  v-for="item in roleList" :value="''+item.id"  :key="item.id" >{{ item.name }}</Option>
+            </Select>
             <SearchFormInput :searchFilter="searchFilter" :onSubmit="searchSubmit"/>
         </div>
         <div class="table-list">
@@ -32,6 +41,7 @@
             >
             <Awarded 
              v-if="openAwarded"
+             :dataRole="roleList"
              @cancel="cancelRole"
              @submit="submitRole"
             />
@@ -70,8 +80,10 @@
 
             params:{
                 page:1,
-                pageSize:15
+                pageSize:15,
+                roleId:""
             },
+            roleList:[],
             searchFilter:[
                 {label:'登录名',value:'accountName'},
                 {label:'姓名',value:'realName'},
@@ -132,9 +144,23 @@
           }
         },
         mounted(){
+            this.getDataList();
             this.getListData();
         },
         methods:{
+            getDataList(){
+                this.$http.get('get-business-role').then((res)=>{
+                    this.roleList=res.data;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            roleChange(){
+                this.params.page=1;
+                this.getListData();
+            },
             getListData(){
                 this.loading=true;
                 let params = Object.assign({},this.params)
@@ -158,7 +184,7 @@
             searchSubmit(params){
                 params.page=1;
                 params.pageSize=15;
-                this.params=Object.assign({},params);
+                this.params=Object.assign({},this.params,params);
                 this.getListData();
             },
             showRole(param){
@@ -187,10 +213,10 @@
 .customer-assets{
     position: relative;
     .div-search{
-        text-align: right;
+        //text-align: right;
         padding:20px ;
-        margin-top: -10px;
-        margin-bottom: 20px;
+        // margin-top: -10px;
+        // margin-bottom: 20px;
     }
     .table-list{
         padding:0 20px;

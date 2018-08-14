@@ -99,7 +99,8 @@ export default {
             }
             this.$http.get('search-phone-member', form).then((res)=>{
                 let data=Object.assign({},res.data);
-                this.formItem=Object.assign({},data);
+                this.formItem.name=data.name;
+                this.formItem.email=data.email;
                 this.ifShow=true;      
 			}).catch((err)=>{
 				this.$Notice.error({

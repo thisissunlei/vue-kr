@@ -27,6 +27,7 @@
                 :placeholder="[placeholder?placeholder:'请输入搜索关键字']" 
                 :name="[inputName?inputName:'search']" 
 				@input="passDataToFather"
+				@keyup.enter="onKeyEnter"
             />
         </div>
     </div>
@@ -128,7 +129,18 @@ export default {
                
 			}
            
-        },
+		},
+		onKeyEnter(){
+			if(this.flag){
+               var value={};;
+                if(this.filterValue){
+					value[this.filterValue]=this.searchValue
+                }else{
+                    value.content=this.searchValue;
+                }   
+                this.onSubmit && this.onSubmit(value); 
+			}
+		},
         getValue(item){
             this.searchLabel=item.label ;
             this.filterValue=item.value;

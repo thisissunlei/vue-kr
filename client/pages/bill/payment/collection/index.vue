@@ -209,7 +209,7 @@ import dateUtils from 'vue-dateutils';
                 
                 this.$http.get('payment-add', this.formItem).then( res => {
                     this.$Notice.success({
-                        title:'回款款成功'
+                        title:'回款成功'
                     });
                     setTimeout(function(){
                          window.close();

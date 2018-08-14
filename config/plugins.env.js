@@ -42,4 +42,3 @@ module.exports = {
     cssFiles
 };
 
-module.exports = envs;

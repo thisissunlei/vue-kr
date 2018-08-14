@@ -180,7 +180,8 @@
                         </Col>
                         <Col span="5" class="discount-table-content">
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <!-- <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :class="'discount-input-'+index"></Input> -->
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
 
                         </Col>
@@ -312,6 +313,8 @@ export default {
         };
 
         return {
+            discountReceive:-1,//订单本身已有的折扣信息
+            discountdisable:[],
             //苏岭
             customerInfo:{},
             isManager:false,
@@ -526,7 +529,6 @@ export default {
             openPrice: false,
             price: '',
             priceError: false,
-            discountReceive:-1//订单本身已有的折扣信息
         }
     },
     head() {
@@ -551,7 +553,6 @@ export default {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
-        
     },
     watch: {
         getFloor() {
@@ -797,10 +798,10 @@ export default {
                             }
                             return false
                         })
-                        debugger
                         obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
                         // 创建者与当前编辑者所拥有的折扣权限不一致 会导致折扣不能回显
-                        // obj.type = item.tacticsType + '/' + index + '/' + item.tacticsName + '/' + item.id;                       
+                        // obj.type = item.tacticsType + '/' + index + '/' + item.tacticsName + '/' + item.id;     
+                        obj.index=index;                  
                         obj.tacticsId = item.tacticsId;
                         obj.discount = item.discountNum;
                         obj.tacticsType = JSON.stringify(item.tacticsType);
@@ -815,10 +816,13 @@ export default {
                         _this.disCountReceive=type1.discount
                         if (type1) {
                             let obj= _this.youhui.find(y=>y.value=='1')
-                            if (obj) {
-                               
+                            if (obj) {                                
                                  if (obj.discount>type1.discount) {
+                                     debugger
+                                     let index=type1.index;
+                                     _this.errorDiscountIndex=index;
                                     _this.showDiscountError();
+                                    _this.discountdisable[index]=true
                                  }
                             }
                         }
@@ -839,6 +843,8 @@ export default {
                 _this.$Notice.error({
                     title: e.message
                 });
+            }).then(()=>{
+                this.disableDiscoutInput()
             })
         },
         config: function () {
@@ -1718,9 +1724,7 @@ export default {
                this.$Notice.error({
                    title: '您没有此折扣权限，请让高权限的同事协助编辑'
                });
-        }
-
-
+        }       
     }
 }
 </script>

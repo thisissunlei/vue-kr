@@ -46,7 +46,7 @@ function originalAccountsCol(){
             align:'center',
             render(tag, params){
                 let time=params.row.dealDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.row.dealDate)):'-';
-                return time;
+                return tag('span',time)
             }
             
         },

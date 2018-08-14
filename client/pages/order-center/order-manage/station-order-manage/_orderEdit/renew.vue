@@ -101,9 +101,9 @@
             </DetailStyle>
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <Col class="col col-discount-header">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" :disabled="disabled" @click="deleteDiscount">删除</Button>
                     <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                     </Col>
 
@@ -736,6 +736,7 @@ export default {
                             let obj= _this.youhui.find(y=>y.value=='1')
                             if (obj) {                                
                                  if (obj.discount>type1.discount) {
+                                    let index=type1.index;
                                     _this.showDiscountError();
                                     _this.discountdisable[index]=true
                                  }
@@ -1674,6 +1675,12 @@ export default {
              top: -8px;
              right:414px;
          }
+        
+     } 
+     .creat-order-form{
+        .col-discount-header{
+            max-width:470px;
+        }
      }
  }
  //苏岭结束

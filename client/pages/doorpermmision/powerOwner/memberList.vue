@@ -94,7 +94,7 @@ export default {
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.ctime)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.ctime)))
                             ]);
                             
                         }

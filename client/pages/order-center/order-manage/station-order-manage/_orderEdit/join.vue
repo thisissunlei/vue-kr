@@ -1800,7 +1800,11 @@ export default {
      }
      .creat-order-form{
          .col-discount-header{
-             max-width:470px;
+             .pay-error{
+                    position: absolute;
+                    top: 10px;
+                    width: 350px;
+             }
          }
      }
  }

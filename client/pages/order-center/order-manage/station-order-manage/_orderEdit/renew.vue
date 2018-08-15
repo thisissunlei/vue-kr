@@ -102,8 +102,8 @@
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
                     <Col class="col col-discount-header">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" :disabled="disabled" @click="deleteDiscount">删除</Button>
+                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
                     <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                     </Col>
 
@@ -198,7 +198,7 @@
             </div>
 
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
                 <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
             </FormItem>
         </Form>
@@ -275,6 +275,7 @@ export default {
             }
         };
         return {
+            discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],
             //苏岭
@@ -1455,6 +1456,7 @@ export default {
                     return;
                 }
             }
+            this.discountErrorStr=''
             this.discount = val;
             this.dealSaleInfo(true)
         },
@@ -1592,6 +1594,7 @@ export default {
         },
         showDiscountError(){
             this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+            this.discountErrorStr=this.discountError
                this.disabled = true;
                this.$Notice.error({
                    title: '您没有此折扣权限，请让高权限的同事协助编辑'

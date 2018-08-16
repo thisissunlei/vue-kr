@@ -33,7 +33,7 @@ const jsFiles = [
 const cssFiles = [
     {rel:'stylesheet',href:pluginsDomain+'/nav/1.0.0/nav.css'},
     { rel: 'stylesheet', href: pluginsDomain+'/public/css/main.css' },
-    { rel: 'icon', type: 'image/x-icon', href: '/public/images/favicon.ico' },
+    { rel: 'icon', type: 'image/x-icon', href: pluginsDomain+ '/public/images/favicon.ico' },
     
 ]
 

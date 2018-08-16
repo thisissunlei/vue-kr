@@ -95,7 +95,8 @@ export default {
                   render(h, obj){
                     if(obj.row.lastEditTime){
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.lastEditTime));
-                        return time;
+                        return h('span',{},time)
+                        
                     }
                     
                   }

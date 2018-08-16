@@ -14,13 +14,6 @@
             @close="close"
             @upload="upload"
         />
-        <Input 
-            v-model="num"
-            placeholder="留言最多30字"
-            type="textarea"
-            :autosize="{minRows:2,maxRows:2}" 
-            :maxlength="200"
-        />
         <Button type="primary" @click="jumpCreate">新建</Button>
     </div>
 </template>

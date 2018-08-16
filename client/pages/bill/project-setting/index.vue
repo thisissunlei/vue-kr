@@ -3,18 +3,28 @@
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="待开业项目" name="PREPARE">
                 <!--项目管理档案列表
-                 <Archives v-if="mask"/> 
+                 <Archives v-if="mask"/>
                 -->
                 <ProjectView projectStatus="PREPARE"  v-if="tabs=='PREPARE'"/>
             </TabPane>
             <TabPane label="已开业项目" name="OPENED">
 
                 <!-- 项目总览
-                    <ProgressView v-if="!mask"/> 
+                    <ProgressView v-if="!mask"/>
                 -->
                <ProjectView projectStatus="OPENED"  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
+
+        <!-- <div style="padding:0 20px">
+          <Buttons label='导出'  type='primary' @click='submitExport' checkAction='pm_file_export'/>
+        </div> -->
+
+
+
+
+
+
   </div>
 </template>
 
@@ -22,22 +32,24 @@
 <script>
 
 import Archives from './archives'
+import Buttons from '~/components/Buttons'
 import ProjectView from './project-view';
 export default {
     components:{
         Archives,
-        ProjectView
+        ProjectView,
+        Buttons
     },
     data(){
         return{
-         
+
             tabs:'PREPARE'
         }
     },
     mounted(){
         GLOBALSIDESWITCH("false");
         // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
-       
+
         // this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
         // if(this.tabs=='OPENED'){
         //     this.mask=false;
@@ -47,6 +59,9 @@ export default {
         // }
     },
     methods:{
+      submitExport(){
+        window.open("/api/pm/project/actions/export")
+      },
         tabsClick(key){
             // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
@@ -78,7 +93,7 @@ export default {
             text-align: center;
             line-height: 35px;
             padding: 8px 20px;
-            
+
         }
         .ivu-tabs-no-animation{
             overflow: visible !important;

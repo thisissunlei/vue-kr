@@ -340,21 +340,26 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'changedAmount',
                     align:'center',
                     render:function(h,params){
-                        return utils.thousand((params.row.changedAmount/100).toFixed(2)) ;
+                        return h('span',
+                            {}
+                        ,utils.thousand((params.row.changedAmount/100).toFixed(2)))
+                        
                     }
                 },{
                     title: '相关记录',
                     key: 'records',
                     align:'center',
                     render:function(h,params){
-                        return params.row.records?params.row.records:'无'
+                        return h('span',{},params.row.records?params.row.records:'无')
+                        
                     }
                 },{
                     title: '操作时间',
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
+                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)))
+                        
                     }
                 }],
                 openBalance:false,//转余额弹窗

@@ -1,6 +1,5 @@
 
 var addEvent = function (el, type, fn, capture) {
-    console.log("-------")
     if (window.addEventListener) {
         if (type === "mousewheel" && document.mozFullScreen !== undefined) {
             type = "DOMMouseScroll";

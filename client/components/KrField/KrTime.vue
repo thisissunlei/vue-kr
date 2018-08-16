@@ -7,7 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
-            :right="right"
+    :right="right"
         >
             <TimePicker 
                 :open="open"
@@ -40,6 +40,7 @@ export default {
     },
     props:{
         right:{
+            
             type:String
         },
         placeholder:{

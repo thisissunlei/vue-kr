@@ -46,15 +46,11 @@
                 </div>
             </Modal>
             
-            <Modal
-                v-model="openNullify"
-                title="提示信息"
-                width="500"
-            >
-                <Nullify/>
+            <Modal id='nullifymodel' v-model="openNullify" title="请确认是否作废订单" width="500">
+                <Nullify v-if="openNullify" :id='id' @refershList='refershJoinList' @closeModalForm='closeNullify' />
                 <div slot="footer">
-                    <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                    <!-- <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
                 </div>
             </Modal>
 
@@ -70,7 +66,7 @@
                 title="提示信息"
                 width="500"
             >
-                <ApplyContract/>
+                <ApplyContract  :requireChineseEnglish='false' @onSelectionChange='onSelectApplyContract'/>
                 <div slot="footer">
                     <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
@@ -117,6 +113,7 @@
                 switchParams:{
                      orderType:'REPLACE'
                 },
+                contractLanguage:'CHINESE',//合同语言类型
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -136,7 +133,8 @@
                     {
                         title: '订单编号',
                         key: 'orderNum',
-                        align:'center'
+                        align:'center',
+                        width:116
                     },
                     {
                         title: '客户名称',
@@ -146,8 +144,52 @@
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var communityName=params.row.communityName;
+                              if (communityName.lastIndexOf('社区')==communityName.length-2) {
+                                 communityName=communityName.slice(0,communityName.length-2)
+                              }           
+                          return <span class="u-txt">{communityName}</span>;
+                        }
                     },
+                    {
+                        title: '商品名称',
+                        key: 'seatNames',
+                        align:'center',
+                        width:150,
+                        render:(h,params)=>{
+                            let setnames=params.row.seatNames;
+                            if (!setnames) {
+                                return
+                            }
+                            let setArray=setnames.split('、');
+                            let lines=[] 
+                            let copyNames=Array.from(setArray)
+                            while(copyNames.length>0){
+                                lines.push( h('p',copyNames.splice(0,5).join('、'))) 
+                            }
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top'
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden',
+                                                    width:'130px'
+                                                }
+                                            },setnames)
+                                        ]),
+                                        h('div', {slot:'content'},lines),
+                                    ])
+                                ])
+                        }                                    
+                    }, 
                     {
                         title: '服务费总额',
                         key: 'rentAmount',
@@ -182,9 +224,10 @@
                         title: '服务期限',
                         key: 'startDate',
                         align:'center',
-                         width:100,
+                        width:192,
                         render(h, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            return h('span',time)
                         }
                     },
                     {
@@ -243,6 +286,14 @@
                         align:'center',
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
+                            if (time.split('  ').length==2) {
+                              let t1=time.split('  ')[0]
+                              let t2=time.split('  ')[1]
+                              let lines=[];
+                              lines.push(tag('p',t1))
+                              lines.push(tag('p',t2))
+                              return tag('div',lines);  
+                            }
                             return time;
                         }
                     },
@@ -250,6 +301,8 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
+                        width:76,
+                        className:'col-operate',
                         render:(tag,params)=>{
                            var btnRender=[
                                tag(Buttons, {
@@ -342,6 +395,10 @@
         },
 
         methods:{   
+            refershJoinList(params) {
+                this.getListData(this.params);
+                this.openNullify = false;
+            },
             submitNullify (){
                 let params={
                     id:this.id
@@ -498,13 +555,17 @@
             showApply(params){
                 this.id=params.row.id;
                 this.closeApply();
+            },
+            //中英文合同选择切换
+            onSelectApplyContract(contractLanguage){
+                this.contractLanguage=contractLanguage;
             }
         }
     }
 </script>
 
-<style lang='less' scoped>
-   .m-join-list{
+<style lang='less'>
+.m-join-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;
@@ -529,12 +590,18 @@
         .list-table{
             margin:20px;
             margin-top:0px;
+            .col-operate{
+                .ivu-table-cell{
+                    padding-left: 0;
+                    padding-right: 0
+                }
+            }
         }
         .list-footer{
             margin: 10px 20px;
             overflow: hidden;
         }
-   }
+
    .m-bill-search{
         display:inline-block;
         height:22px;
@@ -560,4 +627,5 @@
      .u-nullify{
          text-decoration: line-through;
      }
+}
 </style>

@@ -9,15 +9,21 @@
               @cityFloor="cityFloor"
             />
         </div>
-        <SlotHead :class="theHead?'header-here':'header-no'"/>
+        <SlotHead 
+         :class="theHead?'header-here':'header-no'"
+         :isShowEdit="isShowEdit"
+         />
 
         <div style="margin:0 20px;" class="attract-investment-table">
 
         <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Buttons type="primary" styles="margin-right:20px;" :label="isShowBatch?'批量操作':'关闭批量模式'" checkAction='goods_button' @click="openBatch"/>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openPrice">修改定价</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openSpace">创建空间</Button>
                 <Buttons styles="margin-right:20px;" type="primary"   label="新增商品" checkAction='goods_button' @click="butNewgoods"/>
                 <Buttons styles="margin-right:20px;" type="primary"  label="导入商品"  checkAction='goods_button' @click="importgoods"/>
+                <Buttons type="primary" :label="isShowEdit?'编辑':'关闭编辑模式'" checkAction='goods_button' @click="openEditStyle"/>
          </div>
 
             <Table 
@@ -36,7 +42,7 @@
 
             <div  class='list-footer'>
                 <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                    <Page :total="totalCount" :current='tabForms.page' :page-size='tabForms.pageSize' show-total show-elevator show-sizer :page-size-opts="pageArray" placement="top" @on-change="onPageChange" @on-page-size-change="pageSizeChange"/>
                 </div>
             </div>
         </div>
@@ -67,7 +73,37 @@
         </Modal>
 
         <Modal
-            title="Title"
+            width="660"
+            v-model="spaceOpen"
+            title="创建物理空间"
+            class-name="m-clear-footer"
+        >
+                <AddPhysical    
+                     v-if="spaceOpen"
+                    :data="statusData"
+                    :errorData="errorData"
+                    @submit="submitSpace"
+                    @cancel="openSpace"
+                />
+            <div slot="footer"></div>
+        </Modal>
+
+        <Modal
+            width="530"
+            v-model="priceOpen"
+            title="修改定价"
+        >
+            <ChangePrice 
+              v-if="priceOpen"
+              :data="statusData"
+              @submit="submitPrice"
+              @cancel="cancelPrice"
+              />
+            <div slot="footer"></div>
+        </Modal>
+
+        <Modal
+            title="提示"
             v-model="complete"
             class-name="vertical-center-modal"
             style="text-align:left;"
@@ -75,6 +111,18 @@
                 <span style="color:red;">{{statusOldData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
                      <Button type="primary" @click="openComplete" >成功</Button>
+                </div>
+        </Modal>
+
+        <Modal
+            title="创建物理空间"
+            v-model="spaceTip"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+                  <span style="font-size:16px;">创建成功！</span>
+                  <div slot="footer" style="text-align:center;">
+                     <Button type="primary" @click="openSpaceSuccess" >确定</Button>
                 </div>
         </Modal>
 
@@ -87,17 +135,32 @@
             <!-- /   v-if="newmodal" -->
             <Newgoods
                     v-if="newmodal"
-                   :data="newgoodsData"
-                   :newgooddata="newgooddata"
-                   :seacchValue="seacchValue"
                    @newdateForm="newStatus"
                    :floorList="floorList"
-                   :floorValue='floor'
                    ref="goodsNewPage"
                 />
              <div slot="footer">
                  <Button type="primary" @click="subGoods">确定添加</Button>
                  <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+            title="编辑商品"
+            v-model="editOpen"
+            class-name="vertical-center-modal"
+            style="text-align:left;"
+            >
+            <EditGoods
+                   v-if="editOpen"
+                   @newdateForm="newStatus"
+                   :floorList="floorList"
+                   :editData="editData"
+                   ref="goodsEditPage"
+                />
+             <div slot="footer">
+                 <Button type="primary" @click="submitEdit">确定</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="cancelEdit">取消</Button>
             </div>
         </Modal>
 
@@ -166,18 +229,18 @@
             class-name="vertical-center-modal"
             style="text-align:left;">
             <Form>
-    <div>
-    <Form-item  label='移动办公室：' style="text-align:left;"    >
-        <span>{{resect.moveStations}}</span>
-     </Form-item >
-            <Form-item  label='独立办公室：' style="text-align:left;"  >
-                <span>{{resect.openStations}}</span>
-            </Form-item >
-            <Form-item  label='固定办公室：' style="text-align:left;"  >
-                <span>{{resect.spaces}}</span>
-            </Form-item > 
-        </div>
-</Form> 
+                <div>
+                    <Form-item  v-if="resect.moveStations" label='移动办公桌：' style="text-align:left;"    >
+                        <span>{{resect.moveStations}}</span>
+                    </Form-item >
+                    <Form-item  v-if="resect.openStations" label='独立办公室：' style="text-align:left;"  >
+                        <span>{{resect.openStations}}</span>
+                    </Form-item >
+                    <Form-item  v-if="resect.spaces" label='固定办公桌：' style="text-align:left;"  >
+                        <span>{{resect.spaces}}</span>
+                    </Form-item > 
+            </div>
+ </Form> 
   <div slot="footer" style="text-align:center;">
                  <Button type="primary" @click="continu">继续</Button>
             </div>
@@ -190,6 +253,7 @@
             >
             <div style="text-align:left;">
                 <p>请及时在<span  @click="clanar"    style="color:red;text-decoration:underline;cursor: pointer;" >平面图配置</span>中配置商品位置</p>
+                <p style="margin-top: 10px;">请在社区开业前，批量“创建物理空间”或手动关联已有的物理空间</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -206,7 +270,7 @@
             >
             <div style="text-align:left;">
                 <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品 <span style="color:black;">{{errdate}}</span></h2>
-                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+                <p>请确定是否真的要添加一个重名的商品</p>
             </div>
              <div slot="footer">
                  <Button type="primary" @click="determine" >确定导入</Button>
@@ -247,19 +311,18 @@
 
      <Modal
             title="添加成功!"
-            v-model="openService"
+            v-model="serviceOpen"
             class-name="vertical-center-modal"
             >
         <BindService 
-           v-if="openService"
+           v-if="serviceOpen"
            @submit="submitService"
            @cancel="cancelService"
            :singleForms="tabForms"
            :floor="newgoodForm.floor"
+           :editData="serviceData"
         />
-        <div slot="footer">
-        
-         </div>
+        <div slot="footer"></div>
      </Modal>
 
     </div>
@@ -271,6 +334,7 @@ import ToolTip from '~/components/ToolTip';
 import ImportFile from '~/components/ImportFile';
 import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
+import ChangePrice from './bulk-changes/change-price';
 import Loading from '~/components/Loading';
 import SearchForm from './search-form';
 import Message from '~/components/Message';
@@ -280,6 +344,8 @@ import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
 import BindService from './bind-service';
 import Buttons from '~/components/Buttons';
+import EditGoods from './editGoods';
+import AddPhysical from './bulk-changes/add-physical';
 export default {
 
 
@@ -296,15 +362,24 @@ export default {
                 ToolTip,
                 ImportFile,
                 BindService,
-                Buttons
+                Buttons,
+                EditGoods,
+                ChangePrice,
+                AddPhysical
                  },
         props:{
                 mask:String
             },
           data() {
                 return{
+            pageArray:[100,200,500],
+            editOpen:false,
+            priceOpen:false,
+            spaceOpen:false,
+            editData:{},
+            serviceData:{},
             warnCode:'',
-            openService:false,
+            serviceOpen:false,
             fiteter:'',
             feactye:'',
             tables:'',
@@ -332,15 +407,14 @@ export default {
             },
             errorData:[],
             typelist2:[],
-            newgooddata:[],
-            seacchValue:{},
             careful:false,
             isShowBatch:true,
+            isShowEdit:true,
             switchParams:{},
             modifystate: false,
             complete: false,
+            spaceTip:false,
             newmodal:false,
-            butpush:false,
             pudyt:false,
             butpudyt:false,
             vImport:false,//导入
@@ -360,47 +434,51 @@ export default {
             width:'',
             totalCount:0,
             attractColumns:[
-                // {
-                //     title: '商品编号',
-                //     key: 'code',
-                //     align:'center' 
-                // },
                 {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
-                     render(h, params){
+                    render:(h, params)=>{
                          var ile= params.row.name;
                          var nes=params.row.duplicateNo;
                           var btnRender=[];
                           if(params.row.duplicateNo==0){
                                 btnRender=[
-                                   h('p', {                                       
-                                        },ile),
+                                   h('p',{                                       
+                                    },ile),
                                 ];
                           }else{
                                  btnRender.push(
-                                     h('p', { 
+                                    h('p', { 
                                         
                                         },ile),
-                                         h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },'('),
-                                         h('span', { 
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            },'有重复 '),
-                                               h('span', { 
-                                                style: {
-                                                    color:'black'
-                                                }       
-                                            },' 编号'+nes+')'),
+                                    h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },'('),
+                                    h('span', { 
+                                        style: {
+                                            color:'#FF6868'
+                                        }       
+                                    },'有重复 '),
+                                        h('span', { 
+                                        style: {
+                                            color:'black'
+                                        }       
+                                    },' 编号'+nes+')'),
                             )
                           }
-                          return h('div',btnRender)
+                          return h('div',{
+                              style: {
+                                cursor:'pointer'
+                              },
+                              on: {
+                                click: () => {
+                                    this.goDetail(params.row)
+                                }
+                              }
+                          },btnRender)
 
                     }
                 },
@@ -422,24 +500,13 @@ export default {
                     align:'center',
                     width:120,
                      render(h, params){
-                         var bacsk=params.row.suiteTypeName;
-                         var devel=params.row.locationTypeName;
-                         var colorClass='redClas' ; 
-                          return h('div', [
-                                        h('span',{
-                                          attrs: {
-
-                                              class:colorClass
-                                        }
-                                        },devel),
-                                        h('span',{
-                                          
-                                        attrs: {
-                                                class:colorClass
-                                            }
-
-                                        },bacsk),
-                                    ])                               
+                         var bacsk=params.row.suiteTypeName?params.row.suiteTypeName:'';
+                         var devel=params.row.locationTypeName?params.row.locationTypeName:'';
+                         let des=params.row.descr?params.row.descr:'';
+                         return h('div', [
+                                h('span',devel+' '+bacsk),
+                                h('div',des),
+                         ])                               
                     }
                 },
                 {
@@ -461,7 +528,7 @@ export default {
                     key: 'goodsStatusName',
                     align:'center',
                     width:90,
-                   render(tag, params){
+                   render:(tag, params)=>{
                      var statusName=params.row.goodsStatusName?params.row.goodsStatusName:'-';
                      var status=params.row.goodsStatus;
                      var colorClass='';
@@ -473,6 +540,14 @@ export default {
                     return tag('span',{
                             attrs: {
                                 class:colorClass
+                            },
+                            style: {
+                                cursor:'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.openSingleStatus(params.row)
+                                }
                             }
                     },statusName);
                   }
@@ -484,14 +559,6 @@ export default {
                     align:'center',
                     width:150, 
                     render(h,obj){
-                     var statusName=obj.row.goodsStatusName?obj.row.goodsStatusName:'-';
-                     var status=obj.row.goodsStatus;
-                     var colorClass='';
-                     if(status=='DISABLE'||status=='OFF'){
-                         colorClass='redClass'
-                     }else{
-                         colorClass=''
-                     }
                         var rowArray=obj.row.followStatus;
                         var row='';
                         let classN='row-current-more current-more-task table-null';
@@ -506,7 +573,13 @@ export default {
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
                                 var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+' ';
-                                 var staRender=item.goodsStatusName?item.goodsStatusName:'-';
+                                var staRender=item.goodsStatusName?item.goodsStatusName:'-';
+                                var colorClass='';
+                                if(item.goodsStatus=='DISABLE'||item.goodsStatus=='OFF'){
+                                    colorClass='redClass'
+                                }else{
+                                    colorClass=''
+                                }
                                 return h('div', [
 
                                     h('Tooltip', {
@@ -539,16 +612,28 @@ export default {
                     }
                 },
                 {
-                    title: '设备绑定',
-                    key: 'binding',
+                    title: '物理空间',
+                    key: 'bindingText',
                     align:'center',
                     width:60,
-                    render(h,params){
-                        return h('span',{},'-')
+                    render:(h,params)=>{
+                        let middle=params.row.binding;
+                        let ren=params.row.bindingText?params.row.bindingText:'-';
+                        return h('span', {
+                                style: {
+                                    color:middle=='0'?'red':'',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.editService(params.row)
+                                    }
+                                }
+                        },ren)
                     }
                 },
                 {
-                    title: '商品位置',
+                    title: '平面图配置',
                     key: 'goodsLocation',
                     align:'center',
                     width:120,
@@ -576,7 +661,8 @@ export default {
             serviceId:'',
             statusOldData:[],
             singleForms:{},
-            floorStr:'',    
+            floorStr:'', 
+            isAdd:false   
         }
     },
         mounted(){
@@ -605,22 +691,59 @@ export default {
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
-
-            showpushe(){
-                this.butpushd=!this.butpushd;
-            },
+        goDetail(params){
+            window.open('/inventory/goods-library/goods-detail?goodsType='+params.goodsType+'&id='+params.id,'_blank')
+        },
+        openSpace(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
+            this.spaceOpen=!this.spaceOpen;
+            this.errorData=[];       
+        },
+        openSingleStatus(array){
+            this.statusData=[].concat([array]);
+            this.statusOldData=[].concat([array]);
+            this.openStatus();
+        },
+        openPrice(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
+            this.cancelPrice();
+        },
+        cancelPrice(){
+            this.priceOpen=!this.priceOpen;
+        },
+        submitPrice(){
+            this.getListData(this.tabForms);
+            this.statusData=[];
+            this.cancelPrice();
+        },
+        editService(params){
+            this.cancelService();
+            this.serviceData=Object.assign({},params);
+        },
+        showpushe(){
+            this.butpushd=!this.butpushd;
+        },
 
         cityFloor(params){
             this.tabForms=Object.assign({},this.tabForms,params,{page:1});
-            //this.getListData(this.tabForms);
         },
         submitService(params){
-             this.showpush();
-            // console.log('<iiiiiiiii>',this.newgoodForm.goodsType)
+            let middleData=Object.assign({},this.serviceData);
+            console.log('middle--',this.newgoodForm,'3',middleData);
             let data={
-                goodsType:this.newgoodForm.goodsType,
+                goodsType:this.newgoodForm.goodsType||middleData.goodsType,
                 basicSpaceId:params.basicSpaceId,
-                id:this.serviceId
+                id:this.serviceId||middleData.id
             }
             this.$http.post('goods-service-add',data).then((response)=>{
                 this.cancelService();
@@ -637,7 +760,10 @@ export default {
     
 
         cancelService(){
-            this.openService=!this.openService;
+            this.serviceData={};
+            this.newgoodForm={};
+            this.serviceId='';
+            this.serviceOpen=!this.serviceOpen;
         },
         clanar(){
             window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
@@ -650,6 +776,7 @@ export default {
                      this.newmodal=!this.newmodal;      
                   },
         showStatus(){
+                this.newgoodForm={};
                     this.butNewgoods();
                 }, 
         getpudyt(){  
@@ -662,73 +789,72 @@ export default {
             this.butpudyt=!this.butpudyt
         },      
          getsubGoods(){//注意
-
-                    // this.newmodal=!this.newmodal;
-                     this.careful=!this.careful;
-                     },
-         butPush(){//成功
-                    this.butpush=!this.butpush;
-         } ,        
-         showpush(){
-                  this.butpush=!this.butpush;
-         },
+                    this.careful=!this.careful;
+                    },  
          showtPush(){//二次确定
               this.careful=!this.careful;
          },   
         buttPush(){
-            this.newmodal=!this.newmodal;
-                this.butPush();
-                this.getsubGoods();
-                this.getNew();
+            this.getsubGoods();
+            this.getNew();
         },
         primarye(){
             this.butsuccess=!this.butsuccess;
+        },
+
+        getCheckName(){
+            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
+            this.$http.get('getNew-Rename',data).then((response)=>{
+                this.getNew();          
+            }).catch((error)=>{
+                    if(error.code==-1){
+                        this.newmodal=false;
+                        this.editOpen=false;
+                        this.getsubGoods();
+                        this.errdated=error.message;
+                    }else{
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=error.message;
+                    } 
+            })
         },
             //添加弹窗2
         subGoods(){
               let newPage=this.$refs.goodsNewPage.$refs;
               newPage['formItem'].validate((valid) => {
                     if (valid) {
-                       // this.newmodal=!this.newmodal;
-                            //新增重名     
-                            // console.log('fdfffff',this.tabForms);
-                            let data=Object.assign({},this.newgoodForm,{communityId:this.tabForms.communityId}); 
-                            // console.log('66666666666666666666',this.tabForms);
-                            this.$http.get('getNew-Rename',data).then((response)=>{
-                                    this.getNew();
-                                    
-                                // this.newmodal=!this.newmodal;
-                        }).catch((error)=>{
-                            // console.log('err',error)
-                                    if(error.code==-1){
-                                        this.newmodal=!this.newmodal;
-                                        this.getsubGoods();
-                                        // this.getListData();
-                                        this.errdated=error.message;
-                                }else{
-                                    this.openMessage=true;
-                                    this.MessageType="error";
-                                    this.warn=error.message;
-                                } 
-                        })
+                       this.getCheckName();
+                       this.isAdd=false;
                     }
-                })
-
-
-
-
-            
+                })     
+        },
+        submitEdit(){
+            let newPage=this.$refs.goodsEditPage.$refs;
+              newPage['formItem'].validate((valid) => {
+                    if (valid) {
+                       this.getCheckName();
+                       this.isAdd=true;
+                    }
+             })  
         },
        //新增接口a
         getNew(){
-        //  console.log('id--',this.tabForms);
+        let url=this.isAdd?'goods-service-edit':'getNew-lyadded';
          this.newgoodForm.communityId=this.tabForms.communityId;
          let data=Object.assign({},this.newgoodForm);
-         this.$http.post('getNew-lyadded',data).then((response)=>{ 
-              this.serviceId=response.data;
+         this.$http.post(url,data).then((response)=>{ 
+              this.serviceId=(typeof response.data)=='number'?response.data:'';
               this.getListData(this.tabForms);
-              this.cancelService(); 
-              this.butNewgoods();
+              this.newmodal=false;
+              this.editOpen=false;
+              this.openMessage=true;
+              this.MessageType='success';
+              this.warn="编辑成功";
+              if(!this.isAdd){
+                  this.serviceOpen=!this.serviceOpen;
+                  this.warn="新建成功";
+              }
             }).catch((error)=>{
                 this.openMessage=true;
                 this.MessageType="error";
@@ -753,7 +879,6 @@ export default {
             a.href = '/api/order/goods/import/download-template';
             a.download = name || "";
             a.click();
-            //window.open('/api/order/goods/import/download-template');
         },
         close(){
             this.vImport=!this.vImport;
@@ -767,7 +892,7 @@ export default {
          var form = new FormData();
 
         // console.log(this.tabForms.floor,"ppppp")
-         form.append('floors',this.floorStr);
+         form.append('floors','');
          form.append('goodsData',file);
          form.append('communityId',this.tabForms.communityId);
          var xhr = new XMLHttpRequest();
@@ -808,18 +933,16 @@ export default {
                     } 
         },
         getsubGods(){
-                    this.carel=!this.carel;
+            this.carel=!this.carel;
         },
         primaryed(){
             this.feated=!this.feated;
         },
         continu(){//继续
-        this.importsuccess=!this.importsuccess;
-        // this.judgeRepeat();
-        this.feated=!this.feated;
+            this.importsuccess=!this.importsuccess;
+            this.feated=!this.feated;
         },
         judgeRepeat(file){  //商品导入      
-        // console.log('<iiiiiiii>',file)
             let _this = this;
             var form = new FormData();
             form.append('goodsData',this.fiteter); 
@@ -848,21 +971,16 @@ export default {
             xhr.send(form);
         },
         success(response){
-            // console.log('<this.importsuccess>',this.importsuccess)
             this.importsu();
-            // this.importgoods();
             this.resect=response.data;
 
         },
         error(response){
-                  this.openMessage=true;
-                  this.MessageType="error";
-                  this.warn=response.message;
+            this.openMessage=true;
+            this.MessageType="error";
+            this.warn=response.message;
         },
         initData(formItem,floorList){
-            // console.log('hhihhh',foorlist)
-        
-            // console.log('rrrrrrrr',str)
             this.tabForms=Object.assign({},this.tabForms,formItem);
             var str='';
             if(this.tabForms.floor==' '||this.tabForms.floor==''){
@@ -879,17 +997,14 @@ export default {
         },
         searchClick(values){
             this.tabForms=Object.assign({},this.tabForms,values,{page:1});
-            //utils.addParams(this.tabForms);
         },
         clearClick(values){
             this.tabForms=Object.assign({},this.tabForms,values);
-            //utils.addParams(this.tabForms);
         },
         updateStatus(obj){
            this.statusForm=Object.assign({},obj);  
         },
-         newStatus(obj){
-        //    console.log('eeeeeeeeeeeeeeeee',obj)
+        newStatus(obj){
            this.newgoodForm=Object.assign({},obj);  
         },
         tableCommon(){
@@ -911,6 +1026,50 @@ export default {
                 this.$refs.selectionGoodsLibrary.selectAll(true); 
             }else{
                 this.attractColumns.splice(0,1);
+            }
+        },
+        cancelEdit(){
+            this.editOpen=!this.editOpen;
+            this.serviceData={};
+            this.newgoodForm={};
+        },
+        openEdit(params){
+            this.serviceData=Object.assign({},params);
+            this.$http.get('goods-service-get',params).then((response)=>{ 
+                this.editData=response.data;
+                this.editOpen=!this.editOpen;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                }); 
+            })  
+        },
+        openEditStyle(){
+            this.isShowEdit=!this.isShowEdit;
+            if(!this.isShowEdit){
+                this.attractColumns.push(
+                   {
+                    title: '操作',
+                    key: 'action',
+                    align:'center',
+                    width:100,
+                    render:(h,params)=>{
+                        return h('span', {
+                                style: {
+                                    color:'#499df1',
+                                    cursor:'pointer'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.openEdit(params.row)
+                                    }
+                                }
+                        },'编辑')
+                    }
+                }
+             )  
+            }else{
+                this.attractColumns.splice(this.attractColumns.length-1,1);
             }
         },
         openStatus(){
@@ -942,10 +1101,28 @@ export default {
                 });
             })
         },
+        submitSpace(form){
+           this.$http.post('goods-add-space',form).then((response)=>{    
+              if(response.data.length){
+                    this.errorData=response.data;
+              }else{
+                    this.openSpace()
+                    this.openSpaceSuccess();
+                    this.getListData(this.tabForms);
+                    this.statusData=[];
+              }
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            }) 
+        },
         openComplete(){
            this.complete=!this.complete;      
         },
- 
+        openSpaceSuccess(){
+            this.spaceTip=!this.spaceTip;
+        },
         //格式转换
         dateSwitch(data){
             if(data){
@@ -996,15 +1173,22 @@ export default {
             },
             onPageChange(page){
                 this.tabForms=Object.assign({},this.tabForms,{page:page})
-                //this.getListData(this.tabForms); 
             },
             onMessageChange(data){
-            this.openMessage=data;
+                this.openMessage=data;
             },
+            pageSizeChange(size){
+                this.tabForms=Object.assign({},this.tabForms,{pageSize:size})
+            }
         }
 }
 </script>
 <style lang='less'>
+  .m-clear-footer{
+        .ivu-modal-footer{
+            padding:0;
+        }
+   }
   .attract-investment{
           .upload{
                 width: 200px;

@@ -12,9 +12,25 @@
 
 <script>
    export default {
+    props:{
+        isShowEdit:{
+            type:Boolean
+        }
+    },
+    watch:{
+      isShowEdit:function(val){
+          if(!val){
+              this.data.push('操作');
+          }else{
+              if(this.data.length==11){
+                  this.data.splice(10,1);
+              }
+          }
+      }
+    },
     data() {
         return{
-            data:['商品名称','商品类型','工位数量','商品属性','面积','商品定价','当前状态','后续状态变化','设备锁定','商品设置',]
+            data:['商品名称','商品类型','工位数量','商品属性','面积','商品定价','当前状态','后续状态变化','物理空间','平面图配置']
         }
     }
 }
@@ -31,7 +47,7 @@
      height:40px;
      line-height:40px;
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:400;
   .slot-head-class{
         text-align: center;
         border-right:solid 1px #e9eaec;

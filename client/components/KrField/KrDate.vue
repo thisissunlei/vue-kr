@@ -8,7 +8,7 @@
             @cancelClick="cancelClick"
             @recordClick="recordClick"
             :isOk="isOk"
-            :right="right"
+  :right="right"
         >
             <DatePicker 
                 v-model="dateValue"
@@ -33,7 +33,8 @@ export default {
     },
     props:{
         right:{
-            type:String,
+            
+            type:String
         },
         isOk:{
             type:Boolean,

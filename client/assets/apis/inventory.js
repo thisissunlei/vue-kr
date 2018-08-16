@@ -152,10 +152,35 @@ export default  {
         url: '/api/krspace-finance-web/cmt/goods/add/device',
         method: 'post'
     },
-    //新增商品添加设备
-    'goods-ceshi': {
-        url: '/song/api/krspace-order-web/goods/test/text',
+    //编辑商品
+    'goods-service-edit': {
+        url: '/api/krspace-finance-web/cmt/goods/edit',
+        method: 'post'
+    },
+    //修改定价
+    'goods-change-price': {
+        url: '/api/krspace-finance-web/cmt/goods/batch/price',
+        method: 'post'
+    },
+    //编辑商品回显
+    'goods-service-get': {
+        url: '/api/krspace-finance-web/cmt/goods/getGoodsInfo',
         method: 'get'
     },
+    //批量创建空间
+    'goods-add-space': {
+        url: '/api/krspace-finance-web/cmt/goods/add/device/batch',
+        method: 'post'
+    },
+    //商品详情
+    'goods-detail': {
+        url: '/api/krspace-finance-web/cmt/goods/detail',
+        method: 'get'
+    },
+    //合同逾期未操作
+    'contract-no-operation': {
+        url: '/api/krspace-op-web/operation/ovedue/contract/list',
+        method: 'get'
+    }
   }
   

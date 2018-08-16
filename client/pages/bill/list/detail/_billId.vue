@@ -109,7 +109,7 @@
 			</div>
 			<div v-if="costInfo.length>5" class="u-show-tip">
 				<div v-if="!ISshow" @click="showTab">展开<span class="u-bottom"></span></div>
-				<div v-if="ISshow"@click="hideTab">收起<span class="u-top"></span></div>
+				<div v-if="ISshow" @click="hideTab">收起<span class="u-top"></span></div>
 			</div>
 			<div class="u-amount-list">
 				<div class="u-amount">
@@ -193,7 +193,8 @@ export default {
 							'BANKTRANSFER':'银行转账',
 							'RELEASE':'反结算'
 						}
-						return srcType[obj.row.srcType]
+						return h('span',{},srcType[obj.row.srcType]);
+						// return srcType[obj.row.srcType]
 						
 				 	}
 				},
@@ -208,7 +209,8 @@ export default {
 				 align:'center',
 				 render(h, obj){
 					 let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.createTime));
-					 return time;
+					 return h('span',{},time);
+					//  return time;
 				 }
 				},
 				{

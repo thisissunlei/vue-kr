@@ -259,6 +259,8 @@ export default {
             if(_this.formItem.communityId=="" && _this.formItem.communityName=="全部社区"){
                 _this.formItem.communityId=-1;
             }
+            _this.communityName=_this.formItem.communityName;
+            
             if(_this.tabParams.appPublish=='true'){
                 _this.formItem.appPublishName='已上架';
             }else if(_this.tabParams.appPublish=='false'){
@@ -269,15 +271,19 @@ export default {
             }else if(_this.tabParams.kmPublish=='false'){
                 _this.formItem.kmPublishName='未上架';
             }
+             _this.getTableData(_this.tabParams);
         });
-        this.getTableData(this.$route.query);
+       
         
         
       
     },
     methods:{
         communityChange(item){
-            this.communityName=item.label;
+            if(item.label){
+                 this.communityName=item.label;
+            }
+           
         },
         getCommunityList(name,callback){
             let params = {
@@ -321,13 +327,18 @@ export default {
                 
         },
         lowerSubmit(){
-            let communityId=this.formItem.communityId==-1?"":this.formItem.communityId;
+            let communityId;
+            if(this.formItem.communityId){
+                communityId=this.formItem.communityId==-1?"":this.formItem.communityId;
+            }else{
+                communityId=""
+            }
             let params=Object.assign({},this.formItem);
             params.page=1;
             params.pageSize=15;
-            params.communityId=communityId
-        
-            params.communityName = this.communityName;
+            params.communityId=communityId || '';
+            params.communityName = this.communityName || '';
+          
             this.tabParams=Object.assign({},params);
             utils.addParams(this.tabParams);
         },

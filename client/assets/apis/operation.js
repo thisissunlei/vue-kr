@@ -184,5 +184,44 @@ export default  {
         url: '/api/krspace-finance-web/operation/city-cmt-list',
         method: 'get'
     },
+    // 获取一级来源
+    'get-channleType-list': {
+        url: '/api/order/csr-clue/channleType',
+        method: 'get'
+    },
+    // 获取二级来源
+    'get-csrsource-list': {
+        url: '/api/order/csr-clue/csrsource',
+        method: 'get'
+    },
+    //拜访美剧
+    'get-visitstatus-list': {
+        url: '/api/order/csr-clue/visitstatus',
+        method: 'get'
+    },
+    //预约参观列表
+    'get-csr-clue-list': {
+        url: '/api/order/csr-clue/list',
+        method: 'get'
+    },
+    // 新建预约
+    'save-csr-clue': {
+        url: '/api/order/csr-clue/save',
+        method: 'post'
+    },
+    // 删除预约
+    'delete-csr-clue': {
+        url: '/api/order/csr-clue/delete',
+        method: 'post'
+    },
+    'impot-csr-clue': {
+        url: '/api/order/csr-clue/impot',
+        method: 'post'
+    },
+    //会员七天线上化--会员线上化率
+    'get-operation-community-use-rate': {
+        url: '/api/krspace-op-web/app/operation/community/use-rate',
+        method: 'get'
+    },
 }
   

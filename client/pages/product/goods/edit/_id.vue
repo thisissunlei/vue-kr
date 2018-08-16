@@ -2,110 +2,139 @@
     <div class="g-goods-detail">
         <SectionTitle title="编辑社区商品"></SectionTitle>   
         <div class="m-goods-content">
-            <DetailStyle info="社区基本信息">
-                <LabelText label="社区名称：">
-                    {{goodsInfo.comName}}
-                </LabelText>
-                <LabelText label="社区编码：">
-                   {{goodsInfo.comNumber}}
-                </LabelText>
-                <LabelText label="所在地区：">
-                    {{goodsInfo.area}}
-                </LabelText>
-                <LabelText label="开业状态：">
-                    {{goodsInfo.openStatus}}
-                </LabelText>
-                <LabelText label="开业时间：">
-                    {{goodsInfo.openTime}}
-                </LabelText>
-            </DetailStyle>
-            <Form ref="goodsFormValidate" :model="goodsInfo" :rules="ruleValidate" :label-width="100">
-                <DetailStyle info="社区基本运营信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="大厦名称：" prop="buildname">
-                                <Input v-model="goodsInfo.buildname" class="input"/>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="地址描述：" prop="address">
-                                <Input v-model="goodsInfo.address" class="input"/>
-                            </FormItem>
-                         </Col>
-                    </Row>
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="社区坐标：" prop="coordinate">
-                                <Input v-model="goodsInfo.coordinate" class="input"/>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="大厦外景：" prop="fileList" require>
-                                <UploadFile></UploadFile>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                </DetailStyle>
-                <DetailStyle info="APP商品信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="上架状态：" prop="appStatus">
-                                <RadioGroup v-model="goodsInfo.appStatus">
-                                    <Radio label="已上架">已上架</Radio>
-                                    <Radio label="未上架">未上架</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <LabelText label="APP可用会议室楼层：">
-                                {{goodsInfo.appMeeting}}
-                            </LabelText>
-                        </Col>
-                    </Row>
-                </DetailStyle>
-                <DetailStyle info="KM会议室商品信息">
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="上架状态：" prop="KMStatus">
-                                <RadioGroup v-model="goodsInfo.KMStatus">
-                                    <Radio label="已上架">已上架</Radio>
-                                    <Radio label="待上架">待上架</Radio>
-                                    <Radio label="未上架">未上架</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                        <Col span="13">
-                            <FormItem label="社区折扣策略：" prop="discountMsg"  :label-width="120">
-                                <Input v-model="goodsInfo.discountMsg" class="input"/>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <LabelText label="KM可预定会议室数量（个）：">
-                        {{goodsInfo.meetingCount}}
+            <Form ref="formItems" :model="formItem" :rules="ruleValidate">
+                <DetailStyle info="社区基本信息">
+                    <LabelText label="社区名称：">
+                        {{goodsInfo.communityName}}
                     </LabelText>
-                    <LabelText label="KM可用会议室楼层：">
-                        {{goodsInfo.kmMeeting}}
+                    <LabelText label="大厦名称：">
+                        {{goodsInfo.buildingName}}
                     </LabelText>
-
-                    <Row>
-                        <Col span="11">
-                            <FormItem label="KM不可预订日期策略：" prop="dateSelect" :label-width="180">
-                                <Select
-                        v-model="goodsInfo.dateSelect"
-                        style="width:100px"
-                        placeholder="请选择"
-                        clearable
-                    >
-                        <Option
-                            v-for="item in statusList"
-                            :value="item.value"
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                    </Select>
-                            </FormItem>
-                        </Col>
+                    <LabelText label="正式开业状态：">
+                        {{goodsInfo.communityStatus}}
+                    </LabelText>
+                    <LabelText label="正式开业时间：">
+                        {{goodsInfo.openDate}}
+                    </LabelText>
+                    <FormItem label="详细地址"  style="width:252px" prop="communityAddress">
+                        <Input 
+                            v-model="formItem.communityAddress" 
+                            placeholder="详细地址"
+                        />
+                    </FormItem>
+                    <div class="u-upload">
+                        <FormItem label="大厦外景图" class="u-input" prop="buildingImg" style="width:100%">
+                                <UploadFile 
+                                    v-model="formItem.buildingImg"
+                                    :category="category"
+                                    withCredentials
+                                    :format="['jpg','png','gif']"
+                                    :maxSize="2048"
+                                    :maxLen="1"
+                                    :onSuccess="buildingImgSuccess"
+                                    :onRemove="buildingImgRemove"
+                                    :onExceededSize="imgSize"
+                                    :onFormatError="imgSizeFormat"
+                                    :defaultFileList="buildingImgList"
+                                    :imgWidth="120"
+                                    :imgHeight="120"
+                                >
+                                    <div slot="tip" class="u-unload-tip">图片小于1MB，格式为JPG，PNG，GIF，建议图片比例为3:4</div>
+                                </UploadFile>
+                        </FormItem>
+                    </div>
+                    <div class="u-upload">
+                        <FormItem label="社区展示图册" class="u-input" prop="communityImgs" style="width:100%">
+                            <UploadFile 
+                                v-model="formItem.communityImgs"
+                                multiple
+                                :category="category"
+                                withCredentials
+                                :format="['jpg','png','gif']"
+                                :maxSize="2048"
+                                :onSuccess="detailImgsSuccess"
+                                :onRemove="detailImgsRemove"
+                                :onExceededSize="imgSize"
+                                :onFormatError="imgSizeFormat"
+                                :defaultFileList="communityImgsList"
+                                :imgWidth="120"
+                                :imgHeight="120"
+                                
+                            >
+                                <div slot="tip" class="u-unload-tip">图片小于1MB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                            </UploadFile>
+                        </FormItem>
+                    </div>
+                </DetailStyle>
+                <DetailStyle info="APP社区商品信息">
+                   <div>
+                       <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublished">
+                            <RadioGroup v-model="formItem.appPublished" style="width:250px">
+                                <Radio label="1">
+                                    已上架
+                                </Radio>
+                                <Radio label="0">
+                                    未上架
+                                </Radio>
+                            </RadioGroup> 
+                        </FormItem>
+                   </div>
+                    <LabelText label="已上架会议室商品数量：">
+                        {{goodsInfo.appRoomNum}}
+                    </LabelText>
+                    <LabelText label="已上架散座商品数量：">
+                        {{goodsInfo.appSeatNum}}
+                    </LabelText>
+                </DetailStyle>
+                <DetailStyle info="小程序社区商品信息">
+                     <FormItem label="上架状态" class="u-input" style="width:250px" prop="kmPublished">
+                            <RadioGroup v-model="formItem.kmPublished" style="width:250px">
+                                <Radio label="2">
+                                    已上架
+                                </Radio>
+                                 <Radio label="1">
+                                    待上架
+                                </Radio>
+                                <Radio label="0">
+                                    未上架
+                                </Radio>
+                            </RadioGroup> 
+                    </FormItem>
+                    <FormItem label="社区折扣策略"  style="width:252px" >
+                        <Input 
+                            v-model="formItem.promotionDesc" 
+                            placeholder="社区折扣策略"
+                            :maxlength="maxLength"
+                        />
+                    </FormItem>
+                    <LabelText label="已上架会议室商品数量：">
+                        {{goodsInfo.kmRoomNum}}
+                    </LabelText>
+                    <LabelText label="已上架散座商品数量：">
+                        {{goodsInfo.kmSeatNum}}
+                    </LabelText>
+                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:350px"   >
+                           <div style="width:350px;float:left;">
+                               <TimePicker 
+                                    format="HH:mm" 
+                                    style="width: 122px" 
+                                    v-model="form.kmStartTime"
+                                    @on-change="changeAppStartTime"
+                                    :steps="[1,30]"
+                                />
+                                <span style="padding:0 10px;">至</span>
+                                <TimePicker 
+                                    format="HH:mm"  
+                                    style="width: 122px" 
+                                    v-model="form.kmEndTime"
+                                    @on-change="changeAppEndTime"
+                                    :steps="[1,30]"
+                                />
+                                 <div v-if="isAppError" class="u-error">请选择可预订时段</div>
+                           </div>
+                    </FormItem>
+                    <!-- <Row>
+                       
                         <Col span="13" style="position:relative">
                             <FormItem label="KM不可预订日期：" prop="date" :label-width="140">
                                 <span v-on:mouseover="tipsShow" v-on:mouseout="tipsHide" class="help-circled">
@@ -123,14 +152,13 @@
                         </Col>
                        
                     </Row>
-                    
+                     -->
                 </DetailStyle>
                 
                  
             </Form>
             <div style="text-align:center">
-                <Button type="primary" @click="handleSubmit('goodsInfo')">确定</Button>
-                <Button type="ghost" @click="handleReset('goodsInfo')" style="margin-left: 8px">取消</Button>
+                <Button type="primary" @click="handleSubmit('formItems')">确定</Button>
             </div>
         </div>
     </div>
@@ -158,91 +186,207 @@ export default {
     },
     data(){
         return{
-            isShow:false,
-            statusList:[
-                {
-                 label:'周末及节假日',
-                 value:'true'   
-                },
-                {
-                 label:'无',
-                 value:'false'   
-                },
-            ],
-             goodsInfo:{
-                comName:"慈云社社区",
-                comNumber:"BZJB",
-                area:"北京市/北京市/朝阳区",
-                openStatus:"已开业",
-                openTime:"2017-3-3",
-                buildname:"住邦2000",
-                address:"北京市朝阳区八里庄西里100号住邦2000",
-                coordinate:"116.501734，39.921302",
-                appMeeting:"5层 6层",
-                appStatus:"未上架",
-                KMStatus:"未上架",
-                discountMsg:"限时5折优惠",
-                meetingCount:"5",
-                kmMeeting:"5层 6层",
-                dateSelect:"false"
+            category:'app/upgrade',
+            isAppError:false,
+            formItem:{},
+            maxLength:10,
+            form:{
+               kmStartTime:'09:00',
+               kmEndTime:'19:00',
             },
+            goodsInfo:{},
             ruleValidate: {
-                name: [
-                    { required: true, message: '大厦名称不能为空', trigger: 'blur' }
+                communityAddress: [
+                    { required: true, message: '地址不能为空', trigger: 'blur' }
                 ],
-                addressMsg: [
-                    { required: true, message: '地址描述不能为空', trigger: 'blur' }
-                ],
-                comMsg: [
-                    { required: true, message: '社区坐标不能为空', trigger: 'blur' }
-                ],
-                fileList: [
+                buildingImg: [
                     { required: true, message: '请选择图片上传', trigger: 'blur' }
                 ],
-                // fileList:fileListRule,
-                appStatus: [
+                communityImgs: [
+                    { required: true, message: '请选择图片上传', trigger: 'blur' }
+                ],
+                appPublished: [
                     { required: true, message: 'APP商品上架状态不能为空', trigger: 'blur' }
                 ],
-                kmStatus: [
+                kmPublished: [
                     { required: true, message: 'KM商品上架状态不能为空', trigger: 'blur' }
                 ],
-                discountMsg: [
-                    { type: 'string', max: 10, message: '最多10个字符', trigger: 'change' }
-                ],
-                dateSelect: [
-                    { required: true, message: '请选择KM不可预订日期策略', trigger: 'blur' }
-                ],
-                // date: [
-                //     { required: true, message: '不可预订日期选择', trigger: 'blur' }
-                // ],
+               
             },
+            imglist:[],
+            buildingImgList:[],
+            communityImgsList:[],
+            // statusList:[
+            //     {
+            //      label:'周末及节假日',
+            //      value:'true'   
+            //     },
+            //     {
+            //      label:'无',
+            //      value:'false'   
+            //     },
+            // ],
         }
     },
     mounted:function(){
-		GLOBALSIDESWITCH("false")
+        GLOBALSIDESWITCH("false")
+        this.getGoodsInfo();
     },
     methods: {
         handleSubmit (name) {
-           
+            let {params}=this.$route;
+            let message = '请填写完表单';
+            this.$Notice.config({
+                top: 80,
+                duration: 3
+            });
+            let _this = this;
+            this.formItem.communityId=params.id;
+            if(!this.formItem.kmStartTime){
+                this.formItem.kmStartTime="09:00"
+            }
+            if(!this.formItem.kmEndTime){
+                this.formItem.kmEndTime="19:00"
+            }
+            console.log('this.formItem',this.formItem)
             this.$refs[name].validate((valid) => {
-                
                 if (valid) {
-                    this.$Message.success('Success!');
-                    // let para = Object.assign({}, this.goodsInfo);
-                } else {
-                    this.$Message.error('Fail!');
+                        _this.submitCreate();
+                    } else {
+                        _this.$Notice.error({
+                            title:message
+                        });
                 }
+                
             })
         },
-        handleReset (name) {
-            this.$refs[name].resetFields();
+        submitCreate(){
+           
+            this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
+                this.$Notice.success({
+                        title:'编辑成功'
+                    });
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
+        }, 
+        changeAppStartTime(data){
+             this.formItem.kmStartTime=data;
+            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
+                this.isAppError=false;
+            }else{
+                this.isAppError=true;
+            }
         },
-    	tipsShow(){
-            this.isShow = true
+        changeAppEndTime(data){
+            this.formItem.kmEndTime=data;
+            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
+                this.isAppError=false;
+            }else{
+                this.isAppError=true;
+            }
         },
-        tipsHide(){
-            this.isShow = false;
-        }
+        getGoodsInfo(){
+            let {params}=this.$route;
+            let form={
+                communityId: params.id
+             }
+            let communityStatus={
+                '1':'已开业',
+                '0':'未开业'
+            }
+            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
+                let data=Object.assign({},res.data);
+                let appPublished=String(res.data.appPublished)
+                let kmPublished=String(res.data.kmPublished);
+                res.data.communityStatus=communityStatus[res.data.communityStatus];
+                data.appPublished=appPublished;
+                data.kmPublished=kmPublished;
+               
+                let buildingImgList=[];
+                if(data.buildingImg && data.buildingImg!=''){
+                    buildingImgList.push({'url':data.buildingImg});
+                }
+                this.buildingImgList=buildingImgList;
+
+                let communityImgsList=[];
+                data.communityImgs && data.communityImgs.map((item)=>{
+                    let obj={};
+                    obj.url=item;
+                    communityImgsList.push(obj)
+                })
+                this.communityImgsList=communityImgsList;
+
+                this.goodsInfo = res.data;
+
+                delete data.appRoomNum;
+                delete data.appSeatNum;
+                delete data.buildingName;
+                delete data.communityName;
+                delete data.kmRoomNum;
+                delete data.kmSeatNum;
+                delete data.openDate;
+                delete data.communityStatus;
+                this.formItem=data;
+                if(data.kmStartTime){
+                    this.form.kmStartTime=data.kmStartTime.substring(0,5);
+                }
+                if(data.kmEndTime){
+                    this.form.kmEndTime=data.kmEndTime.substring(0,5);
+                }
+                if(data.communityImgs){
+                    this.formItem.communityImgs=data.communityImgs.join(',');
+                }
+                
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+       
+        buildingImgRemove(){
+            this.formItem.buildingImg="";
+        },
+        buildingImgSuccess(file){
+            this.formItem.buildingImg=file.data.url;
+            this.$refs.formItems.validateField('buildingImg') 
+        },
+        detailImgsRemove(fileList){
+            let imglist=[];
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let communityImgs=imglist.join(',');
+            this.formItem.communityImgs=communityImgs;
+        },
+        detailImgsSuccess(response, file, fileList){
+            let imglist=[].concat(this.imglist);
+
+            fileList.map((item)=>{
+                imglist.push(item.url)
+            })
+            let communityImgs=imglist.join(',');
+            this.formItem.communityImgs=communityImgs;
+            this.$refs.formItems.validateField('communityImgs');
+        },
+    	 imgSizeFormat(){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+        },
+        imgSize(){
+           this.$Notice.error({
+                title:'图片大小超出限制'
+            });
+        },
+
 
     }
 }
@@ -250,46 +394,69 @@ export default {
 
 <style lang="less">
     .g-goods-detail{
-		.m-goods-content{
+        .u-input{
+            display: inline-block;
+            width: 252px;
+            max-width: 450px;
+            margin-right:120px;
+            vertical-align:top;
+        }
+        .u-error{
+            color: #ed3f14;
+            font-size: 12px;
+        }
+        .u-upload{
+            width:100%;
+        .ivu-form-item-label{
+            width:100%;
+            text-align: left;
+        } 
+        }
+        .u-unload-label{
+            font-size: 12px;
+            line-height:30px;
+            color:#495060;
+        }
+        .u-unload-tip{
+            line-height:30px;
+            text-indent: 12px;
+            color:#495060;
+            font-size: 12px;
+
+        }
+	    .m-goods-content{
             padding:30px 24px;
-            .ivu-form .ivu-form-item-label{
-                font-size: 14px;
-                color: #333;
-                font-weight: 700;
-            }
-            .help-circled{
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                margin-left: -18px;
-                margin-top: 4px;
+            // .help-circled{
+            //     width: 20px;
+            //     height: 20px;
+            //     display: inline-block;
+            //     margin-left: -18px;
+            //     margin-top: 4px;
                 
-            }
-            .input{
-                width: 300px;
-            }
-            .tips{
-                position: absolute;
-                padding:20px;
-                background: #ccc;
-                font-size: 18px;
-                line-height: 30px;
-                color: #666;
-                z-index: 99;
-                left: 60px;
-                top: 40px;
-            }
-            .tips:after{
-                border-left: 13px solid transparent;  
-                border-right: 13px solid transparent;  
-                border-bottom: 15px solid #ccc;  
-                content: "";  
-                position: absolute;      
-                width: 0; 
-                left: 50px;
-                top: -15px;
-            }
-		}
+            // }
+           
+            // .tips{
+            //     position: absolute;
+            //     padding:20px;
+            //     background: #ccc;
+            //     font-size: 18px;
+            //     line-height: 30px;
+            //     color: #666;
+            //     z-index: 99;
+            //     left: 60px;
+            //     top: 40px;
+            // }
+            // .tips:after{
+            //     border-left: 13px solid transparent;  
+            //     border-right: 13px solid transparent;  
+            //     border-bottom: 15px solid #ccc;  
+            //     content: "";  
+            //     position: absolute;      
+            //     width: 0; 
+            //     left: 50px;
+            //     top: -15px;
+            // }
+        }
 		
 	}
 </style>

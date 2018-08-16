@@ -166,14 +166,20 @@ import PdfDownload from './pdfDownload';
                     },
                     {
                         title: '账单日',
-                        key: 'billingDate',
+                        key: 'payStatus',
                         align:'center',
                         render(h, obj){
-                            if(!obj.row.billingDate){
-                                return '-'
+                            let time = '-'
+                            if(obj.row.billingDate){
+                                time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                              
                             }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
-                            return time;
+                            
+                            return h('span', { 
+                                style: {
+                                    // color:'#FF6868'
+                                }       
+                            }, time);
                         }
                     },
                     {
@@ -182,7 +188,8 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-                            return time;
+                            
+                            return h('span',{},time);
                         }
                     },
                     {
@@ -323,7 +330,8 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         width:90,
                         render(h, obj){
-                          return bizType[obj.row.bizType];
+                            return h('span',{},bizType[obj.row.bizType])
+                        //   return bizType[obj.row.bizType];
                         }
                     }
                 let arr=[].concat(this.columns);
@@ -383,7 +391,7 @@ import PdfDownload from './pdfDownload';
                 this.openMessage=data;
             },
             lowerSubmit(){
-                let customerName=this.tabParams.customerName;
+                let customerName=this.tabParams.customerName || '';
                 this.page=1;
                 this.tabParams={
                     page:1,

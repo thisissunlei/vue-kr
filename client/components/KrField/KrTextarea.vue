@@ -7,7 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
-            :right="right"
+    :right="right"
         >
             <Input
                 v-model="areaValue"
@@ -37,7 +37,8 @@ export default {
         EditLabel,
     },
     props:{
-         right:{
+        right:{
+           
             type:String
         },
         placeholder:{

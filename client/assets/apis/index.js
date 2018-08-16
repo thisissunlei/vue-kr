@@ -1,23 +1,29 @@
+import OrderApi from "./order";
+import OrderManageApi from "./orderManage";
+import ContractCenter from "./contractCenter";
+import apiPublic from "./apiPublic";
+import BillApi from "./bill";
+import MemberApi from "./member";
+import Settlement from "./settlement";
+import operationsCenter from "./operationsCenter";
+import OperationApi from "./operation";
+import NewMain from "./newMain";
+import Basic from "./basic";
+import projectSetting from "./projectSetting";
+import Inventory from "./inventory";
+import Calculator from "./calculator";
+import Smarthardware from "./smarthardware";
+import Krmeeting from "./krmeeting";
+import DoorRelationship from "./doorRelationship";
+import KrmeetingRoom from "./krmeetingRoom";
+import ProductGoods from './productGoods';
+import comment from './comment';
+import DevTool from './devTool';
+import FinancialtransferApply from "./financialtransferApply.js";
+import doorPermmision from './doorPermmision.js';
+import KrmeetingSeat from "./krmeetingSeat.js";
 
-import OrderApi from './order';
-import OrderManageApi from './orderManage';
-import ContractCenter from './contractCenter'
-import apiPublic from './apiPublic'
-import BillApi from './bill.js';
-import MemberApi from './member.js'
-import Settlement from './settlement.js';
-import operationsCenter from './operationsCenter'
-import OperationApi from './operation.js';
-import NewMain from './newMain.js';
-import Basic from './basic.js';
-import projectSetting from './projectSetting';
-import Inventory from './inventory.js';
-import Calculator from './calculator.js';
-import Smarthardware from './smarthardware.js';
-import Krmeeting from './krmeeting.js';
-import DoorRelationship from './doorRelationship.js';
-import KrmeetingRoom from './krmeetingRoom.js';
-import ProductGoods from './productGoods.js';
+
 export default {
   ...OrderApi,
   ...OrderManageApi,
@@ -37,5 +43,10 @@ export default {
   ...Krmeeting,
   ...DoorRelationship,
   ...KrmeetingRoom,
-  ...ProductGoods
+  ...ProductGoods,
+  ...comment,
+  ...DevTool,
+  ...FinancialtransferApply,
+  ...doorPermmision,
+  ...KrmeetingSeat
 }

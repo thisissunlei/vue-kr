@@ -58,6 +58,12 @@ export default {
                 }else{
                      this.checkAll=false; 
                 }
+                let checkList=[].concat(this.checkAllGroup);
+                if(checkList.length>0){
+                    this.checkList=checkList.join(',');
+                    this.$emit('checkData',this.checkList)
+                }
+              
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -102,7 +108,7 @@ export default {
     }
     .u-community-check-list{
         margin-top:16px;
-        padding:0 26px;
+        padding:0 44px;
         .u-all-check{
             margin-bottom:12px;
         }

@@ -2,15 +2,48 @@
 <div class="g-setting-manager">
         <SectionTitle :title='"全部企业（"+totalCount+"）"' ></SectionTitle>
         <div class="u-search" >
-            <span class="u-high-search" @click="showSearch"></span>  
-            <div style='display:inline-block;float:right;padding-right:20px;'>
-                <Input 
-                    v-model="Params.csrName" 
-                    placeholder="请输入公司名称"
-                    style="width: 252px"
-                />
-                <div class='m-search' @click="lowerSubmit">搜索</div>
-            </div> 
+                 <div class="u-search-list" style="margin-left:30px;">
+                    <SearchForm 
+                        placeholder="请输入公司名称"
+                        inputName="csrName"
+                        :openSearch="true"
+                        @serachFormDataChanged="changeCompany"
+                        :onSubmit="lowerSubmit"
+                    />
+                </div>
+                <div class="u-search-list">
+                        <span class="u-search-label">社区</span>
+                        <Select 
+                            v-model="Params.cmtId" 
+                            style="width:200px"
+                            placeholder="请选择社区" 
+                            clearable
+                            filterable
+                            remote
+                            label-in-value
+                            :label="Params.communityName"
+                            @on-change="changeCommunity"
+                        >
+                            <Option   v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+                            
+                        </Select>
+                </div>
+                <div class="u-search-list" >
+                    <span class="u-search-label">是否已设管理员</span>
+                    <Select 
+                        v-model="Params.manager" 
+                        style="width:200px"
+                        placeholder="请选择" 
+                        clearable
+                        filterable
+                        label-in-value
+                        remote
+                        :label="Params.managerName"
+                        @on-change="changeManager"
+                    >
+                        <Option v-for="item in typeList" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+                    </Select>
+                 </div>
         </div>
         <div class="u-table">
             <Table  border :columns="tableHeader" :data="tableData" ></Table>
@@ -49,10 +82,12 @@ import SectionTitle from '~/components/SectionTitle';
 import HighSearch from './highSearch';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
+import SearchForm from '~/components/SearchForm';
 export default {
     components:{
         SectionTitle,
         HighSearch,
+        SearchForm,
     },
     data(){
         return{
@@ -61,10 +96,29 @@ export default {
             pageSize:15,
             tableData:[],
             page:1,
+            typeList:[
+                {
+                    value:-1,
+                    label:'全部'
+                },
+                {
+                    value:0,
+                    label:'未设置'
+                },
+                {
+                    value:1,
+                    label:'已设置'
+                },
+            ],
+            communityList:[],
             Params:{
                 page:1,
                 pageSize:15,
                 csrName:'',
+                cmtId:'',
+                manager:'',
+                communityName:'',
+                managerName:'',
             },
             itemDetail:{},
             searchData:{},
@@ -85,7 +139,7 @@ export default {
                     align:'center',
                     render(h, obj){
                         let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.registerTime));
-                        return time;
+                        return h('span',{},time);
                     }
                 },
                 {
@@ -122,13 +176,47 @@ export default {
         }
     },
     created(){
+        this.getCommunity();
         this.getTableData(this.$route.query);
+        let managerType={
+            '-1':'全部',
+            '0':'未设置',
+            '1' :'已设置'
+        }
          if(!this.$route.query.csrName){
                  this.$route.query.csrName=""
          }
-        this.Params=this.$route.query;
+        let params=Object.assign({},this.$route.query);
+          
+        var _this=this;
+        this.Params=Object.assign({},params);
+        this.Params.managerName=managerType[params.manager];
+       
     },
     methods:{
+        changeCommunity(form){
+            this.Params.cmtId=form.value;
+            this.Params.communityName=form.label;
+            utils.addParams(this.Params);
+        },
+        changeManager(form){
+            this.Params.manager=form.value;
+             this.Params.managerName=form.label;
+            utils.addParams(this.Params);
+        },
+        changeCompany(form){
+            this.Params.csrName=form;
+        },
+        getCommunity(callback){
+            this.$http.get('join-bill-community','').then((res)=>{
+                this.communityList=res.data.items;
+                callback && callback();
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
         getTableData(params){
                 this.$http.get('customer-manager-list', params).then((res)=>{
                     this.tableData=res.data.items;
@@ -146,14 +234,13 @@ export default {
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
-                utils.clearForm(this.searchData);
-                let csrName=this.Params.csrName;
                 this.page=1;
-                this.Params={
+                let Params={
                     page:1,
                     pageSize:15,
-                    csrName:csrName
+                    csrName:this.Params.csrName
                 }
+                this.Params=Object.assign({},Params);
                 utils.addParams(this.Params);
         },
         showSearch (params) {
@@ -186,11 +273,12 @@ export default {
             height:32px;
             margin:16px 0;
             padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
+            box-sizing: border-box;
+            clear: both;
+            .u-search-label{
+                padding:0 10px;
+            }
+            .u-search-list{
                 float:right;
             }
     }

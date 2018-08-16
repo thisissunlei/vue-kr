@@ -376,7 +376,7 @@ export default {
         //去填写详情
         getArchivesDetail(data,callback){
            console.log(data,"ooooooo")
-            this.$http.get('project－archives-file-detail',data).then((response)=>{
+            this.$http.get('project－archives-file-detail-write',data).then((response)=>{
                
                 if(!callback){
                      this.fileDetailData = Object.assign({},response.data);

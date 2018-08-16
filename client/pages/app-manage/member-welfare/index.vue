@@ -101,12 +101,12 @@ export default {
                     key: 'couponType',
                     align:'center',
                     render(h, obj){
-                         let type={
-                              'OFFLINESTORE':'线下门店',
-                              'USERLIFE':'会员生活',
-                              'ENTERPRISESERVICE':'企业服务',
-                            }
-                        return type[obj.row.couponType];
+                        let type={
+                            'OFFLINESTORE':'线下门店',
+                            'USERLIFE':'会员生活',
+                            'ENTERPRISESERVICE':'企业服务',
+                        }
+                        return h('span',{},type[obj.row.couponType]);
                     }
                 },
                 {

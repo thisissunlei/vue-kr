@@ -95,7 +95,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'amount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.amount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.amount/100).toFixed(2)))
+                           
                          }
                     },
                     {
@@ -103,7 +104,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'bankTransfer',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.bankTransfer/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.bankTransfer/100).toFixed(2)))
+        
                          }
                     },
                     {
@@ -111,7 +113,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'communityTransfer',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.communityTransfer/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.communityTransfer/100).toFixed(2)))
+                           
                          }
                     },
                     ],
@@ -121,7 +124,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     width:100,
                     align:'center',
                     render:function(h,params){
-                        return params.row.tradeNo?params.row.tradeNo:'-';
+                        return h('span',{},params.row.tradeNo?params.row.tradeNo:'-')
+                    
                     }
                 },{
                     title: '社区名称',
@@ -136,7 +140,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'amount',
                     align:'center',
                     render:function(h,params){
-                            return utils.thousand((params.row.amount/100).toFixed(2))
+                              return h('span',{},utils.thousand((params.row.amount/100).toFixed(2)))
+                            
                          }
                 },{
                     title: '账户名称',
@@ -147,21 +152,24 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+                       
                     }
                 },{
                     title: '操作人',
                     key: 'createrName',
                     align:'center',
                     render:function(h,params){
-                        return params.row.createrName?params.row.createrName:'系统自动'
+                        return h('span',{},params.row.createrName?params.row.createrName:'系统自动')
+                        
                     }
                 },{
                     title: '操作时间',
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
+                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)))
+
                     }
                 }],
                 summaryData:[],

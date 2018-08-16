@@ -8,7 +8,7 @@
 
                 <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
-                  <Page :total="totalCount" sshow-elevator :current="page" @on-change="changePage" ></Page>
+                  <Page :total="totalCount" sshow-elevator :current="page" :page-size="20" @on-change="changePage" ></Page>
                 </div>
             </div>
       </div>
@@ -156,7 +156,7 @@ export default {
             groupList:[],
             columns: getColumns.columns.call(this),
             dataTable: [],
-            pageSize:10,
+            pageSize:20,
             page:1
         }
     },
@@ -349,6 +349,7 @@ export default {
             this.title = "新建";
             this.formTop.name='';
             this.formTop.code='';
+            this.editRoleId ='';
             this.getRoleEdit()
             this.openEdit = true;
          },

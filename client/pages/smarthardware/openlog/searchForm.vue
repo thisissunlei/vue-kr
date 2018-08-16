@@ -59,7 +59,9 @@ export default{
 
     },
     mounted(){
+
         this.formItem.deviceId = this.$route.query.deviceId || "";
+        this.$route.query.deviceId && this.searchEquipment();
         this.getCommunity();
         
     },
@@ -87,7 +89,6 @@ export default{
             this.formItem.communityId = communityId;
         },
         searchEquipment(){
-
             this.$emit("submitSearchData",this.formItem);
         }
 

@@ -33,7 +33,7 @@
 
         
 
-                <Form-item label="选择库存日期:" style="margin-top:20px;">
+                <Form-item label="选择库存日期:" style="margin-top:20px;height:33px;">
                     <Form-item prop="startDate" style=‘display:inline-block;float:left;margin-left:2px;’>
                     <DatePicker 
                         v-model="formItem.startDate"

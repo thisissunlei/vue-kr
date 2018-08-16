@@ -5,11 +5,6 @@ export default {
         url: '/api/krspace-op-web/customer/manager/list',
         method: 'get'
     },
-    //获取企业管理员详情--员工信息
-    'customer-manager-staff-list': {
-        url: 'api/krspace-op-web/customer/manager/staff/list',
-        method: 'get'
-    },
     //修改管理员
     'edit-customer-manager': {
         url: '/api/krspace-op-web/customer/manager/edit',
@@ -37,7 +32,7 @@ export default {
     },
     //新增客户
     'add-customer': {
-        url: '/api/krspace-op-web/customer-center/add',
+        url: '/api/order/csr/customer/actions/add',
         method: 'post'
     },
     //客户名称校验接口
@@ -88,7 +83,64 @@ export default {
     },
     //获取企业管理员详情--获取管理的社区列表
     'get-manage-cmt-list': {
-        url: 'api/krspace-op-web/customer/manager/manage-cmt-list',
+        url: '/api/krspace-op-web/customer/manager/manage-cmt-list',
         method: 'get'
     },
+    
+    //获取企业管理员详情--在职员工列表
+    'get-customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/employees',
+        method: 'get'
+    },
+    //获取企业管理员详情--管理员列表
+    'get-customer-manager-admin': {
+        url: '/api/krspace-op-web/customer/manager/admin/list',
+        method: 'get'
+    },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-user-detail': {
+        url: '/api/krspace-op-web/customer/manager/user/detail',
+        method: 'get'
+    },
+    //获取企业管理员详情--根据手机号查询会员信息
+    'get-customer-manager-csr-mbrtype-num': {
+        url: '/api/krspace-op-web/customer/manager/csr-mbrtype-num',
+        method: 'get'
+    },
+    //获取企业管理员详情--编辑会员信息
+    'customer-manager-employees': {
+        url: '/api/krspace-op-web/customer/manager/user/edit',
+        method: 'post'
+    },
+
+    //客户会员--客户管理
+    'get-customermanage-customer-type': {
+        url: 'api/order/csr/source/type',
+        method: 'get'
+    },
+    //客户会员--客户管理-编辑回显
+    'get-customer-detail': {
+        url: 'api/order/csr/customer/detail',
+        method: 'get'
+    },
+    //
+    'edit-customer':{
+        url: 'api/order/csr/customer/actions/update',
+        method: 'post' 
+    },
+    //招商账户权限列表
+    'business-bill-list': {
+        url: '/api/krspace-sso-web/sso/ssoUser/business/list',
+        method: 'get'
+    },
+    //获取授予招商权限的列表
+    'get-business-role': {
+        url: '/api/krspace-sso-web/sso/ssoUser/business/role/list',
+        method: 'get'
+    },
+    //授予招商角色
+    'add-business-role': {
+        url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
+        method: 'post'
+    }
 } 

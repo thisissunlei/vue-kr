@@ -96,6 +96,46 @@ export default  {
         url: '/api/iot-platform/dict/common',
         method: 'get'
     },
+    //获取智能硬件权限所有人列表
+    'get-smart-hardware-power-owner':{
+        url: '/api/iot-platform/door-device/accessible-user',
+        method: 'get'
+    },
+
+    //获取门禁设备详情二代
+    'get-smart-hardware-door-device-detail':{
+        url: '/api/iot-platform/door-device/detail',
+        method: 'get'
+    },
+    //获取一代设备香型
+    'get-smart-hardware-door-device-detail-v1':{
+        url: '/api/iot-platform/door-device/v1/detail',
+        method: 'get'
+    },
+    //刷新设备获取上报信息
+    'get-smart-hardware-report-info':{
+        url: '/api/iot-platform/door-device/admin/actions/refresh-reported-info',
+        method: 'get'
+    },
+
+
+     //温湿度变化
+     'temperaturehumiditymaplist':{
+        url: '/api/iot-platform/device-status-log/list',
+        method: 'get'
+    },
+
+    //获取公司列表数据
+    'get-samrt-hard-company-list':{
+        url: 'api/iot-platform/customer/select-items',
+        method: 'get'
+    },
+
+    //生成一代门禁二维码
+    'get-door-new-qr':{
+        url: 'api/iot-platform/door-device/actions/generate-qr-code',
+        method: 'get'
+    },
     
     
 

@@ -8,7 +8,7 @@
             @recordClick="recordClick"
             @editClick="editClick"
             :isOk="isOk"
-            :right="right"
+  :right="right"
         >
             <Cascader
                 ref="cityCascader"
@@ -34,7 +34,8 @@ export default {
     },
     props:{
         right:{
-            type:String,
+          
+            type:String
         },
         isOk:{
             type:Boolean,

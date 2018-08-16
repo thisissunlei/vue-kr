@@ -120,11 +120,11 @@ export default {
                     key: 'updateTime',
                     align:'center',
                     render(h, obj){
-                            if(!obj.row.updateTime){
-                                return '-'
-                            }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.updateTime));
-                            return time;
+                        if(!obj.row.updateTime){
+                            return '-'
+                        }
+                        let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.updateTime));
+                        return h('span',{},time);
                     }
                 },
                 {

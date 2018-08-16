@@ -43,7 +43,7 @@
                 v-model="params.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
-            ></Input>
+            />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>  
     </div>
@@ -172,7 +172,7 @@ export default {
                         width:140,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
-                            return time;
+                            return h('span',{},time)
                         }
                     },
                     {

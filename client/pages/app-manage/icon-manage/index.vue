@@ -138,7 +138,14 @@ export default {
                         if(!obj.row.iconUrl){
                             return '-'
                         }
-                        return <img style="width:40px" src={`${obj.row.iconUrl}`}/>;
+                        return h('img', {
+                            style:{
+                                width:'40px'
+                            },
+                            attrs:{
+                                src:obj.row.iconUrl
+                            }
+                        });
                     }
                 },
                 {
@@ -160,7 +167,7 @@ export default {
                                 return '-'
                             }
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.updateTime));
-                            return time;
+                            return h('span',{},time);
                     }
                 },
                 {

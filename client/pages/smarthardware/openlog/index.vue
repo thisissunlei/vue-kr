@@ -176,8 +176,8 @@ export default {
 
            let _this =this;
            var timeObj = {
-               sdate :(data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
-               edate :(data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
+               sdate :(data.time && data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
+               edate :(data.time && data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
                lastId :''
            }
            var newObj = Object.assign({},_this.searchData,data,timeObj);

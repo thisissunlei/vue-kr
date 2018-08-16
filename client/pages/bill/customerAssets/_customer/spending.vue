@@ -72,7 +72,7 @@ import utils from '~/plugins/utils';
                         key: 'rentAmount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.rentAmount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.rentAmount/100).toFixed(2)))
                          }
                     },
                     {
@@ -80,7 +80,7 @@ import utils from '~/plugins/utils';
                         key: 'mettingAmount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.mettingAmount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.mettingAmount/100).toFixed(2)))
                          }
                     },
                     {
@@ -88,7 +88,7 @@ import utils from '~/plugins/utils';
                         key: 'printAmount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.printAmount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.printAmount/100).toFixed(2)))
                          }
                     },
                     {
@@ -96,7 +96,7 @@ import utils from '~/plugins/utils';
                         key: 'otherAmount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.otherAmount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.otherAmount/100).toFixed(2)))
                          }
                     },
                     {
@@ -104,7 +104,7 @@ import utils from '~/plugins/utils';
                         key: 'total',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand((params.row.total/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.total/100).toFixed(2)))
                          }
                     },
                     ],
@@ -126,14 +126,15 @@ import utils from '~/plugins/utils';
                     key: 'amount',
                     align:'center',
                     render:function(h,params){
-                            return utils.thousand((params.row.amount/100).toFixed(2))
+                            return h('span',{},utils.thousand((params.row.amount/100).toFixed(2)))
                          }
                 },{
                     title: '消费时间',
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+
                     }
                 },{
                     title: '相关记录',

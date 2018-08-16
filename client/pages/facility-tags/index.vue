@@ -44,7 +44,7 @@
                             v-model="formItem.orderNum" 
                             placeholder="请输入序号" 
                             style="width: 250px"
-                    ></Input> 
+                    />
                 </FormItem>
 
                 <FormItem label="名称" prop="lableName">
@@ -52,7 +52,7 @@
                             v-model="formItem.lableName" 
                             placeholder="请输入名称" 
                             style="width: 250px"
-                    ></Input> 
+                    /> 
                 </FormItem>
 
                 <FormItem label="类目" prop="lableType">
@@ -64,7 +64,7 @@
                         v-model="formItem.lableUrl" 
                         style="width: 176px;display:inline-block;"
                         :value="formItem.lableUrl"
-                    ></Input> 
+                    />
                    <Upload
                      name="upfile"
                      ref="upload"
@@ -114,7 +114,7 @@
                             v-model="editItem.orderNum" 
                             placeholder="请输入序号" 
                             style="width: 250px"
-                    ></Input> 
+                    />
                 </FormItem>
 
                 <FormItem label="名称" prop="lableName">
@@ -122,7 +122,7 @@
                             v-model="editItem.lableName" 
                             placeholder="请输入名称" 
                             style="width: 250px"
-                    ></Input> 
+                    />
                 </FormItem>
 
                 <FormItem label="类目" prop="lableType">
@@ -135,7 +135,7 @@
                         style="width: 176px;display:inline-block;"
                         :value="editItem.lableUrl"
                         placeholder="图片地址" 
-                    ></Input> 
+                    />
                    <Upload
                      ref="upload"
                      name="upfile"
@@ -274,11 +274,7 @@ export default {
                         title: '类目',
                         key: 'lableTypeName',
                         align:'center',
-                        width:200,
-                        // render(h, obj){
-                        //     let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
-                        //     return time;
-                        // }
+                        width:200
                     },
                     
                     {

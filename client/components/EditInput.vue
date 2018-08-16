@@ -137,7 +137,6 @@ import http from '~/plugins/http.js';
                 urlArray = this.value.split('http://')[1]
 
             }
-            console.log('=========',urlArray)
             return {
                 // 修改后的数据
                 customer:urlArray,

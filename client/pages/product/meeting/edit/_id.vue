@@ -275,9 +275,9 @@ export default {
                 name:'',
                 appBusyPrice:'',
                 appIdlePrice:'',
-                appEndTime:'23:30',
+                appEndTime:'23:30:00',
                 appPublish:'',
-                appStartTime:'00:00',
+                appStartTime:'00:00:00',
                 area:'',
                 capacity:'',
                 communityId:'',
@@ -287,9 +287,9 @@ export default {
                 floor:'',
                 kmPromotionUnitPrice:'',
                 kmUnitPrice:'',
-                krmEndTime:'19:00',
+                krmEndTime:'19:00:00',
                 krmPublish:'',
-                krmStartTime:'09:00',
+                krmStartTime:'09:00:00',
                 lockBeginTime:'',
                 lockEndTime:'',
                 meetingDevices:''
@@ -297,10 +297,10 @@ export default {
             form:{
                startHour:'', 
                endHour:'',
-               appStartTime:'00:00',
-               appEndTime:'23:30',
-               krmStartTime:'09:00',
-               krmEndTime:'19:00',
+               appStartTime:'00:00:00',
+               appEndTime:'23:30:00',
+               krmStartTime:'09:00:00',
+               krmEndTime:'19:00:00',
 
             },
             isKrmError:false,
@@ -414,16 +414,15 @@ export default {
                     data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;
-                    this.form.appStartTime=data.appStartTime.substring(0,5);
-                    console.log('88888',data.appEndTime.substring(0,3))
+                    this.form.appStartTime=data.appStartTime.substring(0,8);
                     if(data.appEndTime.substring(0,2)==24){
-                        this.form.appEndTime='23:30';
+                        this.form.appEndTime='23:30:00';
                     }else{
-                        this.form.appEndTime=data.appEndTime.substring(0,5);
+                        this.form.appEndTime=data.appEndTime.substring(0,8);
                     }
                   
-                    this.form.krmStartTime=data.krmStartTime.substring(0,5);
-                    this.form.krmEndTime=data.krmEndTime.substring(0,5);
+                    this.form.krmStartTime=data.krmStartTime.substring(0,8);
+                    this.form.krmEndTime=data.krmEndTime.substring(0,8);
                     let coverImgList=[];
                     if(data.coverImg!=''){
                         coverImgList.push({'url':data.coverImg});
@@ -438,14 +437,16 @@ export default {
                     this.detailImgList=detailImgList;
                     this.formItem=data;
                     if(data.lockBeginTime){
-                         this.startDate==dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockBeginTime));
+                        this.startDate=dateUtils.dateToStr("YYYY-MM-DD", new Date(res.data.lockBeginTime));
                         this.formItem.lockBeginTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime));
                         this.form.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
+                        this.startHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockBeginTime)).substr(11,5);
                     }
                     if(data.lockEndTime){
                         this.endDates=dateUtils.dateToStr("YYYY-MM-DD", new Date(data.lockEndTime));
                         this.formItem.lockEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime));
                          this.form.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime)).substr(11,5);
+                         this.endHour=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.lockEndTime)).substr(11,5);
                     }
                     if(data.detailImg){
                          this.formItem.detailImgs=data.detailImg.join(',');
@@ -469,7 +470,7 @@ export default {
                 });
         },
         changeAppStartTime(data){
-             this.formItem.appStartTime=data;
+             this.formItem.appStartTime=`${data}:00`;;
             if(this.formItem.appStartTime && this.formItem.appEndTime){
                 this.isAppError=false;
             }else{
@@ -477,7 +478,7 @@ export default {
             }
         },
         changeAppEndTime(data){
-            this.formItem.appEndTime=data;
+            this.formItem.appEndTime=`${data}:00`;
             if(this.formItem.appStartTime && this.formItem.appEndTime){
                 this.isAppError=false;
             }else{
@@ -485,7 +486,7 @@ export default {
             }
         },
         changeKrmStartTime(data){
-             this.formItem.krmStartTime=data;
+             this.formItem.krmStartTime=`${data}:00`;
             if(this.formItem.krmStartTime && this.formItem.krmEndTime){
                 this.isKrmError=false;
             }else{
@@ -493,8 +494,8 @@ export default {
             }
         },
         changeKrmEndTime(data){
-             this.formItem.krmEndTime=data;
-            if(this.formItem.appStartTime && this.formItem.krmEndTime){
+             this.formItem.krmEndTime=`${data}:00`;
+            if(this.formItem.krmStartTime && this.formItem.krmEndTime){
                 this.isKrmError=false;
             }else{
                 this.isKrmError=true;
@@ -567,18 +568,19 @@ export default {
                     duration: 3
                 });
                 let _this = this;
+                console.log('------->>>>',this.startDate , this.startHour)
+                if(this.startDate && this.startHour){
+                    this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+                }else{
+                    this.formItem.lockBeginTime='';
+                }   
+          
+                if(this.endDates && this.endHour){
+                    this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
+                }else{
+                    this.formItem.lockEndTime='';
+                }
              
-               if(this.startDate && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
-               }else{
-                   this.formItem.lockBeginTime=""
-               }
-               if(this.endDates && this.endHour){
-                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-               }else{
-                    this.formItem.lockEndTime=""
-               }
-              
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();
@@ -637,7 +639,6 @@ export default {
             this.startDate=date;
         },
         endChange(date){
-            console.log('date',date)
             this.endDates=date;
         },
         startHourChange(date){

@@ -95,7 +95,7 @@ var maxWidth = 170;
 export default {
     head() {
         return {
-            title: "工位合同列表-氪空间后台管理系统"
+            title: "工位合同-氪空间后台管理系统"
         }
     },
 

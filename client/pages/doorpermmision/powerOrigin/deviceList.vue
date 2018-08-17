@@ -1,6 +1,6 @@
 <template>
-  <div class="g-openlog">
-      <div class="g-openlog-box">
+  <div class="g-device-list">
+      <div class="g-device-list-box">
             
             <SearchForm  @submitSearchData="submitSearchData"  @deleteRelations = "deleteRelations" @addDevice = "addDevice" :groupLevel="groupLevel"/>
             <div class="table-box">
@@ -97,10 +97,29 @@ export default {
                         title: '授权时间',
                         key: 'ctime',
                         align:'center',
+                        className: 'door-permission-times',
                         render(h,obj){
                            return h('div', [
                                
-                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.startAt))+"————"+dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(obj.row.endAt)))
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.startAt))+"——"+dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.endAt)))
+                            ]);
+                            
+                        }
+                    },
+                    {
+                        title: '操作人',
+                        key: 'creatorName',
+                        align:'center',
+                        
+                    },
+                    {
+                        title: '操作时间',
+                        key: 'ctime',
+                        align:'center',
+                        render(h,obj){
+                           return h('div', [
+                               
+                                h('span', dateUtils.dateToStr("YYYY-MM-DD HH:mm", new Date(obj.row.ctime)))
                             ]);
                             
                         }
@@ -303,6 +322,11 @@ export default {
         .bottom-page{
             float:right;
             margin:10px;
+        }
+    }
+    .g-device-list{
+        .door-permission-times{
+            width:300px;
         }
     }
 </style>

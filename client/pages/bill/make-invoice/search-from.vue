@@ -81,7 +81,7 @@
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="申请时间" class='priceForm' prop="applyStartDate">
+                            <Form-item label="开票时间" class='priceForm' prop="applyStartDate">
                                 <DatePicker 
                                     v-model="formItem.applyStartDate" 
                                     placeholder="开始日期"

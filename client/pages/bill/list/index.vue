@@ -30,7 +30,7 @@ export default {
    name:'billList',
     head () {
             return {
-                title: "已出账单管理"
+                title: "账单-氪空间后台管理系统"
             }
     },
    data(){

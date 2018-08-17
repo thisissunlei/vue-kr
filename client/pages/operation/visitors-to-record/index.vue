@@ -116,7 +116,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '预约参观'
+                title: '预约参观-氪空间后台管理系统'
             }
         },
         data () {

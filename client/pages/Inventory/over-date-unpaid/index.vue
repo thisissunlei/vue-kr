@@ -52,7 +52,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '逾期未付'
+                title: '逾期未付-氪空间后台管理系统'
             }
         },
         data () {

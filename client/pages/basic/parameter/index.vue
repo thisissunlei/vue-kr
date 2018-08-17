@@ -72,6 +72,11 @@ import utils from '~/plugins/utils';
 
 
 export default {
+        head () {
+            return {
+                title: "参数配置-氪空间后台管理系统"
+            }
+        },
         name: 'Meeting',
         components:{
             newForm,

@@ -51,6 +51,11 @@ import BlanceInputGroup from './blanceEdit.1.vue'
 import utils from '~/plugins/utils';
 
 export default {
+    head() {
+        return {
+            title: '释放服务保证金-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,

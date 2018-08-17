@@ -72,7 +72,12 @@
 			Basic,
 			JoinInfo,
 			OrderManagement
-		},
+		}, 
+		head () {
+        	return {
+        	    title: "客户账户详情-氪空间后台管理系统"
+        	}
+ 		},
 		data (){
 
 			return{

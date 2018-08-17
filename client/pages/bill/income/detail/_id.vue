@@ -61,7 +61,7 @@ export default {
 	},
 	head () {
             return {
-                title: "收入详情"
+                title: "收入详情-氪空间后台管理系统"
             }
     },
 	data(){

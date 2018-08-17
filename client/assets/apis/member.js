@@ -128,6 +128,21 @@ export default {
         url: 'api/order/csr/customer/actions/update',
         method: 'post' 
     },
+    // 查看授权书
+    'check-certificate': {
+        url: 'api/krspace-op-web/customer/manager/certificate/list',
+        method: 'get'
+    },
+    // 下载授权书模板
+    'download-certificate': {
+        url: 'api/krspace-op-web/sys/down-auth-file',
+        method: 'post'
+    },
+    // 主管理员列表
+    'get-customer-major-admin': {
+      url: 'api/krspace-op-web/customer/manager/chief/list',
+      method: 'get'
+    },
     //招商账户权限列表
     'business-bill-list': {
         url: '/api/krspace-sso-web/sso/ssoUser/business/list',

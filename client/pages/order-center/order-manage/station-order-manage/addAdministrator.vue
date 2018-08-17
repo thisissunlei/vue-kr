@@ -4,7 +4,7 @@
             <Form ref="formItems" :model="formItem" :rules="ruleCustom"  label-position="top">
                 <div class="u-part">
                     <div class="u-part-title">
-                        管理员可在APP中查看和支付账单，可在官网添加会员、分配会员、门禁权限、申请发票等，<span style="color:red;">请与客户确认无误后再填写</span>
+                        管理员可在APP中查看和支付账单，可在官网添加会员、分配会员门禁权限、申请发票等，<span style="color:red;">请与客户确认无误后再填写</span>
                     </div>
                     <div class="u-part-content">
                          <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="phone">

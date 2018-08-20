@@ -105,7 +105,7 @@ export default {
     },
     head(){
         return{
-            title:"社区商品设置-氪空间后台管理系统"
+            title:"社区信息配置-氪空间后台管理系统"
         }
     },
     data () {

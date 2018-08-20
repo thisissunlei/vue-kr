@@ -424,7 +424,7 @@ export default {
 	computed:{
         discountAdder:{
             get(){
-                let discount=this.data.tacticsVOs.find(e=>e.tacticsType==1)
+                let discount=this.data.tacticsVOs&&this.data.tacticsVOs.find(e=>e.tacticsType==1)
                if (discount) {
                    return discount.addUserName
                }
@@ -433,7 +433,7 @@ export default {
         },
         rentFreeAdder:{
             get(){
-                let rentFree=this.data.tacticsVOs.find(e=>e.tacticsType==3)
+                let rentFree=this.data.tacticsVOs&&this.data.tacticsVOs.find(e=>e.tacticsType==3)
                if (rentFree) {
                    return rentFree.addUserName
                }

@@ -1044,6 +1044,11 @@
                 
                 this.orderStatus = 'create';
                 this.status = value;
+                if (value==2&&this.discountError.length>0) {
+                    this.$Notice.error({
+                            title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                    });
+                }
             },
             changeCustomer(value){
                 this.formItem.customerId = value.value;
@@ -1320,9 +1325,9 @@
                     let maxDiscount=Math.min.apply(null,discountList)
                     if (this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&maxDiscount>this.discountReceive) {
                         this.discountError='您没有此折扣权限，请让高权限的同事协助编辑';
-                        this.$Notice.error({
-                            title: '您没有此折扣权限，请让高权限的同事协助编辑'
-                        });
+                        // this.$Notice.error({
+                        //     title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                        // });
                     }
                 }
                  

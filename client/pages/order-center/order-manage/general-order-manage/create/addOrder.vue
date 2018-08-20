@@ -153,12 +153,12 @@ import utils from '~/plugins/utils';
 
 
 export default {
-        head() {
+   
+        head () {
             return {
-                title: '新建订单'
+                title: "新建通用订单-氪空间后台管理系统"
             }
         },
-
         data() {
             
            const validateMoney = (rule, value, callback) => {

@@ -19,7 +19,7 @@ export default {
    name:'paymentList',
    head() {
         return {
-            title: '订单管理'
+            title: '回款-氪空间后台管理系统'
         }
     },
    data(){

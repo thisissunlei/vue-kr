@@ -280,7 +280,6 @@
         this.getTableData(this.tabParams);
       },
       exportTable() {
-        // todo
         utils.commonExport(this.oldParam,'/api/sync/incomeSummaries/export');
       }
     }

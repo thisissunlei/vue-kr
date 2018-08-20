@@ -53,9 +53,9 @@ var layoutScrollHeight=0;
             ToolTip,
             Loading
         },
-        head() {
+        head(){
             return {
-                title: '即将到期'
+                title: '即将到期-氪空间后台管理系统'
             }
         },
         data () {

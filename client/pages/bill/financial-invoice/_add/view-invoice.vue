@@ -356,7 +356,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '资料详情'
+                title: '资料详情-氪空间后台管理系统'
             }
         },
          mounted(){

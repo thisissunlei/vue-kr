@@ -125,6 +125,11 @@ import CreateSpace from './createSpace';
 import EditSpace from './editSpace';
 
 export default {
+    head () {
+        return {
+            title: "物理空间-氪空间后台管理系统"
+        }
+    },
     components:{
       SectionTitle,
       CreateSpace,

@@ -110,6 +110,11 @@
 <script>
 import dateUtils from 'vue-dateutils';
 export default {
+     head() {
+        return {
+            title: '管理子空间-氪空间后台管理系统'
+        }
+    },
     components:{
     },
     props:{

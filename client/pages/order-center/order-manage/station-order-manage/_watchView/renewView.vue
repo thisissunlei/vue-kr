@@ -222,6 +222,11 @@ export default {
 							return params.row.discountNum
 						}
 					}
+				},
+				{
+					title: '优惠添加人',
+					key: 'addUserName',
+					align: 'center',					
 				}
 			],
 
@@ -330,7 +335,6 @@ export default {
 				id: params.watchView
 			};
 			this.$http.get('join-bill-detail', from).then((response) => {
-				debugger;
 				this.basicInfo = response.data;
 				let pars = {
 					customerId: this.basicInfo.customerId,

@@ -101,9 +101,9 @@
             </DetailStyle>
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <Col class="col col-discount-header">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
                     <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                     </Col>
 
@@ -148,7 +148,8 @@
 
                         </Col>
                         <Col span="5" class="discount-table-content">
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <!-- <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input> -->
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>                      
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
 
@@ -197,7 +198,7 @@
             </div>
 
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
                 <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
             </FormItem>
         </Form>
@@ -274,6 +275,9 @@ export default {
             }
         };
         return {
+            discountErrorStr:'',
+            discountReceive:-1,//订单本身已有的折扣信息
+            discountdisable:[],
             //苏岭
             customerInfo:{},
             isManager:false,
@@ -712,18 +716,36 @@ export default {
                         obj.tacticsId = item.tacticsId;
                         obj.discount = item.discountNum;
                         let i = _this.youhui.filter((items, i) => {
-                            if (items.name == item.tacticsName) {
+                            if (items.value == item.tacticsType) {
+                            // if (items.name == item.tacticsName) {
                                 return true
                             }
                             return false
                         })
                         obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
+                        obj.index=index;
                         obj.tacticsType = JSON.stringify(item.tacticsType);
                         return obj;
                     })
 
                     _this.renewForm.items = data.contractTactics;
                     _this.dealSaleInfo(false)
+
+                    let discontArr=[].concat(data.contractTactics)                  
+                    if (discontArr.length>0) {//订单新建时填写了优惠信息
+                        let type1=discontArr.find(ele=>ele.tacticsType=='1')
+                        _this.disCountReceive=type1.discount
+                        if (type1) {
+                            let obj= _this.youhui.find(y=>y.value=='1')
+                            if (obj) {                                
+                                 if (obj.discount>type1.discount) {
+                                    let index=type1.index;
+                                    _this.showDiscountError();
+                                    _this.discountdisable[index]=true
+                                 }
+                            }
+                        }
+                    }
                 }, 500)
                 _this.getStationFn = +new Date();
                 _this.getSalerChanceList();
@@ -1430,6 +1452,13 @@ export default {
                 })
                 return;
             }
+            if (this.discountReceive!=-1) {
+                if (Number(val)>this.discountReceive) {
+                    this.showDiscountError();
+                    return;
+                }
+            }
+            this.discountErrorStr=''
             this.discount = val;
             this.dealSaleInfo(true)
         },
@@ -1565,7 +1594,14 @@ export default {
 
             })
         },
-
+        showDiscountError(){
+            this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+            this.discountErrorStr=this.discountError
+               this.disabled = true;
+               this.$Notice.error({
+                   title: '您没有此折扣权限，请让高权限的同事协助编辑'
+               });
+        }  
 
 
     }
@@ -1644,6 +1680,16 @@ export default {
              top: -8px;
              right:414px;
          }
+        
+     } 
+     .creat-order-form{
+        .col-discount-header{
+            .pay-error{
+                    position: absolute;
+                    top: 10px;
+                    width: 350px;
+             }
+        }
      }
  }
  //苏岭结束

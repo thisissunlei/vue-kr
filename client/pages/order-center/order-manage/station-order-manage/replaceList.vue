@@ -140,12 +140,14 @@
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
+                        minWidth:100
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',
+                        minWidth:100,    
                         render(tag,params){ 
                           var communityName=params.row.communityName;
                               if (communityName.lastIndexOf('社区')==communityName.length-2) {
@@ -158,7 +160,7 @@
                         title: '商品名称',
                         key: 'seatNames',
                         align:'center',
-                        width:150,
+                        width:100,
                         render:(h,params)=>{
                             let setnames=params.row.seatNames;
                             if (!setnames) {
@@ -182,7 +184,7 @@
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden',
-                                                    width:'130px'
+                                                    width:'64px'
                                                 }
                                             },setnames)
                                         ]),
@@ -195,6 +197,7 @@
                         title: '服务费总额',
                         key: 'rentAmount',
                         align:'center',
+                        minWidth:100,
                         render(h,params){ 
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;
                           return h('div', [
@@ -225,15 +228,20 @@
                         title: '服务期限',
                         key: 'startDate',
                         align:'center',
-                        width:192,
+                        width:120,
                         render(h, params){
-                            let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
-                            return h('span',time)
+                            // let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            // return h('span',time)
+                            let lines=[];
+                            lines.push(h('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+' 至'))
+                            lines.push(h('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate))))
+                            return h('div',lines);   
                         }
                     },
                     {
                         title: '旧服务费退还',
                         key: 'refundRentAmount',
+                        minWidth:120,
                         align:'center',
                         render(h,params){ 
                           var money=params.row.refundRentAmount?utils.thousand(params.row.refundRentAmount):params.row.refundRentAmount;
@@ -249,6 +257,7 @@
                     {
                         title: '保证金旧转新',
                         key: 'transferDepositAmount',
+                        minWidth:120,
                         align:'center',
                         render(h,params){ 
                           var money=params.row.transferDepositAmount?utils.thousand(params.row.transferDepositAmount):params.row.transferDepositAmount;
@@ -264,6 +273,7 @@
                      {
                         title: '扣除保证金',
                         key: 'deductRentAmount',
+                        minWidth:120,
                         align:'center',
                         render(h,params){ 
                           var money=params.row.deductRentAmount?utils.thousand(params.row.deductRentAmount):params.row.deductRentAmount;
@@ -285,6 +295,7 @@
                         title: '生效时间',
                         key: 'effectDate',
                         align:'center',
+                        width:110,
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
                             if (time.split('  ').length==2) {
@@ -591,7 +602,7 @@
          .table-container{           
             overflow: auto;
             .list-table{
-                min-width:1160px ;
+                min-width:1300px ;
                 overflow: auto;
                 margin:0;
                 margin-top:0px;

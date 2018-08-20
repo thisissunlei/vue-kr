@@ -27,7 +27,7 @@
             </div>
 
             <div class="table-container">
-                 <Table :columns="joinOrder" :data="joinData" border class='list-table' />
+                 <Table :columns="joinOrder" :data="joinData" border class='list-table-join' />
             </div>
            
             <div  class='list-footer'>
@@ -222,23 +222,45 @@
                         title: '订单类型',
                         key: 'orderType',
                         align:'center',
-                        minWidth:90,
+                        minWidth:86,
                         render(tag,params){
+                            let lines=[];
                             var orderType={
                                'IN':'入驻服务订单',
                                'INCREASE':'增租服务订单',
                                'CONTINUE':'续租服务订单'
                             }
+                            let typeName=''
                             for(var item in orderType){
-                                 let typeName=orderType[item]
+                                 typeName=orderType[item]
                                 if(item==params.row.orderType){
                                     let typeName=orderType[item]
                                           if (typeName.lastIndexOf('服务订单')==typeName.length-4) {
                                                 typeName=typeName.slice(0,typeName.length-4)
                                             }    
-                                    return <span class="u-txt">{typeName}</span>;
+                                    // return <span class="u-txt">{typeName}</span>;
+                                    lines.push(tag('p',typeName))
                                 }
                             }
+
+                            var orderStatus={
+                               'NOT_EFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'INVALID':'已作废'
+                            }
+                            for(var item in orderStatus){                               
+                                if(item==params.row.orderStatus){
+                                    var style={};
+                                    if(item=='NOT_EFFECTIVE'){
+                                        style='u-red';
+                                    }
+                                    if(item=='INVALID'){
+                                        style='u-nullify';
+                                    }
+                                    lines.push(tag('p',{'class':`u-txt ${style}`},orderStatus[item]))
+                                }
+                            }
+                            return tag('div',lines);                              
                         }
                     },
                     {
@@ -255,36 +277,36 @@
                             return tag('div',lines);                              
                         }
                     },
-                    {
-                        title: '订单状态',
-                        key: 'orderStatus',
-                        align:'center',
-                        width:90,
-                        render(tag, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废'
-                            }
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    var style={};
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                                }
-                            }
-                        }
-                    },
+                    // {
+                    //     title: '订单状态',
+                    //     key: 'orderStatus',
+                    //     align:'center',
+                    //     width:90,
+                    //     render(tag, params){
+                    //         var orderStatus={
+                    //            'NOT_EFFECTIVE':'未生效',
+                    //            'EFFECTIVE':'已生效',
+                    //            'INVALID':'已作废'
+                    //         }
+                    //         for(var item in orderStatus){
+                    //             if(item==params.row.orderStatus){
+                    //                 var style={};
+                    //                 if(item=='NOT_EFFECTIVE'){
+                    //                     style='u-red';
+                    //                 }
+                    //                 if(item=='INVALID'){
+                    //                     style='u-nullify';
+                    //                 }
+                    //                 return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
+                    //             }
+                    //         }
+                    //     }
+                    // },
                     {
                         title: '创建时间',
                         key: 'ctime',
                         align:'center',
-                        minWidth:120,
+                        minWidth:100,
                         render(tag, params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                             if (time.split('  ').length==2) {
@@ -302,7 +324,7 @@
                         title: '生效时间',
                         key: 'effectDate',
                         align:'center',
-                        minWidth:120,
+                        minWidth:100,
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
                             if (time.split('  ').length==2) {
@@ -412,11 +434,11 @@
         let jsonJoin = JSON.parse(sessionStorage.getItem('paramsJoin'));
         this.switchParams = Object.assign({}, jsonJoin, { page: 1, pageSize: 15 });
         this.getListData(this.switchParams);
-        this.params = this.switchParams;
+        this.params = this.switchParams;     
     },
 
 
-    methods:{   
+    methods:{
         refershJoinList(params) {
             this.getListData(this.params);
             this.openNullify = false;
@@ -641,8 +663,8 @@
         }
         .table-container{           
             overflow: auto;
-            .list-table{
-                 min-width:1220px ;
+            .list-table-join{
+                 min-width:1100 ;
                  overflow: auto;
                  width: 100%;
                  margin:0;

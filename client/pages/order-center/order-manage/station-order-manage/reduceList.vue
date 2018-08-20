@@ -26,7 +26,7 @@
             </div>
 
             <div class="table-container">
-                <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+                <Table :columns="joinOrder" :data="joinData" border class='list-table-reduce'/>
             </div>
             <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_reduce_export'/>
@@ -541,7 +541,7 @@
         }
          .table-container{           
             overflow: auto;
-            .list-table{
+            .list-table-reduce{
                 min-width:1160px ;
                 overflow: auto;
                 margin:0;

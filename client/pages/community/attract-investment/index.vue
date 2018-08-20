@@ -115,7 +115,12 @@ export default {
                     width:80,
                     align:'right',
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'price')
+                        if(obj.row.orderList && obj.row.orderList[0] && obj.row.orderList[0].hasAuth ){
+                                return publicFn.mergeCell(h,obj.row.orderList,'price')
+                        }else{
+                            return h('span',{style:{color:'red'}},'*****')
+                        }
+                        
                     }
                 },
                 {
@@ -125,7 +130,11 @@ export default {
                     width:80,
                     align:'right',
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
+                        if(obj.row.orderList && obj.row.orderList[0] && obj.row.orderList[0].hasAuth ){
+                             return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
+                        }else{
+                            return h('span',{style:{color:'red'}},'*****')
+                        } 
                     }
                 },
                 {
@@ -135,7 +144,11 @@ export default {
                     align:'center',
                     width:60,
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'discount')
+                         if(obj.row.orderList && obj.row.orderList[0] && obj.row.orderList[0].hasAuth ){
+                            return publicFn.mergeCell(h,obj.row.orderList,'discount')
+                        }else{
+                            return h('span',{style:{color:'red'}},'*****')
+                        } 
                     }
                 },
                 {

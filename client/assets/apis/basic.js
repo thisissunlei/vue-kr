@@ -33,18 +33,18 @@ export default {
     },
     //添加折扣配置
     "post-add-discount": {
-        url: "/api/krspace-order-web/cmt/discount/add",
+        url: "/api/order/cmt/discount/add",
         // url: "/ben/cmt/discount/add",
         method: "post"
     },
     //获取级别权限类型
     "get-discount-rights": {
-        url: "/api/krspace-order-web/cmt/discount/rights",
+        url: "/api/order/cmt/discount/rights",
         // url: "/ben/cmt/discount/rights",
         method: "get"
     },
     "put-stop-discount": {
-        url: "/api/krspace-order-web/cmt/discount/stop",
+        url: "/api/order/cmt/discount/stop",
         // url: "/ben/cmt/discount/stop",
         method: "put"
     }

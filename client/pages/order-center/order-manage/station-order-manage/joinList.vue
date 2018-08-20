@@ -26,7 +26,10 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
+            <div class="table-container">
+                 <Table :columns="joinOrder" :data="joinData" border class='list-table' />
+            </div>
+           
             <div  class='list-footer'>
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
                     <Buttons  v-if='hasSeatDataExportRight' label='导出工位数据'  type='primary' @click='submitExportSeat' checkAction='seat_order_in_export' style='margin-left:20px'/>
@@ -136,17 +139,19 @@
                         title: '订单编号',
                         key: 'orderNum',
                         align:'center',
-                        width:116
+                        minWidth:116
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
+                        minWidth:100
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center',
+                        align:'center',           
+                        minWidth:100,           
                         render(tag,params){ 
                           var communityName=params.row.communityName;
                               if (communityName.lastIndexOf('社区')==communityName.length-2) {
@@ -159,7 +164,7 @@
                         title: '商品名称',
                         key: 'seatNames',
                         align:'center',
-                        width:150,
+                        width:100,
                         render:(h,params)=>{
                             let setnames=params.row.seatNames;
                             if (!setnames) {
@@ -184,7 +189,7 @@
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden',
-                                                    width:'130px'
+                                                    width:'64px'
                                                 }
                                             },setnames)
                                         ]),
@@ -197,6 +202,7 @@
                         title: '服务费总额',
                         key: 'rentAmount',
                         align:'center',
+                        minWidth:100,
                         render(tag,params){ 
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
                           return <span class="u-txt">{money}</span>;
@@ -206,6 +212,7 @@
                         title: '履约保证金',
                         key: 'depositAmount',
                         align:'center',
+                        minWidth:100,
                         render(tag,params){ 
                           var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
                           return <span class="u-txt">{money}</span>;
@@ -215,7 +222,7 @@
                         title: '订单类型',
                         key: 'orderType',
                         align:'center',
-                        width:90,
+                        minWidth:90,
                         render(tag,params){
                             var orderType={
                                'IN':'入驻服务订单',
@@ -238,16 +245,21 @@
                         title: '租赁期限',
                         key: 'ctime',
                         align:'center',
-                        width:192,
+                        width:120,
                         render(tag, params){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
-                            return tag('span',time)
+                            // let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'至'+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
+                            // return tag('span',time)    
+                            let lines=[];
+                            lines.push(tag('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+' 至'))
+                            lines.push(tag('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate))))
+                            return tag('div',lines);                              
                         }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',
+                        width:90,
                         render(tag, params){
                             var orderStatus={
                                'NOT_EFFECTIVE':'未生效',
@@ -272,6 +284,7 @@
                         title: '创建时间',
                         key: 'ctime',
                         align:'center',
+                        minWidth:120,
                         render(tag, params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                             if (time.split('  ').length==2) {
@@ -289,6 +302,7 @@
                         title: '生效时间',
                         key: 'effectDate',
                         align:'center',
+                        minWidth:120,
                         render(tag, params){
                             let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
                             if (time.split('  ').length==2) {
@@ -307,6 +321,7 @@
                         key: 'action',
                         align:'center',
                         width:76,
+                        // fixed:'right',
                         className:'col-operate',
                         render:(tag,params)=>{
                            var btnRender=[
@@ -624,9 +639,17 @@
                 }
             }
         }
-        .list-table{ 
-            margin:20px;
-            margin-top:0px;
+        .table-container{           
+            overflow: auto;
+            .list-table{
+                 min-width:1220px ;
+                 overflow: auto;
+                 width: 100%;
+                 margin:0;
+                 margin-top:0px;
+                .ivu-tooltip-inner{
+                    max-width: 300px;
+                }
             // /deep/ .ivu-table-cell{
             //     padding-left: 10px;
             //     padding-right: 10px;
@@ -638,6 +661,8 @@
                 }
             }
         }
+        }
+
         .list-footer{
             margin: 10px 20px;
             overflow: hidden;

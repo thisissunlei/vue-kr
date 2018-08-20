@@ -25,8 +25,9 @@
                    </div>
             </div>
 
-
-            <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+            <div class="table-container">
+                <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+            </div>
             <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_reduce_export'/>
                     <div style="float: right;">
@@ -538,13 +539,18 @@
                 }
             }
         }
-        .list-table{
-            margin:20px;
-            margin-top:0px;
-            .col-operate{
-                .ivu-table-cell{
-                    padding-left: 0;
-                    padding-right: 0
+         .table-container{           
+            overflow: auto;
+            .list-table{
+                min-width:1160px ;
+                overflow: auto;
+                margin:0;
+                margin-top:0px;
+                .col-operate{
+                    .ivu-table-cell{
+                        padding-left: 0;
+                        padding-right: 0
+                    }
                 }
             }
         }

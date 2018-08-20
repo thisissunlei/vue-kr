@@ -135,7 +135,7 @@ export default {
     },
     //获取授予招商权限的列表
     'get-business-role': {
-        url: '/api/krspace-sso-web/sso/ssoUser/business/role/list',
+        url: '/api/krspace-sso-web/sso/ssoUser/investment/role/list',
         method: 'get'
     },
     //授予招商角色

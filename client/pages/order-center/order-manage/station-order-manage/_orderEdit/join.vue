@@ -260,7 +260,7 @@
         <!--苏岭增加客户主管理员开始-->
         <Modal
             v-model="isAddManager"
-            title="主管理员变更"
+            :title="manageTitle"
             width="665"
         >
             <AddManager  
@@ -324,6 +324,7 @@ export default {
             isAddEdit:false,
             managerId:'',
             oldManagerId:'',
+            manageTitle:"",
             //苏岭结束
 
             orderId:'',
@@ -612,6 +613,7 @@ export default {
 			})
         },
         addEditOpen(){
+           this.manageTitle=this.isAddEdit?'主管理员变更':'主管理员添加';
            this.isAddManager=!this.isAddManager;
         },
         getformData(form){

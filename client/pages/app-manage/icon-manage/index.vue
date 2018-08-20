@@ -90,7 +90,7 @@ export default {
     },
     head () {
         return {
-            title: "Icon管理-氪空间后台管理系统"
+            title: "图标-氪空间后台管理系统"
         }
     },
     data(){

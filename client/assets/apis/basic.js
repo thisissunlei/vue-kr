@@ -27,7 +27,7 @@ export default {
     },
     // 优惠列表接口
     "get-discont-list": {
-        url: "/api/krspace-order-web/cmt/discount/list",
+        url: "/api/order/cmt/discount/list",
         // url: "/ben/cmt/discount/list",
         method: "get"
     },

@@ -170,7 +170,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '编辑减租服务订单管理'
+                title: "编辑减租订单-氪空间后台管理系统"
             }
         },
         components: {

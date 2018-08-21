@@ -103,7 +103,7 @@ export default {
    name:'doorRelationship',
     head () {
         return {
-            title: "门禁级联关系"
+            title: "门禁级联关系-氪空间后台管理系统"
         }
     },
    data(){

@@ -50,7 +50,7 @@
         },
          head() {
             return {
-                title: '开票系统'
+                title: '财务端-氪空间后台管理系统'
             }
         },
         data () {

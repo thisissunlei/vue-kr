@@ -79,7 +79,7 @@ export default {
     },
     head () {
         return {
-            title: "通知详情"
+            title: "通知详情-氪空间后台管理系统"
         }
     },
 	data(){

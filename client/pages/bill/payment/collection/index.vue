@@ -92,7 +92,7 @@ import dateUtils from 'vue-dateutils';
         },
         head () {
             return {
-                title: "回款"
+                title: "回款-氪空间后台管理系统"
             }
         },
         data() {

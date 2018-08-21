@@ -96,9 +96,8 @@
         },
         head () {
             return {
-                title: "合同列表"
-            }
-           
+                title: '撤场-氪空间后台管理系统'
+            }          
         },
         data () {
             return {

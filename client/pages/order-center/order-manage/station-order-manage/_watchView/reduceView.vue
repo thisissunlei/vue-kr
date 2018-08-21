@@ -89,7 +89,7 @@ export default {
 	name:'ReduceView',
 	head() {
         return {
-            title: '减租详情'
+            title: "查看减租订单详情-氪空间后台管理系统"
         }
     },
 	components:{

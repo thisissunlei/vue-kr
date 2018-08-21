@@ -81,6 +81,11 @@
             Message,
             Buttons,
             SectionTitle
+        },   
+        head () {
+            return {
+                title: "通用订单-氪空间后台管理系统"
+            }
         },
         data () {    
             return {     

@@ -129,6 +129,17 @@ import tableSort from './tableSort';
         
     
     }
+
+    //文件下载的流式下载 新窗口
+    function downFileBlank(href, filename) {
+      var a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.download = filename;
+      console.log('a--',a,href,filename);
+      a.click();
+    }
+
     //不要修改，修改找毅豪
     function downImg(href, filename) {
         var a = document.createElement('a');
@@ -248,6 +259,7 @@ export default{
     arrayCompare,
     thousand,
     downFile,
+    downFileBlank,
     addEvent,
     dataType,
     getDaysInOneMonth,

@@ -26,19 +26,26 @@
 				<p slot="title" class="card-title">
 					企业成员信息
 				</p>
-				<div class="u-add-manager">
-					<Button type="primary" @click="openAddManager">添加管理员</Button>
-				</div>
 				<Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-					<Tab-pane :label="`管理员(${count.adminNum})`" name="manager">
-						<ManagerList 
+					<Tab-pane :label="`主管理员(${count.chiefManagerNum || 0})`" name="major">
+						<MajorList
+								:mask="key"
+								:reload="getCount"
+								:openSetMajor="openSetMajor"
+								:ifReload="ifReload"
+								:openCheck="openCheck"
+						/>
+					</Tab-pane>
+					<Tab-pane :label="`管理员(${count.adminNum || 0})`" name="manager">
+						<ManagerList
 							:mask="key"
 							:reload="getCount"
 							:openSetManager="hideTip"
 							:ifReload="ifReload"
+							:openAddManager="openAddManager"
 						/>
 					</Tab-pane>
-					<Tab-pane :label="`在职员工(${count.employeesNum})`" name="employee">   
+					<Tab-pane :label="`在职员工(${count.employeesNum || 0})`" name="employee">
 						<EmployeeList 
 							:mask="key"
 							:reload="getCount"
@@ -86,6 +93,43 @@
 			<Button type="ghost" style="margin-left: 8px" @click="openAddManager">取消</Button>
       </div>
     </Modal>
+	<Modal
+			v-model="isChangeMajor"
+			title="主管理员变更"
+			ok-text="确定"
+			cancel-text="取消"
+			width="665"
+	>
+		<ChangeMajor
+				v-if="isChangeMajor"
+				:detail="itemDetail"
+				:majorComList="majorComList"
+				:closeMajor="closeMajor"
+				:changeMajor="changeMajor"
+				@formData="getformData"
+		/>
+		<div slot="footer">
+		</div>
+	</Modal>
+  <Modal
+      v-model="isCheck"
+      title="查看授权书"
+      ok-text="确定"
+      cancel-text=""
+      width="665"
+  >
+    <div class="checkBox">
+      <div v-for="(item,index) in checkContent" :key="index">
+        <span class="checkLeft">{{item.certifyCmtName}}</span>
+        <p class="checkRight linked" @click="downloadAuth(item.authFileId)">{{item.certifyNo}}</p>
+      </div>
+    </div>
+    <div slot="footer" style="text-align: center;">
+      <Button type="primary" @click="closeCheck" size="large">
+        确定
+      </Button>
+    </div>
+  </Modal>
 </div>
 </template>
 <script>
@@ -98,6 +142,9 @@ import CommunityManage from './communityManage';
 import ManagerList from './managerList';
 import EmployeeList from './employeeList';
 import AddManager from './addManager';
+import ChangeMajor from './changeMajor';
+import MajorList from './majorList';
+import utils from '~/plugins/utils';
 
 export default {
 	components:{
@@ -107,7 +154,9 @@ export default {
 		CommunityManage,
 		ManagerList,
 		EmployeeList,
-		AddManager
+		AddManager,
+    ChangeMajor,
+    MajorList
 	}, 
 	head () {
     	return {
@@ -116,7 +165,7 @@ export default {
  	},
 	data(){
 		return{
-			activeKey:'manager',
+			activeKey:'major',
 			key:'',
 			detail:{},
 			openTip:false,
@@ -132,6 +181,7 @@ export default {
 			count:{
 				adminNum:0,
 				employeesNum:0,
+        chiefManagerNum: 0
 			},
 			itemDetail:{},
 			companyInfo:{},
@@ -198,11 +248,20 @@ export default {
 
 				//  }
                 // }
+        {
+          title: '该社区主管理员数量',
+          key: 'chiefManagerNum',
+          align:'center',
+        }
 			],
 			companyList:[],
 			tipTitle:'',
 			formData:{},
 			submitManager:null,
+      isChangeMajor: false,
+			majorComList: [],
+      isCheck: false,
+      checkContent: []
 		}
 	},
 	mounted:function(){
@@ -254,6 +313,26 @@ export default {
 			}
 			
 			this.openTip=!this.openTip;
+		},
+    openSetMajor(form) {
+      if(form){
+        this.itemDetail=form;
+        let params={
+          csrId:this.$route.params.csrId,
+          mbrId:form.mbrId,
+        };
+        this.$http.get('get-manage-cmt-list', params).then((res)=>{
+          this.majorComList=res.data.cmtList && res.data.cmtList.filter(i => (i.isManager === 2)) || [];
+          this.isChangeMajor = true;
+        }).catch((err)=>{
+          this.$Notice.error({
+            title:err.message
+          });
+        })
+      }
+		},
+		closeMajor() {
+      this.isChangeMajor = false;
 		},
 		tipSubmit(){
 			let {params}=this.$route;
@@ -310,10 +389,48 @@ export default {
 		},
 		addManagerSubmit(){
 			this.submitManager && this.submitManager(this.managerSubmit);
-		}
-		
+		},
+		changeMajor() {
+      var _this=this;
+      this.ifReload=true;
+      this.isChangeMajor=false;
+      this.$Notice.success({
+        title:'变更主管理员成功'
+      });
+      setTimeout(function(){
+        _this.ifReload=false
+      },500)
+		},
+    openCheck(params) {
+      let customerId=this.$route.params.csrId;
+      this.$http.get('check-certificate', {
+        mbrId: params.mbrId,
+				customerId
+      }).then((res)=>{
+        this.isCheck = true;
+        this.checkContent = res.data;
+      }).catch((err)=>{
+        this.$Notice.error({
+          title:err.message
+        });
+      });
+    },
+    closeCheck() {
+		  this.isCheck = false;
+    },
+    downloadAuth(id) {
+      this.$http.post('get-station-contract-pdf-url', {
+        id
+      }).then((res) => {
+        utils.downFileBlank(res.data)
+      }).catch((err) => {
+        this.$Notice.error({
+          title: err.message
+        });
+      })
+    }
 
-	},
+	}
 	
 
 
@@ -406,9 +523,20 @@ export default {
         }
        
     }
-
 }
 .u-tip{
 	text-align: center;
+}
+.checkBox {
+  font-size: 14px;
+  line-height: 35px;
+  padding: 0 40px;
+  .checkRight {
+    float: right;
+  }
+}
+.linked {
+	color: #2d8cf0;
+	cursor: pointer;
 }
 </style>

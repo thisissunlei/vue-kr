@@ -33,6 +33,17 @@
 					{{nullifyRemark}}
 				</LabelText>
 			</DetailStyle>
+			<DetailStyle info="客户主管理员信息">
+				<LabelText label="管理员手机号：">
+					{{basicInfo.phone}}
+				</LabelText>
+				<LabelText label="管理员姓名：">
+					{{basicInfo.name}}
+				</LabelText>
+				<LabelText label="管理员电子邮箱：">
+					{{basicInfo.email}}
+				</LabelText>
+			</DetailStyle>
 			<DetailStyle info="租赁信息">
 				<LabelText label="租赁开始日期：">
 					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}
@@ -208,6 +219,11 @@ export default {
 							return params.row.discountNum
 						}
 					}
+				},
+				{
+					title: '优惠添加人',
+					key: 'addUserName',
+					align: 'center',					
 				}
 			],
 

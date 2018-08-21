@@ -21,7 +21,7 @@ const envs = {
         'plugins':'http://dev02.krspace.cn',
     },
     'production':{
-        'plugins':'http://op.krspace.cn',
+        'plugins':'',
     },
 }
 const pluginsDomain  = envs[process.env.NODE_ENV].plugins+'/plugins';

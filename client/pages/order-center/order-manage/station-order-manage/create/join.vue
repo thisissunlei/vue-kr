@@ -48,6 +48,27 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!--苏岭增加客户主管理员开始-->
+            <div class="m-customer-info" v-if="isManager">
+              <DetailStyle info="客户主管理员信息">
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{customerInfo.phone}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{customerInfo.name}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{customerInfo.email}}
+                        </LabelText>
+                  </div>
+                </Row>
+              </DetailStyle>  
+            </div>
+            <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="租赁信息">
                 <Row style="margin-bottom:30px">
                     <Col class="col">
@@ -225,6 +246,25 @@
             </div>
         </Modal>
 
+     <!--苏岭增加客户主管理员开始-->
+        <Modal
+            v-model="isAddManager"
+            :title="manageTitle"
+            width="665"
+        >
+            <AddManager  
+                v-if="isAddManager"
+                :customerId="formItem.customerId"
+                @formData="getformData"
+                @submitFn="getFunction"
+            />
+            <div slot="footer">
+                    <Button type="primary" @click="addManagerSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="addEditOpen">取消</Button>
+            </div>
+        </Modal>
+    <!--苏岭增加客户主管理员结束-->
+
     </div>
 </template>
 
@@ -243,6 +283,8 @@ import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
+import LabelText from '~/components/LabelText';
+import AddManager from '../addAdministrator';
 
 
 
@@ -267,6 +309,16 @@ export default {
             }
         };
         return {
+            //苏岭
+            customerInfo:{},
+            isManager:false,
+            submitManager:null,
+            isAddManager:false,
+            isAddEdit:false,
+            managerId:'',
+            manageTitle:'',
+            //苏岭结束
+
             chanceDisable:false,
             remindinfoNewUser: false,
             remindinfo: false,
@@ -494,7 +546,9 @@ export default {
         SelectSaler,
         planMap,
         SelectChance,
-        ListAndMap
+        ListAndMap,
+        LabelText,
+        AddManager
     },
     mounted() {
         GLOBALSIDESWITCH("false");
@@ -533,6 +587,59 @@ export default {
         }
     },
     methods: {
+        //苏岭增加客户主管理员开始
+        addManagerSubmit(params){
+            this.submitManager && this.submitManager(this.managerSubmit);
+        },
+        managerSubmit(){
+			let Params=Object.assign({},this.formData);
+            Params.customerId=this.formItem.customerId;
+            Params.communityId=this.formItem.communityId;
+			var _this=this;
+			this.$http.post('store-change-manager', Params).then((res)=>{
+                this.isAddManager=false;
+                this.customerInfo=Object.assign({},this.formData);
+                this.managerId=res.data.managerId;
+                this.isAddEdit=true;
+				this.$Notice.success({
+					title:'变更管理员成功'
+				});
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        addEditOpen(){
+           this.manageTitle=this.isAddEdit?'主管理员变更':'主管理员添加';
+           this.isAddManager=!this.isAddManager;
+        },
+        getformData(form){
+			this.formData=form;
+        },
+        getFunction(form){
+			this.submitManager=form;
+        },
+        validIsManager(){
+            this.isManager =this.formItem.customerId && this.formItem.communityId;
+            if(!this.isManager){
+                return ;
+            }
+            let params={};
+            params.customerId=this.formItem.customerId;
+            params.communityId=this.formItem.communityId;
+			var _this=this;
+			this.$http.get('order-search-manager',params).then((res)=>{
+                this.isAddEdit=res.data.hasChiefManager;
+                this.customerInfo=Object.assign({},res.data);
+                this.managerId=res.data.managerId?res.data.managerId:'';
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        //苏岭增加客户主管理员结束
         submitPrice() {
             let price = false;
             let _this = this;
@@ -688,8 +795,9 @@ export default {
             formItem.ssoName = this.ssoName;
             let _this = this;
             this.disabled = true;
-
-
+            //苏岭开始
+            formItem.managerId=this.managerId;
+            //苏岭结束
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
                 //欢哥让删掉列表刷新
@@ -768,10 +876,10 @@ export default {
                     obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validStart))
                 }
                 obj.validEnd = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validEnd))
-
+                obj.rightType=item.rightType;
                 return obj;
             })
-
+            
             this.getSaleAmount(saleList);
             // return complete;
         },
@@ -989,7 +1097,10 @@ export default {
             this.formItem.items[itemIndex].tacticsName = itemName;
             this.formItem.items[itemIndex].tacticsId = itemId;
             let items = [];
+            let _this=this
             items = this.formItem.items.map((item) => {
+                let obj= _this.youhui.find(y=>y.id==item.tacticsId)
+                item.rightType=obj.rightType;
                 if (item.value == 'qianmian') {
                     item.validStart = this.formItem.startDate;
                     item.discount = '';
@@ -1052,6 +1163,8 @@ export default {
             this.clearStation();
             this.getFloor = +new Date();
             this.validSaleChance();
+            //苏岭
+            this.validIsManager();
         },
         clearStation: function () {
             // 清除所选的工位
@@ -1088,6 +1201,9 @@ export default {
             
             this.validSaleChance();
             this.clearStation()
+
+            //苏岭
+            this.validIsManager();
 
         },
         changeSaler(value) {
@@ -1393,6 +1509,7 @@ export default {
                         obj.value = item.tacticsType + '';
                         obj.id = item.tacticsId;
                         obj.name = item.tacticsName;
+                        obj.rightType=item.rightType;
                         if (item.tacticsType == 1) {
                             maxDiscount[item.tacticsName] = obj.discount;
                         }
@@ -1526,11 +1643,38 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {
         color: #ed3f14;
     }
 }
+//苏岭开始
+.create-new-order{
+     .m-customer-info{
+         position:relative;
+         .ui-labeltext{
+             width: 50%;
+             max-width: 450px;
+             padding-left:0;
+             height:auto;
+             margin-bottom:0;
+             .ui-text{
+                 margin-bottom: 10px;
+             }
+             .ui-label{
+                 font-size: 12px;
+                 color: #495060;
+                 font-weight:400;
+             }
+         }
+         .info-button{
+             position: absolute;
+             top: -8px;
+             right:414px;
+         }
+     }
+ }
+ //苏岭结束
 </style>

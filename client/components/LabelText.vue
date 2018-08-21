@@ -18,6 +18,16 @@
 			border-radius: 5px;
 		}
 	}
+	.star{
+		&::before{
+			content: '*';
+			display: inline-block;
+			line-height: 1;
+			font-family: SimSun;
+			font-size: 12px;
+			color: #ed3f14;
+		}
+	}
 	.ui-label{
 		font-weight: bold;
 		line-height: 20px;
@@ -43,7 +53,7 @@
 </style>
 <template>
 <div  :class="getClassName()"  >
-	<div class="ui-label" :class="{ circle: type=='circle'}">
+	<div :class="getLabelClass()">
 		{{label}}
 	</div>
 	<div class="ui-text">
@@ -69,6 +79,15 @@ export default{
 				className +=' ui-label-text-unline';
 			}else {
 				className +=' ui-label-text-inline';
+			}
+			return className;
+		},
+		getLabelClass(){
+			var className = 'ui-label';
+			if(this.type=='circle'){
+				className +=' circle';
+			}else if(this.type=='star'){
+				className +=' star';
 			}
 			return className;
 		}

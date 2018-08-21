@@ -26,8 +26,18 @@
 			<span class="tab-span"  v-for="(item, index) in firstTab"
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
 		</div>
+		<!-- 苏岭开始 -->
+		<div class="new-tab-wrap" v-if="selectedTab=='account'">
+			<div class="new-tab-list">
+				<span class="tab-span"  v-for="(item, index) in newFirstTab"
+				:key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
+			</div>
+			<div class="new-tab-content">
+				<AccountManagement />
+			</div>
+		</div>
+		<!-- 苏岭结束 -->
 		<div class="tab-content">
-            	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
             	<div v-if="selectedTab=='menber'" class="tab-texts">
             		<img src="./images/member.svg" alt="">
@@ -61,6 +71,7 @@
 	import Basic from './basic/index.vue'; 
 	import JoinInfo from './joinInfo.vue'; 
 	import OrderManagement from './orderManagement'
+	import AccountManagement from './accountManagement'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -71,7 +82,8 @@
 			Waiting,
 			Basic,
 			JoinInfo,
-			OrderManagement
+			OrderManagement,
+			AccountManagement
 		}, 
 		head () {
         	return {
@@ -107,6 +119,32 @@
 					name:'更多',
 					code:'more'
 				},],
+				newFirstTab:[
+					{
+					name:'基本资料',
+					code:'basic'
+				},{
+					name:'订单管理',
+					code:'order'
+				},{
+					name:'账单管理',
+					code:'bill'
+				},{
+					name:'合同管理',
+					code:'contract'
+				},{
+					name:'入驻信息',
+					code:'join'
+				},{
+					name:'账户管理',
+					code:'account'
+				},{
+					name:'分期对账',
+					code:'stagingBill'
+				},{
+					name:'会员资料',
+					code:'menber'
+				}],
 				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
@@ -183,6 +221,44 @@
 			padding-top:20px;
 			padding-bottom:20px;
 		}
+		/*苏岭开始*/
+		.new-tab-wrap{
+			padding-left: 25px;
+            display: flex;
+			.new-tab-list{
+				width: 110px;
+				display: inline-block;
+				.tab-span{
+					vertical-align: top;
+					display: block;
+					width:108px;
+					height: 36px;
+					line-height: 36px;
+					text-align: center;
+					background: #F7F7F7;
+					border: 1px solid #DFDFDF;
+					border-bottom: none;
+					color:#666;
+					font-size: 14px;
+					cursor: pointer;
+					transition:all .5;
+					
+				}
+				.tab-span:last-child{
+					border-bottom:1px solid #DFDFDF
+				}
+				.tab-active{
+					background-color: #fff;
+					border-right:none;
+					color:#4A90E2;
+					transition:all .5;
+				}
+			}
+			.new-tab-content{
+				vertical-align: top;
+			}
+		}
+		/*苏岭结束*/
 		.tab-list{
 			margin-left: 25px;
 			height: 25px;

@@ -27,7 +27,8 @@
                         <span class="u-select-label">创建时间</span>
                         <DatePicker 
                                 v-model="formItem.beginTIme"
-                                type="date" 
+                                type="date"
+                                format="yyyy-MM-dd" 
                                 placeholder="创建开始日期" 
                                 style="width: 200px"
                             />
@@ -35,6 +36,7 @@
                             <DatePicker 
                                 v-model="formItem.endTime"
                                 type="date" 
+                                format="yyyy-MM-dd"
                                 placeholder="创建结束日期" 
                                 style="width: 200px"
                             />
@@ -78,6 +80,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
 
 export default {
      head () {
@@ -170,6 +173,9 @@ export default {
                   key: 'createTime',
                   align:'center',
                   width: 200,
+                  render(tag, params){
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.createTime)) ;
+                  }
               },
               {
                   title: '修改人',
@@ -182,6 +188,9 @@ export default {
                   key: 'updateTime',
                   align:'center',
                   width: 200,
+                  render(tag, params){
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.updateTime)) ;
+                  }
               },
               {
                   title: '操作',
@@ -250,6 +259,11 @@ export default {
 
           }
       },
+    created(){
+        this.tabParams=Object.assign({},this.$route.query);
+        this.formItem=Object.assign({},this.$route.query);
+        this.getTableData(this.tabParams);
+     },
       mounted(){
           this.getTableData(this.tabParams)
       },
@@ -303,6 +317,8 @@ export default {
             params.page=1;
             params.pageSize=15;
             this.tabParams=Object.assign({},params);
+            this.tabParams.beginTIme=this.tabParams.beginTIme?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.tabParams.beginTIme)):'';
+            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.tabParams.endTime)):'';
             utils.addParams(this.tabParams);
         },
 

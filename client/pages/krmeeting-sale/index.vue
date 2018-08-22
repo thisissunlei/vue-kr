@@ -1,6 +1,48 @@
 <template>
     <div class="g-krmeeting-sale">
         <SectionTitle title="优惠券"></SectionTitle>
+         <div class="m-sale-operation">
+             <Button type="primary" @click="jumpCreate">新建</Button>
+              <div class="u-select">
+                    <div class="u-select-list">
+                        <span class="u-select-label">优惠券批次</span>
+                        <Input
+                            v-model="formItem.roomName"
+                            placeholder="请输入搜索关键词"
+                            style="width: 150px"
+                        />
+                    </div>
+                    <div class="u-select-list">
+                            <span class="u-select-label">优惠券名称</span>
+                            <Input
+                                v-model="formItem.roomCode"
+                                placeholder="请输入搜索关键词"
+                                style="width: 150px"
+                            />
+                    </div>
+              </div>
+             <div class="u-search">
+                
+                  <div class="u-select-list">
+                        <span class="u-select-label">创建时间</span>
+                        <DatePicker 
+                                v-model="formItem.startDate"
+                                type="date" 
+                                placeholder="创建开始日期" 
+                                style="width: 200px"
+                            />
+                        <span class="u-date-txt">至</span>
+                            <DatePicker 
+                                v-model="formItem.endDate"
+                                type="date" 
+                                placeholder="创建结束日期" 
+                                style="width: 200px"
+                            />
+                    </div>
+                  <Button type="primary" @click="lowerSubmit">查询</Button>
+             </div>
+            
+        </div>
          <div class="u-table">
             <Table border :columns="Columns" :data="saleList"  stripe></Table>
              <div style="margin: 10px;overflow: hidden">
@@ -38,6 +80,9 @@ export default {
               tabParams:{
                   page:1,
                   pageSize:15
+              },
+              formItem:{
+                  
               },
               Columns:[
               {
@@ -190,32 +235,72 @@ export default {
           this.getTableData(this.tabParams)
       },
       methods:{
-           getTableData(params){
-             this.$http.get('get-coupon-base-by-page', params).then((res)=>{
+        getTableData(params){
+            this.$http.get('get-coupon-base-by-page', params).then((res)=>{
                     this.saleList=res.data.items;
-                }).catch((err)=>{
+            }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
 					});
-                })
-          },
-           onPageChange(page){
+            })
+        },
+        onPageChange(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
-            },
-          jumpEdit(){
+        },
+        jumpCreate(){
+             window.open('/krmeeting-sale/create','_blank');
+        },
+        jumpEdit(){
+            let saleId=params.id;
+             window.open(`/krmeeting-sale/edit/${saleId}`,'_blank');
+        },
+        createSale(){
 
-          },
-          createSale(){
-
-          }
+        }
 
       }
 }
 </script>
 <style lang="less">
 .g-krmeeting-sale{
+     .m-sale-operation{
+         padding:20px 20px;
+         height:130px;
+         .u-select{
+            display: inline-block;
+            padding-left:20px;
+            height:40px;
+         }
+         .u-select-list{
+             display: inline-block;
+             margin:0 20px;
+            
+         }
+         .u-select-label{
+             padding-right:10px;
+             white-space:nowrap; 
+         }
+         .u-search{
+             height:50px;
+             margin-top:15px;
+             .u-select-list{
+                 margin-left:0;
+             }
+         }
+        .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+            
+        }
+        .u-date-txt{
+            padding:0 5px;
+        }
+    }
     .u-table{
         padding:0 20px 30px;
     }

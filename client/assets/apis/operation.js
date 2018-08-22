@@ -238,10 +238,11 @@ export default  {
         url: '/api/op/kmcoupon/create-coupon',
         method: 'post'
     },
-    //优惠券--根据手机号发放优惠券接口
-    'send-by-phone': {
-        url: '/api/op/kmcoupon/send-by-phone',
-        method: 'post'
+     //优惠券--生成优惠券
+    'get-kmcoupon-detail': {
+        url: '/api/op/kmcoupon/detail',
+        method: 'get'
     },
+   
 }
   

@@ -26,14 +26,14 @@
                   <div class="u-select-list">
                         <span class="u-select-label">创建时间</span>
                         <DatePicker 
-                                v-model="formItem.startDate"
+                                v-model="formItem.beginTIme"
                                 type="date" 
                                 placeholder="创建开始日期" 
                                 style="width: 200px"
                             />
                         <span class="u-date-txt">至</span>
                             <DatePicker 
-                                v-model="formItem.endDate"
+                                v-model="formItem.endTime"
                                 type="date" 
                                 placeholder="创建结束日期" 
                                 style="width: 200px"

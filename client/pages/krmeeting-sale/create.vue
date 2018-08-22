@@ -4,36 +4,36 @@
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
                     <DetailStyle info="基本信息">
-                               <FormItem label="优惠券名称" class="u-input"  prop="name">
+                               <FormItem label="优惠券名称" class="u-input"  prop="couponName">
                                     <Input 
-                                        v-model="formItem.name" 
+                                        v-model="formItem.couponName" 
                                         placeholder="请输入" 
                                         style="width:250px"
                                     />
                                 </FormItem>
-                                <FormItem label="优惠券面额" class="u-input" prop="communityId">
+                                <FormItem label="优惠券面额" class="u-input" prop="amount">
                                     <Input 
-                                        v-model="formItem.name" 
+                                        v-model="formItem.amount" 
                                         placeholder="请输入" 
                                         style="width:250px"
                                     />
                                  </FormItem>
-                                  <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="appPublish">
-                                        <RadioGroup v-model="formItem.appPublish" style="width:262px">
-                                            <Radio label="true" style="marginRight:10px">
+                                  <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="ruleType">
+                                        <RadioGroup v-model="formItem.ruleType" style="width:262px">
+                                            <Radio label="2" style="marginRight:15px">
                                                 满 <Input 
                                                     v-model="formItem.name"
-                                                    style="width:80px"
-                                                />元可用
+                                                    style="width:50px"
+                                                /> 元可用
                                             </Radio>
-                                            <Radio label="false">
+                                            <Radio label="1">
                                                无门槛金额
                                             </Radio>
                                         </RadioGroup> 
                                 </FormItem>
-                                 <FormItem label="发放数量" class="u-input" prop="floor">
+                                 <FormItem label="发放数量" class="u-input" prop="quantity">
                                    <Input 
-                                        v-model="formItem.name" 
+                                        v-model="formItem.quantity" 
                                         placeholder="请输入" 
                                         style="width:250px"
                                     />
@@ -42,75 +42,75 @@
                     <DetailStyle info="基本规则">
                         <FormItem label="有效期类型" class="u-input" style="width:250px" prop="krmPublish">
                             <RadioGroup v-model="formItem.krmPublish" style="width:250px">
-                                <Radio label="true">
-                                     <FormItem label="起止时间"  class="u-date">
-                                            <DatePicker
-                                                type="date"
-                                                v-model="startTime"
-                                                placeholder="日期"
-                                                style="width: 150px;margin-right:4px;"
-                                                @on-change="startChange"
-                                            />
-                                                <TimePicker 
-                                                    format="HH:mm" 
-                                                    placeholder="请选择" 
-                                                    style="width: 96px" 
-                                                    v-model="form.startHour"
-                                                    @on-change="startHourChange"
-                                                    @on-clear="startHourClear"
-                                                    :steps="[1,30]"
-                                                />
-                                                <span class="u-date-txt">至</span>
-                                            <DatePicker
-                                                    type="date"
-                                                    v-model="endtime"
-                                                    placeholder="日期"
-                                                    style="width: 150px;margin-right:4px;"
-                                                    @on-change="endChange"
-                                            />
-                                            <TimePicker 
-                                                    format="HH:mm" 
-                                                    placeholder="请选择" 
-                                                    style="width: 96px" 
-                                                    v-model="form.endHour"
-                                                    @on-change="endHourChange"
-                                                    @on-clear="endHourClear"
-                                                    :steps="[1,30]"
-                                                />
-                                    </FormItem>
+                                <Radio label="true" style="marginBottom:15px">
+                                    <span>起止时间</span>
+                                    <DatePicker
+                                        type="date"
+                                        v-model="startTime"
+                                        placeholder="日期"
+                                        style="width: 150px;margin-right:4px;"
+                                        @on-change="startChange"
+                                    />
+                                        <TimePicker 
+                                            format="HH:mm" 
+                                            placeholder="请选择" 
+                                            style="width: 96px" 
+                                            v-model="form.startHour"
+                                            @on-change="startHourChange"
+                                            @on-clear="startHourClear"
+                                            :steps="[1,30]"
+                                        />
+                                        <span class="u-date-txt">至</span>
+                                    <DatePicker
+                                            type="date"
+                                            v-model="endtime"
+                                            placeholder="日期"
+                                            style="width: 150px;margin-right:4px;"
+                                            @on-change="endChange"
+                                    />
+                                    <TimePicker 
+                                            format="HH:mm" 
+                                            placeholder="请选择" 
+                                            style="width: 96px" 
+                                            v-model="form.endHour"
+                                            @on-change="endHourChange"
+                                            @on-clear="endHourClear"
+                                            :steps="[1,30]"
+                                        />
                                 </Radio>
-                                <Radio label="false">
+                                <!-- <Radio label="false">
                                    领取后，当天有效，有效天数<Input 
                                                     v-model="formItem.name" 
                                                     placeholder="请输入" 
-                                                    style="width:80px"
-                                                />天
-                                </Radio>
+                                                    style="width:50px"
+                                                />
+                                            天
+                                </Radio> -->
                             </RadioGroup> 
                         </FormItem>
-                        <FormItem label="每人限领" style="width:252px">
+                        <FormItem label="每人限领" style="width:252px" prop="gainLimit">
                             <Input 
-                                v-model="formItem.descr" 
-                                placeholder=""
-                                type="textarea"
-                            />次
+                                v-model="formItem.gainLimit" 
+                                style="width:50px;marginRight:10px"
+                            />
+                            次
                         </FormItem>
-                        <FormItem label="使用范围" class="u-input" style="width:250px" prop="appPublish">
-                                <RadioGroup v-model="formItem.appPublish" style="width:250px">
-                                    <Radio label="true">
+                        <FormItem label="使用范围" class="u-input" style="width:250px" prop="usage">
+                                <RadioGroup v-model="formItem.usage" style="width:250px">
+                                    <Radio label="1">
                                        不限
                                     </Radio>
-                                    <Radio label="false">
+                                    <Radio label="2">
                                         会议室
                                     </Radio>
-                                    <Radio label="false">
+                                    <Radio label="3">
                                         散座
                                     </Radio>
                                 </RadioGroup> 
                         </FormItem>
                         <FormItem label="使用说明" style="width:552px">
                             <Input 
-                                v-model="formItem.descr" 
+                                v-model="formItem.instructions" 
                                 placeholder=""
                                 type="textarea"
                             />
@@ -179,48 +179,27 @@ export default {
             endtime:'',
             endHour:'',
             ruleCustom:{
-                name:[
-                    { required: true, message: '请输入会议室名称', trigger: 'change' }
+                couponName:[
+                    { required: true, message: '请输入优惠券名称', trigger: 'change' }
                 ],
-                communityId:[
-                    { required: true, message: '请选择社区', trigger: 'change' }
+                amount:[
+                    { required: true, message: '请输入优惠券面额', trigger: 'change' }
                 ],
-                floor:[
-                    { required: true, message: '请选择楼层', trigger: 'change' }
+                ruleType:[
+                    { required: true, message: '请选择优惠券类型', trigger: 'change' }
                 ],
-                // spaceId:[
-                //     { required: true, message: '请选择所属空间', trigger: 'change' }
-                // ],
-                area:[
-                    { required: true, message: '请输入会议室面积', trigger: 'change' }
+                quantity:[
+                    { required: true, message: '请输入发放数量', trigger: 'change' }
                 ],
-                capacity:[
-                    { required: true, message: '请输入可容纳人数', trigger: 'change' }
+
+                aaaa:[
+                    { required: true, message: '请选择有效期类型', trigger: 'change' }
                 ],
-                appPublish:[
-                    { required: true, message: '请选择上架状态', trigger: 'change' }
+                gainLimit:[
+                    { required: true, message: '请输入限领次数', trigger: 'change' }
                 ],
-                
-                appBusyPrice:[
-                    { required: true, message: '请输入忙时单价', trigger: 'change' }
-                ],
-                appIdlePrice:[
-                    { required: true, message: '请输入闲时单价', trigger: 'change' }
-                ],
-                krmPublish:[
-                    { required: true, message: '请选择上架状态', trigger: 'change' }
-                ],
-                kmUnitPrice:[
-                    { required: true, message: '请输入单价', trigger: 'change' }
-                ],
-                kmPromotionUnitPrice:[
-                    { required: true, message: '请输入优惠价格', trigger: 'change' }
-                ],
-                coverImg:[
-                    { required: true, message: '请上传封面图', trigger: 'change' }
-                ],
-                detailImgs:[
-                    { required: true, message: '请上传详情图片', trigger: 'change' }
+                usage:[
+                    { required: true, message: '请选择使用范围', trigger: 'change' }
                 ],
                 
             },  
@@ -236,8 +215,7 @@ export default {
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-        this.getCommunityList('');
-        this.getDeviceList();
+       
     },
     methods:{
         getDeviceList(){
@@ -256,10 +234,6 @@ export default {
                 });
             })
         },
-        
-       
-       
-       
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -289,32 +263,6 @@ export default {
                         });
                     }
                 }) 
-        },
-          //社区
-       getCommunityList(name){
-            let params = {
-                    cmtName:name
-                }
-            this.$http.get('get-community-new-list', params).then((res)=>{
-           
-               let list= []
-               res.data.cmts.map((item)=>{
-                   let obj ={};
-                    obj.label = item.cmtName;
-                    obj.value = item.cmtId;
-                    if(item.cmtId>0){
-                        list.push(obj)
-                    }
-                    
-                });
-                this.communityList = list;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-            
-            
         },
         submitCreate(){
             this.$http.post('add-krmting-room', this.formItem).then((res)=>{
@@ -376,19 +324,15 @@ export default {
         margin-right:120px;
         vertical-align:top;
     }
-    .u-date{
-        width:530px;
+   
+    .u-date-txt{
+        font-size: 14px;
+        color: #666666;
         display: inline-block;
-        margin-right:120px;
-        vertical-align:top;
-        .u-date-txt{
-            font-size: 14px;
-            color: #666666;
-            display: inline-block;
-            width:30px;
-            text-align: center;
-        }
+        width:30px;
+        text-align: center;
     }
+    
     .u-upload{
         width:100%;
        .ivu-form-item-label{

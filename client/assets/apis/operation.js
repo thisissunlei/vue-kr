@@ -238,7 +238,7 @@ export default  {
         url: '/api/op/kmcoupon/create-coupon',
         method: 'post'
     },
-     //优惠券--生成优惠券
+     //优惠券--获取优惠券详情
     'get-kmcoupon-detail': {
         url: '/api/op/kmcoupon/detail',
         method: 'get'

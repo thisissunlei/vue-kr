@@ -58,6 +58,21 @@
                 </div>
             </div>
          </div> 
+          <Modal
+            v-model="openCreate"
+            title="提示信息"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div class="u-cancel-title">
+                确认要生成优惠券吗，生成后不可编辑？
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitCreateSale">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openCreateSale">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -84,6 +99,7 @@ export default {
               formItem:{
                   
               },
+              openCreate:false,
               Columns:[
               {
                   title: '优惠券批次',
@@ -228,6 +244,7 @@ export default {
               },
            ],
            saleList:[],
+           couponBaseId:'',
 
           }
       },
@@ -258,7 +275,30 @@ export default {
         },
         createSale(){
 
-        }
+        },
+        openCreateSale(value){
+            this.openCreate=!this.openCreate;
+            if(value){
+                this.couponBaseId=value.id;
+            }
+        },
+        submitCreateSale(){
+            let params={
+                    couponBaseId: this.couponBaseId
+                }
+                this.$http.post('create-coupon', params).then((res)=>{
+                    this.$Notice.success({
+                        title:'生成优惠券成功'
+                    });  
+                    this.openCreateSale();
+                    this.getTableData(this.tabParams);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+                 
+        },
 
       }
 }

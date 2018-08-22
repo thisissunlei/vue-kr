@@ -18,12 +18,11 @@
                                         style="width:250px"
                                     />
                                  </FormItem>
-                                  <FormItem label="优惠券类型" class="u-input" style="width:250px" prop="appPublish">
-                                        <RadioGroup v-model="formItem.appPublish" style="width:250px">
-                                            <Radio label="true">
+                                  <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="appPublish">
+                                        <RadioGroup v-model="formItem.appPublish" style="width:262px">
+                                            <Radio label="true" style="marginRight:10px">
                                                 满 <Input 
-                                                    v-model="formItem.name" 
-                                                    placeholder="请输入" 
+                                                    v-model="formItem.name"
                                                     style="width:80px"
                                                 />元可用
                                             </Radio>
@@ -257,104 +256,10 @@ export default {
                 });
             })
         },
-        checkGroupChange(data){
-            
-            let checkList=[].concat(this.checkGroup)
-            this.checkList=checkList.join(',');
-            this.formItem.meetingDevices=this.checkList;
-        },
-        changeAppStartTime(data){
-             this.formItem.appStartTime=`${data}:00`;
-            if(this.formItem.appStartTime && this.formItem.appEndTime){
-                this.isAppError=false;
-            }else{
-                this.isAppError=true;
-            }
-        },
-        changeAppEndTime(data){
-            this.formItem.appEndTime=`${data}:00`;
-            if(this.formItem.appStartTime && this.formItem.appEndTime){
-                this.isAppError=false;
-            }else{
-                this.isAppError=true;
-            }
-        },
-        changeKrmStartTime(data){
-             this.formItem.krmStartTime=`${data}:00`;
-            if(this.formItem.krmStartTime && this.formItem.krmEndTime){
-                this.isKrmError=false;
-            }else{
-                this.isKrmError=true;
-            }
-        },
-        changeKrmEndTime(data){
-             this.formItem.krmEndTime=`${data}:00`;
-            if(this.formItem.krmStartTime && this.formItem.krmEndTime){
-                this.isKrmError=false;
-            }else{
-                this.isKrmError=true;
-            }
-        },
-        imgSizeFormat(){
-            this.$Notice.error({
-                title:'图片格式不正确'
-            });
-        },
-        imgSize(){
-           this.$Notice.error({
-                title:'图片大小超出限制'
-            });
-        },
-        coverImgRemove(){
-            this.formItem.coverImg="";
-        },
-        coverImgSuccess(file){
-            this.formItem.coverImg=file.data.url;
-            this.$refs.formItems.validateField('coverImg') 
-        },
-        detailImgsRemove(fileList){
-            let imglist=[];
-            fileList.map((item)=>{
-                imglist.push(item.url)
-            })
-            let detailImgs=imglist.join(',');
-            this.formItem.detailImgs=detailImgs;
-        },
-        detailImgsSuccess(response, file, fileList){
-            let imglist=[].concat(this.imglist);
-            fileList.map((item)=>{
-                imglist.push(item.url)
-            })
-            let detailImgs=imglist.join(',');
-            this.formItem.detailImgs=detailImgs;
-            this.$refs.formItems.validateField('detailImgs') 
-            
-        },
-        getFloor(){
-            if(!this.formItem.communityId){
-                this.formItem.floor="";
-                return
-            }
-             let params = {
-                    communityId:this.formItem.communityId
-                }
-            this.$http.get('get-krmting-room-floor-list', params).then((res)=>{
-             
-              let list = []
-                res.data.floors.map((item)=>{
-                    let obj ={};
-                    obj.label = item;
-                    obj.value = item;
-                    list.push(obj)
-                });
-                this.floorsList = list;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-            
-        },
+        
+       
+       
+       
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -456,7 +361,7 @@ export default {
     }
     .m-detail-content{
         width:100%;
-        max-width: 1300px;
+        max-width: 1200px;
         box-sizing: border-box;
 	    padding:30px 24px;
     }
@@ -476,12 +381,6 @@ export default {
         display: inline-block;
         margin-right:120px;
         vertical-align:top;
-        label{
-            width:100%;
-            display: block;
-            text-align: left;
-
-        }
         .u-date-txt{
             font-size: 14px;
             color: #666666;

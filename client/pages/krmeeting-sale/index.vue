@@ -285,9 +285,8 @@ export default {
         jumpCreate(){
              window.open('/krmeeting-sale/create','_blank');
         },
-        jumpEdit(){
-            let saleId=params.id;
-             window.open(`/krmeeting-sale/edit/${saleId}`,'_blank');
+        jumpEdit(params){
+             window.open(`/krmeeting-sale/edit/${params.id}`,'_blank');
         },
         openCreateSale(value){
             this.openCreate=!this.openCreate;

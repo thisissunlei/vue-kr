@@ -1,6 +1,6 @@
 <template>
     <div class="g-create-meeting">
-         <SectionTitle title="新建优惠券信息"></SectionTitle>
+         <SectionTitle title="编辑优惠券信息"></SectionTitle>
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
                     <DetailStyle info="基本信息">
@@ -49,15 +49,12 @@
                                         v-model="startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
-                                        @on-change="startChange"
                                     />
                                         <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
                                             v-model="form.startHour"
-                                            @on-change="startHourChange"
-                                            @on-clear="startHourClear"
                                             :steps="[1,30]"
                                         />
                                         <span class="u-date-txt">至</span>
@@ -66,15 +63,12 @@
                                             v-model="endtime"
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
-                                            @on-change="endChange"
                                     />
                                     <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
                                             v-model="form.endHour"
-                                            @on-change="endHourChange"
-                                            @on-clear="endHourClear"
                                             :steps="[1,30]"
                                         />
                                 </Radio>
@@ -159,7 +153,6 @@ export default {
                 quantity:[
                     { required: true, message: '请输入发放数量', trigger: 'change' }
                 ],
-
                 aaaa:[
                     { required: true, message: '请选择有效期类型', trigger: 'change' }
                 ],
@@ -170,15 +163,26 @@ export default {
                     { required: true, message: '请选择使用范围', trigger: 'change' }
                 ],
                 
-            },  
+            }, 
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-       
+        this.getDetailInfo();
     },
     methods:{
-       
+
+        getDetailInfo(){
+            let {params}=this.$route;
+            this.$http.get('get-kmcoupon-detail',{id:params.id}).then((res)=>{
+                this.formItem=res.data.items;
+              
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -224,7 +228,6 @@ export default {
                     });
             })
         }, 
-       
     }
     
 }

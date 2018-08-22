@@ -232,7 +232,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.createSale(params.row)
+                                            this.openCreateSale(params.row)
                                         }
                                     }
                                 }, '生成优惠券')
@@ -272,9 +272,6 @@ export default {
         jumpEdit(){
             let saleId=params.id;
              window.open(`/krmeeting-sale/edit/${saleId}`,'_blank');
-        },
-        createSale(){
-
         },
         openCreateSale(value){
             this.openCreate=!this.openCreate;

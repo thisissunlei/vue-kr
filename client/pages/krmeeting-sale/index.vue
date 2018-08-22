@@ -2,7 +2,19 @@
     <div class="g-krmeeting-sale">
         <SectionTitle title="优惠券"></SectionTitle>
          <div class="u-table">
-            <Table border :row-class-name="rowClassName" :columns="Columns" :data="memberList" ref="table" @on-sort-change="sortChange" stripe></Table>
+            <Table border :columns="Columns" :data="saleList"  stripe></Table>
+             <div style="margin: 10px;overflow: hidden">
+                <div style="float: right;">
+                    <Page 
+                        :current="page"
+                        :total="totalCount"
+                        :page-size="pageSize" 
+                        show-total 
+                        show-elevator
+                        @on-change="onPageChange"
+                    />
+                </div>
+            </div>
          </div> 
     </div>
 </template>
@@ -20,107 +32,183 @@ export default {
       },
       data(){
           return{
+              page:1,
+              pageSize:15,
+              totalCount:0,
+              tabParams:{
+                  page:1,
+                  pageSize:15
+              },
               Columns:[
               {
                   title: '优惠券批次',
-                  key: 'communityName',
+                  key: 'batchNo',
                   align:'center',
+                  fixed: 'left',
+                  width: 150,
               },
               {
                   title: '优惠券名称',
-                  key: 'onlineRate',
+                  key: 'couponName',
                   align:'center',
+                  fixed: 'left',
+                  width: 150,
               },
               {
                   title: '优惠券面额',
-                  key: 'conToOneDaybefore',
+                  key: 'amount',
                   align:'center',
+                  width: 100,
               },
               {
                   title: '优惠券类型',
-                  key: 'conToWeekStart',
+                  key: 'ruleType',
                   align:'center',
+                  width: 150,
               },
               {
                   title: '有效期类型',
-                  key: 'onlineUser',
+                  key: 'conToWeekBefore',
                   align:'center',
+                  width: 150,
               },
               {
                   title: '有效期',
                   key: 'conToWeekBefore',
                   align:'center',
+                  width: 200,
               },
               {
                   title: '领取量',
-                  key: 'conToWeekBefore',
+                  key: 'receivingAmount',
                   align:'center',
+                  width: 100,
               },
               {
                   title: '领取率',
-                  key: 'conToWeekBefore',
+                  key: 'receivingRate',
                   align:'center',
+                  width: 100,
               },
               {
                   title: '使用率',
-                  key: 'conToWeekBefore',
+                  key: 'usageRate',
                   align:'center',
+                  width: 100,
               },
               {
                   title: '创建人',
-                  key: 'conToWeekBefore',
+                  key: 'createName',
                   align:'center',
+                  width: 150,
               },
               {
                   title: '创建时间',
-                  key: 'conToWeekBefore',
+                  key: 'createTime',
                   align:'center',
+                  width: 200,
               },
               {
                   title: '修改人',
-                  key: 'conToWeekBefore',
+                  key: 'updateName',
                   align:'center',
+                  width: 150,
               },
               {
                   title: '修改时间',
-                  key: 'conToWeekBefore',
+                  key: 'updateTime',
                   align:'center',
+                  width: 200,
               },
               {
                   title: '操作',
                   key: 'operation',
                   align:'center',
+                  width: 150,
+                  fixed: 'right',
                   render:(h,params)=>{
-                        
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'text',
-                                    size: 'small'
-                                },
-                                style: {
-                                    color:'#2b85e4'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.jumpEdit(params.row)
+                        if(params.row.producted==1){
+                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpEdit(params.row)
+                                        }
                                     }
-                                }
-                            }, '编辑')
-                            
-                        ]); 
-
+                                }, '编辑')
+                                
+                            ]); 
+                        }else{
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpEdit(params.row)
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.createSale(params.row)
+                                        }
+                                    }
+                                }, '生成优惠券')
+                                
+                            ]); 
+                        }                       
+                        
                     }
               },
            ],
+           saleList:[],
+
           }
       },
       mounted(){
-
+          this.getTableData(this.tabParams)
       },
       methods:{
+           getTableData(params){
+             this.$http.get('get-coupon-base-by-page', params).then((res)=>{
+                    this.saleList=res.data.items;
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+          },
+           onPageChange(page){
+            this.tabParams.page=page;
+            this.page=page;
+            this.getTableData(this.tabParams);
+            },
           jumpEdit(){
-              
+
+          },
+          createSale(){
+
           }
 
       }

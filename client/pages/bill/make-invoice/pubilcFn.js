@@ -199,7 +199,7 @@ function initListData(){
             title: '注册地址',
           
             align:'center',
-            type:'waitMake',
+            type:'waitMake,alreadyMake,returnMake,all',
             render(tag,params){
                 if(params.row.qualificationVO && params.row.qualificationVO.registerAddress){
                     return  params.row.qualificationVO.registerAddress
@@ -210,7 +210,7 @@ function initListData(){
         {
             title: '注册电话',
             align:'center',
-            type:'waitMake',
+            type:'waitMake,alreadyMake,returnMake,all',
             render(tag,params){
                 if(params.row.qualificationVO && params.row.qualificationVO.registerPhone){
                     return  params.row.qualificationVO.registerPhone
@@ -221,7 +221,7 @@ function initListData(){
         {
             title: '开户银行',
             align:'center',
-            type:'waitMake',
+            type:'waitMake,alreadyMake,returnMake,all',
             render(tag,params){
                 if(params.row.qualificationVO && params.row.qualificationVO.bank){
                     return  params.row.qualificationVO.bank;
@@ -232,7 +232,7 @@ function initListData(){
         {
             title: '银行账户',
             align:'center',
-            type:'waitMake',
+            type:'waitMake,alreadyMake,returnMake,all',
             render(tag,params){
                 if(params.row.qualificationVO && params.row.qualificationVO.bankAccount){
                     return  params.row.qualificationVO.bankAccount;

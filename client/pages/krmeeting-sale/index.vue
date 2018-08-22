@@ -7,7 +7,7 @@
                     <div class="u-select-list">
                         <span class="u-select-label">优惠券批次</span>
                         <Input
-                            v-model="formItem.roomName"
+                            v-model="formItem.batchNo"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -15,7 +15,7 @@
                     <div class="u-select-list">
                             <span class="u-select-label">优惠券名称</span>
                             <Input
-                                v-model="formItem.roomCode"
+                                v-model="formItem.couponName"
                                 placeholder="请输入搜索关键词"
                                 style="width: 150px"
                             />
@@ -76,7 +76,9 @@
     </div>
 </template>
 <script>
- import SectionTitle from '~/components/SectionTitle';
+import SectionTitle from '~/components/SectionTitle';
+import utils from '~/plugins/utils';
+
 export default {
      head () {
           return {
@@ -295,6 +297,13 @@ export default {
                     });
                 })
                  
+        },
+         lowerSubmit(){
+            let params=Object.assign({},this.formItem);
+            params.page=1;
+            params.pageSize=15;
+            this.tabParams=Object.assign({},params);
+            utils.addParams(this.tabParams);
         },
 
       }

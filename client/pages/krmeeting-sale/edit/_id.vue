@@ -20,14 +20,14 @@
                                     />
                                  </FormItem>
                                   <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="ruleType">
-                                        <RadioGroup v-model="formItem.ruleType" style="width:262px">
-                                            <Radio label="2" style="marginRight:15px">
+                                        <RadioGroup v-model="formItem.ruleType" style="width:262px"  @on-change="ruleTypeChange">
+                                            <Radio label="FULL_REDUCTION" style="marginRight:15px">
                                                 满 <Input 
                                                     v-model="formItem.frAmount"
                                                     style="width:50px"
                                                 /> 元可用
                                             </Radio>
-                                            <Radio label="1">
+                                            <Radio label="NO_THRESHOLD">
                                                无门槛金额
                                             </Radio>
                                         </RadioGroup> 
@@ -39,25 +39,30 @@
                                         style="width:220px;marginRight:10px"
                                     /> 份
                                 </FormItem>
+                                 <div v-if="amountError" class="u-error">请填写满减金额</div>
                     </DetailStyle>
                     <DetailStyle info="基本规则">
-                        <FormItem label="有效期类型" class="u-input" style="width:250px" prop="expireType">
-                            <RadioGroup v-model="formItem.expireType" style="width:250px">
-                                <Radio label="START_END_TIME" style="marginBottom:15px">
+                       
+                        <FormItem label="有效期类型" class="u-input" style="width:1000px" prop="expireType">
+                            
+                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
+                                <Radio label="START_END_TIME">
                                     <span>起止时间</span>
-                                    <DatePicker
+                                </Radio>
+                                <div style="width:550px;display:inline-block;">
+                                     <DatePicker
                                         type="date"
                                         v-model="startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
-                                       
+                                         @on-change="startChange"
                                     />
                                         <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="form.startHour"
-                                            
+                                            v-model="startHour"
+                                            @on-change="dueStartChange"
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
@@ -65,15 +70,17 @@
                                             v-model="endtime"
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
-                                           
+                                            @on-change="endChange"
                                     />
                                     <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
-                                            v-model="form.endHour"
+                                            v-model="endHour"
+                                            @on-change="dueEndChange"
                                         />
-                                </Radio>
+                                </div>
+                                   
                                 <!-- <Radio label="VALID_DATE">
                                    领取后，当天有效，有效天数<Input 
                                                     v-model="formItem.name" 
@@ -84,6 +91,7 @@
                                 </Radio> -->
                             </RadioGroup> 
                         </FormItem>
+                         <div v-if="timeError" class="u-error">{{errorTip}}</div>
                         <FormItem label="每人限领" style="width:252px" prop="gainLimit">
                             <Input 
                                 v-model="formItem.gainLimit" 
@@ -91,15 +99,15 @@
                             />
                             次
                         </FormItem>
-                        <FormItem label="使用范围" class="u-input" style="width:250px" prop="usage">
-                                <RadioGroup v-model="formItem.usage" style="width:250px">
-                                    <Radio label="1">
+                        <FormItem label="使用范围" class="u-input" style="width:250px" prop="usageType">
+                                <RadioGroup v-model="formItem.usageType" style="width:250px">
+                                    <Radio label="ANY">
                                        不限
                                     </Radio>
-                                    <Radio label="2">
+                                    <Radio label="MEETING">
                                         会议室
                                     </Radio>
-                                    <Radio label="3">
+                                    <Radio label="SEAT">
                                         散座
                                     </Radio>
                                 </RadioGroup> 
@@ -141,7 +149,7 @@ export default {
                 expireType:'START_END_TIME'
             },
             form:{},
-            startTime:'',
+            startTime:'',  
             startHour:'',
             endtime:'',
             endHour:'',
@@ -165,16 +173,18 @@ export default {
                 gainLimit:[
                     { required: true, message: '请输入限领次数', trigger: 'change' }
                 ],
-                usage:[
+                usageType:[
                     { required: true, message: '请选择使用范围', trigger: 'change' }
                 ],
                 
-            },  
+            }, 
+            errorTip:'请选择起止时间',
+            timeError:false,
+            amountError:false,
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-       
     },
     methods:{
        
@@ -185,19 +195,13 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               
-               if(this.startDate && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
-               }else{
-                   this.formItem.lockBeginTime=""
-               }
-
-               if(this.endDates && this.endHour){
-                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-               }else{
-                    this.formItem.lockEndTime=""
-               }
-             
+                if(this.formItem.expireType=="START_END_TIME"){
+                     this.checkTime();
+                }
+                
+               if(this.formItem.ruleType=="FULL_REDUCTION"){
+                    this.checkAmount();
+                }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();
@@ -208,8 +212,48 @@ export default {
                     }
                 }) 
         },
+        ruleTypeChange(form){
+            if(form=="NO_THRESHOLD"){
+                this.formItem.frAmount="";
+                this.amountError=false;
+            }else{
+                this.checkAmount();
+            }
+        },
+        checkAmount(){
+            if(!this.formItem.frAmount ){
+                this.amountError=true;
+            }else{
+                this.amountError=false;
+            }
+        },
+        checkTime(){
+             if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
+                   this.timeError=false;
+                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}:00`;
+                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}:00`;
+               }else{
+                    this.timeError=true;
+               }
+        },
+        startChange(date){
+            this.form.startTime=date;
+            this.checkTime();
+        },
+        endChange(date){
+            this.form.endtime=date;
+            this.checkTime();
+        },
+        dueStartChange(date){
+            this.form.startHour=date;
+            this.checkTime();
+        },
+        dueEndChange(date){
+            this.form.endHour=date;
+            this.checkTime();
+        },
         submitCreate(){
-            this.$http.post('add-krmting-room', this.formItem).then((res)=>{
+            this.$http.post('save-or-edit', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });
@@ -223,6 +267,7 @@ export default {
                     });
             })
         }, 
+
        
     }
     
@@ -242,6 +287,8 @@ export default {
     .u-error{
         color: #ed3f14;
         font-size: 12px;
+        margin-top:-24px;
+        margin-bottom:12px;
     }
     .u-input{
         display: inline-block;

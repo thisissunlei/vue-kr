@@ -197,14 +197,11 @@ export default {
                 let _this = this;
                 if(this.formItem.expireType=="START_END_TIME"){
                      this.checkTime();
-                    
                 }
+                
                if(this.formItem.ruleType=="FULL_REDUCTION"){
                     this.checkAmount();
                 }
-
-                console.log('this.formItem.effectAt',this.formItem.effectAt)
-                  console.log('this.formItem.expireAt',this.formItem.expireAt)
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();

@@ -224,23 +224,7 @@ export default {
                   fixed: 'right',
                   render:(h,params)=>{
                         if(params.row.producted==1){
-                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpEdit(params.row)
-                                        }
-                                    }
-                                }, '编辑')
-                                
-                            ]); 
+                            return '-';
                         }else{
                             return h('div', [
                                 h('Button', {

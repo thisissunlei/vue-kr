@@ -125,12 +125,22 @@ export default {
                   key: 'amount',
                   align:'center',
                   width: 100,
+
               },
               {
                   title: '优惠券类型',
                   key: 'ruleType',
                   align:'center',
                   width: 150,
+                  render(tag, params){
+                      if(params.row.ruleType=="NO_THRESHOLD"){
+                          return '无门槛金额';
+                      }else if(params.row.ruleType=="FULL_REDUCTION"){
+                           return `满${params.row.frAmount}可用`;
+                      }
+                     
+                      
+                  }
               },
               {
                   title: '有效期类型',

@@ -9,6 +9,7 @@
                                         v-model="formItem.couponName" 
                                         placeholder="请输入" 
                                         style="width:250px"
+                                        :maxlength="15"
                                     />
                                 </FormItem>
                                 <FormItem label="优惠券面额" class="u-input" prop="amount">
@@ -22,7 +23,7 @@
                                         <RadioGroup v-model="formItem.ruleType" style="width:262px">
                                             <Radio label="2" style="marginRight:15px">
                                                 满 <Input 
-                                                    v-model="formItem.name"
+                                                    v-model="formItem.frAmount"
                                                     style="width:50px"
                                                 /> 元可用
                                             </Radio>
@@ -36,29 +37,27 @@
                                         v-model="formItem.quantity" 
                                         placeholder="请输入" 
                                         style="width:250px"
-                                    />
+                                    /> 份
                                 </FormItem>
                     </DetailStyle>
                     <DetailStyle info="基本规则">
-                        <FormItem label="有效期类型" class="u-input" style="width:250px" prop="krmPublish">
-                            <RadioGroup v-model="formItem.krmPublish" style="width:250px">
-                                <Radio label="true" style="marginBottom:15px">
+                        <FormItem label="有效期类型" class="u-input" style="width:250px" prop="expireType">
+                            <RadioGroup v-model="formItem.expireType" style="width:250px">
+                                <Radio label="START_END_TIME" style="marginBottom:15px">
                                     <span>起止时间</span>
                                     <DatePicker
                                         type="date"
                                         v-model="startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
-                                        @on-change="startChange"
+                                       
                                     />
                                         <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
                                             v-model="form.startHour"
-                                            @on-change="startHourChange"
-                                            @on-clear="startHourClear"
-                                            :steps="[1,30]"
+                                            
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
@@ -66,19 +65,16 @@
                                             v-model="endtime"
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
-                                            @on-change="endChange"
+                                           
                                     />
                                     <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
                                             v-model="form.endHour"
-                                            @on-change="endHourChange"
-                                            @on-clear="endHourClear"
-                                            :steps="[1,30]"
                                         />
                                 </Radio>
-                                <!-- <Radio label="false">
+                                <!-- <Radio label="VALID_DATE">
                                    领取后，当天有效，有效天数<Input 
                                                     v-model="formItem.name" 
                                                     placeholder="请输入" 
@@ -113,6 +109,7 @@
                                 v-model="formItem.instructions" 
                                 placeholder=""
                                 type="textarea"
+                                :maxlength="100"
                             />
                         </FormItem>
                       
@@ -140,7 +137,9 @@ export default {
     data(){
         return {
             category:'app/upgrade',
-            formItem:{},
+            formItem:{
+                expireType:'START_END_TIME'
+            },
             form:{},
             startTime:'',
             startHour:'',

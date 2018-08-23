@@ -118,7 +118,7 @@ export default {
                   key: 'couponName',
                   align:'center',
                   fixed: 'left',
-                  width: 150,
+                  width: 200,
               },
               {
                   title: '优惠券面额',
@@ -172,7 +172,7 @@ export default {
                   title: '创建时间',
                   key: 'createTime',
                   align:'center',
-                  width: 200,
+                  width: 180,
                   render(tag, params){
                         return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.createTime)) ;
                   }
@@ -187,7 +187,7 @@ export default {
                   title: '修改时间',
                   key: 'updateTime',
                   align:'center',
-                  width: 200,
+                  width: 180,
                   render(tag, params){
                         return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.updateTime)) ;
                   }

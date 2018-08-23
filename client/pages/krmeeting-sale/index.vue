@@ -26,7 +26,7 @@
                   <div class="u-select-list">
                         <span class="u-select-label">创建时间</span>
                         <DatePicker 
-                                v-model="formItem.beginTIme"
+                                v-model="formItem.beginTime"
                                 type="date"
                                 format="yyyy-MM-dd" 
                                 placeholder="创建开始日期" 

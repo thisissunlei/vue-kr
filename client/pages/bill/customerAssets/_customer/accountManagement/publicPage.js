@@ -3,7 +3,7 @@ function initListData(type){
     return [
         {
             title:type=='getDetail'?'单据编号':'退款编号',
-            key: 'applyNum',
+            key: 'recordNo',
             align:'center',
             type:'getDetail,refundDetail',
             render:(h,params)=>{
@@ -22,7 +22,7 @@ function initListData(type){
         },
         {
             title: '社区名称',
-            key: 'communityName',
+            key: 'cmtName',
             align:'center',            
             type:'getDetail,refundDetail,depositDetail,consumptionDetail,balanceDetail'
         },

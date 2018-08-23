@@ -1,6 +1,6 @@
 <template>
     <div class="g-create-meeting">
-         <SectionTitle title="新建优惠券信息"></SectionTitle>
+         <SectionTitle title="编辑优惠券信息"></SectionTitle>
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
                     <DetailStyle info="基本信息">
@@ -135,7 +135,7 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import UploadFile from  '~/components/UploadFile';
-
+import dateUtils from 'vue-dateutils';
 export default {
     components:{
         SectionTitle,
@@ -185,9 +185,37 @@ export default {
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
+        this.getDetailInfo();
     },
     methods:{
-       
+       getDetailInfo(){
+            let {params}=this.$route;
+            this.$http.get('get-kmcoupon-detail',{id:params.id}).then((res)=>{
+                let data=Object.assign({},res.data);
+                data.amount=data.amount.toString();
+                data.quantity=data.quantity.toString();
+                data.gainLimit=data.gainLimit.toString();
+                data.frAmount=data.frAmount==0?'':data.frAmount.toString();
+                data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
+                data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
+                this.form.startTime =data.effectAt.substr(0,10);
+                this.form.startHour =data.effectAt.substr(11,8);
+                this.form.endtime =data.expireAt.substr(0,10);
+                this.form.endHour =data.expireAt.substr(11,8);
+
+                this.startTime =data.effectAt.substr(0,10);
+                this.startHour =data.effectAt.substr(11,8);
+                this.endtime =data.expireAt.substr(0,10);
+                this.endHour =data.expireAt.substr(11,8);
+
+                this.formItem=data;
+              
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -230,8 +258,8 @@ export default {
         checkTime(){
              if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
                    this.timeError=false;
-                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}:00`;
-                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}:00`;
+                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}`;
+                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}`;
                }else{
                     this.timeError=true;
                }
@@ -245,11 +273,11 @@ export default {
             this.checkTime();
         },
         dueStartChange(date){
-            this.form.startHour=date;
+            this.form.startHour=`${date}:00`;
             this.checkTime();
         },
         dueEndChange(date){
-            this.form.endHour=date;
+            this.form.endHour=`${date}:00`;
             this.checkTime();
         },
         submitCreate(){

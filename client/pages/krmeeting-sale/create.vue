@@ -198,7 +198,7 @@ export default {
                 if(this.formItem.expireType=="START_END_TIME"){
                      this.checkTime();
                 }
-                
+
                if(this.formItem.ruleType=="FULL_REDUCTION"){
                     this.checkAmount();
                 }
@@ -230,8 +230,8 @@ export default {
         checkTime(){
              if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
                    this.timeError=false;
-                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}:00`;
-                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}:00`;
+                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}`;
+                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}`;
                }else{
                     this.timeError=true;
                }
@@ -245,11 +245,11 @@ export default {
             this.checkTime();
         },
         dueStartChange(date){
-            this.form.startHour=date;
+            this.form.startHour=`${date}:00`;
             this.checkTime();
         },
         dueEndChange(date){
-            this.form.endHour=date;
+            this.form.endHour=`${date}:00`;
             this.checkTime();
         },
         submitCreate(){

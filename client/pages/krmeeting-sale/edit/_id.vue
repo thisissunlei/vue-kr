@@ -25,6 +25,7 @@
                                                 满 <Input 
                                                     v-model="formItem.frAmount"
                                                     style="width:50px"
+                                                    @on-change="checkAmount"
                                                 /> 元可用
                                             </Radio>
                                             <Radio label="NO_THRESHOLD">
@@ -226,10 +227,8 @@ export default {
                 if(this.formItem.expireType=="START_END_TIME"){
                      this.checkTime();
                 }
+                this.checkAmount();
                 
-               if(this.formItem.ruleType=="FULL_REDUCTION"){
-                    this.checkAmount();
-                }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         _this.submitCreate();
@@ -249,11 +248,14 @@ export default {
             }
         },
         checkAmount(){
-            if(!this.formItem.frAmount ){
-                this.amountError=true;
-            }else{
-                this.amountError=false;
+            if(this.formItem.ruleType=="FULL_REDUCTION"){
+                if(!this.formItem.frAmount ){
+                    this.amountError=true;
+                }else{
+                    this.amountError=false;
+                }
             }
+           
         },
         checkTime(){
              if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
@@ -283,7 +285,7 @@ export default {
         submitCreate(){
             this.$http.post('save-or-edit', this.formItem).then((res)=>{
                 this.$Notice.success({
-                        title:'新建成功'
+                        title:'编辑成功'
                     });
                     setTimeout(function(){
                         window.close();

@@ -36,7 +36,7 @@
                                    <Input 
                                         v-model="formItem.quantity" 
                                         placeholder="请输入" 
-                                        style="width:250px"
+                                        style="width:220px;marginRight:10px"
                                     /> 份
                                 </FormItem>
                     </DetailStyle>
@@ -47,25 +47,22 @@
                                     <span>起止时间</span>
                                     <DatePicker
                                         type="date"
-                                        v-model="startTime"
+                                        v-model="form.startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
-                                       
                                     />
                                         <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
                                             style="width: 96px" 
                                             v-model="form.startHour"
-                                            
                                         />
                                         <span class="u-date-txt">至</span>
                                     <DatePicker
                                             type="date"
-                                            v-model="endtime"
+                                            v-model="form.endtime"
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
-                                           
                                     />
                                     <TimePicker 
                                             format="HH:mm" 
@@ -84,6 +81,7 @@
                                 </Radio> -->
                             </RadioGroup> 
                         </FormItem>
+                         <div v-if="timeError" class="u-error">{{errorTip}}</div>
                         <FormItem label="每人限领" style="width:252px" prop="gainLimit">
                             <Input 
                                 v-model="formItem.gainLimit" 
@@ -140,11 +138,12 @@ export default {
             formItem:{
                 expireType:'START_END_TIME'
             },
-            form:{},
-            startTime:'',
-            startHour:'',
-            endtime:'',
-            endHour:'',
+            form:{
+              startTime:'',  
+              startHour:'',
+              endtime:'',
+              endHour:'',
+            },
             ruleCustom:{
                 couponName:[
                     { required: true, message: '请输入优惠券名称', trigger: 'change' }
@@ -159,7 +158,7 @@ export default {
                     { required: true, message: '请输入发放数量', trigger: 'change' }
                 ],
 
-                aaaa:[
+                expireType:[
                     { required: true, message: '请选择有效期类型', trigger: 'change' }
                 ],
                 gainLimit:[
@@ -169,12 +168,13 @@ export default {
                     { required: true, message: '请选择使用范围', trigger: 'change' }
                 ],
                 
-            },  
+            }, 
+            errorTip:'请选择起止时间',
+            timeError:false,
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-       
     },
     methods:{
        
@@ -186,17 +186,16 @@ export default {
                 });
                 let _this = this;
                
-               if(this.startDate && this.startHour){
-                   this.formItem.lockBeginTime=`${this.startDate} ${this.startHour}:00`;
+               if(form.startTime && form.startHour && form.endtime && form.endHour ){
+                   this.timeError=false;
                }else{
-                   this.formItem.lockBeginTime=""
+                    this.timeError=true;
                }
+            // startTime  
+            // startHour
+            // endtime
+            // endHour
 
-               if(this.endDates && this.endHour){
-                   this.formItem.lockEndTime=`${this.endDates} ${this.endHour}:00`;
-               }else{
-                    this.formItem.lockEndTime=""
-               }
              
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -209,7 +208,7 @@ export default {
                 }) 
         },
         submitCreate(){
-            this.$http.post('add-krmting-room', this.formItem).then((res)=>{
+            this.$http.post('save-or-edit', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });
@@ -242,6 +241,8 @@ export default {
     .u-error{
         color: #ed3f14;
         font-size: 12px;
+        margin-top:-24px;
+        margin-bottom:12px;
     }
     .u-input{
         display: inline-block;

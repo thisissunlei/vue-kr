@@ -284,7 +284,7 @@ export default {
           }
       },
     created(){
-        this.tabParams=Object.assign({},this.$route.query);
+        this.tabParams=Object.assign({},this.$route.query,{pageSize:15,page:1});
         this.formItem=Object.assign({},this.$route.query);
         this.getTableData(this.tabParams);
      },
@@ -295,6 +295,7 @@ export default {
         getTableData(params){
             this.$http.get('get-coupon-base-by-page', params).then((res)=>{
                     this.saleList=res.data.items;
+                    this.totalCount=res.data.totalCount;
             }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message

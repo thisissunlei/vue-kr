@@ -21,13 +21,13 @@
                                  </FormItem>
                                   <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="ruleType">
                                         <RadioGroup v-model="formItem.ruleType" style="width:262px">
-                                            <Radio label="2" style="marginRight:15px">
+                                            <Radio label="FULL_REDUCTION" style="marginRight:15px">
                                                 满 <Input 
                                                     v-model="formItem.frAmount"
                                                     style="width:50px"
                                                 /> 元可用
                                             </Radio>
-                                            <Radio label="1">
+                                            <Radio label="NO_THRESHOLD">
                                                无门槛金额
                                             </Radio>
                                         </RadioGroup> 
@@ -91,13 +91,13 @@
                         </FormItem>
                         <FormItem label="使用范围" class="u-input" style="width:250px" prop="usage">
                                 <RadioGroup v-model="formItem.usage" style="width:250px">
-                                    <Radio label="1">
+                                    <Radio label="ANY">
                                        不限
                                     </Radio>
-                                    <Radio label="2">
+                                    <Radio label="MEETING">
                                         会议室
                                     </Radio>
-                                    <Radio label="3">
+                                    <Radio label="SEAT">
                                         散座
                                     </Radio>
                                 </RadioGroup> 
@@ -186,7 +186,7 @@ export default {
                 });
                 let _this = this;
                
-               if(form.startTime && form.startHour && form.endtime && form.endHour ){
+               if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour ){
                    this.timeError=false;
                }else{
                     this.timeError=true;

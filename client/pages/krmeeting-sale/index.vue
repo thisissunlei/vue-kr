@@ -325,8 +325,8 @@ export default {
             params.page=1;
             params.pageSize=15;
             this.tabParams=Object.assign({},params);
-            this.tabParams.beginTIme=this.tabParams.beginTIme?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.tabParams.beginTIme)):'';
-            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.tabParams.endTime)):'';
+            this.tabParams.beginTime=this.tabParams.beginTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.beginTime)):'';
+            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.endTime)):'';
             utils.addParams(this.tabParams);
         },
 

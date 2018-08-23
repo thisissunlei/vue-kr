@@ -134,15 +134,29 @@ export default {
               },
               {
                   title: '有效期类型',
-                  key: 'conToWeekBefore',
+                  key: 'expireType',
                   align:'center',
                   width: 150,
+                  render(tag, params){
+                      let type={
+                          'START_END_TIME':'起止时间',
+                          'VALID_DATE':'有效天数'
+                      }
+                      return type[params.row.expireType];
+                  }
               },
               {
                   title: '有效期',
-                  key: 'conToWeekBefore',
+                  key: 'time',
                   align:'center',
                   width: 200,
+                  render(tag, params){
+                     let startTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.effectAt)) ;
+                     let endTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.expireAt)) ;
+
+                    return `${startTime}至${endTime}`;
+                  }
+
               },
               {
                   title: '领取量',

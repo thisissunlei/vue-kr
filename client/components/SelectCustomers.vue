@@ -80,12 +80,12 @@ import http from '~/plugins/http.js';
 }
 </script>
 
-<style lang="less"> 
-    .com-select-community{
-            ::-webkit-input-placeholder { color:#666; }
-            ::-moz-placeholder { color:#666; } /* firefox 19+ */
-            :-ms-input-placeholder { color:#666; } /* ie */
-            input:-moz-placeholder { color:#666; }
+<style lang="less" > 
+    .com-select-customers{
+        ::-webkit-input-placeholder { color:#666; }
+        ::-moz-placeholder { color:#666; } /* firefox 19+ */
+        :-ms-input-placeholder { color:#666; } /* ie */
+        input:-moz-placeholder { color:#666; }
 
     }
 </style>

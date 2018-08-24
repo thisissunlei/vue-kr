@@ -3,6 +3,10 @@
 <template>	
     <div class="customer-assets-detail">
 		 <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
+		 <div class="customer-detail" v-if="selectedTab=='account'">
+			 <div class="detail-font">客户详情
+			 </div><div class="detail-line"><div></div></div>
+		 </div>
 
 
 		<div class="content" v-if="selectedTab!='account'">
@@ -222,6 +226,32 @@
 			padding-bottom:20px;
 		}
 		/*苏岭开始*/
+		.customer-detail{
+			height: 50px;
+			font-size: 14px;
+			color: #666;
+			line-height: 50px;
+			padding-left: 25px;
+			position: relative;;
+			.detail-font{
+				width:108px;
+				display:inline-block;
+				text-align:center;
+				background:#ccc;
+			}
+			.detail-line{
+				position: absolute;
+				left: 133px;
+				right: 10px;
+				top:0;
+				div{
+					border-bottom: 1px solid #e8e9e9;
+					display:inline-block;
+					width:100%;
+					vertical-align: bottom;
+				}
+			}
+		}
 		.new-tab-wrap{
 			padding-left: 25px;
             display: flex;

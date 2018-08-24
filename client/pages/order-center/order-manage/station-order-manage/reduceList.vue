@@ -267,6 +267,7 @@
                         width:76,
                         className:'col-operate',
                         render:(tag,params)=>{
+                       if(!params.row.hideBtn){
                            var btnRender=[
                                tag(Buttons, {
                                    props: {
@@ -327,6 +328,7 @@
                                 }
                            }
                            return tag('div',btnRender);  
+                         }
                         }
                     }
                 ]

@@ -183,8 +183,8 @@
 
                  <!-- 第四行-->
                 <div style="white-space: nowrap;">
-                    <span class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
-                    <Form-item class='daily-form'>
+                    <span v-if="show" class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
+                    <Form-item class='daily-form' v-if="show">
                         <Select 
                                 v-model="formItem.sellerId" 
                                 style="width: 200px"
@@ -312,6 +312,7 @@ export default {
 
             return { 
                 loading:false, 
+                show:false,
                 formItem:{
                     investmentStatus:'',
                     status:[],
@@ -404,6 +405,8 @@ export default {
             _this.$emit('initData',this.formItem);
             _this.formItemOld=Object.assign({},this.formItem);
         },500);
+        // 获取销售人员显示 
+        this.handleSalerShow()
     },
     methods:{
         //销售员搜索
@@ -422,6 +425,15 @@ export default {
                 list = res.data.slice(0,10);
                 this.loading= false;
                 this.sellerList=list;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        handleSalerShow(){
+                this.$http.get('community-saler-show',{}).then((res)=>{
+                this.show = res.data.show;
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

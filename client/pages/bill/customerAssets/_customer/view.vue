@@ -2,10 +2,10 @@
 
 <template>	
     <div class="customer-assets-detail">
-		 <SectionTitle title="客户账户详情"  />
+		 <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
 
 
-		<div class="content">
+		<div class="content" v-if="selectedTab!='account'">
 			<Row>  
                 <Col class="col circle" >
 					<div class="title">客户ID：</div>
@@ -22,7 +22,7 @@
                 </Col>
             </Row>
 		</div>
-		<div class="tab-list">
+		<div class="tab-list" v-if="selectedTab!='account'">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
 		</div>

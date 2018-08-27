@@ -15,6 +15,7 @@
                                 <FormItem label="优惠券面额" class="u-input" prop="amount">
                                     <Input 
                                         v-model="formItem.amount" 
+                                        type="text"
                                         placeholder="请输入" 
                                         style="width:250px"
                                         :maxlength="5"
@@ -25,6 +26,7 @@
                                             <Radio label="FULL_REDUCTION" style="marginRight:15px">
                                                 满 <Input 
                                                     v-model="formItem.frAmount"
+                                                    type="text"
                                                     style="width:50px"
                                                     :maxlength="5"
                                                     @on-change="checkAmount"
@@ -38,12 +40,13 @@
                                  <FormItem label="发放数量" class="u-input" prop="quantity">
                                    <Input 
                                         v-model="formItem.quantity" 
+                                        type="text"
                                         placeholder="请输入" 
                                         style="width:220px;marginRight:10px"
                                          :maxlength="7"
                                     /> 份
                                 </FormItem>
-                                 <div v-if="amountError" class="u-error">请填写满减金额</div>
+                                 <div v-if="amountError" class="u-error">{{amountErrorTxt}}</div>
                     </DetailStyle>
                     <DetailStyle info="基本规则">
                        
@@ -99,6 +102,7 @@
                         <FormItem label="每人限领" style="width:252px" prop="gainLimit">
                             <Input 
                                 v-model="formItem.gainLimit" 
+                                type="text"
                                 style="width:50px;marginRight:10px"
                                 :maxlength="2"
                             />
@@ -140,6 +144,7 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import UploadFile from  '~/components/UploadFile';
+import dateUtils from 'vue-dateutils';
 
 export default {
     components:{
@@ -148,6 +153,47 @@ export default {
         UploadFile
     },
     data(){
+        const validateaAmount = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入优惠券面额'));
+                } else {
+                    value=value*1;
+                   if (Number.isInteger(value) && value>0) {
+                        callback(); 
+                    }else{
+                        callback(new Error('请输入正整数'));
+                    }
+                   
+                }
+        };
+         const validateaQuantity = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入发放数量'));
+                } else {
+                    value=value*1;
+                   if (Number.isInteger(value) && value>0) {
+                        callback(); 
+                    }else{
+                        callback(new Error('请输入正整数'));
+                    }
+                   
+                }
+        };
+        const validateaGainLimit = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入限领次数'));
+                } else {
+                    value=value*1;
+                   if (Number.isInteger(value) && value>0) {
+                        callback(); 
+                    }else{
+                        callback(new Error('请输入正整数'));
+                    }
+                   
+                }
+        };
+        
+
         return {
             category:'app/upgrade',
             formItem:{
@@ -163,29 +209,30 @@ export default {
                     { required: true, message: '请输入优惠券名称', trigger: 'change' }
                 ],
                 amount:[
-                    { required: true, message: '请输入优惠券面额', trigger: 'change' }
+                    {required: true, validator:validateaAmount, trigger: 'change' }
                 ],
                 ruleType:[
-                    { required: true, message: '请选择优惠券类型', trigger: 'change' }
+                    {required: true,  message: '请选择优惠券类型', trigger: 'change' }
                 ],
                 quantity:[
-                    { required: true, message: '请输入发放数量', trigger: 'change' }
+                    {required: true, validator:validateaQuantity,trigger: 'change' }
                 ],
 
                 expireType:[
                     { required: true, message: '请选择有效期类型', trigger: 'change' }
                 ],
                 gainLimit:[
-                    { required: true, message: '请输入限领次数', trigger: 'change' }
+                    {required: true, validator:validateaGainLimit, trigger: 'change' }
                 ],
                 usageType:[
                     { required: true, message: '请选择使用范围', trigger: 'change' }
                 ],
                 
             }, 
-            errorTip:'请选择起止时间',
+            errorTip:'',
             timeError:false,
             amountError:false,
+            amountErrorTxt:'',
         }
     },
     mounted:function(){
@@ -225,21 +272,39 @@ export default {
         },
         checkAmount(){
             if(this.formItem.ruleType=="FULL_REDUCTION"){
-                if(!this.formItem.frAmount ){
+                if(!this.formItem.frAmount){
                     this.amountError=true;
+                    this.amountErrorTxt='请填写满减金额'
                 }else{
-                    this.amountError=false;
+                    let value=this.formItem.frAmount*1
+                    if(Number.isInteger(value) && value>0){
+                        this.amountError=false;
+                    } else{
+                        this.amountError=true;
+                        this.amountErrorTxt='请输入正整数'
+                    }  
+                    
                 }
             }
            
         },
         checkTime(){
              if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
-                   this.timeError=false;
-                   this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}`;
-                   this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}`;
+                    this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}`;
+                    this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}`;
+                    let startTime=dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', this.formItem.effectAt)
+                    let endTime=dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss',  this.formItem.expireAt)
+                   
+                   if(startTime>endTime){
+                       this.timeError=true;
+                       this.errorTip='开始时间必须小于结束时间';
+                   }else{
+                        this.timeError=false;
+                       
+                   }
                }else{
                     this.timeError=true;
+                    this.errorTip='请选择起止时间';
                }
         },
         startChange(date){
@@ -293,7 +358,7 @@ export default {
     .u-error{
         color: #ed3f14;
         font-size: 12px;
-        margin-top:-24px;
+        margin-top:-20px;
         margin-bottom:12px;
     }
     .u-input{

@@ -2,9 +2,29 @@
 <template>
   <div class="m-account-management">
       <div class="account-manage-form">
-          <ArriveForm v-if="type=='getDetail'||type=='refundDetail'" :type="type"/>
-          <ConsumptionForm v-if="type=='consumptionDetail'||type=='balanceDetail'" :type="type"/>
-          <DepositForm v-if="type=='depositDetail'"/>
+          <ArriveForm 
+                v-if="type=='getDetail'||type=='refundDetail'" 
+                :type="type" 
+                :communityList="communityList"
+                @init="init"
+                @searchClick="searchClick"
+                @clearClick="clearClick"
+           />
+          <ConsumptionForm 
+                v-if="type=='consumptionDetail'||type=='balanceDetail'" 
+                :type="type" 
+                :communityList="communityList"
+                @init="init"
+                @searchClick="searchClick"
+                @clearClick="clearClick"
+            />
+          <DepositForm 
+                v-if="type=='depositDetail'" 
+                :communityList="communityList"
+                @init="init"
+                @searchClick="searchClick"
+                @clearClick="clearClick"
+           />
       </div>
       <div style="color:red;text-align:right;margin-right:20px;">金额总计:¥{{allMoney}}</div>
       <div class="account-manage-table">
@@ -38,13 +58,23 @@ export default {
         return{
            listData:[],
            listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this,this.type))),
-           allMoney:''
+           allMoney:'',
+           communityList:[]
         }
     },
     mounted(){
-        
+        this.getCommunityData();
     },
     methods:{
+       init(params){
+           this.getListData(params);
+       },
+       searchClick(params){
+           this.getListData(params);
+       },
+       clearClick(params){
+           this.getListData(params);
+       },
        formattingColumns(data){
            var arr = [];
             for(let i=0;i<data.length;i++){
@@ -54,7 +84,45 @@ export default {
                 }
             }
             return arr;
-       }
+       },
+       goView(params){
+           console.log('parna',params);
+       },
+       getCommunityData(params){
+            this.$http.get('join-bill-community','').then((response)=>{    
+                this.communityList=response.data.items 
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        getListData(params){
+            let newParams={};
+            let dateArray=['dateStart','dateEnd'];
+            let newDate=publicFn.dateFormat(dateArray,params);
+            newParams=Object.assign({},params,newDate);
+            newParams.customerId=this.$route.params.customer;
+            let typeUrl='';
+            switch (this.type) {
+                case 'getDetail':
+                    typeUrl='account-payment-detail'
+                    break;
+                case 'refundDetail':
+                    typeUrl='account-refund-detail'
+                    break;
+                default:
+                    break;
+            }
+            this.$http.get(typeUrl,newParams).then((response)=>{    
+                this.listData=response.data.details;
+                this.allMoney=response.data.total;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        }
     }
 }
 </script>
@@ -63,6 +131,11 @@ export default {
   .m-account-management{
       .account-manage-table{
           margin:10px 20px 0 0px;
+      }
+      .statusClass{
+            .ivu-table-cell{
+                padding:0 5px;
+            }
       }
   }
 </style>

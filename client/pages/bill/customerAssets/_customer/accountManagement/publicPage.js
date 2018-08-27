@@ -1,4 +1,5 @@
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 function initListData(type){
     return [
         {
@@ -17,7 +18,7 @@ function initListData(type){
                             this.goView(params.row);
                         }
                     }
-                }, params.row.applyNum)
+                }, params.row.recordNo)
             }
         },
         {
@@ -35,14 +36,28 @@ function initListData(type){
         {
             title: '金额',
             key: 'invoiceTypeName',
-            align:'center',
-            type:'depositDetail,consumptionDetail,balanceDetail'
+            align:'right',
+            className:'statusClass',
+            type:'depositDetail,consumptionDetail,balanceDetail',
+            render:(tag, params)=>{
+                var end='';      
+                if(params.row.invoiceTypeName){
+                    end='¥'+utils.thousand(params.row.invoiceTypeName);
+                }else{
+                    end='-';
+                }
+                return tag('span',{},end)
+            }
         },
         {
             title: '时间',
             key: 'invoiceTypeName',
             align:'center',
-            type:'depositDetail,consumptionDetail'
+            type:'depositDetail,consumptionDetail',
+            render:(h,params)=>{
+                let date=params.row.operateTime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.operateTime)):'';
+                return h('span',{},date);
+            }
         },
         {
             title: type=='balanceDetail'?'单据编号':'相关凭证',
@@ -59,39 +74,65 @@ function initListData(type){
         {
             title: type=='getDetail'?'打款方式':'退款方式',
             align:'center',
-            key: 'corporationName',
+            key: 'payWayName',
             type:'getDetail,refundDetail'
         },
         {
             title: type=='getDetail'?'打款金额':'退款金额',
-            align:'center',
-            key: 'corporationName',
-            type:'getDetail,refundDetail'
+            align:'right',
+            className:'statusClass',
+            key: 'amount',
+            type:'getDetail,refundDetail',
+            render:(tag, params)=>{
+                var end='';      
+                if(params.row.amount){
+                    end='¥'+utils.thousand(params.row.amount);
+                }else{
+                    end='-';
+                }
+                return tag('span',{},end)
+            }
         },
         {
             title: type=='getDetail'?'账户名称':'退至账户',
             align:'center',
-            key: 'corporationName',
+            key: 'acountName',
             type:'getDetail,refundDetail'
         },
         {
             title: type=='getDetail'?'打款日期':'退款日期',
             align:'center',
-            key: 'corporationName',
-            type:'getDetail,refundDetail'
+            key: 'occurDate',
+            type:'getDetail,refundDetail',
+            render:(h,params)=>{
+                let date=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)):'';
+                return h('span',{},date);
+            }
         },
         {
             title: '操作时间',
-            key: 'invoiceTypeName',
+            key: 'operateTime',
             align:'center',
-            type:'getDetail,refundDetail,balanceDetail'
+            type:'getDetail,refundDetail,balanceDetail',
+            render:(h,params)=>{
+                let date=params.row.operateTime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.operateTime)):'';
+                return h('span',{},date);
+            }
         },
         {
             title: '操作人员',
-            key: 'invoiceTypeName',
+            key: 'operaterName',
             align:'center',
             type:'getDetail,refundDetail,depositDetail,consumptionDetail,balanceDetail'
         }
     ]
 }
-export default {initListData};
+
+function dateFormat(array,params){
+    let list={};
+    array.map((item,index)=>{
+       list.item=params[item]?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params[item])):'';
+    })
+    return list;
+}
+export default {initListData,dateFormat};

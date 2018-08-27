@@ -157,5 +157,15 @@ export default {
     'add-business-role': {
         url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
         method: 'post'
+    },
+    //苏岭开始
+    'account-refund-detail': {
+        url: '/song/account/refund',
+        method: 'get'
+    },
+    'account-payment-detail': {
+        url: '/song/account/payment',
+        method: 'get'
     }
+    //苏岭结束
 } 

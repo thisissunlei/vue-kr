@@ -74,7 +74,7 @@
 				{{basicInfo.bizType}}
 			</LabelText>
 			<LabelText label="客户名称：">
-				<a href="">
+				<a :href='"/bill/customerAssets/" + basicInfo.customerId+ "/view#basic"'>
 					{{basicInfo.customerName}}
 				</a>
 			</LabelText>
@@ -160,7 +160,23 @@ export default {
 				 title: '订单编号',
                  key: 'orderNo',
 				 align:'center',
-				 width:200
+				 width:200,
+				 render(h,params){
+                              return h('div', [
+                                    h('a',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                        on: {
+                                                click: () => {
+                                                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/joinView`,'_blank')  
+                                                }
+                                            },
+                                    },params.row.orderNo),
+                                  ])
+                        }
 				},
 				{
 				 title: '备注',

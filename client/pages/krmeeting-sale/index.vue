@@ -335,7 +335,16 @@ export default {
 </script>
 <style lang="less">
 .g-krmeeting-sale{
-    ::-webkit-scrollbar{display:none}
+        .ivu-table-fixed-right::before,
+        .ivu-table-fixed::before {
+            z-index: 3;
+        }
+        .ivu-tooltip-inner {
+            white-space: normal;
+        }
+        .ivu-table-fixed-right {
+            width: 150px !important;
+        }
      .m-sale-operation{
          padding:20px 20px;
          height:130px;

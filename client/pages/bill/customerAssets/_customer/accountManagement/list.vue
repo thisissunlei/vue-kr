@@ -86,7 +86,12 @@ export default {
             return arr;
        },
        goView(params){
-           console.log('parna',params);
+           let name=params.payWayName;
+           if(name=='银行转账'||name=='支付宝'){
+               window.open('/bill/payment/detail/'+params.recordId,'_blank');
+           }else if(name=='资金转移'){
+               window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
+           }
        },
        getCommunityData(params){
             this.$http.get('join-bill-community','').then((response)=>{    

@@ -140,7 +140,7 @@ export default {
             return { 
                 formItem:{
                     recordNo:'',
-                    payWay:' ',
+                    payWay:'',
                     dateStart:'',
                     dateEnd:'', 
                     cmtId:'',

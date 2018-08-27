@@ -11,7 +11,8 @@ function initListData(type){
                 let colData = params.row;
                 return h('div',{
                     style: {
-                        color:'#2b85e4'
+                        color:'#2b85e4',
+                        cursor:'pointer'
                     },
                     on:{
                         click:()=>{
@@ -131,7 +132,7 @@ function initListData(type){
 function dateFormat(array,params){
     let list={};
     array.map((item,index)=>{
-       list.item=params[item]?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params[item])):'';
+       list[item]=params[item]?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params[item])):'';
     })
     return list;
 }

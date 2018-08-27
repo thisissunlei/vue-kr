@@ -46,9 +46,6 @@
                type:'getDetail'
            }
         },
-        mounted(){
-
-        },
         methods:{
             tabsClick(val){
                 this.type = val;
@@ -57,6 +54,10 @@
     }
 </script>
 
-<style lang='less' scoped>
-   
+<style lang='less'>
+  .m-settlement-list{
+     .ivu-tabs{
+        overflow:inherit;
+     }
+  }
 </style>

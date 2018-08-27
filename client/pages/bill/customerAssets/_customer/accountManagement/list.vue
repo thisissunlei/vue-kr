@@ -104,7 +104,7 @@ export default {
         },
         getListData(params){
             let newParams={};
-            let dateArray=['dateStart','dateEnd'];
+            let dateArray=['endTime','startTime'];
             let newDate=publicFn.dateFormat(dateArray,params);
             newParams=Object.assign({},params,newDate);
             newParams.customerId=this.$route.params.customer;

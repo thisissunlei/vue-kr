@@ -76,17 +76,17 @@
                     </Form-item>
 
                     <div class="daily-form" style="margin-right:22px;">
-                        <Form-item :label="type=='getDetail'?'打款日期':'退款日期'"  class="priceForm" prop="dateStart">
+                        <Form-item :label="type=='getDetail'?'打款日期':'退款日期'"  class="priceForm" prop="startTime">
                             <DatePicker 
-                                v-model="formItem.dateStart" 
+                                v-model="formItem.startTime" 
                                 placeholder="开始日期"
                                 style="width: 130px"
                             />
                         </Form-item>
                         <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="dateEnd">
+                        <Form-item  class="priceForm" prop="endTime">
                             <DatePicker 
-                                    v-model="formItem.dateEnd" 
+                                    v-model="formItem.endTime" 
                                     placeholder="结束日期"
                                     style="width: 130px"
                             />
@@ -129,7 +129,7 @@ export default {
 
             //租期天数
             const validateDate = (rule, value, callback) => {
-                if (this.formItem.dateStart&&this.formItem.dateEnd&&this.formItem.dateStart>this.formItem.dateEnd) {
+                if (this.formItem.startTime&&this.formItem.endTime&&this.formItem.startTime>this.formItem.endTime) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
@@ -141,8 +141,8 @@ export default {
                 formItem:{
                     recordNo:'',
                     payWay:'',
-                    dateStart:'',
-                    dateEnd:'', 
+                    startTime:'',
+                    endTime:'', 
                     cmtId:'',
                     amountStart:'',
                     amountEnd:'',
@@ -157,10 +157,10 @@ export default {
                     amountEnd: [
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    dateEnd:[
+                    endTime:[
                         { validator: validateDate, trigger: 'change' }
                     ],
-                    dateStart:[
+                    startTime:[
                         { validator: validateDate, trigger: 'change' }
                     ]
                 }

@@ -335,6 +335,7 @@ export default {
 </script>
 <style lang="less">
 .g-krmeeting-sale{
+    ::-webkit-scrollbar{display:none}
      .m-sale-operation{
          padding:20px 20px;
          height:130px;

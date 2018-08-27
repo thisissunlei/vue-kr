@@ -14,8 +14,8 @@
                             />
                         </Form-item>
 
-                        <Form-item class="priceForm community-form" style="margin-left: 8px;margin-right: 20px;">
-                            <span class="attract-font" style="margin-right:14px;">社<span style="display:inline-block;width:26px;"></span>区</span>
+                        <Form-item class="priceForm community-form" style="margin-left: 10px;margin-right: 8px;">
+                            <span class="attract-font" style="margin-right:12px;">社<span style="display:inline-block;width:26px;"></span>区</span>
                             <div class='operation-community'>
                                 <Select 
                                     v-model="formItem.cmtId" 
@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import './index.less';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 export default {
@@ -203,60 +204,3 @@ export default {
     }
 }
 </script>
-
-<style lang='less'>
-     .arrive-search-form{
-         .community-header{
-            padding: 20px 0px 10px 0px;
-            .ivu-form .ivu-form-item-label{
-                color:#333;
-                font-weight: 500;
-            }
-            .daily-form{
-                display:inline-block;
-                margin-right:20px;
-                .ivu-form-item-content{
-                    display:inline-block;
-                }
-                .ivu-form-item:after, .ivu-form-item:before{
-                    content: none;
-                }
-            }
-            .community-form{
-                vertical-align: middle;
-            }
-            .priceForm{
-                display:inline-block;
-                .ivu-form-item-content{
-                    display:inline-block;
-                }
-            }
-            .attract-font{
-                font-weight:bold;
-                display:inline-block;
-                margin-right:12px;
-            }
-            .attract-line{
-                display:inline-block;
-                margin:0 4px 0 5px;
-                padding-top: 6px;
-            }
-            .ivu-tooltip-popper{
-                word-break: break-all;
-                word-wrap: break-word;
-                max-width:150px;
-            }
-            .ivu-tooltip-inner{
-                white-space: normal;
-            }
-            .operation-community{
-                 display:inline-block;
-                .ivu-select-input{
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-            }
-        }
-     }
-</style>

@@ -6,7 +6,7 @@
                 <!-- 第一行-->
                 <div style="white-space: nowrap;">
 
-                        <Form-item class="priceForm community-form" style="margin-left: 8px;margin-right: 20px;">
+                        <Form-item class="priceForm community-form" style="margin-left: 8px;margin-right: 8px;">
                             <span class="attract-font" style="margin-right:14px;">社<span style="display:inline-block;width:26px;"></span>区</span>
                             <div class='operation-community'><SelectCommunity v-model="formItem.communityId" :params="{cityId:''}" :styles="{width:200+'px'}"  @init="communityInit"/></div>
                         </Form-item> 
@@ -42,7 +42,7 @@
                             </Form-item>
                         </div>
 
-                        <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
+                        <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);margin-left:12px;" @click="clearClick">清除</Button>
                 </div>
 
                 <!-- 第二行-->
@@ -57,7 +57,7 @@
                         />
                     </Form-item>
 
-                    <Form-item label="相关操作" class='daily-form' style="margin-right:314px;"> 
+                    <Form-item label="相关操作" class='daily-form' style="margin-right:302px;"> 
                             <Select 
                                 v-model="formItem.hasAttachment" 
                                 placeholder="请选择相关操作" 
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import './index.less';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SelectCommunity from '~/components/SelectCommon/SelectCommunity';
@@ -197,59 +198,3 @@ export default {
 }
 </script>
 
-<style lang='less'>
-     .arrive-search-form{
-         .community-header{
-            padding: 20px 0px 10px 0px;
-            .ivu-form .ivu-form-item-label{
-                color:#333;
-                font-weight: 500;
-            }
-            .daily-form{
-                display:inline-block;
-                margin-right:20px;
-                .ivu-form-item-content{
-                    display:inline-block;
-                }
-                .ivu-form-item:after, .ivu-form-item:before{
-                    content: none;
-                }
-            }
-            .community-form{
-                vertical-align: middle;
-            }
-            .priceForm{
-                display:inline-block;
-                .ivu-form-item-content{
-                    display:inline-block;
-                }
-            }
-            .attract-font{
-                font-weight:bold;
-                display:inline-block;
-                margin-right:12px;
-            }
-            .attract-line{
-                display:inline-block;
-                margin:0 4px 0 5px;
-                padding-top: 6px;
-            }
-            .ivu-tooltip-popper{
-                word-break: break-all;
-                word-wrap: break-word;
-                max-width:150px;
-            }
-            .ivu-tooltip-inner{
-                white-space: normal;
-            }
-            .operation-community{
-                 display:inline-block;
-                .ivu-select-input{
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-            }
-        }
-     }
-</style>

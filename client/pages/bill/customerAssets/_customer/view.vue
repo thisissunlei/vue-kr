@@ -135,7 +135,7 @@
 					code:'bill'
 				},{
 					name:'合同管理',
-					code:'contract'
+					code:'more'
 				},{
 					name:'入驻信息',
 					code:'join'

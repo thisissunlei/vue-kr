@@ -69,10 +69,10 @@
                         <!--<li>{{totalPrice}}</li>-->
                         <li>{{info.orderPromotionTotalDecimal || '-'}}</li>
                     </ul>
-                    <!--<ul>-->
-                        <!--<li>使用的优惠策略：</li>-->
-                        <!--<li>300</li>-->
-                    <!--</ul>-->
+                    <ul v-if="info.couponDesc">
+                        <li>使用的优惠策略：</li>
+                        <li>{{info.couponDesc}}</li>
+                    </ul>
                     <ul>
                         <li>订单金额：</li>
                         <!--<li>{{totalAmountDecimal}}</li>-->

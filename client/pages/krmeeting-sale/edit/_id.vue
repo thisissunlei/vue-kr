@@ -17,6 +17,7 @@
                                         v-model="formItem.amount" 
                                         placeholder="请输入" 
                                         style="width:250px"
+                                        :maxlength="5"
                                     />
                                  </FormItem>
                                   <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="ruleType">
@@ -26,6 +27,7 @@
                                                     v-model="formItem.frAmount"
                                                     style="width:50px"
                                                     @on-change="checkAmount"
+                                                    :maxlength="5"
                                                 /> 元可用
                                             </Radio>
                                             <Radio label="NO_THRESHOLD">
@@ -38,6 +40,7 @@
                                         v-model="formItem.quantity" 
                                         placeholder="请输入" 
                                         style="width:220px;marginRight:10px"
+                                        :maxlength="7"
                                     /> 份
                                 </FormItem>
                                  <div v-if="amountError" class="u-error">请填写满减金额</div>
@@ -97,6 +100,7 @@
                             <Input 
                                 v-model="formItem.gainLimit" 
                                 style="width:50px;marginRight:10px"
+                                :maxlength="2"
                             />
                             次
                         </FormItem>

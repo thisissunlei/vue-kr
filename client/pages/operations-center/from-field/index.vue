@@ -225,7 +225,7 @@
             },
 
             jumpView(params){
-                window.open(`./from-field/${params.row.id}/view`,'_blank')  
+                window.open(`/operations-center/from-field/${params.row.id}/view`,'_blank')  
             },
 
             getListData(params){

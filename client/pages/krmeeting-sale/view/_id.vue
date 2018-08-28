@@ -7,7 +7,7 @@
                     {{detailInfo.couponName}}
                 </LabelText>
                  <LabelText label="优惠券面额：">
-                    {{detailInfo.amount}}
+                    {{detailInfo.amount}}元
                 </LabelText>
                  <LabelText label="优惠券类型：">
                     {{detailInfo.ruleType}}

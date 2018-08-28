@@ -224,9 +224,38 @@ export default {
                   fixed: 'right',
                   render:(h,params)=>{
                         if(params.row.producted==1){
-                            return '-';
+                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params.row)
+                                        }
+                                    }
+                                }, '查看')
+                            ]); 
                         }else{
                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params.row)
+                                        }
+                                    }
+                                }, '查看'),
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -296,6 +325,9 @@ export default {
         },
         jumpEdit(params){
              window.open(`/krmeeting-sale/edit/${params.id}`,'_blank');
+        },
+        jumpView(params){
+             window.open(`/krmeeting-sale/view/${params.id}`,'_blank');
         },
         openCreateSale(value){
             this.openCreate=!this.openCreate;

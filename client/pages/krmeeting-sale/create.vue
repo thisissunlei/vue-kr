@@ -195,7 +195,6 @@ export default {
         
 
         return {
-            category:'app/upgrade',
             formItem:{
                 expireType:'START_END_TIME'
             },

@@ -12,7 +12,7 @@
                         <dt>订单状态：</dt><dd>{{info.orderShowStatusName || '-'}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单金额：￥</dt><dd>{{info.realCost || '-'}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{info.realCost}}</dd>
                     </dl>
                     <dl class="seat-order-wech">
                         <dt>订单生成时间：</dt><dd>{{this.returnCtime(info.ctime)}}</dd>

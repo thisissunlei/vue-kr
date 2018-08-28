@@ -166,6 +166,14 @@ export default {
     'account-payment-detail': {
         url: '/song/account/payment',
         method: 'get'
+    },
+    'account-cost-detail': {
+        url: '/song//account/cost',
+        method: 'get'
+    },
+    'account-balance-detail': {
+        url: '/song//account/balance',
+        method: 'get'
     }
     //苏岭结束
 } 

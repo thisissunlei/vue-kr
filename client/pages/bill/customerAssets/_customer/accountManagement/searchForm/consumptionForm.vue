@@ -213,6 +213,8 @@ export default {
     mounted(){
         this.formItemOld=Object.assign({},this.formItem);
         this.$emit('init',this.formItemOld);
+        this.getFee();
+        this.getOperate();
     },
     methods:{
         //搜索
@@ -231,6 +233,28 @@ export default {
         //回车
         onKeyEnter(){
             this.searchClick();
+        },
+        getFee(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.FeeType'
+            }).then((r) => {
+                this.feeTypeList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
+        getOperate(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.OperateType'
+            }).then((r) => {
+                this.operationList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
         }
     }
 }

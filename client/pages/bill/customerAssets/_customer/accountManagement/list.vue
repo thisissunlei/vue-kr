@@ -116,6 +116,12 @@ export default {
                 case 'refundDetail':
                     typeUrl='account-refund-detail'
                     break;
+                case 'costDetail':
+                    typeUrl='account-cost-detail'
+                    break;
+                case 'balanceDetail':
+                    typeUrl='account-balance-detail'
+                    break;   
                 default:
                     break;
             }

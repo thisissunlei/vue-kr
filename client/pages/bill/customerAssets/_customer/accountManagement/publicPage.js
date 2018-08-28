@@ -30,16 +30,33 @@ function initListData(type){
         },
         {
             title: '费用类型',
-            key: 'invoiceTypeName',
+            key: 'feeTypeName',
             align:'center',
             type:'depositDetail,consumptionDetail'
         },
         {
             title: '金额',
-            key: 'invoiceTypeName',
+            key: type=='balanceDetail'?'changedAmount':'amount',
             align:'right',
             className:'statusClass',
             type:'depositDetail,consumptionDetail,balanceDetail',
+            render:(tag, params)=>{
+                let newParam=type=='balanceDetail'?params.row.changedAmount:params.row.amount;
+                var end='';      
+                if(newParam){
+                    end='¥'+utils.thousand(newParam);
+                }else{
+                    end='-';
+                }
+                return tag('span',{},end)
+            }
+        },
+        {
+            title: '余额剩余',
+            key: 'amount',
+            align:'right',
+            className:'statusClass',
+            type:'balanceDetail',
             render:(tag, params)=>{
                 var end='';      
                 if(params.row.invoiceTypeName){
@@ -52,7 +69,7 @@ function initListData(type){
         },
         {
             title: '时间',
-            key: 'invoiceTypeName',
+            key: 'operateTime',
             align:'center',
             type:'depositDetail,consumptionDetail',
             render:(h,params)=>{
@@ -62,13 +79,13 @@ function initListData(type){
         },
         {
             title: type=='balanceDetail'?'单据编号':'相关凭证',
-            key: 'invoiceTypeName',
+            key: 'recordNo',
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail'
         },
         {
             title: type=='balanceDetail'?'操作':'相关操作',
-            key: 'invoiceTypeName',
+            key: 'operateTypeName',
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail'
         },

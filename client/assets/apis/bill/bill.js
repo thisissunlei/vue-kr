@@ -80,6 +80,11 @@ export default  {
       url: '/api/krspace-pay/bill/bill-type',
       method: 'get'
     },
+    //账单中心--账单id与类型
+    'get-orderId-type':{
+      url: '/api/krspace-op-web/operation/order-seat/getOrderIdAndType',
+      method: 'get'
+    },
     //账单中心--收入类型
     'get-fee-type': {
       url: '/api/krspace-pay/income/fee-type',

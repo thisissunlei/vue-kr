@@ -161,7 +161,7 @@ export default {
                  key: 'orderNo',
 				 align:'center',
 				 width:200,
-				 render(h,params){
+				 render:(h,params)=>{
                               return h('div', [
                                     h('a',{
                                         style:{
@@ -171,7 +171,8 @@ export default {
                                         },
                                         on: {
                                                 click: () => {
-                                                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/joinView`,'_blank')  
+												this.jumpOrderList(params.row)
+                                               // window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/joinView`,'_blank')  
                                                 }
                                             },
                                     },params.row.orderNo),
@@ -253,7 +254,21 @@ export default {
 						title:err.message
 					});
                 })
-        },
+		},
+		
+		jumpOrderList(obj){
+			 this.$http.get('get-orderId-type', {orderNo:obj.orderNo}).then((res)=>{
+				  let type = {IN:'joinView',INCREASE:'joinView',CONTINUE:'joinView',REDUCE:'reduceView',REPLACE:'replaceView'};
+					  let junpUrl = type[res.data.orderType];
+					  let junpId = res.data.orderId;
+			      window.open(`/order-center/order-manage/station-order-manage/${junpId}/${junpUrl}`,'_blank')  
+
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+		},
 		getInfo(){
 			this.getBillType();
 			var _this=this;

@@ -121,7 +121,10 @@ export default {
                     break;
                 case 'balanceDetail':
                     typeUrl='account-balance-detail'
-                    break;   
+                    break;  
+                case 'depositDetail':
+                    typeUrl='account-deposit-detail'
+                    break; 
                 default:
                     break;
             }

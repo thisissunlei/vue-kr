@@ -12,9 +12,9 @@
                 <TabPane label="退款明细" name="refundDetail" >
                     <List v-if="type == 'refundDetail'" :type="type"/>
                 </TabPane>
-                <!-- <TabPane label="押金明细" name="depositDetail" >
+                <TabPane label="押金明细" name="depositDetail" >
                     <List v-if="type == 'depositDetail'" :type="type"/>
-                </TabPane> -->
+                </TabPane>
                 <TabPane label="消费明细" name="consumptionDetail">
                     <List v-if="type == 'consumptionDetail'" :type="type"/>
                 </TabPane>

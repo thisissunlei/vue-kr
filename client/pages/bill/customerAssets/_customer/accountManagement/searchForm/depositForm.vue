@@ -8,33 +8,43 @@
 
                         <Form-item class="priceForm community-form" style="margin-left: 8px;margin-right: 8px;">
                             <span class="attract-font" style="margin-right:14px;">社<span style="display:inline-block;width:26px;"></span>区</span>
-                            <div class='operation-community'><SelectCommunity v-model="formItem.communityId" :params="{cityId:''}" :styles="{width:200+'px'}"  @init="communityInit"/></div>
+                            <div class='operation-community'>
+                                <Select 
+                                    v-model="formItem.cmtId" 
+                                    placeholder="请选择" 
+                                    clearable
+                                    filterable
+                                    style="width: 200px"
+                                >
+                                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
+                                </Select> 
+                            </div>
                         </Form-item> 
 
-                       <Form-item label="费用类型" class='daily-form' prop="customerName">
+                       <Form-item label="费用类型" class='daily-form'>
                            <Select 
-                                v-model="formItem.hasAttachment" 
+                                v-model="formItem.feeType" 
                                 placeholder="请选择费用类型" 
                                 clearable
                                 style="width:200px"
                             >
-                                <Option v-for="item in fileList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in feeTypeList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                         </Form-item>
 
                         <div class="daily-form community-form">
-                            <Form-item  label="消费金额"  class="priceForm" prop="overDaysMin">
+                            <Form-item  label="消费金额"  class="priceForm" prop="amountStart">
                                 <i-input 
-                                    v-model="formItem.overDaysMin" 
+                                    v-model="formItem.amountStart" 
                                     style="width: 90px"
                                     placeholder="填写消费金额" 
                                     @keyup.enter.native="onKeyEnter($event)"
                                 />
                             </Form-item>
                             <span class="attract-line" style="margin:0 3px 0 4px">至</span>
-                            <Form-item  class="priceForm" prop="overDaysMax" >
+                            <Form-item  class="priceForm" prop="amountEnd" >
                                 <i-input 
-                                    v-model="formItem.overDaysMax" 
+                                    v-model="formItem.amountEnd" 
                                     style="width: 90px"
                                     placeholder="填写消费金额" 
                                     @keyup.enter.native="onKeyEnter($event)"
@@ -48,9 +58,9 @@
                 <!-- 第二行-->
                 <div style="white-space: nowrap;">
 
-                    <Form-item label="相关凭证"  class='daily-form' prop="customerName">
+                    <Form-item label="相关凭证"  class='daily-form'>
                         <i-input 
-                            v-model="formItem.customerName" 
+                            v-model="formItem.recordNo" 
                             placeholder="请输入相关凭证"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -59,12 +69,12 @@
 
                     <Form-item label="相关操作" class='daily-form' style="margin-right:302px;"> 
                             <Select 
-                                v-model="formItem.hasAttachment" 
+                                v-model="formItem.operateType" 
                                 placeholder="请选择相关操作" 
                                 clearable
                                 style="width:200px"
                             >
-                                <Option v-for="item in fileList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in operationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                     </Form-item>
 
@@ -79,104 +89,56 @@
 import './index.less';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import SelectCommunity from '~/components/SelectCommon/SelectCommunity';
 export default {
-    components:{
-      SelectCommunity
+    props:{
+       communityList:{
+           type:Array,
+           default:()=>[]
+       }
     },
     data() {
-            //商品名称
-            const validateName = (rule, value, callback) => {
-                if(value&&value.length>20){
-                    callback('名称最多20长度');
-                }else{
-                    callback();
-                }
-            };
             //租期天数
             const validateTime = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if (this.formItem.overDaysMin&&this.formItem.overDaysMax&&Number(this.formItem.overDaysMin)>Number(this.formItem.overDaysMax)) {
+                    callback('最多两位小数的不为负的数字');
+                }else if (this.formItem.amountStart&&this.formItem.amountEnd&&Number(this.formItem.amountStart)>Number(this.formItem.amountEnd)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
             };
 
-            //租期天数
-            const validateDate = (rule, value, callback) => {
-                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };
-            
 
             return { 
-                isGetAll:true,
-                loading:false, 
                 formItem:{
-                    customerName:'',
-                    communityId:' ',
-                    overDaysMin:'',
-                    overDaysMax:'', 
-                    startDate:'',
-                    endDate:'',
-                    contractPayStatus:'',
-                    hasAttachment:''
+                    cmtId:'',
+                    feeType:'',
+                    operateType:'',
+                    recordNo:'',
+                    amountStart:'',
+                    amountEnd:''
                 },
                 formItemOld:{},
-                communityList:[],
-                cityList:[],
-                fileList:[
-                    {value:'1',label:'是'},
-                    {value:'0',label:'否'}
-                ],
+                feeTypeList:[],
+                operationList:[],
                 ruleInvestment: {
-                    customerName:[
-                        { validator: validateName, trigger: 'change' }
-                    ],
-                    overDaysMin: [
+                    amountStart: [
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    overDaysMax: [
+                    amountEnd: [
                         { validator: validateTime, trigger: 'change' }
-                    ],
-                    startDate:[
-                        { validator: validateDate, trigger: 'change' }
-                    ],
-                    endDate:[
-                        { validator: validateDate, trigger: 'change' }
                     ]
-                },
-                cityNum:0,
-                communityNum:0
+                }
             }
     },
     mounted(){
         this.formItemOld=Object.assign({},this.formItem);
-    },
-    computed: {
-      communityId(){
-          return this.formItem.communityId
-      }
-    },
-    watch:{
-      communityId:function(val) {
-          let rou=this.$route.query;
-          this.communityNum++;
-          if(this.communityNum==1){
-              this.$emit('initData',this.formItem);
-          }
-      }
+        this.$emit('init',this.formItemOld);
+        this.getFee();
+        this.getOperate();
     },
     methods:{
-        communityInit(params){
-            this.formItemOld=Object.assign({},this.formItemOld,params);
-        },
         //搜索
         searchClick(){
             this.$refs['formItemInvestment'].validate((valid) => {
@@ -193,6 +155,28 @@ export default {
         //回车
         onKeyEnter(){
             this.searchClick();
+        },
+        getFee(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.FeeType'
+            }).then((r) => {
+                this.feeTypeList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
+        getOperate(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.OperateType'
+            }).then((r) => {
+                this.operationList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
         }
     }
 }

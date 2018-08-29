@@ -36,12 +36,12 @@ function initListData(type){
         },
         {
             title: '金额',
-            key: type=='balanceDetail'?'changedAmount':'amount',
+            key: 'amount',
             align:'right',
             className:'statusClass',
             type:'depositDetail,consumptionDetail,balanceDetail',
             render:(tag, params)=>{
-                let newParam=type=='balanceDetail'?params.row.changedAmount:params.row.amount;
+                let newParam=params.row.amount;
                 var end='';      
                 if(newParam){
                     end='¥'+utils.thousand(newParam);
@@ -53,14 +53,14 @@ function initListData(type){
         },
         {
             title: '余额剩余',
-            key: 'amount',
+            key: 'remainAmount',
             align:'right',
             className:'statusClass',
             type:'balanceDetail',
             render:(tag, params)=>{
                 var end='';      
-                if(params.row.invoiceTypeName){
-                    end='¥'+utils.thousand(params.row.invoiceTypeName);
+                if(params.row.remainAmount){
+                    end='¥'+utils.thousand(params.row.remainAmount);
                 }else{
                     end='-';
                 }

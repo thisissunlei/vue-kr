@@ -28,7 +28,7 @@
                                 clearable
                                 style="width:200px"
                             >
-                                <Option v-for="item in feeTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in feeTypeList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select>
                         </Form-item>
 
@@ -83,7 +83,7 @@
                                 clearable
                                 style="width:200px"
                             >
-                                <Option v-for="item in operationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in operationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                     </Form-item>
 
@@ -213,7 +213,9 @@ export default {
     mounted(){
         this.formItemOld=Object.assign({},this.formItem);
         this.$emit('init',this.formItemOld);
-        this.getFee();
+        if(this.type=='consumptionDetail'){
+            this.getFee();
+        }
         this.getOperate();
     },
     methods:{
@@ -247,7 +249,7 @@ export default {
         },
         getOperate(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.OperateType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.OperateType'
             }).then((r) => {
                 this.operationList = [].concat(r.data)
             }).catch((e) => {

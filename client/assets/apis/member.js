@@ -159,20 +159,29 @@ export default {
         method: 'post'
     },
     //苏岭开始
+    //退款明细
     'account-refund-detail': {
         url: '/song/account/refund',
         method: 'get'
     },
+    //到款明细
     'account-payment-detail': {
         url: '/song/account/payment',
         method: 'get'
     },
+    //消费明细
     'account-cost-detail': {
         url: '/song//account/cost',
         method: 'get'
     },
+    //余额明细
     'account-balance-detail': {
-        url: '/song//account/balance',
+        url: '/song/account/balance',
+        method: 'get'
+    },
+    //押金明细
+    'account-deposit-detail': {
+        url: '/song/account/deposit',
         method: 'get'
     }
     //苏岭结束

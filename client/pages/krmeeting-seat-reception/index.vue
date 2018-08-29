@@ -30,7 +30,7 @@ export default {
    name:'billList',
     head () {
             return {
-                title: "散座接待"
+                title: '散座接待-氪空间后台管理系统'
             }
     },
    data(){

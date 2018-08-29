@@ -1,8 +1,21 @@
 <template>
 <div class="g-order">
-    <SectionTitle title="参数配置"></SectionTitle>
+    <SectionTitle title="社区优惠配置"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="onCreate">新建</Button> 
+        <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button> 
+        <span style="padding:0 10px"></span> 
+        <div style="display:inline-block;width:400px;">
+            选择社区：
+            <Select 
+                        :v-model="cmtId"
+                        @on-change="changeContent" 
+                        filterable
+                        clearable 
+                        style="width:300px">
+                <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
+            </Select>
+        </div>
+        
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData"  stripe></Table>
@@ -24,19 +37,19 @@
    <!-- 新建 -->
      <Modal
         v-model="openCreate"
-        title="新建参数"
+        title="新建社区优惠"
         ok-text="确定"
         cancel-text="取消"
         width="660"
         :styles="{top: '20px'}"
      >  
-      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="create"/>
+        <Create ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="create" />
+    
         <div slot="footer">
             <Button type="primary" @click="onSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
         </div>
     </Modal>
-
     <!-- 编辑 -->
     <Modal
         v-model="openEdit"
@@ -46,7 +59,7 @@
         width="660"
         :styles="{top: '20px'}"
      >
-        <new-form ref="fromFieldNewPage" v-if="openEdit" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="edit"/>
+       
         <div slot="footer">
             <Button type="primary" @click="editSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>
@@ -64,27 +77,27 @@
 
 <script>
 
-import newForm from './form';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
+import Create from './create.vue';
+import CreateSale from './createSale.vue';
 
 
 export default {
-        head () {
-            return {
-                title: "参数配置-氪空间后台管理系统"
-            }
-        },
         name: 'Meeting',
         components:{
-            newForm,
             SectionTitle,
-            Message
+            Message,
+            CreateSale,
+            Create
         },
         data () {
             return {
+                communityList:[],
+                cmtId:'',
+                openSale:false,
                 editData:{},
                 parameterData:{},
                 openCreate:false,
@@ -97,6 +110,7 @@ export default {
                     page:1,
                     pageSize:15
                 },
+                saleForm:{},
                 openMessage:false,
                 warn:'',
                 MessageType:'',
@@ -105,74 +119,90 @@ export default {
                 dataItem:[],
                 columns: [
                     {
-                        title: '名称',
-                        key: 'paramName',
+                        title: '社区名称',
+                        key: 'cmtName',
                         align:'center'
                     },
                     {
-                        title: '编码',
-                        key: 'paramCode',
+                        title: '优惠类型',
+                        key: 'name',
                         align:'center'
                     },
                     {
-                        title: '值',
-                        key: 'paramVal',
+                        title: '优惠描述',
+                        key: 'descName',
                         align:'center',
                     },
                     {
-                        title: '描述',
-                        key: 'paramDesc',
+                        title: '有效期开始日期',
+                        key: 'validStart',
                         align:'center',
-                    },
-                    {
-                        title: '是否启用',
-                        key: 'enableFlag',
-                        align:'center',
-                        width:100,
-                        render(h, obj){
-                            if(obj.row.enableFlag){
-                                return h('span', { 
-                                           style: {
-                                                color:'#666666'
-                                            }       
-                                        }, '启用'); 
-                            }else{
-                                return h('span', { 
-                                            style: {
-                                                color:'#F5A623'
-                                            }       
-                                        }, '不启用');
-                            }
-
-                           
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validStart))
                         }
                     },
                     {
-                        title: '操作',
-                        key: 'operation',
+                        title: '有效期结束日期',
+                        key: 'validEnd',
                         align:'center',
-                        width:110,
-                        render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showEdit(params.row)
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validEnd))
+                        }
+                    },
+                    {
+                        title: '创建日期',
+                        key: 'ctime',
+                        align:'center',
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
+                        }
+                    },
+                      {
+                        title: '创建人',
+                        key: 'username',
+                        align:'center',
+                    },
+                     {
+                        title: '状态',
+                        key: 'validEnd',
+                        align:'center',
+                         render: (h, params) => {
+                            let today = new Date().getTime();
+                            let result;
+                            let style;
+                            result = today > (params && params.row.validEnd) ?'失效':'有效'; 
+                            if(result ==='失效'){
+                                style = 'color: red'
+                            }
+                            return h('span',{style:style},result)
+                        }
+                    }
+                    // {
+                    //     title: '操作',
+                    //     key: 'operation',
+                    //     align:'center',
+                    //     width:110,
+                    //     render:(h,params)=>{
+                    //        return h('div', [
+                    //             h('Button', {
+                    //                 props: {
+                    //                     type: 'text',
+                    //                     size: 'small'
+                    //                 },
+                    //                 style: {
+                    //                     color:'#2b85e4'
+                    //                 },
+                    //                 on: {
+                    //                     click: () => {
+                    //                         this.showEdit(params.row)
                                                 
-                                        }
-                                    }
-                                }, '编辑')
-                            ]);  
+                    //                     }
+                    //                 }
+                    //             }, '编辑')
+                    //         ]);  
                     
-                    }
-                    }
+                    // }
+                    // }
                 ]
                 
             }
@@ -186,10 +216,27 @@ export default {
         },
         created(){
              this.getTableData(this.params);
+             this.getList()
         },
         methods:{
+            getList(){
+                this.$http.get('join-bill-community','').then((response)=>{    
+                    let list = response.data.items;
+                    list.map((item)=>{
+                        let obj = item;
+                        obj.label = item.name;
+                        obj.value = item.id+'';
+                        return obj;
+                    });
+                    this.communityList = list;
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
+            },
             getTableData(params){
-                this.$http.get('getParamList', params).then((res)=>{
+                this.$http.get('get-sale-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
@@ -292,6 +339,12 @@ export default {
             onChangeOpen(){
                 console.log('changeOpen')
             },
+            changeContent(value){
+                this.params.cmtId = value;
+                this.params.page = 1;
+                this.page = 1;
+                this.getTableData(this.params);
+            },
             changePage(page){
                 this.params.page=page;
                 this.page=page;
@@ -307,7 +360,7 @@ export default {
                 if(data){
                     this.parameterData = data;
                 }
-            }
+            },
 
 
         }

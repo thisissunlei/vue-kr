@@ -130,11 +130,7 @@ export default {
         props:{
             mask:String
         },
-        head () {
-            return {
-                title: "回款管理"
-            }
-        },
+        
         data () {
             return {
                 form:'form',
@@ -309,7 +305,7 @@ export default {
                 this.ifInvoice=!this.ifInvoice
             },
             onRefund(){
-                window.open('./payment/refund','_blank');
+                window.open('/bill/payment/refund','_blank');
             },
             showSearch (params) {
                 utils.clearForm(this.searchData);

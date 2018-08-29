@@ -52,10 +52,16 @@
                 <LabelText :inline="inline" label="优惠折扣：" v-if="formItem.discount">
                     {{formItem.discount}}折
                 </LabelText>
+                <LabelText :inline="inline" label="折扣添加人：" v-if="discountAdder">
+                    {{discountAdder}}
+                </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
                 <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table>
                 <LabelText :inline="inline" label="免租开始日：" v-if="formItem.freeStartDate" >
                     {{formItem.freeStartDate |dateFormat('YYYY-MM-dd')}}
+                </LabelText>
+                <LabelText :inline="inline" label="免租添加人：" v-if="rentFreeAdder">
+                    {{rentFreeAdder}}
                 </LabelText>
                 <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px" :data="formItem.serviceDetailsList"></Table>
                 <LabelText :inline="inline" label="付款周期：">
@@ -159,6 +165,8 @@ export default {
 	},
 	data(){
 		return {
+            // discountAdder:'',
+            // rentFreeAdder:'',
             openService:false,
             inline:false,
             formItem:this.data,
@@ -413,7 +421,26 @@ export default {
 
 		}
 	},
-	
+	computed:{
+        discountAdder:{
+            get(){
+                let discount=this.data.tacticsVOs&&this.data.tacticsVOs.find(e=>e.tacticsType==1)
+               if (discount) {
+                   return discount.addUserName
+               }
+               return ''
+            }
+        },
+        rentFreeAdder:{
+            get(){
+                let rentFree=this.data.tacticsVOs&&this.data.tacticsVOs.find(e=>e.tacticsType==3)
+               if (rentFree) {
+                   return rentFree.addUserName
+               }
+               return ''
+            }
+        }
+    },
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
 		GLOBALHEADERSET('订单合同')
@@ -421,6 +448,7 @@ export default {
 
 	methods:{
 		editCard(value){
+            console.log('editCards，换租查看 新工位信息编辑')
 			this.$emit("editCards", value); 
 		},
 		submit(){

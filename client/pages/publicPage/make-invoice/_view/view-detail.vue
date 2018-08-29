@@ -161,7 +161,7 @@
 export default {
     head() {
         return {
-            title:'发票详情'
+            title:'发票详情-氪空间后台管理系统'
         }
     },
     props:{

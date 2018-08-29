@@ -49,6 +49,11 @@ import DailyTable from './dailyTable';
             Discount,
             GanttChart,
             DailyTable
+        },  
+        head () {
+            return {
+                title: "每日库存查询-氪空间后台管理系统"
+            }
         },
         data () {
             return {  

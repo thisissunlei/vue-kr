@@ -58,6 +58,11 @@ export default {
        Message,
        SlotHead,
        Buttons
+    },  
+    head () {
+        return {
+            title: "社区招商情况-氪空间后台管理系统"
+        }
     },
     data() {
         return{
@@ -83,8 +88,7 @@ export default {
                 {
                     title: '商品类型',
                     key: 'type',
-                    align:'center',
-                    width:80,
+                    align:'center'
                 },
                 {
                     title: '工位数量',
@@ -181,7 +185,6 @@ export default {
                     title: '销售员',
                     key: 'orderList',
                     className:'current-range',
-                    width:100,
                     align:'center',
                     render(h,obj){
                         return publicFn.mergeCell(h,obj.row.orderList,'sellerName')

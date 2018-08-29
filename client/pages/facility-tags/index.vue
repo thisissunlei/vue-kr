@@ -203,6 +203,11 @@ import Buttons from '~/components/Buttons';
 
 export default {
         name: 'receive',
+        head () {
+            return {
+                title: "服务及设施配置-氪空间后台管理系统"
+            }
+        },
         components:{
             SectionTitle,
             SearchCompany,

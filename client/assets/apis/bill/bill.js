@@ -225,7 +225,6 @@ export default  {
       method: 'get'
     },
 
-  // todo: test改成api
     // 同步数据--预收数据
     'get-advanced-collection-list': {
       url: '/api/sync/listKdPaymentSummaryByPage',

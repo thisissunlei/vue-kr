@@ -36,7 +36,7 @@
         },
          head() {
             return {
-                title: '开票系统'
+                title: '增票资质-氪空间后台管理系统'
             }
         },
         data () {

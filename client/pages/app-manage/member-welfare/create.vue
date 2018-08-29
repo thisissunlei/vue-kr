@@ -255,6 +255,12 @@ export default {
      DetailStyle,
      IconTip
   },
+
+    head() {
+        return {
+            title: '新建福利-氪空间后台管理系统'
+        }
+    },
   data(){
       return{
           formItem:{

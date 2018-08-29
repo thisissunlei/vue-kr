@@ -82,7 +82,7 @@ export default  {
     },
     //账单中心--账单id与类型
     'get-orderId-type':{
-      url: '/api/krspace-op-web/operation/order-seat/getOrderIdAndType',
+      url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
       method: 'get'
     },
     //账单中心--收入类型

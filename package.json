@@ -20,6 +20,8 @@
     "build:test02": "cross-env NODE_ENV=test02  nuxt build",
     "build:test03": "cross-env NODE_ENV=test03  nuxt build",
     "build:test04": "cross-env NODE_ENV=test04  nuxt build",
+    "build:test05": "cross-env NODE_ENV=test05  nuxt build",
+    "build:test06": "cross-env NODE_ENV=test06  nuxt build",
     "build:dev01": "cross-env NODE_ENV=dev01  nuxt build",
     "build:dev02": "cross-env NODE_ENV=dev01  nuxt build"
   },

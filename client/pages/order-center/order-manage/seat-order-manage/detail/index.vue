@@ -12,7 +12,7 @@
                         <dt>订单状态：</dt><dd>{{info.orderShowStatusName || '-'}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单金额：￥</dt><dd>{{info.realCost || '-'}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{info.realCost}}</dd>
                     </dl>
                     <dl class="seat-order-wech">
                         <dt>订单生成时间：</dt><dd>{{this.returnCtime(info.ctime)}}</dd>
@@ -69,10 +69,10 @@
                         <!--<li>{{totalPrice}}</li>-->
                         <li>{{info.orderPromotionTotalDecimal || '-'}}</li>
                     </ul>
-                    <!--<ul>-->
-                        <!--<li>使用的优惠策略：</li>-->
-                        <!--<li>300</li>-->
-                    <!--</ul>-->
+                    <ul v-if="info.couponDesc">
+                        <li>使用的优惠策略：</li>
+                        <li>{{info.couponDesc}}</li>
+                    </ul>
                     <ul>
                         <li>订单金额：</li>
                         <!--<li>{{totalAmountDecimal}}</li>-->

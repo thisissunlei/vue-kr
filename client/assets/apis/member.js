@@ -171,7 +171,7 @@ export default {
     },
     //消费明细
     'account-cost-detail': {
-        url: '/song//account/cost',
+        url: '/song/account/cost',
         method: 'get'
     },
     //余额明细

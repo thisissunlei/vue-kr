@@ -198,7 +198,8 @@
                         key: 'rentAmount',
                         align:'center',
                         minWidth:100,
-                        render(h,params){ 
+                        render(h,params){
+                        if(!params.row.hideBtn){ 
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;
                           return h('div', [
                                 h('span', {
@@ -207,13 +208,17 @@
                                     },
                                 }, money),
                             ]);                  
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                     }
                     },
                     {
                         title: '服务保证金',
                         key: 'depositAmount',
                         align:'center',
-                        render(h,params){ 
+                        render(h,params){
+                         if(!params.row.hideBtn){  
                           var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;
                           return h('div', [
                                 h('span', {
@@ -222,6 +227,10 @@
                                     },
                                 }, money),
                             ]);                 
+                        
+                            }else{
+                                return <span class="u-txt">*****</span>;
+                            }
                         }
                     },
                     {
@@ -243,7 +252,8 @@
                         key: 'refundRentAmount',
                         minWidth:120,
                         align:'center',
-                        render(h,params){ 
+                        render(h,params){
+                        if(!params.row.hideBtn){ 
                           var money=params.row.refundRentAmount?utils.thousand(params.row.refundRentAmount):params.row.refundRentAmount;
                           return h('div', [
                                 h('span', {
@@ -252,7 +262,10 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                             return <span class="u-txt">*****</span>;
                         }
+                      }
                     },
                     {
                         title: '保证金旧转新',
@@ -260,6 +273,7 @@
                         minWidth:120,
                         align:'center',
                         render(h,params){ 
+                          if(!params.row.hideBtn){ 
                           var money=params.row.transferDepositAmount?utils.thousand(params.row.transferDepositAmount):params.row.transferDepositAmount;
                           return h('div', [
                                 h('span', {
@@ -268,7 +282,10 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                      }
                     },
                      {
                         title: '扣除保证金',
@@ -276,6 +293,7 @@
                         minWidth:120,
                         align:'center',
                         render(h,params){ 
+                          if(!params.row.hideBtn){ 
                           var money=params.row.deductRentAmount?utils.thousand(params.row.deductRentAmount):params.row.deductRentAmount;
                           return h('div', [
                                 h('span', {
@@ -284,7 +302,10 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                             return <span class="u-txt">*****</span>;
                         }
+                       }
                     },
                     {
                         title: '订单状态',
@@ -316,6 +337,7 @@
                         width:76,
                         className:'col-operate',
                         render:(tag,params)=>{
+                          if(!params.row.hideBtn){ 
                            var btnRender=[
                                tag(Buttons, {
                                    props: {
@@ -376,6 +398,7 @@
                                 }
                            }
                            return tag('div',btnRender);  
+                        }
                         }
                     }
                 ]

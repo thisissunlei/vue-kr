@@ -74,7 +74,7 @@
 				{{basicInfo.bizType}}
 			</LabelText>
 			<LabelText label="客户名称：">
-				<a href="">
+				<a :href='"/bill/customerAssets/" + basicInfo.customerId+ "/view#basic"'>
 					{{basicInfo.customerName}}
 				</a>
 			</LabelText>
@@ -160,7 +160,36 @@ export default {
 				 title: '订单编号',
                  key: 'orderNo',
 				 align:'center',
-				 width:200
+				 width:200,
+				 render:(h,params)=>{
+					 if(params.row.bizType === 'CONTRACT'){
+						   return h('div', [
+                                    h('a',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                        on: {
+                                                click: () => {
+												this.jumpOrderList(params.row)
+                                                }
+                                            },
+                                    },params.row.orderNo),
+                                  ]) 
+					 }else{
+						return h('div', [
+                                    h('span',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                       
+                                    },params.row.orderNo),
+                                  ])  
+					 }     
+                  }
 				},
 				{
 				 title: '备注',
@@ -237,7 +266,21 @@ export default {
 						title:err.message
 					});
                 })
-        },
+		},
+		
+		jumpOrderList(obj){
+			 this.$http.get('get-orderId-type', {orderNo:obj.orderNo}).then((res)=>{
+				  let type = {IN:'joinView',INCREASE:'joinView',CONTINUE:'joinView',REDUCE:'reduceView',REPLACE:'replaceView'};
+					  let junpUrl = type[res.data.orderType];
+					  let junpId = res.data.orderId;
+			      window.open(`/order-center/order-manage/station-order-manage/${junpId}/${junpUrl}`,'_blank')  
+
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+		},
 		getInfo(){
 			this.getBillType();
 			var _this=this;

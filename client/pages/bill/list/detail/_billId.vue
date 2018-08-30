@@ -162,7 +162,8 @@ export default {
 				 align:'center',
 				 width:200,
 				 render:(h,params)=>{
-                              return h('div', [
+					 if(params.row.bizType === 'CONTRACT'){
+						   return h('div', [
                                     h('a',{
                                         style:{
                                             textOverflow:'ellipsis',
@@ -172,12 +173,23 @@ export default {
                                         on: {
                                                 click: () => {
 												this.jumpOrderList(params.row)
-                                               // window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/joinView`,'_blank')  
                                                 }
                                             },
                                     },params.row.orderNo),
-                                  ])
-                        }
+                                  ]) 
+					 }else{
+						return h('div', [
+                                    h('span',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                       
+                                    },params.row.orderNo),
+                                  ])  
+					 }     
+                  }
 				},
 				{
 				 title: '备注',

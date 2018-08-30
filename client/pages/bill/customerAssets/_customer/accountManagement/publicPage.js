@@ -81,7 +81,21 @@ function initListData(type){
             title: type=='balanceDetail'?'单据编号':'相关凭证',
             key: 'recordNo',
             align:'center',
-            type:'depositDetail,consumptionDetail,balanceDetail'
+            type:'depositDetail,consumptionDetail,balanceDetail',
+            render:(h,params)=>{
+                let colData = params.row;
+                return h('div',{
+                    style: {
+                        color:'#2b85e4',
+                        cursor:'pointer'
+                    },
+                    on:{
+                        click:()=>{
+                            this.goRecord(params.row,type);
+                        }
+                    }
+                }, params.row.recordNo)
+            }
         },
         {
             title: type=='balanceDetail'?'操作':'相关操作',

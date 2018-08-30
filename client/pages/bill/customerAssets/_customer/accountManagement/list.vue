@@ -93,6 +93,14 @@ export default {
                window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
            }
        },
+       goRecord(params,type){
+           let name=params.operateTypeName;
+           if(name=='PAY_BILL'){
+               window.open('/bill/list/detail/'+params.recordId,'_blank');
+           }else if(name=='INCOME'||name=='BACK'||name=='TRANSFER'||name=='LOCK_DESPOINT_FREE'||name=='DEPOSIT_TRANSFER_RENT'){
+               window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
+           }
+       },
        getCommunityData(params){
             this.$http.get('join-bill-community','').then((response)=>{    
                 this.communityList=response.data.items 

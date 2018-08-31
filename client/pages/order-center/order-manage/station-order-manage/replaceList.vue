@@ -141,7 +141,18 @@
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        minWidth:100
+                        minWidth:100,
+                         render(h,params){ 
+                          var hideBtn = params.row.hideBtn;
+                              if (hideBtn) {
+                                 return h('div', [
+                                h('div', {
+                                },'*****'),
+                                h('div',{}, `销售员：${params.row.salerName}`)  
+                            ]);
+                       }           
+                          return <span class="u-txt">{params.row.customerName}</span>;
+                        }
                     },
                     {
                         title: '社区名称',

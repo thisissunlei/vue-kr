@@ -146,13 +146,13 @@
                         key: 'customerName',
                         align:'center',
                         minWidth:100,
-                         render(h,params){ 
+                        render(h,params){ 
                           var hideBtn = params.row.hideBtn;
                               if (hideBtn) {
                                  return h('div', [
                                 h('div', {
                                 },'*****'),
-                                h('div',{}, `销售员：${params.row.customerName}`)  // todo 
+                                h('div',{}, `销售员：${params.row.salerName}`)  
                             ]);
                        }           
                           return <span class="u-txt">{params.row.customerName}</span>;
@@ -426,7 +426,7 @@
                                 }
                            }
                            return tag('div',btnRender);  
-                            }
+                         }
                           
                         }
                     }

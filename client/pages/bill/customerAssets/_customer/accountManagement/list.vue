@@ -99,6 +99,28 @@ export default {
                window.open('/bill/list/detail/'+params.recordId,'_blank');
            }else if(name=='INCOME'||name=='BACK'||name=='TRANSFER'||name=='LOCK_DESPOINT_FREE'||name=='DEPOSIT_TRANSFER_RENT'){
                window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
+           }else if(name=='REFUND_RENT'){
+               this.getTypeDetail(params);
+           }
+       },
+       getTypeDetail(params){
+           this.$http.get('account-order-type',{orderNo:params.recordNo}).then((response)=>{    
+                this.goTypeDetail(response.data);
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+       },
+       goTypeDetail(params){
+           if(params.orderType=='IN'||params.orderType=='INCREASE'){
+               window.open('/order-center/order-manage/station-order-manage/'+params.orderId+'/joinView','_blank');
+           }else if(params.orderType=='CONTINUE'){
+               window.open('/order-center/order-manage/station-order-manage/'+params.orderId+'/renewView','_blank');
+           }else if(params.orderType=='REDUCE'){
+               window.open('/order-center/order-manage/station-order-manage/'+params.orderId+'/reduceView','_blank');
+           }else if(params.orderType=='REPLACE'){
+               window.open('/order-center/order-manage/station-order-manage/'+params.orderId+'/replaceView?edit=false','_blank');
            }
        },
        getCommunityData(params){

@@ -183,6 +183,10 @@ export default {
     'account-deposit-detail': {
         url: '/song/account/deposit',
         method: 'get'
+    },
+    'account-order-type': {
+        url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
+        method: 'get'
     }
     //苏岭结束
 } 

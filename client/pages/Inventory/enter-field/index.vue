@@ -194,19 +194,6 @@ var layoutScrollHeight=0;
                         width:90,
                         key: 'ifNewCustomer',
                     },
-                     {
-                        title: '销售员',
-                        width:90,
-                        key: 'salerName',
-                        align:'center',
-                        render(h,params){
-                            if(params.row.salerName){
-                                return h('span',{},params.row.salerName)
-                            }else{
-                                return h('span',{},'-') 
-                            }
-                        }
-                    },
                     {
                         title: '离场日',
                         align:'center',
@@ -220,6 +207,19 @@ var layoutScrollHeight=0;
                         key: 'rentDays',
                         render(h,params){
                             return h('span',{},params.row.rentDays+'天' ) 
+                        }
+                    },
+                     {
+                        title: '销售员',
+                        width:90,
+                        key: 'salerName',
+                        align:'center',
+                        render(h,params){
+                            if(params.row.salerName){
+                                return h('span',{},params.row.salerName)
+                            }else{
+                                return h('span',{},'-') 
+                            }
                         }
                     },
                 ],

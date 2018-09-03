@@ -234,7 +234,7 @@ export default  {
         method: 'post'
     },
     //优惠券--生成优惠券
-   'create-coupon': {
+   'create-coupon-kmcoupon': {
         url: '/api/op/kmcoupon/create-coupon',
         method: 'post'
     },

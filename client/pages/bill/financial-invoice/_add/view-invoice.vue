@@ -331,18 +331,6 @@ import utils from '~/plugins/utils';
                     taxpayerNumber: [
                         {trigger: 'change' ,validator: validateMust},
                     ],
-                    registerAddress:[
-                        {trigger: 'change' ,validator: validateMust},
-                    ],
-                    registerPhone:[
-                        {trigger: 'change' ,validator: validatephone},
-                    ],
-                    bank:[
-                       {trigger: 'change' ,validator: validateMust},
-                    ],
-                    bankAccount:[
-                       {trigger: 'change' ,validator: validateMust},
-                    ]
                 },
                 salerName:'请选择',
                 businessUrlName:[],

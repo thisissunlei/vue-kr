@@ -161,27 +161,27 @@ export default {
     //苏岭开始
     //退款明细
     'account-refund-detail': {
-        url: '/song/account/refund',
+        url: '/api/krspace-pay/account/refund',
         method: 'get'
     },
     //到款明细
     'account-payment-detail': {
-        url: '/song/account/payment',
+        url: '/api/krspace-pay/account/payment',
         method: 'get'
     },
     //消费明细
     'account-cost-detail': {
-        url: '/song/account/cost',
+        url: '/api/krspace-pay/account/cost',
         method: 'get'
     },
     //余额明细
     'account-balance-detail': {
-        url: '/song/account/balance',
+        url: '/api/krspace-pay/account/balance',
         method: 'get'
     },
     //押金明细
     'account-deposit-detail': {
-        url: '/song/account/deposit',
+        url: '/api/krspace-pay/account/deposit',
         method: 'get'
     },
     'account-order-type': {

@@ -204,8 +204,12 @@
                         align:'center',
                         minWidth:100,
                         render(tag,params){ 
+                         if(!params.row.hideBtn){
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
                           return <span class="u-txt">{money}</span>;
+                          }else{
+                              return <span class="u-txt">*****</span>;
+                          }
                         }
                     },
                     {
@@ -214,9 +218,13 @@
                         align:'center',
                         minWidth:100,
                         render(tag,params){ 
+                        if(!params.row.hideBtn){
                           var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
                           return <span class="u-txt">{money}</span>;
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                     }
                     },
                     {
                         title: '订单类型',
@@ -346,7 +354,8 @@
                         // fixed:'right',
                         className:'col-operate',
                         render:(tag,params)=>{
-                           var btnRender=[
+                            if(!params.row.hideBtn){
+                                 var btnRender=[
                                tag(Buttons, {
                                    props: {
                                         type: 'text',
@@ -406,6 +415,8 @@
                                 }
                            }
                            return tag('div',btnRender);  
+                            }
+                          
                         }
                     }
                 

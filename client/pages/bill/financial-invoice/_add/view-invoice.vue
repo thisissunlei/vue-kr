@@ -219,9 +219,6 @@ import utils from '~/plugins/utils';
             const validateMust = (rule, value, callback) => {
                 if(this.formItem.titleType=='PERSON'){
                     callback();
-                }
-                if(this.formItem.titleType!='PERSON' && value === ''){
-                    callback(new Error('此项为必填项。'));
                 }else{
                      callback();
                 }
@@ -231,7 +228,7 @@ import utils from '~/plugins/utils';
                     callback();
                 }
                 let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                if (this.formItem.titleType!='PERSON' && !phone.test(value)) {
+                if (this.formItem.titleType!='PERSON' && !phone.test(value) && value !== '') {
                     callback(new Error('请填写正确的联系方式'));
                 }else{
                     callback()

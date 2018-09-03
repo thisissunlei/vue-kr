@@ -145,14 +145,14 @@
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        minWidth:100,
+                        minWidth:150,
                         render(h,params){ 
                           var hideBtn = params.row.hideBtn;
                               if (hideBtn) {
                                  return h('div', [
                                 h('div', {
                                 },'*****'),
-                                h('div',{}, `销售员：${params.row.salerName}`)  
+                                h('div',{}, `销售员:${params.row.salerName}`)  
                             ]);
                        }           
                           return <span class="u-txt">{params.row.customerName}</span>;
@@ -337,24 +337,6 @@
                                 return tag('div',lines);  
                             }
                             return time;
-                        }
-                    },
-                    {
-                        title: '生效时间',
-                        key: 'effectDate',
-                        align:'center',
-                        minWidth:100,
-                        render(tag, params){
-                            let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
-                            if (time.split('  ').length==2) {
-                                let t1=time.split('  ')[0]
-                                let t2=time.split('  ')[1]
-                                let lines=[];
-                                lines.push(tag('p',t1))
-                                lines.push(tag('p',t2))
-                                return tag('div',lines);  
-                            }                           
-                           return time;
                         }
                     },
                     {

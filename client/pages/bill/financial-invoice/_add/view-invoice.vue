@@ -220,18 +220,15 @@ import utils from '~/plugins/utils';
             const validateMust = (rule, value, callback) => {
                 if(this.formItem.titleType=='PERSON'){
                     callback();
-                }
-                if(this.formItem.titleType!='PERSON' && value === ''){
-                    callback(new Error('此项为必填项。'));
                 }else{
                      callback();
                 }
             };
             const validateAddress = (rule, value, callback) => {
-                if(this.formItem.taxpayerType === 'SMALL'){
-                     callback();
+                if(this.formItem.taxpayerType !== 'SMALL' && value === ''){
+                    callback(new Error('此项为必填项。'))
                 }else{
-                    callback(new Error('此项为必填项。'));
+                     callback();
                 }
             }
             const validatephone = (rule, value, callback) => {
@@ -387,7 +384,7 @@ import utils from '~/plugins/utils';
         methods: {
             taxpayerTypeChange(){
                 this.$refs['formItem'].validate((valid) => {
-
+                   
                 })
                
             },
@@ -500,7 +497,8 @@ import utils from '~/plugins/utils';
             back(){
                 window.history.go(-1);
             },
-            handleSubmit:function(name) {
+            handleSubmit(name) {
+                 console.log("----")
                 let editData=Object.assign({},this.formItem);   
                 delete editData.ctime;  
                 delete editData.rejectTime;
@@ -511,12 +509,13 @@ import utils from '~/plugins/utils';
                     item.qualificationId = this.formItem.id;
                     return item;
                 })
+                 console.log("----1")
                 this.taxUrlName = this.taxUrlName.map(item=>{
                     item.sourceType = 'TAX_CERTIFICATE';
                     item.qualificationId = this.formItem.id;
                     return item;
                 })
-               
+               console.log("----2")
                 editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
                 editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
                 delete editData.taxCertificate;
@@ -524,11 +523,13 @@ import utils from '~/plugins/utils';
 
 
                
-                
+                console.log("----3",name, this.$refs[name].validate)
                 this.$refs[name].validate((valid) => {
+                    console.log("-----4",valid)
                     if (valid) {
+
                         this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
-                            console.log('editok',res);
+                            
                             window.close();
                             if( window.opener){
                                  window.opener.location.reload();

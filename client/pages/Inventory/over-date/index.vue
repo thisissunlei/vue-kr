@@ -211,12 +211,18 @@ var layoutScrollHeight=0;
                                             }
                                         }, [
                                         h('div', [
-                                            h('div',{
+                                            h('a',{
                                                 style:{
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden'
-                                                }
+                                                },
+                                                 on: {
+                                                        click: () => {
+                                                           window.open(`/bill/customerAssets/${params.row.customerId}/view#basic`,'_blank')  
+                                                        }
+                                                     },
+                                               // props:{href:`/bill/customerAssets/${params.customerId}/view#basic`},
                                             },params.row.customerName),
                                         ])
                                     ])

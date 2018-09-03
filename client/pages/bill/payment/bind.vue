@@ -305,7 +305,7 @@ export default {
                 this.ifInvoice=!this.ifInvoice
             },
             onRefund(){
-                window.open('./payment/refund','_blank');
+                window.open('/bill/payment/refund','_blank');
             },
             showSearch (params) {
                 utils.clearForm(this.searchData);

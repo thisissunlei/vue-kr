@@ -223,5 +223,26 @@ export default  {
         url: '/api/krspace-op-web/app/operation/community/use-rate',
         method: 'get'
     },
+    //优惠券--优惠券列表
+    'get-coupon-base-by-page': {
+        url: '/api/op/kmcoupon/coupon-base-by-page',
+        method: 'get'
+    },
+     //优惠券--新增或修改
+     'save-or-edit': {
+        url: '/api/op/kmcoupon/save-or-edit',
+        method: 'post'
+    },
+    //优惠券--生成优惠券
+   'create-coupon-kmcoupon': {
+        url: '/api/op/kmcoupon/create-coupon',
+        method: 'post'
+    },
+     //优惠券--获取优惠券详情
+    'get-kmcoupon-detail': {
+        url: '/api/op/kmcoupon/detail',
+        method: 'get'
+    },
+   
 }
   

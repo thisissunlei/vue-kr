@@ -201,9 +201,9 @@ var layoutScrollHeight=0;
                         align:'center',
                         render(h,params){
                             if(params.row.salerName){
-                                return params.row.salerName
+                                return h('span',{},params.row.salerName)
                             }else{
-                                return '-'
+                                return h('span',{},'-') 
                             }
                         }
                     },
@@ -219,7 +219,7 @@ var layoutScrollHeight=0;
                         width:80,
                         key: 'rentDays',
                         render(h,params){
-                            return params.row.rentDays+'天'
+                            return h('span',{},params.row.rentDays+'天' ) 
                         }
                     },
                 ],

@@ -194,20 +194,14 @@ var layoutScrollHeight=0;
                         width:90,
                         key: 'ifNewCustomer',
                     },
-                    {
-                        title: '联系人',
+                     {
+                        title: '销售员',
+                        width:90,
+                        key: 'salerName',
                         align:'center',
-                        width:100,
-                        key: 'contactName',
-                    },
-                    {
-                        title: '联系方式',
-                        align:'center',
-                        width:130,
-                        key: 'contactTel',
                         render(h,params){
-                            if(params.row.contactTel){
-                                return params.row.contactTel
+                            if(params.row.salerName){
+                                return params.row.salerName
                             }else{
                                 return '-'
                             }

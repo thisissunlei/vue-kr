@@ -668,7 +668,7 @@
         .table-container{           
             overflow: auto;
             .list-table-join{
-                 min-width:1130px ;
+                // min-width:1130px ;
                  overflow: auto;
                  width: 100%;
                  margin:0;

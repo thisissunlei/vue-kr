@@ -35,6 +35,7 @@
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerType" 
                                 placeholder="请输入纳税类型" 
+                                @on-change="taxpayerTypeChange"
                                 clearable
                             >
                                 <Option v-for="item in taxTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -46,7 +47,7 @@
                         <FormItem label="纳税人识别码" style="width:252px" prop="taxpayerNumber" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.taxpayerNumber" 
+                                v-model="formItem.taxpayerNumber"
                                 placeholder="请输入纳税人识别码" 
                             />
                         </FormItem>
@@ -219,19 +220,27 @@ import utils from '~/plugins/utils';
             const validateMust = (rule, value, callback) => {
                 if(this.formItem.titleType=='PERSON'){
                     callback();
-                }
-                if(this.formItem.titleType!='PERSON' && value === ''){
-                    callback(new Error('此项为必填项。'));
                 }else{
                      callback();
                 }
             };
+            const validateAddress = (rule, value, callback) => {
+                if(this.formItem.taxpayerType !== 'SMALL' && value === ''){
+                    callback(new Error('此项为必填项。'))
+                }else{
+                     callback();
+                }
+            }
             const validatephone = (rule, value, callback) => {
                 if(this.formItem.titleType=='PERSON'){
                     callback();
                 }
                 let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                if (this.formItem.titleType!='PERSON' && !phone.test(value)) {
+                if(this.formItem.taxpayerType !== 'SMALL' && value === ''){
+                    callback(new Error('此项为必填项。'));
+                }
+               
+                if (this.formItem.titleType!='PERSON' && !phone.test(value) && value!=='' ) {
                     callback(new Error('请填写正确的联系方式'));
                 }else{
                     callback()
@@ -332,16 +341,16 @@ import utils from '~/plugins/utils';
                         {trigger: 'change' ,validator: validateMust},
                     ],
                     registerAddress:[
-                        {trigger: 'change' ,validator: validateMust},
+                        {trigger: 'change' ,validator: validateAddress},
                     ],
                     registerPhone:[
                         {trigger: 'change' ,validator: validatephone},
                     ],
                     bank:[
-                       {trigger: 'change' ,validator: validateMust},
+                       {trigger: 'change' ,validator: validateAddress},
                     ],
                     bankAccount:[
-                       {trigger: 'change' ,validator: validateMust},
+                       {trigger: 'change' ,validator: validateAddress},
                     ]
                 },
                 salerName:'请选择',
@@ -373,6 +382,12 @@ import utils from '~/plugins/utils';
             this.getViewDetail();
         },
         methods: {
+            taxpayerTypeChange(){
+                this.$refs['formItem'].validate((valid) => {
+                   
+                })
+               
+            },
             changeType(value){
                 if(value){
                     this.formItem.titleType = value;
@@ -420,10 +435,10 @@ import utils from '~/plugins/utils';
             downImg(url,id){
                 utils.downImg(url);
             },
-          cancel(item){
-            this.editItem = item;
-            this.openReject = !this.openReject;
-          },
+            cancel(item){
+                this.editItem = item;
+                this.openReject = !this.openReject;
+            },
             rejectedSubmit(){
                 let param = Object.assign({},this.$route.query);
                 let params = {
@@ -482,37 +497,44 @@ import utils from '~/plugins/utils';
             back(){
                 window.history.go(-1);
             },
-            handleSubmit:function(name) {
-               let editData=Object.assign({},this.formItem);   
-               delete editData.ctime;  
-               delete editData.rejectTime;
-               delete editData.verifyTime ; 
-               delete editData.utime ;
-               this.businessUrlName = this.businessUrlName.map(item=>{
-                item.sourceType = 'BUSINESS_LICENSE';
-                item.qualificationId = this.formItem.id;
-                return item;
-               })
-               this.taxUrlName = this.taxUrlName.map(item=>{
-                item.sourceType = 'TAX_CERTIFICATE';
-                item.qualificationId = this.formItem.id;
-                return item;
-               })
-               
-               editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
-               editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
+            handleSubmit(name) {
+                 console.log("----")
+                let editData=Object.assign({},this.formItem);   
+                delete editData.ctime;  
+                delete editData.rejectTime;
+                delete editData.verifyTime ; 
+                delete editData.utime ;
+                this.businessUrlName = this.businessUrlName.map(item=>{
+                    item.sourceType = 'BUSINESS_LICENSE';
+                    item.qualificationId = this.formItem.id;
+                    return item;
+                })
+                 console.log("----1")
+                this.taxUrlName = this.taxUrlName.map(item=>{
+                    item.sourceType = 'TAX_CERTIFICATE';
+                    item.qualificationId = this.formItem.id;
+                    return item;
+                })
+               console.log("----2")
+                editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
+                editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
                 delete editData.taxCertificate;
-               delete editData.businessLicense;
+                delete editData.businessLicense;
 
 
-               console.log('=====>',editData,this.businessUrlName)
-               // return;
-               this.$refs[name].validate((valid) => {
+               
+                console.log("----3",name, this.$refs[name].validate)
+                this.$refs[name].validate((valid) => {
+                    console.log("-----4",valid)
                     if (valid) {
+
                         this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
-                            console.log('editok',res);
+                            
                             window.close();
-                        window.opener.location.reload();
+                            if( window.opener){
+                                 window.opener.location.reload();
+                            }   
+                       
                         }).catch((err)=>{
                             this.$Notice.error({
                                 title:err.message

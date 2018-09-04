@@ -139,13 +139,13 @@
                         title: '订单编号',
                         key: 'orderNum',
                         align:'center',
-                        minWidth:116
+                        width:100
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        minWidth:150,
+                        width:100,
                         render(h,params){ 
                           var hideBtn = params.row.hideBtn;
                               if (hideBtn) {
@@ -162,7 +162,7 @@
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',           
-                        minWidth:100,           
+                        width:100,           
                         render(tag,params){ 
                           var communityName=params.row.communityName;
                               if (communityName.lastIndexOf('社区')==communityName.length-2) {
@@ -213,7 +213,7 @@
                         title: '服务费总额',
                         key: 'rentAmount',
                         align:'center',
-                        minWidth:100,
+                        width:100,
                         render(tag,params){ 
                          if(!params.row.hideBtn){
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
@@ -227,7 +227,7 @@
                         title: '履约保证金',
                         key: 'depositAmount',
                         align:'center',
-                        minWidth:100,
+                        width:100,
                         render(tag,params){ 
                         if(!params.row.hideBtn){
                           var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
@@ -241,7 +241,7 @@
                         title: '订单类型',
                         key: 'orderType',
                         align:'center',
-                        minWidth:86,
+                        width:100,
                         render(tag,params){
                             let lines=[];
                             var orderType={
@@ -286,7 +286,7 @@
                         title: '租赁期限',
                         key: 'ctime',
                         align:'center',
-                        width:120,
+                        minWidth:100,
                         render(tag, params){
                             // let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'至'+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
                             // return tag('span',time)    
@@ -343,7 +343,7 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
-                        width:76,
+                        minWidth:76,
                         // fixed:'right',
                         className:'col-operate',
                         render:(tag,params)=>{

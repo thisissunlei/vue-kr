@@ -118,9 +118,9 @@ export default {
     data() {
             //租期天数
             const validateTime = (rule, value, callback) => {
-                var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                var reg = /^[-]?(([1-9][0-9]*)|[0]|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
                 if(value&&!reg.test(value)){
-                    callback('最多两位小数的不为负的数字');
+                    callback('最多两位小数的数字');
                 }else if (this.formItem.amountStart&&this.formItem.amountEnd&&Number(this.formItem.amountStart)>Number(this.formItem.amountEnd)) {
                     callback('后者需要大于前者');
                 }else{
@@ -194,7 +194,12 @@ export default {
             this.$http.get('get-enum-all-data', {
                 enmuKey: 'com.krspace.pay.api.enums.PayWay'
             }).then((r) => {
-                this.fileList = [].concat(r.data)
+                let list = [].concat(r.data);
+                list.map((item,index)=>{
+                    if(item.value=='ALIAPPPAY'||item.value=='BANKTRANSFER'||item.value=='FUNDS_TRANSFER'){
+                        this.fileList.push(item);
+                    }
+                })
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message

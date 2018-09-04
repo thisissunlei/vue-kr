@@ -195,25 +195,6 @@ var layoutScrollHeight=0;
                         key: 'ifNewCustomer',
                     },
                     {
-                        title: '联系人',
-                        align:'center',
-                        width:100,
-                        key: 'contactName',
-                    },
-                    {
-                        title: '联系方式',
-                        align:'center',
-                        width:130,
-                        key: 'contactTel',
-                        render(h,params){
-                            if(params.row.contactTel){
-                                return params.row.contactTel
-                            }else{
-                                return '-'
-                            }
-                        }
-                    },
-                    {
                         title: '离场日',
                         align:'center',
                         width:110,
@@ -225,7 +206,20 @@ var layoutScrollHeight=0;
                         width:80,
                         key: 'rentDays',
                         render(h,params){
-                            return params.row.rentDays+'天'
+                            return h('span',{},params.row.rentDays+'天' ) 
+                        }
+                    },
+                     {
+                        title: '销售员',
+                        width:90,
+                        key: 'salerName',
+                        align:'center',
+                        render(h,params){
+                            if(params.row.salerName){
+                                return h('span',{},params.row.salerName)
+                            }else{
+                                return h('span',{},'-') 
+                            }
                         }
                     },
                 ],

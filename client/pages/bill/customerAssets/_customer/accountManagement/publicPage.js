@@ -43,7 +43,7 @@ function initListData(type){
             render:(tag, params)=>{
                 let newParam=params.row.amount;
                 var end='';      
-                if(newParam){
+                if(newParam||newParam==0){
                     end='¥'+utils.thousand(newParam);
                 }else{
                     end='-';
@@ -59,7 +59,7 @@ function initListData(type){
             type:'balanceDetail',
             render:(tag, params)=>{
                 var end='';      
-                if(params.row.remainAmount){
+                if(params.row.remainAmount||params.row.remainAmount==0){
                     end='¥'+utils.thousand(params.row.remainAmount);
                 }else{
                     end='-';
@@ -84,10 +84,12 @@ function initListData(type){
             type:'depositDetail,consumptionDetail,balanceDetail',
             render:(h,params)=>{
                 let colData = params.row;
+                let typeName=colData.operateTypeName;
+                let isColor=typeName=='打款'||typeName=='退款'||typeName=='冻结押金';
                 return h('div',{
                     style: {
-                        color:'#2b85e4',
-                        cursor:'pointer'
+                        color:isColor?'':'#2b85e4',
+                        cursor:isColor?'auto':'pointer'
                     },
                     on:{
                         click:()=>{
@@ -117,7 +119,7 @@ function initListData(type){
             type:'getDetail,refundDetail',
             render:(tag, params)=>{
                 var end='';      
-                if(params.row.amount){
+                if(params.row.amount||params.row.amount==0){
                     end='¥'+utils.thousand(params.row.amount);
                 }else{
                     end='-';

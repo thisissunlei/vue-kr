@@ -53,6 +53,8 @@
                       <div slot="content">
                           <div>当前出租率（在租/总数）</div>
                           <div style="font-weight:500;font-size:20px;">{{pageData.rentRate}}</div>
+                          <div>月累计出租率</div>
+                          <div style="font-weight:500;font-size:20px;">{{pageData.accRentRatio}}</div>
                       </div>
                   </Tooltip>   
                 </div>
@@ -69,8 +71,20 @@
                 <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectMoveStationsNum}}</span>
               </span>
               <span class="number">
-                <span class="title">未租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentSeatsNum}}</span>
+               <div v-if="tab=='all'" style="display:inline-block;">
+                  <Tooltip placement='top'>
+                      <div class="rent-title"><span class="title-text">未租</span><span class="in-rent-pic"></span></div>
+                      <span class="num" style="font-size:44px;color: rgb(254, 220, 130);margin-top:-5px;display:inline-block;">{{pageData.noRentSeatsNum}}</span>
+                      <div slot="content">
+                          <div>下月出租率</div>
+                          <div style="font-weight:500;font-size:20px;">{{pageData.nextMonthRentRatio}}</div>
+                          <div>签约率</div>
+                          <div style="font-weight:500;font-size:20px;">{{pageData.contractRatio}}</div>
+                      </div>
+                  </Tooltip>   
+                </div>
+                <span class="title" v-if="tab!='all'">未租</span> 
+                <!-- <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentSeatsNum}}</span> -->
                 <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentFixStationsNum}}</span>
                 <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentMoveStationsNum}}</span>

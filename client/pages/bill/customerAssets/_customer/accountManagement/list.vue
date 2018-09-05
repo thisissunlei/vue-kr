@@ -95,11 +95,11 @@ export default {
        },
        goRecord(params,type){
            let name=params.operateTypeName;
-           if(name=='PAY_BILL'){
+           if(name=='支付账单'){
                window.open('/bill/list/detail/'+params.recordId,'_blank');
-           }else if(name=='INCOME'||name=='BACK'||name=='TRANSFER'||name=='LOCK_DESPOINT_FREE'||name=='DEPOSIT_TRANSFER_RENT'){
+           }else if(name=='转余额'||name=='转营业外收入'||name=='转社区'||name=='冻结押金支出'||name=='押金转租金'){
                window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
-           }else if(name=='REFUND_RENT'){
+           }else if(name=='订单生效退还租金'){
                this.getTypeDetail(params);
            }
        },

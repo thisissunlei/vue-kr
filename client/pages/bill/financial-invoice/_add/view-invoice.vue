@@ -225,7 +225,8 @@ import utils from '~/plugins/utils';
                 }
             };
             const validateAddress = (rule, value, callback) => {
-                if(this.formItem.taxpayerType !== 'SMALL' && value === ''){
+                console.log(this.formItem.taxpayerType,"---------",value)
+                if(this.formItem.taxpayerType !== 'SMALL' && !value ){
                     callback(new Error('此项为必填项。'))
                 }else{
                      callback();
@@ -341,16 +342,16 @@ import utils from '~/plugins/utils';
                         {trigger: 'change' ,validator: validateMust},
                     ],
                     registerAddress:[
-                        {trigger: 'change' ,validator: validateAddress},
+                        {trigger: 'blur' ,validator: validateAddress},
                     ],
                     registerPhone:[
-                        {trigger: 'change' ,validator: validatephone},
+                        {trigger: 'blur' ,validator: validatephone},
                     ],
                     bank:[
-                       {trigger: 'change' ,validator: validateAddress},
+                       {trigger: 'blur' ,validator: validateAddress},
                     ],
                     bankAccount:[
-                       {trigger: 'change' ,validator: validateAddress},
+                       {trigger: 'blur' ,validator: validateAddress},
                     ]
                 },
                 salerName:'请选择',

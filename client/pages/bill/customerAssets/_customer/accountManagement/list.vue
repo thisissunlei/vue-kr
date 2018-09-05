@@ -94,13 +94,14 @@ export default {
            }
        },
        goRecord(params,type){
-           let name=params.operateTypeName;
+           let name=params.recordNo;
+           let nameSlice=name.slice(0,2);
            let id=type=='balanceDetail'?params.refId:params.recordId;
-           if(name=='支付账单'){
+           if(nameSlice=='ZD'){
                window.open('/bill/list/detail/'+id,'_blank');
-           }else if(name=='转余额'||name=='转营业外收入'||name=='转社区'||name=='冻结押金支出'||name=='押金转租金'){
+           }else if(nameSlice=='ZY'){
                window.open('/order-center/apply-manage/'+id+'/releaseDepositInfo','_blank');
-           }else if(name=='订单生效退还租金'){
+           }else if(nameSlice=='DD'){
                this.getTypeDetail(params);
            }
        },

@@ -192,421 +192,417 @@
 </template>
 
 <script>
-import SectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
-import SelectSaler from '~/components/SelectSaler.vue'
-import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
-import dateUtils from 'vue-dateutils';
-import PhotoAlbum from '~/components/PhotoAlbum';
-import KrUpload from '~/components/KrUpload';
+import SectionTitle from "~/components/SectionTitle.vue";
+import selectCommunities from "~/components/SelectCommunities.vue";
+import selectCustomers from "~/components/SelectCustomers.vue";
+import SelectSaler from "~/components/SelectSaler.vue";
+import DetailStyle from "~/components/DetailStyle";
+import planMap from "~/components/PlanMap.vue";
+import dateUtils from "vue-dateutils";
+import PhotoAlbum from "~/components/PhotoAlbum";
+import KrUpload from "~/components/KrUpload";
 
+import "~/assets/styles/createOrder.less";
+import utils from "~/plugins/utils";
+export default {
+  components: {
+    KrUpload,
+    SectionTitle,
+    selectCommunities,
+    DetailStyle,
+    selectCustomers,
+    SelectSaler,
+    planMap,
+    PhotoAlbum
+  },
+  data() {
+    const validateMust = (rule, value, callback) => {
+      if (this.formItem.titleType == "PERSON") {
+        callback();
+      } else {
+        callback();
+      }
+    };
+    const validateAddress = (rule, value, callback) => {
+      console.log(this.formItem.taxpayerType, "---------", value);
+      if (this.formItem.taxpayerType !== "SMALL" && !value) {
+        callback(new Error("此项为必填项。"));
+      } else {
+        callback();
+      }
+    };
+    const validatephone = (rule, value, callback) => {
+      if (this.formItem.titleType == "PERSON") {
+        callback();
+      }
+      let phone = /(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+      if (this.formItem.taxpayerType !== "SMALL" && value === "") {
+        callback(new Error("此项为必填项。"));
+      }
 
-import '~/assets/styles/createOrder.less';
-import utils from '~/plugins/utils';
-    export default {
-        components:{
-            KrUpload,
-            SectionTitle,
-            selectCommunities,
-            DetailStyle,
-            selectCustomers,
-            SelectSaler,
-            planMap,
-            PhotoAlbum
+      if (
+        this.formItem.titleType != "PERSON" &&
+        !phone.test(value) &&
+        value !== ""
+      ) {
+        callback(new Error("请填写正确的联系方式"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      isReady: true, //只读页面
+      disabled: false,
+      openBussiness: false,
+      //单位类型
+      unitTypeList: [
+        { value: "COMPANY", label: "企业单位" },
+        { value: "PERSON", label: "个人/非企业单位" }
+      ],
+      //纳税类型
+      taxTypeList: [
+        { value: "SMALL", label: "小规模纳税人" },
+        { value: "GENERAL", label: "一般纳税人" }
+      ],
+      tableColumns: [
+        {
+          title: "账单编号",
+          key: "name"
         },
-        data() {
-            const validateMust = (rule, value, callback) => {
-                if(this.formItem.titleType=='PERSON'){
-                    callback();
-                }else{
-                     callback();
-                }
-            };
-            const validateAddress = (rule, value, callback) => {
-                console.log(this.formItem.taxpayerType,"---------",value)
-                if(this.formItem.taxpayerType !== 'SMALL' && !value ){
-                    callback(new Error('此项为必填项。'))
-                }else{
-                     callback();
-                }
+        {
+          title: "账单类型",
+          key: "seatType",
+          render: (h, params) => {
+            let type = params.row.seatType;
+            let typeName = "开放工位";
+            if (type == "SPACE") {
+              typeName = "独立办公室";
+            } else {
+              typeName = "开放工位";
             }
-            const validatephone = (rule, value, callback) => {
-                if(this.formItem.titleType=='PERSON'){
-                    callback();
-                }
-                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                if(this.formItem.taxpayerType !== 'SMALL' && value === ''){
-                    callback(new Error('此项为必填项。'));
-                }
-               
-                if (this.formItem.titleType!='PERSON' && !phone.test(value) && value!=='' ) {
-                    callback(new Error('请填写正确的联系方式'));
-                }else{
-                    callback()
+            return typeName;
+          }
+        },
+        {
+          title: "费用类型",
+          key: "capacity"
+        },
+        {
+          title: "可开票金额",
+          key: "guidePrice"
+        },
+        {
+          title: "申请开票金额",
+          key: "guidePrice",
+          render: (h, params) => {
+            let price = params.row.originalPrice;
 
-                }
-            };
-            return {
-
-                isReady:true, //只读页面
-                disabled:false,
-                openBussiness:false,
-                //单位类型
-                unitTypeList:[
-                    {value:'COMPANY',label:'企业单位'},
-                    {value:'PERSON',label:'个人/非企业单位'}
-                ],
-                //纳税类型
-                taxTypeList:[
-                    {value:'SMALL',label:'小规模纳税人'},
-                    {value:'GENERAL',label:'一般纳税人'}
-                ],
-                tableColumns: [
-                    {
-                        title: '账单编号',
-                        key: 'name'
-                    },
-                    {
-                        title: '账单类型',
-                        key: 'seatType',
-                        render:(h, params) => {
-                            let type = params.row.seatType;
-                            let typeName = '开放工位';
-                            if(type =='SPACE'){
-                                typeName = '独立办公室'
-                            }else{
-                                typeName = "开放工位"
-                            }
-                            return typeName
-                        }
-                    },
-                    {
-                        title:'费用类型',
-                        key:'capacity'
-                    },
-                    {
-                        title: '可开票金额',
-                        key: 'guidePrice'
-                    },
-                    {
-                        title: '申请开票金额',
-                        key: 'guidePrice',
-                        render: (h, params) => {
-                            let price = params.row.originalPrice;
-                            
-                            return h('Input', {
-                                props: {
-                                    min:params.row.guidePrice,
-                                    value:params.row.originalPrice,
-                                    disabled:this.isReady
-                                },
-                                on:{
-                                    'on-change':(event)=>{
-                                        this.tabelInputChange(event);
-                                    }
-                                }
-                            },'44')
-                        }
-                    }
-                ],
-                //列表数据
-                stationList: [
-                    {customerId:'33333'}
-                ],
-               
-                formItem: {
-                    titleType: '',
-                    taxpayerType: '',
-                    invoiceTitle: '',
-                    taxpayerNumber:'',
-                    registerAddress:'',
-                    registerPhone:'',
-                    bank:'',
-                    bankAccount:'' ,
-                    verifyStatus:''  
+            return h(
+              "Input",
+              {
+                props: {
+                  min: params.row.guidePrice,
+                  value: params.row.originalPrice,
+                  disabled: this.isReady
                 },
-                //校验
-                ruleCustom:{
-                    titleType: [
-                        { required: true, message: '请先选择企业类别', trigger: 'change' }
-                    ],
-                    taxpayerType: [
-                        {trigger: 'change' ,validator: validateMust},
-                    ],
-                    invoiceTitle: [
-                        { required: true, message: '请先选择结束时间', trigger: 'change' }
-                    ],
-                    taxpayerNumber: [
-                        {trigger: 'change' ,validator: validateMust},
-                    ],
-                    registerAddress:[
-                        {trigger: 'blur' ,validator: validateAddress},
-                    ],
-                    registerPhone:[
-                        {trigger: 'blur' ,validator: validatephone},
-                    ],
-                    bank:[
-                       {trigger: 'blur' ,validator: validateAddress},
-                    ],
-                    bankAccount:[
-                       {trigger: 'blur' ,validator: validateAddress},
-                    ]
-                },
-                salerName:'请选择',
-                businessUrlName:[],
-                taxUrlName:[],
-                eyeIndex:0,
-                imgData:[],
-                openReject:false,
-                editItem: {},
-                rejectReason:''
-            }
-        },
-        head() {
-            return {
-                title: '资料详情-氪空间后台管理系统'
-            }
-        },
-         mounted(){
-            let params = Object.assign({},this.$route.query);
-            if(params.type == 'edit'){
-                //编辑模式
-                this.isReady = false;
-                
-            }else{
-                //查看模式
-                this.isReady = true;
-            }
-            GLOBALSIDESWITCH("false");
-            this.getViewDetail();
-        },
-        methods: {
-            taxpayerTypeChange(){
-                this.$refs['formItem'].validate((valid) => {
-                   
-                })
-               
-            },
-            changeType(value){
-                if(value){
-                    this.formItem.titleType = value;
-                }else{
-                    this.formItem.titleType = ''
+                on: {
+                  "on-change": event => {
+                    this.tabelInputChange(event);
+                  }
                 }
-                //欢哥说的，切换类别，清空除抬头外其他数据
-                if(value=='PERSON'){
-                    let obj = {
-                        invoiceTitle : this.formItem.invoiceTitle,
-                        titleType :value,
-                        id:this.formItem.id,
-                        verifyStatus:this.formItem.verifyStatus
-                    }
-                    this.formItem = obj;
-                }
-            },
-            upChange(detail,type){
-                console.log('upChange',detail)
-                let businessUrlName = [].concat(this.businessUrlName);
-                console.log('this.businessUrlName==',this.businessUrlName)
-                let taxUrlName = [].concat(this.taxUrlName);
-                console.log('this.taxUrlName==',this.taxUrlName)
-                if(type == 'taxUrlName' && !this.taxUrlName.length){
-
-                    this.taxUrlName = taxUrlName.concat(detail);
-                }
-                if(type == 'businessUrlName' && !this.businessUrlName.length){
-
-                    this.businessUrlName = businessUrlName.concat(detail)
-                }
-            },
-            bussinessClose(){
-                this.openBussiness=!this.openBussiness;
-            },
-            businessClick(item,index,param){
-                if(param=='bus'){
-                    this.imgData=this.businessUrlName;
-                }else{
-                    this.imgData=this.taxUrlName;
-                }
-                this.eyeIndex=index;
-                this.bussinessClose();
-            },
-            downImg(url,id){
-                utils.downImg(url);
-            },
-            cancel(item){
-                this.editItem = item;
-                this.openReject = !this.openReject;
-            },
-            rejectedSubmit(){
-                let param = Object.assign({},this.$route.query);
-                let params = {
-                    handleType:'reject',
-                    id :param.id,
-                    rejectReason:this.rejectReason
-                }
-                this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
-                    window.close();
-                window.opener.location.reload();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
-            },
-            getViewDetail(){
-                let params = Object.assign({},this.$route.query);
-                this.$http.get('get-financial-invoice-detail',{id:params.id}).then((res)=>{
-                    this.formItem=Object.assign({},res.data);
-                    this.formItem.businessLicense.map((item,index)=>{
-                         var list=Object.assign({},item);
-                         list.fieldUrl=list.url;
-                         this.businessUrlName.push(list);
-                    })
-                    console.log(this.formItem)
-                    this.formItem.taxCertificate.map((item,index)=>{
-                         var list=Object.assign({},item);
-                         list.fieldUrl=list.url;
-                         this.taxUrlName.push(list)
-                    })
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
-            },
-            tabelInputChange(event){
-                // console.log(event,"pppppppppp")
-            },
-            editClick(){
-                this.isReady = false;
-            },
-            imgDelete(index,type){
-                let businessUrlName = [].concat(this.businessUrlName);
-                let taxUrlName = [].concat(this.taxUrlName);
-                if(type == 'taxUrlName'){
-                    taxUrlName.splice(index)
-                    this.taxUrlName = [].concat(taxUrlName);
-                }   
-                if(type == 'businessUrlName'){
-                    businessUrlName.splice(index)
-                    this.bussinessClose = [].concat(businessUrlName)
-                }
-            },
-            back(){
-                window.history.go(-1);
-            },
-            handleSubmit(name) {
-                 console.log("----")
-                let editData=Object.assign({},this.formItem);   
-                delete editData.ctime;  
-                delete editData.rejectTime;
-                delete editData.verifyTime ; 
-                delete editData.utime ;
-                this.businessUrlName = this.businessUrlName.map(item=>{
-                    item.sourceType = 'BUSINESS_LICENSE';
-                    item.qualificationId = this.formItem.id;
-                    return item;
-                })
-                 console.log("----1")
-                this.taxUrlName = this.taxUrlName.map(item=>{
-                    item.sourceType = 'TAX_CERTIFICATE';
-                    item.qualificationId = this.formItem.id;
-                    return item;
-                })
-               console.log("----2")
-                editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
-                editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
-                delete editData.taxCertificate;
-                delete editData.businessLicense;
-
-
-               
-                console.log("----3",name, this.$refs[name].validate)
-                this.$refs[name].validate((valid) => {
-                    console.log("-----4",valid)
-                    if (valid) {
-
-                        this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
-                            
-                            window.close();
-                            if( window.opener){
-                                 window.opener.location.reload();
-                            }   
-                       
-                        }).catch((err)=>{
-                            this.$Notice.error({
-                                title:err.message
-                            });
-                        })
-                    }
-                })
-               
-            },
-            changeCommunity(value){
-                // 选择社区
-                if(value){
-                    this.formItem.communityId = value;
-                   
-                }else{
-                    this.formItem.communityId = '';
-                }
-               
-                this.getFloor = +new Date()
-                
-            },
-            changeSaler(){
-
-            },
-            changeCustomer(value){
-                // 客户
-                if(value){
-                    this.formItem.customerId = value;
-                }else{
-                    this.formItem.customerId = '';
-                }
-                this.getFloor = +new Date()
-
-            },
-            makeSureClick(item) {
-              let params = {
-                handleType:'affirm',
-                id :item.id,
-                rejectReason:''
-              }
-              this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
-                window.close();
-              }).catch((err)=>{
-                this.$Notice.error({
-                  title:err.message
-                });
-              })
-            }
+              },
+              "44"
+            );
+          }
         }
+      ],
+      //列表数据
+      stationList: [{ customerId: "33333" }],
+
+      formItem: {
+        titleType: "",
+        taxpayerType: "",
+        invoiceTitle: "",
+        taxpayerNumber: "",
+        registerAddress: "",
+        registerPhone: "",
+        bank: "",
+        bankAccount: "",
+        verifyStatus: ""
+      },
+      //校验
+      ruleCustom: {
+        titleType: [
+          { required: true, message: "请先选择企业类别", trigger: "change" }
+        ],
+        taxpayerType: [{ trigger: "change", validator: validateMust }],
+        invoiceTitle: [
+          { required: true, message: "请先选择结束时间", trigger: "change" }
+        ],
+        taxpayerNumber: [{ trigger: "change", validator: validateMust }],
+        registerAddress: [{ trigger: "blur", validator: validateAddress }],
+        registerPhone: [{ trigger: "blur", validator: validatephone }],
+        bank: [{ trigger: "blur", validator: validateAddress }],
+        bankAccount: [{ trigger: "blur", validator: validateAddress }]
+      },
+      salerName: "请选择",
+      businessUrlName: [],
+      taxUrlName: [],
+      eyeIndex: 0,
+      imgData: [],
+      openReject: false,
+      editItem: {},
+      rejectReason: ""
+    };
+  },
+  head() {
+    return {
+      title: "资料详情-氪空间后台管理系统"
+    };
+  },
+  mounted() {
+    let params = Object.assign({}, this.$route.query);
+    if (params.type == "edit") {
+      //编辑模式
+      this.isReady = false;
+    } else {
+      //查看模式
+      this.isReady = true;
     }
+    GLOBALSIDESWITCH("false");
+    this.getViewDetail();
+  },
+  methods: {
+    taxpayerTypeChange() {
+      this.$refs["formItem"].validate(valid => {});
+    },
+    changeType(value) {
+      if (value) {
+        this.formItem.titleType = value;
+      } else {
+        this.formItem.titleType = "";
+      }
+      //欢哥说的，切换类别，清空除抬头外其他数据
+      if (value == "PERSON") {
+        let obj = {
+          invoiceTitle: this.formItem.invoiceTitle,
+          titleType: value,
+          id: this.formItem.id,
+          verifyStatus: this.formItem.verifyStatus
+        };
+        this.formItem = obj;
+      }
+    },
+    upChange(detail, type) {
+     
+      let businessUrlName = [].concat(this.businessUrlName);
+     
+      let taxUrlName = [].concat(this.taxUrlName);
+     
+      if (type == "taxUrlName" && !this.taxUrlName.length) {
+        this.taxUrlName = taxUrlName.concat(detail);
+      }
+      if (type == "businessUrlName" && !this.businessUrlName.length) {
+        this.businessUrlName = businessUrlName.concat(detail);
+      }
+    },
+    bussinessClose() {
+      this.openBussiness = !this.openBussiness;
+    },
+    businessClick(item, index, param) {
+      if (param == "bus") {
+        this.imgData = this.businessUrlName;
+      } else {
+        this.imgData = this.taxUrlName;
+      }
+      this.eyeIndex = index;
+      this.bussinessClose();
+    },
+    downImg(url, id) {
+      utils.downImg(url);
+    },
+    cancel(item) {
+      this.editItem = item;
+      this.openReject = !this.openReject;
+    },
+    rejectedSubmit() {
+      let param = Object.assign({}, this.$route.query);
+      let params = {
+        handleType: "reject",
+        id: param.id,
+        rejectReason: this.rejectReason
+      };
+      this.$http
+        .put("get-financial-invoice-rejected", params)
+        .then(res => {
+          window.close();
+          window.opener.location.reload();
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+    getViewDetail() {
+      let params = Object.assign({}, this.$route.query);
+      this.$http
+        .get("get-financial-invoice-detail", { id: params.id })
+        .then(res => {
+          this.formItem = Object.assign({}, res.data);
+          this.formItem.businessLicense.map((item, index) => {
+            var list = Object.assign({}, item);
+            list.fieldUrl = list.url;
+            this.businessUrlName.push(list);
+          });
+         
+          this.formItem.taxCertificate.map((item, index) => {
+            var list = Object.assign({}, item);
+            list.fieldUrl = list.url;
+            this.taxUrlName.push(list);
+          });
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+    tabelInputChange(event) {
+      
+    },
+    editClick() {
+      this.isReady = false;
+    },
+    imgDelete(index, type) {
+      let businessUrlName = [].concat(this.businessUrlName);
+      let taxUrlName = [].concat(this.taxUrlName);
+      if (type == "taxUrlName") {
+        taxUrlName.splice(index);
+        this.taxUrlName = [].concat(taxUrlName);
+      }
+      if (type == "businessUrlName") {
+        businessUrlName.splice(index);
+        this.bussinessClose = [].concat(businessUrlName);
+        this.businessUrlName = [].concat(businessUrlName);
+      }
+    },
+    back() {
+      window.history.go(-1);
+    },
+    handleSubmit(name) {
+     
+      let editData = Object.assign({}, this.formItem);
+      delete editData.ctime;
+      delete editData.rejectTime;
+      delete editData.verifyTime;
+      delete editData.utime;
+      this.businessUrlName = this.businessUrlName.map(item => {
+        item.sourceType = "BUSINESS_LICENSE";
+        item.qualificationId = this.formItem.id;
+        return item;
+      });
+     
+      this.taxUrlName = this.taxUrlName.map(item => {
+        item.sourceType = "TAX_CERTIFICATE";
+        item.qualificationId = this.formItem.id;
+        return item;
+      });
+      if (!this.businessUrlName.length) {
+        this.$Notice.error({
+          title: '营业执照不能为空'
+        });
+        return ;
+      }
+      if (!this.taxUrlName.length) {
+        this.$Notice.error({
+          title: '一般纳税人证明不能为空'
+        });
+        return ;
+      }
+     
+      editData.taxCertificateTemp = JSON.stringify(this.taxUrlName);
+      editData.businessLicenseTemp = JSON.stringify(this.businessUrlName);
+      delete editData.taxCertificate;
+      delete editData.businessLicense;
+      
+      
+      this.$refs[name].validate(valid => {
+        
+        if (valid) {
+          this.$http
+            .post("get-financial-invoice-edit", editData)
+            .then(res => {
+              window.close();
+              if (window.opener) {
+                window.opener.location.reload();
+              }
+            })
+            .catch(err => {
+              this.$Notice.error({
+                title: err.message
+              });
+            });
+        }
+      });
+    },
+    changeCommunity(value) {
+      // 选择社区
+      if (value) {
+        this.formItem.communityId = value;
+      } else {
+        this.formItem.communityId = "";
+      }
+
+      this.getFloor = +new Date();
+    },
+    changeSaler() {},
+    changeCustomer(value) {
+      // 客户
+      if (value) {
+        this.formItem.customerId = value;
+      } else {
+        this.formItem.customerId = "";
+      }
+      this.getFloor = +new Date();
+    },
+    makeSureClick(item) {
+      let params = {
+        handleType: "affirm",
+        id: item.id,
+        rejectReason: ""
+      };
+      this.$http
+        .put("get-financial-invoice-rejected", params)
+        .then(res => {
+          window.close();
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    }
+  }
+};
 </script>
 
 
-<style lang="less" scoped> 
-   .add-invoice{
-        .creat-order-form{
-            max-width: 1140px;
-            padding: 30px 0;
-            .col{
-                display: inline-block;
-                width: 50%;
-                max-width: 450px;
-                padding-right: 10px;
-                vertical-align: top;
-            }
-        }
-        .view-btn{
-            margin: 0px 20px;
-        }
-        
-   }
-   
-   
+<style lang="less" scoped>
+.add-invoice {
+  .creat-order-form {
+    max-width: 1140px;
+    padding: 30px 0;
+    .col {
+      display: inline-block;
+      width: 50%;
+      max-width: 450px;
+      padding-right: 10px;
+      vertical-align: top;
+    }
+  }
+  .view-btn {
+    margin: 0px 20px;
+  }
+}
 </style>

@@ -37,7 +37,7 @@ function initListData(type){
         {
             title: '金额',
             key: 'amount',
-            align:'right',
+            align:'center',
             className:'statusClass',
             type:'depositDetail,consumptionDetail,balanceDetail',
             render:(tag, params)=>{
@@ -54,7 +54,7 @@ function initListData(type){
         {
             title: '余额剩余',
             key: 'remainAmount',
-            align:'right',
+            align:'center',
             className:'statusClass',
             type:'balanceDetail',
             render:(tag, params)=>{
@@ -113,7 +113,7 @@ function initListData(type){
         },
         {
             title: type=='getDetail'?'打款金额':'退款金额',
-            align:'right',
+            align:'center',
             className:'statusClass',
             key: 'amount',
             type:'getDetail,refundDetail',

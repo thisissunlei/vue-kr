@@ -8,7 +8,7 @@
                        <Form-item :label="type=='getDetail'?'单据编号':'退款编号'" class='daily-form'>
                             <i-input 
                                 v-model="formItem.recordNo" 
-                                placeholder="请输入"
+                                :placeholder="type=='getDetail'?'请输入单据编号':'请输入退款编号'"
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -19,7 +19,7 @@
                             <div class='operation-community'>
                                 <Select 
                                     v-model="formItem.cmtId" 
-                                    placeholder="请选择" 
+                                    placeholder="请选择社区" 
                                     clearable
                                     filterable
                                     style="width: 200px"
@@ -32,7 +32,7 @@
                         <Form-item :label="type=='getDetail'?'打款方式':'退款方式'" class='daily-form' style="margin-right:172px;"> 
                             <Select 
                                 v-model="formItem.payWay" 
-                                placeholder="请选择" 
+                                :placeholder="type=='getDetail'?'请选择打款方式':'请选择退款方式'"
                                 clearable
                                 style="width: 130px"
                             >
@@ -51,7 +51,7 @@
                             <i-input 
                                 v-model="formItem.amountStart" 
                                 style="width: 90px"
-                                placeholder="填写打款金额" 
+                                :placeholder="type=='getDetail'?'填写打款金额':'填写退款金额'"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -60,7 +60,7 @@
                             <i-input 
                                 v-model="formItem.amountEnd" 
                                 style="width: 90px"
-                                placeholder="填写打款金额" 
+                                :placeholder="type=='getDetail'?'填写打款金额':'填写退款金额'"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>

@@ -26,14 +26,16 @@
                 @clearClick="clearClick"
            />
       </div>
-      <div style="color:red;text-align:right;margin-right:20px;">金额总计:¥{{allMoney}}</div>
-      <div class="account-manage-table">
-          <Table 
-            :columns="listColumns" 
-            :data="listData"
-            border
-          />
-       </div>
+      <div style="margin-right:20px;">
+        <div style="color:red;text-align:right;">金额总计:¥{{allMoney}}</div>
+        <div class="account-manage-table">
+            <Table 
+                :columns="listColumns" 
+                :data="listData"
+                border
+            />
+        </div>
+    </div>
   </div>
 </template>
 
@@ -42,6 +44,7 @@ import publicFn from './publicPage.js';
 import ArriveForm from './searchForm/arriveForm';
 import DepositForm from './searchForm/depositForm';
 import ConsumptionForm from './searchForm/consumptionForm';
+import utils from '~/plugins/utils';
 export default {
     components:{
         ArriveForm,
@@ -173,7 +176,8 @@ export default {
             }
             this.$http.get(typeUrl,newParams).then((response)=>{    
                 this.listData=response.data.details;
-                this.allMoney=response.data.total;
+                let money=response.data.total;
+                this.allMoney=money?utils.thousand(money):'';
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -187,10 +191,11 @@ export default {
 <style lang="less">
   .m-account-management{
       .account-manage-table{
-          margin:10px 20px 0 0px;
+          margin:10px 0px 0 0px;
       }
       .statusClass{
             .ivu-table-cell{
+                text-align:right;
                 padding:0 5px;
             }
       }

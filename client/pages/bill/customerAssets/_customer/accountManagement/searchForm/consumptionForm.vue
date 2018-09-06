@@ -11,7 +11,7 @@
                             <div class='operation-community'>
                                 <Select 
                                     v-model="formItem.cmtId" 
-                                    placeholder="请选择" 
+                                    placeholder="请选择社区" 
                                     clearable
                                     filterable
                                     style="width: 200px"

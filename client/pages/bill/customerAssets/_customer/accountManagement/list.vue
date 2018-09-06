@@ -90,7 +90,7 @@ export default {
            if(name=='银行转账'||name=='支付宝'){
                window.open('/bill/payment/detail/'+params.recordId,'_blank');
            }else if(name=='资金转移'){
-               window.open('/order-center/apply-manage/'+params.recordId+'/releaseDepositInfo','_blank');
+               window.open('/order-center/apply-manage/'+params.recordId+'/transformZoneInfo','_blank');
            }
        },
        goRecord(params,type){
@@ -100,7 +100,7 @@ export default {
            if(nameSlice=='ZD'){
                window.open('/bill/list/detail/'+id,'_blank');
            }else if(nameSlice=='ZY'){
-               window.open('/order-center/apply-manage/'+id+'/releaseDepositInfo','_blank');
+               this.transferDetail(params,id);
            }else if(nameSlice=='DD'){
                this.getTypeDetail(params);
            }
@@ -113,6 +113,17 @@ export default {
                     title:error.message
                 });
             })
+       },
+       transferDetail(params,id){
+           if(params.operateTypeName=='转营业外收入'){
+               window.open('/order-center/apply-manage/'+id+'/releaseDepositInfo','_blank');
+           }else if(params.operateTypeName=='转余额'){
+               window.open('/order-center/apply-manage/'+id+'/balanceInfo','_blank');
+           }else if(params.operateTypeName=='转社区'){
+               window.open('/order-center/apply-manage/'+id+'/transformZoneInfo','_blank');
+           }else if(params.operateTypeName=='押金转租金'){
+               window.open('/order-center/apply-manage/'+id+'/depositRentInfo','_blank');
+           }
        },
        goTypeDetail(params){
            if(params.orderType=='IN'||params.orderType=='INCREASE'){

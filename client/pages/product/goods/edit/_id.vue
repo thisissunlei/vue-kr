@@ -133,6 +133,25 @@
                                  <div v-if="isAppError" class="u-error">请选择可预订时段</div>
                            </div>
                     </FormItem>
+                    <FormItem label="不可预订日期设置" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <div style="width:350px;float:right;">
+                            <Select v-model="model1" style="width:200px">
+                                <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </div>
+                    </FormItem>
+                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <div style="width:350px;float:right;">
+                            <Select v-model="model1" style="width:200px">
+                                <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </div>
+                    </FormItem>
+                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <div style="width:350px;float:right;">
+                            <KrDatePicker/>
+                        </div>
+                    </FormItem>
                     <!-- <Row>
                        
                         <Col span="13" style="position:relative">
@@ -170,14 +189,16 @@ import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle';
 import UploadFile from '~/components/UploadFile';
 import dateUtils from 'vue-dateutils';
-import calendar from '../calendar.vue'
+import calendar from '../calendar.vue';
+import KrDatePicker from '~/components/KrDatePicker'
 export default {
      components:{
         DetailStyle,
 		LabelText,
         SectionTitle,
         UploadFile,
-        calendar
+        calendar,
+        KrDatePicker
     },
     head(){
         return{
@@ -186,6 +207,10 @@ export default {
     },
     data(){
         return{
+            selectList:[
+                {value:'1',label:'无'},
+                {value:'2',label:'自定义时间'},
+            ],
             category:'app/upgrade',
             isAppError:false,
             formItem:{},

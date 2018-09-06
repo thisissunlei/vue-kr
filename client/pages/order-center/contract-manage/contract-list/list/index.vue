@@ -151,6 +151,13 @@ export default {
                     align: 'center',
                     fixed: 'left',
                     width: 150,
+                    render(h,params){ 
+                          var hideBtn = params.row.hideBtn;
+                              if (hideBtn) {
+                                 return h('div', {},'*****');
+                       }           
+                          return <span class="u-txt">{params.row.serialNumber}</span>;
+                   }
                 },
                 {
                     title: '客户名称',
@@ -158,6 +165,13 @@ export default {
                     align: 'center',
                     fixed: 'left',
                     width: 150,
+                    render(h,params){ 
+                          var hideBtn = params.row.hideBtn;
+                              if (hideBtn) {
+                                 return h('div', {},'*****');
+                       }           
+                          return <span class="u-txt">{params.row.customName}</span>;
+                   }
                 },
                 {
                     title: '社区名称',
@@ -194,6 +208,13 @@ export default {
                     key: 'serviceCharges',
                     align: 'center',
                     width: 300,
+                    render(h,params){ 
+                          var hideBtn = params.row.hideBtn;
+                              if (hideBtn) {
+                                 return h('div', {},'*****');
+                       }           
+                          return <span class="u-txt">{params.row.serviceCharges}</span>;
+                   }
                 }, {
                     title: '销售员',
                     key: 'salerName',
@@ -413,7 +434,10 @@ export default {
                                 }
                             }))
                         }
-                        return h('div', btnRender);
+                        if(!params.row.hideBtn){
+                            return h('div', btnRender);
+                        }
+                        
                     }
                 }
             ],

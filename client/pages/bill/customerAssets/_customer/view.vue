@@ -218,6 +218,7 @@
 </script>
 <style lang="less" scoped>
     .customer-assets-detail{
+		overflow: hidden;
 		.content{
 			border-bottom: 1px solid #E8E9E9;
 			margin-bottom: 30px;

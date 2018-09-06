@@ -116,7 +116,7 @@ export default {
        },
        transferDetail(params,id){
            if(params.operateTypeName=='转营业外收入'){
-               window.open('/order-center/apply-manage/'+id+'/releaseDepositInfo','_blank');
+               window.open('/order-center/apply-manage/'+id+'/nonoperatingInfo','_blank');
            }else if(params.operateTypeName=='转余额'){
                window.open('/order-center/apply-manage/'+id+'/balanceInfo','_blank');
            }else if(params.operateTypeName=='转社区'){

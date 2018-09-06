@@ -341,7 +341,7 @@ export default {
         ],
         taxpayerNumber: [{ trigger: "change", validator: validateMust }],
         registerAddress: [{ trigger: "blur", validator: validateAddress }],
-        registerPhone: [{ trigger: "blur", validator: validatephone }],
+        registerPhone: [{ trigger: "change", validator: validatephone }],
         bank: [{ trigger: "blur", validator: validateAddress }],
         bankAccount: [{ trigger: "blur", validator: validateAddress }]
       },
@@ -508,13 +508,13 @@ export default {
         item.qualificationId = this.formItem.id;
         return item;
       });
-      if (!this.businessUrlName.length) {
-        this.$Notice.error({
-          title: '营业执照不能为空'
-        });
-        return ;
-      }
-      if (!this.taxUrlName.length) {
+    //   if (!this.businessUrlName.length) {
+    //     this.$Notice.error({
+    //       title: '营业执照不能为空'
+    //     });
+    //     return ;
+    //   }
+      if (!this.taxUrlName.length && this.formItem.taxpayerType == 'taxUrlName') {
         this.$Notice.error({
           title: '一般纳税人证明不能为空'
         });

@@ -238,7 +238,10 @@ export default {
       let phone = /(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
       if (this.formItem.taxpayerType !== "SMALL" && value === "") {
         callback(new Error("此项为必填项。"));
+      }else{
+          callback();
       }
+
 
       if (
         this.formItem.titleType != "PERSON" &&

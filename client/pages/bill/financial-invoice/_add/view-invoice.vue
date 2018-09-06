@@ -238,8 +238,6 @@ export default {
       let phone = /(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
       if (this.formItem.taxpayerType !== "SMALL" && value === "") {
         callback(new Error("此项为必填项。"));
-      }else{
-          callback();
       }
 
 
@@ -343,7 +341,7 @@ export default {
           { required: true, message: "请先选择结束时间", trigger: "change" }
         ],
         taxpayerNumber: [{ trigger: "change", validator: validateMust }],
-        registerAddress: [{ trigger: "blur", validator: validateAddress }],
+        registerAddress: [{ trigger: "change", validator: validateAddress }],
         registerPhone: [{ trigger: "change", validator: validatephone }],
         bank: [{ trigger: "blur", validator: validateAddress }],
         bankAccount: [{ trigger: "blur", validator: validateAddress }]

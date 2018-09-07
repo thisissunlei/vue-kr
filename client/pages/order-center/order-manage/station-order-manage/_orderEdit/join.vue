@@ -1618,11 +1618,12 @@ export default {
 
             })
         },
-        getSaleTactics: function (params) {//获取优惠信息
+        getSaleTactics(params) {//获取优惠信息
             let list = [];
             let maxDiscount = {};
             let _this = this;
-            this.$http.get('sale-tactics', params, r => {
+            return new Promise((resolve, reject)=>{
+                this.$http.get('sale-tactics', params, r => {
                 if (r.data.length) {
                     list = r.data.map(item => {
                         let obj = item;
@@ -1643,6 +1644,8 @@ export default {
                 _this.youhui = []
 
             })
+            })
+     
         },
         getFreeDeposit() {
             this.$http.get('get-seat-deposit-free', '').then(r => {

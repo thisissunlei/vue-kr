@@ -52,10 +52,10 @@
                             </Form-item>
                         </div>
 
-                        <Form-item v-if="type=='balanceDetail'" label="相关凭证"  class='daily-form'>
+                        <Form-item v-if="type=='balanceDetail'" label="单据编号"  class='daily-form'>
                             <i-input 
                                 v-model="formItem.recordNo" 
-                                placeholder="请输入相关凭证"
+                                placeholder="请输入单据编号"
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />

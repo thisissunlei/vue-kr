@@ -7,19 +7,11 @@
 					<div style="display:'block';text-align:'left';lineHeigitemht:'32px';color:'#333';margin-bottom:8px">
 						 <div style="color:'#333';fontWeight:500;fontSize:14">{{item.name}}</div>
 						<Checkbox style="display:block;min-width:50px;text-aligh:left"  v-model="item.flag" :disabled="allCities" @on-change="checkNativeCity(item)">本城市</Checkbox>
-							<!-- <div v-for="community in item.communities" :key="community.communityId" style="display:'inline-block';line-height:'32px';min-width:100px;"> -->
-	
-								<!-- <CheckboxGroup v-model="communityIds" @on-change="checkAllNativeCommunities" > -->
-									<Checkbox   v-model="community.ownFlag" v-for="community in item.communities" :key="community.communityId" style="display:inline-block;min-width:100px;text-aligh:left"  :disabled="!!item.flag"  :label="community.communityId">{{community.communityName}}</Checkbox>
-								<!-- </CheckboxGroup> -->
-
-							<!-- </div> -->
+							
+							<Checkbox   v-model="community.ownFlag" v-for="community in item.communities" :key="community.communityId" style="display:inline-block;min-width:100px;text-aligh:left"  :disabled="!!item.flag"  :label="community.communityId">{{community.communityName}}</Checkbox>
 		       		</div>
                   </div>    
         </div>
-
-
-
         <div slot="footer" style="margin: 30px 0;text-align: center;">
                 <Button  type="primary" @click="submitRole">确认</Button>
                 <Button  type="ghost" style="margin-left:20px" @click="cancelRole">取消</Button>
@@ -39,10 +31,10 @@ export default {
     data() {
         return{
 		   newDetail:{},
-		   allCities:[], // allCities
+		   allCities:[], 
 		   cities:[],
-		   communityIds:[],  //  所有选择社区的集合， 全国时候 不传  communityId   ownFlag 
-           cityIds:[],   // 全国选中的时候 就是-1 其他的就是全选当前城市的集合 id  flag 
+		   communityIds:[],  
+           cityIds:[],    
         }
 	},
 
@@ -129,8 +121,8 @@ export default {
 				 })
 			 })
 		   }else{
-					target.allCities = false;
-					 target.cities && target.cities.map((val,index) =>{
+				 target.allCities = false;
+				 target.cities && target.cities.map((val,index) =>{
 				 val.flag = false;
 				 val.communities.map((v,i)=>{
 					 v.ownFlag=false;

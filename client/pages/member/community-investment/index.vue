@@ -129,12 +129,12 @@
                         align:'center'
                     },
                     {
-                        title: '管辖社区',
-                        key: 'communities', // todo   
+                        title: '是否存在管辖社区',
+                        key: 'hasMgtCmt',    
                         align:'center',
                         width:150,
                         render:(h,params)=>{
-                            let str = params.row.communities // todo 
+                            let str = params.row.hasMgtCmt 
                         if (str) {
                             return h('Tooltip',{
                                 props: {
@@ -158,9 +158,6 @@
                                         slot: 'content'
                                     }, str)
                                 ])
-                            // return h('div',{
-                            //  class:'comminity'
-                            // },'11122222222333333333333333333') // todo
                         }
                       }
                     },
@@ -237,7 +234,6 @@
                         title:err.message
                     });
                 })
-                console.log(newParams,'提交更改' );
             },
             getListData(){
                 this.loading=true;

@@ -339,7 +339,7 @@ export default {
             let params={
                     couponBaseId: this.couponBaseId
                 }
-                this.$http.post('create-coupon', params).then((res)=>{
+                this.$http.post('create-coupon-kmcoupon', params).then((res)=>{
                     this.$Notice.success({
                         title:'生成优惠券成功'
                     });  

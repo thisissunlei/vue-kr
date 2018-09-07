@@ -240,6 +240,7 @@ export default {
         callback(new Error("此项为必填项。"));
       }
 
+
       if (
         this.formItem.titleType != "PERSON" &&
         !phone.test(value) &&
@@ -340,7 +341,7 @@ export default {
           { required: true, message: "请先选择结束时间", trigger: "change" }
         ],
         taxpayerNumber: [{ trigger: "change", validator: validateMust }],
-        registerAddress: [{ trigger: "blur", validator: validateAddress }],
+        registerAddress: [{ trigger: "change", validator: validateAddress }],
         registerPhone: [{ trigger: "change", validator: validatephone }],
         bank: [{ trigger: "blur", validator: validateAddress }],
         bankAccount: [{ trigger: "blur", validator: validateAddress }]

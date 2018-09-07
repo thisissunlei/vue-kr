@@ -177,7 +177,7 @@ export default {
             this.$http.get(typeUrl,newParams).then((response)=>{    
                 this.listData=response.data.details;
                 let money=response.data.total;
-                this.allMoney=money?utils.thousand(money):'';
+                this.allMoney=(money||money==0)?utils.thousand(money):'';
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

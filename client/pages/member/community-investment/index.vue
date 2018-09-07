@@ -130,11 +130,11 @@
                     },
                     {
                         title: '管辖社区',
-                        key: 'shequ', // todo   
+                        key: 'communities', // todo   
                         align:'center',
                         width:150,
                         render:(h,params)=>{
-                            let str = params.row.shequ // todo 
+                            let str = params.row.communities // todo 
                         if (str) {
                             return h('Tooltip',{
                                 props: {
@@ -228,6 +228,7 @@
                 this.$http.post('editUserCommunity',newParams).then((res)=>{
                   
                   this.openDataPermission();
+                   this.getListData();
                    this.$Notice.success({
                         title:'修改成功'
                     });

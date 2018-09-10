@@ -840,6 +840,7 @@ export default {
                 this.isManager=(data.communityId&&data.customerId)?true:false;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
+                this.getStationAmount()
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -1021,7 +1022,8 @@ export default {
             this.$http.post('count-sale', params).then(r => {
                 _this.stationList = r.data.seats;
                 _this.formItem.rentAmount = r.data.totalrent;
-                let money = this.formItem.stationAmount - r.data.totalrent;
+                // let money = this.formItem.stationAmount - r.data.totalrent;
+                let money = r.data.discountAmount;
 
                 // let money = r.data.originalTotalrent - r.data.totalrent;
                 _this.saleAmount = Math.round(money * 100) / 100;

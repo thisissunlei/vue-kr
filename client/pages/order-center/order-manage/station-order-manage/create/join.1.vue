@@ -3,20 +3,125 @@
         <SectionTitle title="新建入驻服务订单管理"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
-                <BasicInfo/>
+                <Row style="margin-bottom:30px">
+                    <Col class="col">
+                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                        <selectCustomers 
+                            name="formItem.customerId" 
+                            :onchange="changeCustomer"
+                        />
+                    </FormItem>
+                </Col>
+                
+                <Col class="col">
+                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                        <selectCommunities 
+                            test="formItem" 
+                            :onchange="changeCommunity"
+                        />
+                            
+                    </FormItem>
+                    </Col>
+                    <Col class="col">
+                    <FormItem label="销售员" style="width:252px" prop="salerId">
+                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    </FormItem>
+                    </Col>
+                    <Col class="col">
+                    <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.opportunityId" 
+                            @onChange="changeChance" 
+                            @gotChanceList='handleGotChancelist' 
+                            v-show="showChanceSelector" 
+                            :showType="showChanceSelector" 
+                            :orderitems='orderitems' 
+                            :defaultValue='defaultChanceID'
+                            :disabled='chanceDisable'
+                          
+                        ></SelectChance>
+                    </FormItem>
+                    <div v-if='remindinfoNewUser' class="title-container">(
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+                    <div v-if='remindinfo' class="title-container">(如是
+                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+                    <p v-if="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
+                    </Col>
+                </Row>
             </DetailStyle>
             <!--苏岭增加客户主管理员开始-->
-            <div class="m-customer-info">
+            <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
-                <CustomerManager/>
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{customerInfo.phone}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{customerInfo.name}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{customerInfo.email}}
+                        </LabelText>
+                  </div>
+                </Row>
               </DetailStyle>  
             </div>
             <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="租赁信息">
-                <RentInfo/>
+                <Row style="margin-bottom:30px">
+                    <Col class="col">
+                    <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
+                        <DatePicker type="date" placeholder="租赁开始时间" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
+                    </FormItem>
+
+                    </Col>
+                    <Col class="col" v-if="false">
+                    <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
+                        <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    </FormItem>
+                    </Col>
+
+                    <Col class="col">
+                    <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
+                        <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndDateStatus"></DatePicker>
+                    </FormItem>
+                    </Col>
+                    <Col class="col">
+                    <FormItem label="租赁时长" style="width:252px">
+                        <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
+                    </FormItem>
+                    </Col>
+                    <Col class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                        <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                    </Col>
+                </Row>
+
             </DetailStyle>
             <DetailStyle info="金额信息">
-             <AmountInfo/>
+                <Row style="margin-bottom:10px">
+                    <Col class="col">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
+                    </Col>
+
+                </Row>
+                <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <Table border ref="selection" :columns="columns4" :data.sync="stationList" @on-selection-change="selectRow"></Table>
+                    <div class="total-money" v-if="stationList.length">
+                        <span>服务费总计</span>
+                        <span class="money">{{formItem.stationAmount | thousand}} </span>
+                        <span class="money">{{stationAmount}}</span>
+                    </div>
+                    </Col>
+                </Row>
+
             </DetailStyle>
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
@@ -166,10 +271,6 @@
 
 <script>
 
-import BasicInfo from './join/basicInfo.vue'
-import CustomerManager from './join/customerManager.vue'
-import RentInfo from './join/rentInfo.vue'
-import AmountInfo from './join/amountInfo.vue'
 
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
@@ -447,11 +548,7 @@ export default {
         SelectChance,
         ListAndMap,
         LabelText,
-        AddManager,
-        BasicInfo,
-        CustomerManager,
-        RentInfo,
-        AmountInfo
+        AddManager
     },
     mounted() {
         GLOBALSIDESWITCH("false");

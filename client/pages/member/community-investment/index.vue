@@ -165,8 +165,7 @@
         methods:{
             handleJump(obj){
                 this.$http.get('get-bill-person-id',{ssoId:obj.id}).then((res)=>{
-                    // this.roleList=res.data;
-                   window.open(`./#/oa/${res.data}/peopleDetail`,'_blank');
+                   window.open(`new/#/oa/${res.data}/peopleDetail`,'_blank');
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

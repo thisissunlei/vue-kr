@@ -51,6 +51,11 @@ export default  {
         url: '/api/krspace-op-web/krmting/mobile/community/city/list',
         method: 'get'
     },
+    //30天可用日期展示
+    'get-krmting-mobile-get-workday':{
+        url:'/api/krspace-op-web/krmting/mobile/community/generate-disable-calendar',
+        method:'get'
+    }
     
   }
   

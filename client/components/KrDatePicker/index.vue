@@ -70,6 +70,10 @@ export default {
         range: {
             type: Boolean,
             default: false
+        },
+        disabled:{
+            default:false,
+            type:Boolean
         }
     },
     data() {
@@ -234,18 +238,19 @@ export default {
         },
         //上一月
         prevMonthPreview() {
-            this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
-            if (this.tmpMonth == 0) {
-                console.log('this.tmpMonth', this.tmpMonth);
+            this.tmpMonth = this.tmpMonth - 1
+            
+            if (this.tmpMonth < 0) {
                 this.tmpMonth = 11
                 this.tmpYear--
             }
         },
         //下一月
         nextMonthPreview() {
-            this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
+            this.tmpMonth = this.tmpMonth + 1
+           
             if (this.tmpMonth == 11) {
-                console.log('this.tmpMonth', this.tmpMonth);
+                // console.log('this.tmpMonth', this.tmpMonth);
                 this.tmpMonth = 0
                 this.tmpYear++
             }
@@ -261,6 +266,9 @@ export default {
             this.panelType = 'date'
         },
         selectDate(date) {
+            if(this.disabled){
+                return ;
+            }
             // setTimeout(() => {
             if (this.validateDate(date)) return
             if (date.previousMonth) {
@@ -324,7 +332,9 @@ export default {
             return true
         },
         validateWeekend(date) {
+           
             return false
+            
             let day = new Date(this.tmpYear, this.tmpMonth, date.value).getDay()
             if (date.currentMonth && (day === 0 || day === 6)) {
                 return true
@@ -351,7 +361,8 @@ export default {
         },
         clear() {
             this.$emit('input', this.range ? ['', ''] : '')
-        }
+        },
+        
     }
 }
 </script>

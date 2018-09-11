@@ -133,23 +133,17 @@
                                  <div v-if="isAppError" class="u-error">请选择可预订时段</div>
                            </div>
                     </FormItem>
-                    <FormItem label="不可预订日期设置" class="u-input ivu-form-item-required"  style="width:350px"   >
+                  
+                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <div style="width:350px;float:right;">
-                            <Select v-model="model1" style="width:200px">
+                            <Select v-model="form.model" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </div>
                     </FormItem>
-                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <div style="width:350px;float:right;">
-                            <Select v-model="model1" style="width:200px">
-                                <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </div>
-                    </FormItem>
-                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
-                        <div style="width:350px;float:right;">
-                            <KrDatePicker/>
+                            <KrDatePicker v-model="date"/>
                         </div>
                     </FormItem>
                     <!-- <Row>
@@ -211,6 +205,8 @@ export default {
                 {value:'1',label:'无'},
                 {value:'2',label:'自定义时间'},
             ],
+            showDate:false,
+            date: [],
             category:'app/upgrade',
             isAppError:false,
             formItem:{},
@@ -256,8 +252,16 @@ export default {
     mounted:function(){
         GLOBALSIDESWITCH("false")
         this.getGoodsInfo();
+        this.getYearWeekend();
     },
     methods: {
+        selectChange(value){
+            if(value ==2){
+                this.showDate = true;
+            }else{
+                this.showDate = false;
+            }
+        },
         handleSubmit (name) {
             let {params}=this.$route;
             let message = '请填写完表单';
@@ -411,7 +415,31 @@ export default {
                 title:'图片大小超出限制'
             });
         },
-
+        getYearWeekend(){
+          
+            let params = {
+             strategy:'WEEK'
+            }      
+            this.$http.get('get-krmting-mobile-get-workday',params)
+            .then((res)=>{
+              this.date = [].concat(res.data)
+              let from = Object.assign({},this.from);
+              from.model = '2';
+              this.form = Object.assign({},from);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        validateWeekend(year,month,nowday) {
+           
+            let day = new Date(year, month, nowday).getDay()
+            if (month && (day === 0 || day === 6)) {
+                return true
+            }
+            return false
+        },
 
     }
 }

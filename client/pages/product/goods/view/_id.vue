@@ -64,9 +64,12 @@
                 <LabelText label="散座营业时段：">
                     {{goodsInfo.kmStartTime}}-{{goodsInfo.kmEndTime}}
                 </LabelText>
-                <!-- <LabelText label="不可预订日期策略：">
+                <LabelText label="不可预订日期策略：">
                     {{goodsInfo.kmMeeting}}
-                </LabelText> -->
+                </LabelText>
+                <div>
+                     <KrDatePicker v-model="date" :disabled="true"/>
+                </div>
             </DetailStyle>
         </div>
     </div>
@@ -78,12 +81,14 @@ import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle';
 import UploadFile from '~/components/UploadFile';
 import dateUtils from 'vue-dateutils';
+import KrDatePicker from '~/components/KrDatePicker'
 export default {
     components:{
         DetailStyle,
 		LabelText,
         SectionTitle,
-        UploadFile
+        UploadFile,
+        KrDatePicker
     },
     head(){
         return{
@@ -103,11 +108,13 @@ export default {
                 },
             ],
             goodsInfo:{},
+            date:[],
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false")
         this.getGoodsInfo();
+        this.getYearWeekend();
     },
     methods:{
         getGoodsInfo(){
@@ -140,7 +147,24 @@ export default {
                     title:err.message
                 });
             })
-        }
+        },
+        getYearWeekend(){
+          
+            let params = {
+             strategy:'WEEK'
+            }      
+            this.$http.get('get-krmting-mobile-get-workday',params)
+            .then((res)=>{
+              this.date = [].concat(res.data)
+              let from = Object.assign({},this.from);
+              from.model = '2';
+              this.form = Object.assign({},from);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
     }
 }
 </script>

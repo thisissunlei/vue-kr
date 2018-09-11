@@ -583,14 +583,15 @@ export default {
             }
         },
         disabled(val) {
-            console.log('disabled-->', val)
+            // console.log('disabled-->', val)
         }
     },
     methods: {
-        //苏岭增加客户主管理员开始
+//苏岭增加客户主管理员开始
         addManagerSubmit(params){
             this.submitManager && this.submitManager(this.managerSubmit);
         },
+        //变更管理员
         managerSubmit(){
 			let Params=Object.assign({},this.formData);
             Params.customerId=this.formItem.customerId;
@@ -639,10 +640,11 @@ export default {
 				});
 			})
         },
-        //苏岭增加客户主管理员结束
+//苏岭增加客户主管理员结束
+
+//批量录入价格 对于勾选的行
         submitPrice() {
             let price = false;
-            let _this = this;
             let stationVos = this.stationList;
             var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
             if (!pattern.test(this.price)) {
@@ -668,18 +670,17 @@ export default {
                 this.openPrice = !this.openPrice;
                 this.stationList = this.stationList.map((item) => {
                     if (selectedStation.indexOf(item.seatId) != -1) {
-                        item.originalPrice = Number(_this.price);
+                        item.originalPrice = Number(this.price);
                     }
 
                     return item
                 })
                 this.selectedStation = [];
-                this.getStationAmount()
+                this.getStationAmount() //价格变动后需要重新计算工位费用
             }
-
-
-
         },
+//批量录入价格 对于勾选的行
+
         openPriceButton() {
 
             let stationVos = this.stationList;
@@ -711,6 +712,9 @@ export default {
         back() {
             window.history.go(-1);
         },
+
+//提交新建表单
+
         joinFormSubmit() {
 
 
@@ -782,7 +786,7 @@ export default {
             formItem.communityId = this.formItem.communityId;
             formItem.salerId = this.formItem.salerId;
             formItem.opportunityId = this.formItem.saleChanceId;//销售机会ID
-            console.log(this.formItem.opportunityId,'joinFormSubmit_join_this.formItem.saleChanceId')
+            // console.log(this.formItem.opportunityId,'joinFormSubmit_join_this.formItem.saleChanceId')
             formItem.signDate = signDate;
             formItem.timeRange = this.formItem.timeRange;
 
@@ -814,6 +818,10 @@ export default {
             })
 
         },
+//提交新建表单
+
+//计算优惠信息
+        //show? 是否显示错误消息提示
         dealSaleInfo(show) {
             this.config()
             //处理已删除的数据
@@ -825,8 +833,8 @@ export default {
             })
             //检查手否有未填写完整的折扣项
             let complete = true;
-            let zhekou = true;
-            saleList.map(item => {
+            let zhekou = true;//是否是折扣
+            saleList.map(item => {//1 折扣  3免租
                 if (item.tacticsType == '1' && this.discount) {
                     item.discount = this.discount
                 }
@@ -883,6 +891,9 @@ export default {
             this.getSaleAmount(saleList);
             // return complete;
         },
+//计算优惠信息
+
+//提交给后端计算优惠后的金额        
         getSaleAmount(list) {
             this.config()
             let params = {
@@ -914,8 +925,9 @@ export default {
             })
 
         },
-        changezhekou(value) {
+//提交给后端计算优惠后的金额   
 
+        changezhekou(value) {
             let val = value.target.value;
             if (!val) {
                 return
@@ -961,7 +973,8 @@ export default {
                 _this.dealSaleInfo(true)
             }, 200)
         },
-        handleSubmit: function (name) {
+
+        handleSubmit(name) {
             let message = '请填写完表单';
             this.$Notice.config({
                 top: 80,
@@ -1011,7 +1024,8 @@ export default {
                 }
             })
         },
-        selectDiscount: function (value) {
+//切换优惠全选/全不选
+        selectDiscount (value) {
             // checkbox的全选事件
             let items = this.formItem.items;
             items = items.map((item) => {
@@ -1022,18 +1036,24 @@ export default {
             this.selectAll = value;
             this.formItem.items = items;
         },
+//切换优惠全选/全不选
+
         deleteDiscount: function () {
             // 删除选中的优惠信息
+
             let items = this.formItem.items;
             let select = []
             select = items.map((item) => {
                 return item.selelct;
             })
-            items = items.map(function (item, index) {
-                if (item.select) {
-                    item.show = false
-                }
-                return item;
+            // items = items.map(function (item, index) {
+            //     if (item.select) {
+            //         item.show = false
+            //     }
+            //     return item;
+            // });
+            items = items.filter(function (item, index) {
+                return !item.select
             });
             this.formItem.items = items;
             this.discount = ''
@@ -1041,6 +1061,7 @@ export default {
             this.dealSaleInfo(true)
 
         },
+
         getTacticsId(type) {
             let typeId = '';
             typeId = this.youhui.filter((item) => {
@@ -1083,16 +1104,18 @@ export default {
 
         changeType: function (val) {
             //优惠类型选择
-            if (!val) {
+            if (!val||!val.value) {
                 return;
             }
             let label = val.label;
             let value = val.value
             this.config()
+            debugger
             let itemValue = value.split('/')[0];
             let itemIndex = value.split('/')[1];
             let itemName = value.split('/')[2]
             let itemId = value.split('/')[3]
+            console.log('itemIndex',itemIndex)
             this.formItem.items[itemIndex].tacticsType = itemValue;
             this.formItem.items[itemIndex].tacticsName = itemName;
             this.formItem.items[itemIndex].tacticsId = itemId;
@@ -1100,7 +1123,12 @@ export default {
             let _this=this
             items = this.formItem.items.map((item) => {
                 let obj= _this.youhui.find(y=>y.id==item.tacticsId)
-                item.rightType=obj.rightType;
+                if (obj) {
+                    item.rightType=obj.rightType;
+                }  
+                else{
+                    // item.show=false
+                }  
                 if (item.value == 'qianmian') {
                     item.validStart = this.formItem.startDate;
                     item.discount = '';
@@ -1342,6 +1370,12 @@ export default {
                 });
                 return;
             }
+            if (this.formItem.items.length==this.youhui.length) {
+                this.$Notice.warning({
+                     title:`最多只能添加${this.youhui.length}条`
+                })
+                return
+            }
             this.index++;
             this.formItem.items.push({
                 value: '',
@@ -1497,6 +1531,8 @@ export default {
                 console.log('error', e)
             })
         },
+
+//获取可用的优惠        
         getSaleTactics: function (params) {//获取优惠信息
             let list = [];
             let maxDiscount = {};
@@ -1526,6 +1562,9 @@ export default {
                 console.log('error', e)
             })
         },
+//获取可用的优惠
+
+
         getStationAmount(list) {
             this.config()
             //判断标准单价是否有值，若无值，则不提交计算总价

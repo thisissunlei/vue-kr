@@ -347,6 +347,10 @@
         font-size: 14px;
         cursor: pointer;
     }
+    .roleName{
+        color: #2b85e4;
+        cursor: pointer;
+    }
 }
 .no-footer{
     .ivu-modal-footer{

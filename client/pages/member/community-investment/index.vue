@@ -115,6 +115,21 @@
                         align:'center'
                     },
                     {
+                        title:'人员角色',
+                        key:'roleTypeName',
+                        align:'center',
+                        render:(h,params)=>{
+                            return h('span',{
+                                class:'roleName',
+                                on:{
+                                        click:()=>{
+                                        this.handleJump(params.row)
+                                      }
+                                    }
+                                },params.row.roleTypeName)
+                        }
+                    },
+                    {
                         title: '帐号角色',
                         key: 'rolesString',
                         align:'center'
@@ -148,6 +163,16 @@
             this.getListData();
         },
         methods:{
+            handleJump(obj){
+                this.$http.get('get-bill-person-id',{ssoId:obj.id}).then((res)=>{
+                    // this.roleList=res.data;
+                   window.open(`./#/oa/${res.data}/peopleDetail`,'_blank');
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
             getDataList(){
                 this.$http.get('get-business-role').then((res)=>{
                     this.roleList=res.data;

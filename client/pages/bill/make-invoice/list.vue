@@ -329,7 +329,7 @@ import utils from '~/plugins/utils';
             checkData(){
                 let result = true;
                 this.invoiceData.map(item=>{
-                    if(!item.fileId || !item.invoiceNum){
+                    if(!item.invoiceNum){
                         result = false;
                     }
                 });

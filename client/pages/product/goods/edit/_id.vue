@@ -142,6 +142,16 @@
                         </div>
                     </FormItem>
                     <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <Tooltip max-width="300" placement="top">
+                           
+                           <Icon type="ios-help" size="20" style="margin-top:5px;"/>
+                             <div slot="content">
+                                <b>温馨提示</b>
+                                <p>① 灰色日期为不可预订日期</p>
+                                <p>② 单击选中日期，即可设置该日期是否可预订</p>
+                                <p>③ 默认所有周末为不可预订，您可以根据实际需求变更</p>
+                            </div>
+                        </Tooltip>
                         <div style="width:350px;float:right;">
                             <KrDatePicker v-model="form.disableDate"/>
                         </div>
@@ -466,6 +476,14 @@ export default {
 
 <style lang="less">
     .g-goods-detail{
+        .ivu-tooltip-inner{
+            max-width: 300px;
+        }
+        .center{
+            width: 300px;
+          
+            overflow: hidden;
+        }
         .u-input{
             display: inline-block;
             width: 252px;

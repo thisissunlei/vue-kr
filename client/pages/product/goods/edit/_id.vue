@@ -143,7 +143,7 @@
                     </FormItem>
                     <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <div style="width:350px;float:right;">
-                            <KrDatePicker v-model="date"/>
+                            <KrDatePicker v-model="form.disableDate"/>
                         </div>
                     </FormItem>
                     <!-- <Row>
@@ -214,6 +214,7 @@ export default {
             form:{
                kmStartTime:'09:00',
                kmEndTime:'19:00',
+               disableDate:[]
             },
             goodsInfo:{},
             ruleValidate: {
@@ -277,7 +278,7 @@ export default {
             if(!this.formItem.kmEndTime){
                 this.formItem.kmEndTime="19:00"
             }
-            console.log('this.formItem',this.formItem)
+            this.submitYearWeekend();
             this.$refs[name].validate((valid) => {
                 if (valid) {
                         _this.submitCreate();
@@ -415,10 +416,28 @@ export default {
                 title:'图片大小超出限制'
             });
         },
+        //不可预定日期提交
+        submitYearWeekend(){
+            //不可预定日期无时不请求
+            if(!showDate){
+                return ;
+            }
+            let params = JSON.stringify({
+                cmtId:this.$route.params.id,
+                disableDate:this.form.disableDate,
+            });
+            this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
+
+            }).catch(()=>{
+                 this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
         getYearWeekend(){
           
             let params = {
-             strategy:'WEEK'
+              cmtId:this.$route.params.id,
             }      
             this.$http.get('get-krmting-mobile-get-workday',params)
             .then((res)=>{

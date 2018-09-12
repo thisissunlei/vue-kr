@@ -25,7 +25,7 @@
                 v-if="stationList.length">
                 <span>服务费总计</span>
                 <span class="money">{{stationAmount | thousand}} </span>
-                <span class="money">{{stationAmount}}</span>
+                <span class="money">{{formatAmount2BIG(stationAmount)}}</span>
             </div>
             </Col>
         </Row>
@@ -392,12 +392,13 @@ export default {
                 this.stationData.submitData = this.stationList
                 this.rentAmount = r.data.totalrent;
                 this.stationAmount = r.data.totalrent;
-                this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+                // this.stationAmount = utils.smalltoBIG(r.data.totalrent)
                 this.selectedStation = []
                 if (this.showSaleDiv) {
                     this.dealSaleInfo(false)
                 }
-
+                console.log('this.stationAmount',this.stationAmount,this);
+                
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
@@ -405,6 +406,9 @@ export default {
 
             })
         },
+        formatAmount2BIG(amount){
+            return utils.smalltoBIG(amount)
+        }
     },
 }
 </script>

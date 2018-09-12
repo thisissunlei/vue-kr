@@ -53,7 +53,10 @@ export default {
         // placeholder: '请选择',
 
         orderitems: {
-            type: Object
+            type: Object,
+            default:()=>{
+                return {}
+            }
         },
         disabled: {
             type: Boolean,
@@ -101,17 +104,16 @@ export default {
         //         this.disabled = true;
         //     }
         // },
-        orderitems() {
-            console.log(this.orderitems, "....")
+        orderitems(val) {
             this.getSalerChanceList();
-
+            
         },
         defaultValue() {
             if (this.defaultValue==undefined) {
                 this.defaultValue=''
             }
             this.showValue = '' + this.defaultValue;
-            console.log(this.showValue, "-----")
+            // console.log(this.showValue, "-----")
         },
         showType() {
             this.show = this.showType;
@@ -124,7 +126,7 @@ export default {
         // }
     },
     mounted() {
-        console.log(this.showValue, "mmmmmmm")
+        // console.log(this.showValue, "mmmmmmm")
 
     },
     methods: {
@@ -135,7 +137,7 @@ export default {
             } else {
                 v = item.value
             }
-            console.log("vvvvvvv", v)
+            // console.log("vvvvvvv", v)
             this.$emit('onChange', v);
         },
         //获取销售机会列表
@@ -146,11 +148,10 @@ export default {
                 receiveId: this.orderitems.salerId,
                 orderId: this.orderitems.orderId
             }
-            console.log("kkkk")
+            // console.log("kkkk")
             if (!parms.customerId || !parms.communityId || !parms.receiveId) return;
             let list = [];
             let _this = this;
-            console.log("jjjjjj")
             http.get('get-salechance', parms, r => {
 
                 r.data.items.data.map(item => {
@@ -161,7 +162,7 @@ export default {
                 })
                 list.unshift({ label: '不绑定机会', value: -1 })
                 _this.salerOptions = [].concat(list);
-                console.log(_this.showValue, "mmmm", _this.salerOptions)
+                // console.log(_this.showValue, "mmmm", _this.salerOptions)
                 let parms = {
                     count: list.length - 1,
                     isNewUser: r.data.items.isNewUser,
@@ -169,7 +170,6 @@ export default {
                 }
                 this.isNewUser=parms.isNewUser
                 setTimeout(() => {
-
                     if (list.length == 2 && this.type != 'edit' && r.data.items.isNewUser) {
                         this.showValue = '' + list[1].value;
                         this.$emit('onChange', this.showValue);

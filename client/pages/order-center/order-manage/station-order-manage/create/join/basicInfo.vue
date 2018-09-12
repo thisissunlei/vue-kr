@@ -32,7 +32,7 @@
             </Col>
             <Col class="col">
             <!-- <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance"> -->
-            <CustomFormItem title='机会'>
+            <CustomFormItem title='机会' :required='OpportunityRequired' v-show='showSaleChance'>
                 <SelectChance name="formItem.opportunityId"
                     @onChange="changeChance"
                     @gotChanceList='handleGotChancelist'
@@ -76,7 +76,7 @@ export default {
     },
     data() {
         return {
-            salerName: '',
+            salerName: '请选择',
             chanceDisable: false,
             remindinfoNewUser: false,
             remindinfo: false,
@@ -85,7 +85,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: {},
+            orderitems:null,
             test: "test",
             showSaleChance: false,
             formItem: {
@@ -141,7 +141,6 @@ export default {
         changeSaler(val) {
             this.$store.commit('changeSaler', val)
             this.validSaleChance()
-
         },
         changeChance(val) {
             this.$store.commit('changeChance', val)
@@ -156,7 +155,6 @@ export default {
             this.orderitems = Object.assign({}, obj);
         },
         handleGotChancelist(parms) {
-            console.log(parms)
             if (parms.isNewUser) {
                 this.remindinfo = false
                 if (parms.count == 1) {

@@ -280,7 +280,7 @@
                                     // if(item=='INVALID'){
                                     //     style='u-nullify';
                                     // }
-                                    lines.push(tag('p',{class:'u-txts'},'('+orderStatus[item]+')'))
+                                    lines.push(tag('p',{class:`u-txts ${style}`},'('+orderStatus[item]+')'))
                                 }
                             }
                             return tag('div',lines);                              

@@ -157,5 +157,15 @@ export default {
     'add-business-role': {
         url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
         method: 'post'
-    }
+    },
+    //权限--数据--获取社区列表
+    'findCommunities': {
+        url: '/api/krspace-sso-web/sso/ssoUser/findCommunities',
+        method: 'get'
+      },
+       //权限--数据--编辑保存社区权限
+    'editUserCommunity': {
+        url: '/api/krspace-sso-web/sso/ssoUser/editUserCommunity',
+        method: 'post'
+      },
 } 

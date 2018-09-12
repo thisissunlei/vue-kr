@@ -25,8 +25,9 @@
                          </div> 
                    </div>
             </div>
-
-            <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
+            <div class="table-container">
+                <Table :columns="joinOrder" :data="joinData" border  class='list-table-raplace'/>
+            </div>
             <div  class='list-footer'>
                     <!-- <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/> -->
                     <div style="float: right;">
@@ -139,12 +140,25 @@
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
+                        minWidth:150,
+                         render(h,params){ 
+                          var hideBtn = params.row.hideBtn;
+                              if (hideBtn) {
+                                 return h('div', [
+                                h('div', {
+                                },'*****'),
+                                h('div',{}, `销售员:${params.row.salerName}`)  
+                            ]);
+                       }           
+                          return <span class="u-txt">{params.row.customerName}</span>;
+                        }
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',
+                        minWidth:100,    
                         render(tag,params){ 
                           var communityName=params.row.communityName;
                               if (communityName.lastIndexOf('社区')==communityName.length-2) {
@@ -157,7 +171,7 @@
                         title: '商品名称',
                         key: 'seatNames',
                         align:'center',
-                        width:150,
+                        width:100,
                         render:(h,params)=>{
                             let setnames=params.row.seatNames;
                             if (!setnames) {
@@ -181,7 +195,7 @@
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden',
-                                                    width:'130px'
+                                                    width:'64px'
                                                 }
                                             },setnames)
                                         ]),
@@ -194,7 +208,9 @@
                         title: '服务费总额',
                         key: 'rentAmount',
                         align:'center',
-                        render(h,params){ 
+                        minWidth:100,
+                        render(h,params){
+                        if(!params.row.hideBtn){ 
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;
                           return h('div', [
                                 h('span', {
@@ -203,13 +219,17 @@
                                     },
                                 }, money),
                             ]);                  
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                     }
                     },
                     {
                         title: '服务保证金',
                         key: 'depositAmount',
                         align:'center',
-                        render(h,params){ 
+                        render(h,params){
+                         if(!params.row.hideBtn){  
                           var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;
                           return h('div', [
                                 h('span', {
@@ -218,23 +238,33 @@
                                     },
                                 }, money),
                             ]);                 
+                        
+                            }else{
+                                return <span class="u-txt">*****</span>;
+                            }
                         }
                     },
                     {
                         title: '服务期限',
                         key: 'startDate',
                         align:'center',
-                        width:192,
+                        width:120,
                         render(h, params){
-                            let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
-                            return h('span',time)
+                            // let time= dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                            // return h('span',time)
+                            let lines=[];
+                            lines.push(h('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+' 至'))
+                            lines.push(h('p',dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate))))
+                            return h('div',lines);   
                         }
                     },
                     {
                         title: '旧服务费退还',
                         key: 'refundRentAmount',
+                        minWidth:120,
                         align:'center',
-                        render(h,params){ 
+                        render(h,params){
+                        if(!params.row.hideBtn){ 
                           var money=params.row.refundRentAmount?utils.thousand(params.row.refundRentAmount):params.row.refundRentAmount;
                           return h('div', [
                                 h('span', {
@@ -243,13 +273,18 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                             return <span class="u-txt">*****</span>;
                         }
+                      }
                     },
                     {
                         title: '保证金旧转新',
                         key: 'transferDepositAmount',
+                        minWidth:120,
                         align:'center',
                         render(h,params){ 
+                          if(!params.row.hideBtn){ 
                           var money=params.row.transferDepositAmount?utils.thousand(params.row.transferDepositAmount):params.row.transferDepositAmount;
                           return h('div', [
                                 h('span', {
@@ -258,13 +293,18 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                      }
                     },
                      {
                         title: '扣除保证金',
                         key: 'deductRentAmount',
+                        minWidth:120,
                         align:'center',
                         render(h,params){ 
+                          if(!params.row.hideBtn){ 
                           var money=params.row.deductRentAmount?utils.thousand(params.row.deductRentAmount):params.row.deductRentAmount;
                           return h('div', [
                                 h('span', {
@@ -273,29 +313,15 @@
                                     },
                                 }, money),
                             ]);                 
+                        }else{
+                             return <span class="u-txt">*****</span>;
                         }
+                       }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatusName',
                         align:'center',
-                    },
-                    {
-                        title: '生效时间',
-                        key: 'effectDate',
-                        align:'center',
-                        render(tag, params){
-                            let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
-                            if (time.split('  ').length==2) {
-                              let t1=time.split('  ')[0]
-                              let t2=time.split('  ')[1]
-                              let lines=[];
-                              lines.push(tag('p',t1))
-                              lines.push(tag('p',t2))
-                              return tag('div',lines);  
-                            }
-                            return time;
-                        }
                     },
                     {
                         title: '操作',
@@ -304,6 +330,7 @@
                         width:76,
                         className:'col-operate',
                         render:(tag,params)=>{
+                          if(!params.row.hideBtn){ 
                            var btnRender=[
                                tag(Buttons, {
                                    props: {
@@ -364,6 +391,7 @@
                                 }
                            }
                            return tag('div',btnRender);  
+                        }
                         }
                     }
                 ]
@@ -587,13 +615,18 @@
                 }
             }
         }
-        .list-table{
-            margin:20px;
-            margin-top:0px;
-            .col-operate{
-                .ivu-table-cell{
-                    padding-left: 0;
-                    padding-right: 0
+         .table-container{           
+            overflow: auto;
+            .list-table-raplace{
+                min-width:1300px ;
+                overflow: auto;
+                margin:0;
+                margin-top:0px;
+                .col-operate{
+                    .ivu-table-cell{
+                        padding-left: 0;
+                        padding-right: 0
+                    }
                 }
             }
         }

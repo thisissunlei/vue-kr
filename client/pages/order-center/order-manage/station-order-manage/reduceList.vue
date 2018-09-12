@@ -25,8 +25,9 @@
                    </div>
             </div>
 
-
-            <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+            <div class="table-container">
+                <Table :columns="joinOrder" :data="joinData" border class='list-table-reduce'/>
+            </div>
             <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_reduce_export'/>
                     <div style="float: right;">
@@ -133,7 +134,7 @@
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
                     },
                     {
                         title: '社区名称',
@@ -197,10 +198,15 @@
                         title: '减租金额',
                         key: 'rentAmount',
                         align:'center',
-                        render(tag,params){ 
+                        render(tag,params){
+                        if(!params.row.hideBtn){
                           var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
                           return <span class="u-txt">{money}</span>;
+                        
+                        }else{
+                            return <span class="u-txt">*****</span>;
                         }
+                     }
                     },
                     {
                         title: '订单状态',
@@ -243,23 +249,7 @@
                             return time;
                         }
                     },
-                    {
-                        title: '生效时间',
-                        key: 'effectDate',
-                        align:'center',
-                        render(tag, params){
-                            let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
-                            if (time.split('  ').length==2) {
-                              let t1=time.split('  ')[0]
-                              let t2=time.split('  ')[1]
-                              let lines=[];
-                              lines.push(tag('p',t1))
-                              lines.push(tag('p',t2))
-                              return tag('div',lines);  
-                            }
-                            return time;
-                        }
-                    },
+                    
                     {
                         title: '操作',
                         key: 'action',
@@ -267,6 +257,7 @@
                         width:76,
                         className:'col-operate',
                         render:(tag,params)=>{
+                       if(!params.row.hideBtn){
                            var btnRender=[
                                tag(Buttons, {
                                    props: {
@@ -327,6 +318,7 @@
                                 }
                            }
                            return tag('div',btnRender);  
+                         }
                         }
                     }
                 ]
@@ -538,13 +530,18 @@
                 }
             }
         }
-        .list-table{
-            margin:20px;
-            margin-top:0px;
-            .col-operate{
-                .ivu-table-cell{
-                    padding-left: 0;
-                    padding-right: 0
+         .table-container{           
+            overflow: auto;
+            .list-table-reduce{
+                min-width:1160px ;
+                overflow: auto;
+                margin:0;
+                margin-top:0px;
+                .col-operate{
+                    .ivu-table-cell{
+                        padding-left: 0;
+                        padding-right: 0
+                    }
                 }
             }
         }

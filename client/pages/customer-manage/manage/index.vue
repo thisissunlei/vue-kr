@@ -121,6 +121,11 @@
             SwitchCustomer,
             Message,
             EditCustomer
+        },    
+        head () {
+            return {
+                title: "客户管理-氪空间后台管理系统"
+            }
         },
         data () {
             return {
@@ -369,13 +374,14 @@
             }, 
             //打开转移
             createSwitch(){
-                this.$http.get('customer-is-switch',{customerIds:this.switchIds}).then((response)=>{  
-                    this.newSwitch();
-                }).catch((error)=>{
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=error.message;
-                }) 
+                this.newSwitch();
+                // this.$http.get('customer-is-switch',{customerIds:this.switchIds}).then((response)=>{  
+                    
+                // }).catch((error)=>{
+                //     this.openMessage=true;
+                //     this.MessageType="error";
+                //     this.warn=error.message;
+                // }) 
             },
             //转移客户提交
             submitSwitch(name){

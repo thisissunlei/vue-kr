@@ -383,6 +383,11 @@
     // 然后重新重新获取签约价明细（getStationAmount）和服务费明细（getSeatCombin
 
     export default {
+        head () {
+            return {
+                title: "新建换租订单-氪空间后台管理系统"
+            }
+        },
         data() {
             const validateChangeTime = (rule, value, callback) => {
                 var today = new Date()
@@ -803,12 +808,6 @@
 
             }
         },
-
-        head() {
-            return {
-                title: '新建换租订单'
-            }
-        },
         components: {
             SectionTitle,
             SelectSaler,
@@ -1011,6 +1010,8 @@
                 
             },
             editCard(value){
+                console.log("editCard 3");
+                
                 this.orderStatus = 'create';
                 this.status = value;
             },

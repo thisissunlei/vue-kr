@@ -74,6 +74,10 @@ export default  {
     'community-investment-list': {
         url: '/api/krspace-finance-web/inventory/cmt-investment/list',
     },
+    //获取招商销售员下拉的权限
+    'community-saler-show':{
+        url: '/api/krspace-finance-web/inventory/cmt-investment/ifShowSalesman',
+    },
     //每日库存-平面图
     'getInventoryMap': {
         url: '/api/krspace-finance-web/cmt/floor-graph/list',
@@ -175,6 +179,11 @@ export default  {
     //商品详情
     'goods-detail': {
         url: '/api/krspace-finance-web/cmt/goods/detail',
+        method: 'get'
+    },
+    //合同逾期未操作
+    'contract-no-operation': {
+        url: '/api/krspace-op-web/operation/ovedue/contract/list',
         method: 'get'
     }
   }

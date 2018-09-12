@@ -55,7 +55,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '即将进场'
+                title: '即将进场-氪空间后台管理系统'
             }
         },
         data () {
@@ -170,31 +170,29 @@ var layoutScrollHeight=0;
                     {
                         title: '即将进场客户',
                         align:'center',
-                        key: 'customerName'
+                        key: 'customerName',
+                         render(h,params){
+                              return h('div', [
+                                    h('a',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                        on: {
+                                                click: () => {
+                                                window.open(`/bill/customerAssets/${params.row.customerId}/view#basic`,'_blank')  
+                                                }
+                                            },
+                                    },params.row.customerName),
+                                  ])
+                        
+                        }
                     },
                     {
                         title: '客户是否新入驻',
                         width:90,
                         key: 'ifNewCustomer',
-                    },
-                    {
-                        title: '联系人',
-                        align:'center',
-                        width:100,
-                        key: 'contactName',
-                    },
-                    {
-                        title: '联系方式',
-                        align:'center',
-                        width:130,
-                        key: 'contactTel',
-                        render(h,params){
-                            if(params.row.contactTel){
-                                return params.row.contactTel
-                            }else{
-                                return '-'
-                            }
-                        }
                     },
                     {
                         title: '离场日',
@@ -208,7 +206,20 @@ var layoutScrollHeight=0;
                         width:80,
                         key: 'rentDays',
                         render(h,params){
-                            return params.row.rentDays+'天'
+                            return h('span',{},params.row.rentDays+'天' ) 
+                        }
+                    },
+                     {
+                        title: '销售员',
+                        width:90,
+                        key: 'salerName',
+                        align:'center',
+                        render(h,params){
+                            if(params.row.salerName){
+                                return h('span',{},params.row.salerName)
+                            }else{
+                                return h('span',{},'-') 
+                            }
                         }
                     },
                 ],

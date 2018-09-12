@@ -58,6 +58,11 @@ export default {
        Message,
        SlotHead,
        Buttons
+    },  
+    head () {
+        return {
+            title: "社区招商情况-氪空间后台管理系统"
+        }
     },
     data() {
         return{
@@ -83,8 +88,7 @@ export default {
                 {
                     title: '商品类型',
                     key: 'type',
-                    align:'center',
-                    width:100,
+                    align:'center'
                 },
                 {
                     title: '工位数量',
@@ -96,13 +100,13 @@ export default {
                     title: '商品定价',
                     key: 'quotedPrice',
                     align:'right',
-                    width:90
+                    width:80
                 },
                 {
                     title: '招商状态',
                     key: 'investmentStatusName',
                     align:'center',
-                    width:90,
+                    width:80,
                     render(tag, params){
                         var ren=params.row.investmentStatusName?params.row.investmentStatusName:'-'
                         return <span style={params.row.investmentStatus=='AVAILABLE'?'color:red':''}>{ren}</span>
@@ -112,20 +116,29 @@ export default {
                     title: '签约价',
                     key: 'orderList',
                     className:'current-range',
-                    width:90,
+                    width:80,
                     align:'right',
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'price')
+                        if(obj.row.orderList && obj.row.orderList[0] && !obj.row.orderList[0].hasAuth ){
+                                return publicFn.mergeCell(h,obj.row.orderList,'price')
+                        }else{
+                            return h('span',{style:{color:'black'}},'*****')
+                        }
+                        
                     }
                 },
                 {
                     title: '签约单价',
                     key: 'orderList',
                     className:'current-range',
-                    width:90,
+                    width:80,
                     align:'right',
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
+                        if(obj.row.orderList && obj.row.orderList[0] && !obj.row.orderList[0].hasAuth ){
+                             return publicFn.mergeCell(h,obj.row.orderList,obj.row.capacity,'teshu')
+                        }else{
+                            return h('span',{style:{color:'black'}},'*****')
+                        } 
                     }
                 },
                 {
@@ -135,7 +148,11 @@ export default {
                     align:'center',
                     width:60,
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'discount')
+                         if(obj.row.orderList && obj.row.orderList[0] && !obj.row.orderList[0].hasAuth ){
+                            return publicFn.mergeCell(h,obj.row.orderList,'discount')
+                        }else{
+                            return h('span',{style:{color:'black'}},'*****')
+                        } 
                     }
                 },
                 {
@@ -181,7 +198,6 @@ export default {
                     title: '销售员',
                     key: 'orderList',
                     className:'current-range',
-                    width:100,
                     align:'center',
                     render(h,obj){
                         return publicFn.mergeCell(h,obj.row.orderList,'sellerName')
@@ -292,11 +308,15 @@ export default {
         .current-range{
             .ivu-table-cell{ 
                 .ivu-tooltip{
-                    .row-current-more{
-                        padding: 15px 0 10px 0;
-                    }
-                    .noBorder{
-                        border-bottom:none;
+                    width:100%;
+                    .ivu-tooltip-rel{
+                        width:100%;
+                        .row-current-more{
+                            padding: 15px 0 10px 0;
+                        }
+                        .noBorder{
+                            border-bottom:none;
+                        }
                     }
                 }
             }

@@ -127,5 +127,45 @@ export default {
     'edit-customer':{
         url: 'api/order/csr/customer/actions/update',
         method: 'post' 
-    }
+    },
+    // 查看授权书
+    'check-certificate': {
+        url: 'api/krspace-op-web/customer/manager/certificate/list',
+        method: 'get'
+    },
+    // 下载授权书模板
+    'download-certificate': {
+        url: 'api/krspace-op-web/sys/down-auth-file',
+        method: 'post'
+    },
+    // 主管理员列表
+    'get-customer-major-admin': {
+      url: 'api/krspace-op-web/customer/manager/chief/list',
+      method: 'get'
+    },
+    //招商账户权限列表
+    'business-bill-list': {
+        url: '/api/krspace-sso-web/sso/ssoUser/business/list',
+        method: 'get'
+    },
+    //获取授予招商权限的列表
+    'get-business-role': {
+        url: '/api/krspace-sso-web/sso/ssoUser/investment/role/list',
+        method: 'get'
+    },
+    //授予招商角色
+    'add-business-role': {
+        url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
+        method: 'post'
+    },
+    //权限--数据--获取社区列表
+    'findCommunities': {
+        url: '/api/krspace-sso-web/sso/ssoUser/findCommunities',
+        method: 'get'
+      },
+       //权限--数据--编辑保存社区权限
+    'editUserCommunity': {
+        url: '/api/krspace-sso-web/sso/ssoUser/editUserCommunity',
+        method: 'post'
+      },
 } 

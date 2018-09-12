@@ -1,6 +1,6 @@
 // var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const pluginsDomain  = require('./config/plugins.env')[process.env.NODE_ENV].plugins;
+const pluginsDomain  = require('./config/plugins.env');
 module.exports = {
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 700000 },
@@ -21,12 +21,8 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
-    script: [
-      { src: pluginsDomain + '/plugins/nav/nav.1.0.0.js' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: pluginsDomain + '/plugins/public/images/favicon.ico' }
-    ]
+    script: pluginsDomain.jsFiles,
+    link: pluginsDomain.cssFiles
   },
 
   plugins: [

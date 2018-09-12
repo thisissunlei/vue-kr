@@ -88,7 +88,7 @@ export default {
 	},
 	head() {
         return {
-            title: '结算单编辑'
+            title: '结算单编辑-氪空间后台管理系统'
         }
     },
 	data(){

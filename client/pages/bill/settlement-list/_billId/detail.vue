@@ -106,9 +106,9 @@ export default {
 	},
 	head() {
         return {
-            title: '结算单详情页'
+            title: '结算单详情页-氪空间后台管理系统'
         }
-    },
+	},
 	data(){
 		return{
 			disabled:false,

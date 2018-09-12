@@ -17,7 +17,7 @@
       identify='daily'
     />
     <div class='enter-filed-table'>
-        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData" style="max-width:1024px">            
+        <Table :loading="loading" :height="height" border stripe :columns="columns" :data="dailyOldData" style="max-width:1920px">            
             <div slot="loading">
                     <Loading/>
             </div> 
@@ -116,7 +116,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '预约参观'
+                title: '预约参观-氪空间后台管理系统'
             }
         },
         data () {

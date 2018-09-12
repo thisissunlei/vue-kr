@@ -128,6 +128,11 @@
 import SectionTitle from '~/components/SectionTitle';
 import getColumns from './getColumns';
 export default {
+    head () {
+        return {
+            title: "项目管理权限-氪空间后台管理系统"
+        }
+    },
     data(){
         return{
             updatePersonid:'',

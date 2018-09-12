@@ -292,7 +292,7 @@ var layoutScrollHeight = 0;
 export default {
     head () {
             return {
-                title: "散座编辑"
+                title: "散座编辑-氪空间后台管理系统"
             }
     },
     data(){

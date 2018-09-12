@@ -51,6 +51,11 @@ export default {
         Buttons,
         SearchForm
     },
+     head () {
+        return {
+            title: "资金转移-氪空间后台管理系统"
+        }
+    },
     data() {
         return {
             searchFormItem: null,

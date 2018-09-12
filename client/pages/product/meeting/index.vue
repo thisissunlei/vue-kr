@@ -128,7 +128,7 @@ export default {
     },
     head () {
         return {
-            title: "会议室配置"
+            title: "会议室商品-氪空间后台管理系统"
         }
     },
     data(){

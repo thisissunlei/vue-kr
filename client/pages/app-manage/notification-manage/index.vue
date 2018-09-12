@@ -71,7 +71,7 @@ export default {
   },
    head () {
         return {
-            title: "通知管理"
+            title: "通知-氪空间后台管理系统"
         }
     },
   data(){

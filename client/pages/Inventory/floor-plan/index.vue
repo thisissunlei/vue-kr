@@ -92,7 +92,12 @@ export default {
     Discount,
     Loading,
     Configuration
-  },
+  },  
+    head () {
+        return {
+            title: "库存平面图-氪空间后台管理系统"
+        }
+    },
   data(){
     return{
        openTime:false,
@@ -239,8 +244,8 @@ export default {
          //显示
          var tirDom = document.getElementById('gantt-chart-tool-tip'+selectId);
          var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+selectId);
-         tirDom.style.display = 'inline-block';
-         angleDom.style.display = 'inline-block';
+         tirDom.style.display = 'block';
+         angleDom.style.display = 'block';
          publicFn.poptipOver(every,all,canvas,scroll,this.discount,isIcon)
     },
     mouseEnter(event,every,all,canvas,scroll,isIcon){

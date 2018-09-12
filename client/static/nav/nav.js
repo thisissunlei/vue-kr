@@ -2,6 +2,8 @@
 
     // var NavItems = getNavs();
     var menuCode = [];
+    var isSidebarListen = false;
+    var isHanderListen = false;
     var navUtils = {
         activeData: [],
         isHome: false,
@@ -29,7 +31,7 @@
         bodyDom:'',
         contentDom:'',
         menuBtnBacks:[],
-        closeRoutrs:[],
+        
     
     }
     //侧栏按钮
@@ -46,6 +48,7 @@
     var accountBoxId =  'j_account_box'+ Math.round(Math.random()*10);
     var exitBtnId = 'j_exit_btn'+ Math.round(Math.random()*10);
     var maskId = 'j_detail_mask'+ Math.round(Math.random()*10);
+    var headerId = 'j_hander'+ Math.round(Math.random()*10);
     //获取url
     function getRouter() {
         var router = location.href.split('?')[0];
@@ -80,11 +83,6 @@
             alias = '/project/#'
             return '/project/#'+router;
         }
-        if(type && type == 'product'){
-    
-            alias = '/product/#'
-            return '/product/#'+router;
-        }
         if(type && type == "member"){
             alias = '/';
             hostname =  'memberadmin.krspace.cn';
@@ -98,9 +96,7 @@
             return 'admin'
         }else if(router.indexOf('project/#/') !=-1){
             return 'project'
-        }else if(router.indexOf('product/#/') !=-1){
-            return 'product'
-        }else{
+        }else {
             return 'vue';
         }
     }
@@ -208,6 +204,9 @@
             accountBoxDom.style.display = 'none';
         }
     }
+    function goLocation(){
+        console.log("--=======")
+    }
     //头部和侧栏渲染
     function renderHanderAndSidebar(){
         var showSidebar = 'block';
@@ -230,7 +229,7 @@
             '<div class="'+menuName+'" id="'+menuId+'"></div>' +
             '<div class="u-header-logo"></div>' +
 
-            '<div class="header-nav" id="j_header">'+renderHander(navUtils.navs)+'</div>' +
+            '<div class="header-nav" id="'+headerId+'">'+renderHander(navUtils.navs)+'</div>' +
 
             '<div class = "j_header_other">' +
 
@@ -261,6 +260,7 @@
         var moreDom = document.getElementById(moreId);
         var navDom = document.getElementById(navId)
         var sidebarDom =  document.getElementById(sidebarId);
+        var handerDom = document.getElementById(headerId);
         if(moreDom){
             moreDom.onclick = moreClick
         }
@@ -275,7 +275,26 @@
         document.getElementById(accountBoxId).onclick = function(){
 
         }
+        if(!isHanderListen && handerDom){
+            console.log("=======+++")
+            handerDom.onclick = function(e){
+                console.log(e.target.tagName.toUpperCase())
+                if(e.target.tagName.toUpperCase() == 'SPAN'){
+                    var href = event.target.attributes['data-href'].value;
+                    if(href){
+                        if(typeof(Storage)!=="undefined"){
+                            sessionStorage.scrollTop = 0;
+                        }
+                        location.href = href;
+                    }
+                }
+               
+            
+            }
+        }
+       
         
+       
         
         document.getElementById(exitBtnId).onclick = function(){
             var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
@@ -295,8 +314,24 @@
                 xhr.send();
         }
         // sidebarDom.onclick = menuClick;
+        if(typeof(Storage)!=="undefined"){
+            sidebarDom.scrollTop =  sessionStorage.scrollTop;
+           
+        }
+        if(!isSidebarListen && sidebarDom){
+           
+            isSidebarListen = true;
+            sidebarDom.addEventListener('mousewheel',function(e){
+               
+                if(typeof(Storage)!=="undefined"){
+                    sessionStorage.scrollTop = sidebarDom.scrollTop;
+                }
+            },false)
+        }
+        
+       
         if(sidebarDom.style.display=='none'){
-            navUtils.contentDom.style.paddingLeft = '0px'
+            navUtils.contentDom.style.paddingLeft = '0px';
         }else{
             navUtils.contentDom.style.paddingLeft = '180px'
 
@@ -336,10 +371,10 @@
                 if(index>7 && activeStr.indexOf(oldHref)!=-1){
                     otherActive = "bold";
                 }
-                more += '<li  class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+                more += '<li    class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><span data-href="' + href + '">' + item.name + '</span></li>';
                 return;
             }
-            html += '<li name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li   name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><span data-href="' + href + '">' + item.name + '</span></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {
@@ -452,10 +487,38 @@
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        
-        // console.log("pppppp------",dom)
-        http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
-            var navs = [].concat(response.data);
+
+        if(typeof(Storage)!=="undefined")
+	    {
+            if (sessionStorage.user){
+                navUtils.navs = JSON.parse(sessionStorage.navs);
+                navUtils.user = JSON.parse(sessionStorage.user);
+                routerRefresh();
+                return;
+            }
+           
+        }
+       
+        getNavData();
+    }
+  
+    window.addEventListener('hashchange',routerRefresh);
+    
+    renderHanderAndSidebar();
+    function getNavData(){
+         // console.log("pppppp------",dom)
+         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+            var navs = [{
+                iconUrl: "icon-card",
+              
+                name: "首页",
+             
+                showFlag: "YES",
+                sideFoldFlag: "YES",
+               
+                topFoldFlag: "YES",
+                url: "/"
+            }].concat(response.data);
             routerRefresh();
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 
@@ -469,7 +532,9 @@
         })
     }
     renderHanderAndSidebar();
-  
+    window.addEventListener('load',function(){
+
+    })
    
     global.GLOBALSIDESWITCH = pushCloseRoutrs;//设置页面的侧栏
     global.GLOBALHEADERSET = setDefaultHeader;//设置高亮的头部

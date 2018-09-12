@@ -133,6 +133,29 @@
                                  <div v-if="isAppError" class="u-error">请选择可预订时段</div>
                            </div>
                     </FormItem>
+                  
+                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <div style="width:350px;float:right;">
+                            <Select v-model="form.model" style="width:200px" @on-change="selectChange">
+                                <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </div>
+                    </FormItem>
+                    <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                        <Tooltip max-width="300" placement="top">
+                           
+                           <Icon type="ios-help" size="20" style="margin-top:5px;"/>
+                             <div slot="content">
+                                <b>温馨提示</b>
+                                <p>① 灰色日期为不可预订日期</p>
+                                <p>② 单击选中日期，即可设置该日期是否可预订</p>
+                                <p>③ 默认所有周末为不可预订，您可以根据实际需求变更</p>
+                            </div>
+                        </Tooltip>
+                        <div style="width:350px;float:right;">
+                            <KrDatePicker v-model="form.disableDate"/>
+                        </div>
+                    </FormItem>
                     <!-- <Row>
                        
                         <Col span="13" style="position:relative">
@@ -170,14 +193,16 @@ import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle';
 import UploadFile from '~/components/UploadFile';
 import dateUtils from 'vue-dateutils';
-import calendar from '../calendar.vue'
+import calendar from '../calendar.vue';
+import KrDatePicker from '~/components/KrDatePicker'
 export default {
      components:{
         DetailStyle,
 		LabelText,
         SectionTitle,
         UploadFile,
-        calendar
+        calendar,
+        KrDatePicker
     },
     head(){
         return{
@@ -186,6 +211,12 @@ export default {
     },
     data(){
         return{
+            selectList:[
+                {value:'1',label:'无'},
+                {value:'2',label:'自定义时间'},
+            ],
+            showDate:false,
+            date: [],
             category:'app/upgrade',
             isAppError:false,
             formItem:{},
@@ -193,6 +224,7 @@ export default {
             form:{
                kmStartTime:'09:00',
                kmEndTime:'19:00',
+               disableDate:[]
             },
             goodsInfo:{},
             ruleValidate: {
@@ -231,8 +263,16 @@ export default {
     mounted:function(){
         GLOBALSIDESWITCH("false")
         this.getGoodsInfo();
+        this.getYearWeekend();
     },
     methods: {
+        selectChange(value){
+            if(value ==2){
+                this.showDate = true;
+            }else{
+                this.showDate = false;
+            }
+        },
         handleSubmit (name) {
             let {params}=this.$route;
             let message = '请填写完表单';
@@ -248,7 +288,7 @@ export default {
             if(!this.formItem.kmEndTime){
                 this.formItem.kmEndTime="19:00"
             }
-            console.log('this.formItem',this.formItem)
+            this.submitYearWeekend();
             this.$refs[name].validate((valid) => {
                 if (valid) {
                         _this.submitCreate();
@@ -386,7 +426,49 @@ export default {
                 title:'图片大小超出限制'
             });
         },
+        //不可预定日期提交
+        submitYearWeekend(){
+            //不可预定日期无时不请求
+            if(!showDate){
+                return ;
+            }
+            let params = JSON.stringify({
+                cmtId:this.$route.params.id,
+                disableDate:this.form.disableDate,
+            });
+            this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
 
+            }).catch(()=>{
+                 this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        getYearWeekend(){
+          
+            let params = {
+              cmtId:this.$route.params.id,
+            }      
+            this.$http.get('get-krmting-mobile-get-workday',params)
+            .then((res)=>{
+              this.date = [].concat(res.data)
+              let from = Object.assign({},this.from);
+              from.model = '2';
+              this.form = Object.assign({},from);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        validateWeekend(year,month,nowday) {
+           
+            let day = new Date(year, month, nowday).getDay()
+            if (month && (day === 0 || day === 6)) {
+                return true
+            }
+            return false
+        },
 
     }
 }
@@ -394,6 +476,14 @@ export default {
 
 <style lang="less">
     .g-goods-detail{
+        .ivu-tooltip-inner{
+            max-width: 300px;
+        }
+        .center{
+            width: 300px;
+          
+            overflow: hidden;
+        }
         .u-input{
             display: inline-block;
             width: 252px;

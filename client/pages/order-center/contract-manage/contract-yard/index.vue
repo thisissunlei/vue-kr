@@ -56,6 +56,11 @@
             SectionTitle,
             ContractYard,
             EnglishInput
+        },   
+        head() {
+            return {
+                title: "合同扫码-氪空间后台管理系统"
+            }
         },
         data () {    
             return {   

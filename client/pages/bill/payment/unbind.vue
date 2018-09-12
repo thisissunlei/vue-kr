@@ -118,11 +118,6 @@ export default {
         props:{
             mask:String
         },
-        head () {
-            return {
-                title: "回款管理"
-            }
-        },
         data () {
             return {
                 form:'form',
@@ -418,7 +413,7 @@ export default {
 
             },
             onCollection(){
-                window.open('./payment/collection','_blank');
+                window.open('/bill/payment/collection','_blank');
             }
 
 

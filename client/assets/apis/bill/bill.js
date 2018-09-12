@@ -80,6 +80,11 @@ export default  {
       url: '/api/krspace-pay/bill/bill-type',
       method: 'get'
     },
+    //账单中心--账单id与类型
+    'get-orderId-type':{
+      url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
+      method: 'get'
+    },
     //账单中心--收入类型
     'get-fee-type': {
       url: '/api/krspace-pay/income/fee-type',
@@ -224,7 +229,17 @@ export default  {
       url: '/api/krspace-pay/payment/customer/like',
       method: 'get'
     },
-    
+
+    // 同步数据--预收数据
+    'get-advanced-collection-list': {
+      url: '/api/sync/listKdPaymentSummaryByPage',
+      method: 'get'
+    },
+    // 同步数据--应收数据
+    'get-receivable-collection-list': {
+      url: '/api/sync/listKdIncomeSummaryByPage',
+      method: 'get'
+    }
 
   }
   

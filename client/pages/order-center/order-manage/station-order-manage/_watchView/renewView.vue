@@ -33,6 +33,17 @@
 					{{nullifyRemark}}
 				</LabelText>
 			</DetailStyle>
+			<DetailStyle info="客户主管理员信息">
+				<LabelText label="管理员手机号：">
+					{{basicInfo.phone}}
+				</LabelText>
+				<LabelText label="管理员姓名：">
+					{{basicInfo.name}}
+				</LabelText>
+				<LabelText label="管理员电子邮箱：">
+					{{basicInfo.email}}
+				</LabelText>
+			</DetailStyle>
 			<DetailStyle info="续租信息">
 				<LabelText label="续租开始日期：">
 					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}
@@ -101,7 +112,7 @@ export default {
 	name: 'RenewView',
 	head() {
 		return {
-			title: '续租详情'
+			title: "查看续租订单详情-氪空间后台管理系统"
 		}
 	},
 	components: {
@@ -211,6 +222,11 @@ export default {
 							return params.row.discountNum
 						}
 					}
+				},
+				{
+					title: '优惠添加人',
+					key: 'addUserName',
+					align: 'center',					
 				}
 			],
 
@@ -319,7 +335,6 @@ export default {
 				id: params.watchView
 			};
 			this.$http.get('join-bill-detail', from).then((response) => {
-				debugger;
 				this.basicInfo = response.data;
 				let pars = {
 					customerId: this.basicInfo.customerId,

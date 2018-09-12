@@ -83,6 +83,9 @@ export default {
         },
         customerId() {
             this.validIsManager()
+        },
+        managerId(val){
+            this.$store.commit('changeManagerId',val)
         }
     },
     methods: {
@@ -121,6 +124,7 @@ export default {
         },
         validIsManager() {
             this.isManager = this.customerId && this.communityId;
+            this.$store.commit('changeIsManager', this.isManager)
             if (!this.isManager) {
                 return;
             }
@@ -162,7 +166,7 @@ export default {
     }
     .info-button {
         position: absolute;
-        top: -45px!important;
+        top: -45px !important;
         right: 414px;
     }
 }

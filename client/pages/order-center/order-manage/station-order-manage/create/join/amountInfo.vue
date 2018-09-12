@@ -25,7 +25,7 @@
                 v-if="stationList.length">
                 <span>服务费总计</span>
                 <span class="money">{{stationAmount | thousand}} </span>
-                <span class="money">{{formatAmount2BIG(stationAmount)}}</span>
+                <span class="money">{{stationAmount| amountInWords}}</span>
             </div>
             </Col>
         </Row>
@@ -87,6 +87,7 @@ export default {
             stationAmount: '',
             params: '',
             stationList: [],
+            selectedStation: [],
             stationData: {
                 submitData: [],
                 deleteData: [],
@@ -339,12 +340,11 @@ export default {
             this.saleAmounts = utils.smalltoBIG(0);
             this.saleAmount = 0;
         },
-        onResultChange: function (val) {//组件互通数据的触发事件
-            console.log('onResultChange', val)
+        onResultChange(val) {//组件互通数据的触发事件
             this.stationData = val;
 
         },
-        cancelStation: function () {//工位弹窗的取消
+        cancelStation() {//工位弹窗的取消
             this.stationData = {
                 submitData: this.stationList,
                 deleteData: [],
@@ -390,24 +390,20 @@ export default {
                     return obj;
                 });
                 this.stationData.submitData = this.stationList
+                this.$store.commit('changeSeats', this.stationList)
                 this.rentAmount = r.data.totalrent;
+                this.$store.commit('changeRentAmount', r.data.totalrent)
                 this.stationAmount = r.data.totalrent;
-                // this.stationAmount = utils.smalltoBIG(r.data.totalrent)
                 this.selectedStation = []
                 if (this.showSaleDiv) {
                     this.dealSaleInfo(false)
                 }
-                console.log('this.stationAmount',this.stationAmount,this);
-                
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
                 })
 
             })
-        },
-        formatAmount2BIG(amount){
-            return utils.smalltoBIG(amount)
         }
     },
 }

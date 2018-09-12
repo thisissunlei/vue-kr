@@ -71,7 +71,7 @@ export default {
         return {
             startDate: '',
             endDate: "",
-            signDate: '',
+            signDate:'',
             timeRange: '',
             timeError: ''
         }
@@ -93,6 +93,10 @@ export default {
             this.$store.commit('changeTimeRange', val)
 
         },
+    },
+    mounted() {
+        this.startDate=new Date();
+        this.signDate=new Date();
     },
     methods: {
         changeBeginTime(val) {//租赁开始时间的触发事件，判断时间大小

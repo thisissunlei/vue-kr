@@ -113,6 +113,7 @@ export default {
                     this.$store.commit('setFloors', r.data.floor)
                     this.ssoId = r.data.ssoId;
                     this.ssoName = r.data.ssoName;
+                    this.$store.commit('changeSSO',{ssoId:this.ssoId,ssoName:this.ssoName})
                     if (!this.formItem.salerId) {
                         this.$store.commit('changeSaler', JSON.stringify(r.data.ssoId))
                         this.salerName = r.data.ssoName;

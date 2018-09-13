@@ -363,10 +363,7 @@ export default {
             let endTime=dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.endtime));
             this.formItem.endTime=`${endTime} 23:59:59`;
           }
-          if(this.formItem.cityId){
-              let cityId= this.formItem.cityId;
-              this.formItem.cityId= String(cityId)
-          }
+         
 
             let formItem=Object.assign({},this.formItem);
             if(formItem.startTime){

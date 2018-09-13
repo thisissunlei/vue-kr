@@ -8,12 +8,12 @@
                             <RadioGroup 
                                 v-model="formItem.couponType" 
                             >
-                                <Radio 
+                                <!-- <Radio 
                                     label="OFFLINESTORE" 
                                     style="margin-right:120px;"
                                 >
                                     线下门店
-                                </Radio>
+                                </Radio> -->
                                 <Radio 
                                     label="USERLIFE" 
                                     style="margin-right:120px;"

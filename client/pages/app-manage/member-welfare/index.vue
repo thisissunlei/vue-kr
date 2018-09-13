@@ -1,13 +1,68 @@
 <template>
  <div class="g-member-welfare">
        <SectionTitle title="会员福利管理" />
-            <div class="u-search" >
+            <div class="m-welfare-operation">
                  <Button type="primary" @click="jumpCreate">新建</Button>
-                <span class="u-high-search" @click="showSearch"></span>  
-                <SearchForm 
-                        :searchFilter="searchFilter"
-                        :onSubmit="onSubmit"
-                /> 
+                 <div class="u-select">
+                        <div class="u-select-list">
+                            <span class="u-select-label">福利类型</span>
+                            <Select
+                                clearable
+                                v-model="formItem.couponType"
+                                placeholder="请选择"
+                                style="width:100px"
+                                >
+                                <Option v-for="(option, index) in couponTypeList" :value="option.value" :key="index">{{option.label}}</Option>
+                            </Select>
+                        </div>
+                        <div class="u-select-list">
+                                <span  class="u-select-label">福利范围</span>
+                                <Select
+                                    v-model="formItem.cityId"
+                                    placeholder="请选择"
+                                    :label-in-value="labelInValue"
+                                    clearable
+                                    style="width:100px"
+                                    >
+                                    <Option v-for="(option, index) in cityList" :value="option.value" :key="index">{{option.label}}</Option>
+                                </Select>
+                        </div>
+                        <div class="u-select-list u-date">
+                                <span  class="u-select-label">领取有效期</span>
+                                <DatePicker
+                                        type="date"
+                                        v-model="formItem.startTime"
+                                        placeholder="请选择开始日期"
+                                        style="width: 150px;margin-right:4px;"
+                                ></DatePicker>
+                                <span class="u-date-txt">至</span>
+                                <DatePicker
+                                        type="date"
+                                        v-model="formItem.endtime"
+                                        placeholder="请选择截止日期"
+                                        style="width: 150px;margin-right:4px;"
+                                ></DatePicker>
+                        </div>
+                </div>
+                <div class="u-search">
+                    <div class="u-select-list">
+                            <span class="u-select-label">福利标题</span>
+                            <Input
+                                v-model="formItem.title"
+                                placeholder="请输入搜索关键词"
+                                style="width: 150px"
+                            />
+                    </div>
+                    <div class="u-select-list">
+                            <span class="u-select-label">创建人</span>
+                            <Input
+                                v-model="formItem.createName"
+                                placeholder="请输入搜索关键词"
+                                style="width: 150px"
+                            />
+                    </div>
+                    <Button type="primary" @click="lowerSubmit">搜索</Button>
+                </div>
             </div>
           <div class="u-table">
             <Table  border :columns="welfareColumns" :data="tableList"/>
@@ -39,33 +94,17 @@
                 <Button type="ghost" style="margin-left: 8px" @click="openDown">取消</Button>
             </div>
         </Modal>
-        <Modal
-                v-model="openSearch"
-                title="高级查询"
-                ok-text="确定"
-                cancel-text="取消"
-                width="660"
-        >
-                <HighSearch @formData="getSearchData"></HighSearch>
-                <div slot="footer">
-                    <Button type="primary" @click="searchSubmit">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
-                </div>
-        </Modal>
-
+       
  </div>
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-import SearchForm from '~/components/SearchForm';
 import utils from '~/plugins/utils';
-import HighSearch from './highSearch';
+import dateUtils from 'vue-dateutils';
 
 export default {
   components:{
       SectionTitle,
-      SearchForm,
-      HighSearch
   },
     head() {
         return {
@@ -79,22 +118,21 @@ export default {
            totalCount:0,
            tableList:[],
            openCancel:false,
-           openSearch:false,
            Params:{
               pageSize:15,
               page:1, 
            },
            couponId:'',
-           searchFilter:[
-               {
-                   label:'福利标题',
-                   value:'title'
-               },
-               {
-                   label:'创建人',
-                   value:'createName'
-               }
-           ],
+           formItem:{
+               couponType:'',
+               cityId:'',
+               beginTime:'',
+               endTime:'',
+               title:'',
+               createName:'',
+           },
+           couponTypeList:[],
+           cityList:[],
            welfareColumns:[
                 {
                     title: '福利标题',
@@ -233,26 +271,31 @@ export default {
         }else{
             this.getTableData(this.Params)
         }
+         this.getCityType()
          
   },
-//   mounted(){
-//       this.getTableData(this.Params);
-//   },
+
   methods:{
-    onSubmit(form){ 
-          if(this.Params.title){
-            this.Params.title="";
-          }
-          if(this.Params.createName){
-            this.Params.createName="";
-          }
-          let params=Object.assign({},this.Params,form);
-          utils.addParams(params);
-      },
-    showSearch (params) {
-        utils.clearForm(this.searchData);
-        this.openSearch=!this.openSearch;
-      },
+    getCityType(){
+             this.$http.get('get-city-and-type', '').then((res)=>{
+                   res.data.types.map((item)=>{
+                       item.value=item.code;
+                       item.label=item.name;
+                       return item;
+                   })
+                   res.data.citys.map((item)=>{
+                       item.value=item.id;
+                       item.label=item.name;
+                       return item;
+                   })
+                   this.couponTypeList=res.data.types;
+                   this.cityList=res.data.citys;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+    },
      jumpCreate(){
           window.open(`/app-manage/member-welfare/create`,'_blank');
      },
@@ -301,17 +344,12 @@ export default {
             })
         
       },
-       getSearchData(form){
-            this.searchData=form;
-      },
+      
        searchSubmit(){
             let params=Object.assign(this.Params,this.searchData);
             utils.addParams(params);
       },
-       showSearch (params) {
-        utils.clearForm(this.searchData);
-        this.openSearch=!this.openSearch;
-      },
+      
 
 
 
@@ -320,18 +358,38 @@ export default {
 </script>
 <style lang="less">
 .g-member-welfare{
-    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
-                float:right;
-                margin-left:20px;
-            }
+    .m-welfare-operation{
+         padding:20px 20px;
+         height:130px;
+         .u-select{
+            display: inline-block;
+            padding-left:20px;
+            height:40px;
+         }
+         .u-select-list{
+             display: inline-block;
+             margin:0 20px;
+            
+         }
+         .u-select-label{
+             padding-right:10px;
+             white-space:nowrap; 
+         }
+         .u-search{
+             height:50px;
+             margin-top:15px;
+             .u-select-list{
+                 margin-left:0;
+             }
+         }
+        .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+            
+        }
     }
     .u-table{
         padding:0 20px;

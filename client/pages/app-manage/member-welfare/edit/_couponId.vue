@@ -285,6 +285,11 @@ export default {
      IconTip,
      UploadFile
   },
+  head() {
+       return {
+            title: '编辑福利-氪空间后台管理系统'
+        }
+  },
   data(){
       return{
           category:'app/upgrade',

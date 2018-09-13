@@ -117,6 +117,11 @@ export default {
       LabelText,
       SectionTitle
     },
+    head() {
+       return {
+            title: '福利详情-氪空间后台管理系统'
+        }
+  },
     data(){
       return{
         basicInfo:{

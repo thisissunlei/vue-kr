@@ -12,18 +12,6 @@
                     v-if="timeError">租赁开始时间不得大于结束时间</div>
             </CustomFormItem>
             </Col>
-            <Col class="col"
-                v-if="false">
-            <CustomFormItem title='租赁结束日期'>
-                <DatePicker type="month"
-                    placeholder="租赁结束日期"
-                    format="yyyy-MM-dd"
-                    v-model="endDate"
-                    style="display:block"
-                    @on-change="changeEndTime"></DatePicker>
-            </CustomFormItem>
-            </Col>
-
             <Col class="col">
             <CustomFormItem title='租赁结束日期'>
                 <DatePicker type="date"
@@ -71,7 +59,7 @@ export default {
         return {
             startDate: '',
             endDate: "",
-            signDate:'',
+            signDate: '',
             timeRange: '',
             timeError: ''
         }
@@ -91,12 +79,11 @@ export default {
         },
         timeRange(val) {
             this.$store.commit('changeTimeRange', val)
-
         },
     },
     mounted() {
-        this.startDate=new Date();
-        this.signDate=new Date();
+        this.startDate = new Date();
+        this.signDate = new Date();
     },
     methods: {
         changeBeginTime(val) {//租赁开始时间的触发事件，判断时间大小
@@ -122,39 +109,7 @@ export default {
             this.timeError = error;
 
         },
-        changeEndTime(val) {//租赁结束时间的触发事件，判断时间大小
-            debugger
-            // this.clearStation()
-            if (!val) {
-                return;
-            }
 
-            val = this.dealEndDate(val);
-            let error = false;
-
-            val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(val));
-            this.endDate = val;
-
-            if (!this.startDate) {
-                return;
-            }
-            let params = {
-                start: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.startDate)),
-                end: val
-            }
-
-            if (new Date(this.startDate) > new Date(val)) {
-                error = true;
-                this.$Notice.error({
-                    title: '租赁开始时间不得大于结束时间'
-                })
-            } else {
-                this.contractDateRange(params)
-            }
-            this.timeError = error;
-            // this.clearStation();
-
-        },
         dealEndDate(val) {
             let str = val.split('-');
             let year = str[0];
@@ -163,7 +118,6 @@ export default {
             let day = d.getDate();
             val = year + '-' + month + '-' + day;
             return val;
-
         },
 
         changeEndDateStatus(val) {
@@ -198,7 +152,6 @@ export default {
         },
         contractDateRange(params) {//获取租赁范围
             let _this = this;
-
             this.$http.get('contract-date-range', params).then(r => {
                 _this.timeRange = r.data;
             }).catch(e => {

@@ -94,20 +94,16 @@
 <script>
 
 import { mapGetters } from 'vuex'
-
-import BasicInfo from './join/basicInfo.vue'
-import CustomerManager from './join/customerManager.vue'
-import RentInfo from './join/rentInfo.vue'
-import AmountInfo from './join/amountInfo.vue'
-import PreferentialInfo from './join/preferentialInfo.vue'
-
 import SectionTitle from '~/components/SectionTitle.vue'
 import DetailStyle from '~/components/DetailStyle';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-
-
+import BasicInfo from './join/basicInfo.vue'
+import CustomerManager from './join/customerManager.vue'
+import RentInfo from './join/rentInfo.vue'
+import AmountInfo from './join/amountInfo.vue'
+import PreferentialInfo from './join/preferentialInfo.vue'
 
 export default {
     components: {

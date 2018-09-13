@@ -1,6 +1,6 @@
 <template>
 <div class="customer-assets">
-   <SectionTitle title="招商角色配置"></SectionTitle>
+   <SectionTitle title="招商运营级别"></SectionTitle>
         <div class="div-search">
             <Select
                 v-model="params.roleId"

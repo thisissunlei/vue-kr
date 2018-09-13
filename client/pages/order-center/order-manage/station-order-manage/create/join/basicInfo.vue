@@ -32,7 +32,9 @@
             </Col>
             <Col class="col">
             <!-- <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance"> -->
-            <CustomFormItem title='机会' :required='OpportunityRequired' v-show='showSaleChance'>
+            <CustomFormItem title='机会'
+                :required='OpportunityRequired'
+                v-show='showSaleChance'>
                 <SelectChance name="formItem.opportunityId"
                     @onChange="changeChance"
                     @gotChanceList='handleGotChancelist'
@@ -85,7 +87,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems:null,
+            orderitems: null,
             test: "test",
             showSaleChance: false,
             formItem: {
@@ -113,7 +115,7 @@ export default {
                     this.$store.commit('setFloors', r.data.floor)
                     this.ssoId = r.data.ssoId;
                     this.ssoName = r.data.ssoName;
-                    this.$store.commit('changeSSO',{ssoId:this.ssoId,ssoName:this.ssoName})
+                    this.$store.commit('changeSSO', { ssoId: this.ssoId, ssoName: this.ssoName })
                     if (!this.formItem.salerId) {
                         this.$store.commit('changeSaler', JSON.stringify(r.data.ssoId))
                         this.salerName = r.data.ssoName;

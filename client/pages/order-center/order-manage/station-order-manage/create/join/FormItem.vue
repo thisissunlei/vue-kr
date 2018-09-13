@@ -3,7 +3,8 @@
         <label :class="{ title: true, 'require': required }">{{title}}</label>
         <slot>
         </slot>
-        <p class="errortip">{{errorStr}}</p>
+        <p v-if='errorStr'
+            class="errortip">{{errorStr}}</p>
     </div>
 </template>
 
@@ -16,9 +17,6 @@ export default {
             type: Boolean,
             default: true
         }
-    },
-    components: {
-
     },
     data() {
         return {
@@ -57,6 +55,13 @@ export default {
             font-size: 12px;
             color: #ed3f14;
         }
+    }
+    .errortip {
+        left: 0;
+        line-height: 1;
+        padding-top: 6px;
+        color: #ed3f14;
+        font-size: 12px;
     }
 }
 </style>

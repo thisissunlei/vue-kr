@@ -2,39 +2,49 @@
     <div class="join-basic-info-panel">
         <Row style="margin-bottom:30px">
             <Col class="col">
-            <!-- <FormItem label="客户名称" style="width:252px" prop="customerId"> -->
-            <CustomFormItem title='客户名称'>
+            <FormItem label="客户名称"
+                style="width:252px"
+                prop="customerId">
+                <!-- <CustomFormItem title='客户名称'> -->
                 <selectCustomers name="formItem.customerId"
                     :onchange="changeCustomer" />
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
 
-            <!-- </FormItem> -->
+            </FormItem>
             </Col>
 
             <Col class="col">
-            <!-- <FormItem label="所属社区" style="width:252px" prop="communityId"> -->
-            <CustomFormItem title='所属社区'>
+            <FormItem label="所属社区"
+                style="width:252px"
+                prop="communityId">
+                <!-- <CustomFormItem title='所属社区'> -->
                 <selectCommunities test="formItem"
                     :onchange="changeCommunity" />
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
 
-            <!-- </FormItem> -->
+            </FormItem>
             </Col>
             <Col class="col">
-            <!-- <FormItem label="销售员" style="width:252px" prop="salerId"> -->
-            <CustomFormItem title='销售员'>
+            <FormItem label="销售员"
+                style="width:252px"
+                prop="salerId">
+                <!-- <CustomFormItem title='销售员'> -->
                 <SelectSaler name="formItem.salerId"
                     :onchange="changeSaler"
                     :value="salerName"></SelectSaler>
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
 
-            <!-- </FormItem> -->
+            </FormItem>
             </Col>
             <Col class="col">
-            <!-- <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance"> -->
-            <CustomFormItem title='机会'
+            <FormItem v-bind:class="{requiremark:!OpportunityRequired}"
+                label="机会"
+                style="width:252px"
+                prop="salerId"
+                v-show="showSaleChance">
+                <!-- <CustomFormItem title='机会'
                 :required='OpportunityRequired'
-                v-show='showSaleChance'>
+                v-show='showSaleChance'> -->
                 <SelectChance name="formItem.opportunityId"
                     @onChange="changeChance"
                     @gotChanceList='handleGotChancelist'
@@ -43,8 +53,8 @@
                     :orderitems='orderitems'
                     :defaultValue='defaultChanceID'
                     :disabled='chanceDisable'></SelectChance>
-            </CustomFormItem>
-            <!-- </FormItem> -->
+                <!-- </CustomFormItem> -->
+            </FormItem>
             <div v-if='remindinfoNewUser'
                 class="title-container">(
                 <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
@@ -134,14 +144,17 @@ export default {
     methods: {
         changeCustomer(val) {
             this.$store.commit('changeCustomer', val)
+            this.formItem.customerId=val
             this.getFloor = +new Date()
         },
         changeCommunity(val) {
             this.$store.commit('changeCommunity', val)
+            this.formItem.communityId=val
             this.getFloor = +new Date()
         },
         changeSaler(val) {
             this.$store.commit('changeSaler', val)
+            this.formItem.salerId=val
             this.validSaleChance()
         },
         changeChance(val) {

@@ -2,7 +2,10 @@
     <div class="rent-info-panel">
         <Row style="margin-bottom:30px">
             <Col class="col">
-            <CustomFormItem title='租赁开始日期'>
+            <FormItem label="租赁开始日期"
+                style="width:252px"
+                prop="startDate">
+                <!-- <CustomFormItem title='租赁开始日期'> -->
                 <DatePicker type="date"
                     placeholder="租赁开始时间"
                     v-model="startDate"
@@ -10,35 +13,46 @@
                     @on-change="changeBeginTime"></DatePicker>
                 <div class="pay-error"
                     v-if="timeError">租赁开始时间不得大于结束时间</div>
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
+            </FormItem>
             </Col>
             <Col class="col">
-            <CustomFormItem title='租赁结束日期'>
+            <FormItem label="租赁结束日期"
+                style="width:252px"
+                prop="endDate">
+                <!-- <CustomFormItem title='租赁结束日期'> -->
                 <DatePicker type="date"
                     placeholder="租赁结束日期"
                     format="yyyy-MM-dd"
                     v-model="endDate"
                     style="display:block"
                     @on-change="changeEndDateStatus"></DatePicker>
-            </CustomFormItem>
-
+                <!-- </CustomFormItem> -->
+            </FormItem>
             </Col>
             <Col class="col">
-            <CustomFormItem title='租赁时长'>
+            <FormItem label="租赁时长"
+                style="width:252px">
+                <!-- <CustomFormItem title='租赁时长'> -->
                 <Input v-model="timeRange"
                     placeholder="租赁时长"
                     disabled></Input>
 
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
+            </FormItem>
             </Col>
             <Col class="col">
-            <CustomFormItem title='签署日期'>
+            <FormItem label="签署日期"
+                style="width:252px"
+                prop="signDate">
+                <!-- <CustomFormItem title='签署日期'> -->
                 <DatePicker type="date"
                     placeholder="签署日期"
                     format="yyyy-MM-dd"
                     v-model="signDate"
                     style="display:block"></DatePicker>
-            </CustomFormItem>
+                <!-- </CustomFormItem> -->
+            </FormItem>
 
             </Col>
         </Row>
@@ -61,21 +75,27 @@ export default {
             endDate: "",
             signDate: '',
             timeRange: '',
-            timeError: ''
+            timeError: '',
+            formItem: {
+                startDate: '',
+                endDate: '',
+                signDate: '',
+            },
         }
     },
 
     watch: {
         startDate(val) {
             this.$store.commit('changeStartDate', val)
+            this.formItem.startDate=val
         },
         endDate(val) {
             this.$store.commit('changeEndDate', val)
-
+            this.formItem.endDate=val
         },
         signDate(val) {
             this.$store.commit('changeSignDate', val)
-
+            this.formItem.signDate=val
         },
         timeRange(val) {
             this.$store.commit('changeTimeRange', val)

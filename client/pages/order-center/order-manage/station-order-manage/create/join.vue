@@ -85,7 +85,6 @@
                     v-if="disabled">提交</Button>
                 <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
-
         </Form>
     </div>
 </template>
@@ -255,7 +254,6 @@ export default {
                 return
             }
             this.$refs[name].validate((valid) => {
-                debugger
                 if (valid) {
                     if (this.errorPayType || this.errorAmount) {
                         this.$Notice.error({
@@ -410,21 +408,30 @@ export default {
 </script>
 <style lang="less">
 .create-new-order {
-    .required-label {
-        font-size: 14px;
-        position: relative;
-        &::before {
-            content: "*";
+    .creat-order-form {
+        .col {
             display: inline-block;
-            margin-right: 4px;
-            line-height: 1;
-            font-family: SimSun;
-            font-size: 12px;
+            width: 50%;
+            max-width: 450px;
+            padding-right: 10px;
+            vertical-align: top;
+        }
+        .required-label {
+            font-size: 14px;
+            position: relative;
+            &::before {
+                content: "*";
+                display: inline-block;
+                margin-right: 4px;
+                line-height: 1;
+                font-family: SimSun;
+                font-size: 12px;
+                color: #ed3f14;
+            }
+        }
+        .pay-error {
             color: #ed3f14;
         }
-    }
-    .pay-error {
-        color: #ed3f14;
     }
 }
 </style>

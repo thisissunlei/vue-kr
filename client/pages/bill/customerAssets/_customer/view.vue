@@ -2,15 +2,15 @@
 
 <template>	
     <div class="customer-assets-detail">
-		<SectionTitle title="客户账户详情"/>
-		 <!-- <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
+		<!-- <SectionTitle title="客户账户详情"/> -->
+		 <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
 		 <div class="customer-detail" v-if="selectedTab=='account'">
 			 <div class="detail-font">客户详情
 			 </div><div class="detail-line"><div></div></div>
-		 </div> -->
+		 </div>
 
 
-		<div class="content">
+		<div class="content" v-if="selectedTab!='account'">
 			<Row>  
                 <Col class="col circle" >
 					<div class="title">客户ID：</div>
@@ -27,12 +27,12 @@
                 </Col>
             </Row>
 		</div>
-		<div class="tab-list">
+		<div class="tab-list" v-if="selectedTab!='account'">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
 		</div>
 		<!-- 苏岭开始 -->
-		<!-- <div class="new-tab-wrap" v-if="selectedTab=='account'">
+		<div class="new-tab-wrap" v-if="selectedTab=='account'">
 			<div class="new-tab-list">
 				<span class="tab-span"  v-for="(item, index) in newFirstTab"
 				:key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
@@ -40,10 +40,10 @@
 			<div class="new-tab-content">
 				<AccountManagement />
 			</div>
-		</div> -->
+		</div>
 		<!-- 苏岭结束 -->
 		<div class="tab-content">
-			    <Assets v-if="selectedTab=='account'"/>
+			    <!-- <Assets v-if="selectedTab=='account'"/> -->
             	<Basic v-if="selectedTab=='basic'"/>
             	<div v-if="selectedTab=='menber'" class="tab-texts">
             		<img src="./images/member.svg" alt="">

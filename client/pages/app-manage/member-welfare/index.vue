@@ -20,11 +20,10 @@
                                 <Select
                                     v-model="formItem.cityId"
                                     placeholder="请选择"
-                                    :label-in-value="labelInValue"
-                                    clearable
                                     style="width:100px"
+                                    clearable
                                     >
-                                    <Option v-for="(option, index) in cityList" :value="option.value" :key="index">{{option.label}}</Option>
+                                    <Option v-for="(option, index) in cityList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
                                 </Select>
                         </div>
                         <div class="u-select-list u-date">
@@ -125,7 +124,6 @@ export default {
            couponId:'',
            formItem:{
                couponType:'',
-               cityId:'',
                beginTime:'',
                endTime:'',
                title:'',
@@ -133,6 +131,7 @@ export default {
            },
            couponTypeList:[],
            cityList:[],
+           communityLoading:false,
            welfareColumns:[
                 {
                     title: '福利标题',
@@ -263,20 +262,28 @@ export default {
       }
   },
   created(){
-      let query=this.$route.query;
-        if (Object.keys(query).length !== 0) {
-            this.getTableData(query);
-            this.Params=query;
-          
-        }else{
-            this.getTableData(this.Params)
-        }
-         this.getCityType()
+      let query=Object.assign({},this.$route.query);
+      var _this=this;
+      this.getCityType(function(){
+            if (Object.keys(query).length !== 0) {
+                _this.Params=Object.assign({},query);
+                let formItem=Object.assign({},query);
+                _this.formItem=formItem;
+                _this.formItem.startTime=formItem.beginTime;
+                _this.formItem.endtime=formItem.endTime;
+               
+                 _this.getTableData(query);
+            }else{
+                _this.getTableData(_this.Params)
+            } 
+      })
+        
+        
          
   },
 
   methods:{
-    getCityType(){
+    getCityType(callback){
              this.$http.get('get-city-and-type', '').then((res)=>{
                    res.data.types.map((item)=>{
                        item.value=item.code;
@@ -288,8 +295,10 @@ export default {
                        item.label=item.name;
                        return item;
                    })
-                   this.couponTypeList=res.data.types;
                    this.cityList=res.data.citys;
+                   this.couponTypeList=res.data.types;
+                  
+                    callback && callback();
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -345,8 +354,29 @@ export default {
         
       },
       
-       searchSubmit(){
-            let params=Object.assign(this.Params,this.searchData);
+      lowerSubmit(){
+          if(this.formItem.startTime){
+            let beginTime=dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.startTime));
+            this.formItem.beginTime=`${beginTime} 00:00:00`;
+          }
+          if(this.formItem.endtime){
+            let endTime=dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.endtime));
+            this.formItem.endTime=`${endTime} 23:59:59`;
+          }
+          if(this.formItem.cityId){
+              let cityId= this.formItem.cityId;
+              this.formItem.cityId= String(cityId)
+          }
+
+            let formItem=Object.assign({},this.formItem);
+            if(formItem.startTime){
+              delete formItem.startTime;
+            }
+            if(formItem.endtime){
+                delete formItem.endtime;
+            }
+           
+            let params=Object.assign(this.Params,formItem);
             utils.addParams(params);
       },
       
@@ -388,7 +418,9 @@ export default {
             margin-left:10px;
             font-size:14px;
             cursor:pointer;
-            
+        }
+        .u-date-txt{
+           padding-right:5px; 
         }
     }
     .u-table{

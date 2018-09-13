@@ -145,7 +145,11 @@ export default {
         },
         seats(val) {
             this.stationList = [].concat(this.seats)
-        }
+            if (this.stationList.length == 0) {
+                this.formItem = Object.assign({}, { items: [] }, { rentAmount: 0 })             
+            } 
+            this.dealSaleInfo(true)
+        },
     },
     mounted() {
         this.stationList = [].concat(this.seats)

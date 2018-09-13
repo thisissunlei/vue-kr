@@ -12,9 +12,13 @@ var rentInfo = {
     mutations: {
         changeStartDate(state, val) {
             state.startDate = val;
+            //清空工位
+            this.commit("changeSeats", []);
         },
         changeEndDate(state, val) {
             state.endDate = val;
+            //清空工位
+            this.commit("changeSeats", []);
         },
         changeSignDate(state, val) {
             state.signDate = val;

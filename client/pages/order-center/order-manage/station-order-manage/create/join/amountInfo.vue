@@ -204,8 +204,23 @@ export default {
             'customerId',
             'startDate',
             'endDate',
-            'floors'
+            'floors',
+            'seats'
         ])
+    },
+    watch: {
+        //更改客户和社区时需要清空工位
+        seats(val) {
+            if (val && val.length == 0) {
+                this.stationList = [];
+                this.selectedStation = []
+                this.stationAmount = ''
+                this.stationData = {
+                    submitData: [],
+                    deleteData: [],
+                };
+            }
+        }
     },
     methods: {
         showStation() {

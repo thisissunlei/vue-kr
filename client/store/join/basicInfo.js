@@ -16,9 +16,13 @@ var basicInfo = {
     mutations: {
         changeCustomer(state, val) {
             state.customerId = val;
+            //清空工位
+            this.commit('changeSeats',[])
         },
         changeCommunity(state, val) {
             state.communityId = val;
+            //清空工位
+            this.commit('changeSeats',[])
         },
         changeSaler(state, val) {
             state.salerId = val;

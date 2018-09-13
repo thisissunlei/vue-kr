@@ -413,14 +413,14 @@ export default {
     .required-label {
         font-size: 14px;
         position: relative;
-        margin-left: 5px;
-        &&:before {
+        &::before {
             content: "*";
-            color: red;
-            position: absolute;
-            font-size: 18px;
-            left: -7px;
-            top: 14px;
+            display: inline-block;
+            margin-right: 4px;
+            line-height: 1;
+            font-family: SimSun;
+            font-size: 12px;
+            color: #ed3f14;
         }
     }
     .pay-error {

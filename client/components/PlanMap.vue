@@ -38,7 +38,7 @@ import http from '~/plugins/http.js';
 			originStationList:Array
 		},
         data () {
-        	console.log('this.stationData.submitData',this.stationData.submitData)
+        	// console.log('this.stationData.submitData',this.stationData.submitData)
             return {
                 data:'',//平面图基础数据
                 selectedObjs:this.stationData.submitData,//编辑带回的数据
@@ -196,7 +196,7 @@ import http from '~/plugins/http.js';
 				let data = this.data;
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
-				console.log('渲染',selectedObjs)
+				// console.log('渲染',selectedObjs)
 				let startToEnd = []
 				let originStationList = this.origin || [];
 				for (let i = 0; i < data.length; i++) {

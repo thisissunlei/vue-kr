@@ -9,9 +9,16 @@ var amountInfo = {
     },
     mutations: {
         changeSeats(state, val) {
+            if (val.length==0) {
+                console.log('qingkong_seats')
+                this.commit('changeRentAmount',0)
+            }
             state.seats = [].concat(val);
         },
         changeRentAmount(state, val) {
+            if (val==0) {
+                console.log('qingkong_rentAmount')
+            }
             state.rentAmount = val;
         }
     },

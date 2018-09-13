@@ -187,6 +187,21 @@ export default {
     'account-order-type': {
         url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
         method: 'get'
-    }
+    },
     //苏岭结束
+      //账户列表-人员获取id
+    'get-bill-person-id':{
+    url: '/api/krspace-erp-web/erp/ssoUser/resource-id',
+    method: 'get'
+   },
+    //权限--数据--获取社区列表
+    'findCommunities': {
+        url: '/api/krspace-sso-web/sso/ssoUser/findCommunities',
+        method: 'get'
+      },
+       //权限--数据--编辑保存社区权限
+    'editUserCommunity': {
+        url: '/api/krspace-sso-web/sso/ssoUser/editUserCommunity',
+        method: 'post'
+      },
 } 

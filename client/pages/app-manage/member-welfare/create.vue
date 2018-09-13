@@ -264,7 +264,7 @@ export default {
   data(){
       return{
           formItem:{
-              couponType:'OFFLINESTORE',
+              couponType:'USERLIFE',
               title:'',
               descr:'',
               faceValue:'',

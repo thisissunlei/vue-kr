@@ -11,9 +11,9 @@
                   </LabelText>
             </DetailStyle>
              <DetailStyle info="领取情况">
-                  <LabelText label="会员点击次数：" style="width:1100px;">
-                    {{basicInfo.getCount}}
-                  </LabelText>
+                  <div class="u-table">
+                      <Table border :columns="columns" :data="getinfoList"></Table>
+                  </div>
             </DetailStyle>
              <DetailStyle info="展示信息">
                   <LabelText label="福利类型：" style="width:1100px;">
@@ -44,6 +44,37 @@
                       无
                     </div>
                   </LabelText>
+                   <LabelText label="内部会员提供：" style="width:1100px;">
+                    {{basicInfo.fromInner==1?'是':'否'}}
+                  </LabelText>
+            </DetailStyle>
+            <DetailStyle info="详细信息">
+                  <LabelText label="详细地址：" style="width:1100px;">
+                    {{basicInfo.merchantAddress}}
+                  </LabelText>
+                  <LabelText label="地图坐标：" style="width:1100px;">
+                    {{basicInfo.longitude}}, {{basicInfo.latitude}}
+                  </LabelText>
+                  <LabelText label="联系电话：" style="width:1100px;">
+                    {{basicInfo.merchantPhone}}
+                  </LabelText>
+                  <LabelText label="使用提示：" style="width:1100px;">
+                    {{basicInfo.useRule}}
+                  </LabelText>
+                   <LabelText label="福利简介：" style="width:1100px;">
+                    {{basicInfo.couponDetail}}
+                  </LabelText>
+                  <div class="u-img-content">
+                      <div class="u-img-title">福利图册：</div>
+                      <div class="u-img-list">
+                        <img 
+                          v-for="(item, index) in basicInfo.couponImgs"
+                          :src="item.url" 
+                          :key="index"
+                          class="u-img-url" />
+                    {{basicInfo.couponImgs && basicInfo.couponImgs.length>0?'':'无'}}
+                    </div>
+                  </div>
             </DetailStyle>
              <DetailStyle info="领取限制">
                  <LabelText label="福利范围：" style="width:1100px;">
@@ -59,9 +90,16 @@
                    <LabelText label="领取有效期：" style="width:1100px;">
                     {{basicInfo.indate}}
                   </LabelText>
-                   <LabelText   v-if="basicInfo.couponType!='OFFLINESTORE'" label="领取链接：" style="width:1100px;">
+                   <LabelText label="领取方式：" style="width:1100px;">
+                    {{basicInfo.getWayTxt}}
+                  </LabelText>
+                   <LabelText   v-if="basicInfo.getWay=='ONLINE'" label="领取链接：" style="width:1100px;">
                     {{basicInfo.getUrl}}
                   </LabelText>
+                  <div class="u-img-content" v-if="basicInfo.getWay=='OFFLINE'">
+                      <div class="u-img-title">商户LOGO：</div>
+                      <div><img :src="basicInfo.merchantLogo" class="u-img-url">{{basicInfo.merchantLogo?'':'无'}}</div>
+                  </div>
                  
              </DetailStyle>
         </div>
@@ -83,7 +121,31 @@ export default {
       return{
         basicInfo:{
           tags:[],
-        }
+        },
+        getinfoList:[],
+        columns:[
+          {
+              title: '会员收藏次数',
+              key: 'collectCount',
+              align:'center'	
+          },
+          {
+              title: '会员领取次数',
+              key: 'getCount',
+              align:'center'	
+          },
+          {
+              title: '会员发帖数',
+              key: 'discussCount',
+              align:'center'	
+          },
+          {
+              title: '综合人气值',
+              key: 'hotValue',
+              align:'center'	
+          },
+        ]  
+       
       }
     },
     mounted:function(){
@@ -103,12 +165,25 @@ export default {
               'USERLIFE':'会员生活',
               'ENTERPRISESERVICE':'企业服务',
             }
+        let getWayType={
+          'OFFLINE':'到店出示身份',
+          'ONLINE':'在线领取',
+          'DETAIL':'详情中展示'
+        }
 
         this.$http.get('get-coupon-detail', from).then((res)=>{
                   let data = res.data;
                   data.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.ctime));
                   data.couponTypetxt=type[data.couponType];
+                  let tableinfo={
+                    collectCount:data.collectCount,
+                    getCount:data.getCount,
+                    discussCount:data.discussCount,
+                    hotValue:data.hotValue
+                  }
+                  data.getWayTxt=getWayType[ data.getWay]
                   this.basicInfo = data;
+                  this.getinfoList.push(tableinfo)
 
         }).catch((error)=>{
           this.$Notice.error({
@@ -138,13 +213,21 @@ export default {
         }
         .u-img-url{
             max-width: 132px;
-            max-width: 132px;
+            max-height: 132px;
             float: left;
             margin-bottom:30px;
         }
     }
+    .u-img-list{
+      margin-bottom:15px;
+    }
     .u-tag{
         padding:0 5px;
+    }
+    .u-table{
+      padding:0 20px;
+      margin-bottom:20px;
+      box-sizing: border-box;
     }
     
 }

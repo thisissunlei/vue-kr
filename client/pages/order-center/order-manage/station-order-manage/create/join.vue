@@ -409,42 +409,21 @@ export default {
 }
 </script>
 <style lang="less">
-.required-label {
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before {
-        content: "*";
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left: -7px;
-        top: 14px;
+.create-new-order {
+    .required-label {
+        font-size: 14px;
+        position: relative;
+        margin-left: 5px;
+        &&:before {
+            content: "*";
+            color: red;
+            position: absolute;
+            font-size: 18px;
+            left: -7px;
+            top: 14px;
+        }
     }
-}
-.pay-error {
-    color: #ed3f14;
-}
-.vertical-center-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .ivu-modal {
-        top: 0;
-    }
-}
-.requiremark .ivu-form-item-label::before {
-    content: "";
-}
-.title-container {
-    display: inline;
-    position: absolute;
-    top: 9px;
-    left: 36px;
-    font-size: 12px;
-    .title-remind-info {
+    .pay-error {
         color: #ed3f14;
     }
 }

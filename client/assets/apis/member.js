@@ -158,6 +158,11 @@ export default {
         url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
         method: 'post'
     },
+      //账户列表-人员获取id
+    'get-bill-person-id':{
+    url: '/api/krspace-erp-web/erp/ssoUser/resource-id',
+    method: 'get'
+   },
     //权限--数据--获取社区列表
     'findCommunities': {
         url: '/api/krspace-sso-web/sso/ssoUser/findCommunities',

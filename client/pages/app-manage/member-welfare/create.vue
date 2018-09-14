@@ -62,28 +62,20 @@
                                 <div slot="tip" class="u-unload-tip">  图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                             </UploadFile>
                         </FormItem>
-                       
-                        <!-- <div class="u-upload-logo" v-if="formItem.couponType=='OFFLINESTORE'">
-                                <IconTip style="left:95px;top:9px;">用于到店凭证展示给店主</IconTip>
-                                <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
-                                      <UploadFile 
-                                            :category="category"
-                                            withCredentials
-                                            :format="['jpg','png','gif']"
-                                            :maxLen="1"
-                                            :onSuccess="logoSuccess"
-                                            :onRemove="logoRemove"
-                                            :onFormatError="imgSizeFormat"
-                                            :imgWidth="148"
-                                            :imgHeight="148"
-                                        >
-                                            <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
-                                        </UploadFile>
-                                </FormItem>
-                        </div> -->
                         <div class="u-welfare-tag">
+                             <IconTip style="left:95px;top:9px;">上限选择三个</IconTip>
                              <FormItem label="福利标签" style="width:516px" >
-                                 <Input 
+                                 <div class="u-tag-content" >
+                                     <div 
+                                        class="u-tag" 
+                                        v-for="(item,index) in tagList"
+                                        :key="index"
+                                      >
+                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
+                                        {{item.name}}
+                                     </div>
+                                 </div>
+                                 <!-- <Input 
                                         v-model="tag" 
                                         placeholder="5个字符以内"
                                         :maxlength="tagLength"
@@ -101,23 +93,11 @@
                                          <span class="u-tag-close" @click="deleteTag(index)"></span>
                                         {{item.name}}
                                      </div>
-                                 </div>
+                                 </div> -->
                              </FormItem>
                         </div>
-                         <!-- <FormItem 
-                                label="商户详细地址"  
-                                style="width:294px;margin-top:-20px;" 
-                                v-if="formItem.couponType=='OFFLINESTORE'"
-                         >
-                                <Input 
-                                    v-model="formItem.merchantAddress" 
-                                    placeholder="30个字符以内"
-                                    :maxlength="addressLength"
-                                    
-                                />
-                      </FormItem> -->
-                       <FormItem label="内部会员提供：" style="width:352px" prop="enable">
-                            <RadioGroup v-model="formItem.enable">
+                       <FormItem label="内部会员提供：" style="width:352px" prop="fromInner">
+                            <RadioGroup v-model="formItem.fromInner">
                                 <Radio label="1">
                                     是
                                 </Radio>
@@ -136,12 +116,16 @@
                               :maxlength="addressLength"
                           />
                       </FormItem> 
-                    <FormItem label="地图坐标"  style="width:300px;position:relative;" >
-                          <Input 
-                              v-model="formItem.local"
-                          />
-                          <a class='mapLocation' href="http:\\api.map.baidu.com/lbsapi/getpoint/index.html" target='_blank'/>
-                      </FormItem>
+                      <div class="u-upload-logo">
+                            <IconTip style="left:80px;top:10px;">用以APP地图导航</IconTip>
+                            <FormItem label="地图坐标"  style="width:300px;position:relative;" >
+                            <Input 
+                                v-model="formItem.local"
+                            />
+                            <a class='mapLocation' href="http:\\api.map.baidu.com/lbsapi/getpoint/index.html" target='_blank'/>
+                            </FormItem>
+                      </div>
+                      
                        <FormItem label="联系电话"  style="width:300px" >
                           <Input 
                               v-model="formItem.merchantPhone" 
@@ -157,24 +141,27 @@
                               class="u-textarea"
                           />
                       </FormItem> 
-                       <FormItem label="福利简介"  style="width:500px;" >
-
-                       </FormItem> 
-                        <FormItem label="福利图册（支持多张）" style="width:516px"  prop="merchantLogo">
-                                <UploadFile 
-                                    :category="category"
-                                    withCredentials
-                                    :format="['jpg','png','gif']"
-                                    :maxLen="20"
-                                    :onSuccess="logoSuccess"
-                                    :onRemove="logoRemove"
-                                    :onFormatError="imgSizeFormat"
-                                    :imgWidth="100"
-                                    :imgHeight="200"
-                                >
-                                    <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
-                                </UploadFile>
-                        </FormItem>
+                       <FormItem label="福利简介"  style="width:700px;"  prop="couponDetail">
+                             <UEditor :styleObj='UEStyleObj' v-model="formItem.couponDetail" ></UEditor>
+                       </FormItem>
+                       <div class="u-upload-logo"> 
+                              <IconTip style="left:95px;top:9px;">支持多张</IconTip>
+                                <FormItem label="福利图册" style="width:516px"  prop="merchantLogo">
+                                        <UploadFile 
+                                            :category="category"
+                                            withCredentials
+                                            :format="['jpg','png','gif']"
+                                            :maxLen="20"
+                                            :onSuccess="welfareSuccess"
+                                            :onRemove="welfareRemove"
+                                            :onFormatError="imgSizeFormat"
+                                            :imgWidth="200"
+                                            :imgHeight="100"
+                                        >
+                                            <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                        </UploadFile>
+                                </FormItem>
+                       </div>
                 </DetailStyle>
 
                 <DetailStyle info="福利领取信息">
@@ -256,10 +243,43 @@
                                 />
                              <div v-if="isTimeError" class="u-error">请选择领取有效期</div>
                       </FormItem>
+                       <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required">
+                            <RadioGroup 
+                                v-model="formItem.getWay" 
+                            >
+                                <Radio label="OFFLINE" style="margin-right:20px;" >
+                                    到店出示身份
+                                </Radio>
+                                <Radio label="ONLINE"  style="margin-right:20px;">
+                                   在线领取
+                                </Radio>
+                                <Radio label="DETAIL">
+                                   详情中展示
+                                </Radio>
+                            </RadioGroup> 
+                      </FormItem>
+                      <div class="u-upload-logo" v-if="formItem.getWay=='OFFLINE'">
+                            <IconTip style="left:95px;top:10px;">用于到店凭证展示给店主</IconTip>
+                            <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
+                                    <UploadFile 
+                                        :category="category"
+                                        withCredentials
+                                        :format="['jpg','png','gif']"
+                                        :maxLen="1"
+                                        :onSuccess="logoSuccess"
+                                        :onRemove="logoRemove"
+                                        :onFormatError="imgSizeFormat"
+                                        :imgWidth="148"
+                                        :imgHeight="148"
+                                    >
+                                        <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比例建议为1:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                    </UploadFile>
+                            </FormItem>
+                      </div>
                       <FormItem 
                                 label="领取链接"  
                                 style="width:294px" 
-                                v-if="formItem.couponType!='OFFLINESTORE'"
+                                v-if="formItem.getWay=='ONLINE'"
                                 prop="getUrl"
                          >
                                 <Input 
@@ -291,7 +311,8 @@ export default {
      SectionTitle,
      DetailStyle,
      IconTip,
-     UploadFile
+     UploadFile,
+     UEditor
   },
   head() {
        return {
@@ -355,7 +376,12 @@ export default {
             merchantLogo:[
                 { required: true, message: '请选择要上传的图片', trigger: 'change' }
             ],
-          }
+          },
+          UEStyleObj: {
+                'width': '100%',
+                'height': '300px',
+                'clear': 'both'
+          },
 
       }
   },
@@ -446,16 +472,24 @@ export default {
             this.$refs.formItems.validateField('couponCover') 
            
         },
-        // logoSuccess(res){
-        //     this.formItem.merchantLogo=res.data.url;
-        //     this.$refs.formItems.validateField('merchantLogo') 
-        // },
+        logoSuccess(res){
+            this.formItem.merchantLogo=res.data.url;
+            this.$refs.formItems.validateField('merchantLogo') 
+        },
+        welfareSuccess(res){
+            this.formItem.merchantLogo=res.data.url;
+            this.$refs.formItems.validateField('merchantLogo') 
+        },
+        
         coverRemove(){
             this.formItem.couponCover="";
         },
-        // logoRemove(){
-        //     this.formItem.merchantLogo="";
-        // },
+        logoRemove(){
+            this.formItem.merchantLogo="";
+        },
+        welfareRemove(){
+            this.formItem.merchantLogo="";
+        },
         coverError(error,file){
             this.$Notice.error({
                 title:error.message
@@ -736,6 +770,7 @@ export default {
         
     }
     .u-welfare-tag{
+         position: relative;
         .u-add-tag-btn{
             padding-left:10px;
             color:#499DF1;

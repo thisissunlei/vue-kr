@@ -157,7 +157,24 @@
                               class="u-textarea"
                           />
                       </FormItem> 
-                       
+                       <FormItem label="福利简介"  style="width:500px;" >
+
+                       </FormItem> 
+                        <FormItem label="福利图册（支持多张）" style="width:516px"  prop="merchantLogo">
+                                <UploadFile 
+                                    :category="category"
+                                    withCredentials
+                                    :format="['jpg','png','gif']"
+                                    :maxLen="20"
+                                    :onSuccess="logoSuccess"
+                                    :onRemove="logoRemove"
+                                    :onFormatError="imgSizeFormat"
+                                    :imgWidth="100"
+                                    :imgHeight="200"
+                                >
+                                    <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                </UploadFile>
+                        </FormItem>
                 </DetailStyle>
 
                 <DetailStyle info="福利领取信息">
@@ -267,6 +284,7 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import UploadFile from  '~/components/UploadFile';
+import UEditor from '../UEditor.vue'
 
 export default {
   components:{

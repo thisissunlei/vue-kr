@@ -30,6 +30,9 @@ const jsFiles = [
     {src: 'https://web.krspace.cn/kr-op/echarts/4.1.0/echarts.min.js'},
     {src: 'https://web.krspace.cn/kr-op/go/1.8.14/go.js'},
     {src: 'https://web.krspace.cn/plugins/watermark.js'},
+    {src: 'https://web.krspace.cn/kr-op/umeditor/1.0.0/ueditor.config.js'},
+    {src: 'https://web.krspace.cn/kr-op/umeditor/1.0.0/ueditor.all.js'},
+    {src: 'https://web.krspace.cn/kr-op/umeditor/1.0.0/lang/zh-cn/zh-cn.js'},
 ]
 const cssFiles = [
     {rel:'stylesheet',href:pluginsDomain+'/nav/1.0.0/nav.css'},

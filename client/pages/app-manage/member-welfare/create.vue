@@ -284,7 +284,7 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import UploadFile from  '~/components/UploadFile';
-import UEditor from '../UEditor.vue'
+import UEditor from '~/components/UEditor.vue'
 
 export default {
   components:{

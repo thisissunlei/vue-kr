@@ -70,8 +70,7 @@
                                         class="u-tag" 
                                         v-for="(item,index) in tagList"
                                         :key="index"
-                                      >
-                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
+                                      > 
                                         {{item.name}}
                                      </div>
                                  </div>

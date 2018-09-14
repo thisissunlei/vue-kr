@@ -145,7 +145,7 @@
                        </FormItem>
                        <div class="u-upload-logo"> 
                               <IconTip style="left:95px;top:9px;">支持多张</IconTip>
-                                <FormItem label="福利图册" style="width:516px"  prop="merchantLogo">
+                                <FormItem label="福利图册" style="width:916px"  prop="couponImgs">
                                         <UploadFile 
                                             :category="category"
                                             withCredentials
@@ -303,7 +303,7 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import UploadFile from  '~/components/UploadFile';
-import UEditor from '~/components/UEditor.vue'
+import UEditor from '~/components/UEditor.vue';
 
 export default {
   components:{
@@ -476,8 +476,11 @@ export default {
             this.$refs.formItems.validateField('merchantLogo') 
         },
         welfareSuccess(res){
-            this.formItem.merchantLogo=res.data.url;
-            this.$refs.formItems.validateField('merchantLogo') 
+            let imgObj={
+                url: res.data.url
+            }
+            this.formItem.couponImgs.push(imgObj)
+            this.$refs.formItems.validateField('couponImgs') 
         },
         
         coverRemove(){
@@ -487,7 +490,7 @@ export default {
             this.formItem.merchantLogo="";
         },
         welfareRemove(){
-            this.formItem.merchantLogo="";
+            this.formItem.couponImgs=[];
         },
         coverError(error,file){
             this.$Notice.error({

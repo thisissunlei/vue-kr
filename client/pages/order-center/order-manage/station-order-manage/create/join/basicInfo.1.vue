@@ -37,7 +37,33 @@
             </FormItem>
             </Col>
             <Col class="col">
-            <SelectChanceNew v-if='showSaleChance' :params='orderitems' />
+            <FormItem v-bind:class="{requiremark:!OpportunityRequired}"
+                label="机会"
+                style="width:252px"
+                prop="salerId"
+                v-show="showSaleChance">
+                <!-- <CustomFormItem title='机会'
+                :required='OpportunityRequired'
+                v-show='showSaleChance'> -->
+                <SelectChance name="formItem.opportunityId"
+                    @onChange="changeChance"
+                    @gotChanceList='handleGotChancelist'
+                    v-show="showChanceSelector"
+                    :showType="showChanceSelector"
+                    :orderitems='orderitems'
+                    :defaultValue='defaultChanceID'
+                    :disabled='chanceDisable'></SelectChance>
+                <!-- </CustomFormItem> -->
+            </FormItem>
+            <div v-if='remindinfoNewUser'
+                class="title-container">(
+                <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+            <div v-if='remindinfo'
+                class="title-container">(如是
+                <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
+            <p v-if="!showChanceSelector"
+                id='chancemsg'
+                v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
             </Col>
         </Row>
     </div>
@@ -49,7 +75,7 @@ import { mapGetters } from 'vuex'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue';
-// import SelectChance from '~/components/SelectSaleChance.vue';
+import SelectChance from '~/components/SelectSaleChance.vue';
 
 
 import SelectChanceNew from './SelectChance/index.vue'
@@ -59,13 +85,14 @@ export default {
         selectCommunities,
         selectCustomers,
         SelectSaler,
+        SelectChance,
         SelectChanceNew
     },
     props: {
         formItem: {
             communityId: '',
             customerId: '',
-            salerId: ''
+            salerId:''
         },
     },
     data() {
@@ -105,9 +132,9 @@ export default {
                     this.ssoName = r.data.ssoName;
                     this.$store.commit('changeSSO', { ssoId: this.ssoId, ssoName: this.ssoName })
                     if (!this.formItem.salerId) {
-                        this.formItem.salerId = '' + r.data.ssoId
+                        this.formItem.salerId=''+r.data.ssoId
                         this.$store.commit('changeSaler', JSON.stringify(r.data.ssoId))
-                        this.salerName = r.data.ssoName;
+                        this.salerName = r.data.ssoName;                       
                     }
                     this.validSaleChance()
 

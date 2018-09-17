@@ -63,11 +63,11 @@
 import { mapGetters } from 'vuex'
 import dateUtils from 'vue-dateutils';
 
-import CustomFormItem from './FormItem.vue'
+// import CustomFormItem from './FormItem.vue'
 
 export default {
     components: {
-        CustomFormItem
+        // CustomFormItem
     },
     props: {
         formItem: {

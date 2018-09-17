@@ -2,7 +2,7 @@
     <div class="g-goods-detail">
         <SectionTitle title="编辑社区商品"></SectionTitle>   
         <div class="m-goods-content">
-            <Form ref="formItems" :model="formItem" :rules="ruleValidate">
+            <Form ref="formItems" :model="formItem"  :rules="ruleValidate">
                 <DetailStyle info="社区基本信息">
                     <LabelText label="社区名称：">
                         {{goodsInfo.communityName}}
@@ -100,7 +100,7 @@
                                 </Radio>
                             </RadioGroup> 
                     </FormItem>
-                    <FormItem label="社区折扣策略"  style="width:252px" >
+                    <FormItem label="社区折扣策略"  style="width:252px;" >
                         <Input 
                             v-model="formItem.promotionDesc" 
                             placeholder="社区折扣策略"
@@ -113,8 +113,8 @@
                     <LabelText label="已上架散座商品数量：">
                         {{goodsInfo.kmSeatNum}}
                     </LabelText>
-                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:350px"   >
-                           <div style="width:350px;float:left;">
+                    <FormItem label="散座营业时段"  style="width:45%;display:inline-block;"   >
+                           <div >
                                <TimePicker 
                                     format="HH:mm" 
                                     style="width: 122px" 
@@ -134,14 +134,14 @@
                            </div>
                     </FormItem>
                   
-                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
-                        <div style="width:350px;float:right;">
-                            <Select v-model="form.model" style="width:200px" @on-change="selectChange">
+                    <FormItem label="自定义不可预订日期" style="width:45%;display:inline-block;">
+                        <div >
+                            <Select v-model="goodsInfo.enableDateStrategy" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </div>
                     </FormItem>
-                    <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem v-if="showDate && form.unuseDates.length" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <Tooltip max-width="300" placement="top">
                            
                            <Icon type="ios-help" size="20" style="margin-top:5px;"/>
@@ -153,7 +153,7 @@
                             </div>
                         </Tooltip>
                         <div style="width:350px;float:right;">
-                            <KrDatePicker v-model="form.disableDate"/>
+                            <KrDatePicker v-model="form.unuseDates"/>
                         </div>
                     </FormItem>
                     <!-- <Row>
@@ -212,8 +212,8 @@ export default {
     data(){
         return{
             selectList:[
-                {value:'1',label:'无'},
-                {value:'2',label:'自定义时间'},
+                {value:'NONE',label:'无'},
+                {value:'WEEK',label:'自定义时间'},
             ],
             showDate:false,
             date: [],
@@ -224,7 +224,7 @@ export default {
             form:{
                kmStartTime:'09:00',
                kmEndTime:'19:00',
-               disableDate:[]
+               unuseDates:[]
             },
             goodsInfo:{},
             ruleValidate: {
@@ -263,12 +263,13 @@ export default {
     mounted:function(){
         GLOBALSIDESWITCH("false")
         this.getGoodsInfo();
-        this.getYearWeekend();
+        // this.getYearWeekend();
     },
     methods: {
         selectChange(value){
-            if(value ==2){
-                this.showDate = true;
+            if(value =='WEEK'){
+               
+                this.getYearWeekend();
             }else{
                 this.showDate = false;
             }
@@ -288,7 +289,7 @@ export default {
             if(!this.formItem.kmEndTime){
                 this.formItem.kmEndTime="19:00"
             }
-            this.submitYearWeekend();
+            
             this.$refs[name].validate((valid) => {
                 if (valid) {
                         _this.submitCreate();
@@ -301,14 +302,14 @@ export default {
             })
         },
         submitCreate(){
-           
             this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'
                     });
+                    this.submitYearWeekend();
                     setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
+                        // window.close();
+                        // window.opener.location.reload();
                     },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -342,6 +343,7 @@ export default {
                 '0':'未开业'
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
+           
                 let data=Object.assign({},res.data);
                 let appPublished=String(res.data.appPublished)
                 let kmPublished=String(res.data.kmPublished);
@@ -383,6 +385,9 @@ export default {
                 if(data.communityImgs){
                     this.formItem.communityImgs=data.communityImgs.join(',');
                 }
+                // if(res.data.enableDateStrategy == 'WEEK'){
+                //     this.getYearWeekend();
+                // }
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -429,21 +434,22 @@ export default {
         //不可预定日期提交
         submitYearWeekend(){
             //不可预定日期无时不请求
-            if(!showDate){
+            if(!this.showDate){
                 return ;
             }
             let params = JSON.stringify({
                 cmtId:this.$route.params.id,
-                disableDate:this.form.disableDate,
+                unuseDates:this.form.unuseDates,
             });
             this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
 
-            }).catch(()=>{
+            }).catch((err)=>{
                  this.$Notice.error({
                     title:err.message
                 });
             })
         },
+        //获取周六日
         getYearWeekend(){
           
             let params = {
@@ -451,10 +457,12 @@ export default {
             }      
             this.$http.get('get-krmting-mobile-get-workday',params)
             .then((res)=>{
-              this.date = [].concat(res.data)
+            //   this.date = [].concat(res.data.unuseDates)
+           
               let from = Object.assign({},this.from);
-              from.model = '2';
+              from.unuseDates = [].concat(res.data.unuseDates);
               this.form = Object.assign({},from);
+               this.showDate = true;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -477,7 +485,7 @@ export default {
 <style lang="less">
     .g-goods-detail{
         .ivu-tooltip-inner{
-            max-width: 300px;
+            max-width: 350px;
         }
         .center{
             width: 300px;
@@ -497,15 +505,17 @@ export default {
         }
         .u-upload{
             width:100%;
-        .ivu-form-item-label{
-            width:100%;
-            text-align: left;
-        } 
+            .ivu-form-item-label{
+                width:100%;
+                text-align: left;
+                float:none;
+            } 
         }
         .u-unload-label{
             font-size: 12px;
             line-height:30px;
             color:#495060;
+            
         }
         .u-unload-tip{
             line-height:30px;

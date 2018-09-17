@@ -158,6 +158,42 @@ export default {
         url: '/api/krspace-sso-web/sso/ssoUser/business/role/',
         method: 'post'
     },
+    //苏岭开始
+    //退款明细
+    'account-refund-detail': {
+        url: '/api/krspace-pay/account/refund',
+        method: 'get'
+    },
+    //到款明细
+    'account-payment-detail': {
+        url: '/api/krspace-pay/account/payment',
+        method: 'get'
+    },
+    //消费明细
+    'account-cost-detail': {
+        url: '/api/krspace-pay/account/cost',
+        method: 'get'
+    },
+    //余额明细
+    'account-balance-detail': {
+        url: '/api/krspace-pay/account/balance',
+        method: 'get'
+    },
+    //押金明细
+    'account-deposit-detail': {
+        url: '/api/krspace-pay/account/deposit',
+        method: 'get'
+    },
+    'account-order-type': {
+        url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
+        method: 'get'
+    },
+    //苏岭结束
+      //账户列表-人员获取id
+    'get-bill-person-id':{
+    url: '/api/krspace-erp-web/erp/ssoUser/resource-id',
+    method: 'get'
+   },
     //权限--数据--获取社区列表
     'findCommunities': {
         url: '/api/krspace-sso-web/sso/ssoUser/findCommunities',

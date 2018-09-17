@@ -1,6 +1,6 @@
 <template>
 <div class="customer-assets">
-   <SectionTitle title="招商角色配置"></SectionTitle>
+   <SectionTitle title="招商运营级别"></SectionTitle>
         <div class="div-search">
             <Select
                 v-model="params.roleId"
@@ -81,7 +81,7 @@
         },
         head() {
             return {
-                title: '招商角色配置-氪空间后台管理系统'
+                title: '招商运营级别-氪空间后台管理系统'
             }
         },
         data () {
@@ -127,6 +127,21 @@
                         title: '电子邮箱',
                         key: 'email',
                         align:'center'
+                    },
+                    {
+                        title:'人员角色',
+                        key:'roleTypeName',
+                        align:'center',
+                        render:(h,params)=>{
+                            return h('span',{
+                                class:'roleName',
+                                on:{
+                                        click:()=>{
+                                        this.handleJump(params.row)
+                                      }
+                                    }
+                                },params.row.roleTypeName)
+                        }
                     },
                     {
                         title: '是否存在管辖社区',
@@ -175,7 +190,7 @@
                            return h('div',[h(Buttons,{
                                    props: {
                                         type: 'text',
-                                        checkAction:'Investment_role_button', // todo 
+                                        checkAction:'Investment_role_button', 
                                         label:'管辖社区',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
@@ -207,6 +222,15 @@
             this.getListData();
         },
         methods:{
+            handleJump(obj){
+                this.$http.get('get-bill-person-id',{ssoId:obj.id}).then((res)=>{
+                   window.open(`new/#/oa/${res.data}/peopleDetail`,'_blank');
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
             getDataList(){
                 this.$http.get('get-business-role').then((res)=>{
                     this.roleList=res.data;
@@ -321,6 +345,10 @@
         display: inline-block;
         margin-left: 10px;
         font-size: 14px;
+        cursor: pointer;
+    }
+    .roleName{
+        color: #2b85e4;
         cursor: pointer;
     }
 }

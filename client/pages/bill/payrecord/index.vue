@@ -180,7 +180,7 @@ export default {
                         key: 'ctime',
                         align:'center',
                         render(h, obj){
-                            let time = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time = obj.row.ctime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime)):'';
                             return h('span',{},time);
                         }
                     },

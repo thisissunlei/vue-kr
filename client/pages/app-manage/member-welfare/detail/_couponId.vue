@@ -33,14 +33,14 @@
                       <div><img :src="basicInfo.couponCover" class="u-img-url">{{basicInfo.couponCover?'':'无'}}</div>
                   </div>
                   <LabelText label="福利标签：" style="width:1100px;">
-                     <div v-if="basicInfo.tags.length>0">
+                     <div v-if="basicInfo.tags">
                          <span 
                           v-for="(item,index) in basicInfo.tags" 
                           class="u-tag"
                           :key="index"
                         >{{item.name}}</span>
                      </div>
-                    <div v-if="basicInfo.tags.length<=0">
+                    <div v-if="!basicInfo.tags">
                       无
                     </div>
                   </LabelText>
@@ -50,16 +50,16 @@
             </DetailStyle>
             <DetailStyle info="详细信息">
                   <LabelText label="详细地址：" style="width:1100px;">
-                    {{basicInfo.merchantAddress}}
+                    {{basicInfo.merchantAddress?basicInfo.merchantAddress:'无'}}
                   </LabelText>
                   <LabelText label="地图坐标：" style="width:1100px;">
-                    {{basicInfo.longitude}}, {{basicInfo.latitude}}
+                    {{loacl}}
                   </LabelText>
                   <LabelText label="联系电话：" style="width:1100px;">
-                    {{basicInfo.merchantPhone}}
+                    {{basicInfo.merchantPhone?basicInfo.merchantPhone:'无'}}
                   </LabelText>
                   <LabelText label="使用提示：" style="width:1100px;">
-                    {{basicInfo.useRule}}
+                    {{basicInfo.useRule?basicInfo.useRule:'无'}}
                   </LabelText>
                    <LabelText label="福利简介：" style="width:1100px;">
                     {{basicInfo.couponDetail}}
@@ -128,6 +128,7 @@ export default {
           tags:[],
         },
         getinfoList:[],
+        loacl:'',
         columns:[
           {
               title: '会员收藏次数',
@@ -189,6 +190,12 @@ export default {
                   data.getWayTxt=getWayType[ data.getWay]
                   this.basicInfo = data;
                   this.getinfoList.push(tableinfo)
+                  if(data.longitude && data.latitude){
+                       this.loacl=`${data.longitude},${data.latitude}`
+                  }else{
+                       this.loacl='无'
+                  }
+                 
 
         }).catch((error)=>{
           this.$Notice.error({

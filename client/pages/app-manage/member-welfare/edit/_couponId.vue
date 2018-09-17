@@ -394,6 +394,7 @@ export default {
     GLOBALSIDESWITCH("false");
     this.getCityList();
     this.getInfo();
+    this.getTagList();
    
   },
   methods:{
@@ -464,6 +465,15 @@ export default {
                   });
               });
           },
+        getTagList(){
+            this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+                this.tagList=res.data.tags;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            });
+        },
         addTags(){
                 if(!this.tag){
                     this.$Notice.error({

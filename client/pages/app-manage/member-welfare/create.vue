@@ -70,6 +70,7 @@
                                         class="u-tag" 
                                         v-for="(item,index) in tagList"
                                         :key="index"
+                                        @click="checkTag"
                                       > 
                                         {{item.name}}
                                      </div>
@@ -387,7 +388,7 @@ export default {
   mounted:function(){
     GLOBALSIDESWITCH("false");
     this.getCityList()
-   
+    this.getTagList();
   },
   methods:{
         typeChange(form){
@@ -396,32 +397,44 @@ export default {
             this.isTimeError=false;
             this.formItem.couponType=type;
         },
-        addTags(){
-                if(!this.tag){
-                    this.$Notice.error({
-                    title:'福利标签不能为空'
-                    });
-                    return;
-                }
-                
-                this.$http.post('create-tag', {name:this.tag}).then((res)=>{
-                   this.tagList.push(res.data)
-                   this.tagIds.push(res.data.id)
-                   this.tag='';
-                }).catch((error)=>{
+        getTagList(){
+            this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+                this.tagList=res.data.tags;
+            }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
-                    });
                 });
+            });
         },
-        deleteTag(index){
-            let tagList=this.tagList;
-            let tagIds=this.tagIds;
-            tagList.splice(index, 1);
-            tagIds.splice(index, 1);
-            this.tagList=tagList;
-            this.tagIds=tagIds;
+        checkTag(){
+
         },
+        // addTags(){
+        //         if(!this.tag){
+        //             this.$Notice.error({
+        //             title:'福利标签不能为空'
+        //             });
+        //             return;
+        //         }
+                
+        //         this.$http.post('create-tag', {name:this.tag}).then((res)=>{
+        //            this.tagList.push(res.data)
+        //            this.tagIds.push(res.data.id)
+        //            this.tag='';
+        //         }).catch((error)=>{
+        //         this.$Notice.error({
+        //             title:error.message
+        //             });
+        //         });
+        // },
+        // deleteTag(index){
+        //     let tagList=this.tagList;
+        //     let tagIds=this.tagIds;
+        //     tagList.splice(index, 1);
+        //     tagIds.splice(index, 1);
+        //     this.tagList=tagList;
+        //     this.tagIds=tagIds;
+        // },
         deleteCity(index){
             let checkCity=this.checkCity;
             let cityIds=this.cityIds;

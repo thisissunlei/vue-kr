@@ -61,8 +61,8 @@
                   <LabelText label="使用提示：" style="width:1100px;">
                     {{basicInfo.useRule?basicInfo.useRule:'无'}}
                   </LabelText>
-                   <LabelText label="福利简介：" style="width:1100px;" >
-                     <div v-html="basicInfo.couponDetail"></div>
+                   <LabelText label="福利简介：" style="width:1100px;display:inline-block;height:auto;" >
+                     <div class="u-coupon-detail" v-html="basicInfo.couponDetail"></div>
                   </LabelText>
                   <div class="u-img-content" style="margin-top:10px;">
                       <div class="u-img-title">福利图册：</div>
@@ -260,6 +260,12 @@ export default {
       padding:0 20px;
       margin-bottom:20px;
       box-sizing: border-box;
+    }
+    .u-coupon-detail{
+      display:inline-block;
+      img{
+        vertical-align: top;
+      }
     }
     
 }

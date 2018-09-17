@@ -302,7 +302,6 @@ export default {
             })
         },
         submitCreate(){
-           
             this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'

@@ -308,8 +308,8 @@ export default {
                     });
                     this.submitYearWeekend();
                     setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
+                        // window.close();
+                        // window.opener.location.reload();
                     },1000) 
             }).catch((err)=>{
                 this.$Notice.error({

@@ -133,9 +133,9 @@ export default {
                     if (!this.formItem.salerId) {
                         this.formItem.salerId=''+r.data.ssoId
                         this.$store.commit('changeSaler', JSON.stringify(r.data.ssoId))
-                        this.salerName = r.data.ssoName;
-                        this.validSaleChance()
+                        this.salerName = r.data.ssoName;                       
                     }
+                    this.validSaleChance()
 
                 }, e => {
                     this.$Notice.error({

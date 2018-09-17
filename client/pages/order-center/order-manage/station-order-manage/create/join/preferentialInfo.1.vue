@@ -10,9 +10,11 @@
             <Button type="ghost"
                 style="font-size:14px"
                 @click="deleteDiscount">删除</Button>
+
             <span class="pay-error"
                 v-show="discountError">{{discountError}}</span>
             </Col>
+
         </Row>
         <Row>
             <Col span="3"
@@ -31,6 +33,7 @@
             <Col span="5"
                 class="discount-table-head">
             <span>结束时间</span>
+
             </Col>
             <Col span="5"
                 class="discount-table-head">
@@ -38,9 +41,9 @@
             </Col>
         </Row>
         <div v-for="(item, index) in formItem.items"
-            :key="item.index"
+            :key="index"
             style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
-            <Row>
+            <Row v-show="item.show">
                 <Col span="3"
                     class="discount-table-content"
                     style="padding:0">
@@ -52,7 +55,7 @@
                     label-in-value
                     @on-change="changeType">
                     <Option v-for="(types,i) in youhui"
-                        :value="types.value+'/'+index+'/'+types.name+'/'+types.id+'/'+item.index"
+                        :value="types.value+'/'+index+'/'+types.name+'/'+types.id"
                         :key="types.value+index+types.name+types.id">{{ types.label }}</Option>
                 </Select>
                 </Col>
@@ -83,6 +86,7 @@
                     @on-blur="changezhekou"
                     v-if="item.tacticsType == '1'"
                     :number="inputNumberType"></Input>
+                <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                 <Input v-model="item.zhekou"
                     v-if="item.tacticsType !== '1'"
                     disabled></Input>
@@ -122,7 +126,6 @@ export default {
             showSaleDiv: true,
             saleAmount: 0,
             stationList: [],
-            discountIndex: -1,
         }
     },
     computed: {
@@ -143,8 +146,8 @@ export default {
         seats(val) {
             this.stationList = [].concat(this.seats)
             if (this.stationList.length == 0) {
-                this.formItem = Object.assign({}, { items: [] }, { rentAmount: 0 })
-            }
+                this.formItem = Object.assign({}, { items: [] }, { rentAmount: 0 })             
+            } 
             this.dealSaleInfo(true)
         },
     },
@@ -196,26 +199,36 @@ export default {
                 })
                 return
             }
-            this.discountIndex++;
+            this.index++;
             this.formItem.items.push({
                 value: '',
-                index: this.discountIndex,
+                index: this.index,
                 status: 1,
                 show: true,
                 discount: ''
             });
         },
-        deleteDiscount() {
+        deleteDiscount: function () {
             // 删除选中的优惠信息
 
-            let items = [].concat(this.formItem.items);
-
-            let rest = items.filter(p => !p.select)
-
-            this.formItem.items = rest;
+            let items = this.formItem.items;
+            let select = []
+            select = items.map((item) => {
+                return item.selelct;
+            })
+            // items = items.map(function (item, index) {
+            //     if (item.select) {
+            //         item.show = false
+            //     }
+            //     return item;
+            // });
+            items = items.filter(function (item, index) {
+                return !item.select
+            });
+            this.formItem.items = items;
             this.discount = ''
             this.selectDiscount(false);
-            this.dealSaleInfo(false)
+            this.dealSaleInfo(true)
 
         },
         //切换优惠全选/全不选
@@ -261,6 +274,7 @@ export default {
             if (val < this.minDiscount) {
                 this.discountError = '折扣不得小于' + this.minDiscount;
                 this.disabled = true;
+
                 this.$Notice.error({
                     title: '折扣不得小于' + this.minDiscount
                 })
@@ -288,25 +302,14 @@ export default {
             let itemIndex = value.split('/')[1];
             let itemName = value.split('/')[2]
             let itemId = value.split('/')[3]
-
-            let rowIndex = value.split('/')[4]
-
-            // console.log('itemIndex', itemIndex)
-            // console.log('val', val)
-            // console.log('this.formItem.items', this.formItem.items)
-
-            this.formItem.items.map(item => {
-                if (item.index == rowIndex) {
-                    item.tacticsType = itemValue;
-                    item.tacticsName = itemName;
-                    item.tacticsId = itemId;
-                }
-            })
-
+            console.log('itemIndex', itemIndex)
+            this.formItem.items[itemIndex].tacticsType = itemValue;
+            this.formItem.items[itemIndex].tacticsName = itemName;
+            this.formItem.items[itemIndex].tacticsId = itemId;
             let items = [];
-
+            let _this = this
             items = this.formItem.items.map((item) => {
-                let obj = this.youhui.find(y => y.id == item.tacticsId)
+                let obj = _this.youhui.find(y => y.id == item.tacticsId)
                 if (obj) {
                     item.rightType = obj.rightType;
                 }
@@ -316,14 +319,12 @@ export default {
                 if (item.value == 'qianmian') {
                     item.validStart = this.formItem.startDate;
                     item.discount = '';
-                    // } else if (item.tacticsType == 3 && item.show) {
-                } else if (item.tacticsType == 3) {
+                } else if (item.tacticsType == 3 && item.show) {
                     item.validStart = item.startDate || ''
                     item.validEnd = this.endDate
                     item.tacticsId = item.tacticsId || itemId;
                     item.discount = '';
-                    // } else if (item.tacticsType == 1 && item.show) {
-                } else if (item.tacticsType == 1) {
+                } else if (item.tacticsType == 1 && item.show) {
                     item.validStart = this.startDate
                     item.tacticsId = item.tacticsId || itemId
                     item.discount = item.discount || ''
@@ -335,7 +336,11 @@ export default {
             let message = '';
 
             let typeList = items.map(item => {
-                return item.tacticsType;
+                if (item.show) {
+                    return item.tacticsType;
+                } else {
+                    return;
+                }
             })
             let qianmian = typeList.join(",").split('qianmian').length - 1;
             let houmian = typeList.join(",").split('3').length - 1;
@@ -352,9 +357,7 @@ export default {
                 this.$Notice.error({
                     title: message
                 });
-
-                items.splice(itemIndex, 1);
-
+                items[itemIndex].show = false;
                 this.formItem.items = items;
                 return;
             }
@@ -396,9 +399,12 @@ export default {
         //show? 是否显示错误消息提示
         dealSaleInfo(show) {
             //处理已删除的数据
-
-            let saleList = [].concat(this.formItem.items)
-
+            let saleList = this.formItem.items.filter(item => {
+                if (!item.show) {
+                    return false;
+                }
+                return true;
+            })
             //检查手否有未填写完整的折扣项
             let complete = true;
             let zhekou = true;//是否是折扣
@@ -408,17 +414,21 @@ export default {
                 }
                 if (!item.tacticsType) {
                     complete = false
+
                 }
                 if (item.tacticsType == '3' && (!item.startDate || !item.validEnd)) {
+
                     complete = false;
                 }
                 if (item.tacticsType == '1' && !item.discount) {
                     complete = false;
                 } else {
+
                     zhekou = this.dealzhekou(item.discount || this.discount)
                 }
             });
-
+            // this.saleAmount = 0;
+            // this.saleAmounts = utils.smalltoBIG(0)
             if (!complete && show) {
                 this.$Notice.error({
                     title: '请填写完整优惠信息'
@@ -487,6 +497,28 @@ export default {
                 }
             })
 
+        },
+        //提交给后端计算优惠后的金额   
+        clearStation() {
+            // 清除所选的工位
+            if (this.stationList.length) {
+                this.stationData = {
+                    submitData: [],
+                    deleteData: [],
+                };
+                this.stationList = [];
+                this.formItem.items = [];
+                this.formItem.rentAmount = '0'
+            }
+            if (this.formItem.items.length) {
+                this.formItem.items = []
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
+            }
+            if (this.discountError) {
+                this.discountError = false;
+                this.disabled = false
+            }
         },
     },
 }

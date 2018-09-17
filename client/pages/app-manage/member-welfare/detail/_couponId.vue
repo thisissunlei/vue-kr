@@ -61,10 +61,10 @@
                   <LabelText label="使用提示：" style="width:1100px;">
                     {{basicInfo.useRule?basicInfo.useRule:'无'}}
                   </LabelText>
-                   <LabelText label="福利简介：" style="width:1100px;" v-html="basicInfo.couponDetail">
-                    
+                   <LabelText label="福利简介：" style="width:1100px;" >
+                     <div v-html="basicInfo.couponDetail"></div>
                   </LabelText>
-                  <div class="u-img-content">
+                  <div class="u-img-content" style="margin-top:10px;">
                       <div class="u-img-title">福利图册：</div>
                       <div class="u-img-list">
                         <img 

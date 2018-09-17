@@ -37,7 +37,10 @@
             </FormItem>
             </Col>
             <Col class="col">
-            <SelectChanceNew v-if='showSaleChance' :params='orderitems' />
+            <SelectChanceNew v-if='showSaleChance'
+                :params='orderitems'
+                v-model="chanceId"
+                @on-select-change='changeChance' />
             </Col>
         </Row>
     </div>
@@ -70,19 +73,12 @@ export default {
     },
     data() {
         return {
+            showSaleChance:false,
             salerName: '请选择',
-            chanceDisable: false,
-            remindinfoNewUser: false,
-            remindinfo: false,
-            chanceRemindStr: "",
-            defaultChanceID: 0,
-            opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
-            OpportunityRequired: true,
-            showChanceSelector: true,
             orderitems: null,
             test: "test",
-            showSaleChance: false,
             getFloor: +new Date(),
+            chanceId: ''
         }
     },
     computed: {
@@ -148,46 +144,6 @@ export default {
             // this.defaultChanceID = -1;
             this.orderitems = Object.assign({}, obj);
         },
-        handleGotChancelist(parms) {
-            if (parms.isNewUser) {
-                this.remindinfo = false
-                if (parms.count == 1) {
-                    this.remindinfoNewUser = false
-                    this.chanceRemindStr = '';
-                    this.showChanceSelector = true;
-                    // this.defaultChanceID =parms.list[1].value; 
-                    // this.$set(this.orderitems, 'saleChanceId', parms.list[1].value)
-                }
-                else if (parms.count > 1) {
-                    this.remindinfoNewUser = false
-                    this.chanceRemindStr = '';
-                    this.showChanceSelector = true;
-                }
-                else if (parms.count == 0) {
-                    this.remindinfoNewUser = true
-                    this.chanceRemindStr = '入驻订单必须绑定机会'
-                    this.showChanceSelector = false;
-                    this.OpportunityRequired = true;
-                    this.formItem.saleChanceId = '';
-                    this.opportunityTipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
-                }
-            }
-            else {
-                this.remindinfoNewUser = false
-                this.remindinfo = true
-                this.chanceRemindStr = '新入驻客户，须选择机会'
-                this.OpportunityRequired = false;
-                if (parms.count == 0) {
-                    this.showChanceSelector = false;
-                    this.formItem.saleChanceId = "";
-                    this.opportunityTipStr = '您没有可用机会，客户增租续租时不必须'
-                }
-                else if (parms.count >= 1) {
-                    this.showChanceSelector = true;
-                    this.defaultChanceID = ''
-                }
-            }
-        }
     },
 }
 </script>

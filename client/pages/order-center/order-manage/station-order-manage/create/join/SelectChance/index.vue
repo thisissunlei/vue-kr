@@ -2,9 +2,10 @@
     <div class="custom-formitem">
         <label :class="{ title: true, 'require': required }">{{title}}</label>
         <label v-if='subTitle.length>0'
-            class="subTitle">(
+            class="subTitle">
+            (
             <span v-if='subTitlePrefix'>如是</span>
-            {{subTitle}} )
+            <span class="subTitleStr">{{subTitle}}</span>)
             </span>
         </label>
         <div>
@@ -33,6 +34,7 @@ export default {
                 return {};
             }
         },
+        value:''
     },
     data() {
         return {
@@ -50,7 +52,7 @@ export default {
     },
     watch: {
         params(val) {
-            debugger
+           
             this.initOptions(val)
         }
     },
@@ -58,8 +60,10 @@ export default {
         this.initOptions(this.params)
     },
     methods: {
-        changeContent() {
-
+        changeContent(value) { 
+            debugger
+            this.$emit('input',"" + value)
+            this.$emit("on-select-change", "" + value);
         },
 
         getChanceList(params) {
@@ -68,8 +72,8 @@ export default {
                     let list = []
                     r.data.items.data.map(item => {
                         list.push({
-                            label: item.name || '   ',
-                            value: item.id
+                            label: item.name || ' ',
+                            value: ''+item.id
                         })
                     })
                     let obj = {}
@@ -98,10 +102,10 @@ export default {
                 let list = [
                     {
                         label: '不绑定机会',
-                        value: -1
+                        value: ' '
                     }]
-                list.concat(data.list);
-                this.options = list;
+                data.list.unshift({ label: '不绑定机会', value: ' ' })
+                this.options=data.list
                 this.data = data;
             }).then(() => {
                 if (this.data.isNewUser) {
@@ -160,9 +164,11 @@ export default {
         line-height: 1;
         padding: 10px 12px 10px 0;
         float: left;
-        color: #ed3f14;
         span {
             color: #495060;
+        }
+        .subTitleStr {
+            color: #ed3f14;
         }
     }
     .require {

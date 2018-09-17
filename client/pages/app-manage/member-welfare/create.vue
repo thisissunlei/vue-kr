@@ -76,25 +76,6 @@
                                         {{item.name}}
                                      </div>
                                  </div>
-                                 <!-- <Input 
-                                        v-model="tag" 
-                                        placeholder="5个字符以内"
-                                        :maxlength="tagLength"
-                                        style="width:278px"
-                                 />
-                                 <span v-if="tagList.length<3" class="u-add-tag-btn" @click="addTags">添加</span>
-                                  <span v-if="tagList.length>=3" class="u-tag-btn" >添加</span>
-                                 <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
-                                 <div class="u-tag-content" v-if="tagList.length>0">
-                                     <div 
-                                        class="u-tag" 
-                                        v-for="(item,index) in tagList"
-                                        :key="index"
-                                      >
-                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
-                                        {{item.name}}
-                                     </div>
-                                 </div> -->
                              </FormItem>
                         </div>
                        <FormItem label="内部会员提供：" style="width:352px" prop="fromInner">
@@ -405,10 +386,10 @@ export default {
   },
   methods:{
         typeChange(form){
-            // this.$refs.formItems.resetFields();
-            // let type=form;
-            // this.isTimeError=false;
-            // this.formItem.couponType=type;
+            let type=form;
+            this.$refs.formItems.resetFields();
+            this.isTimeError=false;
+            this.formItem.couponType=type;
         },
         getTagList(){
             this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
@@ -438,32 +419,6 @@ export default {
             }
             this.tagList[index].check=!item.check;
         },
-        // addTags(){
-        //         if(!this.tag){
-        //             this.$Notice.error({
-        //             title:'福利标签不能为空'
-        //             });
-        //             return;
-        //         }
-                
-        //         this.$http.post('create-tag', {name:this.tag}).then((res)=>{
-        //            this.tagList.push(res.data)
-        //            this.tagIds.push(res.data.id)
-        //            this.tag='';
-        //         }).catch((error)=>{
-        //         this.$Notice.error({
-        //             title:error.message
-        //             });
-        //         });
-        // },
-        // deleteTag(index){
-        //     let tagList=this.tagList;
-        //     let tagIds=this.tagIds;
-        //     tagList.splice(index, 1);
-        //     tagIds.splice(index, 1);
-        //     this.tagList=tagList;
-        //     this.tagIds=tagIds;
-        // },
         deleteCity(index){
             let checkCity=this.checkCity;
             let cityIds=this.cityIds;
@@ -518,10 +473,11 @@ export default {
             this.$refs.formItems.validateField('merchantLogo') 
         },
         welfareSuccess(res){
+            
             let imgObj={
                 url: res.data.url
             }
-            this.formItem.couponImgs.push(imgObj)
+            this.formItem.couponImgs.push(imgObj);
             this.$refs.formItems.validateField('couponImgs') 
         },
         
@@ -531,8 +487,10 @@ export default {
         logoRemove(){
             this.formItem.merchantLogo="";
         },
-        welfareRemove(){
-            this.formItem.couponImgs=[];
+        welfareRemove(form){
+            let index=this.formItem.couponImgs.indexOf(form.fieldUrl)
+            this.formItem.couponImgs.splice(index,1);
+             console.log('this.formItem.couponImgs---->>>re',this.formItem.couponImgs)
         },
         coverError(error,file){
             this.$Notice.error({
@@ -581,11 +539,11 @@ export default {
                     this.formItem.longitude=local[0];
                     this.formItem.latitude=local[1];
                }
-              
-               
+              let couponImgs=this.formItem.couponImgs;
+
                this.formItem.tagIds=this.tagIds.join(',');
                this.formItem.cityIds=this.cityIds.join(',');
-             
+               this.formItem.couponImgs=JSON.stringify(couponImgs);
                 
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {
@@ -599,15 +557,16 @@ export default {
       },
       submitCreate(){
           console.log('this.formItem',this.formItem)
+          //this.formItem.couponImgs
           //return
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

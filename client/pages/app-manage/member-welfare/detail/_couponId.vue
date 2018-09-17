@@ -61,7 +61,7 @@
                   <LabelText label="使用提示：" style="width:1100px;">
                     {{basicInfo.useRule?basicInfo.useRule:'无'}}
                   </LabelText>
-                   <LabelText label="福利简介：" style="width:1100px;display:inline-block;height:auto;" >
+                   <LabelText label="福利简介：" class="u-coupon" style="width:1100px;display:inline-block;height:auto;" >
                      <div class="u-coupon-detail" v-html="basicInfo.couponDetail"></div>
                   </LabelText>
                   <div class="u-img-content" style="margin-top:10px;">
@@ -69,15 +69,15 @@
                       <div class="u-img-list">
                         <img 
                           v-for="(item, index) in basicInfo.couponImgs"
-                          :src="item.url" 
+                          :src="item" 
                           :key="index"
-                          class="u-img-url" />
+                          class="u-img-url-list" />
                     {{basicInfo.couponImgs && basicInfo.couponImgs.length>0?'':'无'}}
                     </div>
                   </div>
             </DetailStyle>
              <DetailStyle info="领取限制">
-                 <LabelText label="福利范围：" style="width:1100px;">
+                 <LabelText label="福利范围："  style="width:1100px;">
                     <span v-if="basicInfo.couponScope==1">不限</span>
                     <div v-if="basicInfo.couponScope!=1">
                          <span 
@@ -248,6 +248,13 @@ export default {
             max-height: 132px;
             float: left;
             margin-bottom:30px;
+            margin-right:10px;
+        }
+        .u-img-url-list{
+          width:200px;
+          height:100px;
+          object-fit:cover;
+          margin-right:10px;
         }
     }
     .u-img-list{
@@ -267,6 +274,11 @@ export default {
         vertical-align: top;
       }
     }
+   .u-coupon{
+      .ui-text{
+        display: block;
+      }
+   }
     
 }
 

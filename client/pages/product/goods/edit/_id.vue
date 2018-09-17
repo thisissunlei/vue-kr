@@ -2,7 +2,7 @@
     <div class="g-goods-detail">
         <SectionTitle title="编辑社区商品"></SectionTitle>   
         <div class="m-goods-content">
-            <Form ref="formItems" :model="formItem" :rules="ruleValidate">
+            <Form ref="formItems" :model="formItem"  :rules="ruleValidate">
                 <DetailStyle info="社区基本信息">
                     <LabelText label="社区名称：">
                         {{goodsInfo.communityName}}
@@ -100,7 +100,7 @@
                                 </Radio>
                             </RadioGroup> 
                     </FormItem>
-                    <FormItem label="社区折扣策略"  style="width:252px" >
+                    <FormItem label="社区折扣策略"  style="width:252px;" >
                         <Input 
                             v-model="formItem.promotionDesc" 
                             placeholder="社区折扣策略"
@@ -113,8 +113,8 @@
                     <LabelText label="已上架散座商品数量：">
                         {{goodsInfo.kmSeatNum}}
                     </LabelText>
-                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:45%;"   >
-                           <div style="width:45%;">
+                    <FormItem label="散座营业时段"  style="width:45%;display:inline-block;"   >
+                           <div >
                                <TimePicker 
                                     format="HH:mm" 
                                     style="width: 122px" 
@@ -134,8 +134,8 @@
                            </div>
                     </FormItem>
                   
-                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:45%;"   >
-                        <div style="width:45%;">
+                    <FormItem label="自定义不可预订日期" style="width:45%;display:inline-block;">
+                        <div >
                             <Select v-model="form.model" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -477,7 +477,7 @@ export default {
 <style lang="less">
     .g-goods-detail{
         .ivu-tooltip-inner{
-            max-width: 300px;
+            max-width: 350px;
         }
         .center{
             width: 300px;
@@ -497,15 +497,17 @@ export default {
         }
         .u-upload{
             width:100%;
-        .ivu-form-item-label{
-            width:100%;
-            text-align: left;
-        } 
+            .ivu-form-item-label{
+                width:100%;
+                text-align: left;
+                float:none;
+            } 
         }
         .u-unload-label{
             font-size: 12px;
             line-height:30px;
             color:#495060;
+            
         }
         .u-unload-tip{
             line-height:30px;

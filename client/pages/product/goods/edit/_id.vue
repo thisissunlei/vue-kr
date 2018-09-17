@@ -464,7 +464,7 @@ export default {
             this.$http.get('get-krmting-mobile-get-workday',params)
             .then((res)=>{
             //   this.date = [].concat(res.data.unuseDates)
-           
+                console.log(this.dateFormat(res.data.unuseDates||[]))
               let from = Object.assign({},this.from);
               from.unuseDates = [].concat(res.data.unuseDates);
               this.form = Object.assign({},from);
@@ -488,7 +488,7 @@ export default {
             now = now.join(',');
             let arr = [];
            for(let i=0;i<old.length;i++){
-               if(now.indexOf(old[i])!=-1){
+               if(now.indexOf(old[i])==-1){
                    arr.push(old[i]);
                }
            }

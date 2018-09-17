@@ -49,6 +49,9 @@
                   </LabelText>
             </DetailStyle>
             <DetailStyle info="详细信息">
+                  <LabelText label="商户名称：" style="width:1100px;">
+                    {{basicInfo.merchantName?basicInfo.merchantName:'无'}}
+                  </LabelText>
                   <LabelText label="详细地址：" style="width:1100px;">
                     {{basicInfo.merchantAddress?basicInfo.merchantAddress:'无'}}
                   </LabelText>

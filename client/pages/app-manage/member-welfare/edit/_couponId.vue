@@ -108,6 +108,13 @@
                 </DetailStyle>
 
                 <DetailStyle info="详细信息">
+                        <FormItem label="商户名称"  style="width:300px" >
+                            <Input 
+                                v-model="formItem.merchantName" 
+                                placeholder="20个字符以内"
+                                :maxlength="20"
+                            />
+                        </FormItem>
                       <FormItem label="详细地址"  style="width:300px" >
                           <Input 
                               v-model="formItem.merchantAddress" 

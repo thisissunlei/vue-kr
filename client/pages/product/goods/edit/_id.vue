@@ -113,8 +113,8 @@
                     <LabelText label="已上架散座商品数量：">
                         {{goodsInfo.kmSeatNum}}
                     </LabelText>
-                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:350px"   >
-                           <div style="width:350px;float:left;">
+                    <FormItem label="散座营业时段" class="u-input ivu-form-item-required"  style="width:45%;"   >
+                           <div style="width:45%;">
                                <TimePicker 
                                     format="HH:mm" 
                                     style="width: 122px" 
@@ -134,8 +134,8 @@
                            </div>
                     </FormItem>
                   
-                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
-                        <div style="width:350px;float:right;">
+                    <FormItem label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:45%;"   >
+                        <div style="width:45%;">
                             <Select v-model="form.model" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>

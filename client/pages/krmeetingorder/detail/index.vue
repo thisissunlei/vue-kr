@@ -139,6 +139,31 @@ export default {
                         title: '团队卡抵扣',
                         key: 'teamCardCost',
                         align: 'center',
+                        render:(h,params)=>{
+                            var p;
+                            if(params.row.teamCardCost == ''){
+                                p = h('div', [
+                                    h('span', {
+                                        style: {
+                                            // color: 'red',
+                                            // fontSize : "20px",
+                                        },
+                                    }, '0'),
+                                    
+                                ]);
+                            }else{
+                                p = h('div', [
+                                    h('span', {
+                                        style: {
+                                            // color: 'red',
+                                            // fontSize : "20px",
+                                        },
+                                    }, '-'+params.row.teamCardCost),
+                                    
+                                ]);
+                            }
+                            return p
+                        }
                     },
                     {
                         title: '订单金额（￥）',
@@ -194,7 +219,7 @@ export default {
                     cost : resData.cost,
                     discountDesc : resData.discountDesc || "/",
                     totalAmount : resData.totalAmount,
-                    teamCardCost:resData.teamCardCost || 0
+                    teamCardCost:resData.teamCardCost 
                 }]
 
                 this.detail = res.data;

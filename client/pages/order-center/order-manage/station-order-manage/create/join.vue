@@ -6,14 +6,14 @@
             :rules="ruleCustom"
             class="creat-order-form">
             <DetailStyle info="基本信息">
-                <BasicInfo/>
+                <BasicInfo :formItem='formItem' />
             </DetailStyle>
             <DetailStyle info="客户主管理员信息"
                 v-show='showManager'>
                 <CustomerManager/>
             </DetailStyle>
             <DetailStyle info="租赁信息">
-                <RentInfo/>
+                <RentInfo :formItem='formItem' />
             </DetailStyle>
             <DetailStyle info="金额信息">
                 <AmountInfo/>
@@ -261,18 +261,24 @@ export default {
                         });
                         return;
                     }
-                    if (!_this.stationList.length) {
-                        _this.$Notice.error({
+                    if (!this.stationList.length) {
+                        this.$Notice.error({
                             title: '请选择入驻工位'
                         });
-                        _this.disabled = false;
+                        this.disabled = false;
                         return
+                    }
+                    if (!this.managerId) {
+                        this.$Notice.error({
+                            title: '请选择主管理员'
+                        });
+                        return;
                     }
                     // this.disabled = true;
 
                     this.joinFormSubmit()
                 } else {
-                    _this.disabled = false;
+                    this.disabled = false;
                     this.$Notice.error({
                         title: message
                     });
@@ -282,7 +288,6 @@ export default {
         //提交新建表单
 
         joinFormSubmit() {
-            debugger
             let station = this.stationList;
             let priceError = false;
             station.map((item) => {
@@ -324,7 +329,6 @@ export default {
             // return;
             // }
 
-            debugger
             let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.startDate));
             let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.signDate || new Date()));
             let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.endDate || this.endDateStatus));

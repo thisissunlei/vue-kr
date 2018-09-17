@@ -86,6 +86,13 @@ export default {
         SelectChance,
         CustomFormItem
     },
+    props: {
+        formItem: {
+            communityId: '',
+            customerId: '',
+            salerId:''
+        },
+    },
     data() {
         return {
             salerName: '请选择',
@@ -100,10 +107,7 @@ export default {
             orderitems: null,
             test: "test",
             showSaleChance: false,
-            formItem: {
-                communityId: '',
-                customerId: ''
-            },
+
             getFloor: +new Date(),
         }
     },
@@ -127,6 +131,7 @@ export default {
                     this.ssoName = r.data.ssoName;
                     this.$store.commit('changeSSO', { ssoId: this.ssoId, ssoName: this.ssoName })
                     if (!this.formItem.salerId) {
+                        this.formItem.salerId=''+r.data.ssoId
                         this.$store.commit('changeSaler', JSON.stringify(r.data.ssoId))
                         this.salerName = r.data.ssoName;
                         this.validSaleChance()
@@ -144,17 +149,17 @@ export default {
     methods: {
         changeCustomer(val) {
             this.$store.commit('changeCustomer', val)
-            this.formItem.customerId=val
+            this.formItem.customerId = val
             this.getFloor = +new Date()
         },
         changeCommunity(val) {
             this.$store.commit('changeCommunity', val)
-            this.formItem.communityId=val
+            this.formItem.communityId = val
             this.getFloor = +new Date()
         },
         changeSaler(val) {
             this.$store.commit('changeSaler', val)
-            this.formItem.salerId=val
+            this.formItem.salerId = val
             this.validSaleChance()
         },
         changeChance(val) {

@@ -69,6 +69,13 @@ export default {
     components: {
         CustomFormItem
     },
+    props: {
+        formItem: {
+            startDate: '',
+            endDate: '',
+            signDate: '',
+        },
+    },
     data() {
         return {
             startDate: '',
@@ -76,26 +83,21 @@ export default {
             signDate: '',
             timeRange: '',
             timeError: '',
-            formItem: {
-                startDate: '',
-                endDate: '',
-                signDate: '',
-            },
         }
     },
 
     watch: {
         startDate(val) {
             this.$store.commit('changeStartDate', val)
-            this.formItem.startDate=val
+            this.formItem.startDate = val
         },
         endDate(val) {
             this.$store.commit('changeEndDate', val)
-            this.formItem.endDate=val
+            this.formItem.endDate = val
         },
         signDate(val) {
             this.$store.commit('changeSignDate', val)
-            this.formItem.signDate=val
+            this.formItem.signDate = val
         },
         timeRange(val) {
             this.$store.commit('changeTimeRange', val)

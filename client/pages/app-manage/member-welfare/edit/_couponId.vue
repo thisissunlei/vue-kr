@@ -381,6 +381,15 @@ export default {
             merchantLogo:[
                 { required: true, message: '请选择要上传的图片', trigger: 'change' }
             ],
+            fromInner:[
+                { required: true, message: '请选择内部会员提供', trigger:'change' }
+            ],
+            getWay:[
+                { required: true, message: '请选择领取方式', trigger:'change' }
+            ],
+            couponDetail:[
+               { required: true, message: '请输入福利简介', trigger:'change' } 
+            ]
           },
           UEStyleObj: {
                 'width': '100%',

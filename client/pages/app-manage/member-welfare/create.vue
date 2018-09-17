@@ -9,6 +9,7 @@
                                 v-model="formItem.couponType" 
                                 @on-change="typeChange"
                             >
+                            <!--  -->
                                 <!-- <Radio 
                                     label="OFFLINESTORE" 
                                     style="margin-right:120px;"
@@ -64,13 +65,13 @@
                         </FormItem>
                         <div class="u-welfare-tag">
                              <IconTip style="left:95px;top:9px;">上限选择三个</IconTip>
-                             <FormItem label="福利标签" style="width:516px" >
-                                 <div class="u-tag-content" >
+                             <FormItem label="福利标签" style="width:1000px" >
+                                 <div class="u-tag-content" style="width:1200px" >
                                      <div 
-                                        class="u-tag" 
                                         v-for="(item,index) in tagList"
                                         :key="index"
-                                        @click="checkTag"
+                                        @click="checkTag(item,index)"
+                                        :class="item.check?'u-no-tag u-check-tag':'u-no-tag'" 
                                       > 
                                         {{item.name}}
                                      </div>
@@ -243,7 +244,8 @@
                                 />
                              <div v-if="isTimeError" class="u-error">请选择领取有效期</div>
                       </FormItem>
-                       <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required">
+                      <!-- class="ivu-form-item-required" -->
+                       <FormItem label="领取方式" style="width:600px" prop="getWay">
                             <RadioGroup 
                                 v-model="formItem.getWay" 
                             >
@@ -331,6 +333,8 @@ export default {
               beginTime:'',
               endTime:'',
               merchantAddress:'',
+              couponImgs:[],
+              getWay:'',
           },
           id:'',
           tag:'',
@@ -376,6 +380,15 @@ export default {
             merchantLogo:[
                 { required: true, message: '请选择要上传的图片', trigger: 'change' }
             ],
+            fromInner:[
+                { required: true, message: '请选择内部会员提供', trigger:'change' }
+            ],
+            getWay:[
+                { required: true, message: '请选择领取方式', trigger:'change' }
+            ],
+            couponDetail:[
+               { required: true, message: '请输入福利简介', trigger:'change' } 
+            ],
           },
           UEStyleObj: {
                 'width': '100%',
@@ -392,13 +405,17 @@ export default {
   },
   methods:{
         typeChange(form){
-            let type=form;
-            this.$refs.formItems.resetFields();
-            this.isTimeError=false;
-            this.formItem.couponType=type;
+            // this.$refs.formItems.resetFields();
+            // let type=form;
+            // this.isTimeError=false;
+            // this.formItem.couponType=type;
         },
         getTagList(){
             this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+                res.data.tags.map((item)=>{
+                    item.check=false;
+                    return item;
+                })
                 this.tagList=res.data.tags;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -406,8 +423,20 @@ export default {
                 });
             });
         },
-        checkTag(){
-
+        checkTag(item,index){
+            if(item.check){
+                let idIndex=this.tagIds.indexOf(item.id)
+                this.tagIds.splice(idIndex,1);
+            }else{
+                if(this.tagIds.length>=3){
+                    this.$Notice.error({
+                        title:'福利标签最多只能选三个'
+                    });
+                    return;
+                }
+                this.tagIds.push(item.id);
+            }
+            this.tagList[index].check=!item.check;
         },
         // addTags(){
         //         if(!this.tag){
@@ -541,15 +570,22 @@ export default {
                   flag.push('no');
                    this.isCoverError=true;
                }
-               if(this.formItem.couponType=="OFFLINESTORE"){
+               if(this.formItem.getWay=='OFFLINE'){
                     if(!this.formItem.merchantLogo){
                           flag.push('no')
                           this.isLogoError=true;
                     }
                }
+               if(this.formItem.local){
+                    let local=this.formItem.local.split(',');
+                    this.formItem.longitude=local[0];
+                    this.formItem.latitude=local[1];
+               }
+              
                
-               this.formItem.cityIds=this.cityIds.join(',');
                this.formItem.tagIds=this.tagIds.join(',');
+               this.formItem.cityIds=this.cityIds.join(',');
+             
                 
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {
@@ -568,10 +604,10 @@ export default {
                 this.$Notice.success({
                         title:'新建成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message
@@ -830,6 +866,23 @@ export default {
                right:-8px;
            }
        } 
+    }
+    .u-no-tag{
+         padding:0 10px;
+           height:32px;
+           line-height:32px;
+           border:1px solid #000;
+           border-radius: 4px;
+           text-align: center;
+           display: inline-block;
+           position: relative;
+           color:#000;
+           margin-right:20px;
+           margin-bottom:10px;
+    }
+    .u-check-tag{
+         color:#499DF1;
+          border:1px solid #499DF1;
     }
     .mapLocation{
         width:16px;

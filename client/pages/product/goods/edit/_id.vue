@@ -212,7 +212,7 @@ export default {
     data(){
         return{
             selectList:[
-                {value:'--',label:'无'},
+                {value:'NONE',label:'无'},
                 {value:'WEEK',label:'自定义时间'},
             ],
             showDate:false,

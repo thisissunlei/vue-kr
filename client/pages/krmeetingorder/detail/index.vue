@@ -136,6 +136,11 @@ export default {
                         align: 'center',
                     },
                     {
+                        title: '团队卡抵扣',
+                        key: 'teamCardCost',
+                        align: 'center',
+                    },
+                    {
                         title: '订单金额（￥）',
                         key: 'cost',
                         align: 'center',
@@ -189,6 +194,7 @@ export default {
                     cost : resData.cost,
                     discountDesc : resData.discountDesc || "/",
                     totalAmount : resData.totalAmount,
+                    teamCardCost:resData.teamCardCost || 0
                 }]
 
                 this.detail = res.data;

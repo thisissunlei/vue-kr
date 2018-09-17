@@ -152,7 +152,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+                        let time=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)):'';
+                        return h('span',{},time)
                        
                     }
                 },{
@@ -168,7 +169,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)))
+                        let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)):'';
+                        return h('span',{},time)
 
                     }
                 }],

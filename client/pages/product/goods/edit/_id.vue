@@ -141,7 +141,7 @@
                             </Select>
                         </div>
                     </FormItem>
-                    <FormItem v-if="showDate && form.unuseDates.length" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem v-if="showDate " label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <Tooltip max-width="300" placement="top">
                            
                            <Icon type="ios-help" size="20" style="margin-top:5px;"/>
@@ -302,6 +302,7 @@ export default {
             })
         },
         submitCreate(){
+            delete this.formItem.unuseDates
             this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'
@@ -439,11 +440,16 @@ export default {
             }
             let params = JSON.stringify({
                 cmtId:this.$route.params.id,
-                unuseDates:this.form.unuseDates,
+                disableDate:this.dateFormat(this.form.unuseDates||[]),
+                enableDate: this.dateFormat(this.getEnableDate(this.form.unuseDates||[],this.goodsInfo.unuseDates||[])),
+                strategy:'WEEK'
             });
-            this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
+
+            // return ;
+            this.$http.post('post-krmting-mobile-edit-disable-calendar',{editJson:params}).then(()=>{
 
             }).catch((err)=>{
+                
                  this.$Notice.error({
                     title:err.message
                 });
@@ -477,6 +483,26 @@ export default {
             }
             return false
         },
+        getEnableDate(now,old){
+           
+            now = now.join(',');
+            let arr = [];
+           for(let i=0;i<old.length;i++){
+               if(now.indexOf(old[i])!=-1){
+                   arr.push(old[i]);
+               }
+           }
+           console.log(arr,now)
+           return arr;
+           
+        },
+        dateFormat(dateArr){
+            let  arr = [].concat(dateArr)
+            for(let i=0;i<arr.length;i++){
+               arr[i] =  dateUtils.dateToStr("YYYY-MM-DD", new Date(arr[i]))+' 00:00:00';
+            }
+            return arr;
+        }
 
     }
 }

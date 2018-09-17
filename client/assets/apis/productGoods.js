@@ -59,7 +59,7 @@ export default  {
     //30天可用提交
     'post-krmting-mobile-edit-disable-calendar':{
         url:'/api/krspace-op-web/krmting/mobile/community/edit-disable-calendar',
-        method:'get'
+        method:'post'
     },
     
   }

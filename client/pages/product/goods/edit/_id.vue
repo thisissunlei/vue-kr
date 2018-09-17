@@ -136,12 +136,12 @@
                   
                     <FormItem label="自定义不可预订日期" style="width:45%;display:inline-block;">
                         <div >
-                            <Select v-model="form.model" style="width:200px" @on-change="selectChange">
+                            <Select v-model="goodsInfo.enableDateStrategy" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </div>
                     </FormItem>
-                    <FormItem v-if="showDate" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem v-if="showDate && form.unuseDates.length" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <Tooltip max-width="300" placement="top">
                            
                            <Icon type="ios-help" size="20" style="margin-top:5px;"/>
@@ -153,7 +153,7 @@
                             </div>
                         </Tooltip>
                         <div style="width:350px;float:right;">
-                            <KrDatePicker v-model="form.disableDate"/>
+                            <KrDatePicker v-model="form.unuseDates"/>
                         </div>
                     </FormItem>
                     <!-- <Row>
@@ -212,8 +212,8 @@ export default {
     data(){
         return{
             selectList:[
-                {value:'1',label:'无'},
-                {value:'2',label:'自定义时间'},
+                {value:'--',label:'无'},
+                {value:'WEEK',label:'自定义时间'},
             ],
             showDate:false,
             date: [],
@@ -224,7 +224,7 @@ export default {
             form:{
                kmStartTime:'09:00',
                kmEndTime:'19:00',
-               disableDate:[]
+               unuseDates:[]
             },
             goodsInfo:{},
             ruleValidate: {
@@ -263,12 +263,13 @@ export default {
     mounted:function(){
         GLOBALSIDESWITCH("false")
         this.getGoodsInfo();
-        this.getYearWeekend();
+        // this.getYearWeekend();
     },
     methods: {
         selectChange(value){
-            if(value ==2){
-                this.showDate = true;
+            if(value =='WEEK'){
+               
+                this.getYearWeekend();
             }else{
                 this.showDate = false;
             }
@@ -288,7 +289,7 @@ export default {
             if(!this.formItem.kmEndTime){
                 this.formItem.kmEndTime="19:00"
             }
-            this.submitYearWeekend();
+            
             this.$refs[name].validate((valid) => {
                 if (valid) {
                         _this.submitCreate();
@@ -306,6 +307,7 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
+                    this.submitYearWeekend();
                     setTimeout(function(){
                         window.close();
                         window.opener.location.reload();
@@ -342,6 +344,7 @@ export default {
                 '0':'未开业'
             }
             this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
+           
                 let data=Object.assign({},res.data);
                 let appPublished=String(res.data.appPublished)
                 let kmPublished=String(res.data.kmPublished);
@@ -383,6 +386,9 @@ export default {
                 if(data.communityImgs){
                     this.formItem.communityImgs=data.communityImgs.join(',');
                 }
+                // if(res.data.enableDateStrategy == 'WEEK'){
+                //     this.getYearWeekend();
+                // }
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -429,21 +435,22 @@ export default {
         //不可预定日期提交
         submitYearWeekend(){
             //不可预定日期无时不请求
-            if(!showDate){
+            if(!this.showDate){
                 return ;
             }
             let params = JSON.stringify({
                 cmtId:this.$route.params.id,
-                disableDate:this.form.disableDate,
+                unuseDates:this.form.unuseDates,
             });
             this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
 
-            }).catch(()=>{
+            }).catch((err)=>{
                  this.$Notice.error({
                     title:err.message
                 });
             })
         },
+        //获取周六日
         getYearWeekend(){
           
             let params = {
@@ -451,10 +458,12 @@ export default {
             }      
             this.$http.get('get-krmting-mobile-get-workday',params)
             .then((res)=>{
-              this.date = [].concat(res.data)
+            //   this.date = [].concat(res.data.unuseDates)
+           
               let from = Object.assign({},this.from);
-              from.model = '2';
+              from.unuseDates = [].concat(res.data.unuseDates);
               this.form = Object.assign({},from);
+               this.showDate = true;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

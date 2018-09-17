@@ -33,14 +33,14 @@
                       <div><img :src="basicInfo.couponCover" class="u-img-url">{{basicInfo.couponCover?'':'无'}}</div>
                   </div>
                   <LabelText label="福利标签：" style="width:1100px;">
-                     <div v-if="basicInfo.tags">
+                     <div v-if="basicInfo.tagsList">
                          <span 
-                          v-for="(item,index) in basicInfo.tags" 
+                          v-for="(item,index) in basicInfo.tagsList" 
                           class="u-tag"
                           :key="index"
                         >{{item.name}}</span>
                      </div>
-                    <div v-if="!basicInfo.tags">
+                    <div v-if="!basicInfo.tagsList">
                       无
                     </div>
                   </LabelText>
@@ -128,6 +128,7 @@ export default {
           tags:[],
         },
         getinfoList:[],
+        tagList:[],
         loacl:'',
         columns:[
           {
@@ -155,11 +156,20 @@ export default {
       }
     },
     mounted:function(){
+        this.getTagList();
         this.getInfo();
         GLOBALSIDESWITCH("false")
 	 },
    methods:{
-		
+      getTagList(){
+          this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+              this.tagList=res.data.tags;
+          }).catch((error)=>{
+              this.$Notice.error({
+                  title:error.message
+              });
+          });
+      },
       getInfo(){
         var _this=this;
         let {params}=this.$route;
@@ -179,6 +189,7 @@ export default {
 
         this.$http.get('get-coupon-detail', from).then((res)=>{
                   let data = res.data;
+                  let tags=[];
                   data.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.ctime));
                   data.couponTypetxt=type[data.couponType];
                   let tableinfo={
@@ -187,7 +198,16 @@ export default {
                     discussCount:data.discussCount,
                     hotValue:data.hotValue
                   }
-                  data.getWayTxt=getWayType[ data.getWay]
+                 
+                  data.getWayTxt=getWayType[data.getWay];
+                  this.tagList.map((tagItem)=>{
+                    data.tagIds.map((idItem)=>{
+                        if(tagItem.id==idItem){
+                           tags.push(tagItem) 
+                        }
+                    })
+                  })
+                  data.tagsList=tags;
                   this.basicInfo = data;
                   this.getinfoList.push(tableinfo)
                   if(data.longitude && data.latitude){

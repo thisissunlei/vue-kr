@@ -73,9 +73,9 @@ export default {
     },
     data() {
         return {
-            showSaleChance:false,
+            showSaleChance: false,
             salerName: '请选择',
-            orderitems: null,
+            orderitems: {},
             test: "test",
             getFloor: +new Date(),
             chanceId: ''
@@ -91,6 +91,7 @@ export default {
     watch: {
         getFloor() {
             if (this.communityId && this.customerId) {
+                this.showSaleChance = true;
                 let params = {
                     communityId: this.communityId,
                     customerId: this.customerId
@@ -113,6 +114,9 @@ export default {
                     });
 
                 })
+            }
+            else {
+                this.showSaleChance = false
             }
         },
     },

@@ -326,8 +326,7 @@ export default {
           id:'',
           coverImgList:[],
           logoImgList:[],
-          tag:'',
-          imgLogoUrl:'',
+          welfareImgList:[],
           titleLength:15,
           descrLength:20,
           faceValueLength:20,
@@ -427,6 +426,7 @@ export default {
                         if(data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
+                        this.logoImgList=logoImgList;
                         data.couponImgs.map((item)=>{
                             let obj={
                                 'url':item
@@ -435,8 +435,9 @@ export default {
                         })
                        
                         this.welfareImgList=welfareImgList;
-
-                        this.logoImgList=logoImgList;
+                       
+                       
+                        console.log('logoImgList',this.logoImgList)
                         
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
@@ -503,7 +504,7 @@ export default {
                 }
                 this.tagIds.push(item.id);
             }
-            console.log('this.tagIds',this.tagIds)
+           
             this.tagList[index].check=!item.check;
          },
         getTagList(callback){

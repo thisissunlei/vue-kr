@@ -245,22 +245,28 @@ export default{
 	 watch: {
 		defaultFileList: {
 			deep: true,
-			handler(nextProps) {
+			handler(nextProps){
 				this.fileList=nextProps;
-				if(this.maxLen){
+				this.imglen();
+			}
+		}
+	},
+	mounted(){
+		if(this.defaultFileList){
+			this.fileList=this.defaultFileList;
+			this.imglen();
+		}
+	},
+	methods:{
+		imglen(){
+			if(this.maxLen){
 					if(this.fileList.length<this.maxLen){
 						this.upIconShow =true;
 					}else{
 						this.upIconShow =false;
 					}
-				}
 			}
-		}
-	},
-	mounted(){
-		
-	},
-	methods:{
+		},
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
 			this.eyeIndex = index;
@@ -276,13 +282,7 @@ export default{
 			var list = [].concat(this.fileList);
 			list.splice(index, 1);
 			this.fileList = [].concat(list);
-			if(this.maxLen){
-				if(this.fileList.length<this.maxLen){
-					this.upIconShow =true;
-				}else{
-					this.upIconShow =false;
-				}
-			}
+			this.imglen();
 		
 			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.fileList);

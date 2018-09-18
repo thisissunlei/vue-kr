@@ -425,7 +425,10 @@ export default {
 
               this.$http.get('get-coupon-detail', from).then((res)=>{
                         let data = res.data;
+
+                       
                         this.formItem = data;
+                         this.formItem.fromInner= String(data.fromInner);
                         if(data.citys){
                           this.checkCity=data.citys.map((item,index)=>{
                               item.value=item.id;
@@ -459,28 +462,27 @@ export default {
                         this.startHour = startHour;
                         this.endDates = endtime.substr(0,11);
                         this.endHour = endHour;
-                        let tagIds=[],cityIds=[];
+
+
+                        let cityIds=[];
 
                         if(data.longitude && data.latitude){
                            this.formItem.local=`${data.longitude},${data.latitude}`
                         }
-                        console.log('data.tagIds',data.tagIds)
                        
-                        let tagList=this.tagList.map((tagItem,index)=>{
+                       let tagList=this.tagList;
+                       this.tagList.map((tagItem,index)=>{
                               data.tagIds.map((idItem)=>{
                                     if(tagItem.id==idItem){
-                                        console.log('index',index)
-                                        tagItem.check=true;
-                                    }else{
-                                        tagItem.check=false
+                                       this.tagList[index].check=true;
                                     }
                             })
                         })
-                       // this.tagList=tagList;
-                        console.log('this.tagList',this.tagList)
-
+                       
                         if(data.tagIds){
+                            this.tagIds=data.tagIds;
                             this.formItem.tagIds=data.tagIds.join(',');
+                            
                         }
                         if(data.citys){
                             data.citys.map((item,index)=>{
@@ -510,6 +512,7 @@ export default {
                 }
                 this.tagIds.push(item.id);
             }
+            console.log('this.tagIds',this.tagIds)
             this.tagList[index].check=!item.check;
          },
         getTagList(callback){

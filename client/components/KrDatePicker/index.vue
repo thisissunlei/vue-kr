@@ -43,7 +43,7 @@
                         <li v-for="item in weekList" :key="item">{{item | week(language)}}</li>
                     </ul>
                     <ul class="date-list">
-                        <li v-for="(item, index) in dateList" :key="index" :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth,
+                        <li v-for="(item, index) in dateList" :key="index" :class="{preMonth: item.previousMonth||isLessToday(item), nextMonth: item.nextMonth,
                                 invalid: validateDate(item), firstItem: (index % 7) === 0,weekend:validateWeekend(item),today: isToday(item)==='今天'}" @click="selectDate(item)">
                             <div class="message" :class="{selected: isSelected('date', item)}">
                                 <div class="bg"></div>
@@ -266,6 +266,10 @@ export default {
             this.panelType = 'date'
         },
         selectDate(date) {
+            console.log(date,"---------")
+            if(this.isLessToday(date)){
+                return ;
+            }
             if(this.disabled){
                 return ;
             }
@@ -340,6 +344,19 @@ export default {
                 return true
             }
             return false
+        },
+        isLessToday(date){
+             if (date.currentMonth) {
+                 console.log(this.tmpMonth,"ppppppp")
+                let selectTime = (new Date(this.tmpYear+'/'+(this.tmpMonth+1)+'/'+date.value)).getTime();
+                let nowTime = (new Date()).getTime();
+                if (selectTime<nowTime) {
+                    return true;
+                }
+                
+                   
+            }
+             return false
         },
         isToday(date) {
             if (date.currentMonth) {

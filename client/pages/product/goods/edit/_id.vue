@@ -310,7 +310,10 @@ export default {
           this.$Notice.success({
             title: "编辑成功"
           });
-          this.submitYearWeekend();
+          if (this.showDate) {
+            this.submitYearWeekend();
+          }
+
           setTimeout(function() {
             window.close();
             window.opener.location.reload();
@@ -441,9 +444,7 @@ export default {
     //不可预定日期提交
     submitYearWeekend() {
       //不可预定日期无时不请求
-      if (!this.showDate) {
-        return;
-      }
+
       let params = JSON.stringify({
         cmtId: this.$route.params.id,
         disableDate: this.dateFormat(this.form.unuseDates || []),

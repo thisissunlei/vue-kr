@@ -235,6 +235,7 @@
                        <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required">
                             <RadioGroup 
                                 v-model="formItem.getWay" 
+                                 @on-change="wayChange"
                             >
                                 <Radio label="OFFLINE" style="margin-right:20px;" >
                                     到店出示身份
@@ -397,6 +398,17 @@ export default {
    
   },
   methods:{
+        wayChange(form){
+            if(form=="DETAIL"){
+                this.formItem.getUrl="";
+                this.logoImgList=[];
+            }else if(form=="ONLINE"){
+                 this.logoImgList=[];
+            }else {
+                 this.formItem.getUrl="";
+            }
+            
+        },
          getInfo(){
               var _this=this;
               let {params}=this.$route;
@@ -426,6 +438,7 @@ export default {
                         if(data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
+                        console.log('logoImgList',logoImgList)
                         this.logoImgList=logoImgList;
                        
                         if(data.couponImgs){

@@ -452,10 +452,10 @@ export default {
       this.$http
         .post("post-krmting-mobile-edit-disable-calendar", { editJson: params })
         .then(() => {
-          // setTimeout(function() {
-          //   window.close();
-          //   window.opener.location.reload();
-          // }, 1000);
+          setTimeout(function() {
+            window.close();
+            window.opener.location.reload();
+          }, 1000);
         })
         .catch(err => {
           this.$Notice.error({

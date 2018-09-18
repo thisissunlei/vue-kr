@@ -661,16 +661,16 @@ export default {
                  
       },
       submitCreate(){
-            console.log('this.formItem',this.formItem)
+            //console.log('this.formItem',this.formItem)
             //return
             this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    // setTimeout(function(){
-                    //     window.close();
-                    //     window.opener.location.reload();
-                    // },1000) 
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

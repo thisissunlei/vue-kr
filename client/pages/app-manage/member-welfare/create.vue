@@ -562,17 +562,15 @@ export default {
                 })
       },
       submitCreate(){
-          console.log('this.formItem',this.formItem)
-          //this.formItem.couponImgs
-          //return
+         
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });
-                    // setTimeout(function(){
-                    //     window.close();
-                    //     window.opener.location.reload();
-                    // },1000) 
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

@@ -310,14 +310,11 @@ export default {
           this.$Notice.success({
             title: "编辑成功"
           });
-          if (this.showDate) {
+         
             this.submitYearWeekend();
-          }
+          
 
-          setTimeout(function() {
-            window.close();
-            window.opener.location.reload();
-          }, 1000);
+          
         })
         .catch(err => {
           this.$Notice.error({
@@ -444,23 +441,35 @@ export default {
     //不可预定日期提交
     submitYearWeekend() {
       //不可预定日期无时不请求
-
-      let params = JSON.stringify({
-        cmtId: this.$route.params.id,
-        disableDate: this.dateFormat(this.form.unuseDates || []),
-        enableDate: this.dateFormat(
+      let strategy = 'WEEK'
+      let disableDate = this.dateFormat(this.form.unuseDates || []);
+      let enableDate = this.dateFormat(
           this.getEnableDate(
             this.form.unuseDates || [],
             this.goodsInfo.unuseDates || []
           )
-        ),
-        strategy: "WEEK"
+        )
+       if (!this.showDate) {
+            strategy = 'NONE';
+            disableDate=[];
+            enableDate=[];
+       }  
+      let params = JSON.stringify({
+        cmtId: this.$route.params.id,
+        disableDate: disableDate,
+        enableDate: enableDate,
+        strategy:strategy
       });
 
       // return ;
       this.$http
         .post("post-krmting-mobile-edit-disable-calendar", { editJson: params })
-        .then(() => {})
+        .then(() => {
+            setTimeout(function() {
+            window.close();
+            window.opener.location.reload();
+          }, 1000);
+        })
         .catch(err => {
           this.$Notice.error({
             title: err.message

@@ -435,9 +435,7 @@ export default {
                         })
                        
                         this.welfareImgList=welfareImgList;
-                       
-                       
-                        console.log('logoImgList',this.logoImgList)
+                        this.formItem.couponImgs=welfareImgList;
                         
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
@@ -617,15 +615,22 @@ export default {
                   flag.push(false);
                    this.isCoverError=true;
                }
-               if(this.formItem.couponType=="OFFLINESTORE"){
+               if(this.formItem.getWay=='OFFLINE'){
                     if(!this.formItem.merchantLogo){
-                          flag.push(false)
+                          flag.push('no')
                           this.isLogoError=true;
                     }
                }
+               if(this.formItem.local){
+                    let local=this.formItem.local.split(',');
+                    this.formItem.longitude=local[0];
+                    this.formItem.latitude=local[1];
+               }
+               let couponImgs=this.formItem.couponImgs;
                
-               this.formItem.cityIds=this.cityIds.join(',');
                this.formItem.tagIds=this.tagIds.join(',');
+               this.formItem.cityIds=this.cityIds.join(',');
+               this.formItem.couponImgs=JSON.stringify(couponImgs);
                
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {
@@ -639,14 +644,16 @@ export default {
                  
       },
       submitCreate(){
+            console.log('this.formItem',this.formItem)
+            //return
             this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

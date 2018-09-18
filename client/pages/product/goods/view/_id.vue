@@ -65,10 +65,10 @@
                     {{goodsInfo.kmStartTime}}-{{goodsInfo.kmEndTime}}
                 </LabelText>
                 <LabelText label="不可预订日期策略：">
-                    {{goodsInfo.kmMeeting}}
+                    {{goodsInfo.enableDateStrategy=='NONE'?'无':'自定义时间'}}
                 </LabelText>
                 <div>
-                     <KrDatePicker v-model="date" :disabled="true"/>
+                     <KrDatePicker v-if="showDate" v-model="goodsInfo.unuseDates" :disabled="true"/>
                 </div>
             </DetailStyle>
         </div>
@@ -97,6 +97,7 @@ export default {
     },
     data(){
         return{
+            showDate:false,
             statusList:[
                 {
                  label:'周末及节假日',
@@ -141,6 +142,9 @@ export default {
                 data.kmPublished=kmPublished[res.data.kmPublished];
                 data.communityStatus=communityStatus[res.data.communityStatus];
                 this.goodsInfo = data;
+                if(res.data.enableDateStrategy == 'WEEK'){
+                    this.getYearWeekend();
+                }
                 
             }).catch((err)=>{
                 this.$Notice.error({
@@ -151,14 +155,13 @@ export default {
         getYearWeekend(){
           
             let params = {
-             strategy:'WEEK'
+             cmtId: this.$route.params.id
+
             }      
             this.$http.get('get-krmting-mobile-get-workday',params)
             .then((res)=>{
-              this.date = [].concat(res.data)
-              let from = Object.assign({},this.from);
-              from.model = '2';
-              this.form = Object.assign({},from);
+              this.goodsInfo.unuseDates = [].concat(res.data.unuseDates)
+              this.showDate = true;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

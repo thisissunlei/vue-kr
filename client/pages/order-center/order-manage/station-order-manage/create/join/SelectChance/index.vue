@@ -3,9 +3,8 @@
         <label :class="{ title: true, 'require': required }">{{title}}</label>
         <label v-if='subTitle.length>0'
             class="subTitle">
-            (
             <span v-if='subTitlePrefix'>如是</span>
-            <span class="subTitleStr">{{subTitle}}</span>)
+            <span class="subTitleStr">{{subTitle}}</span>
             </span>
         </label>
         <div>
@@ -34,7 +33,7 @@ export default {
                 return {};
             }
         },
-        value:''
+        value: ''
     },
     data() {
         return {
@@ -52,7 +51,6 @@ export default {
     },
     watch: {
         params(val) {
-           
             this.initOptions(val)
         }
     },
@@ -60,9 +58,9 @@ export default {
         this.initOptions(this.params)
     },
     methods: {
-        changeContent(value) { 
+        changeContent(value) {
             debugger
-            this.$emit('input',"" + value)
+            this.$emit('input', "" + value)
             this.$emit("on-select-change", "" + value);
         },
 
@@ -73,7 +71,7 @@ export default {
                     r.data.items.data.map(item => {
                         list.push({
                             label: item.name || ' ',
-                            value: ''+item.id
+                            value: '' + item.id
                         })
                     })
                     let obj = {}
@@ -105,38 +103,41 @@ export default {
                         value: ' '
                     }]
                 data.list.unshift({ label: '不绑定机会', value: ' ' })
-                this.options=data.list
+                this.options = data.list
                 this.data = data;
             }).then(() => {
-                if (this.data.isNewUser) {
-                    this.required = true
-                    this.isError = true
-                    this.subTitlePrefix = false
-                    if (this.data.list.length == 1) {
-                        this.subTitle = '入驻订单必须绑定机会'
-                        this.tipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
-                    } else if (this.data.list.length = 2) {
-                        this.subTitle = ''
-                        this.tipStr = ''
-                        this.chanceId = this.data.list[1].value
-                    } else if (this.data.list.length > 2) {
-                        this.subTitle = ''
-                        this.tipStr = ''
-                        this.chanceId = ''
-                    }
-                }
-                else {
-                    this.required = false
-                    this.subTitle = '新入驻客户，须选择机会'
-                    this.chanceId = ''
-                    this.isError = false
-                    this.subTitlePrefix = true
-                    if (this.data.list.length == 1) {
-                        this.tipStr = '您没有可用机会，客户增租续租时不必须'
-                    }
-                }
-
+                this.renderSelector();
             })
+        },
+
+        renderSelector() {
+            if (this.data.isNewUser) {
+                this.required = true
+                this.isError = true
+                this.subTitlePrefix = false
+                if (this.data.list.length == 1) {
+                    this.subTitle = '入驻订单必须绑定机会'
+                    this.tipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
+                } else if (this.data.list.length = 2) {
+                    this.subTitle = ''
+                    this.tipStr = ''
+                    this.chanceId = this.data.list[1].value
+                } else if (this.data.list.length > 2) {
+                    this.subTitle = ''
+                    this.tipStr = ''
+                    this.chanceId = ''
+                }
+            }
+            else {
+                this.required = false
+                this.subTitle = '新入驻客户，须选择机会'
+                this.chanceId = ''
+                this.isError = false
+                this.subTitlePrefix = true
+                if (this.data.list.length == 1) {
+                    this.tipStr = '您没有可用机会，客户增租续租时不必须'
+                }
+            }
         }
     },
 }
@@ -164,8 +165,12 @@ export default {
         line-height: 1;
         padding: 10px 12px 10px 0;
         float: left;
-        span {
-            color: #495060;
+        color: #495060;
+        &::before {
+            content: "(";
+        }
+        &::after {
+            content: ")";
         }
         .subTitleStr {
             color: #ed3f14;

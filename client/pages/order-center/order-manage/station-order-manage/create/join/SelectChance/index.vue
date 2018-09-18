@@ -55,6 +55,9 @@ export default {
     watch: {
         params(val) {
             this.initOptions(val)
+        },
+        options(val){
+            console.log('options',val)
         }
     },
     mounted() {
@@ -62,7 +65,6 @@ export default {
     },
     methods: {
         changeContent(value) {
-            debugger
             this.$emit('input', "" + value)
             this.$emit("on-select-change", "" + value);
         },
@@ -114,6 +116,7 @@ export default {
         },
 
         renderSelector() {
+            debugger
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true
@@ -121,7 +124,7 @@ export default {
                 if (this.data.list.length == 1) {
                     this.subTitle = '入驻订单必须绑定机会'
                     this.tipStr = '您没有可用的机会，请确认登录账户或前往CRM检查'
-                } else if (this.data.list.length = 2) {
+                } else if (this.data.list.length == 2) {
                     this.subTitle = ''
                     this.tipStr = ''
                     this.chanceId = this.data.list[1].value

@@ -84,6 +84,8 @@ export default {
         return {
             openStation: false,
             openPrice: false,
+            price:'',
+            priceError:'',
             stationAmount: '',
             params: '',
             stationList: [],
@@ -285,11 +287,11 @@ export default {
         },
         //批量录入价格 对于勾选的行
         submitPrice() {
-            let price = false;
+            let errorStr=''
             let stationVos = this.stationList;
             var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
             if (!pattern.test(this.price)) {
-                price = '工位单价不得多于三位小数'
+                errorStr = '工位单价不得多于三位小数'
             }
             // 选中的工位
             let selectedStation = this.selectedStation;
@@ -301,13 +303,13 @@ export default {
             });
             stationVos.map((item) => {
                 if (item.guidePrice > this.price) {
-                    price = '工位单价不得小于' + item.guidePrice;
+                    errorStr = '工位单价不得小于' + item.guidePrice;
                 }
             })
-            if (price) {
-                this.priceError = price;
+            if (errorStr) {
+                this.priceError = errorStr;
             } else {
-                this.priceError = false;
+                this.priceError = '';
                 this.openPrice = !this.openPrice;
                 this.stationList = this.stationList.map((item) => {
                     if (selectedStation.indexOf(item.seatId) != -1) {
@@ -336,7 +338,7 @@ export default {
         },
         cancelPrice() {
             this.openPrice = !this.openPrice;
-            this.priceError = false;
+            this.priceError = '';
             this.price = ''
         },
         changePrice(index, e, guidePrice) {

@@ -251,16 +251,6 @@ export default {
       imglist: [],
       buildingImgList: [],
       communityImgsList: []
-      // statusList:[
-      //     {
-      //      label:'周末及节假日',
-      //      value:'true'
-      //     },
-      //     {
-      //      label:'无',
-      //      value:'false'
-      //     },
-      // ],
     };
   },
   mounted: function() {

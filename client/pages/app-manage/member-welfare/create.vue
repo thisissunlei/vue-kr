@@ -480,7 +480,6 @@ export default {
             this.$refs.formItems.validateField('merchantLogo') 
         },
         welfareSuccess(res){
-            
             let imgObj={
                 url: res.data.url
             }

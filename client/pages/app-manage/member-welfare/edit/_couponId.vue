@@ -64,12 +64,13 @@
                         </FormItem>
                         <div class="u-welfare-tag">
                              <IconTip style="left:95px;top:9px;">上限选择三个</IconTip>
-                             <FormItem label="福利标签" style="width:516px" >
-                                 <div class="u-tag-content" >
-                                     <div 
-                                        class="u-tag" 
+                             <FormItem label="福利标签" style="width:1000px" >
+                                 <div class="u-tag-content" style="width:1200px" >
+                                      <div 
                                         v-for="(item,index) in tagList"
                                         :key="index"
+                                        @click="checkTag(item,index)"
+                                        :class="item.check?'u-no-tag u-check-tag':'u-no-tag'" 
                                       > 
                                         {{item.name}}
                                      </div>
@@ -122,7 +123,7 @@
                               :maxlength="addressLength"
                           />
                       </FormItem> 
-                      <div class="u-upload-logo">
+                     <div class="u-upload-logo">
                             <IconTip style="left:80px;top:10px;">用以APP地图导航</IconTip>
                             <FormItem label="地图坐标"  style="width:300px;position:relative;" >
                             <Input 
@@ -408,9 +409,10 @@ export default {
   },
   mounted:function(){
     GLOBALSIDESWITCH("false");
+    this.getTagList(this.getInfo);
     this.getCityList();
-    this.getInfo();
-    this.getTagList();
+   
+   
    
   },
   methods:{
@@ -441,8 +443,7 @@ export default {
                             logoImgList.push({'url':data.merchantLogo});
                         }
                         this.logoImgList=logoImgList;
-
-                        this.tagList=data.tags;
+                        
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
                         let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.beginTime));
@@ -459,12 +460,27 @@ export default {
                         this.endDates = endtime.substr(0,11);
                         this.endHour = endHour;
                         let tagIds=[],cityIds=[];
-                        if(data.tags){
-                            data.tags.map((item,index)=>{
-                              tagIds.push(item.id)
+
+                        if(data.longitude && data.latitude){
+                           this.formItem.local=`${data.longitude},${data.latitude}`
+                        }
+                        console.log('data.tagIds',data.tagIds)
+                       
+                        let tagList=this.tagList.map((tagItem,index)=>{
+                              data.tagIds.map((idItem)=>{
+                                    if(tagItem.id==idItem){
+                                        console.log('index',index)
+                                        tagItem.check=true;
+                                    }else{
+                                        tagItem.check=false
+                                    }
                             })
-                             this.tagIds=tagIds;
-                            this.formItem.tagIds=tagIds.join(',');
+                        })
+                       // this.tagList=tagList;
+                        console.log('this.tagList',this.tagList)
+
+                        if(data.tagIds){
+                            this.formItem.tagIds=data.tagIds.join(',');
                         }
                         if(data.citys){
                             data.citys.map((item,index)=>{
@@ -481,41 +497,36 @@ export default {
                   });
               });
           },
-        getTagList(){
+         checkTag(item,index){
+            if(item.check){
+                let idIndex=this.tagIds.indexOf(item.id)
+                this.tagIds.splice(idIndex,1);
+            }else{
+                if(this.tagIds.length>=3){
+                    this.$Notice.error({
+                        title:'福利标签最多只能选三个'
+                    });
+                    return;
+                }
+                this.tagIds.push(item.id);
+            }
+            this.tagList[index].check=!item.check;
+         },
+        getTagList(callback){
             this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+                 res.data.tags.map((item)=>{
+                    item.check=false;
+                    return item;
+                })
                 this.tagList=res.data.tags;
+                callback && callback();
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
                 });
             });
         },
-        addTags(){
-                if(!this.tag){
-                    this.$Notice.error({
-                    title:'福利标签不能为空'
-                    });
-                    return;
-                }
-                
-                this.$http.post('create-tag', {name:this.tag}).then((res)=>{
-                   this.tagList.push(res.data)
-                   this.tagIds.push(res.data.id)
-                   this.tag='';
-                }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                    });
-                });
-        },
-        deleteTag(index){
-            let tagList=this.tagList;
-            let tagIds=this.tagIds;
-            tagList.splice(index, 1);
-            tagIds.splice(index, 1);
-            this.tagList=tagList;
-            this.tagIds=tagIds;
-        },
+       
         deleteCity(index){
             let checkCity=this.checkCity;
             let cityIds=this.cityIds;
@@ -573,7 +584,7 @@ export default {
             let imgObj={
                 url: res.data.url
             }
-            this.formItem.couponImgs.push(imgObj)
+            this.formItem.couponImgs.push(imgObj);
             this.$refs.formItems.validateField('couponImgs') 
         },
         coverRemove(){
@@ -583,7 +594,8 @@ export default {
             this.formItem.merchantLogo="";
         },
         welfareRemove(){
-            this.formItem.couponImgs="";
+           let index=this.formItem.couponImgs.indexOf(form.fieldUrl)
+            this.formItem.couponImgs.splice(index,1);
         },
         
         cancelSubmit(){
@@ -904,6 +916,23 @@ export default {
                right:-8px;
            }
        } 
+    }
+     .u-no-tag{
+         padding:0 10px;
+           height:32px;
+           line-height:32px;
+           border:1px solid #000;
+           border-radius: 4px;
+           text-align: center;
+           display: inline-block;
+           position: relative;
+           color:#000;
+           margin-right:20px;
+           margin-bottom:10px;
+    }
+    .u-check-tag{
+         color:#499DF1;
+          border:1px solid #499DF1;
     }
    
   

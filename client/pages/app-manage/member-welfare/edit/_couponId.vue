@@ -75,25 +75,6 @@
                                         {{item.name}}
                                      </div>
                                  </div>
-                                 <!-- <Input 
-                                        v-model="tag" 
-                                        placeholder="5个字符以内"
-                                        :maxlength="tagLength"
-                                        style="width:278px"
-                                 />
-                                 <span v-if="tagList.length<3" class="u-add-tag-btn" @click="addTags">添加</span>
-                                  <span v-if="tagList.length>=3" class="u-tag-btn" >添加</span>
-                                 <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
-                                 <div class="u-tag-content" v-if="tagList.length>0">
-                                     <div 
-                                        class="u-tag" 
-                                        v-for="(item,index) in tagList"
-                                        :key="index"
-                                      >
-                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
-                                        {{item.name}}
-                                     </div>
-                                 </div> -->
                              </FormItem>
                         </div>
                        <FormItem label="内部会员提供：" style="width:352px" prop="fromInner">
@@ -164,6 +145,7 @@
                                             :onFormatError="imgSizeFormat"
                                             :imgWidth="200"
                                             :imgHeight="100"
+                                            :defaultFileList="welfareImgList"
                                         >
                                             <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                         </UploadFile>
@@ -436,15 +418,24 @@ export default {
                               return item;
                           })
                         }
-                        let coverImgList=[];
+                        let coverImgList=[],logoImgList=[],welfareImgList=[];
                         if(data.couponCover!=''){
                             coverImgList.push({'url':data.couponCover});
                         }
                         this.coverImgList=coverImgList;
-                        let logoImgList=[];
+                       
                         if(data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
+                        data.couponImgs.map((item)=>{
+                            let obj={
+                                'url':item
+                            }
+                            welfareImgList.push(obj);
+                        })
+                       
+                        this.welfareImgList=welfareImgList;
+
                         this.logoImgList=logoImgList;
                         
                         this.formItem.startTime=data.beginTime;
@@ -543,10 +534,8 @@ export default {
             this.changeTime();
         },
         endChange(date){
-            
             this.endDates=date;
             this.changeTime();
-           
         },
         startHourChange(date){
             this.startHour=date;

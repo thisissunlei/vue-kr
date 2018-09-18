@@ -136,12 +136,12 @@
                   
                     <FormItem label="自定义不可预订日期" style="width:45%;display:inline-block;">
                         <div >
-                            <Select v-model="goodsInfo.enableDateStrategy" style="width:200px" @on-change="selectChange">
+                            <Select v-model="formItem.enableDateStrategy" style="width:200px" @on-change="selectChange">
                                 <Option v-for="item in selectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </div>
                     </FormItem>
-                    <FormItem v-if="showDate && form.unuseDates.length" label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
+                    <FormItem v-if="showDate " label="自定义不可预订日期" class="u-input ivu-form-item-required"  style="width:350px"   >
                         <Tooltip max-width="300" placement="top">
                            
                            <Icon type="ios-help" size="20" style="margin-top:5px;"/>
@@ -188,377 +188,409 @@
 </template>
 
 <script>
-import DetailStyle from '~/components/DetailStyle';
-import LabelText from '~/components/LabelText';
-import SectionTitle from '~/components/SectionTitle';
-import UploadFile from '~/components/UploadFile';
-import dateUtils from 'vue-dateutils';
-import calendar from '../calendar.vue';
-import KrDatePicker from '~/components/KrDatePicker'
+import DetailStyle from "~/components/DetailStyle";
+import LabelText from "~/components/LabelText";
+import SectionTitle from "~/components/SectionTitle";
+import UploadFile from "~/components/UploadFile";
+import dateUtils from "vue-dateutils";
+import calendar from "../calendar.vue";
+import KrDatePicker from "~/components/KrDatePicker";
 export default {
-     components:{
-        DetailStyle,
-		LabelText,
-        SectionTitle,
-        UploadFile,
-        calendar,
-        KrDatePicker
+  components: {
+    DetailStyle,
+    LabelText,
+    SectionTitle,
+    UploadFile,
+    calendar,
+    KrDatePicker
+  },
+  head() {
+    return {
+      title: "编辑社区商品"
+    };
+  },
+  data() {
+    return {
+      selectList: [
+        { value: "NONE", label: "无" },
+        { value: "WEEK", label: "自定义时间" }
+      ],
+      showDate: false,
+      date: [],
+      category: "app/upgrade",
+      isAppError: false,
+      formItem: {},
+      maxLength: 10,
+      form: {
+        kmStartTime: "09:00",
+        kmEndTime: "19:00",
+        unuseDates: []
+      },
+      goodsInfo: {},
+      ruleValidate: {
+        communityAddress: [
+          { required: true, message: "地址不能为空", trigger: "blur" }
+        ],
+        buildingImg: [
+          { required: true, message: "请选择图片上传", trigger: "blur" }
+        ],
+        communityImgs: [
+          { required: true, message: "请选择图片上传", trigger: "blur" }
+        ],
+        appPublished: [
+          {
+            required: true,
+            message: "APP商品上架状态不能为空",
+            trigger: "blur"
+          }
+        ],
+        kmPublished: [
+          { required: true, message: "KM商品上架状态不能为空", trigger: "blur" }
+        ]
+      },
+      imglist: [],
+      buildingImgList: [],
+      communityImgsList: []
+      // statusList:[
+      //     {
+      //      label:'周末及节假日',
+      //      value:'true'
+      //     },
+      //     {
+      //      label:'无',
+      //      value:'false'
+      //     },
+      // ],
+    };
+  },
+  mounted: function() {
+    GLOBALSIDESWITCH("false");
+    this.getGoodsInfo();
+    // this.getYearWeekend();
+  },
+  methods: {
+    selectChange(value) {
+      if (value == "WEEK") {
+        this.getYearWeekend();
+      } else {
+        this.showDate = false;
+      }
     },
-    head(){
-        return{
-            title:"编辑社区商品"
+    handleSubmit(name) {
+      let { params } = this.$route;
+      let message = "请填写完表单";
+      this.$Notice.config({
+        top: 80,
+        duration: 3
+      });
+      let _this = this;
+      this.formItem.communityId = params.id;
+      if (!this.formItem.kmStartTime) {
+        this.formItem.kmStartTime = "09:00";
+      }
+      if (!this.formItem.kmEndTime) {
+        this.formItem.kmEndTime = "19:00";
+      }
+
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          _this.submitCreate();
+        } else {
+          _this.$Notice.error({
+            title: message
+          });
         }
+      });
     },
-    data(){
-        return{
-            selectList:[
-                {value:'NONE',label:'无'},
-                {value:'WEEK',label:'自定义时间'},
-            ],
-            showDate:false,
-            date: [],
-            category:'app/upgrade',
-            isAppError:false,
-            formItem:{},
-            maxLength:10,
-            form:{
-               kmStartTime:'09:00',
-               kmEndTime:'19:00',
-               unuseDates:[]
-            },
-            goodsInfo:{},
-            ruleValidate: {
-                communityAddress: [
-                    { required: true, message: '地址不能为空', trigger: 'blur' }
-                ],
-                buildingImg: [
-                    { required: true, message: '请选择图片上传', trigger: 'blur' }
-                ],
-                communityImgs: [
-                    { required: true, message: '请选择图片上传', trigger: 'blur' }
-                ],
-                appPublished: [
-                    { required: true, message: 'APP商品上架状态不能为空', trigger: 'blur' }
-                ],
-                kmPublished: [
-                    { required: true, message: 'KM商品上架状态不能为空', trigger: 'blur' }
-                ],
-               
-            },
-            imglist:[],
-            buildingImgList:[],
-            communityImgsList:[],
-            // statusList:[
-            //     {
-            //      label:'周末及节假日',
-            //      value:'true'   
-            //     },
-            //     {
-            //      label:'无',
-            //      value:'false'   
-            //     },
-            // ],
+    submitCreate() {
+      delete this.formItem.unuseDates;
+      this.$http
+        .post("edit-krmting-mobile-community", this.formItem)
+        .then(res => {
+          this.$Notice.success({
+            title: "编辑成功"
+          });
+          this.submitYearWeekend();
+          setTimeout(function() {
+            window.close();
+            window.opener.location.reload();
+          }, 1000);
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+    changeAppStartTime(data) {
+      this.formItem.kmStartTime = data;
+      if (this.formItem.kmStartTime && this.formItem.kmEndTime) {
+        this.isAppError = false;
+      } else {
+        this.isAppError = true;
+      }
+    },
+    changeAppEndTime(data) {
+      this.formItem.kmEndTime = data;
+      if (this.formItem.kmStartTime && this.formItem.kmEndTime) {
+        this.isAppError = false;
+      } else {
+        this.isAppError = true;
+      }
+    },
+    getGoodsInfo() {
+      let { params } = this.$route;
+      let form = {
+        communityId: params.id
+      };
+      let communityStatus = {
+        "1": "已开业",
+        "0": "未开业"
+      };
+      this.$http
+        .get("get-krmting-mobile-community-detail", form)
+        .then(res => {
+          let data = Object.assign({}, res.data);
+          let appPublished = String(res.data.appPublished);
+          let kmPublished = String(res.data.kmPublished);
+          res.data.communityStatus = communityStatus[res.data.communityStatus];
+          data.appPublished = appPublished;
+          data.kmPublished = kmPublished;
+
+          let buildingImgList = [];
+          if (data.buildingImg && data.buildingImg != "") {
+            buildingImgList.push({ url: data.buildingImg });
+          }
+          this.buildingImgList = buildingImgList;
+
+          let communityImgsList = [];
+          data.communityImgs &&
+            data.communityImgs.map(item => {
+              let obj = {};
+              obj.url = item;
+              communityImgsList.push(obj);
+            });
+          this.communityImgsList = communityImgsList;
+
+          this.goodsInfo = res.data;
+
+          delete data.appRoomNum;
+          delete data.appSeatNum;
+          delete data.buildingName;
+          delete data.communityName;
+          delete data.kmRoomNum;
+          delete data.kmSeatNum;
+          delete data.openDate;
+          delete data.communityStatus;
+          this.formItem = data;
+          if (data.kmStartTime) {
+            this.form.kmStartTime = data.kmStartTime.substring(0, 5);
+          }
+          if (data.kmEndTime) {
+            this.form.kmEndTime = data.kmEndTime.substring(0, 5);
+          }
+          if (data.communityImgs) {
+            this.formItem.communityImgs = data.communityImgs.join(",");
+          }
+          // if(res.data.enableDateStrategy == 'WEEK'){
+          //     this.getYearWeekend();
+          // }
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+
+    buildingImgRemove() {
+      this.formItem.buildingImg = "";
+    },
+    buildingImgSuccess(file) {
+      this.formItem.buildingImg = file.data.url;
+      this.$refs.formItems.validateField("buildingImg");
+    },
+    detailImgsRemove(fileList) {
+      let imglist = [];
+      fileList.map(item => {
+        imglist.push(item.url);
+      });
+      let communityImgs = imglist.join(",");
+      this.formItem.communityImgs = communityImgs;
+    },
+    detailImgsSuccess(response, file, fileList) {
+      let imglist = [].concat(this.imglist);
+
+      fileList.map(item => {
+        imglist.push(item.url);
+      });
+      let communityImgs = imglist.join(",");
+      this.formItem.communityImgs = communityImgs;
+      this.$refs.formItems.validateField("communityImgs");
+    },
+    imgSizeFormat() {
+      this.$Notice.error({
+        title: "图片格式不正确"
+      });
+    },
+    imgSize() {
+      this.$Notice.error({
+        title: "图片大小超出限制"
+      });
+    },
+    //不可预定日期提交
+    submitYearWeekend() {
+      //不可预定日期无时不请求
+      if (!this.showDate) {
+        return;
+      }
+      let params = JSON.stringify({
+        cmtId: this.$route.params.id,
+        disableDate: this.dateFormat(this.form.unuseDates || []),
+        enableDate: this.dateFormat(
+          this.getEnableDate(
+            this.form.unuseDates || [],
+            this.goodsInfo.unuseDates || []
+          )
+        ),
+        strategy: "WEEK"
+      });
+
+      // return ;
+      this.$http
+        .post("post-krmting-mobile-edit-disable-calendar", { editJson: params })
+        .then(() => {})
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+    //获取周六日
+    getYearWeekend() {
+      let params = {
+        cmtId: this.$route.params.id
+      };
+      this.$http
+        .get("get-krmting-mobile-get-workday", params)
+        .then(res => {
+          //   this.date = [].concat(res.data.unuseDates)
+          console.log(this.dateFormat(res.data.unuseDates || []));
+          let from = Object.assign({}, this.from);
+          from.unuseDates = [].concat(res.data.unuseDates);
+          this.form = Object.assign({}, from);
+          this.showDate = true;
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
+    },
+    validateWeekend(year, month, nowday) {
+      let day = new Date(year, month, nowday).getDay();
+      if (month && (day === 0 || day === 6)) {
+        return true;
+      }
+      return false;
+    },
+    getEnableDate(now, old) {
+      now = now.join(",");
+      let arr = [];
+      for (let i = 0; i < old.length; i++) {
+        if (now.indexOf(old[i]) == -1) {
+          arr.push(old[i]);
         }
+      }
+      console.log(arr, now);
+      return arr;
     },
-    mounted:function(){
-        GLOBALSIDESWITCH("false")
-        this.getGoodsInfo();
-        // this.getYearWeekend();
-    },
-    methods: {
-        selectChange(value){
-            if(value =='WEEK'){
-               
-                this.getYearWeekend();
-            }else{
-                this.showDate = false;
-            }
-        },
-        handleSubmit (name) {
-            let {params}=this.$route;
-            let message = '请填写完表单';
-            this.$Notice.config({
-                top: 80,
-                duration: 3
-            });
-            let _this = this;
-            this.formItem.communityId=params.id;
-            if(!this.formItem.kmStartTime){
-                this.formItem.kmStartTime="09:00"
-            }
-            if(!this.formItem.kmEndTime){
-                this.formItem.kmEndTime="19:00"
-            }
-            
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                        _this.submitCreate();
-                    } else {
-                        _this.$Notice.error({
-                            title:message
-                        });
-                }
-                
-            })
-        },
-        submitCreate(){
-            this.$http.post('edit-krmting-mobile-community', this.formItem).then((res)=>{
-                this.$Notice.success({
-                        title:'编辑成功'
-                    });
-                    this.submitYearWeekend();
-                    setTimeout(function(){
-                        // window.close();
-                        // window.opener.location.reload();
-                    },1000) 
-            }).catch((err)=>{
-                this.$Notice.error({
-                        title:err.message
-                    });
-            })
-        }, 
-        changeAppStartTime(data){
-             this.formItem.kmStartTime=data;
-            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
-                this.isAppError=false;
-            }else{
-                this.isAppError=true;
-            }
-        },
-        changeAppEndTime(data){
-            this.formItem.kmEndTime=data;
-            if(this.formItem.kmStartTime && this.formItem.kmEndTime){
-                this.isAppError=false;
-            }else{
-                this.isAppError=true;
-            }
-        },
-        getGoodsInfo(){
-            let {params}=this.$route;
-            let form={
-                communityId: params.id
-             }
-            let communityStatus={
-                '1':'已开业',
-                '0':'未开业'
-            }
-            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
-           
-                let data=Object.assign({},res.data);
-                let appPublished=String(res.data.appPublished)
-                let kmPublished=String(res.data.kmPublished);
-                res.data.communityStatus=communityStatus[res.data.communityStatus];
-                data.appPublished=appPublished;
-                data.kmPublished=kmPublished;
-               
-                let buildingImgList=[];
-                if(data.buildingImg && data.buildingImg!=''){
-                    buildingImgList.push({'url':data.buildingImg});
-                }
-                this.buildingImgList=buildingImgList;
-
-                let communityImgsList=[];
-                data.communityImgs && data.communityImgs.map((item)=>{
-                    let obj={};
-                    obj.url=item;
-                    communityImgsList.push(obj)
-                })
-                this.communityImgsList=communityImgsList;
-
-                this.goodsInfo = res.data;
-
-                delete data.appRoomNum;
-                delete data.appSeatNum;
-                delete data.buildingName;
-                delete data.communityName;
-                delete data.kmRoomNum;
-                delete data.kmSeatNum;
-                delete data.openDate;
-                delete data.communityStatus;
-                this.formItem=data;
-                if(data.kmStartTime){
-                    this.form.kmStartTime=data.kmStartTime.substring(0,5);
-                }
-                if(data.kmEndTime){
-                    this.form.kmEndTime=data.kmEndTime.substring(0,5);
-                }
-                if(data.communityImgs){
-                    this.formItem.communityImgs=data.communityImgs.join(',');
-                }
-                // if(res.data.enableDateStrategy == 'WEEK'){
-                //     this.getYearWeekend();
-                // }
-                
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
-       
-        buildingImgRemove(){
-            this.formItem.buildingImg="";
-        },
-        buildingImgSuccess(file){
-            this.formItem.buildingImg=file.data.url;
-            this.$refs.formItems.validateField('buildingImg') 
-        },
-        detailImgsRemove(fileList){
-            let imglist=[];
-            fileList.map((item)=>{
-                imglist.push(item.url)
-            })
-            let communityImgs=imglist.join(',');
-            this.formItem.communityImgs=communityImgs;
-        },
-        detailImgsSuccess(response, file, fileList){
-            let imglist=[].concat(this.imglist);
-
-            fileList.map((item)=>{
-                imglist.push(item.url)
-            })
-            let communityImgs=imglist.join(',');
-            this.formItem.communityImgs=communityImgs;
-            this.$refs.formItems.validateField('communityImgs');
-        },
-    	 imgSizeFormat(){
-            this.$Notice.error({
-                title:'图片格式不正确'
-            });
-        },
-        imgSize(){
-           this.$Notice.error({
-                title:'图片大小超出限制'
-            });
-        },
-        //不可预定日期提交
-        submitYearWeekend(){
-            //不可预定日期无时不请求
-            if(!this.showDate){
-                return ;
-            }
-            let params = JSON.stringify({
-                cmtId:this.$route.params.id,
-                unuseDates:this.form.unuseDates,
-            });
-            this.$http.post('post-krmting-mobile-edit-disable-calendar',params).then(()=>{
-
-            }).catch((err)=>{
-                 this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
-        //获取周六日
-        getYearWeekend(){
-          
-            let params = {
-              cmtId:this.$route.params.id,
-            }      
-            this.$http.get('get-krmting-mobile-get-workday',params)
-            .then((res)=>{
-            //   this.date = [].concat(res.data.unuseDates)
-           
-              let from = Object.assign({},this.from);
-              from.unuseDates = [].concat(res.data.unuseDates);
-              this.form = Object.assign({},from);
-               this.showDate = true;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
-        validateWeekend(year,month,nowday) {
-           
-            let day = new Date(year, month, nowday).getDay()
-            if (month && (day === 0 || day === 6)) {
-                return true
-            }
-            return false
-        },
-
+    dateFormat(dateArr) {
+      let arr = [].concat(dateArr);
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] =
+          dateUtils.dateToStr("YYYY-MM-DD", new Date(arr[i])) + " 00:00:00";
+      }
+      return arr;
     }
-}
+  }
+};
 </script>
 
 <style lang="less">
-    .g-goods-detail{
-        .ivu-tooltip-inner{
-            max-width: 350px;
-        }
-        .center{
-            width: 300px;
-          
-            overflow: hidden;
-        }
-        .u-input{
-            display: inline-block;
-            width: 252px;
-            max-width: 450px;
-            margin-right:120px;
-            vertical-align:top;
-        }
-        .u-error{
-            color: #ed3f14;
-            font-size: 12px;
-        }
-        .u-upload{
-            width:100%;
-            .ivu-form-item-label{
-                width:100%;
-                text-align: left;
-                float:none;
-            } 
-        }
-        .u-unload-label{
-            font-size: 12px;
-            line-height:30px;
-            color:#495060;
-            
-        }
-        .u-unload-tip{
-            line-height:30px;
-            text-indent: 12px;
-            color:#495060;
-            font-size: 12px;
+.g-goods-detail {
+  .ivu-tooltip-inner {
+    max-width: 350px;
+  }
+  .center {
+    width: 300px;
 
-        }
-	    .m-goods-content{
-            padding:30px 24px;
-            // .help-circled{
-            //     width: 20px;
-            //     height: 20px;
-            //     display: inline-block;
-            //     margin-left: -18px;
-            //     margin-top: 4px;
-                
-            // }
-           
-            // .tips{
-            //     position: absolute;
-            //     padding:20px;
-            //     background: #ccc;
-            //     font-size: 18px;
-            //     line-height: 30px;
-            //     color: #666;
-            //     z-index: 99;
-            //     left: 60px;
-            //     top: 40px;
-            // }
-            // .tips:after{
-            //     border-left: 13px solid transparent;  
-            //     border-right: 13px solid transparent;  
-            //     border-bottom: 15px solid #ccc;  
-            //     content: "";  
-            //     position: absolute;      
-            //     width: 0; 
-            //     left: 50px;
-            //     top: -15px;
-            // }
-        }
-		
-	}
+    overflow: hidden;
+  }
+  .u-input {
+    display: inline-block;
+    width: 252px;
+    max-width: 450px;
+    margin-right: 120px;
+    vertical-align: top;
+  }
+  .u-error {
+    color: #ed3f14;
+    font-size: 12px;
+  }
+  .u-upload {
+    width: 100%;
+    .ivu-form-item-label {
+      width: 100%;
+      text-align: left;
+      float: none;
+    }
+  }
+  .u-unload-label {
+    font-size: 12px;
+    line-height: 30px;
+    color: #495060;
+  }
+  .u-unload-tip {
+    line-height: 30px;
+    text-indent: 12px;
+    color: #495060;
+    font-size: 12px;
+  }
+  .m-goods-content {
+    padding: 30px 24px;
+    // .help-circled{
+    //     width: 20px;
+    //     height: 20px;
+    //     display: inline-block;
+    //     margin-left: -18px;
+    //     margin-top: 4px;
+
+    // }
+
+    // .tips{
+    //     position: absolute;
+    //     padding:20px;
+    //     background: #ccc;
+    //     font-size: 18px;
+    //     line-height: 30px;
+    //     color: #666;
+    //     z-index: 99;
+    //     left: 60px;
+    //     top: 40px;
+    // }
+    // .tips:after{
+    //     border-left: 13px solid transparent;
+    //     border-right: 13px solid transparent;
+    //     border-bottom: 15px solid #ccc;
+    //     content: "";
+    //     position: absolute;
+    //     width: 0;
+    //     left: 50px;
+    //     top: -15px;
+    // }
+  }
+}
 </style>
 
 

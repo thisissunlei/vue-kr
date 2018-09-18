@@ -115,7 +115,7 @@ export default {
   mounted: function() {
     GLOBALSIDESWITCH("false");
     this.getGoodsInfo();
-    this.getYearWeekend();
+   
   },
   methods: {
     getGoodsInfo() {

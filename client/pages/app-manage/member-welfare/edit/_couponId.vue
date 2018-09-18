@@ -427,16 +427,20 @@ export default {
                             logoImgList.push({'url':data.merchantLogo});
                         }
                         this.logoImgList=logoImgList;
-                        data.couponImgs.map((item)=>{
-                            let obj={
-                                'url':item
-                            }
-                            welfareImgList.push(obj);
-                        })
                        
+                        if(data.couponImgs){
+                             data.couponImgs.map((item)=>{
+                                let obj={
+                                    'url':item
+                                }
+                                welfareImgList.push(obj);
+                            })
+                            
+                        }
+                    
                         this.welfareImgList=welfareImgList;
                         this.formItem.couponImgs=welfareImgList;
-                        
+                      
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
                         let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.beginTime));
@@ -627,7 +631,7 @@ export default {
                     this.formItem.latitude=local[1];
                }
                let couponImgs=this.formItem.couponImgs;
-               
+              
                this.formItem.tagIds=this.tagIds.join(',');
                this.formItem.cityIds=this.cityIds.join(',');
                this.formItem.couponImgs=JSON.stringify(couponImgs);

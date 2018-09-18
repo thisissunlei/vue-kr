@@ -435,11 +435,11 @@ export default {
                             coverImgList.push({'url':data.couponCover});
                         }
                         this.coverImgList=coverImgList;
-                        console.log('logoImgList',data.merchantLogo)
+                       
                         if(data.merchantLogo && data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
-                        console.log('logoImgList',logoImgList)
+                        
                         this.logoImgList=logoImgList;
                        
                         if(data.couponImgs){
@@ -593,6 +593,7 @@ export default {
             let imgObj={
                 url: res.data.url
             }
+            console.log('imgObj',imgObj,this.formItem.couponImgs)
             this.formItem.couponImgs.push(imgObj);
             this.$refs.formItems.validateField('couponImgs') 
         },

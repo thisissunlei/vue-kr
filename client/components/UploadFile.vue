@@ -252,10 +252,7 @@ export default{
 		}
 	},
 	mounted(){
-		if(this.defaultFileList){
-			this.fileList=this.defaultFileList;
-			this.imglen();
-		}
+		this.imglen();
 	},
 	methods:{
 		imglen(){

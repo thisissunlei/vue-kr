@@ -83,7 +83,6 @@
                     v-if="!disabled">提交</Button>
                 <Button disabled
                     v-if="disabled">提交</Button>
-                <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
         </Form>
     </div>
@@ -323,11 +322,6 @@ export default {
                 }
                 return true;
             })
-            // let complete = this.dealSaleInfo(true)
-
-            // if (complete == 'complete') {
-            // return;
-            // }
 
             let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.startDate));
             let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.signDate || new Date()));
@@ -370,8 +364,6 @@ export default {
             this.$http.post('save-join', formItem).then(r => {
                 debugger
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
-                //欢哥让删掉列表刷新
-                // window.opener.location.href=window.opener.location.href;  
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message
@@ -383,12 +375,12 @@ export default {
 
         },
         //提交新建表单
-        selectDeposit: function (value) {
+        selectDeposit (value) {
             // 选择保证金
             this.depositAmount = value
             this.errorAmount = false;
         },
-        selectPayType: function (value) {
+        selectPayType (value) {
             // 选择付款方式
             this.installmentType = value;
             this.errorPayType = false;

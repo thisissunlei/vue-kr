@@ -33,7 +33,10 @@ export default {
                 return {};
             }
         },
-        value: ''
+        value: {
+            type:String,
+            default:''
+        }
     },
     data() {
         return {

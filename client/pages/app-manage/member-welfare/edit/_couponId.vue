@@ -399,6 +399,7 @@ export default {
   },
   methods:{
         wayChange(form){
+            
             if(form=="DETAIL"){
                 this.formItem.getUrl="";
                 this.logoImgList=[];
@@ -430,12 +431,12 @@ export default {
                           })
                         }
                         let coverImgList=[],logoImgList=[],welfareImgList=[];
-                        if(data.couponCover!=''){
+                        if(data.couponCover && data.couponCover!=''){
                             coverImgList.push({'url':data.couponCover});
                         }
                         this.coverImgList=coverImgList;
-                       
-                        if(data.merchantLogo!=''){
+                        console.log('logoImgList',data.merchantLogo)
+                        if(data.merchantLogo && data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
                         console.log('logoImgList',logoImgList)

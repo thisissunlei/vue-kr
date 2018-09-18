@@ -253,15 +253,19 @@
                             for(var item in orderType){
                                  typeName=orderType[item]
                                 if(item==params.row.orderType){
+                                    let styles="display:inline-block;";
                                     let typeName=orderType[item]
-                                          if (typeName.lastIndexOf('服务订单')==typeName.length-4) {
-                                                typeName=typeName.slice(0,typeName.length-4)
-                                            }    
+                                    if (typeName.lastIndexOf('服务订单')==typeName.length-4) {
+                                        typeName=typeName.slice(0,typeName.length-4)
+                                    }
+                                    if(params.row.orderStatus=='INVALID') {
+                                        styles="display:inline-block;text-decoration:line-through;"
+                                    }   
                                     // return <span class="u-txt">{typeName}</span>;
-                                    lines.push(tag('p',typeName))
+                                    lines.push(tag('p',{style:styles},typeName))
                                 }
                             }
-
+                            
                             var orderStatus={
                                'NOT_EFFECTIVE':'未生效',
                                'EFFECTIVE':'已生效',
@@ -273,10 +277,10 @@
                                     if(item=='NOT_EFFECTIVE'){
                                         style='u-red';
                                     }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    lines.push(tag('p',{'class':`u-txt ${style}`},orderStatus[item]))
+                                    // if(item=='INVALID'){
+                                    //     style='u-nullify';
+                                    // }
+                                    lines.push(tag('p',{class:`u-txts ${style}`},'('+orderStatus[item]+')'))
                                 }
                             }
                             return tag('div',lines);                              
@@ -712,6 +716,9 @@
             color:#2b85e4;
             display:inline-block;
             cursor:pointer;
+     }
+     .u-txts{
+         display:inline-block;
      }
      .u-red{
          color:red;

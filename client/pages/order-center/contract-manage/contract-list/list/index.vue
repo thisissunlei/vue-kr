@@ -325,7 +325,7 @@ export default {
                         if (params.row.isOldContract) {
                             downText = "打印"
                         }
-                        if (!params.row.isOldContract) {
+                        if (!params.row.isOldContract && !params.row.hideDownloadAndShowBtn) {
                             btnRender.push(h('Button', {
                                 props: {
                                     type: 'text',
@@ -357,7 +357,8 @@ export default {
                                     }
                                 }
                             }, "下载"))
-                        } else {
+                        } 
+                        if(params.row.isOldContract) {
                             btnRender.push(h('Button', {
                                 props: {
                                     type: 'text',

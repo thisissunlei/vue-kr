@@ -138,7 +138,7 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:140,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate));
+                            let time=obj.row.dealDate?dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate)):'';
                             // return time;
                             return h('span',{},time);
                         }

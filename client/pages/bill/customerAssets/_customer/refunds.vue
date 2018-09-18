@@ -90,7 +90,8 @@ import utils from '~/plugins/utils';
                     key: 'occurDate',
                     align:'center',
                     render:function(h,params){
-                        return h('span',{},dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)))
+                        let time=params.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate)):'';
+                        return h('span',{},time)
   
                     }
                 },{
@@ -102,7 +103,8 @@ import utils from '~/plugins/utils';
                     key: 'ctime',
                     align:'ctime',
                     render:function(h,params){
-                        return h('span',{}, dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)));
+                         let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)):'';
+                        return h('span',{}, time);
                      
                     }
                 }],

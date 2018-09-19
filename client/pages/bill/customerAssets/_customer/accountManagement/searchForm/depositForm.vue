@@ -67,10 +67,10 @@
                         />
                     </Form-item>
 
-                    <Form-item label="相关操作" class='daily-form' style="margin-right:302px;"> 
+                    <Form-item label="来源类型" class='daily-form' style="margin-right:302px;"> 
                             <Select 
-                                v-model="formItem.operateType" 
-                                placeholder="请选择相关操作" 
+                                v-model="formItem.sourceDetailType" 
+                                placeholder="请选择来源类型" 
                                 clearable
                                 style="width:200px"
                             >
@@ -114,7 +114,7 @@ export default {
                 formItem:{
                     cmtId:'',
                     feeType:'',
-                    operateType:'',
+                    sourceDetailType:'',
                     recordNo:'',
                     amountStart:'',
                     amountEnd:''
@@ -169,7 +169,7 @@ export default {
         },
         getOperate(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.OperateType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.SourceDetailType'
             }).then((r) => {
                 this.operationList = [].concat(r.data)
             }).catch((e) => {

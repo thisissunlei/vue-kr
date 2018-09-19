@@ -100,7 +100,7 @@ function initListData(type){
             }
         },
         {
-            title: type=='balanceDetail'?'操作':'相关操作',
+            title: '来源类型',
             key: 'operateTypeName',
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail'

@@ -57,7 +57,7 @@ export default {
             this.initOptions(val)
         },
         options(val){
-            console.log('options',val)
+            // console.log('options',val)
         }
     },
     mounted() {
@@ -82,7 +82,6 @@ export default {
                     let obj = {}
                     obj.isNewUser = r.data.items.isNewUser;
                     obj.list = list;
-                    console.log(r.data)
                     resolve(obj)
                 }, error => {
                     this.$Notice.error({
@@ -116,7 +115,6 @@ export default {
         },
 
         renderSelector() {
-            debugger
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true

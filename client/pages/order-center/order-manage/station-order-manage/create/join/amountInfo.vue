@@ -84,8 +84,8 @@ export default {
         return {
             openStation: false,
             openPrice: false,
-            price:'',
-            priceError:'',
+            price: '',
+            priceError: '',
             stationAmount: '',
             params: '',
             stationList: [],
@@ -222,6 +222,10 @@ export default {
                     deleteData: [],
                 };
             }
+        },
+        openPrice(){
+            this.priceError=''
+            this.price = ''
         }
     },
     methods: {
@@ -287,7 +291,7 @@ export default {
         },
         //批量录入价格 对于勾选的行
         submitPrice() {
-            let errorStr=''
+            let errorStr = ''
             let stationVos = this.stationList;
             var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
             if (!pattern.test(this.price)) {
@@ -301,21 +305,20 @@ export default {
                 }
                 return false;
             });
-            stationVos.map((item) => {
-                if (item.guidePrice > this.price) {
-                    errorStr = '工位单价不得小于' + item.guidePrice;
-                }
-            })
-            if (errorStr) {
-                this.priceError = errorStr;
-            } else {
+
+            let sortStationVos = [].concat(stationVos)
+            sortStationVos.sort((s1, s2) => s1.guidePrice < s2.guidePrice)
+            let maxPrice = sortStationVos[0].guidePrice;
+            if (maxPrice > this.price) {
+                this.priceError = '工位单价不得小于' +maxPrice
+            }
+            else {
                 this.priceError = '';
                 this.openPrice = !this.openPrice;
                 this.stationList = this.stationList.map((item) => {
                     if (selectedStation.indexOf(item.seatId) != -1) {
                         item.originalPrice = Number(this.price);
                     }
-
                     return item
                 })
                 this.selectedStation = [];
@@ -338,14 +341,12 @@ export default {
         },
         cancelPrice() {
             this.openPrice = !this.openPrice;
-            this.priceError = '';
-            this.price = ''
         },
         changePrice(index, e, guidePrice) {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
         },
-        submitStation: function () {//工位弹窗的提交
+        submitStation () {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
             this.getStationAmount()

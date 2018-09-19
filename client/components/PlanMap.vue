@@ -315,7 +315,7 @@ import http from '~/plugins/http.js';
 				this.Map.destory();
 				this.canvasEles();
 			},
-			dataChange: function(data, allData) {
+			dataChange(data, allData) {
 				const {
 					selectedObjs,
 					newfloor,
@@ -386,7 +386,7 @@ import http from '~/plugins/http.js';
 				for (let i in delDataObj) {
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
 				}
-				submitDataAll = submitDataAll.map(function(item, index) {
+				submitDataAll = submitDataAll.map((item, index)=>{
 					var obj1 = {};
 					let belongType = 1;
 					let type = 'OPEN'
@@ -404,7 +404,8 @@ import http from '~/plugins/http.js';
 					// obj1.seatPrice = item.seatPrice || item.guidePrice || 0;
 					obj1.seatPrice = item.seatPrice;
 					obj1.capacity = item.capacity;
-					obj1.originalPrice = item.originalPrice || obj1.seatPrice|| '';
+					// obj1.originalPrice = item.originalPrice || obj1.seatPrice|| '';// originalPrice seatPrice 都有可能为0 
+					obj1.originalPrice = this.getOriginalPrice(item,obj1)
 					return obj1
 
 				})
@@ -413,7 +414,17 @@ import http from '~/plugins/http.js';
 					deleteData: deleteDataArr,
 				}
 				this.stationArr = station;
-			}
+			},
+			getOriginalPrice(item1,item2){
+       		   if (item1.hasOwnProperty('originalPrice') ) {
+       		       return item1['originalPrice']
+       		   } 
+       		   else if (item2.hasOwnProperty('seatPrice')) {
+       		       return item2['seatPrice']
+       		   } else {
+       		       return ''
+       			}
+       		}
         },
     }
 </script>

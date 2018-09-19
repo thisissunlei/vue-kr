@@ -233,7 +233,7 @@ export default{
 			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
-			fileList:this.defaultFileList?this.defaultFileList:[],
+			fileList:[],
 			serverUrl:'',
 			nowFile:{},
 			fileDetail:{},

@@ -145,7 +145,7 @@
                                             :onFormatError="imgSizeFormat"
                                             :imgWidth="200"
                                             :imgHeight="100"
-                                            :defaultFileList="welfareImgList"
+                                            :defaultFileList="welfareImgs"
                                         >
                                             <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                         </UploadFile>
@@ -327,7 +327,7 @@ export default {
           id:'',
           coverImgList:[],
           logoImgList:[],
-          welfareImgList:[],
+          welfareImgs:[],
           titleLength:15,
           descrLength:20,
           faceValueLength:20,
@@ -430,7 +430,7 @@ export default {
                               return item;
                           })
                         }
-                        let coverImgList=[],logoImgList=[],welfareImgList=[];
+                        let coverImgList=[],logoImgList=[],welfareImgs=[];
                         if(data.couponCover && data.couponCover!=''){
                             coverImgList.push({'url':data.couponCover});
                         }
@@ -442,18 +442,17 @@ export default {
                         
                         this.logoImgList=logoImgList;
                        
-                        if(data.couponImgs){
+                        if(data.couponImgs && data.couponImgs.length>0){
                              data.couponImgs.map((item)=>{
                                 let obj={
                                     url:item
                                 }
-                                welfareImgList.push(obj);
+                                welfareImgs.push(obj);
                             })
-                            
+                          
                         }
-                    
-                        this.welfareImgList=welfareImgList;
-                        this.formItem.couponImgs=welfareImgList;
+                        this.welfareImgs=welfareImgs;
+                        this.formItem.couponImgs=[].concat(this.welfareImgs);
                       
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
@@ -593,7 +592,6 @@ export default {
             let imgObj={
                 url:res.data.url
             }
-            console.log('imgObj',this.welfareImgList)
             this.formItem.couponImgs.push(imgObj);
             this.$refs.formItems.validateField('couponImgs') 
         },
@@ -669,10 +667,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

@@ -11,7 +11,7 @@
                 style="font-size:14px"
                 @click="deleteDiscount">删除</Button>
             <span class="pay-error"
-                v-show="discountError">{{discountError}}</span>
+                v-show="discountErrorStr.length>0">{{discountErrorStr}}</span>
             </Col>
         </Row>
         <Row>
@@ -50,7 +50,7 @@
                     class="discount-table-content">
                 <Select v-model="item.type"
                     label-in-value
-                    @on-change="changeType">
+                    @on-change="changePreferentialType">
                     <Option v-for="(types,i) in youhui"
                         :value="types.value+'/'+index+'/'+types.name+'/'+types.id+'/'+item.index"
                         :key="types.value+index+types.name+types.id">{{ types.label }}</Option>
@@ -67,7 +67,7 @@
                     v-show="item.tacticsType == '3'"
                     placeholder="开始时间"
                     v-model="item.startDate"
-                    @on-change="changeSaleTime"></DatePicker>
+                    @on-change="changeStartTime"></DatePicker>
                 </Col>
                 <Col span="5"
                     class="discount-table-content">
@@ -80,7 +80,7 @@
                     class="discount-table-content">
                 <Input v-model="item.discount"
                     placeholder="折扣"
-                    @on-blur="changezhekou"
+                    @on-blur="changeDiscount"
                     v-if="item.tacticsType == '1'"
                     :number="inputNumberType"></Input>
                 <Input v-model="item.zhekou"
@@ -116,7 +116,8 @@ export default {
         return {
             youhui: [],//当前登陆人在当前社区拥有的折扣和免租项 优惠=》youhui 拼音？？？！！！
             formItem: { items: [] },//所添加的优惠项 只提交show=true的
-            discountError: false,
+            discountErrorStr: false,
+            discountInput: '',
             selectAll: false,
             inputNumberType: true,
             showSaleDiv: true,
@@ -147,6 +148,9 @@ export default {
             }
             this.dealSaleInfo(true)
         },
+        discountErrorStr(val) {
+            this.$store.commit('changePreferentialError', val)
+        }
     },
     mounted() {
         this.stationList = [].concat(this.seats)
@@ -183,6 +187,14 @@ export default {
         },
         handleAdd() {
             // 优惠信息的添加按钮
+
+            if (this.discountErrorStr) {
+                this.$Notice.error({
+                    title: '请先填写完正确的优惠信息'
+                });
+                return
+            }
+
             this.showSaleDiv = true;
             if (!this.stationList.length) {
                 this.$Notice.error({
@@ -207,13 +219,18 @@ export default {
         },
         deleteDiscount() {
             // 删除选中的优惠信息
-
             let items = [].concat(this.formItem.items);
-
+            debugger
+            let deleteDiscout = items.some(p => p.tacticsType == '1')
+            if (deleteDiscout) {
+                this.discountInput = ''
+            }
             let rest = items.filter(p => !p.select)
-
             this.formItem.items = rest;
-            this.discount = ''
+            if (rest.length == 0) {
+                this.discountErrorStr = ''
+            }
+            // this.discountInput = ''
             this.selectDiscount(false);
             this.dealSaleInfo(false)
 
@@ -232,20 +249,20 @@ export default {
         },
         //切换优惠全选/全不选
 
-        changeSaleTime(val) {
+        changeStartTime(val) {
             let _this = this;
             setTimeout(function () {
                 _this.dealSaleInfo(true)
             }, 200)
         },
-        changezhekou(value) {
+        changeDiscount(value) {
             let val = value.target.value;
             if (!val) {
                 return
             }
             val = val.replace(/\s/g, '');
             if (!(/^(\d|[0-9])(\.\d)?$/.test(val))) {
-                this.discountError = '折扣只能为一位小数或整数';
+                this.discountErrorStr = '折扣只能为一位小数或整数';
                 this.disabled = true;
 
                 this.$Notice.error({
@@ -254,12 +271,12 @@ export default {
                 return;
             }
             if (isNaN(val)) {
-                this.discountError = '折扣必须是数字';
+                this.discountErrorStr = '折扣必须是数字';
                 this.disabled = true;
                 return
             }
             if (val < this.minDiscount) {
-                this.discountError = '折扣不得小于' + this.minDiscount;
+                this.discountErrorStr = '折扣不得小于' + this.minDiscount;
                 this.disabled = true;
                 this.$Notice.error({
                     title: '折扣不得小于' + this.minDiscount
@@ -267,17 +284,17 @@ export default {
                 return;
             }
             if (val > 9.9) {
-                this.discountError = '折扣不得大于9.9'
+                this.discountErrorStr = '折扣不得大于9.9'
                 this.disabled = true;
                 this.$Notice.error({
                     title: '折扣不得大于9.9'
                 })
                 return;
             }
-            this.discount = val;
+            this.discountInput = val;
             this.dealSaleInfo(false)
         },
-        changeType(val) {
+        changePreferentialType(val) {
             //优惠类型选择
             if (!val || !val.value) {
                 return;
@@ -364,17 +381,17 @@ export default {
             this.formItem.items = items;
             this.dealSaleInfo(false)
         },
-        dealzhekou(val) {
+        checkDiscountInput(val) {
             if (!val) {
                 return false
             }
             if (isNaN(val)) {
-                this.discountError = '折扣必须是数字';
+                this.discountErrorStr = '折扣必须是数字';
                 this.disabled = true;
                 return false
             }
             if (val < this.minDiscount) {
-                this.discountError = '折扣不得小于' + this.minDiscount;
+                this.discountErrorStr = '折扣不得小于' + this.minDiscount;
                 this.disabled = true;
 
                 this.$Notice.error({
@@ -383,28 +400,26 @@ export default {
                 return false;
             }
             if (val > 9.9) {
-                this.discountError = '折扣不得大于9.9'
+                this.discountErrorStr = '折扣不得大于9.9'
                 this.disabled = true;
                 this.$Notice.error({
                     title: '折扣不得大于9.9'
                 })
                 return false;
             }
+            this.discountErrorStr = ''
             return true;
         },
         //计算优惠信息
         //show? 是否显示错误消息提示
         dealSaleInfo(show) {
-            //处理已删除的数据
-
             let saleList = [].concat(this.formItem.items)
-
             //检查手否有未填写完整的折扣项
             let complete = true;
             let zhekou = true;//是否是折扣
             saleList.map(item => {//1 折扣  3免租
-                if (item.tacticsType == '1' && this.discount) {
-                    item.discount = this.discount
+                if (item.tacticsType == '1' && this.discountInput) {
+                    item.discount = this.discountInput
                 }
                 if (!item.tacticsType) {
                     complete = false
@@ -415,7 +430,7 @@ export default {
                 if (item.tacticsType == '1' && !item.discount) {
                     complete = false;
                 } else {
-                    zhekou = this.dealzhekou(item.discount || this.discount)
+                    zhekou = this.checkDiscountInput(item.discount || this.discountInput)
                 }
             });
 
@@ -423,7 +438,7 @@ export default {
                 this.$Notice.error({
                     title: '请填写完整优惠信息'
                 });
-                this.discountError = '请填写完整优惠信息'
+                this.discountErrorStr = '请填写完整优惠信息'
                 return 'complete';
             }
 
@@ -467,7 +482,6 @@ export default {
                 saleList: JSON.stringify(list)
             };
             this.disabled = false;
-            this.discountError = false;
             this.$http.post('count-sale', params, r => {
 
                 this.stationList = r.data.seats;
@@ -479,8 +493,7 @@ export default {
             }, e => {
                 if (this.stationList.length) {
                     this.disabled = true;
-                    this.discountError = e.message;
-
+                    this.discountErrorStr = e.message;
                     this.$Notice.error({
                         title: e.message
                     })
@@ -494,5 +507,8 @@ export default {
 
 <style lang="less">
 .perferential-info-panel {
+    .pay-error {
+        padding-left: 10px;
+    }
 }
 </style>

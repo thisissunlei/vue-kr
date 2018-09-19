@@ -6,7 +6,8 @@ var perferentialInfo = {
     state: {
         youhui: [],
         saleList: [],
-        rentAmountSale: ""//扣除优惠后的总金额
+        rentAmountSale: "",//扣除优惠后的总金额,
+        preferentialError:"",//优惠输入是否有误
     },
     mutations: {
         changeYouhui(state, val) {
@@ -17,6 +18,9 @@ var perferentialInfo = {
         },
         changeRentAmountSale(state, val) {
             state.rentAmountSale = val
+        },
+        changePreferentialError(state,val){
+            state.preferentialError=val
         }
     },
     actions: {},
@@ -29,6 +33,9 @@ var perferentialInfo = {
         },
         rentAmountSale(state) {
             return state.rentAmountSale;
+        },
+        preferentialError(state){
+            return state.preferentialError;
         }
     }
 };

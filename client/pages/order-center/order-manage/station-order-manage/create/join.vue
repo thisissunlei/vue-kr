@@ -213,7 +213,8 @@ export default {
             'signDate',
             'timeRange',
             'sso',
-            'managerId'
+            'managerId',
+            'preferentialError'
         ])
     },
     watch: {
@@ -274,7 +275,12 @@ export default {
                         return;
                     }
                     // this.disabled = true;
-
+                    if (this.preferentialError) {
+                        this.$Notice.error({
+                            title: this.preferentialError
+                        });
+                        return;
+                    }
                     this.joinFormSubmit()
                 } else {
                     this.disabled = false;
@@ -360,9 +366,10 @@ export default {
             formItem.managerId = this.managerId;
 
             let _this = this;
-            this.disabled = true;
+            // this.disabled = true;
+            debugger
+            return
             this.$http.post('save-join', formItem).then(r => {
-                debugger
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
             }).catch(e => {
                 _this.$Notice.error({
@@ -375,12 +382,12 @@ export default {
 
         },
         //提交新建表单
-        selectDeposit (value) {
+        selectDeposit(value) {
             // 选择保证金
             this.depositAmount = value
             this.errorAmount = false;
         },
-        selectPayType (value) {
+        selectPayType(value) {
             // 选择付款方式
             this.installmentType = value;
             this.errorPayType = false;

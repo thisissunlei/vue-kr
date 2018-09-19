@@ -83,13 +83,10 @@ function initListData(type){
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail',
             render:(h,params)=>{
-                let colData = params.row;
-                let typeName=colData.operateTypeName;
-                let isColor=typeName=='打款'||typeName=='退款'||typeName=='冻结押金';
                 return h('div',{
                     style: {
-                        color:isColor?'':'#2b85e4',
-                        cursor:isColor?'auto':'pointer'
+                        color:'#2b85e4',
+                        cursor:'pointer'
                     },
                     on:{
                         click:()=>{

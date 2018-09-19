@@ -366,9 +366,8 @@ export default {
             formItem.managerId = this.managerId;
 
             let _this = this;
-            // this.disabled = true;
-            debugger
-            return
+            this.disabled = true;
+
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
             }).catch(e => {

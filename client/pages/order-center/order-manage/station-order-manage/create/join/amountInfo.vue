@@ -223,8 +223,8 @@ export default {
                 };
             }
         },
-        openPrice(){
-            this.priceError=''
+        openPrice() {
+            this.priceError = ''
             this.price = ''
         }
     },
@@ -305,13 +305,15 @@ export default {
                 }
                 return false;
             });
-
+            console.log()
             let sortStationVos = [].concat(stationVos)
-            sortStationVos.sort((s1, s2) => s1.guidePrice < s2.guidePrice)
+            sortStationVos.sort((s1, s2) => { return s2.guidePrice - s1.guidePrice })
             let maxPrice = sortStationVos[0].guidePrice;
+            debugger
             if (maxPrice > this.price) {
-                this.priceError = '工位单价不得小于' +maxPrice
+                this.priceError = '工位单价不得小于' + maxPrice
             }
+
             else {
                 this.priceError = '';
                 this.openPrice = !this.openPrice;
@@ -346,7 +348,7 @@ export default {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
         },
-        submitStation () {//工位弹窗的提交
+        submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
             this.getStationAmount()

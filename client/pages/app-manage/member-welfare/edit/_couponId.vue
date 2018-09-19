@@ -399,15 +399,15 @@ export default {
   },
   methods:{
         wayChange(form){
-            
-            if(form=="DETAIL"){
-                this.formItem.getUrl="";
-                this.logoImgList=[];
-            }else if(form=="ONLINE"){
-                 this.logoImgList=[];
-            }else {
-                 this.formItem.getUrl="";
-            }
+            console.log('00000',form)
+            // if(form=="DETAIL"){
+            //     this.formItem.getUrl="";
+            //     this.logoImgList=[];
+            // }else if(form=="ONLINE"){
+            //      this.logoImgList=[];
+            // }else {
+            //      this.formItem.getUrl="";
+            // }
             
         },
          getInfo(){
@@ -439,6 +439,7 @@ export default {
                         if(data.merchantLogo && data.merchantLogo!=''){
                             logoImgList.push({'url':data.merchantLogo});
                         }
+                       
                         
                         this.logoImgList=logoImgList;
                        

@@ -252,6 +252,7 @@ export default{
 		}
 	},
 	mounted(){
+		this.fileList=this.defaultFileList;
 		this.imglen();
 	},
 	methods:{

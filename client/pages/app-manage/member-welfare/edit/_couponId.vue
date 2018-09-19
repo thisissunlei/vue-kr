@@ -445,7 +445,7 @@ export default {
                         if(data.couponImgs){
                              data.couponImgs.map((item)=>{
                                 let obj={
-                                    'url':item
+                                    url:item
                                 }
                                 welfareImgList.push(obj);
                             })
@@ -591,9 +591,9 @@ export default {
         },
         welfareSuccess(res){
             let imgObj={
-                url: res.data.url
+                url:res.data.url
             }
-            console.log('imgObj',imgObj,this.formItem.couponImgs)
+            console.log('imgObj',this.welfareImgList)
             this.formItem.couponImgs.push(imgObj);
             this.$refs.formItems.validateField('couponImgs') 
         },

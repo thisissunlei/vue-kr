@@ -603,7 +603,7 @@ export default {
         logoRemove(){
             this.formItem.merchantLogo="";
         },
-        welfareRemove(){
+        welfareRemove(form){
            let index=this.formItem.couponImgs.indexOf(form.fieldUrl)
             this.formItem.couponImgs.splice(index,1);
         },

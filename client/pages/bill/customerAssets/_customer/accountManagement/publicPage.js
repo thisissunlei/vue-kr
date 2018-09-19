@@ -101,7 +101,7 @@ function initListData(type){
         },
         {
             title: '来源类型',
-            key: 'operateTypeName',
+            key: 'sourceDetailTypeName',
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail'
         },

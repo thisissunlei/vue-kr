@@ -249,7 +249,7 @@ export default {
         },
         getOperate(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.sourceDetailType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.SourceDetailType'
             }).then((r) => {
                 this.operationList = [].concat(r.data)
             }).catch((e) => {

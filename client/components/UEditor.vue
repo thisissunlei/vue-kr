@@ -190,8 +190,12 @@ export default {
         })
 
         this.ue.addListener('blur', () => {
+            // let s=this.ue.selection;
+            let r=this.ue.selection.getRange();
+            // let c=this.ue.selection.getRange().getClosedNode()
             let closeNode = this.ue.selection.getRange().getClosedNode()
-            if (!closeNode) {
+            debugger
+            if (!closeNode&&r.endOffset==r.startOffset) {
                 this.ue.execCommand('inserthtml', '<span></span>');
             }
         });

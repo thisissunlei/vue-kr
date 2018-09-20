@@ -119,7 +119,9 @@
                           <Input 
                               v-model="formItem.merchantPhone" 
                               placeholder="请填写商户联系电话"
+                              @on-change="checkPhone(formItem.merchantPhone)"
                           />
+                          <div v-if="isPhoneError" class="u-error">联系电话只能是数字</div>
                       </FormItem> 
                        <FormItem label="享受规则"  style="width:500px;" >
                           <Input 
@@ -383,6 +385,7 @@ export default {
                 'height': '300px',
                 'clear': 'both'
           },
+          isPhoneError:false,
 
       }
   },
@@ -392,6 +395,14 @@ export default {
     this.getTagList();
   },
   methods:{
+        checkPhone(value){
+            let reg=/^[0-9]*$/;
+            if(reg.test(value)){
+                this.isPhoneError=false;
+            }else{
+                this.isPhoneError=true;
+            }
+        },
         typeChange(form){
             let type=form;
             this.$refs.formItems.resetFields();

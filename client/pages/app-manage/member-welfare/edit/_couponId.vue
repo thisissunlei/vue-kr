@@ -118,6 +118,7 @@
                           <Input 
                               v-model="formItem.merchantPhone" 
                               placeholder="请填写商户联系电话"
+                              @on-change="checkPhone(formItem.merchantPhone)"
                           />
                       </FormItem> 
                        <FormItem label="享受规则"  style="width:500px;" >
@@ -398,6 +399,14 @@ export default {
    
   },
   methods:{
+        checkPhone(value){
+            let reg=/^[0-9]*$/;
+            if(reg.test(value)){
+                this.isPhoneError=false;
+            }else{
+                this.isPhoneError=true;
+            }
+        },
         wayChange(form){
             if(form=="DETAIL"){
                 this.formItem.getUrl="";

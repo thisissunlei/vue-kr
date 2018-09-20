@@ -358,10 +358,14 @@ export default {
           if(this.formItem.startTime){
             let beginTime=dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.startTime));
             this.formItem.beginTime=`${beginTime} 00:00:00`;
+          }else{
+              this.formItem.beginTime=""
           }
           if(this.formItem.endtime){
             let endTime=dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.endtime));
             this.formItem.endTime=`${endTime} 23:59:59`;
+          }else{
+              this.formItem.endTime=""
           }
             let formItem=Object.assign({},this.formItem);
             if(formItem.startTime){

@@ -159,20 +159,10 @@ export default {
       }
     },
     mounted:function(){
-        this.getTagList();
         this.getInfo();
         GLOBALSIDESWITCH("false")
 	 },
    methods:{
-      getTagList(){
-          this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
-              this.tagList=res.data.tags;
-          }).catch((error)=>{
-              this.$Notice.error({
-                  title:error.message
-              });
-          });
-      },
       getInfo(){
         var _this=this;
         let {params}=this.$route;
@@ -201,9 +191,9 @@ export default {
                     discussCount:data.discussCount,
                     hotValue:data.hotValue
                   }
-                 
                   data.getWayTxt=getWayType[data.getWay];
-                  this.tagList.map((tagItem)=>{
+
+                  data.tags.map((tagItem)=>{
                     data.tagIds.map((idItem)=>{
                         if(tagItem.id==idItem){
                            tags.push(tagItem) 

@@ -382,7 +382,10 @@ export default {
             ],
             couponDetail:[
                { required: true, message: '请输入福利简介', trigger:'change' } 
-            ]
+            ],
+             couponScope:[
+               { required: true, message: '请选择福利范围', trigger:'change' } 
+            ],
           },
           UEStyleObj: {
                 'width': '100%',

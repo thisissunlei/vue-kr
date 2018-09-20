@@ -383,6 +383,9 @@ export default {
             couponDetail:[
                { required: true, message: '请输入福利简介', trigger:'change' } 
             ],
+            couponScope:[
+               { required: true, message: '请选择福利范围', trigger:'change' } 
+            ],
           },
           UEStyleObj: {
                 'width': '100%',
@@ -572,7 +575,10 @@ export default {
 
                this.formItem.tagIds=this.tagIds.join(',');
                this.formItem.cityIds=this.cityIds.join(',');
-               this.formItem.couponImgs=JSON.stringify(couponImgs);
+               if(this.formItem.couponImgs.length>0){
+                   this.formItem.couponImgs=JSON.stringify(couponImgs);
+               }
+               
                 
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {

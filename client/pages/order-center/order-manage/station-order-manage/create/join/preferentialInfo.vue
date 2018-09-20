@@ -1,7 +1,8 @@
 
 
 <template>
-    <div class="perferential-info-panel">
+    <div class="perferential-info-panel"
+        @mouseleave="onMouseLeave">
         <Row style="margin-bottom:10px">
             <Col class="col">
             <Button type="primary"
@@ -381,73 +382,14 @@ export default {
             this.formItem.items = items;
             this.dealSaleInfo(false)
         },
-        checkDiscountInput(val) {
-            if (!val) {
-                return false
-            }
-            if (isNaN(val)) {
-                this.discountErrorStr = '折扣必须是数字';
-                this.disabled = true;
-                return false
-            }
-            if (val < this.minDiscount) {
-                this.discountErrorStr = '折扣不得小于' + this.minDiscount;
-                this.disabled = true;
 
-                this.$Notice.error({
-                    title: '折扣不得小于' + this.minDiscount
-                })
-                return false;
-            }
-            if (val > 9.9) {
-                this.discountErrorStr = '折扣不得大于9.9'
-                this.disabled = true;
-                this.$Notice.error({
-                    title: '折扣不得大于9.9'
-                })
-                return false;
-            }
-            this.discountErrorStr = ''
-            return true;
-        },
         //计算优惠信息
         //show? 是否显示错误消息提示
         dealSaleInfo(show) {
             let saleList = [].concat(this.formItem.items)
-            //检查手否有未填写完整的折扣项
-            let complete = true;
-            let zhekou = true;//是否是折扣
-            saleList.map(item => {//1 折扣  3免租
-                if (item.tacticsType == '1' && this.discountInput) {
-                    item.discount = this.discountInput
-                }
-                if (!item.tacticsType) {
-                    complete = false
-                }
-                if (item.tacticsType == '3' && (!item.startDate || !item.validEnd)) {
-                    complete = false;
-                }
-                if (item.tacticsType == '1' && !item.discount) {
-                    complete = false;
-                } else {
-                    zhekou = this.checkDiscountInput(item.discount || this.discountInput)
-                }
-            });
-
-            if (!complete && show) {
-                this.$Notice.error({
-                    title: '请填写完整优惠信息'
-                });
-                this.discountErrorStr = '请填写完整优惠信息'
-                return 'complete';
-            }
-
-            if (!complete && !show) {
-
-                return;
-            }
-            if (!zhekou && !show) {
-                return;
+            let valid = this.checkInputIntegrity(saleList, show)
+            if (!valid) {
+                return
             }
             if (!saleList.length) {
                 this.showSaleDiv = false;
@@ -501,6 +443,87 @@ export default {
             })
 
         },
+
+        //折扣输入校验
+        checkDiscountInput(val) {
+            if (!val) {
+                return false
+            }
+            if (isNaN(val)) {
+                this.discountErrorStr = '折扣必须是数字';
+                this.disabled = true;
+                return false
+            }
+            if (val < this.minDiscount) {
+                this.discountErrorStr = '折扣不得小于' + this.minDiscount;
+                this.disabled = true;
+
+                this.$Notice.error({
+                    title: '折扣不得小于' + this.minDiscount
+                })
+                return false;
+            }
+            if (val > 9.9) {
+                this.discountErrorStr = '折扣不得大于9.9'
+                this.disabled = true;
+                this.$Notice.error({
+                    title: '折扣不得大于9.9'
+                })
+                return false;
+            }
+            this.discountErrorStr = ''
+            return true;
+        },
+        //优惠输入的完整性校验
+        checkInputIntegrity(saleList, show) {
+            let complete = true;//输入完整
+            let discountInputValid = true;//折扣输入合法
+            saleList.map(item => {//1 折扣  3免租
+                debugger
+                if (!item.tacticsType) {
+                    complete = false
+                }
+                else if (item.tacticsType == '3' && (!item.startDate || !item.validEnd)) {
+                    complete = false;
+                }
+                else if (item.tacticsType == '1' && !item.discount) {
+                    complete = false;
+                } else if (item.tacticsType == '1' && item.discount) {
+                    discountInputValid = this.checkDiscountInput(item.discount || this.discountInput)
+                }
+                if (item.tacticsType == '1' && this.discountInput) {
+                    item.discount = this.discountInput
+                }
+            });
+
+            if (!complete) {
+
+                this.discountErrorStr = '请填写完整优惠信息'
+                if (show) {
+                    this.$Notice.error({
+                        title: '请填写完整优惠信息'
+                    });
+                }
+                return false
+            }
+
+            if (!discountInputValid) {
+                this.discountErrorStr = '折扣输入错误'
+                if (show) {
+                    this.$Notice.error({
+                        title: '折扣输入错误'
+                    });
+                }
+                return false
+            }
+            return true
+        },
+        onMouseLeave() {
+            if (!this.discountErrorStr) {
+                let saleList = [].concat(this.formItem.items)
+                this.checkInputIntegrity(saleList, false)
+            }
+        }
     },
 }
 </script>

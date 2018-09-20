@@ -444,8 +444,6 @@ export default {
 
               this.$http.get('get-coupon-detail', from).then((res)=>{
                         let data = res.data;
-
-                       
                         this.formItem = data;
                          this.formItem.fromInner= String(data.fromInner);
                         if(data.citys){
@@ -501,31 +499,21 @@ export default {
 
                         if(data.longitude && data.latitude){
                            this.formItem.local=`${data.longitude},${data.latitude}`
-                        }
-                      
-                        data.tags.map((tagItem,index)=>{
-                               tagItem.check=false; 
+                        }  
+                        this.tagList=data.tags.map((tagItem,index)=>{
+                              tagItem.check=false;
                               data.tagIds.map((idItem)=>{
                                     if(tagItem.id==idItem){
-                                       data.tags[index].check=true;
+                                      tagItem.check=true;
                                     }
-                            })
+                              })
+                              return tagItem;
                         })
-                         this.tagList=data.tags;
-
-                    //    this.tagList=data.tags;
-                    //    this.tagList.map((tagItem,index)=>{
-                    //           data.tagIds.map((idItem)=>{
-                    //                 if(tagItem.id==idItem){
-                    //                    this.tagList[index].check=true;
-                    //                 }
-                    //         })
-                    //     })
                        
+
                         if(data.tagIds){
                             this.tagIds=data.tagIds;
                             this.formItem.tagIds=data.tagIds.join(',');
-                            
                         }
                         if(data.citys){
                             data.citys.map((item,index)=>{
@@ -543,6 +531,7 @@ export default {
               });
           },
          checkTag(item,index){
+            let tagList=[].concat(this.tagList);
             if(item.check){
                 let idIndex=this.tagIds.indexOf(item.id)
                 this.tagIds.splice(idIndex,1);
@@ -555,8 +544,8 @@ export default {
                 }
                 this.tagIds.push(item.id);
             }
-           
-            this.tagList[index].check=!item.check;
+            tagList[index].check=!item.check;
+            this.tagList=tagList;
          },
         getTagList(type){
             this.$http.get('get-coupon/tag-list', {'couponType':type}).then((res)=>{
@@ -564,7 +553,7 @@ export default {
                     item.check=false;
                     return item;
                 })
-                this.tagList=res.data.tags;
+                this.tagList=[].concat(res.data.tags) ;
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

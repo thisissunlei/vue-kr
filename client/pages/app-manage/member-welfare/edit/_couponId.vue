@@ -7,6 +7,7 @@
                     <FormItem label="福利类型" style="width:700px" prop="couponType">
                             <RadioGroup 
                                 v-model="formItem.couponType" 
+                                @on-change="typeChange"
                             >
                                 <!-- <Radio 
                                     label="OFFLINESTORE" 
@@ -407,6 +408,12 @@ export default {
                 this.isPhoneError=true;
             }
         },
+        typeChange(form){
+            let type=form;
+            this.$refs.formItems.resetFields();
+            this.isTimeError=false;
+            this.formItem.couponType=type;
+        },
         wayChange(form){
             if(form=="DETAIL"){
                 this.formItem.getUrl="";
@@ -687,7 +694,7 @@ export default {
             })
       },
       cityChange(form){
-          if(Object.keys(form).length === 0){
+         if(!form.value){
               return;
           }
           let flag;

@@ -588,7 +588,7 @@ export default {
             })
       },
       cityChange(form){
-          if(Object.keys(form).length === 0){
+          if(!form.value){
               return;
           }
           let flag;

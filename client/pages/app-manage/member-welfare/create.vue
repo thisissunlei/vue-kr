@@ -90,7 +90,7 @@
                         </FormItem>
                 </DetailStyle>
 
-                <DetailStyle info="详细信息">=
+                <DetailStyle info="详细信息">
                       <FormItem label="商户名称"  style="width:300px" >
                           <Input 
                               v-model="formItem.merchantName" 
@@ -496,7 +496,6 @@ export default {
         welfareRemove(form){
             let index=this.formItem.couponImgs.indexOf(form.fieldUrl)
             this.formItem.couponImgs.splice(index,1);
-             console.log('this.formItem.couponImgs---->>>re',this.formItem.couponImgs)
         },
         coverError(error,file){
             this.$Notice.error({
@@ -567,10 +566,10 @@ export default {
                 this.$Notice.success({
                         title:'新建成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

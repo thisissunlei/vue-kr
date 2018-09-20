@@ -399,15 +399,14 @@ export default {
   },
   methods:{
         wayChange(form){
-            console.log('00000',form)
-            // if(form=="DETAIL"){
-            //     this.formItem.getUrl="";
-            //     this.logoImgList=[];
-            // }else if(form=="ONLINE"){
-            //      this.logoImgList=[];
-            // }else {
-            //      this.formItem.getUrl="";
-            // }
+            if(form=="DETAIL"){
+                this.formItem.getUrl="";
+                this.logoImgList=[];
+            }else if(form=="ONLINE"){
+                 this.logoImgList=[];
+            }else {
+                 this.formItem.getUrl="";
+            }
             
         },
          getInfo(){

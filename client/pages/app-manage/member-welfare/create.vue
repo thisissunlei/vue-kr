@@ -50,6 +50,7 @@
                       </FormItem>
                        <FormItem label="福利封面" style="width:516px" prop="couponCover">
                              <UploadFile 
+                                ref="couponCover"
                                 :category="category"
                                 withCredentials
                                 :format="['jpg','png','gif']"
@@ -59,6 +60,7 @@
                                 :onFormatError="imgSizeFormat"
                                 :imgWidth="148"
                                 :imgHeight="148"
+                                :clearFiles="coverRemove"
                             >
                                 <div slot="tip" class="u-unload-tip">  图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                             </UploadFile>
@@ -91,14 +93,14 @@
                 </DetailStyle>
 
                 <DetailStyle info="详细信息">
-                      <FormItem label="商户名称"  style="width:300px" >
+                      <FormItem label="商户名称"  style="width:300px" prop="merchantName" >
                           <Input 
                               v-model="formItem.merchantName" 
                               placeholder="20个字符以内"
                               :maxlength="20"
                           />
                       </FormItem> 
-                      <FormItem label="详细地址"  style="width:300px" >
+                      <FormItem label="详细地址"  style="width:300px" prop="merchantAddress" >
                           <Input 
                               v-model="formItem.merchantAddress" 
                               placeholder="30个字符以内,建议填写门店详细地址"
@@ -107,7 +109,7 @@
                       </FormItem> 
                       <div class="u-upload-logo">
                             <IconTip style="left:80px;top:10px;">用以APP地图导航</IconTip>
-                            <FormItem label="地图坐标"  style="width:300px;position:relative;" >
+                            <FormItem label="地图坐标"  style="width:300px;position:relative;"  prop="local">
                             <Input 
                                 v-model="formItem.local"
                             />
@@ -115,7 +117,7 @@
                             </FormItem>
                       </div>
                       
-                       <FormItem label="联系电话"  style="width:300px" >
+                       <FormItem label="联系电话"  style="width:300px"  prop="merchantPhone" >
                           <Input 
                               v-model="formItem.merchantPhone" 
                               placeholder="请填写商户联系电话"
@@ -123,7 +125,7 @@
                           />
                           <div v-if="isPhoneError" class="u-error">联系电话只能是数字</div>
                       </FormItem> 
-                       <FormItem label="享受规则"  style="width:500px;" >
+                       <FormItem label="享受规则"  style="width:500px;"   prop="useRule">
                           <Input 
                               v-model="formItem.useRule"
                               type="textarea" 
@@ -148,6 +150,7 @@
                                             :onFormatError="imgSizeFormat"
                                             :imgWidth="200"
                                             :imgHeight="100"
+                                            :clearFiles="coverRemove"
                                         >
                                             <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                         </UploadFile>
@@ -156,7 +159,7 @@
                 </DetailStyle>
 
                 <DetailStyle info="福利领取信息">
-                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required">
+                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required"   prop="couponScope">
                             <RadioGroup 
                                 v-model="formItem.couponScope" 
                             >
@@ -174,7 +177,7 @@
                       <div class="u-community-content" v-if="formItem.couponScope=='0'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
-                              <FormItem label="选择城市"  style="width:250px;" >
+                              <FormItem label="选择城市"  style="width:250px;"  prop="id" >
                                   <Select
                                       v-model="id"
                                       filterable
@@ -200,7 +203,7 @@
                                  </div>
                           </div>
                       </div>
-                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" >
+                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" prop="startTime" >
                                 <DatePicker
                                     type="date"
                                     v-model="formItem.startTime"
@@ -263,6 +266,7 @@
                                         :onFormatError="imgSizeFormat"
                                         :imgWidth="148"
                                         :imgHeight="148"
+                                        :clearFiles="logoRemove"
                                     >
                                         <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比例建议为1:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                     </UploadFile>
@@ -319,7 +323,7 @@ export default {
               title:'',
               descr:'',
               faceValue:'',
-              couponScope:1,
+              couponScope:'',
               beginTime:'',
               endTime:'',
               merchantAddress:'',
@@ -392,7 +396,7 @@ export default {
   mounted:function(){
     GLOBALSIDESWITCH("false");
     this.getCityList()
-    this.getTagList();
+    this.getTagList('USERLIFE');
   },
   methods:{
         checkPhone(value){
@@ -408,9 +412,18 @@ export default {
             this.$refs.formItems.resetFields();
             this.isTimeError=false;
             this.formItem.couponType=type;
+            this.formItem.startHour='';
+            this.formItem.endtime='';
+            this.formItem.endHour='';
+            this.getTagList(type)
+            this.$refs.couponCover.clearFiles();
+            console.log('this.$refs.couponCover',this.$refs.couponCover)
+            // this.formItem.couponCover="";
+            // this.formItem.merchantLogo="";
+            // this.formItem.couponImgs=[];
         },
-        getTagList(){
-            this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+        getTagList(type){
+            this.$http.get('get-coupon/tag-list', {'couponType':type}).then((res)=>{
                 res.data.tags.map((item)=>{
                     item.check=false;
                     return item;

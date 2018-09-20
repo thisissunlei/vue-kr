@@ -49,6 +49,7 @@
                       </FormItem>
                        <FormItem label="福利封面" style="width:516px" prop="couponCover">
                              <UploadFile 
+                                ref="couponCover"
                                 :category="category"
                                 withCredentials
                                 :format="['jpg','png','gif']"
@@ -91,14 +92,14 @@
                 </DetailStyle>
 
                 <DetailStyle info="详细信息">
-                        <FormItem label="商户名称"  style="width:300px" >
+                        <FormItem label="商户名称"  style="width:300px" prop="merchantName">
                             <Input 
                                 v-model="formItem.merchantName" 
                                 placeholder="20个字符以内"
                                 :maxlength="20"
                             />
                         </FormItem>
-                      <FormItem label="详细地址"  style="width:300px" >
+                      <FormItem label="详细地址"  style="width:300px" prop="merchantAddress">
                           <Input 
                               v-model="formItem.merchantAddress" 
                               placeholder="30个字符以内,建议填写门店详细地址"
@@ -107,7 +108,7 @@
                       </FormItem> 
                      <div class="u-upload-logo">
                             <IconTip style="left:80px;top:10px;">用以APP地图导航</IconTip>
-                            <FormItem label="地图坐标"  style="width:300px;position:relative;" >
+                            <FormItem label="地图坐标"  prop="local" style="width:300px;position:relative;" >
                             <Input 
                                 v-model="formItem.local"
                             />
@@ -115,14 +116,14 @@
                             </FormItem>
                       </div>
                       
-                       <FormItem label="联系电话"  style="width:300px" >
+                       <FormItem label="联系电话" prop="merchantPhone" style="width:300px" >
                           <Input 
                               v-model="formItem.merchantPhone" 
                               placeholder="请填写商户联系电话"
                               @on-change="checkPhone(formItem.merchantPhone)"
                           />
                       </FormItem> 
-                       <FormItem label="享受规则"  style="width:500px;" >
+                       <FormItem label="享受规则" prop="useRule" style="width:500px;" >
                           <Input 
                               v-model="formItem.useRule"
                               type="textarea" 
@@ -174,7 +175,7 @@
                       <div class="u-community-content" v-if="formItem.couponScope=='0'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
-                              <FormItem label="选择城市"  style="width:250px;" >
+                              <FormItem label="选择城市"  style="width:250px;"  prop="id" >
                                   <Select
                                       v-model="id"
                                       filterable
@@ -317,11 +318,11 @@ export default {
       return{
           category:'app/upgrade',
           formItem:{
-              couponType:'OFFLINESTORE',
+              couponType:'USERLIFE',
               title:'',
               descr:'',
               faceValue:'',
-              couponScope:1,
+              couponScope:'',
               beginTime:'',
               endTime:'',
               merchantAddress:'',
@@ -393,11 +394,8 @@ export default {
   },
   mounted:function(){
     GLOBALSIDESWITCH("false");
-    this.getTagList(this.getInfo);
+    this.getInfo();
     this.getCityList();
-   
-   
-   
   },
   methods:{
         checkPhone(value){
@@ -413,6 +411,15 @@ export default {
             this.$refs.formItems.resetFields();
             this.isTimeError=false;
             this.formItem.couponType=type;
+            this.formItem.startHour='';
+            this.formItem.endtime='';
+            this.formItem.endHour='';
+            this.getTagList(type)
+            console.log('this.$refs.couponCover',this.$refs.couponCover)
+            //this.$refs.couponCover.onRemove();
+            
+           
+            this.formItem.couponImgs=[];
         },
         wayChange(form){
             if(form=="DETAIL"){
@@ -492,15 +499,25 @@ export default {
                         if(data.longitude && data.latitude){
                            this.formItem.local=`${data.longitude},${data.latitude}`
                         }
-                       
-                       let tagList=this.tagList;
-                       this.tagList.map((tagItem,index)=>{
+                      
+                        data.tags.map((tagItem,index)=>{
+                               tagItem.check=false; 
                               data.tagIds.map((idItem)=>{
                                     if(tagItem.id==idItem){
-                                       this.tagList[index].check=true;
+                                       data.tags[index].check=true;
                                     }
                             })
                         })
+                         this.tagList=data.tags;
+
+                    //    this.tagList=data.tags;
+                    //    this.tagList.map((tagItem,index)=>{
+                    //           data.tagIds.map((idItem)=>{
+                    //                 if(tagItem.id==idItem){
+                    //                    this.tagList[index].check=true;
+                    //                 }
+                    //         })
+                    //     })
                        
                         if(data.tagIds){
                             this.tagIds=data.tagIds;
@@ -538,14 +555,13 @@ export default {
            
             this.tagList[index].check=!item.check;
          },
-        getTagList(callback){
-            this.$http.get('get-coupon/tag-list', {name:this.tag}).then((res)=>{
+        getTagList(type){
+            this.$http.get('get-coupon/tag-list', {'couponType':type}).then((res)=>{
                  res.data.tags.map((item)=>{
                     item.check=false;
                     return item;
                 })
                 this.tagList=res.data.tags;
-                callback && callback();
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

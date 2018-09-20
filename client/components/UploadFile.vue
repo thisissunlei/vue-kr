@@ -252,10 +252,18 @@ export default{
 		}
 	},
 	mounted(){
-		this.fileList=this.defaultFileList;
-		this.imglen();
+		//this.fileList=this.defaultFileList;
+		//this.imglen();
 	},
 	methods:{
+		clearFiles(){
+			this.upIconShow =true;
+			this.disabled=false;
+			this.fileList=[];
+			
+			
+			//this.imglen(this.fileList);
+		},
 		imglen(){
 			if(this.maxLen){
 					if(this.fileList.length<this.maxLen){
@@ -455,6 +463,8 @@ export default{
 			if(file){
 				this.getUpFileUrl(file);
 			}
+			
+			this.$emit('clearFiles',this.clearFiles);  
 		},
 		//上传成功
 		handleSuccess(params,response,file){

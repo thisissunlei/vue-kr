@@ -202,7 +202,7 @@
                                  </div>
                           </div>
                       </div>
-                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" >
+                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" prop="startTime" >
                                 <DatePicker
                                     type="date"
                                     v-model="formItem.startTime"
@@ -422,13 +422,16 @@ export default {
             this.getTagList(type)
             this.$refs.couponCover.clearFiles();
             this.$refs.welfare.clearFiles();
-            if(this.formItem.getWay=='OFFLINE'){
+            if(this.$refs.log){
                  this.$refs.logo.clearFiles();
             }
 
             this.formItem.couponCover="";
             this.formItem.couponImgs=[];
             this.formItem.merchantLogo="";
+            this.checkCity=[];
+            this.cityIds=[];
+            this.id='';
         },
         wayChange(form){
             if(form=="DETAIL"){

@@ -422,13 +422,16 @@ export default {
             this.getTagList(type)
             this.$refs.couponCover.clearFiles();
             this.$refs.welfare.clearFiles();
-            if(this.formItem.getWay=='OFFLINE'){
+            if(this.$refs.logo){
                  this.$refs.logo.clearFiles();
             }
-
+           
             this.formItem.couponCover="";
             this.formItem.couponImgs=[];
             this.formItem.merchantLogo="";
+            this.checkCity=[];
+            this.cityIds=[];
+            this.id='';
             
         },
         getTagList(type){

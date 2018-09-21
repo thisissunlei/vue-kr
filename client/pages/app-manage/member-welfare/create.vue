@@ -79,17 +79,19 @@
                                  </div>
                              </FormItem>
                         </div>
-                       <FormItem label="内部会员提供：" style="width:352px" prop="fromInner">
-                            <RadioGroup v-model="formItem.fromInner">
-                                <Radio label="1">
-                                    是
-                                </Radio>
-                                <Radio label="0">
-                                    否
-                                </Radio>
-                            </RadioGroup> 
-                        </FormItem>
                 </DetailStyle>
+                 <div>
+                     <FormItem label="内部会员提供" style="width:352px;margin-top:10px;" prop="fromInner">
+                        <RadioGroup v-model="formItem.fromInner">
+                            <Radio label="1">
+                                是
+                            </Radio>
+                            <Radio label="0">
+                                否
+                            </Radio>
+                        </RadioGroup> 
+                    </FormItem>
+                 </div>
 
                 <DetailStyle info="详细信息">
                       <FormItem label="商户名称"  style="width:300px" prop="merchantName" >
@@ -448,6 +450,7 @@ export default {
             });
         },
         checkTag(item,index){
+            let tagList=[].concat(this.tagList);
             if(item.check){
                 let idIndex=this.tagIds.indexOf(item.id)
                 this.tagIds.splice(idIndex,1);
@@ -460,7 +463,8 @@ export default {
                 }
                 this.tagIds.push(item.id);
             }
-            this.tagList[index].check=!item.check;
+            tagList[index].check=!item.check;
+            this.tagList=tagList;
         },
         deleteCity(index){
             let checkCity=this.checkCity;

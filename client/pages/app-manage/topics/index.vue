@@ -115,9 +115,7 @@ export default {
               pageSize:15,
               page:1, 
            },
-           formItem:{
-
-           },
+           formItem:{},
            openCancel:false,
            openResult:false,
            topicsColumns:[
@@ -357,6 +355,7 @@ export default {
         if (Object.keys(query).length !== 0) {
             this.getTableData(query);
             this.Params=query;
+            this.formItem=query;
           
         }else{
             this.getTableData(this.Params)

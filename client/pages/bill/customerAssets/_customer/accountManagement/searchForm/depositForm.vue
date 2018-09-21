@@ -23,7 +23,7 @@
 
                        <Form-item label="费用类型" class='daily-form'>
                            <Select 
-                                v-model="formItem.feeType" 
+                                v-model="formItem.depositType" 
                                 placeholder="请选择费用类型" 
                                 clearable
                                 style="width:200px"
@@ -113,7 +113,7 @@ export default {
             return { 
                 formItem:{
                     cmtId:'',
-                    feeType:'',
+                    depositType:'',
                     sourceDetailType:'',
                     recordNo:'',
                     amountStart:'',
@@ -158,7 +158,7 @@ export default {
         },
         getFee(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.FeeType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.DepositType'
             }).then((r) => {
                 this.feeTypeList = [].concat(r.data)
             }).catch((e) => {

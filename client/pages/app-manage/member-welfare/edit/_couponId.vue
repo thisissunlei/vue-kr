@@ -158,7 +158,7 @@
                 </DetailStyle>
 
                 <DetailStyle info="福利领取信息">
-                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required">
+                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required"  prop="couponScope">
                             <RadioGroup 
                                 v-model="formItem.couponScope" 
                             >
@@ -236,7 +236,7 @@
                                 />
                              <div v-if="isTimeError" class="u-error">请选择领取有效期</div>
                       </FormItem>
-                       <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required">
+                       <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required"  prop="getWay">
                             <RadioGroup 
                                 v-model="formItem.getWay" 
                                  @on-change="wayChange"
@@ -984,6 +984,24 @@ export default {
          color:#499DF1;
           border:1px solid #499DF1;
     }
+
+     .mapLocation{
+        width:16px;
+        height:20px;
+        display:inline-block;
+        background:url('~/assets/images/location.svg') no-repeat center;
+        background-size: 100%;
+        position: absolute;
+        right: 10px;
+        top:8px;
+        z-index: 2;
+        margin-top:0;
+  }
+  .u-textarea{
+      textarea{
+        height:100px;
+      }
+  }
    
   
 }

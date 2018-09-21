@@ -63,30 +63,16 @@
                 <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
             </div>
         </Modal>
-         <Modal
-            v-model="openCancel"
-            title="删除"
-            ok-text="确定"
-            cancel-text="取消"
-            width="490"
-        >
-            <div style="text-align:center;font-size:14px;margin-top:20px;">
-               下线后，该福利会即时从APP端隐藏，并且会员不可领取
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="">取消</Button>
-            </div>
-        </Modal>
         <Modal
                 v-model="openResult"
-                title="投票结果"
+                :title="`投票结果——#${resultTitle}#`"
                 ok-text="确定"
                 cancel-text="取消"
-                width="660"
+                width="411"
+                height="480"
         >
                 
-               
+            <ResultView :detail="resultDetail" />
         </Modal>
 
  </div>
@@ -95,11 +81,13 @@
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
 import CoverImg from './coverImg';
+import ResultView from './resultView';
 
 export default {
   components:{
       SectionTitle,
-      CoverImg
+      CoverImg,
+      ResultView
   },
     head() {
         return {
@@ -112,6 +100,7 @@ export default {
            page:1,
            totalCount:0,
            tableList:[],
+           
            typeList:[
                {
                    label:'普通话题',
@@ -135,6 +124,8 @@ export default {
            openCancel:false,
            openDeleteModal:false,
            openResult:false,
+           resultTitle:'',
+           resultDetail:{},
            topicsColumns:[
                 {
                     title: '话题封面',
@@ -295,7 +286,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.openView(params.row)
                                                 }
                                             }
                                         }, '投票结果'),
@@ -340,7 +331,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.openView(params.row)
                                                 }
                                             }
                                         }, '投票结果'),
@@ -384,6 +375,27 @@ export default {
             if(params){
                 this.talkpointId=params.talkpointId
             }
+        },
+        openView(params){
+             this.openResult=!this.openResult;
+            if(params){
+                this.talkpointId=params.talkpointId;
+                this.resultTitle=params.title;
+                this.getResult(params.talkpointId);
+            }
+        },
+        getResult(talkpointId){
+            let params={
+                        talkpointId: talkpointId
+                }
+                this.$http.get('get-app-console-talkpoint-poll-detail', params).then((res)=>{
+                    this.resultDetail=res.data.pollInfo;
+                    
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
         },
         changePage(page){
             this.Params.page=page;
@@ -448,20 +460,14 @@ export default {
                 })
             
         },
-        getSearchData(form){
-            this.searchData=form;
-        },
-       lowerSubmit(){
+        lowerSubmit(){
             let params=Object.assign({},this.formItem);
             this.tabParams=Object.assign({},params);
             this.tabParams.page=1;
             this.tabParams.pageSize=15;
             utils.addParams(this.tabParams);
         },
-       showSearch (params) {
-            utils.clearForm(this.searchData);
-            this.openSearch=!this.openSearch;
-        },
+        
 
 
 

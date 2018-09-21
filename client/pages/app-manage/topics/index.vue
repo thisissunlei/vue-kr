@@ -216,7 +216,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.cancelStick(params.row)
                                                 }
                                             }
                                         }, '取消置顶'),
@@ -247,7 +247,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.stickTopics(params.row)
                                                 }
                                             }
                                         }, '置顶'),
@@ -281,7 +281,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.cancelStick(params.row)
                                                 }
                                             }
                                         }, '取消置顶'),
@@ -326,7 +326,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.jumpView(params.row)
+                                                    this.stickTopics(params.row)
                                                 }
                                             }
                                         }, '置顶'),
@@ -394,18 +394,48 @@ export default {
                 let params={
                         talkpointId: this.talkpointId
                     }
-                    this.$http.post('delete-app-console-talkpoint', params).then((res)=>{
-                        this.$Notice.success({
-                            title:'删除成功'
-                        });  
-                        this.openDelete();
-                        this.getTableData(this.Params);
-                    }).catch((err)=>{
-                        this.$Notice.error({
-                            title:err.message
-                        });
-                    })
+                this.$http.post('delete-app-console-talkpoint', params).then((res)=>{
+                    this.$Notice.success({
+                        title:'删除成功'
+                    });  
+                    this.openDelete();
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
                     
+        },
+        stickTopics(params){
+             let form={
+                    talkpointId:params.talkpointId
+                }
+                this.$http.post('app-console-talkpoint-stick', form).then((res)=>{
+                    this.$Notice.success({
+                        title:'置顶成功'
+                    });  
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+        },
+         cancelStick(params){
+             let form={
+                    talkpointId: params.talkpointId
+                }
+                this.$http.post('app-console-talkpoint-cancel-stick', form).then((res)=>{
+                    this.$Notice.success({
+                        title:'取消置顶成功'
+                    });
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
         },
         getTableData(params){
                 this.$http.get('get-app-console-talkpoint-page', params).then((res)=>{

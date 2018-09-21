@@ -82,10 +82,12 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
+import CoverImg from './coverImg';
 
 export default {
   components:{
       SectionTitle,
+      CoverImg
   },
     head() {
         return {
@@ -125,17 +127,13 @@ export default {
                     title: '话题封面',
                     key: 'coverImg',
                     align:'center',
-                    width:150,
-                    style: {
-                        width:'100px',
-                        height:'100px',
-                    },
+                    width:100,
                     render:(h,params)=>{
-                        return h('img',{
+                        return h(CoverImg ,{
                             props: {
-                                src: params.row.coverImg,
-                            },
-                        })
+                                imgUrl:params.row.coverImg,
+                            }
+                         });
                     }
                 },
                 {
@@ -158,11 +156,13 @@ export default {
                     title: '关注人数',
                     key: 'followCount',
                     align:'center',
+                    width:80,
                 },
                 {
                     title: '参与讨论数',
                     key: 'discussCount',
                     align:'center',
+                    width:80,
                 },
 
                 {
@@ -174,89 +174,169 @@ export default {
                     title: '创建时间',
                     key: 'ctime',
                     align:'center',
-                    width:80,
                 },
                 {
                     title: '操作',
-                    key: 'effective',
+                    key: 'type',
                     align:'center',
                     render:(h,params)=>{
-                        if(params.row.effective==1){
-                            return h('div', [
-                               h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpView(params.row)
-                                        }
-                                    }
-                                }, '详情'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpEdit(params.row)
-                                        }
-                                    }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openDown(params.row)
-                                        }
-                                    }
-                                }, '下线')
-                            ]); 
+                        if(params.row.type=='NORMAL'){
+                            if(params.row.stick=='1'){
+                                return h('div', [
+                                    h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '取消置顶'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openDown(params.row)
+                                                }
+                                            }
+                                        }, '删除')
+                                    ]); 
+                            }else{
+                                return h('div', [
+                                    h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '置顶'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openDown(params.row)
+                                                }
+                                            }
+                                        }, '删除')
+                                    ]); 
+                            }
+                            
                         }else{
-                             return h('div', [
-                               h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpView(params.row)
-                                        }
-                                    }
-                                }, '详情'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpEdit(params.row)
-                                        }
-                                    }
-                                }, '编辑')
-                            ]);
+                            if(params.row.stick=='1'){
+                                return h('div', [
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '取消置顶'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '投票结果'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openDown(params.row)
+                                                }
+                                            }
+                                        }, '删除')
+                                    ]); 
+                            }else{
+                                return h('div', [
+                                    h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '置顶'),
+                                         h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.jumpView(params.row)
+                                                }
+                                            }
+                                        }, '投票结果'),
+                                        h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openDown(params.row)
+                                                }
+                                            }
+                                        }, '删除')
+                                    ]); 
+                            }
                         }
                             
                  }
@@ -265,14 +345,21 @@ export default {
       }
   },
   created(){
-      let query=this.$route.query;
-        if (Object.keys(query).length !== 0) {
-            this.getTableData(query);
-            this.Params=query;
+    //   let query=this.$route.query;
+    //     if (Object.keys(query).length !== 0) {
+    //         this.getTableData(query);
+    //         this.Params=query;
           
-        }else{
-            this.getTableData(this.Params)
+    //     }else{
+    //         this.getTableData(this.Params)
+    //     }
+    this.tableList=[
+        {
+          'coverImg' :'http://img5.imgtn.bdimg.com/it/u=415293130,2419074865&fm=27&gp=0.jpg',
+          'title':'话题标题话题标题话题标题话题标题',
+          'followCount':100000
         }
+    ] 
          
   },
   methods:{
@@ -280,7 +367,7 @@ export default {
             this.openCancel=!this.openCancel;
             if(params){
                 this.couponId=params.couponId
-                }
+            }
         },
         changePage(page){
             this.Params.page=page;

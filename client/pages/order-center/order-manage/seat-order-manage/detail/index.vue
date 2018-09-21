@@ -69,6 +69,11 @@
                         <!--<li>{{totalPrice}}</li>-->
                         <li>{{info.orderPromotionTotalDecimal || '-'}}</li>
                     </ul>
+                    <ul v-if="info.teamCardCost">
+                        <li>团队卡抵扣：</li>
+                        <!--<li>{{totalPrice}}</li>-->
+                        <li>-{{info.teamCardCost}}</li>
+                    </ul>
                     <ul v-if="info.couponDesc">
                         <li>使用的优惠策略：</li>
                         <li>{{info.couponDesc}}</li>

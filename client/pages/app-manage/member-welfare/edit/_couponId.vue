@@ -455,6 +455,7 @@ export default {
                         let data = res.data;
                         this.formItem = data;
                          this.formItem.fromInner= String(data.fromInner);
+                         this.formItem.couponScope=String(data.couponScope)
                         if(data.citys){
                           this.checkCity=data.citys.map((item,index)=>{
                               item.value=item.id;

@@ -407,6 +407,8 @@ export default {
        lowerSubmit(){
             let params=Object.assign({},this.formItem);
             this.tabParams=Object.assign({},params);
+            this.tabParams.page=1;
+            this.tabParams.pageSize=15;
             utils.addParams(this.tabParams);
         },
        showSearch (params) {

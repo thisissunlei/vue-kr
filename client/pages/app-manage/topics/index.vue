@@ -64,17 +64,14 @@
             </div>
         </Modal>
         <Modal
-                v-model="openSearch"
-                title="高级查询"
+                v-model="openResult"
+                title="投票结果"
                 ok-text="确定"
                 cancel-text="取消"
                 width="660"
         >
-                <HighSearch @formData="getSearchData"></HighSearch>
-                <div slot="footer">
-                    <Button type="primary" @click="searchSubmit">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
-                </div>
+                
+               
         </Modal>
 
  </div>
@@ -122,6 +119,7 @@ export default {
 
            },
            openCancel:false,
+           openResult:false,
            topicsColumns:[
                 {
                     title: '话题封面',
@@ -150,19 +148,27 @@ export default {
                 {
                     title: '话题类型',
                     key: 'type',
-                    align:'center'
+                    align:'center',
+                    render:(h,params)=>{
+                        let type={
+                            'NORMAL':'普通话题',
+                            'POLLING':'投票中',
+                            'POLLEND':'投票已结束'
+                        }
+                        return h('span',{},type[params.row.type]);
+                    }
                 },
                 {
                     title: '关注人数',
                     key: 'followCount',
                     align:'center',
-                    width:80,
+                    width:70,
                 },
                 {
                     title: '参与讨论数',
                     key: 'discussCount',
                     align:'center',
-                    width:80,
+                    width:70,
                 },
 
                 {
@@ -174,11 +180,13 @@ export default {
                     title: '创建时间',
                     key: 'ctime',
                     align:'center',
+                    width:150,
                 },
                 {
                     title: '操作',
                     key: 'type',
                     align:'center',
+                    width:150,
                     render:(h,params)=>{
                         if(params.row.type=='NORMAL'){
                             if(params.row.stick=='1'){
@@ -345,22 +353,14 @@ export default {
       }
   },
   created(){
-    //   let query=this.$route.query;
-    //     if (Object.keys(query).length !== 0) {
-    //         this.getTableData(query);
-    //         this.Params=query;
+      let query=this.$route.query;
+        if (Object.keys(query).length !== 0) {
+            this.getTableData(query);
+            this.Params=query;
           
-    //     }else{
-    //         this.getTableData(this.Params)
-    //     }
-    this.tableList=[
-        {
-          'coverImg' :'http://img5.imgtn.bdimg.com/it/u=415293130,2419074865&fm=27&gp=0.jpg',
-          'title':'话题标题话题标题话题标题话题标题',
-          'followCount':100000
+        }else{
+            this.getTableData(this.Params)
         }
-    ] 
-         
   },
   methods:{
         openDown(params){

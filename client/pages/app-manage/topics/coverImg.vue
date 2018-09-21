@@ -17,11 +17,13 @@ export default {
 <style lang="less">
 .g-cover-img{
   height:100px;
-  padding:5px;
+  text-align: center;
+  line-height:100px;
   img{
       width:80px;
       height:80px;
       object-fit: contain;
+      vertical-align: middle;
   }
   
 }

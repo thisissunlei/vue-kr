@@ -80,7 +80,7 @@
                              </FormItem>
                         </div>
                 </DetailStyle>
-                 <div>
+                 <div style="padding-left:23px;box-sizing:border-box;">
                      <FormItem label="内部会员提供" style="width:352px;margin-top:10px;" prop="fromInner">
                         <RadioGroup v-model="formItem.fromInner">
                             <Radio label="1">

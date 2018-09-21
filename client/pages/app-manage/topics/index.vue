@@ -49,8 +49,23 @@
             </div>
         </div>
         <Modal
+            v-model="openDeleteModal"
+            title="删除"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div style="text-align:center;font-size:14px;margin-top:20px;">
+               确认删除此话题？
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitDelete">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+            </div>
+        </Modal>
+         <Modal
             v-model="openCancel"
-            title="下线"
+            title="删除"
             ok-text="确定"
             cancel-text="取消"
             width="490"
@@ -59,8 +74,8 @@
                下线后，该福利会即时从APP端隐藏，并且会员不可领取
             </div>
             <div slot="footer">
-                <Button type="primary" @click="submitDown">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="openDown">取消</Button>
+                <Button type="primary" @click="">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="">取消</Button>
             </div>
         </Modal>
         <Modal
@@ -115,8 +130,10 @@ export default {
               pageSize:15,
               page:1, 
            },
+           talkpointId:'',
            formItem:{},
            openCancel:false,
+           openDeleteModal:false,
            openResult:false,
            topicsColumns:[
                 {
@@ -213,7 +230,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.openDown(params.row)
+                                                    this.openDelete(params.row)
                                                 }
                                             }
                                         }, '删除')
@@ -244,7 +261,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.openDown(params.row)
+                                                    this.openDelete(params.row)
                                                 }
                                             }
                                         }, '删除')
@@ -292,7 +309,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.openDown(params.row)
+                                                    this.openDelete(params.row)
                                                 }
                                             }
                                         }, '删除')
@@ -337,7 +354,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.openDown(params.row)
+                                                    this.openDelete(params.row)
                                                 }
                                             }
                                         }, '删除')
@@ -362,10 +379,10 @@ export default {
         }
   },
   methods:{
-        openDown(params){
-            this.openCancel=!this.openCancel;
+        openDelete(params){
+            this.openDeleteModal=!this.openDeleteModal;
             if(params){
-                this.couponId=params.couponId
+                this.talkpointId=params.talkpointId
             }
         },
         changePage(page){
@@ -373,15 +390,15 @@ export default {
             this.page=page;
             this.getTableData(this.Params);
         },
-        submitDown(){
+        submitDelete(){
                 let params={
-                        couponId: this.couponId
+                        talkpointId: this.talkpointId
                     }
-                    this.$http.post('coupon-offline', params).then((res)=>{
+                    this.$http.post('delete-app-console-talkpoint', params).then((res)=>{
                         this.$Notice.success({
-                            title:'下线成功'
+                            title:'删除成功'
                         });  
-                        this.openDown();
+                        this.openDelete();
                         this.getTableData(this.Params);
                     }).catch((err)=>{
                         this.$Notice.error({

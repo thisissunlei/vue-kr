@@ -139,6 +139,7 @@
                               <IconTip style="left:95px;top:9px;">支持多张</IconTip>
                                 <FormItem label="福利图册" style="width:916px"  prop="couponImgs">
                                         <UploadFile 
+                                            ref="welfare"
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
@@ -255,6 +256,7 @@
                             <IconTip style="left:95px;top:10px;">用于到店凭证展示给店主</IconTip>
                             <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
                                     <UploadFile 
+                                        ref="logo"
                                         :category="category"
                                         withCredentials
                                         :format="['jpg','png','gif']"
@@ -418,11 +420,15 @@ export default {
             this.formItem.endtime='';
             this.formItem.endHour='';
             this.getTagList(type)
-            console.log('this.$refs.couponCover',this.$refs.couponCover)
-            //this.$refs.couponCover.onRemove();
-            
-           
+            this.$refs.couponCover.clearFiles();
+            this.$refs.welfare.clearFiles();
+            if(this.formItem.getWay=='OFFLINE'){
+                 this.$refs.logo.clearFiles();
+            }
+
+            this.formItem.couponCover="";
             this.formItem.couponImgs=[];
+            this.formItem.merchantLogo="";
         },
         wayChange(form){
             if(form=="DETAIL"){

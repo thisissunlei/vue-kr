@@ -60,7 +60,6 @@
                                 :onFormatError="imgSizeFormat"
                                 :imgWidth="148"
                                 :imgHeight="148"
-                                :clearFiles="coverRemove"
                             >
                                 <div slot="tip" class="u-unload-tip">  图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                             </UploadFile>
@@ -141,6 +140,7 @@
                               <IconTip style="left:95px;top:9px;">支持多张</IconTip>
                                 <FormItem label="福利图册" style="width:916px"  prop="couponImgs">
                                         <UploadFile 
+                                            ref="welfare"
                                             :category="category"
                                             withCredentials
                                             :format="['jpg','png','gif']"
@@ -150,7 +150,7 @@
                                             :onFormatError="imgSizeFormat"
                                             :imgWidth="200"
                                             :imgHeight="100"
-                                            :clearFiles="coverRemove"
+                                           
                                         >
                                             <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                         </UploadFile>
@@ -257,6 +257,7 @@
                             <IconTip style="left:95px;top:10px;">用于到店凭证展示给店主</IconTip>
                             <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
                                     <UploadFile 
+                                        ref="logo"
                                         :category="category"
                                         withCredentials
                                         :format="['jpg','png','gif']"
@@ -266,7 +267,7 @@
                                         :onFormatError="imgSizeFormat"
                                         :imgWidth="148"
                                         :imgHeight="148"
-                                        :clearFiles="logoRemove"
+                                       
                                     >
                                         <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比例建议为1:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
                                     </UploadFile>
@@ -420,10 +421,15 @@ export default {
             this.formItem.endHour='';
             this.getTagList(type)
             this.$refs.couponCover.clearFiles();
-            console.log('this.$refs.couponCover',this.$refs.couponCover)
-            // this.formItem.couponCover="";
-            // this.formItem.merchantLogo="";
-            // this.formItem.couponImgs=[];
+            this.$refs.welfare.clearFiles();
+            if(this.formItem.getWay=='OFFLINE'){
+                 this.$refs.logo.clearFiles();
+            }
+
+            this.formItem.couponCover="";
+            this.formItem.couponImgs=[];
+            this.formItem.merchantLogo="";
+            
         },
         getTagList(type){
             this.$http.get('get-coupon/tag-list', {'couponType':type}).then((res)=>{

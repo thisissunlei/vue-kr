@@ -252,17 +252,13 @@ export default{
 		}
 	},
 	mounted(){
-		//this.fileList=this.defaultFileList;
-		//this.imglen();
+		this.fileList=this.defaultFileList;
+		this.imglen();
 	},
 	methods:{
 		clearFiles(){
-			this.upIconShow =true;
-			this.disabled=false;
 			this.fileList=[];
-			
-			
-			//this.imglen(this.fileList);
+			this.imglen();
 		},
 		imglen(){
 			if(this.maxLen){
@@ -482,10 +478,6 @@ export default{
 		handleError(err, response, file){
 			this.onError(err, response, file)
 		},
-		clearFiles() {
-            this.fileList = [];
-        }
-		
 		
 	}
 }

@@ -30,6 +30,7 @@
                                         style="width: 150px"
                                     />
                             </div>
+                             <Button type="primary" @click="lowerSubmit">搜索</Button>
                     </div>
             </div> 
           <div class="u-table">
@@ -118,6 +119,7 @@ export default {
            formItem:{
 
            },
+           openCancel:false,
            topicsColumns:[
                 {
                     title: '话题封面',
@@ -274,59 +276,57 @@ export default {
          
   },
   methods:{
-   
-   
-    
-     openDown(params){
-           this.openCancel=!this.openCancel;
-           if(params){
-               this.couponId=params.couponId
-            }
-     },
-    changePage(page){
-        this.Params.page=page;
-        this.page=page;
-        this.getTableData(this.Params);
-    },
-    submitDown(){
-            let params={
-                    couponId: this.couponId
+        openDown(params){
+            this.openCancel=!this.openCancel;
+            if(params){
+                this.couponId=params.couponId
                 }
-                this.$http.post('coupon-offline', params).then((res)=>{
-                    this.$Notice.success({
-                        title:'下线成功'
-                    });  
-                    this.openDown();
-                    this.getTableData(this.Params);
+        },
+        changePage(page){
+            this.Params.page=page;
+            this.page=page;
+            this.getTableData(this.Params);
+        },
+        submitDown(){
+                let params={
+                        couponId: this.couponId
+                    }
+                    this.$http.post('coupon-offline', params).then((res)=>{
+                        this.$Notice.success({
+                            title:'下线成功'
+                        });  
+                        this.openDown();
+                        this.getTableData(this.Params);
+                    }).catch((err)=>{
+                        this.$Notice.error({
+                            title:err.message
+                        });
+                    })
+                    
+        },
+        getTableData(params){
+                this.$http.get('get-app-console-talkpoint-page', params).then((res)=>{
+                    this.tableList=res.data.items;
+                    this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
-                 
-    },
-    getTableData(params){
-            this.$http.get('get-app-console-talkpoint-page', params).then((res)=>{
-                this.tableList=res.data.items;
-                this.totalCount=res.data.totalCount;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        
-      },
-       getSearchData(form){
+            
+        },
+        getSearchData(form){
             this.searchData=form;
-      },
-       searchSubmit(){
-            let params=Object.assign(this.Params,this.searchData);
-            utils.addParams(params);
-      },
+        },
+       lowerSubmit(){
+            let params=Object.assign({},this.formItem);
+            this.tabParams=Object.assign({},params);
+            utils.addParams(this.tabParams);
+        },
        showSearch (params) {
-        utils.clearForm(this.searchData);
-        this.openSearch=!this.openSearch;
-      },
+            utils.clearForm(this.searchData);
+            this.openSearch=!this.openSearch;
+        },
 
 
 
@@ -336,8 +336,9 @@ export default {
 <style lang="less">
 .g-topics{
     .m-topics-operation{
-         padding:20px 20px;
-         height:130px;
+         padding:20px 0;
+         height:70px;
+         box-sizing: border-box;
     }
     .u-select{
         display: inline-block;

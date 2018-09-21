@@ -194,7 +194,7 @@ export default {
             let r=this.ue.selection.getRange();
             // let c=this.ue.selection.getRange().getClosedNode()
             let closeNode = this.ue.selection.getRange().getClosedNode()
-            debugger
+           
             if (!closeNode&&r.endOffset==r.startOffset) {
                 this.ue.execCommand('inserthtml', '<span></span>');
             }

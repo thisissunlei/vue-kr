@@ -1,48 +1,39 @@
 <template>
  <div class="g-topics">
        <SectionTitle title="话题" />
-              <div class="u-select">
-                        <div class="u-select-list">
-                            <span class="u-select-label">福利类型</span>
-                            <Select
-                                clearable
-                                v-model="formItem.couponType"
-                                placeholder="请选择"
-                                style="width:100px"
-                                >
-                                <Option v-for="(option, index) in couponTypeList" :value="option.value" :key="index">{{option.label}}</Option>
-                            </Select>
-                        </div>
-                        <div class="u-select-list">
-                                <span  class="u-select-label">福利范围</span>
+            <div class="m-topics-operation">
+                <div class="u-select">
+                            <div class="u-select-list">
+                                <span class="u-select-label">话题类型</span>
                                 <Select
-                                    v-model="formItem.cityId"
+                                    clearable
+                                    v-model="formItem.type"
                                     placeholder="请选择"
                                     style="width:100px"
-                                    clearable
                                     >
-                                    <Option v-for="(option, index) in cityList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
+                                    <Option v-for="(option, index) in typeList" :value="option.value" :key="index">{{option.label}}</Option>
                                 </Select>
-                        </div>
-                        <div class="u-select-list u-date">
-                                <span  class="u-select-label">领取有效期</span>
-                                <DatePicker
-                                        type="date"
-                                        v-model="formItem.startTime"
-                                        placeholder="请选择开始日期"
-                                        style="width: 150px;margin-right:4px;"
-                                ></DatePicker>
-                                <span class="u-date-txt">至</span>
-                                <DatePicker
-                                        type="date"
-                                        v-model="formItem.endtime"
-                                        placeholder="请选择截止日期"
-                                        style="width: 150px;margin-right:4px;"
-                                ></DatePicker>
-                        </div>
-                </div>
+                            </div>
+                            <div class="u-select-list">
+                                    <span  class="u-select-label">话题标题</span>
+                                    <Input
+                                        v-model="formItem.title"
+                                        placeholder="请输入搜索关键词"
+                                        style="width: 150px"
+                                    />
+                            </div>
+                            <div class="u-select-list">
+                                    <span  class="u-select-label">发起人</span>
+                                    <Input
+                                        v-model="formItem.createrName"
+                                        placeholder="请输入搜索关键词"
+                                        style="width: 150px"
+                                    />
+                            </div>
+                    </div>
+            </div> 
           <div class="u-table">
-            <Table  border :columns="welfareColumns" :data="tableList"/>
+            <Table  border :columns="topicsColumns" :data="tableList"/>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page 
@@ -89,19 +80,15 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-import SearchForm from '~/components/SearchForm';
 import utils from '~/plugins/utils';
-import HighSearch from './highSearch';
 
 export default {
   components:{
       SectionTitle,
-      SearchForm,
-      HighSearch
   },
     head() {
         return {
-            title: '会员福利-氪空间后台管理系统'
+            title: '话题管理-氪空间后台管理系统'
         }
     },
   data(){
@@ -110,61 +97,80 @@ export default {
            page:1,
            totalCount:0,
            tableList:[],
-           openCancel:false,
-           openSearch:false,
+           typeList:[
+               {
+                   label:'普通话题',
+                   value:'NORMAL'
+               },
+               {
+                   label:'投票中',
+                   value:'POLLING'
+               },
+               {
+                   label:'投票已结束',
+                   value:'POLLEND'
+               },
+           ],
            Params:{
               pageSize:15,
               page:1, 
            },
-           couponId:'',
-           searchFilter:[
-               {
-                   label:'福利标题',
-                   value:'title'
-               },
-               {
-                   label:'创建人',
-                   value:'createName'
-               }
-           ],
-           welfareColumns:[
+           formItem:{
+
+           },
+           topicsColumns:[
                 {
-                    title: '福利标题',
-                    key: 'title',
-                    align:'center'
-                },
-                {
-                    title: '福利类型',
-                    key: 'couponType',
+                    title: '话题封面',
+                    key: 'coverImg',
                     align:'center',
-                    render(h, obj){
-                        let type={
-                            'OFFLINESTORE':'线下门店',
-                            'USERLIFE':'会员生活',
-                            'ENTERPRISESERVICE':'企业服务',
-                        }
-                        return h('span',{},type[obj.row.couponType]);
+                    width:150,
+                    style: {
+                        width:'100px',
+                        height:'100px',
+                    },
+                    render:(h,params)=>{
+                        return h('img',{
+                            props: {
+                                src: params.row.coverImg,
+                            },
+                        })
                     }
                 },
                 {
-                    title: '优惠面值',
-                    key: 'faceValue',
-                    align:'center'
+                    title: '话题标题',
+                    key: 'title',
+                    align:'center',
                 },
                 {
-                    title: '福利范围',
-                    key: 'scopeCitys',
-                    align:'center'
-                },
-                {
-                    title: '领取有效期',
-                    key: 'indate',
+                    title: '话题描述',
+                    key: 'description',
                     align:'center',
                     width:260,
                 },
                 {
-                    title: '创建人',
-                    key: 'createName',
+                    title: '话题类型',
+                    key: 'type',
+                    align:'center'
+                },
+                {
+                    title: '关注人数',
+                    key: 'followCount',
+                    align:'center',
+                },
+                {
+                    title: '参与讨论数',
+                    key: 'discussCount',
+                    align:'center',
+                },
+
+                {
+                    title: '发起人',
+                    key: 'createrName',
+                    align:'center',
+                },
+                {
+                    title: '创建时间',
+                    key: 'ctime',
                     align:'center',
                     width:80,
                 },
@@ -267,33 +273,10 @@ export default {
         }
          
   },
-//   mounted(){
-//       this.getTableData(this.Params);
-//   },
   methods:{
-    onSubmit(form){ 
-          if(this.Params.title){
-            this.Params.title="";
-          }
-          if(this.Params.createName){
-            this.Params.createName="";
-          }
-          let params=Object.assign({},this.Params,form);
-          utils.addParams(params);
-      },
-    showSearch (params) {
-        utils.clearForm(this.searchData);
-        this.openSearch=!this.openSearch;
-      },
-     jumpCreate(){
-          window.open(`/app-manage/member-welfare/create`,'_blank');
-     },
-     jumpView(params){
-          window.open(`/app-manage/member-welfare/detail/${params.couponId}`,'_blank');
-     },
-     jumpEdit(params){
-         window.open(`/app-manage/member-welfare/edit/${params.couponId}`,'_blank');
-     },
+   
+   
+    
      openDown(params){
            this.openCancel=!this.openCancel;
            if(params){
@@ -323,7 +306,7 @@ export default {
                  
     },
     getTableData(params){
-            this.$http.get('get-coupon-page', params).then((res)=>{
+            this.$http.get('get-app-console-talkpoint-page', params).then((res)=>{
                 this.tableList=res.data.items;
                 this.totalCount=res.data.totalCount;
             }).catch((err)=>{
@@ -352,10 +335,15 @@ export default {
 </script>
 <style lang="less">
 .g-topics{
+    .m-topics-operation{
+         padding:20px 20px;
+         height:130px;
+    }
     .u-select{
         display: inline-block;
         padding-left:20px;
         height:40px;
+        
     }
     .u-select-list{
         display: inline-block;

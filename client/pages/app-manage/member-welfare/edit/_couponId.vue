@@ -1003,6 +1003,11 @@ export default {
         height:100px;
       }
   }
+   .u-unload-tip{
+      color:#999999;
+      line-height:18px;
+      margin-top:5px;
+  }
    
   
 }

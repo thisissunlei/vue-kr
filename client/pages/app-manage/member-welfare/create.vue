@@ -906,6 +906,10 @@ export default {
         height:100px;
       }
   }
+  .u-unload-tip{
+      color:#999999;
+      line-height:24px;
+  }
   
 }
 </style>

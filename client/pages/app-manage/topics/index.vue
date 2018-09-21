@@ -73,6 +73,9 @@
         >
                 
             <ResultView :detail="resultDetail" />
+             <div slot="footer">
+                   
+            </div>
         </Modal>
 
  </div>

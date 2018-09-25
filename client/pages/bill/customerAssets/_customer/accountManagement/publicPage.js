@@ -97,6 +97,12 @@ function initListData(type){
             }
         },
         {
+            title: '记录类型',
+            key: 'recordTypeName',
+            align:'center',
+            type:'depositDetail'
+        },
+        {
             title: '来源类型',
             key: 'sourceDetailTypeName',
             align:'center',

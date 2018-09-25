@@ -67,7 +67,7 @@
                         />
                     </Form-item>
 
-                    <Form-item label="来源类型" class='daily-form' style="margin-right:302px;"> 
+                    <Form-item label="来源类型" class='daily-form'> 
                             <Select 
                                 v-model="formItem.sourceDetailType" 
                                 placeholder="请选择来源类型" 
@@ -75,6 +75,17 @@
                                 style="width:200px"
                             >
                                 <Option v-for="item in operationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
+                            </Select> 
+                    </Form-item>
+
+                    <Form-item label="纪录类型" class='daily-form'> 
+                            <Select 
+                                v-model="formItem.recordType" 
+                                placeholder="请选择纪录类型" 
+                                clearable
+                                style="width:200px;margin-right:13px;"
+                            >
+                                <Option v-for="item in recordList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                     </Form-item>
 
@@ -117,11 +128,13 @@ export default {
                     sourceDetailType:'',
                     recordNo:'',
                     amountStart:'',
-                    amountEnd:''
+                    amountEnd:'',
+                    recordType:''
                 },
                 formItemOld:{},
                 feeTypeList:[],
                 operationList:[],
+                recordList:[],
                 ruleInvestment: {
                     amountStart: [
                         { validator: validateTime, trigger: 'change' }
@@ -137,6 +150,7 @@ export default {
         this.$emit('init',this.formItemOld);
         this.getFee();
         this.getOperate();
+        this.getRecord();
     },
     methods:{
         //搜索
@@ -172,6 +186,17 @@ export default {
                 enmuKey: 'com.krspace.pay.api.enums.wallet.SourceDetailType'
             }).then((r) => {
                 this.operationList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
+        getRecord(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.RecordType'
+            }).then((r) => {
+                this.recordList = [].concat(r.data)
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message

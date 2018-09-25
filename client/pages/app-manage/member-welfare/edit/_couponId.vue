@@ -302,6 +302,7 @@ import IconTip from '~/components/IconTip';
 import dateUtils from 'vue-dateutils';
 import UploadFile from  '~/components/UploadFile';
 import UEditor from '~/components/UEditor.vue';
+import utils from '~/plugins/utils';
 
 export default {
   components:{
@@ -413,22 +414,16 @@ export default {
         },
         typeChange(form){
             let type=form;
-            this.$refs.formItems.resetFields();
+            utils.clearForm(this.formItem);
             this.isTimeError=false;
             this.formItem.couponType=type;
-            this.formItem.startHour='';
-            this.formItem.endtime='';
-            this.formItem.endHour='';
             this.getTagList(type)
             this.$refs.couponCover.clearFiles();
             this.$refs.welfare.clearFiles();
             if(this.$refs.log){
                  this.$refs.logo.clearFiles();
             }
-
-            this.formItem.couponCover="";
             this.formItem.couponImgs=[];
-            this.formItem.merchantLogo="";
             this.checkCity=[];
             this.cityIds=[];
             this.id='';

@@ -2,7 +2,7 @@
   <div class="g-welfare-create">
       <SectionTitle title="会员福利-新建福利" />
       <div class="u-form">
-            <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
+            <Form ref="formItem" :model="formItem" :rules="ruleCustom" :label-width="100" >
               <DetailStyle info="福利展示信息">
                     <FormItem label="福利类型" style="width:700px" prop="couponType">
                             <RadioGroup 
@@ -290,7 +290,7 @@
                 
                 <FormItem  style="margin:0 24px; height:60px;">
                     <div class="u-btn-content">
-                        <Button  style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
+                        <Button  style="margin-right:20px;" type="primary" @click="handleSubmit('formItem')" >确定</Button>
                         <Button type="ghost" @click="cancelSubmit()" >取消</Button>
                     </div>
                 </FormItem>  
@@ -304,6 +304,7 @@ import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import UploadFile from  '~/components/UploadFile';
 import UEditor from '~/components/UEditor.vue';
+import utils from '~/plugins/utils';
 
 export default {
   components:{
@@ -415,22 +416,16 @@ export default {
         },
         typeChange(form){
             let type=form;
-            this.$refs.formItems.resetFields();
+            utils.clearForm(this.formItem);
             this.isTimeError=false;
             this.formItem.couponType=type;
-            this.formItem.startHour='';
-            this.formItem.endtime='';
-            this.formItem.endHour='';
             this.getTagList(type)
             this.$refs.couponCover.clearFiles();
             this.$refs.welfare.clearFiles();
             if(this.$refs.logo){
                  this.$refs.logo.clearFiles();
             }
-           
-            this.formItem.couponCover="";
             this.formItem.couponImgs=[];
-            this.formItem.merchantLogo="";
             this.checkCity=[];
             this.cityIds=[];
             this.id='';
@@ -512,19 +507,19 @@ export default {
         },
         coverSuccess(res){
             this.formItem.couponCover=res.data.url;
-            this.$refs.formItems.validateField('couponCover') 
+            this.$refs.formItem.validateField('couponCover') 
            
         },
         logoSuccess(res){
             this.formItem.merchantLogo=res.data.url;
-            this.$refs.formItems.validateField('merchantLogo') 
+            this.$refs.formItem.validateField('merchantLogo') 
         },
         welfareSuccess(res){
             let imgObj={
                 url: res.data.url
             }
             this.formItem.couponImgs.push(imgObj);
-            this.$refs.formItems.validateField('couponImgs') 
+            this.$refs.formItem.validateField('couponImgs') 
         },
         
         coverRemove(){

@@ -5,7 +5,7 @@
                 {{detail.pollName}}{{detail.maxOption>1?'[多选]':'[单选]'}}
             </div>
             <div class="u-result-info">
-               {{detail.pollUserCount}}人参与投票 <span class="u-result-status"> ·  {{detail.expiredTime}}</span>
+               {{detail.pollUserCount}}人参与投票 <span class="u-result-status" v-if="detail.expiredTime"> ·  {{detail.expiredTime}}</span>
             </div>
             <div class="u-list">
                 <div class="u-select-list" v-for="(item,index) in detail.options" :key="index">

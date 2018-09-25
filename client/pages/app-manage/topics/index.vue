@@ -126,7 +126,7 @@ export default {
            formItem:{},
            openCancel:false,
            openDeleteModal:false,
-           openResult:true,
+           openResult:false,
            resultTitle:'',
            resultDetail:{},
            topicsColumns:[

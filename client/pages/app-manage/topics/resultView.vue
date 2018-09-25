@@ -2,15 +2,15 @@
     <div class="g-result">
         <div class="m-result">
             <div class="u-result-title">
-                选择你最爱吃的早餐 [单选] 
+                {{detail.pollName}}{{detail.maxOption>1?'[多选]':'[单选]'}}
             </div>
             <div class="u-result-info">
-               3人参与投票 <span class="u-result-status"> ·  距离结束还有6天23时59分</span>
+               {{detail.pollUserCount}}人参与投票 <span class="u-result-status"> ·  {{detail.expiredTime}}</span>
             </div>
             <div class="u-list">
-                <div class="u-select-list">
-                    <span class="u-select-name">肯德基</span>
-                    <span class="u-select-count">2票  70%</span>
+                <div class="u-select-list" v-for="(item,index) in detail.options" :key="index">
+                    <span class="u-select-name">{{item.optionName}}</span>
+                    <span class="u-select-count">{{item.optionCount}}票  {{item.optionRate}}</span>
                 </div>
             </div>
         </div>
@@ -18,7 +18,13 @@
 </template>
 <script>
 export default {
-    
+  name:'result',
+  props:{
+      detail:{
+          type:Object,
+          defalut:{}
+      }
+  }
 }
 </script>
 <style lang="less">

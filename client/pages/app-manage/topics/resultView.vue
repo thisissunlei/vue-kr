@@ -30,7 +30,7 @@ export default {
 <style lang="less">
 .g-result{
     width:100%;
-    height:400px;
+    height:380px;
     padding:20px 0;
     box-sizing: border-box; 
     .m-result{

@@ -61,7 +61,7 @@
                   <LabelText label="联系电话：" style="width:1100px;">
                     {{basicInfo.merchantPhone?basicInfo.merchantPhone:'无'}}
                   </LabelText>
-                  <LabelText label="使用提示：" style="width:1100px;">
+                  <LabelText :label="basicInfo.couponType=='USERLIFE'?'使用提示':'享受规则'" style="width:1100px;">
                     {{basicInfo.useRule?basicInfo.useRule:'无'}}
                   </LabelText>
                    <LabelText label="福利简介：" class="u-coupon" style="width:1100px;display:inline-block;height:auto;" >

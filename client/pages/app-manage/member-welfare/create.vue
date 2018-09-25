@@ -126,7 +126,7 @@
                           />
                           <div v-if="isPhoneError" class="u-error">联系电话只能是数字</div>
                       </FormItem> 
-                       <FormItem label="享受规则"  style="width:500px;"   prop="useRule">
+                       <FormItem :label="formItem.couponType=='USERLIFE'?'使用提示':'享受规则'"  style="width:500px;"   prop="useRule">
                           <Input 
                               v-model="formItem.useRule"
                               type="textarea" 

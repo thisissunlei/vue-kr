@@ -123,7 +123,7 @@
                               @on-change="checkPhone(formItem.merchantPhone)"
                           />
                       </FormItem> 
-                       <FormItem label="享受规则" prop="useRule" style="width:500px;" >
+                       <FormItem :label="formItem.couponType=='USERLIFE'?'使用提示':'享受规则'" prop="useRule" style="width:500px;" >
                           <Input 
                               v-model="formItem.useRule"
                               type="textarea" 

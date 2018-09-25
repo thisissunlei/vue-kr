@@ -145,6 +145,7 @@ export default {
         seats(val) {
             this.stationList = [].concat(this.seats)
             if (this.stationList.length == 0) {
+                this.discountErrorStr = ''
                 this.formItem = Object.assign({}, { items: [] }, { rentAmount: 0 })
             }
             this.dealSaleInfo(true)
@@ -431,6 +432,7 @@ export default {
                 this.saleAmount = Math.round(money * 100) / 100;
                 // this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
                 this.formItem.rentAmount = r.data.totalrent;
+                this.discountErrorStr=''
                 this.$store.commit('changeRentAmountSale', r.data.totalrent)
             }, e => {
                 if (this.stationList.length) {

@@ -429,6 +429,7 @@ export default {
             this.checkCity=[];
             this.cityIds=[];
             this.id='';
+            this.tagIds=[];
             
         },
         getTagList(type){
@@ -515,7 +516,7 @@ export default {
             this.$refs.formItem.validateField('merchantLogo') 
         },
         welfareSuccess(res){
-             let imgObj={
+            let imgObj={
                 url:res.data.url
             }
             this.formItem.couponImgs.push(imgObj);
@@ -599,8 +600,6 @@ export default {
                 })
       },
       submitCreate(){
-          console.log('this.formItem', this.formItem)
-         
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'

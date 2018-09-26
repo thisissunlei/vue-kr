@@ -429,6 +429,7 @@ export default {
             this.cityIds=[];
             this.id='';
             this.formItem.couponId=params.couponId;
+            this.tagIds=[];
              
         },
         wayChange(form){

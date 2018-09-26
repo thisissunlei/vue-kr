@@ -5,7 +5,6 @@
             <FormItem label="租赁开始日期"
                 style="width:252px"
                 prop="startDate">
-                <!-- <CustomFormItem title='租赁开始日期'> -->
                 <DatePicker type="date"
                     placeholder="租赁开始时间"
                     v-model="startDate"
@@ -13,45 +12,37 @@
                     @on-change="changeBeginTime"></DatePicker>
                 <div class="pay-error"
                     v-if="timeError">租赁开始时间不得大于结束时间</div>
-                <!-- </CustomFormItem> -->
             </FormItem>
             </Col>
             <Col class="col">
             <FormItem label="租赁结束日期"
                 style="width:252px"
                 prop="endDate">
-                <!-- <CustomFormItem title='租赁结束日期'> -->
                 <DatePicker type="date"
                     placeholder="租赁结束日期"
                     format="yyyy-MM-dd"
                     v-model="endDate"
                     style="display:block"
                     @on-change="changeEndDateStatus"></DatePicker>
-                <!-- </CustomFormItem> -->
             </FormItem>
             </Col>
             <Col class="col">
             <FormItem label="租赁时长"
                 style="width:252px">
-                <!-- <CustomFormItem title='租赁时长'> -->
                 <Input v-model="timeRange"
                     placeholder="租赁时长"
                     disabled></Input>
-
-                <!-- </CustomFormItem> -->
             </FormItem>
             </Col>
             <Col class="col">
             <FormItem label="签署日期"
                 style="width:252px"
                 prop="signDate">
-                <!-- <CustomFormItem title='签署日期'> -->
                 <DatePicker type="date"
                     placeholder="签署日期"
                     format="yyyy-MM-dd"
                     v-model="signDate"
                     style="display:block"></DatePicker>
-                <!-- </CustomFormItem> -->
             </FormItem>
 
             </Col>
@@ -63,12 +54,8 @@
 import { mapGetters } from 'vuex'
 import dateUtils from 'vue-dateutils';
 
-// import CustomFormItem from './FormItem.vue'
-
 export default {
-    components: {
-        // CustomFormItem
-    },
+
     props: {
         formItem: {
             startDate: '',

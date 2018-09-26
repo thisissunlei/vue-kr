@@ -17,22 +17,17 @@
             <FormItem label="所属社区"
                 style="width:252px"
                 prop="communityId">
-                <!-- <CustomFormItem title='所属社区'> -->
                 <selectCommunities test="formItem"
                     :onchange="changeCommunity" />
-                <!-- </CustomFormItem> -->
-
             </FormItem>
             </Col>
             <Col class="col">
             <FormItem label="销售员"
                 style="width:252px"
                 prop="salerId">
-                <!-- <CustomFormItem title='销售员'> -->
                 <SelectSaler name="formItem.salerId"
                     :onchange="changeSaler"
                     :value="salerName"></SelectSaler>
-                <!-- </CustomFormItem> -->
 
             </FormItem>
             </Col>
@@ -52,9 +47,6 @@ import { mapGetters } from 'vuex'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue';
-// import SelectChance from '~/components/SelectSaleChance.vue';
-
-
 import SelectChanceNew from './SelectChance/index.vue'
 
 export default {

@@ -222,7 +222,6 @@ export default {
         deleteDiscount() {
             // 删除选中的优惠信息
             let items = [].concat(this.formItem.items);
-            debugger
             let deleteDiscout = items.some(p => p.tacticsType == '1')
             if (deleteDiscout) {
                 this.discountInput = ''
@@ -309,10 +308,6 @@ export default {
             let itemId = value.split('/')[3]
 
             let rowIndex = value.split('/')[4]
-
-            // console.log('itemIndex', itemIndex)
-            // console.log('val', val)
-            // console.log('this.formItem.items', this.formItem.items)
 
             this.formItem.items.map(item => {
                 if (item.index == rowIndex) {
@@ -481,7 +476,6 @@ export default {
             let complete = true;//输入完整
             let discountInputValid = true;//折扣输入合法
             saleList.map(item => {//1 折扣  3免租
-                debugger
                 if (!item.tacticsType) {
                     complete = false
                 }

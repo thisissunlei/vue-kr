@@ -56,9 +56,6 @@ export default {
         params(val) {
             this.initOptions(val)
         },
-        options(val){
-            // console.log('options',val)
-        },
         chanceId(val){
             this.changeContent(val)
         }
@@ -68,7 +65,6 @@ export default {
     },
     methods: {
         changeContent(value) {
-            console.log('change-chance',value)
             this.$emit('input', "" + value)
             this.$emit("on-select-change", "" + value);
         },

@@ -305,11 +305,9 @@ export default {
                 }
                 return false;
             });
-            console.log()
             let sortStationVos = [].concat(stationVos)
             sortStationVos.sort((s1, s2) => { return s2.guidePrice - s1.guidePrice })
             let maxPrice = sortStationVos[0].guidePrice;
-            debugger
             if (maxPrice > this.price) {
                 this.priceError = '工位单价不得小于' + maxPrice
             }

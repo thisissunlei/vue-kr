@@ -414,6 +414,7 @@ export default {
         },
         typeChange(form){
             let type=form;
+            let {params}=this.$route;
             utils.clearForm(this.formItem);
             this.isTimeError=false;
             this.formItem.couponType=type;
@@ -427,6 +428,8 @@ export default {
             this.checkCity=[];
             this.cityIds=[];
             this.id='';
+            this.formItem.couponId=params.couponId;
+             
         },
         wayChange(form){
             if(form=="DETAIL"){

@@ -515,8 +515,8 @@ export default {
             this.$refs.formItem.validateField('merchantLogo') 
         },
         welfareSuccess(res){
-            let imgObj={
-                url: res.data.url
+             let imgObj={
+                url:res.data.url
             }
             this.formItem.couponImgs.push(imgObj);
             this.$refs.formItem.validateField('couponImgs') 
@@ -599,6 +599,7 @@ export default {
                 })
       },
       submitCreate(){
+          console.log('this.formItem', this.formItem)
          
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({

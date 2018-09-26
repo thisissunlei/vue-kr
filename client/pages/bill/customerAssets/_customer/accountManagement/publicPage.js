@@ -37,6 +37,7 @@ function initListData(type){
         {
             title: '金额',
             key: 'amount',
+            width:100,
             align:'center',
             className:'statusClass',
             type:'depositDetail,consumptionDetail,balanceDetail',

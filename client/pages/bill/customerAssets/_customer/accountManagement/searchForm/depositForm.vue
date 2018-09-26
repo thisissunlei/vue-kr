@@ -78,10 +78,10 @@
                             </Select> 
                     </Form-item>
 
-                    <Form-item label="纪录类型" class='daily-form'> 
+                    <Form-item label="记录类型" class='daily-form'> 
                             <Select 
                                 v-model="formItem.recordType" 
-                                placeholder="请选择纪录类型" 
+                                placeholder="请选择记录类型" 
                                 clearable
                                 style="width:200px;margin-right:13px;"
                             >

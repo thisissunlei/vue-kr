@@ -222,7 +222,7 @@
                   
                    
                    <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
+                   v-if="!item.canEdit"
                    >
                     <span>-</span>
                    </FormItem>
@@ -245,7 +245,7 @@
 
                    
                    <FormItem style="width:120px" 
-                   v-if="typeof(item.guestPromotionPriceDecimal)=='undefined' && (item.enableDateStr.indexOf('周六')>-1 || item.enableDateStr.indexOf('周日')>-1)"
+                   v-if="!item.canEdit"
                    >
                      <span >-</span>
                    </FormItem>
@@ -583,7 +583,7 @@ export default {
           obj.quantity = this.detailData.openQuantity;
             obj.promotionPriceDecimal = this.detailData.promotionPriceDecimal;
           console.log('setPriceList=====',item.guestPriceDecimal)
-          if(typeof(item.guestPriceDecimal)!="undefined"){
+          if(item.canEdit){
             obj.guestPriceDecimal = this.detailData.guestPriceDecimal
             obj.guestPromotionPriceDecimal = this.detailData.guestPromotionPriceDecimal
           }

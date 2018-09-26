@@ -207,11 +207,22 @@ export default {
              list.name=item.cellName;
              list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
              list.id=item.belongId;
-             list.originalPrice=item.originalPrice||item.seatPrice||'';
+            //  list.originalPrice=item.originalPrice||item.seatPrice||'';// originalPrice seatPrice 都有可能为0 
+             list.originalPrice=this.getOriginalPrice(item)
              return list
          })
          this.endParams.submitData=[].concat(param).concat(this.stationData);
          this.$emit('on-result-change',this.endParams);
+       },
+       getOriginalPrice(item){
+           if (item.hasOwnProperty('originalPrice') ) {
+               return item['originalPrice']
+           } 
+           else if (item.hasOwnProperty('seatPrice')) {
+               return item['seatPrice']
+           } else {
+               return ''
+           }
        }
     }
 }

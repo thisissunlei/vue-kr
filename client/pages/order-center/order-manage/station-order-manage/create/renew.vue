@@ -675,10 +675,7 @@ export default {
                 return
             }
 
-
-
-
-            let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.start));
+            let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.start.replace(/-/g,'/')));
             let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.endDate));
             let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.signDate));
             let renewForm = {}

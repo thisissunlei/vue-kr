@@ -660,7 +660,6 @@ export default {
         },
         renewFormSubmit() {
             this.config();
-
             let station = this.selecedStation;
             let priceError = false;
             station.map((item) => {

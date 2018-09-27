@@ -34,8 +34,8 @@ export default {
             }
         },
         value: {
-            type:String,
-            default:''
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -56,7 +56,7 @@ export default {
         params(val) {
             this.initOptions(val)
         },
-        chanceId(val){
+        chanceId(val) {
             this.changeContent(val)
         }
     },
@@ -118,6 +118,7 @@ export default {
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true
+                this.tipStr = ''
                 this.subTitlePrefix = false
                 if (this.data.list.length == 1) {
                     this.subTitle = '入驻订单必须绑定机会'
@@ -136,8 +137,10 @@ export default {
                 this.required = false
                 this.subTitle = '新入驻客户，须选择机会'
                 this.chanceId = ''
+                this.tipStr = ''
                 this.isError = false
                 this.subTitlePrefix = true
+                console.table(this.data.list)
                 if (this.data.list.length == 1) {
                     this.tipStr = '您没有可用机会，客户增租续租时不必须'
                 }

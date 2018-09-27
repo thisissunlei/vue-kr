@@ -29,6 +29,12 @@ function initListData(type){
             type:'getDetail,refundDetail,depositDetail,consumptionDetail,balanceDetail'
         },
         {
+            title: '记录类型',
+            key: 'recordTypeName',
+            align:'center',
+            type:'depositDetail'
+        },
+        {
             title: '费用类型',
             key: 'feeTypeName',
             align:'center',
@@ -96,12 +102,6 @@ function initListData(type){
                     }
                 }, params.row.recordNo)
             }
-        },
-        {
-            title: '记录类型',
-            key: 'recordTypeName',
-            align:'center',
-            type:'depositDetail'
         },
         {
             title: '来源类型',

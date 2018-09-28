@@ -181,7 +181,7 @@
                  
             </Form>
             <div style="text-align:center">
-                <Button type="primary" @click="handleSubmit('formItems')">确定</Button>
+                <Button type="primary" @click="handleSubmit('formItems')" :disabled="isDisabled">确定</Button>
             </div>
         </div>
     </div>
@@ -215,6 +215,7 @@ export default {
         { value: "NONE", label: "无" },
         { value: "WEEK", label: "自定义时间" }
       ],
+      isDisabled:false,
       showDate: false,
       date: [],
       category: "app/upgrade",
@@ -294,16 +295,19 @@ export default {
     },
     submitCreate() {
       delete this.formItem.unuseDates;
+      this.isDisabled = true;
       this.$http
         .post("edit-krmting-mobile-community", this.formItem)
         .then(res => {
           this.$Notice.success({
             title: "编辑成功"
           });
+         
 
           this.submitYearWeekend();
         })
         .catch(err => {
+           this.isDisabled = false
           this.$Notice.error({
             title: err.message
           });
@@ -452,12 +456,14 @@ export default {
       this.$http
         .post("post-krmting-mobile-edit-disable-calendar", { editJson: params })
         .then(() => {
+          this.isDisabled = false;
           setTimeout(function() {
             window.close();
             window.opener.location.reload();
           }, 1000);
         })
         .catch(err => {
+           this.isDisabled = false;
           this.$Notice.error({
             title: err.message
           });

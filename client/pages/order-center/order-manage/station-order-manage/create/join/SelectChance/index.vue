@@ -116,8 +116,8 @@ export default {
         },
 
         renderSelector() {
-            console.log('isNewUser', this.data.isNewUser)
-            console.table(this.data.list)
+            // console.log('isNewUser', this.data.isNewUser)
+            // console.table(this.data.list)
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true

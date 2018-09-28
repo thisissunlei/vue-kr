@@ -736,7 +736,8 @@ export default {
             let from = {
                 id: params.orderEdit
             };
-            this.orderId=from.id;
+            this.orderId=from.id; 
+
             this.$http.get('join-bill-detail', from, r => {
                 let data = r.data;
                 _this.orderType = data.orderType == 'INCREASE' ? '增租' : '入驻';
@@ -756,7 +757,8 @@ export default {
                     submitData: data.orderSeatDetailVo,
                     deleteData: []
                 };
-                _this.getSaleTactics({ communityId: data.communityId })
+                // _this.getSaleTactics({ communityId: data.communityId })
+
                 _this.formItem.customerId = JSON.stringify(data.customerId);
                 _this.customerName = data.customerName;
                 _this.formItem.communityId = JSON.stringify(data.communityId);
@@ -766,7 +768,7 @@ export default {
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
-                console.log(data.opportunityId,'_this.saleChanceId')
+                //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
                 _this.communityName = data.communityName;
@@ -784,9 +786,8 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
 
-                setTimeout(function () {
-
-                    data.contractTactics = data.contractTactics.map((item, index) => {
+                _this.getSaleTactics({ communityId: data.communityId }).then(()=>{
+                        data.contractTactics = data.contractTactics.map((item, index) => {
                         let obj = {};
                         obj.status = 1;
                         obj.show = true;
@@ -827,9 +828,10 @@ export default {
                             }
                         }
                     }
+                    _this.getStationAmount()
+                })
 
 
-                }, 700)
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
                 _this.getSalerChanceList();
@@ -839,6 +841,7 @@ export default {
                 this.isManager=(data.communityId&&data.customerId)?true:false;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
+              
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -1020,7 +1023,8 @@ export default {
             this.$http.post('count-sale', params).then(r => {
                 _this.stationList = r.data.seats;
                 _this.formItem.rentAmount = r.data.totalrent;
-                let money = this.formItem.stationAmount - r.data.totalrent;
+                // let money = this.formItem.stationAmount - r.data.totalrent;
+                let money = r.data.discountAmount;
 
                 // let money = r.data.originalTotalrent - r.data.totalrent;
                 _this.saleAmount = Math.round(money * 100) / 100;
@@ -1617,35 +1621,37 @@ export default {
 
             })
         },
-        getSaleTactics: function (params) {//获取优惠信息
-            let list = [];
-            let maxDiscount = {};
-            let _this = this;
-            this.$http.get('sale-tactics', params, r => {
+        getSaleTactics(params) {//获取优惠信息
+            return new Promise((resolve, reject)=>{
+                let list = [];
+                let maxDiscount = {};
+                let _this = this;
+                this.$http.get('sale-tactics', params, r => {
                 if (r.data.length) {
-                    list = r.data.map(item => {
-                        let obj = item;
-                        obj.label = item.tacticsName;
-                        obj.value = item.tacticsType + '';
-                        obj.id = item.tacticsId
-                        obj.name = item.tacticsName
-                        if (item.tacticsType == 1) {
-                            maxDiscount[item.tacticsName] = obj.discount;
-                        }
+                        list = r.data.map(item => {
+                            let obj = item;
+                            obj.label = item.tacticsName;
+                            obj.value = item.tacticsType + '';
+                            obj.id = item.tacticsId
+                            obj.name = item.tacticsName
+                            if (item.tacticsType == 1) {
+                                maxDiscount[item.tacticsName] = obj.discount;
+                            }
                         return obj;
-                    })
+                    })                   
                 }
                 _this.youhui = list;
                 _this.maxDiscount = maxDiscount;
-
-            }, e => {
-                _this.youhui = []
-
+                resolve()
+                },e=>{
+                    _this.youhui = []
+                    reject()
+                })
             })
         },
         getFreeDeposit() {
             this.$http.get('get-seat-deposit-free', '').then(r => {
-                console.log('---->', r.data)
+                // console.log('---->', r.data)
                 if (r.data) {
                     this.depositList.push({ value: '0', label: '无押金' }, )
                     this.depositList.push({ value: '1', label: '1个月' }, )

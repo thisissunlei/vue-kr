@@ -224,7 +224,6 @@ export default {
       }
     };
     const validateAddress = (rule, value, callback) => {
-      console.log(this.formItem.taxpayerType, "---------", value);
       if (this.formItem.taxpayerType !== "SMALL" && !value) {
         callback(new Error("此项为必填项。"));
       } else {
@@ -239,15 +238,18 @@ export default {
       if (this.formItem.taxpayerType !== "SMALL" && value === "") {
         callback(new Error("此项为必填项。"));
       }
-
-
+      console.log(value,"pppppp")
       if (
-        this.formItem.titleType != "PERSON" &&
+        (this.formItem.titleType != "PERSON" &&
+        this.formItem.taxpayerType !== "SMALL" && !value)||
+        (this.formItem.titleType != "PERSON" &&
+        this.formItem.taxpayerType == "SMALL"&&
         !phone.test(value) &&
-        value !== ""
+        value)
+
       ) {
         callback(new Error("请填写正确的联系方式"));
-      } else {
+      }  else {
         callback();
       }
     };
@@ -395,11 +397,10 @@ export default {
       }
     },
     upChange(detail, type) {
-     
       let businessUrlName = [].concat(this.businessUrlName);
-     
+
       let taxUrlName = [].concat(this.taxUrlName);
-     
+
       if (type == "taxUrlName" && !this.taxUrlName.length) {
         this.taxUrlName = taxUrlName.concat(detail);
       }
@@ -456,7 +457,7 @@ export default {
             list.fieldUrl = list.url;
             this.businessUrlName.push(list);
           });
-         
+
           this.formItem.taxCertificate.map((item, index) => {
             var list = Object.assign({}, item);
             list.fieldUrl = list.url;
@@ -469,9 +470,7 @@ export default {
           });
         });
     },
-    tabelInputChange(event) {
-      
-    },
+    tabelInputChange(event) {},
     editClick() {
       this.isReady = false;
     },
@@ -492,7 +491,6 @@ export default {
       window.history.go(-1);
     },
     handleSubmit(name) {
-     
       let editData = Object.assign({}, this.formItem);
       delete editData.ctime;
       delete editData.rejectTime;
@@ -503,33 +501,34 @@ export default {
         item.qualificationId = this.formItem.id;
         return item;
       });
-     
+
       this.taxUrlName = this.taxUrlName.map(item => {
         item.sourceType = "TAX_CERTIFICATE";
         item.qualificationId = this.formItem.id;
         return item;
       });
-    //   if (!this.businessUrlName.length) {
-    //     this.$Notice.error({
-    //       title: '营业执照不能为空'
-    //     });
-    //     return ;
-    //   }
-      if (!this.taxUrlName.length && this.formItem.taxpayerType == 'taxUrlName') {
+      //   if (!this.businessUrlName.length) {
+      //     this.$Notice.error({
+      //       title: '营业执照不能为空'
+      //     });
+      //     return ;
+      //   }
+      if (
+        !this.taxUrlName.length &&
+        this.formItem.taxpayerType == "taxUrlName"
+      ) {
         this.$Notice.error({
-          title: '一般纳税人证明不能为空'
+          title: "一般纳税人证明不能为空"
         });
-        return ;
+        return;
       }
-     
+
       editData.taxCertificateTemp = JSON.stringify(this.taxUrlName);
       editData.businessLicenseTemp = JSON.stringify(this.businessUrlName);
       delete editData.taxCertificate;
       delete editData.businessLicense;
-      
-      
+
       this.$refs[name].validate(valid => {
-        
         if (valid) {
           this.$http
             .post("get-financial-invoice-edit", editData)

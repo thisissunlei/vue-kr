@@ -103,7 +103,7 @@
     function setDefaultHeader(value) {
         setTimeout(function(){
             var j_li = document.getElementsByName(value)[0];
-            console.log(j_li,"kkkkk")
+            // console.log(j_li,"kkkkk")
             if(j_li){
                 j_li.setAttribute("class", "active");
             }else{
@@ -205,7 +205,7 @@
         }
     }
     function goLocation(){
-        console.log("--=======")
+        // console.log("--=======")
     }
     //头部和侧栏渲染
     function renderHanderAndSidebar(){
@@ -276,7 +276,7 @@
 
         }
         if(!isHanderListen && handerDom){
-            console.log("=======+++")
+            // console.log("=======+++")
             handerDom.onclick = function(e){
                 console.log(e.target.tagName.toUpperCase())
                 if(e.target.tagName.toUpperCase() == 'SPAN'){

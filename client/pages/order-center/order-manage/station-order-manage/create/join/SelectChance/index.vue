@@ -109,12 +109,15 @@ export default {
                 data.list.unshift({ label: '不绑定机会', value: ' ' })
                 this.options = data.list
                 this.data = data;
+                this.tipStr = ''
             }).then(() => {
                 this.renderSelector();
             })
         },
 
         renderSelector() {
+            console.log('isNewUser', this.data.isNewUser)
+            console.table(this.data.list)
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true
@@ -140,7 +143,6 @@ export default {
                 this.tipStr = ''
                 this.isError = false
                 this.subTitlePrefix = true
-                console.table(this.data.list)
                 if (this.data.list.length == 1) {
                     this.tipStr = '您没有可用机会，客户增租续租时不必须'
                 }

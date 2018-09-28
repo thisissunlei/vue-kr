@@ -34,8 +34,8 @@ export default {
             }
         },
         value: {
-            type:String,
-            default:''
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -56,7 +56,7 @@ export default {
         params(val) {
             this.initOptions(val)
         },
-        chanceId(val){
+        chanceId(val) {
             this.changeContent(val)
         }
     },
@@ -109,15 +109,19 @@ export default {
                 data.list.unshift({ label: '不绑定机会', value: ' ' })
                 this.options = data.list
                 this.data = data;
+                this.tipStr = ''
             }).then(() => {
                 this.renderSelector();
             })
         },
 
         renderSelector() {
+            // console.log('isNewUser', this.data.isNewUser)
+            // console.table(this.data.list)
             if (this.data.isNewUser) {
                 this.required = true
                 this.isError = true
+                this.tipStr = ''
                 this.subTitlePrefix = false
                 if (this.data.list.length == 1) {
                     this.subTitle = '入驻订单必须绑定机会'
@@ -136,6 +140,7 @@ export default {
                 this.required = false
                 this.subTitle = '新入驻客户，须选择机会'
                 this.chanceId = ''
+                this.tipStr = ''
                 this.isError = false
                 this.subTitlePrefix = true
                 if (this.data.list.length == 1) {

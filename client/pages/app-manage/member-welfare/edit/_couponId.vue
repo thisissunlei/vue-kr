@@ -7,13 +7,14 @@
                     <FormItem label="福利类型" style="width:700px" prop="couponType">
                             <RadioGroup 
                                 v-model="formItem.couponType" 
+                                @on-change="typeChange"
                             >
-                                <Radio 
+                                <!-- <Radio 
                                     label="OFFLINESTORE" 
                                     style="margin-right:120px;"
                                 >
                                     线下门店
-                                </Radio>
+                                </Radio> -->
                                 <Radio 
                                     label="USERLIFE" 
                                     style="margin-right:120px;"
@@ -28,121 +29,136 @@
                       <FormItem label="福利标题"  style="width:300px" prop="title">
                           <Input 
                               v-model="formItem.title" 
-                              placeholder="15个字符以内"
+                              placeholder="20个字符以内"
                               :maxlength="titleLength"
                           />
                       </FormItem>
                       <FormItem label="福利描述"  style="width:516px" prop="descr">
                           <Input 
                               v-model="formItem.descr" 
-                              placeholder="20个字符以内,建议填写门店详细地址"
+                              placeholder="20个字符以内,建议补充描述该福利内容"
                               :maxlength="descrLength"
                           />
                       </FormItem>
                        <FormItem label="福利面值"  style="width:294px" prop="faceValue">
                           <Input 
                               v-model="formItem.faceValue" 
-                              :placeholder="formItem.couponType=='OFFLINESTORE'?'10个字符以内,如“9折”':'10个字符以内,如“1000元礼券”'"
+                              :placeholder="formItem.couponType=='ENTERPRISESERVICE'?'10个字符以内,如“9折”':'10个字符以内,如“1000元礼券”'"
                               :maxlength="faceValueLength"
                           />
                       </FormItem>
-                       <FormItem label="福利封面" style="width:516px" class="ivu-form-item-required">
-                            <div class="demo-upload-list" v-if="this.imgCoverUrl">
-                                <img :src="this.imgCoverUrl">
-                                <div class="demo-upload-list-cover">
-                                    <Icon type="ios-trash-outline" @click.native="coverRemove()"></Icon>
-                                </div>
-                            </div>
-                            <Upload
-                                ref="upload"
-                                name="img"
-                                v-if="!this.imgCoverUrl"
-                                :show-upload-list="false"
-                                :format="['jpg','gif','png']"
-                                with-credentials
-                                :on-success="coverSuccess"
-                                :on-error="coverError"
-                                type="drag"
-                                action="/api/krspace-finance-web/mobile/file/img/upload"
-                                style="display: inline-block;width:148px;">
-                                <div style="width: 148px;height:148px;line-height: 158px;">
-                                    <Icon type="camera" size="40"></Icon>
-                                </div>
-                            </Upload>
-                             <div v-if="isCoverError" class="u-error">请选择要上传的图片</div>
+                       <FormItem label="福利封面" style="width:516px" prop="couponCover">
+                             <UploadFile 
+                                ref="couponCover"
+                                :category="category"
+                                withCredentials
+                                :format="['jpg','png','gif']"
+                                :maxLen="1"
+                                :onSuccess="coverSuccess"
+                                :onRemove="coverRemove"
+                                :onFormatError="imgSizeFormat"
+                                :imgWidth="148"
+                                :imgHeight="148"
+                                :defaultFileList="coverImgList"
+                            >
+                                <div slot="tip" class="u-unload-tip">  图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                            </UploadFile>
                         </FormItem>
-                        <div class="u-upload-tip">
-                            图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
-                        </div>
-                        <div class="u-upload-logo" v-if="formItem.couponType=='OFFLINESTORE'">
-                                <IconTip style="left:95px;top:9px;">用于到店凭证展示给店主</IconTip>
-                                <FormItem label="商户LOGO" style="width:516px" class="ivu-form-item-required">
-                                    <div class="demo-upload-list" v-if="this.imgLogoUrl">
-                                        <img :src="this.imgLogoUrl">
-                                        <div class="demo-upload-list-cover">
-                                            <Icon type="ios-trash-outline" @click.native="logoRemove()"></Icon>
-                                        </div>
-                                    </div>
-                                    <Upload
-                                        ref="upload"
-                                        name="img"
-                                        v-if="!this.imgLogoUrl"
-                                        :show-upload-list="false"
-                                        :format="['jpg','gif','png']"
-                                        with-credentials
-                                        :on-success="logoSuccess"
-                                        :on-error="logoError"
-                                        type="drag"
-                                        action="/api/krspace-finance-web/mobile/file/img/upload"
-                                        style="display: inline-block;width:148px;">
-                                        <div style="width: 148px;height:148px;line-height: 158px;">
-                                            <Icon type="camera" size="40"></Icon>
-                                        </div>
-                                    </Upload>
-                                     <div v-if="isLogoError" class="u-error">请选择要上传的图片</div>
-                                </FormItem>
-                                <div class="u-upload-tip">
-                                    图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
-                                </div>
-                        </div>
                         <div class="u-welfare-tag">
-                             <FormItem label="福利标签" style="width:516px" >
-                                 <Input 
-                                        v-model="tag" 
-                                        placeholder="5个字符以内"
-                                        :maxlength="tagLength"
-                                        style="width:278px"
-                                 />
-                                 <span v-if="tagList.length<3" class="u-add-tag-btn" @click="addTags">添加</span>
-                                  <span v-if="tagList.length>=3" class="u-tag-btn" >添加</span>
-                                 <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
-                                 <div class="u-tag-content" v-if="tagList.length>0">
-                                     <div 
-                                        class="u-tag" 
+                             <IconTip style="left:95px;top:9px;">上限选择三个</IconTip>
+                             <FormItem label="福利标签" style="width:1000px" >
+                                 <div class="u-tag-content" style="width:1200px" >
+                                      <div 
                                         v-for="(item,index) in tagList"
                                         :key="index"
-                                      >
-                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
+                                        @click="checkTag(item,index)"
+                                        :class="item.check?'u-no-tag u-check-tag':'u-no-tag'" 
+                                      > 
                                         {{item.name}}
                                      </div>
                                  </div>
                              </FormItem>
                         </div>
-                         <FormItem 
-                                label="商户详细地址"  
-                                style="width:294px;margin-top:-20px;" 
-                                v-if="formItem.couponType=='OFFLINESTORE'"
-                         >
-                                <Input 
-                                    v-model="formItem.merchantAddress" 
-                                    placeholder="30个字符以内"
-                                    :maxlength="addressLength"
-                                    
-                                />
-                      </FormItem>
+                       <FormItem label="内部会员提供" style="width:352px" prop="fromInner">
+                            <RadioGroup v-model="formItem.fromInner">
+                                <Radio label="1">
+                                    是
+                                </Radio>
+                                <Radio label="0">
+                                    否
+                                </Radio>
+                            </RadioGroup> 
+                        </FormItem>
                 </DetailStyle>
+
+                <DetailStyle info="详细信息">
+                        <FormItem label="商户名称"  style="width:300px" prop="merchantName">
+                            <Input 
+                                v-model="formItem.merchantName" 
+                                placeholder="20个字符以内"
+                                :maxlength="20"
+                            />
+                        </FormItem>
+                      <FormItem label="详细地址"  style="width:300px" prop="merchantAddress">
+                          <Input 
+                              v-model="formItem.merchantAddress" 
+                              placeholder="30个字符以内,建议填写门店详细地址"
+                              :maxlength="addressLength"
+                          />
+                      </FormItem> 
+                     <div class="u-upload-logo">
+                            <IconTip style="left:80px;top:10px;">用以APP地图导航</IconTip>
+                            <FormItem label="地图坐标"  prop="local" style="width:300px;position:relative;" >
+                            <Input 
+                                v-model="formItem.local"
+                            />
+                            <a class='mapLocation' href="http:\\api.map.baidu.com/lbsapi/getpoint/index.html" target='_blank'/>
+                            </FormItem>
+                      </div>
+                      
+                       <FormItem label="联系电话" prop="merchantPhone" style="width:300px" >
+                          <Input 
+                              v-model="formItem.merchantPhone" 
+                              placeholder="请填写商户联系电话"
+                              @on-change="checkPhone(formItem.merchantPhone)"
+                          />
+                      </FormItem> 
+                       <FormItem :label="formItem.couponType=='USERLIFE'?'使用提示':'享受规则'" prop="useRule" style="width:500px;" >
+                          <Input 
+                              v-model="formItem.useRule"
+                              type="textarea" 
+                              placeholder="1000个字符以内，请详细描述该福利的使用规则、营业时间等信息"
+                              :maxlength="1000"
+                              class="u-textarea"
+                          />
+                      </FormItem> 
+                       <FormItem label="福利简介"  style="width:700px;"  prop="couponDetail">
+                             <UEditor :styleObj='UEStyleObj' v-model="formItem.couponDetail" ></UEditor>
+                       </FormItem>
+                       <div class="u-upload-logo"> 
+                              <IconTip style="left:95px;top:9px;">支持多张</IconTip>
+                                <FormItem label="福利图册" style="width:916px"  prop="couponImgs">
+                                        <UploadFile 
+                                            ref="welfare"
+                                            :category="category"
+                                            withCredentials
+                                            :format="['jpg','png','gif']"
+                                            :maxLen="20"
+                                            :onSuccess="welfareSuccess"
+                                            :onRemove="welfareRemove"
+                                            :onFormatError="imgSizeFormat"
+                                            :imgWidth="200"
+                                            :imgHeight="100"
+                                            :defaultFileList="welfareImgs"
+                                        >
+                                            <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比建议为2:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                        </UploadFile>
+                                </FormItem>
+                       </div>
+                </DetailStyle>
+
                 <DetailStyle info="福利领取信息">
-                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required">
+                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required"  prop="couponScope">
                             <RadioGroup 
                                 v-model="formItem.couponScope" 
                             >
@@ -153,14 +169,14 @@
                                     不限
                                 </Radio>
                                 <Radio label="0">
-                                    部分城市
+                                    部分城市(可多选)
                                 </Radio>
                             </RadioGroup> 
                       </FormItem>
                       <div class="u-community-content" v-if="formItem.couponScope=='0'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
-                              <FormItem label="选择城市"  style="width:250px;" >
+                              <FormItem label="选择城市"  style="width:250px;"  prop="id" >
                                   <Select
                                       v-model="id"
                                       filterable
@@ -186,7 +202,7 @@
                                  </div>
                           </div>
                       </div>
-                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" >
+                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" prop="startTime" >
                                 <DatePicker
                                     type="date"
                                     v-model="formItem.startTime"
@@ -220,10 +236,46 @@
                                 />
                              <div v-if="isTimeError" class="u-error">请选择领取有效期</div>
                       </FormItem>
+                       <FormItem label="领取方式" style="width:600px" class="ivu-form-item-required"  prop="getWay">
+                            <RadioGroup 
+                                v-model="formItem.getWay" 
+                                 @on-change="wayChange"
+                            >
+                                <Radio label="OFFLINE" style="margin-right:20px;" >
+                                    到店出示身份
+                                </Radio>
+                                <Radio label="ONLINE"  style="margin-right:20px;">
+                                   在线领取
+                                </Radio>
+                                <Radio label="DETAIL">
+                                   详情中展示
+                                </Radio>
+                            </RadioGroup> 
+                      </FormItem>
+                      <div class="u-upload-logo" v-if="formItem.getWay=='OFFLINE'">
+                            <IconTip style="left:95px;top:10px;">用于到店凭证展示给店主</IconTip>
+                            <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
+                                    <UploadFile 
+                                        ref="logo"
+                                        :category="category"
+                                        withCredentials
+                                        :format="['jpg','png','gif']"
+                                        :maxLen="1"
+                                        :onSuccess="logoSuccess"
+                                        :onRemove="logoRemove"
+                                        :onFormatError="imgSizeFormat"
+                                        :imgWidth="148"
+                                        :imgHeight="148"
+                                        :defaultFileList="logoImgList"
+                                    >
+                                        <div slot="tip" class="u-unload-tip"> 图片小于300KB，格式为JPG，PNG，GIF；配图宽高比例建议为1:1，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）</div>
+                                    </UploadFile>
+                            </FormItem>
+                      </div>
                       <FormItem 
                                 label="领取链接"  
                                 style="width:294px" 
-                                v-if="formItem.couponType!='OFFLINESTORE'"
+                                v-if="formItem.getWay=='ONLINE'"
                                 prop="getUrl"
                          >
                                 <Input 
@@ -248,29 +300,40 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
 import dateUtils from 'vue-dateutils';
+import UploadFile from  '~/components/UploadFile';
+import UEditor from '~/components/UEditor.vue';
+import utils from '~/plugins/utils';
 
 export default {
   components:{
      SectionTitle,
      DetailStyle,
-     IconTip
+     IconTip,
+     UploadFile,
+     UEditor
+  },
+  head() {
+       return {
+            title: '编辑福利-氪空间后台管理系统'
+        }
   },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
-              couponType:'OFFLINESTORE',
+              couponType:'USERLIFE',
               title:'',
               descr:'',
               faceValue:'',
-              couponScope:1,
+              couponScope:'',
               beginTime:'',
               endTime:'',
               merchantAddress:'',
           },
           id:'',
-          imgCoverUrl:'',
-          tag:'',
-          imgLogoUrl:'',
+          coverImgList:[],
+          logoImgList:[],
+          welfareImgs:[],
           titleLength:15,
           descrLength:20,
           faceValueLength:20,
@@ -308,17 +371,78 @@ export default {
             getTime:[
                 { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
-          }
+             couponCover:[
+                { required: true, message: '请选择要上传的图片', trigger: 'change' }
+            ],
+            merchantLogo:[
+                { required: true, message: '请选择要上传的图片', trigger: 'change' }
+            ],
+            fromInner:[
+                { required: true, message: '请选择内部会员提供', trigger:'change' }
+            ],
+            getWay:[
+                { required: true, message: '请选择领取方式', trigger:'change' }
+            ],
+            couponDetail:[
+               { required: true, message: '请输入福利简介', trigger:'change' } 
+            ],
+             couponScope:[
+               { required: true, message: '请选择福利范围', trigger:'change' } 
+            ],
+          },
+          UEStyleObj: {
+                'width': '100%',
+                'height': '300px',
+                'clear': 'both'
+          },
 
       }
   },
   mounted:function(){
     GLOBALSIDESWITCH("false");
-    this.getCityList();
     this.getInfo();
-   
+    this.getCityList();
   },
   methods:{
+        checkPhone(value){
+            let reg=/^[0-9]*$/;
+            if(reg.test(value)){
+                this.isPhoneError=false;
+            }else{
+                this.isPhoneError=true;
+            }
+        },
+        typeChange(form){
+            let type=form;
+            let {params}=this.$route;
+            utils.clearForm(this.formItem);
+            this.isTimeError=false;
+            this.formItem.couponType=type;
+            this.getTagList(type)
+            this.$refs.couponCover.clearFiles();
+            this.$refs.welfare.clearFiles();
+            if(this.$refs.log){
+                 this.$refs.logo.clearFiles();
+            }
+            this.formItem.couponImgs=[];
+            this.checkCity=[];
+            this.cityIds=[];
+            this.id='';
+            this.formItem.couponId=params.couponId;
+            this.tagIds=[];
+             
+        },
+        wayChange(form){
+            if(form=="DETAIL"){
+                this.formItem.getUrl="";
+                this.logoImgList=[];
+            }else if(form=="ONLINE"){
+                 this.logoImgList=[];
+            }else {
+                 this.formItem.getUrl="";
+            }
+            
+        },
          getInfo(){
               var _this=this;
               let {params}=this.$route;
@@ -329,6 +453,8 @@ export default {
               this.$http.get('get-coupon-detail', from).then((res)=>{
                         let data = res.data;
                         this.formItem = data;
+                         this.formItem.fromInner= String(data.fromInner);
+                         this.formItem.couponScope=String(data.couponScope)
                         if(data.citys){
                           this.checkCity=data.citys.map((item,index)=>{
                               item.value=item.id;
@@ -336,9 +462,31 @@ export default {
                               return item;
                           })
                         }
-                        this.imgCoverUrl=data.couponCover;
-                        this.imgLogoUrl=data.merchantLogo;
-                        this.tagList=data.tags;
+                        let coverImgList=[],logoImgList=[],welfareImgs=[];
+                        if(data.couponCover && data.couponCover!=''){
+                            coverImgList.push({'url':data.couponCover});
+                        }
+                        this.coverImgList=coverImgList;
+                       
+                        if(data.merchantLogo && data.merchantLogo!=''){
+                            logoImgList.push({'url':data.merchantLogo});
+                        }
+                       
+                        
+                        this.logoImgList=logoImgList;
+                       
+                        if(data.couponImgs && data.couponImgs.length>0){
+                             data.couponImgs.map((item)=>{
+                                let obj={
+                                    url:item
+                                }
+                                welfareImgs.push(obj);
+                            })
+                          
+                        }
+                        this.welfareImgs=welfareImgs;
+                        this.formItem.couponImgs=[].concat(this.welfareImgs);
+                      
                         this.formItem.startTime=data.beginTime;
                         this.formItem.endtime=data.endTime;
                         let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.beginTime));
@@ -354,13 +502,27 @@ export default {
                         this.startHour = startHour;
                         this.endDates = endtime.substr(0,11);
                         this.endHour = endHour;
-                        let tagIds=[],cityIds=[];
-                        if(data.tags){
-                            data.tags.map((item,index)=>{
-                              tagIds.push(item.id)
-                            })
-                             this.tagIds=tagIds;
-                            this.formItem.tagIds=tagIds.join(',');
+
+
+                        let cityIds=[];
+
+                        if(data.longitude && data.latitude){
+                           this.formItem.local=`${data.longitude},${data.latitude}`
+                        }  
+                        this.tagList=data.tags.map((tagItem,index)=>{
+                              tagItem.check=false;
+                              data.tagIds.map((idItem)=>{
+                                    if(tagItem.id==idItem){
+                                      tagItem.check=true;
+                                    }
+                              })
+                              return tagItem;
+                        })
+                       
+
+                        if(data.tagIds){
+                            this.tagIds=data.tagIds;
+                            this.formItem.tagIds=data.tagIds.join(',');
                         }
                         if(data.citys){
                             data.citys.map((item,index)=>{
@@ -377,32 +539,37 @@ export default {
                   });
               });
           },
-        addTags(){
-                if(!this.tag){
+         checkTag(item,index){
+            let tagList=[].concat(this.tagList);
+            if(item.check){
+                let idIndex=this.tagIds.indexOf(item.id)
+                this.tagIds.splice(idIndex,1);
+            }else{
+                if(this.tagIds.length>=3){
                     this.$Notice.error({
-                    title:'福利标签不能为空'
+                        title:'福利标签最多只能选三个'
                     });
                     return;
                 }
-                
-                this.$http.post('create-tag', {name:this.tag}).then((res)=>{
-                   this.tagList.push(res.data)
-                   this.tagIds.push(res.data.id)
-                   this.tag='';
-                }).catch((error)=>{
+                this.tagIds.push(item.id);
+            }
+            tagList[index].check=!item.check;
+            this.tagList=tagList;
+         },
+        getTagList(type){
+            this.$http.get('get-coupon/tag-list', {'couponType':type}).then((res)=>{
+                 res.data.tags.map((item)=>{
+                    item.check=false;
+                    return item;
+                })
+                this.tagList=[].concat(res.data.tags) ;
+            }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
-                    });
                 });
+            });
         },
-        deleteTag(index){
-            let tagList=this.tagList;
-            let tagIds=this.tagIds;
-            tagList.splice(index, 1);
-            tagIds.splice(index, 1);
-            this.tagList=tagList;
-            this.tagIds=tagIds;
-        },
+       
         deleteCity(index){
             let checkCity=this.checkCity;
             let cityIds=this.cityIds;
@@ -416,10 +583,8 @@ export default {
             this.changeTime();
         },
         endChange(date){
-            
             this.endDates=date;
             this.changeTime();
-           
         },
         startHourChange(date){
             this.startHour=date;
@@ -448,38 +613,32 @@ export default {
                 this.isTimeError=false;
             }
         },
-        coverSuccess(res,file){
-            if(res.code==1){
-                this.isCoverError=false;
-                this.formItem.couponCover=res.data.imgUrl;
-                this.imgCoverUrl=res.data.imgUrl
-            }
+        coverSuccess(res){
+            this.formItem.couponCover=res.data.url;
+            this.$refs.formItems.validateField('couponCover') 
         },
-        logoSuccess(res,file){
-            if(res.code==1){
-                this.isLogoError=false;
-                this.formItem.merchantLogo=res.data.imgUrl;
-                this.imgLogoUrl=res.data.imgUrl
+        logoSuccess(res){
+            this.formItem.merchantLogo=res.data.url;
+            this.$refs.formItems.validateField('merchantLogo') 
+        },
+        welfareSuccess(res){
+            let imgObj={
+                url:res.data.url
             }
+            this.formItem.couponImgs.push(imgObj);
+            this.$refs.formItems.validateField('couponImgs') 
         },
         coverRemove(){
             this.formItem.couponCover="";
-            this.imgCoverUrl="" 
         },
         logoRemove(){
             this.formItem.merchantLogo="";
-            this.imgLogoUrl="" 
         },
-        coverError(error,file){
-            this.$Notice.error({
-                title:error.message
-            });
+        welfareRemove(form){
+           let index=this.formItem.couponImgs.indexOf(form.fieldUrl)
+            this.formItem.couponImgs.splice(index,1);
         },
-        logoError(error,file){
-            this.$Notice.error({
-                title:error.message
-            });
-        },
+        
         cancelSubmit(){
             window.close();
             window.opener.location.reload();
@@ -506,15 +665,22 @@ export default {
                   flag.push(false);
                    this.isCoverError=true;
                }
-               if(this.formItem.couponType=="OFFLINESTORE"){
+               if(this.formItem.getWay=='OFFLINE'){
                     if(!this.formItem.merchantLogo){
-                          flag.push(false)
+                          flag.push('no')
                           this.isLogoError=true;
                     }
                }
-               
-               this.formItem.cityIds=this.cityIds.join(',');
+               if(this.formItem.local){
+                    let local=this.formItem.local.split(',');
+                    this.formItem.longitude=local[0];
+                    this.formItem.latitude=local[1];
+               }
+               let couponImgs=this.formItem.couponImgs;
+              
                this.formItem.tagIds=this.tagIds.join(',');
+               this.formItem.cityIds=this.cityIds.join(',');
+               this.formItem.couponImgs=JSON.stringify(couponImgs);
                
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {
@@ -528,6 +694,8 @@ export default {
                  
       },
       submitCreate(){
+            //console.log('this.formItem',this.formItem)
+            //return
             this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'
@@ -543,7 +711,7 @@ export default {
             })
       },
       cityChange(form){
-          if(Object.keys(form).length === 0){
+         if(!form.value){
               return;
           }
           let flag;
@@ -613,6 +781,11 @@ export default {
             return list;
             
       },
+      imgSizeFormat(){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+        },
     
 
   }
@@ -794,6 +967,46 @@ export default {
            }
        } 
     }
+     .u-no-tag{
+         padding:0 10px;
+           height:32px;
+           line-height:32px;
+           border:1px solid #000;
+           border-radius: 4px;
+           text-align: center;
+           display: inline-block;
+           position: relative;
+           color:#000;
+           margin-right:20px;
+           margin-bottom:10px;
+    }
+    .u-check-tag{
+         color:#499DF1;
+          border:1px solid #499DF1;
+    }
+
+     .mapLocation{
+        width:16px;
+        height:20px;
+        display:inline-block;
+        background:url('~/assets/images/location.svg') no-repeat center;
+        background-size: 100%;
+        position: absolute;
+        right: 10px;
+        top:8px;
+        z-index: 2;
+        margin-top:0;
+  }
+  .u-textarea{
+      textarea{
+        height:100px;
+      }
+  }
+   .u-unload-tip{
+      color:#999999;
+      line-height:18px;
+      margin-top:5px;
+  }
    
   
 }

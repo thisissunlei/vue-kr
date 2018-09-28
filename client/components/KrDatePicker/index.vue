@@ -266,7 +266,7 @@ export default {
             this.panelType = 'date'
         },
         selectDate(date) {
-            console.log(date,"---------")
+           
             if(this.isLessToday(date)){
                 return ;
             }
@@ -347,9 +347,10 @@ export default {
         },
         isLessToday(date){
              if (date.currentMonth) {
-                 console.log(this.tmpMonth,"ppppppp")
-                let selectTime = (new Date(this.tmpYear+'/'+(this.tmpMonth+1)+'/'+date.value)).getTime();
+               
+                let selectTime = (new Date(this.tmpYear+'/'+(this.tmpMonth+1)+'/'+date.value+' 23:59:59')).getTime();
                 let nowTime = (new Date()).getTime();
+                //   console.log(selectTime,nowTime,"ppppppp");
                 if (selectTime<nowTime) {
                     return true;
                 }

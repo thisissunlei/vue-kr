@@ -243,6 +243,11 @@ export default  {
         url: '/api/op/kmcoupon/detail',
         method: 'get'
     },
+     //福利--查询所有标签
+     'get-coupon/tag-list': {
+        url: '/api/krspace-finance-web/coupon/tag-list',
+        method: 'get'
+    },
    
 }
   

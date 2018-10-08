@@ -1305,6 +1305,7 @@
                         tacticsType:discount[0].tacticsType,
                         tacticsId:discount[0].tacticsId
                     }
+                    this.discountReceive=this.discount.minDiscount
                     let maxDiscount=Math.min.apply(null,discountList)
                     if (this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&maxDiscount>this.discountReceive) {
                         this.discountError='您没有此折扣权限，请让高权限的同事协助编辑';

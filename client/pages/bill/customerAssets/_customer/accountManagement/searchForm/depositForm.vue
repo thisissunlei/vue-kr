@@ -194,7 +194,7 @@ export default {
         },
         getRecord(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.RecordType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.DepositRecordType'
             }).then((r) => {
                 this.recordList = [].concat(r.data)
             }).catch((e) => {

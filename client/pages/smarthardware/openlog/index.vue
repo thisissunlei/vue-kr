@@ -2,16 +2,19 @@
   <div class="g-openlog">
       <div class="g-openlog-box">
             <SectionTitle title="开门记录" />
-            <SearchForm @submitSearchData="submitSearchData"/>
-            <div class="table-box">
-                <Table :columns="columns1" :data="openLogList" size="small"></Table>
-                <div class="loading-box"  v-if="loading">
-                    <Spin fix>
-                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                    </Spin>
+             
+                <SearchForm @submitSearchData="submitSearchData"/>
+                <div class="scroll-box">
+                    <Scroll
+                        :on-reach-bottom="getListData"
+                        :height="tableHeight"
+                        :loading-text="loadingText"
+                    >
+                        <div class="table-box">
+                            <Table :columns="columns1" :data="openLogList" size="small"></Table>
+                        </div>
+                    </Scroll>
                 </div>
-                <div v-if="allData" class="all-data">以上是全部数据~</div>
-            </div>
         </div>
     </div>
 </template>
@@ -27,6 +30,8 @@ export default {
    },
    data(){
      return{
+         tableHeight:100,
+         loadingText:'加载中',
         tableScrollTop : 0,
         lastReq : [],
         page : '',
@@ -148,12 +153,17 @@ export default {
      }
    },
    created(){
-
+       
    },
    mounted(){
        this.getListData();
        this.getSmartHardwareDict();
-       this.handleWindowScroll();
+    //    this.handleWindowScroll();
+        var dom = document.body;
+        var domHeight = dom.offsetHeight;
+        var tableHeight =domHeight-50-95-60-80; 
+        this.tableHeight = tableHeight;
+        console.log("tableHeight",tableHeight)
    },
    methods:{
        returnResultExplain(data){
@@ -256,36 +266,36 @@ export default {
                return "失败" 
            }
        },
-       handleWindowScroll(){
+    //    handleWindowScroll(){
 
-           let _this =this;
+    //        let _this =this;
 
-           var  openlogDom = document.getElementsByClassName("g-openlog")[0];
-           var  openlogboxDom = document.getElementsByClassName("g-openlog-box")[0];
+    //        var  openlogDom = document.getElementsByClassName("g-openlog")[0];
+    //        var  openlogboxDom = document.getElementsByClassName("g-openlog-box")[0];
            
            
-            openlogDom.onscroll=function(){
+    //         openlogDom.onscroll=function(){
                 
                
-                var boxOffsetHeight = openlogDom.offsetHeight;
-                var boxScrollTop = openlogDom.scrollTop;
-                var boxScrollHeight = openlogDom.scrollHeight;
+    //             var boxOffsetHeight = openlogDom.offsetHeight;
+    //             var boxScrollTop = openlogDom.scrollTop;
+    //             var boxScrollHeight = openlogDom.scrollHeight;
                 
-                _this.tableScrollTop = boxScrollTop;
-                if(boxScrollHeight-boxOffsetHeight+15  <= boxScrollTop){
+    //             _this.tableScrollTop = boxScrollTop;
+    //             if(boxScrollHeight-boxOffsetHeight+15  <= boxScrollTop){
                     
                     
-                    if(_this.loading ||_this.allData || _this.lastReq.length<25){
-                        return;
-                    }
+    //                 if(_this.loading ||_this.allData || _this.lastReq.length<25){
+    //                     return;
+    //                 }
                     
-                    _this.loading = true;
-                    _this.getListData();
-                }
+    //                 _this.loading = true;
+    //                 _this.getListData();
+    //             }
 
                 
-            }
-       }
+    //         }
+    //    }
 
 
    }
@@ -295,33 +305,36 @@ export default {
 <style lang="less">
     .g-openlog{
         height: 100%;
-        overflow: scroll;
         .g-openlog-box{
             // overflow: scroll;
+            .scroll-box{
+                height:100%;
+            }
+            .table-box{
+                padding: 0 10px 10px 10px;
+                .ivu-table-cell{
+                    padding : 0;
+                }
+                .all-data{
+                    text-align:center;
+                    padding:10px;
+                }
+                .loading-box{
+                    height: 100px;
+                    position: relative;
+                    .demo-spin-icon-load{
+                        animation: ani-demo-spin 1s linear infinite;
+                    }
+                    @keyframes ani-demo-spin {
+                        from { transform: rotate(0deg);}
+                        50%  { transform: rotate(180deg);}
+                        to   { transform: rotate(360deg);}
+                    }
+                }
+            }
         }
     }
-    .table-box{
-        padding: 0 10px 10px 10px;
-        .ivu-table-cell{
-            padding : 0;
-        }
-        .all-data{
-            text-align:center;
-            padding:10px;
-        }
-        .loading-box{
-            height: 100px;
-            position: relative;
-            .demo-spin-icon-load{
-                animation: ani-demo-spin 1s linear infinite;
-            }
-            @keyframes ani-demo-spin {
-                from { transform: rotate(0deg);}
-                50%  { transform: rotate(180deg);}
-                to   { transform: rotate(360deg);}
-            }
-        }
-    }
+    
 </style>
 
 

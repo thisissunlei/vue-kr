@@ -29,27 +29,44 @@
                 :key="option.value">{{option.desc}}</Option>
             </Select>
           </FormItem>
-          <Button @click="onCancel">取消</Button>
-          <Button type="primary"
-            @click="next">下一步</Button>
+
+          <div class="step-btn-container">
+            <Button class="step-btn"
+              @click="onCancel">取消</Button>
+            <Button class="step-btn"
+              type="primary"
+              @click="next">下一步</Button>
+          </div>
         </div>
 
         <div class="select-discount"
           v-show="current==1">
           <AddDiscount />
-          <Button @click="previous">上一步</Button>
-          <Button type="primary"
-            @click="onAdd">添加</Button>
+
+          <div class="step-btn-container">
+            <Button class="step-btn"
+              @click="previous">上一步</Button>
+            <Button class="step-btn"
+              type="primary"
+              @click="onAdd">添加</Button>
+            <Button class="step-btn"
+              type="primary"
+              @click="next">下一步</Button>
+          </div>
         </div>
       </Form>
       <div class="select-goods"
         v-show="current==2">
+        <div class="step-btn-container">
+          <Button class="step-btn"
+            @click="previous">上一步</Button>
+          <Button class="step-btn"
+            type="primary"
+            @click="onAdd">添加</Button>
+        </div>
         <SelectGoods />
       </div>
 
-      <Button @click="previous">上一步</Button>
-      <Button type="primary"
-        @click="next">下一步</Button>
     </div>
 
   </div>
@@ -61,7 +78,7 @@ import selectCommunities from './SelectCommunities.vue'
 import RentFree from './rentFree.vue'
 import SelectDiscount from './discountSelect.vue'
 import AddDiscount from './create.vue'
-import SelectGoods from './list.vue'
+import SelectGoods from './selectGoods.vue'
 
 export default {
   components: {
@@ -237,6 +254,7 @@ export default {
 <style lang="less">
 .create-discount-panel {
   .step-container {
+    padding-left: 25%;
     margin-bottom: 20px;
   }
   .from-container {
@@ -291,6 +309,19 @@ export default {
         .btn {
           margin: 0 45px;
         }
+      }
+    }
+    .select-discount-scheme,
+    .select-discount {
+      width: 500px;
+      margin: 0 auto;
+    }
+    .select-goods {
+      padding: 10px 50px;
+    }
+    .step-btn-container {
+      .step-btn {
+        margin: 0 50px;
       }
     }
   }

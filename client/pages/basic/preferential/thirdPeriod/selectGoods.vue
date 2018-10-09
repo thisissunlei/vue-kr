@@ -1,10 +1,9 @@
 <template>
     <div class="list-and-map-list">
-        <div>
+        <div class="search-from-panel">
             <Form ref="formItemInvestment"
                 :model="formItem"
                 label-position="left">
-
                 <FormItem label="楼层"
                     prop="discountType">
                     <Select v-model="formItem.floor"
@@ -272,6 +271,9 @@ export default {
 
 <style lang='less' scoped>
 .list-and-map-list {
+    .search-from-panel{
+        
+    }
   .table-list {
     margin-top: 20px;
     overflow: auto;

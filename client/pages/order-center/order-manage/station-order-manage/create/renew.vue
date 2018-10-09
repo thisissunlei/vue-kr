@@ -1226,7 +1226,7 @@ export default {
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || 0;
-                if (item.originalPrice == '') {
+                if (item.originalPrice ==='') {
                     originalPrice = true;
                 }
                 obj.seatId = item.seatId;
@@ -1238,6 +1238,7 @@ export default {
                 obj.end = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.renewForm.endDate));
                 return obj;
             })
+            
             let params = {
                 leaseEnddate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.renewForm.endDate)),
                 leaseBegindate: this.renewForm.start,

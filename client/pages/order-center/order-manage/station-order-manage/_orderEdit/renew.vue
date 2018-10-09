@@ -58,6 +58,27 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!--苏岭增加客户主管理员开始-->
+            <div class="m-customer-info" v-if="isManager">
+              <DetailStyle info="客户主管理员信息">
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{customerInfo.phone}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{customerInfo.name}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{customerInfo.email}}
+                        </LabelText>
+                  </div>
+                </Row>
+              </DetailStyle>  
+            </div>
+            <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">
                     <Col class="col">
@@ -80,9 +101,9 @@
             </DetailStyle>
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <Col class="col col-discount-header">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
                     <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                     </Col>
 
@@ -127,7 +148,8 @@
 
                         </Col>
                         <Col span="5" class="discount-table-content">
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <!-- <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input> -->
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>                      
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
 
@@ -176,7 +198,7 @@
             </div>
 
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
                 <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
             </FormItem>
         </Form>
@@ -200,6 +222,25 @@
                 <Button @click="cancelPrice">取消</Button>
             </div>
         </Modal>
+
+        <!--苏岭增加客户主管理员开始-->
+        <Modal
+            v-model="isAddManager"
+            :title="manageTitle"
+            width="665"
+        >
+            <AddManager  
+                v-if="isAddManager"
+                :customerId="renewForm.customerId"
+                @formData="getformData"
+                @submitFn="getFunction"
+            />
+            <div slot="footer">
+                    <Button type="primary" @click="addManagerSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="addEditOpen">取消</Button>
+            </div>
+        </Modal>
+    <!--苏岭增加客户主管理员结束-->
     </div>
 </template>
 
@@ -216,6 +257,8 @@ import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
+import LabelText from '~/components/LabelText';
+import AddManager from '../addAdministrator';
 
 
 
@@ -232,6 +275,20 @@ export default {
             }
         };
         return {
+            discountErrorStr:'',
+            discountReceive:-1,//订单本身已有的折扣信息
+            discountdisable:[],
+            //苏岭
+            customerInfo:{},
+            isManager:false,
+            submitManager:null,
+            isAddManager:false,
+            isAddEdit:false,
+            managerId:'',
+            oldManagerId:'',
+            manageTitle:"",
+            //苏岭结束
+
             orderId:'',
             chancedisabled:true,
             salerdisabled:true,
@@ -415,7 +472,7 @@ export default {
     },
     head() {
         return {
-            title: '编辑续租服务订单管理'
+            title: "编辑续租订单-氪空间后台管理系统"
         }
     },
     components: {
@@ -426,7 +483,9 @@ export default {
         SelectSaler,
         stationList,
         planMap,
-        SelectChance
+        SelectChance,
+        LabelText,
+        AddManager
     },
     mounted() {
         this.getDetailData();
@@ -444,6 +503,41 @@ export default {
         },
     },
     methods: {
+        //苏岭增加客户主管理员开始
+        addManagerSubmit(params){
+            this.submitManager && this.submitManager(this.managerSubmit);
+        },
+        managerSubmit(){
+            this.managerId='';
+			let Params=Object.assign({},this.formData);
+            Params.customerId=this.renewForm.customerId;
+            Params.communityId=this.renewForm.communityId;
+			var _this=this;
+			this.$http.post('store-change-manager', Params).then((res)=>{
+                this.isAddManager=false;
+                this.customerInfo=Object.assign({},this.formData);
+                this.isAddEdit=true;
+                this.managerId=res.data.managerId;
+				this.$Notice.success({
+					title:'变更管理员成功'
+				});
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        addEditOpen(){
+           this.manageTitle=this.isAddEdit?'主管理员变更':'主管理员添加';
+           this.isAddManager=!this.isAddManager;
+        },
+        getformData(form){
+			this.formData=form;
+        },
+        getFunction(form){
+			this.submitManager=form;
+        },
+        //苏岭增加客户主管理员结束
                 //获取销售机会列表
         getSalerChanceList() {
         // let chanceid=this.renewForm.saleChanceId;
@@ -622,21 +716,45 @@ export default {
                         obj.tacticsId = item.tacticsId;
                         obj.discount = item.discountNum;
                         let i = _this.youhui.filter((items, i) => {
-                            if (items.name == item.tacticsName) {
+                            if (items.value == item.tacticsType) {
+                            // if (items.name == item.tacticsName) {
                                 return true
                             }
                             return false
                         })
                         obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
+                        obj.index=index;
                         obj.tacticsType = JSON.stringify(item.tacticsType);
                         return obj;
                     })
 
                     _this.renewForm.items = data.contractTactics;
                     _this.dealSaleInfo(false)
+
+                    let discontArr=[].concat(data.contractTactics)                  
+                    if (discontArr.length>0) {//订单新建时填写了优惠信息
+                        let type1=discontArr.find(ele=>ele.tacticsType=='1')
+                        _this.disCountReceive=type1.discount
+                        if (type1) {
+                            let obj= _this.youhui.find(y=>y.value=='1')
+                            if (obj) {                                
+                                 if (obj.discount>type1.discount) {
+                                    let index=type1.index;
+                                    _this.showDiscountError();
+                                    _this.discountdisable[index]=true
+                                 }
+                            }
+                        }
+                    }
                 }, 500)
                 _this.getStationFn = +new Date();
                 _this.getSalerChanceList();
+                 //苏岭开始
+                this.isAddEdit=data.managerId?true:false;
+                this.oldManagerId=data.managerId;
+                this.isManager=(data.communityId&&data.customerId)?true:false;
+                this.customerInfo=Object.assign({},data);
+                //苏岭结束
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -709,7 +827,9 @@ export default {
             renewForm.endDate = end;
             let _this = this;
             this.disabled = true;
-
+            //苏岭开始
+            renewForm.managerId=this.managerId||this.oldManagerId;
+            //苏岭结束
             this.$http.post('save-renew', renewForm).then(r => {
         
                 window.location.href = '/order-center/order-manage/station-order-manage/' + params.orderEdit + '/renewView';
@@ -1197,7 +1317,7 @@ export default {
                 // obj.originalPrice = item.price;
                 obj.seatId = item.seatId;
                 startDate = obj.endDate;
-                if (item.originalPrice == '') {
+                if (item.originalPrice === '') {
                     originalPrice = true;
                 }
                 obj.floor = item.whereFloor || item.floor;
@@ -1332,6 +1452,13 @@ export default {
                 })
                 return;
             }
+            if (this.discountReceive!=-1) {
+                if (Number(val)>this.discountReceive) {
+                    this.showDiscountError();
+                    return;
+                }
+            }
+            this.discountErrorStr=''
             this.discount = val;
             this.dealSaleInfo(true)
         },
@@ -1467,7 +1594,14 @@ export default {
 
             })
         },
-
+        showDiscountError(){
+            this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+            this.discountErrorStr=this.discountError
+               this.disabled = true;
+               this.$Notice.error({
+                   title: '您没有此折扣权限，请让高权限的同事协助编辑'
+               });
+        }  
 
 
     }
@@ -1515,11 +1649,48 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {
         color: #ed3f14;
     }
 }
+//苏岭开始
+.create-new-order{
+     .m-customer-info{
+         position:relative;
+         .ui-labeltext{
+             width: 50%;
+             max-width: 450px;
+             padding-left:0;
+             height:auto;
+             margin-bottom:0;
+             .ui-text{
+                 margin-bottom: 10px;
+             }
+             .ui-label{
+                 font-size: 12px;
+                 color: #495060;
+                 font-weight:400;
+             }
+         }
+         .info-button{
+             position: absolute;
+             top: -8px;
+             right:414px;
+         }
+        
+     } 
+     .creat-order-form{
+        .col-discount-header{
+            .pay-error{
+                    position: absolute;
+                    top: 10px;
+                    width: 350px;
+             }
+        }
+     }
+ }
+ //苏岭结束
 </style>

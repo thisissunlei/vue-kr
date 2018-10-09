@@ -38,6 +38,11 @@
         components:{
             SectionTitle,
             Buttons
+        },  
+        head () {
+            return {
+                title: "客户账户-氪空间后台管理系统"
+            }
         },
         data () {
             return {

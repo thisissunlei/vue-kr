@@ -45,6 +45,11 @@ import BlanceInputGroup from './blanceEdit.1.vue'
 
 
 export default {
+     head() {
+        return {
+            title: '押金转租金-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,

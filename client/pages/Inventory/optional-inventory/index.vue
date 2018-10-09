@@ -50,6 +50,11 @@ import OptionalTable from './optionalTable';
             GanttChart,
             OptionalTable
         },
+        head () {
+            return {
+                title: "可租商品查询-氪空间后台管理系统"
+            }
+        },
         data () {
             return {   
                 tabsValue:'dailyList', 

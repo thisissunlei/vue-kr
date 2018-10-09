@@ -56,6 +56,27 @@
                     <!-- </Col> -->
                 </Row>
             </DetailStyle>
+            <!--苏岭增加客户主管理员开始-->
+            <div class="m-customer-info" v-if="isManager">
+              <DetailStyle info="客户主管理员信息">
+                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <Row style="margin-bottom:30px">                
+                    <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
+                    <div v-if="isAddEdit">
+                        <LabelText label="管理员手机号" :inline="true"  type="star">
+                            {{customerInfo.phone}}
+                        </LabelText>
+                        <LabelText label="管理员姓名" :inline="true" type="star">
+                            {{customerInfo.name}}
+                        </LabelText>
+                        <LabelText label="管理员电子邮箱" :inline="true" type="star">
+                            {{customerInfo.email}}
+                        </LabelText>
+                  </div>
+                </Row>
+              </DetailStyle>  
+            </div>
+            <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="租赁信息">
                 <Row style="margin-bottom:30px">
                     <Col class="col">
@@ -112,9 +133,9 @@
             </DetailStyle>
             <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <Col class="col col-discount-header">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
                     <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                     </Col>
 
@@ -159,7 +180,8 @@
                         </Col>
                         <Col span="5" class="discount-table-content">
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <!-- <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :class="'discount-input-'+index"></Input> -->
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
 
                         </Col>
@@ -209,7 +231,7 @@
 
             </div>
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
                 <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
             </FormItem>
 
@@ -235,6 +257,25 @@
             </div>
         </Modal>
 
+        <!--苏岭增加客户主管理员开始-->
+        <Modal
+            v-model="isAddManager"
+            :title="manageTitle"
+            width="665"
+        >
+            <AddManager  
+                v-if="isAddManager"
+                :customerId="formItem.customerId"
+                @formData="getformData"
+                @submitFn="getFunction"
+            />
+            <div slot="footer">
+                    <Button type="primary" @click="addManagerSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="addEditOpen">取消</Button>
+            </div>
+        </Modal>
+    <!--苏岭增加客户主管理员结束-->
+
     </div>
 </template>
 
@@ -246,12 +287,13 @@ import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectChance from '~/components/SelectSaleChance.vue';
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
+import LabelText from '~/components/LabelText';
+import AddManager from '../addAdministrator';
 
 
 
@@ -270,6 +312,20 @@ export default {
         };
 
         return {
+            discountErrorStr:'',
+            discountReceive:-1,//订单本身已有的折扣信息
+            discountdisable:[],
+            //苏岭
+            customerInfo:{},
+            isManager:false,
+            submitManager:null,
+            isAddManager:false,
+            isAddEdit:false,
+            managerId:'',
+            oldManagerId:'',
+            manageTitle:"",
+            //苏岭结束
+
             orderId:'',
             chancedisabled:true,
             salerdisabled:true,
@@ -282,7 +338,7 @@ export default {
             opportunityTipStr: '您没有可用的机会，请确认登录账户或前往CRM检查',
             OpportunityRequired: true,
             showChanceSelector: true,
-            orderitems: '',
+            orderitems: {},
             showSaleChance: true,
             showFree: false,
             openStation: false,
@@ -478,7 +534,7 @@ export default {
     },
     head() {
         return {
-            title: '编辑订单'
+            title: "编辑入驻订单-氪空间后台管理系统"
         }
     },
     components: {
@@ -489,13 +545,15 @@ export default {
         SelectSaler,
         planMap,
         SelectChance,
-        ListAndMap
+        ListAndMap,
+        LabelText,
+        AddManager
+
     },
     mounted() {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
-        
     },
     watch: {
         getFloor() {
@@ -529,6 +587,41 @@ export default {
         },
     },
     methods: {
+        //苏岭增加客户主管理员开始
+        addManagerSubmit(params){
+            this.submitManager && this.submitManager(this.managerSubmit);
+        },
+        managerSubmit(){
+            this.managerId='';
+			let Params=Object.assign({},this.formData);
+            Params.customerId=this.formItem.customerId;
+            Params.communityId=this.formItem.communityId;
+			var _this=this;
+			this.$http.post('store-change-manager', Params).then((res)=>{
+                this.isAddManager=false;
+                this.customerInfo=Object.assign({},this.formData);
+                this.isAddEdit=true;
+                this.managerId=res.data.managerId;
+				this.$Notice.success({
+					title:'变更管理员成功'
+				});
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        addEditOpen(){
+           this.manageTitle=this.isAddEdit?'主管理员变更':'主管理员添加';
+           this.isAddManager=!this.isAddManager;
+        },
+        getformData(form){
+			this.formData=form;
+        },
+        getFunction(form){
+			this.submitManager=form;
+        },
+        //苏岭增加客户主管理员结束
         //获取销售机会列表
         getSalerChanceList() {
             let chanceid=this.formItem.saleChanceId;
@@ -643,7 +736,8 @@ export default {
             let from = {
                 id: params.orderEdit
             };
-            this.orderId=from.id;
+            this.orderId=from.id; 
+
             this.$http.get('join-bill-detail', from, r => {
                 let data = r.data;
                 _this.orderType = data.orderType == 'INCREASE' ? '增租' : '入驻';
@@ -663,7 +757,8 @@ export default {
                     submitData: data.orderSeatDetailVo,
                     deleteData: []
                 };
-                _this.getSaleTactics({ communityId: data.communityId })
+                // _this.getSaleTactics({ communityId: data.communityId })
+
                 _this.formItem.customerId = JSON.stringify(data.customerId);
                 _this.customerName = data.customerName;
                 _this.formItem.communityId = JSON.stringify(data.communityId);
@@ -673,7 +768,7 @@ export default {
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
 
-                console.log(data.opportunityId,'_this.saleChanceId')
+                //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
                 _this.communityName = data.communityName;
@@ -691,9 +786,8 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
 
-                setTimeout(function () {
-
-                    data.contractTactics = data.contractTactics.map((item, index) => {
+                _this.getSaleTactics({ communityId: data.communityId }).then(()=>{
+                        data.contractTactics = data.contractTactics.map((item, index) => {
                         let obj = {};
                         obj.status = 1;
                         obj.show = true;
@@ -701,12 +795,16 @@ export default {
                         obj.startDate = item.freeStart;
                         obj.validEnd = item.freeEnd;
                         let i = _this.youhui.filter((items, i) => {
-                            if (items.name == item.tacticsName) {
+                            // if (items.name == item.tacticsName) {
+                            if (items.value == item.tacticsType) {
                                 return true
                             }
                             return false
                         })
                         obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
+                        // 创建者与当前编辑者所拥有的折扣权限不一致 会导致折扣不能回显
+                        // obj.type = item.tacticsType + '/' + index + '/' + item.tacticsName + '/' + item.id;     
+                        obj.index=index;                  
                         obj.tacticsId = item.tacticsId;
                         obj.discount = item.discountNum;
                         obj.tacticsType = JSON.stringify(item.tacticsType);
@@ -714,10 +812,36 @@ export default {
                     })
 
                     _this.formItem.items = data.contractTactics;
-                }, 700)
+                    let discontArr=[].concat(data.contractTactics)
+                   
+                    if (discontArr.length>0) {//订单新建时填写了优惠信息
+                        let type1=discontArr.find(ele=>ele.tacticsType=='1')
+                        _this.disCountReceive=type1.discount
+                        if (type1) {
+                            let obj= _this.youhui.find(y=>y.value=='1')
+                            if (obj) {                                
+                                 if (obj.discount>type1.discount) {
+                                    let index=type1.index;
+                                    _this.showDiscountError();
+                                    _this.discountdisable[index]=true
+                                 }
+                            }
+                        }
+                    }
+                    _this.getStationAmount()
+                })
+
+
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
                 _this.getSalerChanceList();
+                //苏岭开始
+                this.isAddEdit=data.managerId?true:false;
+                this.oldManagerId=data.managerId;
+                this.isManager=(data.communityId&&data.customerId)?true:false;
+                this.customerInfo=Object.assign({},data);
+                //苏岭结束
+              
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -808,6 +932,9 @@ export default {
             formItem.endDate = end;
             let _this = this;
             this.disabled = true;
+            //苏岭开始
+            formItem.managerId=this.managerId||this.oldManagerId;
+            //苏岭结束
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
                 // window.close();
@@ -896,7 +1023,8 @@ export default {
             this.$http.post('count-sale', params).then(r => {
                 _this.stationList = r.data.seats;
                 _this.formItem.rentAmount = r.data.totalrent;
-                let money = this.formItem.stationAmount - r.data.totalrent;
+                // let money = this.formItem.stationAmount - r.data.totalrent;
+                let money = r.data.discountAmount;
 
                 // let money = r.data.originalTotalrent - r.data.totalrent;
                 _this.saleAmount = Math.round(money * 100) / 100;
@@ -954,6 +1082,13 @@ export default {
                 })
                 return;
             }
+            if (this.discountReceive!=-1) {
+                if (Number(val)>this.discountReceive) {
+                    this.showDiscountError();
+                    return;
+                }
+            }
+            this.discountErrorStr=''
             this.discount = val;
             this.dealSaleInfo(true)
         },
@@ -1145,6 +1280,7 @@ export default {
             if (itemValue == 1) {
                 this.minDiscount = this.maxDiscount[label]
             }
+            debugger
             this.formItem.items = items;
             this.dealSaleInfo(false)
         },
@@ -1159,7 +1295,6 @@ export default {
             this.clearStation();
             this.validSaleChance();
             this.getFloor = +new Date()
-
         },
         clearStation: function () {
             // 清除所选的工位
@@ -1486,35 +1621,37 @@ export default {
 
             })
         },
-        getSaleTactics: function (params) {//获取优惠信息
-            let list = [];
-            let maxDiscount = {};
-            let _this = this;
-            this.$http.get('sale-tactics', params, r => {
+        getSaleTactics(params) {//获取优惠信息
+            return new Promise((resolve, reject)=>{
+                let list = [];
+                let maxDiscount = {};
+                let _this = this;
+                this.$http.get('sale-tactics', params, r => {
                 if (r.data.length) {
-                    list = r.data.map(item => {
-                        let obj = item;
-                        obj.label = item.tacticsName;
-                        obj.value = item.tacticsType + '';
-                        obj.id = item.tacticsId
-                        obj.name = item.tacticsName
-                        if (item.tacticsType == 1) {
-                            maxDiscount[item.tacticsName] = obj.discount;
-                        }
+                        list = r.data.map(item => {
+                            let obj = item;
+                            obj.label = item.tacticsName;
+                            obj.value = item.tacticsType + '';
+                            obj.id = item.tacticsId
+                            obj.name = item.tacticsName
+                            if (item.tacticsType == 1) {
+                                maxDiscount[item.tacticsName] = obj.discount;
+                            }
                         return obj;
-                    })
+                    })                   
                 }
                 _this.youhui = list;
                 _this.maxDiscount = maxDiscount;
-
-            }, e => {
-                _this.youhui = []
-
+                resolve()
+                },e=>{
+                    _this.youhui = []
+                    reject()
+                })
             })
         },
         getFreeDeposit() {
             this.$http.get('get-seat-deposit-free', '').then(r => {
-                console.log('---->', r.data)
+                // console.log('---->', r.data)
                 if (r.data) {
                     this.depositList.push({ value: '0', label: '无押金' }, )
                     this.depositList.push({ value: '1', label: '1个月' }, )
@@ -1584,9 +1721,15 @@ export default {
                 })
 
             })
-        }
-
-
+        },
+        showDiscountError(){
+            this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+            this.discountErrorStr=this.discountError 
+               this.disabled = true;
+               this.$Notice.error({
+                   title: '您没有此折扣权限，请让高权限的同事协助编辑'
+               });
+        }       
     }
 }
 </script>
@@ -1632,11 +1775,47 @@ export default {
 .title-container {
     display: inline;
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 36px;
     font-size: 12px;
     .title-remind-info {
         color: #ed3f14;
     }
 }
+//苏岭开始
+.create-new-order{
+     .m-customer-info{
+         position:relative;
+         .ui-labeltext{
+             width: 50%;
+             max-width: 450px;
+             padding-left:0;
+             height:auto;
+             margin-bottom:0;
+             .ui-text{
+                 margin-bottom: 10px;
+             }
+             .ui-label{
+                 font-size: 12px;
+                 color: #495060;
+                 font-weight:400;
+             }
+         }
+         .info-button{
+             position: absolute;
+             top: -8px;
+             right:414px;
+         }
+     }
+     .creat-order-form{
+         .col-discount-header{
+             .pay-error{
+                    position: absolute;
+                    top: 10px;
+                    width: 350px;
+             }
+         }
+     }
+ }
+ //苏岭结束
 </style>

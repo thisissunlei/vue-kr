@@ -152,9 +152,9 @@ import utils from '~/plugins/utils';
 
 
 export default {
-       head() {
+        head () {
             return {
-                title: '编辑订单'
+                title: "编辑通用订单-氪空间后台管理系统"
             }
         },
 

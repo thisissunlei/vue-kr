@@ -85,7 +85,7 @@ export default {
         },
         head () {
             return {
-                title: "交易流水"
+                title: "交易流水-氪空间后台管理系统"
             }
         },
         data () {
@@ -180,7 +180,7 @@ export default {
                         key: 'ctime',
                         align:'center',
                         render(h, obj){
-                            let time = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time = obj.row.ctime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime)):'';
                             return h('span',{},time);
                         }
                     },

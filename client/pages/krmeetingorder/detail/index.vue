@@ -103,7 +103,7 @@ export default {
    name:'krmeetingdetail',
     head () {
             return {
-                title: "KM会议室订单详情"
+                title: "KM会议室订单详情-氪空间后台管理系统"
             }
     },
    data(){
@@ -134,6 +134,36 @@ export default {
                         title: '使用的优惠策略',
                         key: 'discountDesc',
                         align: 'center',
+                    },
+                    {
+                        title: '团队卡抵扣',
+                        key: 'teamCardCost',
+                        align: 'center',
+                        render:(h,params)=>{
+                            var p;
+                            if(params.row.teamCardCost == ''){
+                                p = h('div', [
+                                    h('span', {
+                                        style: {
+                                            // color: 'red',
+                                            // fontSize : "20px",
+                                        },
+                                    }, '0'),
+                                    
+                                ]);
+                            }else{
+                                p = h('div', [
+                                    h('span', {
+                                        style: {
+                                            // color: 'red',
+                                            // fontSize : "20px",
+                                        },
+                                    }, '-'+params.row.teamCardCost),
+                                    
+                                ]);
+                            }
+                            return p
+                        }
                     },
                     {
                         title: '订单金额（￥）',
@@ -189,6 +219,7 @@ export default {
                     cost : resData.cost,
                     discountDesc : resData.discountDesc || "/",
                     totalAmount : resData.totalAmount,
+                    teamCardCost:resData.teamCardCost 
                 }]
 
                 this.detail = res.data;

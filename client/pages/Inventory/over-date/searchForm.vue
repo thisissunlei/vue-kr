@@ -335,7 +335,7 @@ export default {
     },
     head() {
         return {
-            title: '即将到期列表'
+            title: '即将到期-氪空间后台管理系统'
         }
     },
     methods:{

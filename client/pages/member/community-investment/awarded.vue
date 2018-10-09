@@ -6,7 +6,7 @@
             placeholder="请选择角色"
             clearable
         >
-            <Option  v-for="item in roleList" :value="''+item.id"  :key="item.id" >{{ item.name }}</Option>
+            <Option  v-for="item in dataRole" :value="''+item.id"  :key="item.id" >{{ item.name }}</Option>
         </Select>
         <div slot="footer" style="margin: 30px 0;text-align: center;">
                 <Button  type="primary" @click="submitRole">确认</Button>
@@ -18,6 +18,12 @@
 <script>
 
 export default {
+    props:{
+        dataRole:{
+            type:Array,
+            default:()=>[]
+        }
+    },
     data() {
         return{
            formItem:{
@@ -26,19 +32,7 @@ export default {
            roleList:[] 
         }
     },
-    mounted(){
-        this.getDataList();
-    },
     methods:{
-       getDataList(){
-            this.$http.get('get-business-role').then((res)=>{
-                this.roleList=res.data;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-       },
        submitRole(){
            this.$emit('submit',this.formItem);
        },

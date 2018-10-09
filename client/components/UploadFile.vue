@@ -34,7 +34,7 @@
 			<div 
 				style="color: rgb(43, 133, 228);padding: 2px 7px;cursor: pointer;display:inlie-block;" 
 				@click = "switchList" 
-			
+
 			>上传附件</div>
 			
 			<div class = "list-box" v-show = "isOpenList">
@@ -233,7 +233,7 @@ export default{
 			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
-			fileList:this.defaultFileList?this.defaultFileList:[],
+			fileList:[],
 			serverUrl:'',
 			nowFile:{},
 			fileDetail:{},
@@ -245,22 +245,30 @@ export default{
 	 watch: {
 		defaultFileList: {
 			deep: true,
-			handler(nextProps) {
+			handler(nextProps){
 				this.fileList=nextProps;
-				if(this.maxLen){
+				this.imglen();
+			}
+		}
+	},
+	mounted(){
+		this.fileList=this.defaultFileList;
+		this.imglen();
+	},
+	methods:{
+		clearFiles(){
+			this.fileList=[];
+			this.imglen();
+		},
+		imglen(){
+			if(this.maxLen){
 					if(this.fileList.length<this.maxLen){
 						this.upIconShow =true;
 					}else{
 						this.upIconShow =false;
 					}
-				}
 			}
-		}
-	},
-	mounted(){
-		
-	},
-	methods:{
+		},
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
 			this.eyeIndex = index;
@@ -276,13 +284,7 @@ export default{
 			var list = [].concat(this.fileList);
 			list.splice(index, 1);
 			this.fileList = [].concat(list);
-			if(this.maxLen){
-				if(this.fileList.length<this.maxLen){
-					this.upIconShow =true;
-				}else{
-					this.upIconShow =false;
-				}
-			}
+			this.imglen();
 		
 			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.fileList);
@@ -457,6 +459,8 @@ export default{
 			if(file){
 				this.getUpFileUrl(file);
 			}
+			
+			this.$emit('clearFiles',this.clearFiles);  
 		},
 		//上传成功
 		handleSuccess(params,response,file){
@@ -474,10 +478,6 @@ export default{
 		handleError(err, response, file){
 			this.onError(err, response, file)
 		},
-		clearFiles() {
-            this.fileList = [];
-        }
-		
 		
 	}
 }

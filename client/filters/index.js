@@ -1,6 +1,6 @@
 import dateUtils from 'vue-dateutils';
 import thousand from './thousand.js'
-
+import amountInWords from './amountInWords.js'
 function name(params) {
     
 }
@@ -17,5 +17,6 @@ function dateFormat(time,fmt) {
 export default {
     name,
     dateFormat,
-    thousand
+    thousand,
+    amountInWords
 };

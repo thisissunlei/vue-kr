@@ -118,11 +118,6 @@ export default {
         props:{
             mask:String
         },
-        head () {
-            return {
-                title: "回款管理"
-            }
-        },
         data () {
             return {
                 form:'form',
@@ -170,7 +165,7 @@ export default {
                         align:'center',
                         width:100,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
+                            let time=obj.row.occurDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate)):'';
                             return h('span',{},time);
                             // return time;
                         }

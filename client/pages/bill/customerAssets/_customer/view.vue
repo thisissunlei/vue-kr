@@ -2,10 +2,15 @@
 
 <template>	
     <div class="customer-assets-detail">
-		 <SectionTitle title="客户账户详情"  />
+		 <!-- <SectionTitle title="客户账户详情"/> -->
+		 <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
+		 <div class="customer-detail" v-if="selectedTab=='account'">
+			 <div class="detail-font">客户详情
+			 </div><div class="detail-line"><div></div></div>
+		 </div>
 
 
-		<div class="content">
+		<div class="content" v-if="selectedTab!='account'">
 			<Row>  
                 <Col class="col circle" >
 					<div class="title">客户ID：</div>
@@ -22,12 +27,23 @@
                 </Col>
             </Row>
 		</div>
-		<div class="tab-list">
+		<div class="tab-list" v-if="selectedTab!='account'">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
 		</div>
+		<!-- 苏岭开始 -->
+		<div class="new-tab-wrap" v-if="selectedTab=='account'">
+			<div class="new-tab-list">
+				<span class="tab-span"  v-for="(item, index) in newFirstTab"
+				:key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
+			</div>
+			<div class="new-tab-content">
+				<AccountManagement />
+			</div>
+		</div>
+		<!-- 苏岭结束 -->
 		<div class="tab-content">
-            	<Assets v-if="selectedTab=='account'"/>
+			    <!-- <Assets v-if="selectedTab=='account'"/> -->
             	<Basic v-if="selectedTab=='basic'"/>
             	<div v-if="selectedTab=='menber'" class="tab-texts">
             		<img src="./images/member.svg" alt="">
@@ -61,6 +77,7 @@
 	import Basic from './basic/index.vue'; 
 	import JoinInfo from './joinInfo.vue'; 
 	import OrderManagement from './orderManagement'
+	import AccountManagement from './accountManagement'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -71,8 +88,14 @@
 			Waiting,
 			Basic,
 			JoinInfo,
-			OrderManagement
-		},
+			OrderManagement,
+			AccountManagement
+		}, 
+		head () {
+        	return {
+        	    title: "客户账户详情-氪空间后台管理系统"
+        	}
+ 		},
 		data (){
 
 			return{
@@ -102,6 +125,32 @@
 					name:'更多',
 					code:'more'
 				},],
+				newFirstTab:[
+					{
+					name:'基本资料',
+					code:'basic'
+				},{
+					name:'订单管理',
+					code:'order'
+				},{
+					name:'账单管理',
+					code:'bill'
+				},{
+					name:'合同管理',
+					code:'more'
+				},{
+					name:'入驻信息',
+					code:'join'
+				},{
+					name:'账户管理',
+					code:'account'
+				},{
+					name:'分期对账',
+					code:'stagingBill'
+				},{
+					name:'会员资料',
+					code:'menber'
+				}],
 				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
@@ -171,6 +220,7 @@
 </script>
 <style lang="less" scoped>
     .customer-assets-detail{
+		//overflow: hidden;
 		.content{
 			border-bottom: 1px solid #E8E9E9;
 			margin-bottom: 30px;
@@ -178,6 +228,72 @@
 			padding-top:20px;
 			padding-bottom:20px;
 		}
+		/*苏岭开始*/
+		.customer-detail{
+			height: 50px;
+			font-size: 14px;
+			color: #666;
+			line-height: 50px;
+			padding-left: 25px;
+			position: relative;;
+			.detail-font{
+				width:108px;
+				display:inline-block;
+				text-align:center;
+				background:#ccc;
+			}
+			.detail-line{
+				position: absolute;
+				left: 133px;
+				right: 10px;
+				top:0;
+				div{
+					border-bottom: 1px solid #e8e9e9;
+					display:inline-block;
+					width:100%;
+					vertical-align: bottom;
+				}
+			}
+		}
+		.new-tab-wrap{
+			padding-left: 25px;
+            display: flex;
+			.new-tab-list{
+				width: 110px;
+				display: inline-block;
+				.tab-span{
+					vertical-align: top;
+					display: block;
+					width:108px;
+					height: 36px;
+					line-height: 36px;
+					text-align: center;
+					background: #F7F7F7;
+					border: 1px solid #DFDFDF;
+					border-bottom: none;
+					color:#666;
+					font-size: 14px;
+					cursor: pointer;
+					transition:all .5;
+					
+				}
+				.tab-span:last-child{
+					border-bottom:1px solid #DFDFDF
+				}
+				.tab-active{
+					background-color: #fff;
+					border-right:none;
+					color:#4A90E2;
+					transition:all .5;
+				}
+			}
+			.new-tab-content{
+				vertical-align: top;
+				flex: 1;
+    			width: 0;
+			}
+		}
+		/*苏岭结束*/
 		.tab-list{
 			margin-left: 25px;
 			height: 25px;

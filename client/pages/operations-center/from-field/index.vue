@@ -1,11 +1,11 @@
 <template>
     <div class="from-field-list">
         <SectionTitle title = "撤场记录管理"/>
-        <div style="padding:20px;padding-right:0;">
-            <Buttons label="新建撤场" type="primary" @click="showNewPage" class='join-btn' checkAction='csr_withdrawal_save'/>
+        <div style="padding:20px;padding-right:0;padding-bottom: 0;">
+            <div style="height:40px;display:inline-block;"><Buttons label="新建撤场" type="primary" @click="showNewPage" class='join-btn' checkAction='csr_withdrawal_save'/></div>
 
-           
-            <div style="float:right;">
+            
+            <div style="float:right;margin-top:-10px;">
                 <div style='display:inline-block;margin:10px 20px;'>
                     <span style='padding-right:10px'>客户名称</span>
                     <i-input 
@@ -96,9 +96,8 @@
         },
         head () {
             return {
-                title: "合同列表"
-            }
-           
+                title: '撤场-氪空间后台管理系统'
+            }          
         },
         data () {
             return {
@@ -226,7 +225,7 @@
             },
 
             jumpView(params){
-                window.open(`./from-field/${params.row.id}/view`,'_blank')  
+                window.open(`/operations-center/from-field/${params.row.id}/view`,'_blank')  
             },
 
             getListData(params){

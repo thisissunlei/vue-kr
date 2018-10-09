@@ -369,8 +369,13 @@ export default {
                  },
         props:{
                 mask:String
-            },
-          data() {
+            },  
+        head () {
+            return {
+                title: "工位商品-氪空间后台管理系统"
+            }
+        },
+        data() {
                 return{
             pageArray:[100,200,500],
             editOpen:false,

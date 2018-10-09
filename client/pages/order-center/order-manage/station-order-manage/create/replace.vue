@@ -1366,7 +1366,7 @@
             },
             setDiscountNum(){
                 this.discountNum = this.discountCon;
-                if(!this.discountNum){
+                if(!this.discountNum||(''+this.discountNum).trim().length===0){
                     this.$Notice.error({
                         title:'请先选择折扣'
                     })

@@ -185,12 +185,17 @@ export default {
        submitSearchData(data){
 
            let _this =this;
-           var timeObj = {
-               sdate :(data.time && data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
-               edate :(data.time && data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
-               lastId :''
+           var otherObj = {
+                sdate :(data.time && data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
+                edate :(data.time && data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
+                lastId :'',
+                deviceId : data.deviceId,
+                communityId : data.communityId,
+                memberName : data.memberName,
+                phone : data.phone
            }
-           var newObj = Object.assign({},_this.searchData,data,timeObj);
+           var newObj = Object.assign({},_this.searchData,otherObj);
+
            this.searchData = newObj;
            this.getListData();
 

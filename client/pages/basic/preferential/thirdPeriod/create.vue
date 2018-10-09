@@ -1,13 +1,8 @@
 <template>
     <div class='discount-set-from-panel' id='discount-set-from-panel'>
-        <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent" class='discount-set-from'>
-            <FormItem label="适用社区" prop="communityId">
-                <selectCommunities v-model="formItem.communityId"></selectCommunities>
-            </FormItem>
-            <FormItem label="优惠类型" prop="discountType">
-                <Select v-model="formItem.discountType" @on-change='handleSelectDiscountTypeChange'>
-                    <Option v-for="(option, index) in discountTypeList" :value="option.value" :key="option.value">{{option.desc}}</Option>
-                </Select>
+        
+            <FormItem label="折扣类型" prop="discountType">
+                <span>折扣</span>
             </FormItem>
             <FormItem label="优惠期间" class="bill-search" prop="time">
                 <DatePicker v-model="formItem.time.startDate" type="date" placeholder="开始日期" style="width: 140px" />
@@ -17,10 +12,8 @@
             <FormItem label="优惠方案" prop="scheme" v-show="showRent">
                 <span style='padding:0 13px'>满</span>
                 <InputNumber v-model="formItem.scheme.target" :max="36" :min="1" placeholder="1-36" style="width: 120px" />
-                <!-- <Input v-model="formItem.scheme.target" :number='true' placeholder="1-36" style="width: 120px" /> -->
                 <span style='padding:0 14px'>赠</span>
                 <InputNumber v-model="formItem.scheme.present" :max="12" :min="1" placeholder="1-12" style="width: 120px" />
-                <!-- <Input v-model="formItem.scheme.present" :number='true' placeholder="1-12" style="width: 120px" /> -->
             </FormItem>
 
             <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
@@ -38,12 +31,9 @@
                 <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/100":0+"/100"}}</div>
             </FormItem>
             <FormItem class="form-item-btn">
-                <Button type="primary" class="btn" @click="handleSubmit(formItem)">确定</Button>
-                <Button class="btn" @click="handleCancle(false)">取消</Button>
+                <!-- <Button type="primary" class="btn" @click="handleSubmit(formItem)">确定</Button> -->
+                <!-- <Button class="btn" @click="handleCancle(false)">取消</Button> -->
             </FormItem>
-
-        </Form>
-
     </div>
 </template>
 <script>

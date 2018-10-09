@@ -29,13 +29,12 @@
             </div>
         </div>
 
-        <!-- 新建 -->
-        <Modal v-model="openCreate" id='create-discount-modal' title="添加优惠" ok-text="确定" cancel-text="取消" width="500" :styles="{top: '20px'}">
+        <Modal v-model="openCreate" id='create-discount-modal' title="添加优惠" ok-text="确定" cancel-text="取消" width="90%" :styles="{top: '20px'}">
             <Create ref="fromFieldNewPage" v-if="openCreate" @closeAddModal="handleAddModal" />
             <div slot="footer">
             </div>
         </Modal>
-        <!-- 停用 -->
+        
         <Modal v-model="openStop" title="确定要停用?" ok-text="确定" cancel-text="取消" width="300" :styles="{top: '20px'}">
             <div style='font-size:14px'>停用将让此优惠立即失效，不可撤销。</div>
             <div slot="footer">
@@ -52,15 +51,13 @@
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import Create from './new/create.vue';
-import CreateSale from './new/createSale.vue';
+import Create from './thirdPeriod';
 
 
 export default {
     name: 'DiscountList',
     components: {
         SectionTitle,
-        CreateSale,
         Create
     },
     head () {

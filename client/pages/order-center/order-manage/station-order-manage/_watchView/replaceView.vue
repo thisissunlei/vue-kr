@@ -1750,11 +1750,11 @@
             },
             checkDiscount(){
                 let value = this.discountCon;
-                if(isNaN(value)){
+                 if(isNaN(value)|| value.trim().length===0 ){
                     this.$Notice.error({
                         title:'折扣必须为数字'
                     })
-                    this.discountCon = this.discount.minDiscount;
+                    // this.discountCon = this.discount.minDiscount;
                     return;
                 }
                 var pattern =/^[1-9]+(.[0-9]{1})?$/;
@@ -1766,7 +1766,7 @@
                 }
                 if(value<this.discount.minDiscount){
                     this.$Notice.error({
-                        title:'单价不得小于'+this.discount.minDiscount
+                        title:'折扣不得小于'+this.discount.minDiscount
                     })
                     this.discountCon = this.discount.minDiscount;
                     return;

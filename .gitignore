@@ -10,8 +10,8 @@ npm-debug.log.*
 *.DS_Store
 node_modules
 yarn.lock
-npm-debug.log
 package.json
+npm-debug.log
 .idea/inspectionProfiles/Project_Default.xml
 .idea/kr-vue.iml
 .idea/misc.xml

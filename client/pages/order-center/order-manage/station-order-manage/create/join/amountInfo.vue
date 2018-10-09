@@ -181,21 +181,6 @@ export default {
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.originalAmount))
                     }
-                },
-
-                {
-                    title: '租赁期限',
-                    key: 'address',
-                    render: (h, params) => {
-                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD", new Date(this.startDate)) + '至' + dateUtils.dateToStr("YYYY-MM-DD", new Date(this.endDate)))
-                    }
-                },
-                {
-                    title: '小计',
-                    key: 'originalAmount',
-                    render: function (h, params) {
-                        return utils.thousand(params.row.originalAmount)
-                    }
                 }
             ],
         }

@@ -67,10 +67,9 @@
             port = ":" + port;
         }
         if(type && type == 'admin'){
-            if(nowType == 'admin'){
-                return router;
-            }
+           
             alias = '/new/#'
+            return '/new/#'+router;
         }
         if (type && type == "vue") {
             if(nowType == 'vue'){
@@ -79,10 +78,10 @@
             alias = '';
         }
         if(type && type == 'project'){
-            if(nowType == 'project'){
-                return router;
-            }
+           
+            
             alias = '/project/#'
+            return '/project/#'+router;
         }
         if(type && type == "member"){
             alias = '/';
@@ -104,7 +103,7 @@
     function setDefaultHeader(value) {
         setTimeout(function(){
             var j_li = document.getElementsByName(value)[0];
-            console.log(j_li,"kkkkk")
+            // console.log(j_li,"kkkkk")
             if(j_li){
                 j_li.setAttribute("class", "active");
             }else{
@@ -206,7 +205,7 @@
         }
     }
     function goLocation(){
-        console.log("--=======")
+        // console.log("--=======")
     }
     //头部和侧栏渲染
     function renderHanderAndSidebar(){
@@ -277,7 +276,7 @@
 
         }
         if(!isHanderListen && handerDom){
-            console.log("=======+++")
+            // console.log("=======+++")
             handerDom.onclick = function(e){
                 console.log(e.target.tagName.toUpperCase())
                 if(e.target.tagName.toUpperCase() == 'SPAN'){

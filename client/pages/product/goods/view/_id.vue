@@ -64,113 +64,143 @@
                 <LabelText label="散座营业时段：">
                     {{goodsInfo.kmStartTime}}-{{goodsInfo.kmEndTime}}
                 </LabelText>
-                <!-- <LabelText label="不可预订日期策略：">
-                    {{goodsInfo.kmMeeting}}
-                </LabelText> -->
+                <LabelText label="不可预订日期策略：">
+                    {{goodsInfo.enableDateStrategy=='NONE'?'无':'自定义时间'}}
+                </LabelText>
+                <div>
+                     <KrDatePicker v-if="showDate" v-model="goodsInfo.unuseDates" :disabled="true"/>
+                </div>
             </DetailStyle>
         </div>
     </div>
 </template>
 
 <script>
-import DetailStyle from '~/components/DetailStyle';
-import LabelText from '~/components/LabelText';
-import SectionTitle from '~/components/SectionTitle';
-import UploadFile from '~/components/UploadFile';
-import dateUtils from 'vue-dateutils';
+import DetailStyle from "~/components/DetailStyle";
+import LabelText from "~/components/LabelText";
+import SectionTitle from "~/components/SectionTitle";
+import UploadFile from "~/components/UploadFile";
+import dateUtils from "vue-dateutils";
+import KrDatePicker from "~/components/KrDatePicker";
 export default {
-    components:{
-        DetailStyle,
-		LabelText,
-        SectionTitle,
-        UploadFile
-    },
-    head(){
-        return{
-            title:"查看社区商品"
+  components: {
+    DetailStyle,
+    LabelText,
+    SectionTitle,
+    UploadFile,
+    KrDatePicker
+  },
+  head() {
+    return {
+      title: "查看社区商品"
+    };
+  },
+  data() {
+    return {
+      showDate: false,
+      statusList: [
+        {
+          label: "周末及节假日",
+          value: "true"
+        },
+        {
+          label: "无",
+          value: "false"
         }
+      ],
+      goodsInfo: {},
+      date: []
+    };
+  },
+  mounted: function() {
+    GLOBALSIDESWITCH("false");
+    this.getGoodsInfo();
+   
+  },
+  methods: {
+    getGoodsInfo() {
+      let { params } = this.$route;
+      let form = {
+        communityId: params.id
+      };
+      let appPublish = {
+        "1": "已上架",
+        "0": "未上架"
+      };
+      let kmPublished = {
+        "2": "已上架",
+        "0": "未上架",
+        "1": "待上架"
+      };
+      let communityStatus = {
+        "1": "已开业",
+        "0": "未开业"
+      };
+      this.$http
+        .get("get-krmting-mobile-community-detail", form)
+        .then(res => {
+          let data = Object.assign({}, res.data);
+          data.appPublished = appPublish[res.data.appPublished];
+          data.kmPublished = kmPublished[res.data.kmPublished];
+          data.communityStatus = communityStatus[res.data.communityStatus];
+          this.goodsInfo = data;
+          if (res.data.enableDateStrategy == "WEEK") {
+            this.getYearWeekend();
+          }
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
     },
-    data(){
-        return{
-            statusList:[
-                {
-                 label:'周末及节假日',
-                 value:'true'   
-                },
-                {
-                 label:'无',
-                 value:'false'   
-                },
-            ],
-            goodsInfo:{},
-        }
-    },
-    mounted:function(){
-        GLOBALSIDESWITCH("false")
-        this.getGoodsInfo();
-    },
-    methods:{
-        getGoodsInfo(){
-            let {params}=this.$route;
-            let form={
-                communityId: params.id
-             }
-            let appPublish={
-                '1':'已上架',
-                '0':'未上架'
-            }
-            let kmPublished={
-                '2':'已上架',
-                '0':'未上架',
-                '1':'待上架'
-            }
-            let communityStatus={
-                '1':'已开业',
-                '0':'未开业'
-            }
-            this.$http.get('get-krmting-mobile-community-detail',form).then((res)=>{
-                let data=Object.assign({},res.data);
-                data.appPublished=appPublish[res.data.appPublished];
-                data.kmPublished=kmPublished[res.data.kmPublished];
-                data.communityStatus=communityStatus[res.data.communityStatus];
-                this.goodsInfo = data;
-                
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        }
+    getYearWeekend() {
+      let params = {
+        strategy: "WEEK",
+        cmtId: this.$route.params.id
+      };
+      this.$http
+        .get("get-krmting-mobile-get-workday", params)
+        .then(res => {
+          this.goodsInfo.unuseDates = [].concat(res.data.unuseDates);
+          this.showDate = true;
+        })
+        .catch(err => {
+          this.$Notice.error({
+            title: err.message
+          });
+        });
     }
-}
+  }
+};
 </script>
 
 <style lang="less">
-    .g-goods-detail{
-		.m-goods-content{
-            padding:30px 24px;
-            .input{
-                width: 300px;
-            }
-        }
-         .u-img-content{
-            width:100%;
-            display: inline-block;
-             margin-bottom:24px;
-            .u-img-title{
-                color: #333333;
-                margin-left:14px;
-                display: inline-block;
-                font-weight: bold;
-            }
-            .u-img-url{
-                max-width: 132px;
-                max-width: 132px;
-                float: left;
-                margin-right:20px;
-            }
-        }
-	}
+.g-goods-detail {
+  .m-goods-content {
+    padding: 30px 24px;
+    .input {
+      width: 300px;
+    }
+  }
+  .u-img-content {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 24px;
+    .u-img-title {
+      color: #333333;
+      margin-left: 14px;
+      display: inline-block;
+      font-weight: bold;
+    }
+    .u-img-url {
+      max-width: 132px;
+      max-width: 132px;
+      float: left;
+      margin-right: 20px;
+    }
+  }
+}
 </style>
 
 

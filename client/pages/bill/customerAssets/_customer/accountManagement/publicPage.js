@@ -29,6 +29,12 @@ function initListData(type){
             type:'getDetail,refundDetail,depositDetail,consumptionDetail,balanceDetail'
         },
         {
+            title: '记录类型',
+            key: 'recordTypeName',
+            align:'center',
+            type:'depositDetail'
+        },
+        {
             title: '费用类型',
             key: 'feeTypeName',
             align:'center',
@@ -37,6 +43,7 @@ function initListData(type){
         {
             title: '金额',
             key: 'amount',
+            width:100,
             align:'center',
             className:'statusClass',
             type:'depositDetail,consumptionDetail,balanceDetail',
@@ -83,13 +90,10 @@ function initListData(type){
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail',
             render:(h,params)=>{
-                let colData = params.row;
-                let typeName=colData.operateTypeName;
-                let isColor=typeName=='打款'||typeName=='退款'||typeName=='冻结押金';
                 return h('div',{
                     style: {
-                        color:isColor?'':'#2b85e4',
-                        cursor:isColor?'auto':'pointer'
+                        color:'#2b85e4',
+                        cursor:'pointer'
                     },
                     on:{
                         click:()=>{
@@ -100,8 +104,8 @@ function initListData(type){
             }
         },
         {
-            title: type=='balanceDetail'?'操作':'相关操作',
-            key: 'operateTypeName',
+            title: '来源类型',
+            key: 'sourceDetailTypeName',
             align:'center',
             type:'depositDetail,consumptionDetail,balanceDetail'
         },

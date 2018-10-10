@@ -166,7 +166,7 @@ export default {
     //    this.handleWindowScroll();
         var dom = document.body;
         var domHeight = dom.offsetHeight;
-        var tableHeight =domHeight-50-95-60-80; 
+        var tableHeight =domHeight-50-95-60-100; 
         this.tableHeight = tableHeight;
         console.log("tableHeight",tableHeight)
    },

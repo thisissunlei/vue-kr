@@ -1226,7 +1226,7 @@ export default {
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || 0;
-                if (item.originalPrice == '') {
+                if (item.originalPrice === '') {
                     originalPrice = true;
                 }
                 obj.seatId = item.seatId;

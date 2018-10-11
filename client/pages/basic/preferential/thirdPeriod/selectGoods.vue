@@ -1,100 +1,36 @@
 <template>
     <div class="list-and-map-list">
         <div class="search-from-panel">
-            <Form ref="formItemInvestment"
-                :model="formItem"
-                :label-width="66"
-                label-position="right">
-                <div style="padding: 10px 10px 0 20px;background:#fff">
-
-                    <FormItem label="楼层"
-                        class="search-from-item"
-                        prop="discountType">
-                        <Select v-model="formItem.floor"
-                            style="width:150px;margin-right:15px;"
-                            placeholder="全部楼层"
-                            clearable>
-                            <Option v-for="item in floorList"
-                                :value="item.value"
-                                :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem label="商品类型"
-                        class="search-from-item"
-                        prop="discountType">
-                        <Select v-model="formItem.goodsType"
-                            placeholder="请输入商品类型"
-                            style="width:150px;margin-right:15px;"
-                            clearable>
-                            <Option v-for="item in productList"
-                                :value="item.value"
-                                :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem label="当前状态"
-                        class="search-from-item">
-                        <Select v-model="formItem.investmentStatus"
-                            placeholder="全部(可多选)"
-                            style="width:150px;margin-right:15px;"
-                            multiple>
-                            <Option v-for="item in goodsStatusList"
-                                :value="item.value"
-                                :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                </div>
-                <div style="padding: 10px 10px 0 20px;background:#fff">
-                    <FormItem label="工位数量"
-                        class="search-from-item">
-                        <Input style='width:60px' />&nbsp;至&nbsp;
-                        <Input style='width:60px' />
-                    </FormItem>
-                    <FormItem label="方位"
-                        class="search-from-item">
-                        <Select v-model="formItem.locationType"
-                            placeholder="请输入方位"
-                            style="width:150px;margin-right:15px;"
-                            clearable>
-                            <Option v-for="item in locationList"
-                                :value="item.value"
-                                :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem label="有无套间"
-                        class="search-from-item">
-                        <Select v-model="formItem.suiteType"
-                            placeholder="请输入套间"
-                            style="width:150px;margin-right:15px;"
-                            clearable>
-                            <Option v-for="item in suiteTypeList"
-                                :value="item.value"
-                                :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
-                    <Button type="primary"
-                        @click="searchClick">搜索</Button>
-                </div>
-            </Form>
+            <SearchForm :communityId="communityId"
+                @searchClick="searchClick"
+                @clearClick="clearClick"
+                @initData="initData"
+                @getFloor="getFloor"
+                @cityFloor="cityFloor" />
         </div>
         <div class="table-list"
             :style="{height:(page.height-300)+'px'}">
-            <Table stripe
+            <Table ref="selectionGoodsLibrary"
+                border
+                :loading="loading"
+                stripe
                 :columns="attractColumns"
                 :data="attractData"
-                border
                 @on-selection-change="tableChange">
-                <!-- <div slot="loading">:loading="loading"
-                    <Loading />
-                </div> -->
             </Table>
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Loading from '~/components/Loading';
 import dateUtils from 'vue-dateutils';
+import SearchForm from './search-form.vue';
 export default {
+    components: {
+        SearchForm
+    },
     props: {
         floors: {
             type: Array,
@@ -111,15 +47,24 @@ export default {
         stationData: {
             type: Array,
             default: () => []
+        },
+        communityId: {
+            type: String,
+            default: ''
+        },
+        addFlag: {
+            type: Number,
+            default: -1
         }
-    },
-    components: {
-        Loading
     },
     data() {
         return {
             floorList: [],
             floorStr: '',
+            tabForms: {
+                page: 1,
+                pageSize: 100
+            },
             formItem: {
                 page: 1,
                 pageSize: 100,
@@ -136,56 +81,126 @@ export default {
                 },
                 {
                     title: '商品名称',
-                    key: 'cellName',
-                    align: 'center'
+                    key: 'name',
+                    align: 'center',
+                    render: (h, params) => {
+                        var ile = params.row.name;
+                        var nes = params.row.duplicateNo;
+                        var btnRender = [];
+                        if (params.row.duplicateNo == 0) {
+                            btnRender = [
+                                h('p', {
+                                }, ile),
+                            ];
+                        } else {
+                            btnRender.push(
+                                h('p', {
+
+                                }, ile),
+                                h('span', {
+                                    style: {
+                                        color: 'black'
+                                    }
+                                }, '('),
+                                h('span', {
+                                    style: {
+                                        color: '#FF6868'
+                                    }
+                                }, '有重复 '),
+                                h('span', {
+                                    style: {
+                                        color: 'black'
+                                    }
+                                }, ' 编号' + nes + ')'),
+                            )
+                        }
+                        return h('div', {
+                            style: {
+                                cursor: 'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.goDetail(params.row)
+                                }
+                            }
+                        }, btnRender)
+
+                    }
                 },
                 {
                     title: '商品类型',
                     key: 'goodsTypeName',
-                    align: 'center'
+                    align: 'center',
+                    width: 120,
                 },
                 {
                     title: '工位数量',
                     key: 'capacity',
-                    align: 'center'
-                },
-                {
-                    title: '方位',
-                    key: 'capacity',
-                    align: 'center'
-                },
-                {
-                    title: '有无套间',
-                    key: 'capacity',
-                    align: 'center'
-                },
-                {
-                    title: '面积',
-                    key: 'capacity',
-                    align: 'center'
-                },
-                {
-                    title: '商品定价',
-                    key: 'seatPrice',
-                    width: 120,
-                    align: 'right'
-                },
-                {
-                    title: '当前状态',
-                    key: 'availableDetail',
                     align: 'center',
-                    render(tag, params) {
-                        let end = params.row.availableDetail.endDate ? dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.availableDetail.endDate)) : '不限';
-                        let ren = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.availableDetail.startDate)) + '至' + end;
-                        return tag('span', {}, ren);
+                    width: 90,
+                },
+                {
+                    title: '商品属性',
+                    key: 'locationTypeName',
+                    align: 'center',
+                    width: 120,
+                    render(h, params) {
+                        var bacsk = params.row.suiteTypeName ? params.row.suiteTypeName : '';
+                        var devel = params.row.locationTypeName ? params.row.locationTypeName : '';
+                        let des = params.row.descr ? params.row.descr : '';
+                        return h('div', [
+                            h('span', devel + ' ' + bacsk),
+                            h('div', des),
+                        ])
                     }
                 },
                 {
-                    title: '备注',
-                    key: 'seatPrice',
-                    width: 120,
-                    align: 'center'
+                    title: '面积',
+                    key: 'area',
+                    align: 'center',
+                    width: 90,
                 },
+                {
+                    title: '商品定价',
+                    key: 'quotedPrice',
+                    width: 90,
+                    align: 'right',
+                },
+                {
+                    title: '当前状态',
+                    key: 'goodsStatusName',
+                    align: 'center',
+                    width: 90,
+                    render: (tag, params) => {
+                        var statusName = params.row.goodsStatusName ? params.row.goodsStatusName : '-';
+                        var status = params.row.goodsStatus;
+                        var colorClass = '';
+                        if (status == 'DISABLE' || status == 'OFF') {
+                            colorClass = 'redClass'
+                        } else {
+                            colorClass = ''
+                        }
+                        return tag('span', {
+                            attrs: {
+                                class: colorClass
+                            },
+                            style: {
+                                cursor: 'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.openSingleStatus(params.row)
+                                }
+                            }
+                        }, statusName);
+                    }
+                },
+
+                {
+                    title: '备注',
+                    key: 'descr',
+                    align: 'center'
+                }
             ],
             attractData: [],
             loading: false,
@@ -219,81 +234,112 @@ export default {
             page: {}
         }
     },
+    computed: {
+        ...mapGetters([
+            'formDiscount'
+        ])
+    },
+    watch: {
+        tabForms: function (val, old) {
+            this.getListData(this.tabForms);
+            this.floor = this.tabForms.floor;
+        },
+        addFlag() {
+            this.doAddDiscount(this.formDiscount)
+        }
+    },
     mounted() {
-        this.getPageWidthOrHeight();
-        this.initFormat();
-        let params = Object.assign({}, this.params, this.formItem);
-        this.getListData(params);
-        this.$watch('formItem', this.itemChangeHandler, { deep: true })
+
+
     },
     methods: {
-        //获取屏幕的高度
-        getPageWidthOrHeight() {
-            var page = {};
-            page.width = window.innerWidth;
-            page.height = window.innerHeight;
-            if (document.compatMode == 'CSS1Compat') {
-                page.width = document.documentElement.clientWidth;
-                page.height = document.documentElement.clientHeight;
-            } else {
-                page.width = document.body.clientWidth;
-                page.height = document.body.clientHeight;
+        initData(formItem, floorList) {
+            this.tabForms = Object.assign({}, this.tabForms, formItem);
+            var str = '';
+            if (this.tabForms.floor == ' ' || this.tabForms.floor == '') {
+                // for
+                for (var i = floorList.length - 1; i >= 0; i--) {
+                    if (floorList[i].floor != ' ') {
+                        str = str + floorList[i].floor + ','
+                    }
+                }
+                str = str.substring(0, str.length - 1);
+                this.floorStr = str;
             }
-            this.page = Object.assign({}, page);
+            console.log('floorListfloorListfloorListfloorList', floorList)
         },
-        initFormat() {
-            this.floorList = [].concat(this.floors);
-            let len = this.floorList.length;
-            if (len && len > 1) {
-                this.floorList.unshift({ label: '全部楼层', value: ' ' });
-                this.formItem.floor = this.floorList[1].value;
-            } else if (len && len <= 1) {
-                this.formItem.floor = this.floorList[0].value;
-            }
+        searchClick(values) {
+            this.tabForms = Object.assign({}, this.tabForms, values, { page: 1 });
         },
-        itemChangeHandler(val) {
-            if (!this.formItem.floor) {
-                this.formItem.floor = this.params.floor;
-            }
-            let params = Object.assign({}, this.params, this.formItem);
-            this.$emit('clear');
-            this.getListData(params);
+        clearClick(values) {
+            this.tabForms = Object.assign({}, this.tabForms, values);
         },
-        getListData(params) {
+        getFloor(list) {
+            this.floorList = [].concat(list);
+        },
+        cityFloor(params) {
+            this.tabForms = Object.assign({}, this.tabForms, params, { page: 1 });
+        },
+        getListData(tabParams) {//列表
             this.loading = true;
-            this.$http.get('downOrderGoodsList', params).then((response) => {
-                this.attractData = response.data;
+            let params = Object.assign({}, tabParams)
+            params.floor = params.floor.length > 1 ? ' ' : params.floor;
+            params.cityId = ''
+            this.$http.get('getGoodsList', params).then((response) => {
+                this.totalCount = response.data.totalCount;
+                this.attractData = response.data.items;
+                this.name = response.data;
                 this.loading = false;
             }).catch((error) => {
-                this.$Notice.error({
-                    title: error.message
-                });
+                this.openMessage = true;
+                this.MessageType = "error";
+                this.warn = error.message;
             })
         },
         tableChange(params) {
-            var param = params.map((item, index) => {
-                var list = Object.assign({}, item);
-                list.name = item.cellName;
-                list.seatType = item.belongType == 'STATION' ? 'OPEN' : 'SPACE';
-                list.id = item.belongId;
-                //  list.originalPrice=item.originalPrice||item.seatPrice||'';// originalPrice seatPrice 都有可能为0 
-                list.originalPrice = this.getOriginalPrice(item)
-                return list
+            let goodsIds = params.map(item => item.id)
+            this.formDiscount.seatIds = goodsIds.join(',')
+            this.$emit('on-result-change', goodsIds);
+        },
+        doAddDiscount(formItem) {
+            console.log('doAddDiscount', this.formDiscount)
+
+            if (!formItem.seatIds||!formItem.seatIds.includes(',')) {
+                this.$Notice.error({
+                    title: '请选择工位'
+                });
+                return
+            }
+
+            let { communityId, schemeType, seatIds, time: { startDate, endDate }, remark } = formItem
+            let parmas = { communityId, schemeType, seatIds, startDate, endDate, remark }
+            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
+            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
+
+            let res = {};
+            let obj = formItem.discountList
+            Object.keys(obj).map(item => {
+                let temp = this.roleList.filter(r => {
+                    return r.level == Number(item)
+                })
+                if (temp != null && temp.length > 0) {
+                    res[temp[0].id] = obj[item]
+                }
             })
-            this.endParams.submitData = [].concat(param).concat(this.stationData);
-            this.$emit('on-result-change', this.endParams);
-        },
-        getOriginalPrice(item) {
-            if (item.hasOwnProperty('originalPrice')) {
-                return item['originalPrice']
-            }
-            else if (item.hasOwnProperty('seatPrice')) {
-                return item['seatPrice']
-            } else {
-                return ''
-            }
-        },
-        searchClick() {
+            parmas.rightDetail = JSON.stringify(res);
+
+            // post-add-discount
+            console.log('add_discount', parmas)
+            debugger
+            this.$http.post('post-add-discount', parmas).then((response) => {
+                this.$Message.success('添加成功');
+                this.handleCancle(true);
+            }).catch((error) => {
+                this.$Notice.error({
+                    title: '添加失败',
+                    desc: error.message
+                });
+            })
 
         }
     }
@@ -303,11 +349,6 @@ export default {
 <style lang='less' scoped>
 .list-and-map-list {
   .search-from-panel {
-    padding-top: 10px;
-    .search-from-item {
-      display: inline-block;
-      width: 252px;
-    }
   }
   .table-list {
     margin-top: 20px;

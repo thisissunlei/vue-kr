@@ -55,7 +55,6 @@ export default {
                     obj[key] = Number(obj[key].toString().match(/^\d+(?:\.\d)?/))
                 }
             })
-            debugger
             this.discount = Object.assign({}, obj)
             this.$emit('input', this.discount)
         }

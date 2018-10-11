@@ -1,7 +1,7 @@
 <template>
   <div class="create-discount-panel">
     <div class="step-container">
-      <Steps :current="current">
+      <Steps :currentStep="currentStep">
         <Step v-for="(step,index) in steps"
           :key="index"
           :title="step.title" />
@@ -9,27 +9,29 @@
     </div>
 
     <div class="from-container">
-      <Form :model="formItem"
-        :label-width="100"
-        style="padding:0 20px"
-        :rules="ruleCustom"
-        ref="formContent"
-        class='discount-set-from'>
-        <div class="select-discount-scheme"
-          v-show="current==0">
+
+      <!-- 第一步 -->
+      <div class="select-discount-scheme"
+        v-show="currentStep==0">
+        <Form :model="formScheme"
+          :label-width="100"
+          style="padding:0 20px"
+          :rules="ruleCustom"
+          ref="formContent"
+          class='discount-set-from'>
           <FormItem label="适用社区"
             prop="communityId">
-            <selectCommunities v-model="formItem.communityId"></selectCommunities>
+            <selectCommunities v-model="formScheme.communityId"></selectCommunities>
           </FormItem>
           <FormItem label="折扣方案"
-            prop="discountScheme">
-            <Select v-model="formItem.discountScheme">
+            prop="schemeType">
+            <Select v-model="formScheme.schemeType"
+              @on-change='onSchemeChange'>
               <Option v-for="(option, index) in discountSchemeList"
                 :value="option.value"
                 :key="option.value">{{option.desc}}</Option>
             </Select>
           </FormItem>
-
           <div class="step-btn-container">
             <Button class="step-btn"
               @click="onCancel">取消</Button>
@@ -37,151 +39,76 @@
               type="primary"
               @click="next">下一步</Button>
           </div>
-        </div>
 
-        <div class="select-discount"
-          v-show="current==1">
-          <AddDiscount />
+        </Form>
+      </div>
 
-          <div class="step-btn-container">
-            <Button class="step-btn"
-              @click="previous">上一步</Button>
-            <Button class="step-btn"
-              type="primary"
-              @click="onAdd">添加</Button>
-            <Button class="step-btn"
-              type="primary"
-              @click="next">下一步</Button>
-          </div>
-        </div>
-      </Form>
-      <div class="select-goods"
-        v-show="current==2">
+      <!-- 第二步 -->
+      <div class="select-discount"
+        v-show="currentStep==1">
+        <AddDiscount :addFlag="setp2AddFlag"
+          :nextFlat="setp2NextFlag"
+          :communityId="formScheme.communityId"
+          :schemeType="formScheme.schemeType" />
         <div class="step-btn-container">
           <Button class="step-btn"
             @click="previous">上一步</Button>
           <Button class="step-btn"
             type="primary"
-            @click="onAdd">添加</Button>
+            v-if='!isGoodsScheme'
+            @click="onAddSetpTwo">添加</Button>
+          <Button class="step-btn"
+            type="primary"
+            v-if='isGoodsScheme'
+            @click="next">下一步</Button>
         </div>
-        <SelectGoods />
+      </div>
+
+      <!-- 第三步 -->
+      <div class="select-goods"
+        v-show="currentStep==2">
+        <div class="step-btn-container">
+          <Button class="step-btn"
+            @click="previous">上一步</Button>
+          <Button class="step-btn"
+            type="primary"
+            @click="setp3AddFlag=(new Date()).getTime()">添加</Button>
+        </div>
+        <SelectGoods :communityId="formScheme.communityId"
+          :addFlag="setp3AddFlag"
+          @on-result-change='onGoodsIdsChange' />
       </div>
 
     </div>
-
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import dateUtils from 'vue-dateutils';
 import selectCommunities from './SelectCommunities.vue'
-import RentFree from './rentFree.vue'
-import SelectDiscount from './discountSelect.vue'
 import AddDiscount from './create.vue'
 import SelectGoods from './selectGoods.vue'
 
 export default {
   components: {
     selectCommunities,
-    SelectDiscount,
-    RentFree,
     AddDiscount,
     SelectGoods
   },
   data() {
-    const validateCummity = (rule, value, callback) => {
-      if (value == null || value.length == 0) {
-        callback("请选择社区")
-      }
-      else
-        callback()
-    };
-    const validateDate = (rule, value, callback) => {
-      if (!value.startDate) {
-        callback("请输入开始日期")
-      } else if (!value.endDate) {
-        callback("请输入结束日期")
-      } else if (value.startDate > value.endDate) {
-        callback('开始日期不能大于结束日期')
-      } else {
-        callback()
-      }
-    };
-    //target present
-    const validatescheme = (rule, value, callback) => {
-      if (isNaN(value.target) || isNaN(value.present)) {
-        callback("请输入数字")
-      } else if (value.target > 36 || value.target < 1) {
-        callback('输入有误,有效范围1-36')
-      } else if (value.present > 12 || value.present < 1) {
-        callback('输入有误,有效范围1-12')
-      } else if (value.present > value.target) {
-        callback('输入有误，后者不能大于前者')
-      } else {
-        callback()
-      }
-    };
-    const validateRentFreeList = (rule, value, callback) => {
-      if (value.length == 0) {
-        callback('至少勾选一个级别')
-      } else {
-        callback()
-      }
-    };
-    const validateDiscountList = (rule, value, callback) => {
-      debugger
-      if (Object.keys(value).length == 0) {
-        callback('至少输入一个级别')
-      } else if (!checkDiscountExtexnd(value)) {
-        callback('折扣输入有误，应该大于0小于10')
-      } else if (checkDiscount(value)) {
-        callback()
-      } else {
-        callback('上级折扣权限不能低于下级')
-      }
-    };
-    var checkDiscountExtexnd = function (obj) {
-      debugger
-      let values = Object.values(obj).map(key => Number(key))
-      let arr = values.filter(item => item >= 10 || item <= 0)
-      if (arr == null || arr.length > 0) {
-        return false
-      }
-      return true
-    };
-    var checkDiscount = function (obj) {
-      let keys = Object.keys(obj).map(key => Number(key))
-      let values = Object.values(obj).map(key => Number(key))
-      let maxLevel = Math.max.apply(null, keys)
-      let minLevel = Math.min.apply(null, keys)
-      if (minLevel != 1) {
-        return false
-      }
-      if (maxLevel + 1 - minLevel != keys.length) {
-        return false
-      } else {
-        let i = 0;
-        for (i = 0; i < keys.length; i++) {
-          if (i != keys.length - 1) {
-            if (values[i] > values[i + 1]) {
-              return false
-            }
-          }
-        }
-      }
-      return true;
-    };
     return {
-      current: 2,
+      setp2AddFlag: 0,
+      setp2NextFlag: 0,
+      setp3AddFlag: 0,
+      isGoodsScheme: false,
+      goodsIds: '',
       steps: [
         {
           title: '选择折扣方案',
         },
         {
           title: '添加折扣',
-        },
-        {
-          title: '选择商品',
         }
       ],
       discountSchemeList: [
@@ -194,58 +121,84 @@ export default {
           desc: '按商品',
         },
       ],
-      formItem: {
+      formScheme: {
         communityId: '',
-        discountScheme: ''
+        schemeType: ''
       },
       ruleCustom: {
         communityId: [
-          { required: true, validator: validateCummity, trigger: 'change' }
+          { required: true, message: '请选择适用社区', trigger: 'change' }
         ],
-        discountType: [
-          { required: true, message: '请选择优惠类型', trigger: 'blur' }
-        ],
-        time: [
-          { required: true, validator: validateDate, trigger: 'change' }
-        ],
-        sale: [
-          { required: true, message: '请选择优惠类型' }
-        ],
-        discount: [
-          { required: true, message: '请选择优惠类型' }
-        ],
-        scheme: [
-          { required: true, validator: validatescheme, trigger: 'change' }
-        ],
-        rentFreeList: [
-          { required: true, type: 'array', validator: validateRentFreeList, trigger: 'change' }
-        ],
-        discountList: [
-          { required: true, validator: validateDiscountList, trigger: 'blur' }
+        schemeType: [
+          { required: true, message: '请选择折扣方案', trigger: 'change' }
         ],
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'currentStep'
+    ])
+  },
+  watch: {
+    isGoodsScheme(val) {
+      if (val) {
+        this.steps.push(
+          {
+            title: '选择商品',
+          })
+      } else {
+        this.steps.pop()
+      }
+    }
+  },
   methods: {
+    onSchemeChange(val) {
+      this.isGoodsScheme = (val === 'GOODS')
+    },
     onCancel() {
 
     },
-    onAdd() {
+    onAddSetpTwo() {
+      this.setp2AddFlag = (new Date()).getTime()
+    },
+    onAddSetpThree() {
 
     },
     previous() {
-      if (this.current == 0) {
-        this.current = 0;
+      if (this.currentStep == 0) {
+        this.$store.commit('changeStep', 0)
       } else {
-        this.current--;
+        this.$store.commit('changeStep', this.currentStep - 1)
       }
     },
     next() {
-      if (this.current == this.steps.length) {
-        this.current = 0;
-      } else {
-        this.current++;
+      if (this.currentStep === 0) {
+        let v = false
+        if (!this.formScheme.communityId) {
+          this.$refs.formContent.validateField('communityId')
+          v = true
+        }
+        if (!this.formScheme.schemeType) {
+          this.$refs.formContent.validateField('schemeType')
+          v = true
+        }
+        if (v) {
+          return
+        }
+        else {
+          this.$store.commit('changeDiscountSetting', this.formScheme )
+          this.$store.commit('changeStep', this.currentStep + 1)
+          return
+        }
       }
+      if (this.currentStep === 1) {
+        this.setp2NextFlag = (new Date()).getTime()
+      }
+    },
+    onGoodsIdsChange(idsArr) {
+      this.goodsIds = idsArr.join(',')
+      console.log('this.goodsIds', this.goodsIds)
     }
   },
 }
@@ -318,6 +271,9 @@ export default {
     }
     .select-goods {
       padding: 10px 50px;
+    }
+    .select-discount-scheme {
+      height: 510px;
     }
     .step-btn-container {
       .step-btn {

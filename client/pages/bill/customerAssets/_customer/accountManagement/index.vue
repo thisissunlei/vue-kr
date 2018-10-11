@@ -1,6 +1,6 @@
 <template>
     <div class='m-settlement-list'>
-        <div style="padding:0px 10px 0 50px;margin-top: 30px;">
+        <div>
             <Tabs 
                 :value="type"
                 :animated="false"

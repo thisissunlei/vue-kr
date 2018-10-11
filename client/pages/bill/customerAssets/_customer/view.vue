@@ -2,49 +2,21 @@
 
 <template>	
     <div class="customer-assets-detail">
-		 <!-- <SectionTitle title="客户账户详情"/> -->
-		 <SectionTitle title="客户账户详情" v-if="selectedTab!='account'" />
-		 <div class="customer-detail" v-if="selectedTab=='account'">
+		 <div class="customer-detail">
 			 <div class="detail-font">客户详情
 			 </div><div class="detail-line"><div></div></div>
 		 </div>
 
 
-		<div class="content" v-if="selectedTab!='account'">
-			<Row>  
-                <Col class="col circle" >
-					<div class="title">客户ID：</div>
-					<div class="contents">{{customerBasic.id}}</div>
-                </Col>
-                
-                <Col class="col circle">
-					<div class="title">客户名称：</div>
-					<div class="contents"><span>{{customerBasic.company}}</span></div>
-                </Col>
-                <Col class="col circle">
-					<div class="title">客户状态：</div>
-					<div class="contents">{{customerBasic.status}}</div>
-                </Col>
-            </Row>
-		</div>
-		<div class="tab-list" v-if="selectedTab!='account'">
-			<span class="tab-span"  v-for="(item, index) in firstTab"
-                :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
-		</div>
 		<!-- 苏岭开始 -->
-		<div class="new-tab-wrap" v-if="selectedTab=='account'">
+		<div class="new-tab-wrap">
 			<div class="new-tab-list">
 				<span class="tab-span"  v-for="(item, index) in newFirstTab"
 				:key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
 			</div>
 			<div class="new-tab-content">
-				<AccountManagement />
-			</div>
-		</div>
-		<!-- 苏岭结束 -->
-		<div class="tab-content">
-			    <!-- <Assets v-if="selectedTab=='account'"/> -->
-            	<Basic v-if="selectedTab=='basic'"/>
+				<AccountManagement v-if="selectedTab=='account'"/>
+				<Basic v-if="selectedTab=='basic'"/>
             	<div v-if="selectedTab=='menber'" class="tab-texts">
             		<img src="./images/member.svg" alt="">
             		<a href="javascript:void(0);" @click="openMember">点击查看会员列表</a>  
@@ -62,7 +34,9 @@
 				<OrderManagement v-if="selectedTab=='stagingBill'" :customerId="customerId" class="tab-texts"/>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
-        </div>
+			</div>
+		</div>
+		<!-- 苏岭结束 -->
 		
     </div>
 	
@@ -290,7 +264,8 @@
 			.new-tab-content{
 				vertical-align: top;
 				flex: 1;
-    			width: 0;
+				width: 0;
+				padding: 30px 10px 0px 50px;
 			}
 		}
 		/*苏岭结束*/

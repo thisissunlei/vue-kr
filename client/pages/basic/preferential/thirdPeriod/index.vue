@@ -172,7 +172,7 @@ export default {
       return true;
     };
     return {
-      current: 0,
+      current: 2,
       steps: [
         {
           title: '选择折扣方案',

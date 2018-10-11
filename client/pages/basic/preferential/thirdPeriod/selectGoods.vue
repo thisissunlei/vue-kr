@@ -3,78 +3,89 @@
         <div class="search-from-panel">
             <Form ref="formItemInvestment"
                 :model="formItem"
-                label-position="left">
-                <FormItem label="楼层"
-                    prop="discountType">
-                    <Select v-model="formItem.floor"
-                        style="width:100px;margin-right:15px;"
-                        placeholder="全部楼层"
-                        clearable>
-                        <Option v-for="item in floorList"
-                            :value="item.value"
-                            :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
-                <FormItem label="商品类型"
-                    prop="discountType">
-                    <Select v-model="formItem.goodsType"
-                        placeholder="请输入商品类型"
-                        style="width:100px;margin-right:15px;"
-                        clearable>
-                        <Option v-for="item in productList"
-                            :value="item.value"
-                            :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
-                <FormItem label="当前状态"
-                    class='daily-form'>
-                    <Select v-model="formItem.investmentStatus"
-                        placeholder="全部(可多选)"
-                        style="width: 200px"
-                        multiple>
-                        <Option v-for="item in goodsStatusList"
-                            :value="item.value"
-                            :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
-                <FormItem label="工位数量"
-                    prop="discountType">
-                </FormItem>
-                <FormItem label="方位"
-                    prop="discountType">
-                    <Select v-model="formItem.locationType"
-                        placeholder="请输入方位"
-                        style="width:100px;margin-right:15px;"
-                        clearable>
-                        <Option v-for="item in locationList"
-                            :value="item.value"
-                            :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
-                <FormItem label="有无套间"
-                    prop="discountType">
-                    <Select v-model="formItem.suiteType"
-                        placeholder="请输入套间"
-                        style="width:100px;"
-                        clearable>
-                        <Option v-for="item in suiteTypeList"
-                            :value="item.value"
-                            :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
+                :label-width="66"
+                label-position="right">
+                <div style="padding: 10px 10px 0 20px;background:#fff">
+
+                    <FormItem label="楼层"
+                        class="search-from-item"
+                        prop="discountType">
+                        <Select v-model="formItem.floor"
+                            style="width:150px;margin-right:15px;"
+                            placeholder="全部楼层"
+                            clearable>
+                            <Option v-for="item in floorList"
+                                :value="item.value"
+                                :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem label="商品类型"
+                        class="search-from-item"
+                        prop="discountType">
+                        <Select v-model="formItem.goodsType"
+                            placeholder="请输入商品类型"
+                            style="width:150px;margin-right:15px;"
+                            clearable>
+                            <Option v-for="item in productList"
+                                :value="item.value"
+                                :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem label="当前状态"
+                        class="search-from-item">
+                        <Select v-model="formItem.investmentStatus"
+                            placeholder="全部(可多选)"
+                            style="width:150px;margin-right:15px;"
+                            multiple>
+                            <Option v-for="item in goodsStatusList"
+                                :value="item.value"
+                                :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                </div>
+                <div style="padding: 10px 10px 0 20px;background:#fff">
+                    <FormItem label="工位数量"
+                        class="search-from-item">
+                        <Input style='width:60px' />&nbsp;至&nbsp;
+                        <Input style='width:60px' />
+                    </FormItem>
+                    <FormItem label="方位"
+                        class="search-from-item">
+                        <Select v-model="formItem.locationType"
+                            placeholder="请输入方位"
+                            style="width:150px;margin-right:15px;"
+                            clearable>
+                            <Option v-for="item in locationList"
+                                :value="item.value"
+                                :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem label="有无套间"
+                        class="search-from-item">
+                        <Select v-model="formItem.suiteType"
+                            placeholder="请输入套间"
+                            style="width:150px;margin-right:15px;"
+                            clearable>
+                            <Option v-for="item in suiteTypeList"
+                                :value="item.value"
+                                :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                    <Button type="primary"
+                        @click="searchClick">搜索</Button>
+                </div>
             </Form>
         </div>
         <div class="table-list"
             :style="{height:(page.height-300)+'px'}">
-            <Table :loading="loading"
-                stripe
+            <Table stripe
                 :columns="attractColumns"
                 :data="attractData"
                 border
                 @on-selection-change="tableChange">
-                <div slot="loading">
+                <!-- <div slot="loading">:loading="loading"
                     <Loading />
-                </div>
+                </div> -->
             </Table>
         </div>
     </div>
@@ -95,7 +106,7 @@ export default {
         },
         params: {
             type: Object,
-            default: () => {}
+            default: () => { }
         },
         stationData: {
             type: Array,
@@ -124,7 +135,7 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '商品',
+                    title: '商品名称',
                     key: 'cellName',
                     align: 'center'
                 },
@@ -139,8 +150,18 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '商品属性',
-                    key: 'attrString',
+                    title: '方位',
+                    key: 'capacity',
+                    align: 'center'
+                },
+                {
+                    title: '有无套间',
+                    key: 'capacity',
+                    align: 'center'
+                },
+                {
+                    title: '面积',
+                    key: 'capacity',
                     align: 'center'
                 },
                 {
@@ -150,7 +171,7 @@ export default {
                     align: 'right'
                 },
                 {
-                    title: '可租时段',
+                    title: '当前状态',
                     key: 'availableDetail',
                     align: 'center',
                     render(tag, params) {
@@ -158,6 +179,12 @@ export default {
                         let ren = dateUtils.dateToStr("YYYY-MM-DD", new Date(params.row.availableDetail.startDate)) + '至' + end;
                         return tag('span', {}, ren);
                     }
+                },
+                {
+                    title: '备注',
+                    key: 'seatPrice',
+                    width: 120,
+                    align: 'center'
                 },
             ],
             attractData: [],
@@ -180,6 +207,7 @@ export default {
                 { value: 'UNSUITE', label: '无套间' }
             ],
             goodsStatusList: [
+                { value: ' ', label: '全部' },
                 { value: 'ON', label: '启用' },
                 { value: 'DISABLE', label: '不可用' },
                 { value: 'OFF', label: '下架' }
@@ -264,6 +292,9 @@ export default {
             } else {
                 return ''
             }
+        },
+        searchClick() {
+
         }
     }
 }
@@ -271,9 +302,13 @@ export default {
 
 <style lang='less' scoped>
 .list-and-map-list {
-    .search-from-panel{
-        
+  .search-from-panel {
+    padding-top: 10px;
+    .search-from-item {
+      display: inline-block;
+      width: 252px;
     }
+  }
   .table-list {
     margin-top: 20px;
     overflow: auto;

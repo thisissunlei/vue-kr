@@ -23,7 +23,7 @@
 
                        <Form-item label="费用类型" class='daily-form'>
                            <Select 
-                                v-model="formItem.feeType" 
+                                v-model="formItem.depositType" 
                                 placeholder="请选择费用类型" 
                                 clearable
                                 style="width:200px"
@@ -67,14 +67,25 @@
                         />
                     </Form-item>
 
-                    <Form-item label="相关操作" class='daily-form' style="margin-right:302px;"> 
+                    <Form-item label="来源类型" class='daily-form'> 
                             <Select 
-                                v-model="formItem.operateType" 
-                                placeholder="请选择相关操作" 
+                                v-model="formItem.sourceDetailType" 
+                                placeholder="请选择来源类型" 
                                 clearable
                                 style="width:200px"
                             >
                                 <Option v-for="item in operationList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
+                            </Select> 
+                    </Form-item>
+
+                    <Form-item label="记录类型" class='daily-form'> 
+                            <Select 
+                                v-model="formItem.recordType" 
+                                placeholder="请选择记录类型" 
+                                clearable
+                                style="width:200px;margin-right:13px;"
+                            >
+                                <Option v-for="item in recordList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                     </Form-item>
 
@@ -113,15 +124,17 @@ export default {
             return { 
                 formItem:{
                     cmtId:'',
-                    feeType:'',
-                    operateType:'',
+                    depositType:'',
+                    sourceDetailType:'',
                     recordNo:'',
                     amountStart:'',
-                    amountEnd:''
+                    amountEnd:'',
+                    recordType:''
                 },
                 formItemOld:{},
                 feeTypeList:[],
                 operationList:[],
+                recordList:[],
                 ruleInvestment: {
                     amountStart: [
                         { validator: validateTime, trigger: 'change' }
@@ -137,6 +150,7 @@ export default {
         this.$emit('init',this.formItemOld);
         this.getFee();
         this.getOperate();
+        this.getRecord();
     },
     methods:{
         //搜索
@@ -158,7 +172,7 @@ export default {
         },
         getFee(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.FeeType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.DepositType'
             }).then((r) => {
                 this.feeTypeList = [].concat(r.data)
             }).catch((e) => {
@@ -169,9 +183,20 @@ export default {
         },
         getOperate(){
             this.$http.get('get-enum-all-data', {
-                enmuKey: 'com.krspace.pay.api.enums.wallet.OperateType'
+                enmuKey: 'com.krspace.pay.api.enums.wallet.SourceDetailType'
             }).then((r) => {
                 this.operationList = [].concat(r.data)
+            }).catch((e) => {
+                this.$Notice.error({
+                    title: e.message
+                });
+            })
+        },
+        getRecord(){
+            this.$http.get('get-enum-all-data', {
+                enmuKey: 'com.krspace.pay.api.enums.wallet.DepositRecordType'
+            }).then((r) => {
+                this.recordList = [].concat(r.data)
             }).catch((e) => {
                 this.$Notice.error({
                     title: e.message

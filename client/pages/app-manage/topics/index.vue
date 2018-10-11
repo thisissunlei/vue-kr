@@ -65,7 +65,7 @@
         </Modal>
         <Modal
                 v-model="openResult"
-                :title="`投票结果——#${resultTitle}#`"
+                :title="`投票结果——${resultTitle}`"
                 ok-text="确定"
                 cancel-text="取消"
                 width="411"

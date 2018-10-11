@@ -42,8 +42,10 @@ export default {
     .u-result-title{
         font-size:16px;
         color:#333333;
-        height:30px;
-        line-height:30px;
+        width:100%;
+        line-height:24px;
+        display: inline-block;
+        margin-bottom:7px;
         font-weight: 500;
     }
     .u-result-info{

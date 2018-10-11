@@ -69,6 +69,10 @@ export default {
         padding:0 10px;
         box-sizing: border-box;
         .u-select-name{
+           max-width:200px;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           white-space: nowrap;
            font-size:15px;
            color:#333333;
            line-height:50px;

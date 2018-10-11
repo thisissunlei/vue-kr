@@ -1,6 +1,6 @@
 <template>
   <div class="g-cover-img">
-      <img :src="imgUrl" alt="">
+      <img :src="`${imgUrl}?x-oss-process=image/resize,p_50`" alt="">
   </div>
 </template>
 <script>

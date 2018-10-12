@@ -145,7 +145,7 @@ export default {
 						return h('div',[
 							h('span',{},headNum),
 							h('span',{
-								style:{background:'#b7d7fa'}
+								style:{color:'#e96900'}
 							},middleNum),
 							h('span',{},tailNum)
 						])

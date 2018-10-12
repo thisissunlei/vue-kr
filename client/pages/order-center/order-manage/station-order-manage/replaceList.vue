@@ -145,7 +145,7 @@ export default {
               h(
                 "span",
                 {
-                  style: { background: "#b7d7fa" }
+                  	style:{color:'#e96900'}
                 },
                 middleNum
               ),

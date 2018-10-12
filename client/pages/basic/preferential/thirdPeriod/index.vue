@@ -87,7 +87,7 @@
 import { mapGetters } from 'vuex'
 import dateUtils from 'vue-dateutils';
 import selectCommunities from './SelectCommunities.vue'
-import AddDiscount from './create.vue'
+import AddDiscount from './addDiscount.vue'
 import SelectGoods from './selectGoods.vue'
 
 export default {
@@ -137,7 +137,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentStep'
+      'currentStep',
     ])
   },
   watch: {
@@ -187,7 +187,7 @@ export default {
           return
         }
         else {
-          this.$store.commit('changeDiscountSetting', this.formScheme )
+          this.$store.commit('changeDiscountSetting', this.formScheme)
           this.$store.commit('changeStep', this.currentStep + 1)
           return
         }

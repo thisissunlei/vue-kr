@@ -304,36 +304,16 @@ export default {
         doAddDiscount(formItem) {
             console.log('doAddDiscount', this.formDiscount)
 
-            if (!formItem.seatIds||!formItem.seatIds.includes(',')) {
+            if (!formItem.seatIds || !formItem.seatIds.includes(',')) {
                 this.$Notice.error({
                     title: '请选择工位'
                 });
                 return
             }
-
-            let { communityId, schemeType, seatIds, time: { startDate, endDate }, remark } = formItem
-            let parmas = { communityId, schemeType, seatIds, startDate, endDate, remark }
-            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
-            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
-
-            let res = {};
-            let obj = formItem.discountList
-            Object.keys(obj).map(item => {
-                let temp = this.roleList.filter(r => {
-                    return r.level == Number(item)
-                })
-                if (temp != null && temp.length > 0) {
-                    res[temp[0].id] = obj[item]
-                }
-            })
-            parmas.rightDetail = JSON.stringify(res);
-
-            // post-add-discount
-            console.log('add_discount', parmas)
-            debugger
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
                 this.handleCancle(true);
+                this.$store.commit('changeModalState', false)
             }).catch((error) => {
                 this.$Notice.error({
                     title: '添加失败',

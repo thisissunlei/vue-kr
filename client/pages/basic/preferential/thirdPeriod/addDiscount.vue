@@ -57,7 +57,6 @@
 </template>
 <script>
 import selectCommunities from './SelectCommunities.vue'
-import RentFree from './rentFree.vue'
 import SelectDiscount from './discountSelect.vue'
 import dateUtils from 'vue-dateutils';
 
@@ -65,7 +64,6 @@ export default {
     components: {
         selectCommunities,
         SelectDiscount,
-        RentFree
     },
     props: {
         addFlag: {
@@ -334,15 +332,14 @@ export default {
             })
             parmas.rightDetail = JSON.stringify(res);
 
-            // post-add-discount
-            console.log('add_discount', parmas)
-            debugger
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
                 this.handleCancle(true);
+                this.$store.commit('changeModalState', false)
+                
             }).catch((error) => {
                 this.$Notice.error({
-                    title:'添加失败',
+                    title: '添加失败',
                     desc: error.message
                 });
             })

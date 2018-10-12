@@ -2,44 +2,81 @@
     <div class="g-order">
         <SectionTitle title="社区优惠配置"></SectionTitle>
         <div class="u-search">
-            <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button>
+            <Button type="primary"
+                @click="onCreate"
+                style="display:none">新建社区优惠</Button>
             <span style="padding:0 10px"></span>
             <div style="display:inline-block;width:200px;">
                 社区：
-                <Select v-model="communityId" @on-change="changeCommunity" filterable clearable style="width:150px">
-                    <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
+                <Select v-model="communityId"
+                    @on-change="changeCommunity"
+                    filterable
+                    clearable
+                    style="width:150px">
+                    <Option v-for="(option, index) in communityList"
+                        :value="option.value"
+                        :key="option.value">{{option.label}}</Option>
                 </Select>
             </div>
             <span style="padding:0 10px"></span>
             <div style="display:inline-block;width:400px;">
-                <CheckboxGroup style="font-size:12px" v-model="statusList" @on-change="checkAllGroupChange">状态：
-                    <Checkbox v-for='(option, index) in stateList' :key='option.value' :label="option.value">{{option.desc}}</Checkbox>
+                <CheckboxGroup style="font-size:12px"
+                    v-model="statusList"
+                    @on-change="checkAllGroupChange">状态：
+                    <Checkbox v-for='(option, index) in stateList'
+                        :key='option.value'
+                        :label="option.value">{{option.desc}}</Checkbox>
                 </CheckboxGroup>
             </div>
             <div class='u-create'>
-                <Button type="primary" @click="onCreate">添加</Button>
+                <Button type="primary"
+                    @click="onCreate">添加</Button>
             </div>
         </div>
         <div class="u-table">
-            <Table border :columns="columns" :data="tableData" stripe></Table>
+            <Table border
+                :columns="columns"
+                :data="tableData"
+                stripe></Table>
             <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
-                    <Page :current="page" :total="totalCount" :page-size="params.pageSize" @on-change="changePage" show-total show-elevator></Page>
+                    <Page :current="page"
+                        :total="totalCount"
+                        :page-size="params.pageSize"
+                        @on-change="changePage"
+                        show-total
+                        show-elevator></Page>
                 </div>
             </div>
         </div>
 
-        <Modal v-model="openCreate" id='create-discount-modal' title="添加优惠" ok-text="确定" cancel-text="取消" width="90%" :styles="{top: '20px'}">
-            <Create ref="fromFieldNewPage" v-if="openCreate" @closeAddModal="handleAddModal" />
+        <Modal v-model="openAddModal"
+            id='create-discount-modal'
+            title="添加优惠"
+            ok-text="确定"
+            cancel-text="取消"
+            width="90%"
+            :mask-closable='false'
+            :styles="{top: '20px'}">
+            <Create ref="fromFieldNewPage"
+                v-if="openAddModal" />
             <div slot="footer">
             </div>
         </Modal>
-        
-        <Modal v-model="openStop" title="确定要停用?" ok-text="确定" cancel-text="取消" width="300" :styles="{top: '20px'}">
+
+        <Modal v-model="openStop"
+            title="确定要停用?"
+            ok-text="确定"
+            cancel-text="取消"
+            width="300"
+            :styles="{top: '20px'}">
             <div style='font-size:14px'>停用将让此优惠立即失效，不可撤销。</div>
             <div slot="footer">
-                <Button type="primary" @click="submitStop('formContent')">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="cancelStop">取消</Button>
+                <Button type="primary"
+                    @click="submitStop('formContent')">确定</Button>
+                <Button type="ghost"
+                    style="margin-left: 8px"
+                    @click="cancelStop">取消</Button>
             </div>
         </Modal>
     </div>
@@ -47,7 +84,7 @@
 
 
 <script>
-
+import { mapGetters } from 'vuex'
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
@@ -60,7 +97,7 @@ export default {
         SectionTitle,
         Create
     },
-    head () {
+    head() {
         return {
             title: "工位折扣-氪空间后台管理系统"
         }
@@ -245,7 +282,18 @@ export default {
             ]
         }
     },
-
+    computed: {
+        ...mapGetters([
+            'openAddModal'
+        ])
+    },
+    watch: {
+        openAddModal() {
+            this.getTableData(this.params);
+            this.$store.commit('changeStep',0)
+            this.$store.commit('resetDiscountSetting',{})
+        }
+    },
     created() {
         this.getTableData(this.params);
         this.getCmtList();
@@ -331,21 +379,14 @@ export default {
             this.currentID = item.id;
             this.openStop = true;
         },
-        handleAddModal(reload) {
-            this.openCreate = false
-            if (reload) {
-                this.getTableData();
-            }
-        },
+
         cancelStop() {
             this.openStop = false;
         },
         onCreate() {
-            this.openCreate = true;
+            this.$store.commit('changeModalState', true)
         },
-        cancelCreate() {
-            this.openCreate = false;
-        },
+
     }
 
 }
@@ -353,37 +394,37 @@ export default {
 
 <style lang="less">
 .g-order {
-    .u-search {
-        height: 32px;
-        margin: 16px 20px;
-        .u-create {
-            float: right;
-            right: 50px;
-        }
+  .u-search {
+    height: 32px;
+    margin: 16px 20px;
+    .u-create {
+      float: right;
+      right: 50px;
     }
-    .ivu-table-cell {
-        padding: 0;
-    }
-    .u-table {
-        padding: 0 20px;
-    }
-    .m-search {
-        color: #2b85e4;
-        display: inline-block;
-        margin-left: 10px;
-        font-size: 14px;
-        cursor: pointer;
-    }
+  }
+  .ivu-table-cell {
+    padding: 0;
+  }
+  .u-table {
+    padding: 0 20px;
+  }
+  .m-search {
+    color: #2b85e4;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
 }
 .u-cancel-title {
-    width: 334px;
-    text-align: center;
-    margin: 40px auto 35px;
-    font-size: 14px;
+  width: 334px;
+  text-align: center;
+  margin: 40px auto 35px;
+  font-size: 14px;
 }
 #create-discount-modal {
-    .ivu-modal-footer {
-        display: none;
-    }
+  .ivu-modal-footer {
+    display: none;
+  }
 }
 </style>

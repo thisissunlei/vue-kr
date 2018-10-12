@@ -7,11 +7,15 @@ var discountSetting = {
     communityId: "",
     schemeType: "",
     formDiscount: {},
-    currentStep:0
+    currentStep:0,
+    openAddModal:false
   },
   mutations: {
     changeDiscountSetting(state, val) {
       state.formDiscount = Object.assign({},state.formDiscount, val);
+    },
+    resetDiscountSetting(state, val) {
+      state.formDiscount = {}
     },
     changeStep(state, val) {
       state.currentStep = val
@@ -21,7 +25,11 @@ var discountSetting = {
     },
     changeCommunityId(state, val) {
       state.formDiscount.communityId = val
-    }
+    },
+    changeModalState(state, val) {
+      state.openAddModal = val
+      state.formDiscount = {}
+    },
   },
   actions: {},
   getters: {
@@ -30,6 +38,9 @@ var discountSetting = {
     },
     currentStep: state => {
       return state.currentStep;
+    },
+    openAddModal: state => {
+      return state.openAddModal;
     }
   }
 };

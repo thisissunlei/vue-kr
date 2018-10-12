@@ -188,11 +188,11 @@ export default {
 			],
 
 			treatment: [
-				{
-					title: '优惠类型',
-					key: 'tacticsName',
-					align: 'center'
-				},
+				// {
+				// 	title: '优惠类型',
+				// 	key: 'tacticsName',
+				// 	align: 'center'
+				// },
 				{
 					title: '开始日期',
 					key: 'freeStart',

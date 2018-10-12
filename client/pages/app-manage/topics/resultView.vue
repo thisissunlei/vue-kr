@@ -34,7 +34,7 @@ export default {
     padding:20px 0;
     box-sizing: border-box; 
     .m-result{
-        width:330px;
+        width:326px;
         height:100%;
         overflow: auto;
         margin:0 auto;

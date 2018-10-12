@@ -34,10 +34,11 @@ export default {
     padding:20px 0;
     box-sizing: border-box; 
     .m-result{
-        width:311px;
+        width:330px;
         height:100%;
         overflow: auto;
         margin:0 auto;
+        padding-right:15px;
     }
     .u-result-title{
         font-size:16px;

@@ -59,6 +59,7 @@ export default {
     },
     data() {
         return {
+            selectGoods: [],
             floorList: [],
             floorStr: '',
             tabForms: {
@@ -231,7 +232,33 @@ export default {
                 deleteData: [],
                 submitData: []
             },
-            page: {}
+            page: {},
+            roleList: [
+                {
+                    id: 1,
+                    level: 1,
+                    name: '总部管理人员',
+                    discount: 7.5
+                },
+                {
+                    id: 2,
+                    level: 2,
+                    name: '区域招商经理',
+                    discount: 8
+                },
+                {
+                    id: 3,
+                    level: 3,
+                    name: '招商经理',
+                    discount: 8.5
+                },
+                {
+                    id: 4,
+                    level: 4,
+                    name: '招商主管',
+                    discount: 9
+                },
+            ],
         }
     },
     computed: {
@@ -297,19 +324,37 @@ export default {
             })
         },
         tableChange(params) {
-            let goodsIds = params.map(item => item.id)
-            this.formDiscount.seatIds = goodsIds.join(',')
-            this.$emit('on-result-change', goodsIds);
+            this.selectGoods = params.map(item => {
+                return { seatId: item.id, goodsType: item.goodsType }
+            })
         },
-        doAddDiscount(formItem) {
+        doAddDiscount(formDiscount) {
             console.log('doAddDiscount', this.formDiscount)
 
-            if (!formItem.seatIds || !formItem.seatIds.includes(',')) {
+            if (this.selectGoods.length === 0) {
                 this.$Notice.error({
                     title: '请选择工位'
                 });
                 return
             }
+            let { communityId, schemeType, discountType, time: { startDate, endDate }, remark } = formDiscount
+            let parmas = { communityId, schemeType, discountType, startDate, endDate, remark }
+            parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
+            parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
+
+            let res = {};
+            let obj = formDiscount.discountList
+            Object.keys(obj).map(item => {
+                let temp = this.roleList.filter(r => {
+                    return r.level == Number(item)
+                })
+                if (temp != null && temp.length > 0) {
+                    res[temp[0].id] = obj[item]
+                }
+            })
+            parmas.rightDetail = JSON.stringify(res);
+            parmas.goods = JSON.stringify(this.selectGoods)
+            debugger
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
                 this.handleCancle(true);

@@ -75,8 +75,7 @@
             @click="setp3AddFlag=(new Date()).getTime()">添加</Button>
         </div>
         <SelectGoods :communityId="formScheme.communityId"
-          :addFlag="setp3AddFlag"
-          @on-result-change='onGoodsIdsChange' />
+          :addFlag="setp3AddFlag"/>
       </div>
 
     </div>

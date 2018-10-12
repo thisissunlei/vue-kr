@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <Modal v-model="openAddModal"
+        <Modal v-model="createModal"
             id='create-discount-modal'
             title="添加优惠"
             ok-text="确定"
@@ -104,6 +104,7 @@ export default {
     },
     data() {
         return {
+            createModal:false,
             currentID: '',
             statusList: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
@@ -288,11 +289,18 @@ export default {
         ])
     },
     watch: {
-        openAddModal() {
+        openAddModal(val) {
+            this.createModal=val
             this.getTableData(this.params);
             this.$store.commit('changeStep',0)
             this.$store.commit('resetDiscountSetting',{})
+        },
+        createModal(val){
+            if (val!=this.openAddModal) {
+                this.$store.commit('changeModalState', val)
+            }
         }
+
     },
     created() {
         this.getTableData(this.params);

@@ -1,7 +1,7 @@
 <template>
     <div class="amount-info-panel">
         <Row style="margin-bottom:10px">
-            <Col sapn='24'>
+            <Col class="col">
             <Button type="primary"
                 style="margin-right:20px;font-size:14px"
                 @click="showStation">选择工位</Button>
@@ -9,11 +9,8 @@
                 style="margin-right:20px;font-size:14px"
                 @click="deleteStation">删除</Button>
             <Button type="primary"
-                style="margin-right:20px;font-size:14px"
-                @click="openPriceButton">批量填写价格</Button>
-            <Button type="primary"
-                style="margin-right:20px;font-size:14px"
-                @click="openPriceButton">批量填写折扣</Button>
+                style="font-size:14px"
+                @click="openPriceButton">录入单价</Button>
             </Col>
 
         </Row>
@@ -85,7 +82,6 @@ export default {
     },
     data() {
         return {
-            seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
             openPrice: false,
             price: '',
@@ -106,24 +102,34 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '商品',
-                    key: 'name',
-                    align: 'center'
+                    title: '工位房间编号',
+                    key: 'name'
                 },
                 {
-                    title: '工位数',
-                    key: 'capacity',
-                    align: 'center'
+                    title: '类型',
+                    key: 'seatType',
+                    render: (h, params) => {
+                        let type = params.row.seatType;
+                        let typeName = '开放工位';
+                        if (type == 'SPACE') {
+                            typeName = '独立办公室'
+                        } else {
+                            typeName = "开放工位"
+                        }
+                        return typeName
+                    }
                 },
                 {
-                    title: '商品定价',
-                    align: 'right',
+                    title: '工位可容纳人数',
+                    key: 'capacity'
+                },
+                {
+                    title: '定价',
+                    key: 'guidePrice'
+                },
+                {
+                    title: '标准单价（元/月）',
                     key: 'guidePrice',
-                },
-                {
-                    title: '标准月费',
-                    key: 'guidePrice',
-                    align: 'center',
                     render: (h, params) => {
                         let price = params.row.originalPrice;
                         return h('Input', {
@@ -161,103 +167,21 @@ export default {
 
                     }
                 },
+
                 {
-                    title: '当前折扣权限',
-                    key: 'guidePrice',
-                    align: 'center',
+                    title: '租赁期限',
+                    key: 'address',
                     render: (h, params) => {
-                        let discount = params.row.rightDiscount;
-                        if (discount == 10 || !discount) {
-                            params.row.rightDiscount = 10
-                            return h('div', '-')
-                        }
-                        else {
-                            return h('div', discount + '折')
-                        }
+                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD", new Date(this.startDate)) + '至' + dateUtils.dateToStr("YYYY-MM-DD", new Date(this.endDate)))
                     }
                 },
                 {
-                    title: '签约折扣',
-                    key: 'guidePrice',
-                    align: 'center',
-                    render: (h, params) => {
-                        let discount = 10;
-                        let discountEditDisable = params.row.rightDiscount == 10
-                        return h('Input', {
-                            props: {
-                                min: params.row.guidePrice,
-                                value: '',
-                                disabled: discountEditDisable,
-                            },
-                            on: {
-                                'on-change': (event) => {
-                                    let e = event.target.value;
-                                    if (isNaN(e)) {
-                                        e = ''
-                                    }
-                                    discount = e;
-                                },
-                                'on-blur': () => {
-                                    var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
-                                    if (discount && !pattern.test(discount)) {
-                                        this.$Notice.error({
-                                            title: '单价不得多余小数点后三位'
-                                        })
-                                        var num2 = Number(discount).toFixed(4);
-                                        discount = num2.substring(0, num2.lastIndexOf('.') + 4)
-                                    }
-                                    if (discount < params.row.rightDiscount) {
-                                        discount = params.row.rightDiscount
-                                        this.$Notice.error({
-                                            title: '单价不得小于' + params.row.rightDiscount
-                                        })
-                                    }
-                                    // this.changePrice(params.index, discount)
-                                }
-                            }
-                        })
-                    }
-                },
-                {
-                    title: '签约月费',
-                    key: 'guidePrice',
-                    align: 'right',
-                },
-                {
-                    title: '服务费小计',
+                    title: '小计',
                     key: 'originalAmount',
-                    align: 'right',
                     render: function (h, params) {
                         return h('span', {}, utils.thousand(params.row.originalAmount))
                     }
-                },
-                {
-                    title: '操作',
-                    key: 'guidePrice',
-                    align: 'center',
-                    render: (h, params) => {
-                        let price = params.row.originalPrice;
-                        return h('div', {
-                            props: {
-                                min: params.row.guidePrice,
-                                value: params.row.originalPrice,
-                            },
-                            style: {
-                                color: 'rgb(43, 133, 228)',
-                                textAlign: 'center',
-                                cursor: 'pointer'
-                            },
-                            on: {
-                                'click': () => {
-                                    console.log('删除商品明细行', params.row._index)
-                                },
-                            }
-                        }, '删除')
-
-                    }
-                },
-
-
+                }
             ],
         }
     },
@@ -409,8 +333,6 @@ export default {
         },
         submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
-            //获取每一个工位商品的折扣权限
-
             this.delStation = this.stationData.deleteData || [];
             this.getStationAmount()
             this.openStation = false;
@@ -449,7 +371,6 @@ export default {
                 if (item.originalPrice === '') {
                     originalPrice = true;
                 }
-                obj.discountNum = 10
                 return obj;
             })
             if (originalPrice) {
@@ -486,50 +407,7 @@ export default {
                 })
 
             })
-        },
-        //获取工位折扣权限
-        getSeatDiscoutRight(params) {
-            return new Promise((reslove, reject) => {
-                this.$http.post("post-seat-discount-right", params).then(r => {
-                    reslove(r)
-                }).catch(e => {
-                    this.$Notice.error({
-                        desc: e.message
-                    })
-                    reject(e)
-                })
-            })
-        },
-        setSeatDiscountMap(stationList) {
-            if (stationList.length == 0) return
-            let arr = []
-            let goodTypeSetTypeMap = {
-                OPEN: 'OPEN',
-                MOVE: 'OPEN',
-                SPACE: 'SPACE',
-            }
-            stationList.map(item => {
-                let obj = {}
-                obj.seatId = item.id || item.seatId;
-                obj.seatType = goodTypeSetTypeMap[item.goodsType]
-                arr.push(obj)
-            })
-            let params = {
-                communityId: this.communityId,
-                goods: JSON.stringify(arr)
-            }
-            this.getSeatDiscoutRight(params).then(r => {
-                r.data.map(item => {
-                    let key = item.seatType + '_' + item.seatId
-                    this.seatDiscountMap[key] = item.rightDiscount
-                })
-            }).catch(e => {
-                this.$Notice.error({
-                    desc: e.message
-                })
-            })
         }
-
     },
 }
 </script>

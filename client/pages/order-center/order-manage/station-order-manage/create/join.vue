@@ -15,7 +15,7 @@
             <DetailStyle info="租赁信息">
                 <RentInfo :formItem='formItem' />
             </DetailStyle>
-            <DetailStyle info="金额信息">
+            <DetailStyle info="商品价格明细">
                 <AmountInfo/>
             </DetailStyle>
             <DetailStyle info="优惠信息"

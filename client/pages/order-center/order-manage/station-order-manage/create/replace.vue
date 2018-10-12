@@ -1366,7 +1366,7 @@
             },
             setDiscountNum(){
                 this.discountNum = this.discountCon;
-                if(!this.discountNum){
+                if(!this.discountNum||(''+this.discountNum).trim().length===0){
                     this.$Notice.error({
                         title:'请先选择折扣'
                     })
@@ -1649,11 +1649,11 @@
             },
             checkDiscount(){
                 let value = this.discountCon;
-                if(isNaN(value)){
+                if(isNaN(value)|| value.trim().length===0 ){
                     this.$Notice.error({
                         title:'折扣必须为数字'
                     })
-                    this.discountCon = this.discount.minDiscount;
+                    // this.discountCon = this.discount.minDiscount;
                     return;
                 }
                 var pattern =/^[0-9]+(.[0-9]{1})?$/;

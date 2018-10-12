@@ -23,6 +23,7 @@ import FinancialtransferApply from "./financialtransferApply.js";
 import doorPermmision from './doorPermmision.js';
 import KrmeetingSeat from "./krmeetingSeat.js";
 import discountSetting from './discountSetting'
+import App from "./app.js";
 
 
 export default {
@@ -50,5 +51,6 @@ export default {
   ...FinancialtransferApply,
   ...doorPermmision,
   ...KrmeetingSeat,
-  ...discountSetting
+  ...discountSetting,
+  ...App
 }

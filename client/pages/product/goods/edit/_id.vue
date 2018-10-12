@@ -478,11 +478,9 @@ export default {
       this.$http
         .get("get-krmting-mobile-get-workday", params)
         .then(res => {
-          //   this.date = [].concat(res.data.unuseDates)
-          console.log(this.dateFormat(res.data.unuseDates || []));
-          let from = Object.assign({}, this.from);
-          from.unuseDates = [].concat(res.data.unuseDates);
-          this.form = Object.assign({}, from);
+          // let from = Object.assign({}, this.from);
+          // from.unuseDates = [].concat(res.data.unuseDates);
+          this.form.unuseDates =[].concat(res.data.unuseDates);
           this.showDate = true;
         })
         .catch(err => {

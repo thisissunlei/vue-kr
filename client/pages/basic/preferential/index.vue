@@ -79,6 +79,20 @@
                     @click="cancelStop">取消</Button>
             </div>
         </Modal>
+        <Modal v-model="openGoods"
+            title="查看商品"
+            ok-text="确定"
+            cancel-text="取消"
+            width="60%"
+            :styles="{top: '20px'}">
+            <Table border
+                :columns="goodsColumns"
+                :data="goodsTableData"
+                stripe></Table>
+            <div slot="footer">
+
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -104,7 +118,8 @@ export default {
     },
     data() {
         return {
-            createModal:false,
+            openGoods: false,
+            createModal: false,
             currentID: '',
             statusList: [],//优惠可用状态
             stateList: [],//优惠可用状态列表 
@@ -121,26 +136,48 @@ export default {
             },
             columns: [
                 {
-                    title: '优惠方案',
+                    title: '折扣方案',
                     key: 'discountScheme',
                     align: 'center',
                     width: 120,
-                },
-                {
-                    title: '优惠类型',
-                    key: 'discountType',
-                    align: 'center',
-                    width: 100,
                     render: (h, params) => {
-                        let str = ''
-                        if (params.row.discountType == 'DISCOUNT') {
-                            str = '折扣'
-                        } else if (params.row.discountType == 'AFTER_FREE') {
-                            str = '后免租'
+                        let schemeTypeName = params.row.schemeTypeName
+                        if (schemeTypeName === '按社区') {
+                            return h('div', schemeTypeName)
+                        } else if (params.row.goods) {
+                            let str = `${schemeTypeName}(${params.row.goods.length}个)`
+                            return h('div', {
+                                style: {
+                                    color: '#2b85e4',
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showGoods(params.row.goods)
+                                    }
+                                }
+                            }, str)
                         }
-                        return h('span', str)
+
                     }
                 },
+                // {
+                //     title: '折扣类型',
+                //     key: 'discountType',
+                //     align: 'center',
+                //     width: 100,
+                //     render: (h, params) => {
+                //         let str = ''
+                //         if (params.row.discountType == 'DISCOUNT') {
+                //             str = '折扣'
+                //         } else if (params.row.discountType == 'AFTER_FREE') {
+                //             str = '后免租'
+                //         }
+                //         return h('span', str)
+                //     }
+                // },
                 {
                     title: '社区名称',
                     key: 'communityName',
@@ -280,7 +317,131 @@ export default {
                         }
                     }
                 }
-            ]
+            ],
+            goodsColumns: [
+                {
+                    title: '商品名称',
+                    key: 'name',
+                    align: 'center',
+                    render: (h, params) => {
+                        var ile = params.row.name;
+                        var nes = params.row.duplicateNo;
+                        var btnRender = [];
+                        if (params.row.duplicateNo == 0) {
+                            btnRender = [
+                                h('p', {
+                                }, ile),
+                            ];
+                        } else {
+                            btnRender.push(
+                                h('p', {
+
+                                }, ile),
+                                h('span', {
+                                    style: {
+                                        color: 'black'
+                                    }
+                                }, '('),
+                                h('span', {
+                                    style: {
+                                        color: '#FF6868'
+                                    }
+                                }, '有重复 '),
+                                h('span', {
+                                    style: {
+                                        color: 'black'
+                                    }
+                                }, ' 编号' + nes + ')'),
+                            )
+                        }
+                        return h('div', {
+                            style: {
+                                cursor: 'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.goDetail(params.row)
+                                }
+                            }
+                        }, btnRender)
+
+                    }
+                },
+                {
+                    title: '商品类型',
+                    key: 'goodsTypeName',
+                    align: 'center',
+                    width: 120,
+                },
+                {
+                    title: '工位数量',
+                    key: 'capacity',
+                    align: 'center',
+                    width: 90,
+                },
+                {
+                    title: '商品属性',
+                    key: 'locationTypeName',
+                    align: 'center',
+                    width: 120,
+                    render(h, params) {
+                        var bacsk = params.row.suiteTypeName ? params.row.suiteTypeName : '';
+                        var devel = params.row.locationTypeName ? params.row.locationTypeName : '';
+                        let des = params.row.descr ? params.row.descr : '';
+                        return h('div', [
+                            h('span', devel + ' ' + bacsk),
+                            h('div', des),
+                        ])
+                    }
+                },
+                {
+                    title: '面积',
+                    key: 'area',
+                    align: 'center',
+                    width: 90,
+                },
+                {
+                    title: '商品定价',
+                    key: 'quotedPrice',
+                    width: 90,
+                    align: 'right',
+                },
+                {
+                    title: '当前状态',
+                    key: 'goodsStatusName',
+                    align: 'center',
+                    width: 90,
+                    render: (tag, params) => {
+                        var statusName = params.row.goodsStatusName ? params.row.goodsStatusName : '-';
+                        var status = params.row.goodsStatus;
+                        var colorClass = '';
+                        if (status == 'DISABLE' || status == 'OFF') {
+                            colorClass = 'redClass'
+                        } else {
+                            colorClass = ''
+                        }
+                        return tag('span', {
+                            attrs: {
+                                class: colorClass
+                            },
+                            style: {
+                                cursor: 'pointer'
+                            },
+                            on: {
+                                click: () => {
+                                    this.openSingleStatus(params.row)
+                                }
+                            }
+                        }, statusName);
+                    }
+                },
+                {
+                    title: '备注',
+                    key: 'descr',
+                    align: 'center'
+                }
+            ],
+            goodsTableData: []
         }
     },
     computed: {
@@ -290,13 +451,13 @@ export default {
     },
     watch: {
         openAddModal(val) {
-            this.createModal=val
+            this.createModal = val
             this.getTableData(this.params);
-            this.$store.commit('changeStep',0)
-            this.$store.commit('resetDiscountSetting',{})
+            this.$store.commit('changeStep', 0)
+            this.$store.commit('resetDiscountSetting', {})
         },
-        createModal(val){
-            if (val!=this.openAddModal) {
+        createModal(val) {
+            if (val != this.openAddModal) {
                 this.$store.commit('changeModalState', val)
             }
         }
@@ -308,6 +469,7 @@ export default {
         this.getStateList();
     },
     methods: {
+        //获取折扣状态枚举
         getStateList() {
             this.$http.get('get-enum-all-data', {
                 enmuKey: 'com.krspace.order.api.enums.discount.DiscountStatus'
@@ -321,6 +483,7 @@ export default {
             })
 
         },
+        //获取社区列表
         getCmtList() {
             this.$http.get('join-bill-community', '').then((response) => {
                 let list = response.data.items;
@@ -341,7 +504,7 @@ export default {
                 });
             })
         },
-
+        //停用折扣
         submitStop() {
             this.$http.put('put-stop-discount', { id: this.currentID }).then((res) => {
                 this.openStop = false;
@@ -357,6 +520,7 @@ export default {
                 });
             })
         },
+        //获取折扣列表数据
         getTableData(params) {
             this.$http.get('get-discont-list', params).then((res) => {
                 this.tableData = res.data.items;
@@ -391,9 +555,22 @@ export default {
         cancelStop() {
             this.openStop = false;
         },
+        //打开新建折扣弹窗
         onCreate() {
             this.$store.commit('changeModalState', true)
         },
+        //查看商品
+        showGoods(goods) {
+            this.$http.post('post-goods-info', goods).then(r => {
+                this.goodsTableData = r.data;
+                this.openGoods = true
+            }).catch(error => {
+                this.$Notice.error({
+                    title: '查看失败',
+                    desc: error.message
+                });
+            })
+        }
 
     }
 

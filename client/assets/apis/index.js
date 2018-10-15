@@ -22,6 +22,7 @@ import DevTool from './devTool';
 import FinancialtransferApply from "./financialtransferApply.js";
 import doorPermmision from './doorPermmision.js';
 import KrmeetingSeat from "./krmeetingSeat.js";
+import App from "./app.js";
 
 
 export default {
@@ -48,5 +49,6 @@ export default {
   ...DevTool,
   ...FinancialtransferApply,
   ...doorPermmision,
-  ...KrmeetingSeat
+  ...KrmeetingSeat,
+  ...App
 }

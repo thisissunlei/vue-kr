@@ -102,339 +102,397 @@
 
 
 <script>
-
-import DetailStyle from '~/components/DetailStyle';
-import LabelText from '~/components/LabelText';
-import utils from '~/plugins/utils';
-import dateUtils from 'vue-dateutils';
+import DetailStyle from "~/components/DetailStyle";
+import LabelText from "~/components/LabelText";
+import utils from "~/plugins/utils";
+import dateUtils from "vue-dateutils";
 
 export default {
-	name: 'JoinView',
-	head() {
-		return {
-			title: "查看入驻订单详情-氪空间后台管理系统"
-		}
-	},
-	components: {
-		DetailStyle,
-		LabelText
-	},
-	data() {
-		return {
-			nullifyReason: '',
-			nullifyRemark: '',
-			opportunityStr: '',
-			basicInfo: {},
-			capitalService: '',
-			capitalTreatment: '',
-			versionRemark: '',
-			service: [
-				{
-					title: '工位/房间编号',
-					key: 'seatName',
-					align: 'center'
-				},
-				{
-					title: '类型',
-					key: 'seatType',
-					align: 'center',
-					render: (h, params) => {
-						let type = params.row.seatType;
-						let typeName = '开放工位';
-						if (type == 'SPACE') {
-							typeName = '独立办公室'
-						} else {
-							typeName = "开放工位"
-						}
-						return typeName
-					}
-				},
-				{
-					title: '工位可容纳人数',
-					key: 'capacity',
-					align: 'center'
-				},
-				{
-					title: '标准单价(元/月)',
-					key: 'originalPrice',
-					align: 'center'
-				},
-				{
-					title: '开始日期',
-					key: 'startDate',
-					align: 'center',
-					render(tag, params) {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.startDate));
-						return time;
-					}
-				},
-				{
-					title: '结束日期',
-					key: 'endDate',
-					align: 'center',
-					render(tag, params) {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.endDate));
-						return time;
-					}
-				},
-				{
-					title: '小计',
-					key: 'originalAmount',
-					align: 'center'
-				}
-			],
+  name: "JoinView",
+  head() {
+    return {
+      title: "查看入驻订单详情-氪空间后台管理系统"
+    };
+  },
+  components: {
+    DetailStyle,
+    LabelText
+  },
+  data() {
+    return {
+      nullifyReason: "",
+      nullifyRemark: "",
+      opportunityStr: "",
+      basicInfo: {},
+      capitalService: "",
+      capitalTreatment: "",
+      versionRemark: "",
+      service: [
+        {
+          title: "工位/房间编号",
+          key: "seatName",
+          align: "center"
+        },
+        {
+          title: "类型",
+          key: "seatType",
+          align: "center",
+          render: (h, params) => {
+            let type = params.row.seatType;
+            let typeName = "开放工位";
+            if (type == "SPACE") {
+              typeName = "独立办公室";
+            } else {
+              typeName = "开放工位";
+            }
+            return typeName;
+          }
+        },
+        {
+          title: "工位可容纳人数",
+          key: "capacity",
+          align: "center"
+        },
+        {
+          title: "标准单价(元/月)",
+          key: "originalPrice",
+          align: "center"
+        },
+        {
+          title: "开始日期",
+          key: "startDate",
+          align: "center",
+          render(tag, params) {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.startDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "结束日期",
+          key: "endDate",
+          align: "center",
+          render(tag, params) {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.endDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "小计",
+          key: "originalAmount",
+          align: "center"
+        }
+      ],
 
-			treatment: [
-				{
-					title: '优惠类型',
-					key: 'tacticsName',
-					align: 'center'
-				},
-				{
-					title: '开始日期',
-					key: 'freeStart',
-					align: 'center',
-					render(tag, params) {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.freeStart));
-						return time;
-					}
-				},
-				{
-					title: '结束日期',
-					key: 'freeEnd',
-					align: 'center',
-					render(tag, params) {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.freeEnd));
-						return time;
-					}
-				},
-				{
-					title: '折扣比例',
-					key: 'discountNum',
-					align: 'center',
-					render(tag, params) {
-						if (params.row.discountNum == 0) {
-							return '-';
-						} else {
-							return params.row.discountNum
-						}
-					}
-				},
-				{
-					title: '优惠添加人',
-					key: 'addUserName',
-					align: 'center',					
-				}
-			],
+      treatment: [
+        // {
+        // 	title: '优惠类型',
+        // 	key: 'tacticsName',
+        // 	align: 'center'
+        // },
+        {
+          title: "开始日期",
+          key: "freeStart",
+          align: "center",
+          render(tag, params) {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.freeStart)
+            );
+            return time;
+          }
+        },
+        {
+          title: "结束日期",
+          key: "freeEnd",
+          align: "center",
+          render(tag, params) {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.freeEnd)
+            );
+            return time;
+          }
+        },
+        {
+          title: "折扣比例",
+          key: "discountNum",
+          align: "center",
+          render(tag, params) {
+            if (params.row.discountNum == 0) {
+              return "-";
+            } else {
+              return params.row.discountNum;
+            }
+          }
+        },
+        {
+          title: "优惠添加人",
+          key: "addUserName",
+          align: "center"
+        }
+      ],
 
-			contract: [
-				{
-					title: '合同编号',
-					key: 'contractNum',
-					align: 'center'
-				},
-				{
-					title: '合同金额',
-					key: 'rentAmount',
-					align: 'center'
-				},
-				{
-					title: '状态',
-					key: 'orderStatusTypeName',
-					align: 'center'
-				}
-			],
-			installments: [],
-			serviceData: [],
-			treatmentData: [],
-			contractData: [],
-			showButton: false,
-			showAll: false,
-			stagesColumn: [
-				{
-					title: '分期类型',
-					key: 'installmentCategoryStr'
-				},
-				{
-					title: '账单日',
-					key: 'billingDate',
-					render: (h, params) => {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.billingDate));
-						return time;
-					}
-				},
-				{
-					title: '最后付款日',
-					key: 'lastPaymentDate',
-					render: (h, params) => {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.lastPaymentDate));
-						return time;
-					}
-				},
-				{
-					title: '分期开始时间',
-					key: 'startDate',
-					render: (h, params) => {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.startDate));
-						return time;
-					}
-				},
-				{
-					title: '分期结束时间',
-					key: 'startDate',
-					render: (h, params) => {
-						let time = dateUtils.dateToStr('YYYY-MM-DD', new Date(params.row.endDate));
-						return time;
-					}
-				},
-				{
-					title: '分期金额',
-					key: 'totalAmount',
-					render: (h, params) => {
-						return utils.thousand(params.row.totalAmount)
-					}
-				},
-				{
-					title: '支付状态',
-					key: 'payStatusStr',
-				}
-			],
-		}
-	},
+      contract: [
+        {
+          title: "合同编号",
+          key: "contractNum",
+          align: "center",
+          render(h, params) {
+            return h(
+              "div",
+              {
+								style:{
+									color:'rgb(43, 133, 228)',
+									cursor:"pointer"
+								},
+                on: {
+                  click: () => {
+                    window.open(
+                      `/order-center/contract-manage/contract-list/list?serialNumber=${
+                        params.row.contractNum
+                      }`,
+                      "_blank"
+                    );
+                  }
+                }
+              },
+              params.row.contractNum
+            );
+          }
+        },
+        {
+          title: "合同金额",
+          key: "rentAmount",
+          align: "center"
+        },
+        {
+          title: "状态",
+          key: "orderStatusTypeName",
+          align: "center"
+        }
+      ],
+      installments: [],
+      serviceData: [],
+      treatmentData: [],
+      contractData: [],
+      showButton: false,
+      showAll: false,
+      stagesColumn: [
+        {
+          title: "分期类型",
+          key: "installmentCategoryStr"
+        },
+        {
+          title: "账单日",
+          key: "billingDate",
+          render: (h, params) => {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.billingDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "最后付款日",
+          key: "lastPaymentDate",
+          render: (h, params) => {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.lastPaymentDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "分期开始时间",
+          key: "startDate",
+          render: (h, params) => {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.startDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "分期结束时间",
+          key: "startDate",
+          render: (h, params) => {
+            let time = dateUtils.dateToStr(
+              "YYYY-MM-DD",
+              new Date(params.row.endDate)
+            );
+            return time;
+          }
+        },
+        {
+          title: "分期金额",
+          key: "totalAmount",
+          render: (h, params) => {
+            return utils.thousand(params.row.totalAmount);
+          }
+        },
+        {
+          title: "支付状态",
+          key: "payStatusStr"
+        }
+      ]
+    };
+  },
 
-	mounted: function () {
-		GLOBALSIDESWITCH('false');
-		// GLOBALHEADERSET('订单合同')
-		this.getDetailData();
-	},
+  mounted: function() {
+    GLOBALSIDESWITCH("false");
+    // GLOBALHEADERSET('订单合同')
+    this.getDetailData();
+  },
 
-	methods: {
+  methods: {
+    //获取销售机会列表
+    getSalerChanceList(parms) {
+      let list = [];
+      let _this = this;
+      this.$http.get(
+        "get-salechance",
+        parms,
+        r => {
+          r.data.items.data.map(item => {
+            list.push({
+              label: item.name,
+              value: item.id
+            });
+          });
+          let obj = list.find(
+            item => item.value == this.basicInfo.opportunityId
+          );
+          this.opportunityStr = obj.label || "";
+        },
+        error => {
+          this.$Notice.error({
+            title: error.message
+          });
+        }
+      );
+    },
 
-		//获取销售机会列表
-		getSalerChanceList(parms) {
-			let list = [];
-			let _this = this;
-			this.$http.get('get-salechance', parms, r => {
-				r.data.items.data.map(item => {
-					list.push({
-						label: item.name,
-						value: item.id
-					})
-				})
-				let obj = list.find(item => item.value == this.basicInfo.opportunityId)
-				this.opportunityStr = obj.label || '';
-			}, error => {
-				this.$Notice.error({
-					title: error.message
-				});
-			}
-			)
-		},
-
-		getDetailData() {
-			let { params } = this.$route;
-			let from = {
-				id: params.watchView
-			};
-			this.$http.get('join-bill-detail', from).then((response) => {
-				this.basicInfo = response.data;
-				let pars = {
-					customerId: this.basicInfo.customerId,
-					communityId: this.basicInfo.communityId,
-					receiveId: this.basicInfo.salerId,
-					orderId:this.basicInfo.id
-				}
-				this.getSalerChanceList(pars);
-				if (response.data.installments.length > 10) {
-					this.showButton = true;
-					this.showAll = false;
-					this.installments = response.data.installments.slice(0, 10)
-				} else {
-					this.installments = response.data.installments || [];
-				}
-				this.installmentAll = response.data.installments || [];
-				this.nullifyReason = response.data.invalidString;
-				this.nullifyRemark = response.data.remark;
-				this.capitalTreatment = response.data.tactiscAmount ? utils.smalltoBIG(response.data.tactiscAmount) : '';
-				this.capitalService = response.data.seatRentAmount ? utils.smalltoBIG(response.data.seatRentAmount) : '';
-				this.serviceData = response.data.orderSeatDetailVo || [];
-				this.treatmentData = response.data.contractTactics || [];
-				this.contractData = response.data.orderContractInfo ? response.data.orderContractInfo : [];
-			}).catch((error) => {
-				this.$Notice.error({
-					title: error.message
-				});
-			})
-		},
-		notAllList() {
-			let list = this.installmentAll
-			this.showAll = false;
-			this.installments = list.slice(0, 10)
-		},
-		showAllList() {
-			let list = this.installmentAll
-			this.showAll = true;
-			this.installments = list;
-		},
-
-	}
-}
+    getDetailData() {
+      let { params } = this.$route;
+      let from = {
+        id: params.watchView
+      };
+      this.$http
+        .get("join-bill-detail", from)
+        .then(response => {
+          this.basicInfo = response.data;
+          let pars = {
+            customerId: this.basicInfo.customerId,
+            communityId: this.basicInfo.communityId,
+            receiveId: this.basicInfo.salerId,
+            orderId: this.basicInfo.id
+          };
+          this.getSalerChanceList(pars);
+          if (response.data.installments.length > 10) {
+            this.showButton = true;
+            this.showAll = false;
+            this.installments = response.data.installments.slice(0, 10);
+          } else {
+            this.installments = response.data.installments || [];
+          }
+          this.installmentAll = response.data.installments || [];
+          this.nullifyReason = response.data.invalidString;
+          this.nullifyRemark = response.data.remark;
+          this.capitalTreatment = response.data.tactiscAmount
+            ? utils.smalltoBIG(response.data.tactiscAmount)
+            : "";
+          this.capitalService = response.data.seatRentAmount
+            ? utils.smalltoBIG(response.data.seatRentAmount)
+            : "";
+          this.serviceData = response.data.orderSeatDetailVo || [];
+          this.treatmentData = response.data.contractTactics || [];
+          this.contractData = response.data.orderContractInfo
+            ? response.data.orderContractInfo
+            : [];
+        })
+        .catch(error => {
+          this.$Notice.error({
+            title: error.message
+          });
+        });
+    },
+    notAllList() {
+      let list = this.installmentAll;
+      this.showAll = false;
+      this.installments = list.slice(0, 10);
+    },
+    showAllList() {
+      let list = this.installmentAll;
+      this.showAll = true;
+      this.installments = list;
+    }
+  }
+};
 </script>
 
 
 <style lang="less" scoped>
 .g-order-detail {
-    // margin:-10px;
-    .m-detail-header {
-        height: 50px;
-        border-bottom: 1px solid #e8e9e9;
-        line-height: 50px;
-        font-size: 16px;
-        color: #666666;
-        .u-border-left {
-            width: 0;
-            height: 24px;
-            border: 2px solid #499df1;
-            margin-right: 20px;
-        }
+  // margin:-10px;
+  .m-detail-header {
+    height: 50px;
+    border-bottom: 1px solid #e8e9e9;
+    line-height: 50px;
+    font-size: 16px;
+    color: #666666;
+    .u-border-left {
+      width: 0;
+      height: 24px;
+      border: 2px solid #499df1;
+      margin-right: 20px;
     }
-    .m-detail-content {
-        padding: 30px 24px;
-        .ivu-table-wrapper {
-            margin-bottom: 30px;
-        }
+  }
+  .m-detail-content {
+    padding: 30px 24px;
+    .ivu-table-wrapper {
+      margin-bottom: 30px;
     }
-    .table-button {
-        text-align: center;
-        cursor: pointer;
-        color: #499df1;
-        display: inline-block;
-        transition: all 0.5s;
-        & > span {
-            font-size: 16px;
-            padding-bottom: 5px;
-            padding-top: 10px;
-            display: inline-block;
-        }
+  }
+  .table-button {
+    text-align: center;
+    cursor: pointer;
+    color: #499df1;
+    display: inline-block;
+    transition: all 0.5s;
+    & > span {
+      font-size: 16px;
+      padding-bottom: 5px;
+      padding-top: 10px;
+      display: inline-block;
     }
-    .button-list {
-        text-align: center;
-    }
-    .notAll {
-        display: block;
-        margin: 0 auto;
-        width: 16px;
-        height: 16px;
-        transform: rotate(180deg);
-        vertical-align: middle;
-    }
-    .showAll {
-        display: block;
-        margin: 0 auto;
-        width: 16px;
-        height: 16px;
+  }
+  .button-list {
+    text-align: center;
+  }
+  .notAll {
+    display: block;
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
+    transform: rotate(180deg);
+    vertical-align: middle;
+  }
+  .showAll {
+    display: block;
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
 
-        vertical-align: middle;
-    }
+    vertical-align: middle;
+  }
 }
 </style>

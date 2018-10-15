@@ -6,6 +6,9 @@
                 :animated="false"
                 @on-click="tabsClick"
             >
+                <TabPane label="账户汇总" name="accountSummary"> 
+                    <AccountSummary v-if="type == 'accountSummary'" :type="type"/>
+                </TabPane>
                 <TabPane label="到款明细" name="getDetail"> 
                     <List v-if="type == 'getDetail'" :type="type"/>
                 </TabPane>
@@ -31,10 +34,12 @@
     import utils from '~/plugins/utils';
     import List from './list';
     import dateUtils from 'vue-dateutils';
+    import AccountSummary from './accountSummary';
     export default {
        
         components:{
-            List
+            List,
+            AccountSummary
         },
          head() {
             return {
@@ -43,7 +48,7 @@
         },
         data () {
            return {
-               type:'getDetail'
+               type:'accountSummary'
            }
         },
         methods:{

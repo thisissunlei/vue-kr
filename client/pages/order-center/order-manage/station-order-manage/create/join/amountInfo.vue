@@ -211,7 +211,7 @@ export default {
                         return h('Input', {
                             props: {
                                 min: params.row.rightDiscount,
-                                value:params.row.discountNum,
+                                value: params.row.discountNum,
                                 disabled: params.row.rightDiscount === 10,
                             },
                             on: {
@@ -477,7 +477,9 @@ export default {
             this.getStationAmount()
         },
         changeDiscount(index, e, guidePrice) {
-            debugger
+            if (!e||e===10) {
+                return
+            }
             this.stationList[index].discountNum = e;
             this.getSaleAmount()
         },

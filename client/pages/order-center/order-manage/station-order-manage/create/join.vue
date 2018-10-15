@@ -18,11 +18,11 @@
             <DetailStyle info="商品价格明细">
                 <AmountInfo/>
             </DetailStyle>
-            <DetailStyle info="优惠信息"
+            <!-- <DetailStyle info="优惠信息"
                 v-show="youhui.length"
                 style="margin-top:40px">
                 <PreferentialInfo/>
-            </DetailStyle>
+            </DetailStyle> -->
             <div style="padding-left:24px">
                 <Row>
                     <Col class="col">
@@ -101,7 +101,7 @@ import BasicInfo from './join/basicInfo.vue'
 import CustomerManager from './join/customerManager.vue'
 import RentInfo from './join/rentInfo.vue'
 import AmountInfo from './join/amountInfo.vue'
-import PreferentialInfo from './join/preferentialInfo.vue'
+// import PreferentialInfo from './join/preferentialInfo.vue'
 
 export default {
     components: {
@@ -111,7 +111,7 @@ export default {
         CustomerManager,
         RentInfo,
         AmountInfo,
-        PreferentialInfo
+        // PreferentialInfo
     },
     head() {
         return {

@@ -4,7 +4,7 @@
     <div class="customer-assets-detail">
 		 <div class="customer-detail">
 			 <div class="detail-font">客户详情
-			 </div><div class="detail-line"><div></div></div>
+			 </div><div style="display:inline-block;margin-left:20px;">{{customerBasic.company}}</div><div class="detail-line"><div></div></div>
 		 </div>
 
 

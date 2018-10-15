@@ -100,7 +100,7 @@ export default {
                     key: 'itemVOs',
                     align:'center',
                     render(tag, params){
-                        return publicFn.mergeCell(h,params.row.itemVOs,'depositType')
+                        return publicFn.mergeCell(h,params.row.itemVOs,'depositTypeDesc')
                     }
                 },
                 {

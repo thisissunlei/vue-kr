@@ -13,7 +13,7 @@
                 @click="openPriceButton">批量填写价格</Button>
             <Button type="primary"
                 style="margin-right:20px;font-size:14px"
-                @click="openPriceButton">批量填写折扣</Button>
+                @click="openDiscountButton">批量填写折扣</Button>
             </Col>
 
         </Row>
@@ -26,7 +26,8 @@
                 @on-selection-change="selectRow"></Table>
             <div class="total-money"
                 v-if="stationList.length">
-                <div class="left"> <span>折扣原因：</span> <Input style="width:400px" v-model="discountRemark"></Input></div>
+                <div class="left"> <span>折扣原因：</span> <Input style="width:400px"
+                        v-model="discountRemark"></Input></div>
                 <div class="right"> <span>服务费总计</span>
                     <span class="money">{{stationAmount | thousand}} </span>
                     <span class="money">{{stationAmount| amountInWords}}</span></div>
@@ -70,6 +71,26 @@
                 <Button @click="cancelPrice">取消</Button>
             </div>
         </Modal>
+        <Modal v-model="openDiscount"
+            title="填写折扣"
+            ok-text="保存"
+            cancel-text="取消"
+            class-name="vertical-center-modal">
+            <div v-if="openDiscount">
+                <span style="display:inline-block;height:32px;line-height:32px"> 工位折扣： </span>
+                <Input v-model="batchDiscount"
+                    placeholder="工位折扣"
+                    style="width:150px"></Input>
+                <span style="display:block;height:32px;line-height:32px;color:red"
+                    v-if="batchDiscountError">{{batchDiscountError}}</span>
+
+            </div>
+            <div slot="footer">
+                <Button type="primary"
+                    @click="submitDiscount">确定</Button>
+                <Button @click="openDiscount=false">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -86,12 +107,15 @@ export default {
     },
     data() {
         return {
-            discountRemark:'',//折扣原因
+            discountRemark: '',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
             openPrice: false,
+            openDiscount: false,
             price: '',
+            batchDiscount: '',
             priceError: '',
+            batchDiscountError: '',
             stationAmount: '',
             params: '',
             stationList: [],
@@ -180,16 +204,15 @@ export default {
                 },
                 {
                     title: '签约折扣',
-                    key: 'discount',
+                    key: 'discountNum',
                     align: 'center',
                     render: (h, params) => {
                         let discount = 10;
-                        let discountEditDisable = params.row.rightDiscount == 10
                         return h('Input', {
                             props: {
                                 min: params.row.rightDiscount,
-                                value: '',
-                                disabled: !discountEditDisable,
+                                value:params.row.discountNum,
+                                disabled: params.row.rightDiscount === 10,
                             },
                             on: {
                                 'on-change': (event) => {
@@ -199,7 +222,7 @@ export default {
                                     }
                                     discount = e;
                                 },
-                                'on-blur': () => {
+                                'on-blur': (event) => {
                                     var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
                                     if (discount && !pattern.test(discount)) {
                                         this.$Notice.error({
@@ -288,6 +311,10 @@ export default {
         },
         openPrice() {
             this.priceError = ''
+            this.price = ''
+        },
+        openDiscount() {
+            this.batchDiscountError = ''
             this.price = ''
         }
     },
@@ -388,7 +415,9 @@ export default {
                 this.getStationAmount() //价格变动后需要重新计算工位费用
             }
         },
-        //批量录入价格 对于勾选的行
+        cancelPrice() {
+            this.openPrice = !this.openPrice;
+        },
 
         openPriceButton() {
             let stationVos = this.stationList;
@@ -402,15 +431,54 @@ export default {
             }
             this.openPrice = !this.openPrice;
         },
-        cancelPrice() {
-            this.openPrice = !this.openPrice;
+
+        submitDiscount() {
+            let errorStr = ''
+            let stationVos = this.stationList;
+            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            if (!pattern.test(this.batchDiscount)) {
+                errorStr = '工位折扣不得多于三位小数'
+            }
+            // 选中的工位
+            let selectedStation = this.selectedStation;
+            stationVos = stationVos.filter(function (item, index) {
+                if (selectedStation.indexOf(item.seatId) != -1) {
+                    return true;
+                }
+                return false;
+            });
+            let sortStationVos = [].concat(stationVos)
+            sortStationVos.sort((s1, s2) => { return s1.rightDiscount - s2.rightDiscount })
+            let maxPrice = sortStationVos[0].rightDiscount;
+            if (maxPrice > this.batchDiscount) {
+                this.batchDiscountError = '工位折扣不得小于' + maxPrice
+            }
+
+            else {
+                this.batchDiscountError = '';
+                this.openDiscount = !this.openDiscount;
+                this.stationList = this.stationList.map((item) => {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        item.discount = Number(this.batchDiscount);
+                    }
+                    return item
+                })
+                this.selectedStation = [];
+                this.getSaleAmount() //价格变动后需要重新计算工位费用
+            }
         },
+        //批量录入价格 对于勾选的行
+        openDiscountButton() {
+            this.openDiscount = true
+        },
+
         changePrice(index, e, guidePrice) {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
         },
         changeDiscount(index, e, guidePrice) {
-            this.stationList[index].discount = e;
+            debugger
+            this.stationList[index].discountNum = e;
             this.getSaleAmount()
         },
         submitStation() {//工位弹窗的提交
@@ -453,7 +521,7 @@ export default {
                 if (item.originalPrice === '') {
                     originalPrice = true;
                 }
-                obj.discountNum = 10
+                // obj.discountNum = 10
                 return obj;
             })
             if (originalPrice) {
@@ -507,7 +575,7 @@ export default {
                 let money = r.data.discountAmount;
                 this.saleAmount = Math.round(money * 100) / 100;
                 // this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
-                this.formItem.rentAmount = r.data.totalrent;
+                this.stationAmount = r.data.totalrent;
                 this.discountErrorStr = ''
                 this.$store.commit('changeRentAmountSale', r.data.totalrent)
             }, e => {

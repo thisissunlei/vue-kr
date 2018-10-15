@@ -8,7 +8,7 @@
             <Button type="primary" @click="handle2SQ" class='operate-btn'>转社区</Button>
             <Button type="primary" @click="handle2YYW" class='operate-btn'>转营业外</Button>
             <Button type="primary" @click="handle2YE" class='operate-btn'>转余额</Button>
-            <Button type="primary" @click="handleYJ2ZJ" class='operate-btn'>押金转租金</Button>
+            <!-- <Button type="primary" @click="handleYJ2ZJ" class='operate-btn'>押金转租金</Button> -->
             <Button type="primary" @click="handleReleaseFWBZJ" class='operate-btn'>释放服务保证金</Button>
 
         </div>

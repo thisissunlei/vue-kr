@@ -214,7 +214,8 @@ export default {
             'timeRange',
             'sso',
             'managerId',
-            'preferentialError'
+            'preferentialError',
+            'discountReason'
         ])
     },
     watch: {
@@ -364,7 +365,7 @@ export default {
             formItem.ssoId = this.sso.ssoId;
             formItem.ssoName = this.sso.ssoName;
             formItem.managerId = this.managerId;
-
+            formItem.discountReason=this.discountReason;
             let _this = this;
             this.disabled = true;
             // return

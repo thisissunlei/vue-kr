@@ -4,6 +4,7 @@
 
 var amountInfo = {
     state: {
+        discountReason:'',
         seats: [],
         rentAmount: ""//总金额
     },
@@ -20,6 +21,9 @@ var amountInfo = {
                 // console.log('qingkong_rentAmount')
             }
             state.rentAmount = val;
+        },
+        changeDiscountReson(state, val) {
+            state.discountReason=val.trim()
         }
     },
     actions: {},
@@ -32,6 +36,9 @@ var amountInfo = {
         },
         rentAmount(state) {
             return state.rentAmount;
+        },
+        discountReason(state){
+            return state.discountReason;
         }
     }
 };

@@ -52,14 +52,14 @@
         </Modal>
 
         <Modal v-model="openPrice"
-            title="填写单价"
+            title="批量填写价格"
             ok-text="保存"
             cancel-text="取消"
             class-name="vertical-center-modal">
             <div v-if="openPrice">
-                <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+                <span style="display:inline-block;height:32px;line-height:32px"> 标准月费： </span>
                 <Input v-model="price"
-                    placeholder="工位单价"
+                    placeholder="标准月费"
                     style="width:150px"></Input>
                 <span style="display:block;height:32px;line-height:32px;color:red"
                     v-if="priceError">{{priceError}}</span>
@@ -67,19 +67,19 @@
             </div>
             <div slot="footer">
                 <Button type="primary"
-                    @click="submitPrice">确定</Button>
+                    @click="submitPrice">批量填写</Button>
                 <Button @click="cancelPrice">取消</Button>
             </div>
         </Modal>
         <Modal v-model="openDiscount"
-            title="填写折扣"
+            title="批量填写折扣"
             ok-text="保存"
             cancel-text="取消"
             class-name="vertical-center-modal">
             <div v-if="openDiscount">
-                <span style="display:inline-block;height:32px;line-height:32px"> 工位折扣： </span>
+                <span style="display:inline-block;height:32px;line-height:32px"> 签约折扣: </span>
                 <Input v-model="batchDiscount"
-                    placeholder="工位折扣"
+                    placeholder="签约折扣"
                     style="width:150px"></Input>
                 <span style="display:block;height:32px;line-height:32px;color:red"
                     v-if="batchDiscountError">{{batchDiscountError}}</span>
@@ -87,7 +87,7 @@
             </div>
             <div slot="footer">
                 <Button type="primary"
-                    @click="submitDiscount">确定</Button>
+                    @click="submitDiscount">批量填写</Button>
                 <Button @click="openDiscount=false">取消</Button>
             </div>
         </Modal>
@@ -316,6 +316,9 @@ export default {
         openDiscount() {
             this.batchDiscountError = ''
             this.price = ''
+        },
+        discountRemark(val) {
+            this.$store.commit('changeDiscountReson', val)
         }
     },
     methods: {
@@ -376,6 +379,8 @@ export default {
                 }
                 return true;
             });
+            this.stationList = stationVos
+            this.$store.commit('changeSeats', this.stationList)
             this.getStationAmount(stationVos);
             this.items = []
         },
@@ -399,7 +404,8 @@ export default {
             sortStationVos.sort((s1, s2) => { return s2.guidePrice - s1.guidePrice })
             let maxPrice = sortStationVos[0].guidePrice;
             if (maxPrice > this.price) {
-                this.priceError = '工位单价不得小于' + maxPrice
+                // this.priceError = '工位单价不得小于' + maxPrice
+                this.priceError = '部分或全部商品标准月费低于定价'
             }
 
             else {
@@ -451,7 +457,8 @@ export default {
             sortStationVos.sort((s1, s2) => { return s1.rightDiscount - s2.rightDiscount })
             let maxPrice = sortStationVos[0].rightDiscount;
             if (maxPrice > this.batchDiscount) {
-                this.batchDiscountError = '工位折扣不得小于' + maxPrice
+                // this.batchDiscountError = '工位折扣不得小于' + maxPrice
+                this.batchDiscountError = '部分或全部商品没有此权限'
             }
 
             else {
@@ -477,7 +484,7 @@ export default {
             this.getStationAmount()
         },
         changeDiscount(index, e, guidePrice) {
-            if (!e||e===10) {
+            if (!e || e === 10) {
                 return
             }
             this.stationList[index].discountNum = e;
@@ -486,6 +493,7 @@ export default {
         submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
+            debugger
             this.getStationAmount()
             this.openStation = false;
             this.clearSale()
@@ -507,9 +515,13 @@ export default {
             this.openStation = false
         },
         getStationAmount(list) {
+
             //判断标准单价是否有值，若无值，则不提交计算总价
             let originalPrice = false;
             let val = list || this.stationList;
+            if (this.stationList.length === 0) {
+                return
+            }
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || item.seatPrice || 0;

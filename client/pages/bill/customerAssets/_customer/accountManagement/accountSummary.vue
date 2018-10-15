@@ -44,7 +44,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.balanceAmount?'¥'+utils.thousand(params.row.balanceAmount):'-';
+                        var end=params.row.balanceAmount?'¥'+utils.thousand(params.row.balanceAmount):'¥0.00';
                         return <span style="text-align:right;">{end}</span>;
                     }
                 },
@@ -54,7 +54,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.paymentAmount?'¥'+utils.thousand(params.row.paymentAmount):'-';
+                        var end=params.row.paymentAmount?'¥'+utils.thousand(params.row.paymentAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -64,7 +64,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.refundAmount?'¥'+utils.thousand(params.row.refundAmount):'-';
+                        var end=params.row.refundAmount?'¥'+utils.thousand(params.row.refundAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -74,7 +74,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.comsumeAmount?'¥'+utils.thousand(params.row.comsumeAmount):'-';
+                        var end=params.row.comsumeAmount?'¥'+utils.thousand(params.row.comsumeAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -84,7 +84,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.depositAmount?'¥'+utils.thousand(params.row.depositAmount):'-';
+                        var end=params.row.depositAmount?'¥'+utils.thousand(params.row.depositAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 }
@@ -152,7 +152,7 @@ export default {
                     key: 'rentAmount',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.rentAmount?'¥'+utils.thousand(params.row.rentAmount):'-';
+                        var end=params.row.rentAmount?'¥'+utils.thousand(params.row.rentAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -162,7 +162,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.mettingAmount?'¥'+utils.thousand(params.row.mettingAmount):'-';
+                        var end=params.row.mettingAmount?'¥'+utils.thousand(params.row.mettingAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -172,7 +172,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.printAmount?'¥'+utils.thousand(params.row.printAmount):'-';
+                        var end=params.row.printAmount?'¥'+utils.thousand(params.row.printAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -182,7 +182,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.registerAmount?'¥'+utils.thousand(params.row.registerAmount):'-';
+                        var end=params.row.registerAmount?'¥'+utils.thousand(params.row.registerAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 },
@@ -192,7 +192,7 @@ export default {
                     className:'cell-right',
                     align:'center',
                     render(tag, params){
-                        var end=params.row.otherAmount?'¥'+utils.thousand(params.row.otherAmount):'-';
+                        var end=params.row.otherAmount?'¥'+utils.thousand(params.row.otherAmount):'¥0.00';
                         return <span >{end}</span>;
                     }
                 }

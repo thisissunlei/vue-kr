@@ -22,7 +22,7 @@ function mergeCell(h,rowArray,param,type){
         row=rowArray.map((item,index)=>{
             var pageData=item[param]?item[param]:'-';
             if(type=='money'){
-                pageData=item[param]?'¥'+utils.thousand(item[param]):'-';
+                pageData=item[param]?'¥'+utils.thousand(item[param]):'¥0.00';
             }
             return h('div', [
                 h('Tooltip', {

@@ -6,7 +6,7 @@ export default {
   },
   //获取工位折扣权限
   "post-seat-discount-right": {
-    url: "/cmt/discount/goods",
+    url: "/ben/cmt/discount/goods",
     method: "post"
   },
 };

@@ -325,34 +325,34 @@ export default {
         },
         tableChange(params) {
             this.selectGoods = params.map(item => {
-                return { seatId: item.id, goodsType: item.goodsType }
+                return { seatId: item.id, seatType: item.goodsType }
             })
         },
         doAddDiscount(formDiscount) {
             console.log('doAddDiscount', this.formDiscount)
-
+            debugger
             if (this.selectGoods.length === 0) {
                 this.$Notice.error({
                     title: '请选择工位'
                 });
                 return
             }
-            let { communityId, schemeType, discountType, time: { startDate, endDate }, remark } = formDiscount
-            let parmas = { communityId, schemeType, discountType, startDate, endDate, remark }
+            let { communityId, schemeType, discountType, rightDetail,time: { startDate, endDate }, remark } = formDiscount
+            let parmas = { communityId, schemeType, discountType,rightDetail, startDate, endDate, remark }
             parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
             parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
 
-            let res = {};
-            let obj = formDiscount.discountList
-            Object.keys(obj).map(item => {
-                let temp = this.roleList.filter(r => {
-                    return r.level == Number(item)
-                })
-                if (temp != null && temp.length > 0) {
-                    res[temp[0].id] = obj[item]
-                }
-            })
-            parmas.rightDetail = JSON.stringify(res);
+            // let res = {};
+            // let obj = formDiscount.discountList
+            // Object.keys(obj).map(item => {
+            //     let temp = this.roleList.filter(r => {
+            //         return r.level == Number(item)
+            //     })
+            //     if (temp != null && temp.length > 0) {
+            //         res[temp[0].id] = obj[item]
+            //     }
+            // })
+            // parmas.rightDetail = JSON.stringify(res);
             parmas.goods = JSON.stringify(this.selectGoods)
             debugger
             this.$http.post('post-add-discount', parmas).then((response) => {

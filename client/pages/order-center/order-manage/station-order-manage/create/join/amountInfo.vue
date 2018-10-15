@@ -26,9 +26,10 @@
                 @on-selection-change="selectRow"></Table>
             <div class="total-money"
                 v-if="stationList.length">
-                <span>服务费总计</span>
-                <span class="money">{{stationAmount | thousand}} </span>
-                <span class="money">{{stationAmount| amountInWords}}</span>
+                <div class="left"> <span>折扣原因：</span> <Input style="width:400px" v-model="discountRemark"></Input></div>
+                <div class="right"> <span>服务费总计</span>
+                    <span class="money">{{stationAmount | thousand}} </span>
+                    <span class="money">{{stationAmount| amountInWords}}</span></div>
             </div>
             </Col>
         </Row>
@@ -85,6 +86,7 @@ export default {
     },
     data() {
         return {
+            discountRemark:'',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
             openPrice: false,
@@ -178,16 +180,16 @@ export default {
                 },
                 {
                     title: '签约折扣',
-                    key: 'guidePrice',
+                    key: 'discount',
                     align: 'center',
                     render: (h, params) => {
                         let discount = 10;
                         let discountEditDisable = params.row.rightDiscount == 10
                         return h('Input', {
                             props: {
-                                min: params.row.guidePrice,
+                                min: params.row.rightDiscount,
                                 value: '',
-                                disabled: discountEditDisable,
+                                disabled: !discountEditDisable,
                             },
                             on: {
                                 'on-change': (event) => {
@@ -209,10 +211,10 @@ export default {
                                     if (discount < params.row.rightDiscount) {
                                         discount = params.row.rightDiscount
                                         this.$Notice.error({
-                                            title: '单价不得小于' + params.row.rightDiscount
+                                            title: '折扣不得小于' + params.row.rightDiscount
                                         })
                                     }
-                                    // this.changePrice(params.index, discount)
+                                    this.changeDiscount(params.index, discount)
                                 }
                             }
                         })
@@ -407,10 +409,12 @@ export default {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
         },
+        changeDiscount(index, e, guidePrice) {
+            this.stationList[index].discount = e;
+            this.getSaleAmount()
+        },
         submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
-            //获取每一个工位商品的折扣权限
-
             this.delStation = this.stationData.deleteData || [];
             this.getStationAmount()
             this.openStation = false;
@@ -469,6 +473,7 @@ export default {
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.startDate))
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.endDate))
                     obj.belongType = item.seatType;
+                    obj.rightDiscount = item.rightDiscount
                     return obj;
                 });
                 this.stationData.submitData = this.stationList
@@ -487,54 +492,51 @@ export default {
 
             })
         },
-        //获取工位折扣权限
-        getSeatDiscoutRight(params) {
-            return new Promise((reslove, reject) => {
-                this.$http.post("post-seat-discount-right", params).then(r => {
-                    reslove(r)
-                }).catch(e => {
-                    this.$Notice.error({
-                        desc: e.message
-                    })
-                    reject(e)
-                })
-            })
-        },
-        setSeatDiscountMap(stationList) {
-            if (stationList.length == 0) return
-            let arr = []
-            let goodTypeSetTypeMap = {
-                OPEN: 'OPEN',
-                MOVE: 'OPEN',
-                SPACE: 'SPACE',
-            }
-            stationList.map(item => {
-                let obj = {}
-                obj.seatId = item.id || item.seatId;
-                obj.seatType = goodTypeSetTypeMap[item.goodsType]
-                arr.push(obj)
-            })
+
+        getSaleAmount(list) {
             let params = {
                 communityId: this.communityId,
-                goods: JSON.stringify(arr)
-            }
-            this.getSeatDiscoutRight(params).then(r => {
-                r.data.map(item => {
-                    let key = item.seatType + '_' + item.seatId
-                    this.seatDiscountMap[key] = item.rightDiscount
-                })
-            }).catch(e => {
-                this.$Notice.error({
-                    desc: e.message
-                })
+                leaseEnddate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.endDate)),
+                leaseBegindate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.startDate)),
+                seats: JSON.stringify(this.stationList),
+                // saleList: JSON.stringify(list)
+            };
+            this.disabled = false;
+            this.$http.post('count-sale', params, r => {
+                this.stationList = r.data.seats;
+                let money = r.data.discountAmount;
+                this.saleAmount = Math.round(money * 100) / 100;
+                // this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
+                this.formItem.rentAmount = r.data.totalrent;
+                this.discountErrorStr = ''
+                this.$store.commit('changeRentAmountSale', r.data.totalrent)
+            }, e => {
+                if (this.stationList.length) {
+                    this.disabled = true;
+                    this.discountErrorStr = e.message;
+                    this.$Notice.error({
+                        title: e.message
+                    })
+                }
             })
-        }
 
+        },
     },
 }
 </script>
 
 <style lang="less">
 .amount-info-panel {
+  .total-money {
+    .left {
+      float: left;
+      text-align: left;
+      padding-left: 10px;
+      width: 500px;
+    }
+    .right {
+      float: right;
+    }
+  }
 }
 </style>

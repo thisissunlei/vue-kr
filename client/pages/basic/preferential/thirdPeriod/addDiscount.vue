@@ -227,6 +227,19 @@ export default {
                         });
                     }
                     if (pass) {
+                        let res = {};
+                        let obj = this.formItem.discountList
+                        debugger
+                        Object.keys(obj).map(item => {
+                            let temp = this.roleList.filter(r => {
+                                return r.level == Number(item)
+                            })
+                            if (temp != null && temp.length > 0) {
+                                res[temp[0].id] = obj[item]
+                            }
+                        })
+                        this.formItem.rightDetail = JSON.stringify(res);
+                        debugger
                         this.$store.commit('changeDiscountSetting', this.formItem)
                         this.$store.commit('changeStep', 2)
                     }
@@ -336,7 +349,7 @@ export default {
                 this.$Message.success('添加成功');
                 this.handleCancle(true);
                 this.$store.commit('changeModalState', false)
-                
+
             }).catch((error) => {
                 this.$Notice.error({
                     title: '添加失败',

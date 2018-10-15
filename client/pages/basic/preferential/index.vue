@@ -142,7 +142,7 @@ export default {
                     width: 120,
                     render: (h, params) => {
                         let schemeTypeName = params.row.schemeTypeName
-                        if (schemeTypeName === '按社区') {
+                        if (schemeTypeName === '全社区') {
                             return h('div', schemeTypeName)
                         } else if (params.row.goods) {
                             let str = `${schemeTypeName}(${params.row.goods.length}个)`

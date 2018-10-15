@@ -396,11 +396,11 @@ export default {
             saleList = saleList.map(item => {
                 let obj = Object.assign({}, item);
                 if (item.tacticsType == '3') {
-                    obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.startDate))
+                    obj.validStart = dateUtils.dateToStr("YYYY/MM/dd 00:00:00", new Date(item.startDate))
                 } else {
-                    obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validStart))
+                    obj.validStart = dateUtils.dateToStr("YYYY/MM/dd 00:00:00", new Date(item.validStart))
                 }
-                obj.validEnd = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.validEnd))
+                obj.validEnd = dateUtils.dateToStr("YYYY/MM/dd 00:00:00", new Date(item.validEnd))
                 obj.rightType = item.rightType;
                 return obj;
             })

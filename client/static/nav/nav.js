@@ -67,10 +67,9 @@
             port = ":" + port;
         }
         if(type && type == 'admin'){
-            if(nowType == 'admin'){
-                return router;
-            }
+           
             alias = '/new/#'
+            return '/new/#'+router;
         }
         if (type && type == "vue") {
             if(nowType == 'vue'){
@@ -79,10 +78,10 @@
             alias = '';
         }
         if(type && type == 'project'){
-            if(nowType == 'project'){
-                return router;
-            }
+           
+            
             alias = '/project/#'
+            return '/project/#'+router;
         }
         if(type && type == "member"){
             alias = '/';

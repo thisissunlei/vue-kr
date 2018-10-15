@@ -1317,7 +1317,7 @@ export default {
                 // obj.originalPrice = item.price;
                 obj.seatId = item.seatId;
                 startDate = obj.endDate;
-                if (item.originalPrice == '') {
+                if (item.originalPrice === '') {
                     originalPrice = true;
                 }
                 obj.floor = item.whereFloor || item.floor;

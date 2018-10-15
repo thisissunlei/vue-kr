@@ -287,7 +287,6 @@ import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectChance from '~/components/SelectSaleChance.vue';
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';

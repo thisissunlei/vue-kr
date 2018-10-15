@@ -17,7 +17,7 @@
 			</LabelText>
 
 			<LabelText label="客户名称：">
-				<a href="">
+				<a href="JavaScript:;">
 					{{basicInfo.customerName?basicInfo.customerName:'-'}}
 				</a>
 			</LabelText>

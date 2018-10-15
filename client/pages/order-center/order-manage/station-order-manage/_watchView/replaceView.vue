@@ -1322,6 +1322,7 @@
                         tacticsType:discount[0].tacticsType,
                         tacticsId:discount[0].tacticsId
                     }
+                    this.discountReceive=this.discount.minDiscount
                     let maxDiscount=Math.min.apply(null,discountList)
                     if (this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&maxDiscount>this.discountReceive) {
                         this.discountError='您没有此折扣权限，请让高权限的同事协助编辑';
@@ -1463,7 +1464,7 @@
             },
             setDiscountNum(){
                 this.discountNum = this.discountCon
-                if(!this.discountNum){
+                if(!this.discountNum||(''+this.discountNum).trim().length===0){
                     this.$Notice.error({
                         title:'请先选择折扣'
                     })
@@ -1749,11 +1750,11 @@
             },
             checkDiscount(){
                 let value = this.discountCon;
-                if(isNaN(value)){
+                 if(isNaN(value)|| value.trim().length===0 ){
                     this.$Notice.error({
                         title:'折扣必须为数字'
                     })
-                    this.discountCon = this.discount.minDiscount;
+                    // this.discountCon = this.discount.minDiscount;
                     return;
                 }
                 var pattern =/^[1-9]+(.[0-9]{1})?$/;
@@ -1765,7 +1766,7 @@
                 }
                 if(value<this.discount.minDiscount){
                     this.$Notice.error({
-                        title:'单价不得小于'+this.discount.minDiscount
+                        title:'折扣不得小于'+this.discount.minDiscount
                     })
                     this.discountCon = this.discount.minDiscount;
                     return;

@@ -337,8 +337,8 @@ export default {
                 });
                 return
             }
-            let { communityId, schemeType, discountType, rightDetail,time: { startDate, endDate }, remark } = formDiscount
-            let parmas = { communityId, schemeType, discountType,rightDetail, startDate, endDate, remark }
+            let { communityId, schemeType, discountType, rightDetail, time: { startDate, endDate }, remark } = formDiscount
+            let parmas = { communityId, schemeType, discountType, rightDetail, startDate, endDate, remark }
             parmas.startDate = parmas.startDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate)) : ''
             parmas.endDate = parmas.endDate ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate)) : ''
 
@@ -357,7 +357,6 @@ export default {
             debugger
             this.$http.post('post-add-discount', parmas).then((response) => {
                 this.$Message.success('添加成功');
-                this.handleCancle(true);
                 this.$store.commit('changeModalState', false)
             }).catch((error) => {
                 this.$Notice.error({

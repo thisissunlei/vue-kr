@@ -12,9 +12,7 @@ var discountSetting = {
   },
   mutations: {
     changeDiscountSetting(state, val) {
-      debugger
       state.formDiscount = Object.assign({},state.formDiscount, val);
-      debugger
     },
     resetDiscountSetting(state, val) {
       state.formDiscount = {}

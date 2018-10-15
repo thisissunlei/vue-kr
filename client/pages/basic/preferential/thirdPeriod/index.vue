@@ -1,7 +1,7 @@
 <template>
   <div class="create-discount-panel">
     <div class="step-container">
-      <Steps :currentStep="currentStep">
+      <Steps :current="currentStep">
         <Step v-for="(step,index) in steps"
           :key="index"
           :title="step.title" />
@@ -156,7 +156,7 @@ export default {
       this.isGoodsScheme = (val === 'GOODS')
     },
     onCancel() {
-
+      this.$store.commit('changeModalState',false)
     },
     onAddSetpTwo() {
       this.setp2AddFlag = (new Date()).getTime()

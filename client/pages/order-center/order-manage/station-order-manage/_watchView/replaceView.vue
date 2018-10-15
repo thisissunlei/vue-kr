@@ -1609,8 +1609,8 @@
             // 获取step3的服务费用明细
             getSeatCombin(){
                 let list = this.selecedStationList.map(item=>{
-                    item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
-                    item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                    item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",utils.dateParse(item.startDate))
+                    item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",utils.dateParse(item.endDate))
                     return item
                 })
                 let params = {

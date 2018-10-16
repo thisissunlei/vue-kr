@@ -26,7 +26,8 @@
                 @on-selection-change="selectRow"></Table>
             <div class="total-money"
                 v-if="stationList.length">
-                <div class="left"> <span>折扣原因：</span><Input style="width:400px" maxlength="200"
+                <div class="left"> <span>折扣原因：</span><Input style="width:400px"
+                        :maxlength="200"
                         v-model="discountRemark"></Input></div>
                 <div class="right"> <span>服务费总计</span>
                     <span class="money">{{stationAmount | thousand}} </span>
@@ -134,7 +135,22 @@ export default {
                 {
                     title: '商品',
                     key: 'name',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', {
+                            style: {
+                                color: '#2b85e4',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                                textDecoration: 'underline'
+                            },
+                            on: {
+                                click: () => {
+                                    window.open('/inventory/goods-library/goods-detail?goodsType=' + params.row.seatType + '&id=' + params.row.id||params.row.seatId, '_blank')
+                                }
+                            }
+                        }, params.row.name)
+                    }
                 },
                 {
                     title: '工位数',
@@ -240,12 +256,12 @@ export default {
                                     this.changeDiscount(params.index, discount)
                                 }
                             }
-                        },params.row.discountNum)
+                        }, params.row.discountNum)
                     }
                 },
                 {
                     title: '签约月费',
-                    key: 'guidePrice',
+                    key: 'discountedPrice',
                     align: 'right',
                 },
                 {
@@ -385,8 +401,8 @@ export default {
             this.getStationAmount(stationVos);
             this.items = []
         },
-        deleteStationByIndex(index){
-            this.stationList.splice(index,1)
+        deleteStationByIndex(index) {
+            this.stationList.splice(index, 1)
             this.$store.commit('changeSeats', this.stationList)
             this.getStationAmount(this.stationList);
         },

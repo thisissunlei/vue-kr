@@ -77,7 +77,23 @@
 				</div>
 			</DetailStyle> -->
       <DetailStyle info="商品价格明细">
-        <goodPriceDetail :stationList="stationList"></goodPriceDetail>
+          <goodPriceDetail :stationList="stationList" style='margin-bottom:20px'/>  
+          <div>
+            <LabelText label="折扣添加人：" >
+					  	{{basicInfo.discountCreaterName}}
+					  </LabelText>
+					  <LabelText label="折扣原因：" >
+					  	{{basicInfo.discountReason}}
+					  </LabelText>
+          </div>
+          <div>
+					  <LabelText label="服务费总额：" style="color:red;">
+					  	{{basicInfo.rentAmount}}
+					  </LabelText>
+					  <LabelText label="履约保证金总额：" style="color:red;">
+					  	{{basicInfo.depositAmount}}
+					  </LabelText>
+				  </div>
 			</DetailStyle>
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData" />
@@ -424,7 +440,7 @@ export default {
           this.contractData = response.data.orderContractInfo
             ? response.data.orderContractInfo
             : [];
-          // this.stationList=
+          this.stationList=response.data.orderSeatDetailVo||[]
         })
         .catch(error => {
           this.$Notice.error({

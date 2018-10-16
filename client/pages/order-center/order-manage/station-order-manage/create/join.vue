@@ -25,14 +25,14 @@
             </DetailStyle> -->
             <div style="padding-left:24px">
                 <Row>
-                    <Col class="col">
+                    <!-- <Col class="col">
                     <FormItem label="优惠后服务费总额"
                         style="width:252px">
                         <Input v-model="amountNeedPay"
                             placeholder="优惠后服务费总额"
                             disabled></Input>
                     </FormItem>
-                    </Col>
+                    </Col> -->
                     <Col class="col">
                     <FormItem label="首付款日期"
                         style="width:252px"

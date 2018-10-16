@@ -98,6 +98,7 @@ export default {
                 {
                     title: '押金款项',
                     key: 'itemVOs',
+                    className:'current-range',
                     align:'center',
                     render(tag, params){
                         return publicFn.mergeCell(h,params.row.itemVOs,'depositTypeDesc')
@@ -106,7 +107,7 @@ export default {
                 {
                     title: '可用',
                     key: 'itemVOs',
-                    className:'cell-right',
+                    className:'cell-right current-range',
                     align:'center',
                     render(tag, params){
                         return publicFn.mergeCell(h,params.row.itemVOs,'freeDeposit','money')
@@ -115,7 +116,7 @@ export default {
                 {
                     title: '在押',
                     key: 'itemVOs',
-                    className:'cell-right',
+                    className:'cell-right current-range',
                     align:'center',
                     render(tag, params){
                         return publicFn.mergeCell(h,params.row.itemVOs,'deposit','money')
@@ -124,7 +125,7 @@ export default {
                 {
                     title: '冻结',
                     key: 'itemVOs',
-                    className:'cell-right',
+                    className:'cell-right current-range',
                     align:'center',
                     render(tag, params){
                         return publicFn.mergeCell(h,params.row.itemVOs,'lockDeposit','money')
@@ -133,7 +134,7 @@ export default {
                 {
                     title: '转移中',
                     key: 'itemVOs',
-                    className:'cell-right',
+                    className:'cell-right current-range',
                     align:'center',
                     render(tag, params){
                         return publicFn.mergeCell(h,params.row.itemVOs,'transferDeposit','money')
@@ -251,6 +252,10 @@ export default {
 <style lang="less">
 .account-summary{
   padding-right:20px;
+  .ivu-table-cell{
+      padding:0;
+      padding-right:5px;
+  }
   .cell-right{
       .ivu-table-cell{
           text-align: right;
@@ -258,12 +263,14 @@ export default {
   }
   .current-range{
     .ivu-table-cell{ 
+        padding:0;
         .ivu-tooltip{
             width:100%;
             .ivu-tooltip-rel{
                 width:100%;
                 .row-current-more{
                     padding: 15px 0 10px 0;
+                    padding-right:5px;
                 }
                 .noBorder{
                     border-bottom:none;

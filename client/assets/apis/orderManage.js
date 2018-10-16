@@ -103,6 +103,11 @@ export default {
     "search-phone-member": {
         url: "/api/krspace-op-web/customer/manager/user/phone",
         method: "get"
+    },
+    //根据订单id获取合同编号
+    "get-order-seat-serial-number": {
+        url: "/api/krspace-op-web/order-seat/contract-no",
+        method: "get"
     }
-    //苏岭添加结束
+    
 };

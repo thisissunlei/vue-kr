@@ -429,7 +429,7 @@ export default {
                     title: '租赁期限',
                     key: 'address',
                     render: (h, params) => {
-                        return h('strong', dateUtils.dateToStr("YYYY-MM-dd", new Date(params.row.start)) + '至' + dateUtils.dateToStr("YYYY-MM-dd", new Date(params.row.end)))
+                        return h('strong', dateUtils.dateToStr("YYYY-MM-dd", utils.dateParse(params.row.start)) + '至' + dateUtils.dateToStr("YYYY-MM-dd", utils.dateParse(params.row.end)))
                     }
                 },
                 {
@@ -656,14 +656,14 @@ export default {
                 let data = r.data;
                 let money = 0;
                 data.orderSeatDetailVo = data.orderSeatDetailVo.map(item => {
-                    let obj = item;
+                    let obj =Object.assign({},item) ;
                     money += item.amount;
                     obj.guidePrice = item.guidePrice || 0;
                     obj.name = item.seatName;
-                    obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.startDate));
-                    obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.startDate));
-                    obj.end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
-                    obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(item.endDate));
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", utils.dateParse(item.startDate));
+                    obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", utils.dateParse(item.startDate));
+                    obj.end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", utils.dateParse(item.endDate));
+                    obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", utils.dateParse(item.endDate));
                     return obj;
                 })
                  _this.orderitems = Object.assign({}, {

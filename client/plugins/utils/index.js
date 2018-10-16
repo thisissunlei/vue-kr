@@ -4,7 +4,7 @@ import dataType from './dataType';
 import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
-
+import dateParse from './dateParse'
 
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
@@ -249,6 +249,7 @@ import tableSort from './tableSort';
         return iDays  
     }
 
+
 export default{
     smalltoBIG,
     clearForm,
@@ -272,7 +273,8 @@ export default{
     downImg,
     createElement,
     getStrWidth,
-    timeRange
+    timeRange,
+    dateParse
 }
 
 

@@ -144,8 +144,9 @@ export default {
                         let schemeTypeName = params.row.schemeTypeName
                         if (schemeTypeName === '全社区') {
                             return h('div', schemeTypeName)
-                        } else if (params.row.goods) {
-                            let str = `${schemeTypeName}(${params.row.goods.length}个)`
+                        } else if (params.row.goodsInfo) {
+                            let arr=JSON.parse(params.row.goodsInfo)
+                            let str = `${schemeTypeName}(${arr.length}个)`
                             return h('div', {
                                 style: {
                                     color: '#2b85e4',
@@ -155,7 +156,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.showGoods(params.row.goods)
+                                        this.showGoods(params.row.goodsInfo)
                                     }
                                 }
                             }, str)

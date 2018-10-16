@@ -565,7 +565,6 @@ export default {
                 if (item.originalPrice === '') {
                     originalPrice = true;
                 }
-                // obj.discountNum = 10
                 return obj;
             })
             if (originalPrice) {
@@ -621,7 +620,8 @@ export default {
                 // this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
                 this.stationAmount = r.data.totalrent;
                 this.discountErrorStr = ''
-                this.$store.commit('changeRentAmountSale', r.data.totalrent)
+                this.$store.commit('changeSeats', this.stationList)
+                // this.$store.commit('changeRentAmountSale', r.data.totalrent)
             }, e => {
                 if (this.stationList.length) {
                     this.disabled = true;

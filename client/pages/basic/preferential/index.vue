@@ -562,7 +562,7 @@ export default {
         },
         //查看商品
         showGoods(goods) {
-            this.$http.post('post-goods-info', goods).then(r => {
+            this.$http.post('post-goods-info',{goodsInfo:goods} ).then(r => {
                 this.goodsTableData = r.data;
                 this.openGoods = true
             }).catch(error => {

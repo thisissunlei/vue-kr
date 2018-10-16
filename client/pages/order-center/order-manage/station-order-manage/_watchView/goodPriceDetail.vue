@@ -81,10 +81,10 @@ export default {
         },
         {
           title: '签约月费',
-          key: 'originalPrice',
+          key: 'discountedPrice',
           align: 'center',
           render: function (h, params) {
-            return h('span', {}, utils.thousand(params.row.originalPrice))
+            return h('span', {}, utils.thousand(params.row.discountedPrice))
           }
         },
         {

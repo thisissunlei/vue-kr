@@ -28,7 +28,7 @@
                 v-if="stationList.length">
                 <div class="left"> <span>折扣原因：</span><Input style="width:400px"
                         :maxlength="200"
-                        v-model="discountRemark"></Input></div>
+                        v-model="discountReason"></Input></div>
                 <div class="right"> <span>服务费总计</span>
                     <span class="money">{{stationAmount | thousand}} </span>
                     <span class="money">{{stationAmount| amountInWords}}</span></div>
@@ -108,7 +108,7 @@ export default {
     },
     data() {
         return {
-            discountRemark: '',//折扣原因
+            discountReason: '',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
             openPrice: false,
@@ -146,7 +146,7 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    window.open('/inventory/goods-library/goods-detail?goodsType=' + params.row.seatType + '&id=' + params.row.id||params.row.seatId, '_blank')
+                                    window.open('/inventory/goods-library/goods-detail?goodsType=' + params.row.seatType + '&id=' + params.row.id || params.row.seatId, '_blank')
                                 }
                             }
                         }, params.row.name)
@@ -266,10 +266,10 @@ export default {
                 },
                 {
                     title: '服务费小计',
-                    key: 'originalAmount',
+                    key: 'amount',
                     align: 'right',
                     render: function (h, params) {
-                        return h('span', {}, utils.thousand(params.row.originalAmount))
+                        return h('span', {}, utils.thousand(params.row.amount))
                     }
                 },
                 {
@@ -334,7 +334,7 @@ export default {
             this.batchDiscountError = ''
             this.price = ''
         },
-        discountRemark(val) {
+        discountReason(val) {
             this.$store.commit('changeDiscountReson', val)
         }
     },
@@ -498,6 +498,15 @@ export default {
         },
         //批量录入价格 对于勾选的行
         openDiscountButton() {
+            let stationVos = this.stationList;
+            //选中的工位
+            let selectedStation = this.selectedStation;
+            if (!selectedStation.length) {
+                this.$Notice.error({
+                    title: '请先选择录入单价的工位'
+                })
+                return;
+            }
             this.openDiscount = true
         },
 
@@ -630,16 +639,16 @@ export default {
 
 <style lang="less">
 .amount-info-panel {
-  .total-money {
-    .left {
-      float: left;
-      text-align: left;
-      padding-left: 10px;
-      width: 500px;
-    }
-    .right {
-      float: right;
-    }
+ .total-money {
+  .left {
+   float: left;
+   text-align: left;
+   padding-left: 10px;
+   width: 500px;
   }
+  .right {
+   float: right;
+  }
+ }
 }
 </style>

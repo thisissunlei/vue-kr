@@ -351,7 +351,9 @@ export default {
             formItem.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", this.formItem.firstPayTime);
             formItem.deposit = this.depositAmount;
             formItem.rentAmount = this.amountNeedPay;
-            formItem.saleList = JSON.stringify(saleList);
+            // formItem.saleList = JSON.stringify(saleList);
+            this.stationList.map(item=>item.discountNum=item.discountNum||10)
+            debugger
             formItem.seats = JSON.stringify(this.stationList);
 
             formItem.customerId = this.customerId;

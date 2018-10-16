@@ -58,7 +58,7 @@
 					{{basicInfo.firstPayTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 			</DetailStyle>
-			<DetailStyle info="金额信息">
+			<!-- <DetailStyle info="金额信息">
 				<Table :columns="service" :data="serviceData" />
 				<LabelText label="服务费总计：" style="font-weight:bold;">
 					{{basicInfo.seatRentAmount}} {{capitalService}}
@@ -75,6 +75,9 @@
 						{{basicInfo.depositAmount}}
 					</LabelText>
 				</div>
+			</DetailStyle> -->
+      <DetailStyle info="商品价格明细">
+        <goodPriceDetail :stationList="stationList"></goodPriceDetail>
 			</DetailStyle>
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData" />
@@ -106,6 +109,7 @@ import DetailStyle from "~/components/DetailStyle";
 import LabelText from "~/components/LabelText";
 import utils from "~/plugins/utils";
 import dateUtils from "vue-dateutils";
+import goodPriceDetail from "./goodPriceDetail"
 
 export default {
   name: "JoinView",
@@ -116,10 +120,12 @@ export default {
   },
   components: {
     DetailStyle,
-    LabelText
+    LabelText,
+    goodPriceDetail
   },
   data() {
     return {
+      stationList:[],
       nullifyReason: "",
       nullifyRemark: "",
       opportunityStr: "",
@@ -418,6 +424,7 @@ export default {
           this.contractData = response.data.orderContractInfo
             ? response.data.orderContractInfo
             : [];
+          // this.stationList=
         })
         .catch(error => {
           this.$Notice.error({

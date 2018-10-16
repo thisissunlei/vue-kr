@@ -26,7 +26,7 @@
                 @on-selection-change="selectRow"></Table>
             <div class="total-money"
                 v-if="stationList.length">
-                <div class="left"> <span>折扣原因：</span> <Input style="width:400px"
+                <div class="left"> <span>折扣原因：</span><Input style="width:400px" maxlength="200"
                         v-model="discountRemark"></Input></div>
                 <div class="right"> <span>服务费总计</span>
                     <span class="money">{{stationAmount | thousand}} </span>
@@ -228,7 +228,7 @@ export default {
                                         this.$Notice.error({
                                             title: '单价不得多余小数点后三位'
                                         })
-                                        var num2 = Number(discount).toFixed(4);
+                                        var num2 = Number(discount).toFixed(5);
                                         discount = num2.substring(0, num2.lastIndexOf('.') + 4)
                                     }
                                     if (discount < params.row.rightDiscount) {
@@ -240,7 +240,7 @@ export default {
                                     this.changeDiscount(params.index, discount)
                                 }
                             }
-                        })
+                        },params.row.discountNum)
                     }
                 },
                 {
@@ -275,6 +275,7 @@ export default {
                             on: {
                                 'click': () => {
                                     console.log('删除商品明细行', params.row._index)
+                                    this.deleteStationByIndex(params.row._index)
                                 },
                             }
                         }, '删除')
@@ -384,6 +385,11 @@ export default {
             this.getStationAmount(stationVos);
             this.items = []
         },
+        deleteStationByIndex(index){
+            this.stationList.splice(index,1)
+            this.$store.commit('changeSeats', this.stationList)
+            this.getStationAmount(this.stationList);
+        },
         //批量录入价格 对于勾选的行
         submitPrice() {
             let errorStr = ''
@@ -454,7 +460,7 @@ export default {
                 return false;
             });
             let sortStationVos = [].concat(stationVos)
-            sortStationVos.sort((s1, s2) => { return s1.rightDiscount - s2.rightDiscount })
+            sortStationVos.sort((s1, s2) => { return s2.rightDiscount - s1.rightDiscount })
             let maxPrice = sortStationVos[0].rightDiscount;
             if (maxPrice > this.batchDiscount) {
                 // this.batchDiscountError = '工位折扣不得小于' + maxPrice
@@ -466,7 +472,7 @@ export default {
                 this.openDiscount = !this.openDiscount;
                 this.stationList = this.stationList.map((item) => {
                     if (selectedStation.indexOf(item.seatId) != -1) {
-                        item.discount = Number(this.batchDiscount);
+                        item.discountNum = Number(this.batchDiscount);
                     }
                     return item
                 })
@@ -484,16 +490,15 @@ export default {
             this.getStationAmount()
         },
         changeDiscount(index, e, guidePrice) {
-            if (!e || e === 10) {
+            if (!e || e == 10) {
                 return
             }
-            this.stationList[index].discountNum = e;
+            this.stationList[index].discountNum = Number(e);
             this.getSaleAmount()
         },
         submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
-            debugger
             this.getStationAmount()
             this.openStation = false;
             this.clearSale()
@@ -575,7 +580,7 @@ export default {
             })
         },
 
-        getSaleAmount(list) {
+        getSaleAmount() {
             let params = {
                 communityId: this.communityId,
                 leaseEnddate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.endDate)),

@@ -110,99 +110,13 @@
                                 v-model="formItem.discountReason"></Input>
                             </div>
                         <div class="right"> <span>服务费总计</span>
-                            <span class="money">{{formItem.rentAmount | thousand}} </span>
-                            <span class="money">{{formItem.rentAmount|amountInWords}}</span>
+                            <span class="money">{{formItem.stationAmount | thousand}} </span>
+                            <span class="money">{{formItem.stationAmount|amountInWords}}</span>
                         </div>
                         </div>
                     </Col>
                 </Row>
             </DetailStyle>
-            
-            <!-- <DetailStyle info="金额信息">
-                <Row style="margin-bottom:10px">
-                    <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
-                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
-                    <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
-                    </Col>
-
-                </Row>
-                <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
-                    <div class="total-money" v-if="stationList.length">
-                        <span>服务费总计</span>
-                        <span class="money">{{formItem.stationAmount| thousand}} </span>
-                        <span class="money">{{stationAmount}}</span>
-                    </div>
-                    </Col>
-                </Row>
-
-            </DetailStyle>
-            <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
-                <Row style="margin-bottom:10px">
-                    <Col class="col col-discount-header">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
-                    <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
-                    </Col>
-
-                </Row>
-                <Row>
-                    <Col span="3" class="discount-table-head">
-                    <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
-                    </Col>
-                    <Col span="6" class="discount-table-head">
-                    <span> 优惠类型</span>
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>开始时间</span>
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>结束时间</span>
-
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>折扣</span>
-
-                    </Col>
-
-                </Row>
-                <FormItem v-for="(item, index) in formItem.items" :key="index" style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
-                    <Row v-show="item.show">
-                        <Col span="3" class="discount-table-content" style="padding:0">
-                        <Checkbox v-model="item.select"></Checkbox>
-                        </Col>
-                        <Col span="6" class="discount-table-content">
-                        <Select v-model="item.type" label-in-value @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+types.id+types.name">{{ types.label }}</Option>
-                        </Select>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        </DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>
-                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
-
-                        </Col>
-                    </Row>
-                </FormItem>
-                <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length && showSaleDiv">
-                        <span>优惠金额总计</span>
-                        <span class="money">{{saleAmount | thousand}} </span>
-                        <span class="money">{{saleAmounts}}</span>
-                    </div>
-                    </Col>
-                </Row>
-            </DetailStyle> -->
             <div style="padding-left:24px">
                 <Row>
                     <!-- <Col class="col">
@@ -514,11 +428,18 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         let discount = 10;
+                        let disabled=false
+                        if (params.row.rightDiscount === 10) {
+                            disabled=true
+                        }
+                        if (params.row.discountNum&&params.row.discountNum<params.row.rightDiscount) {
+                            disabled=true
+                        }
                         return h('Input', {
                             props: {
                                 min: params.row.rightDiscount,
                                 value: params.row.discountNum,
-                                disabled: params.row.rightDiscount === 10,
+                                disabled:disabled,
                             },
                             on: {
                                 'on-change': (event) => {
@@ -673,6 +594,7 @@ export default {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
+        this.checkDiscountRight()
     },
     watch: {
         getFloor() {
@@ -857,7 +779,6 @@ export default {
             });
             let sortStationVos = [].concat(stationVos)
             sortStationVos.sort((s1, s2) => { return s2.rightDiscount - s1.rightDiscount })
-            debugger
             let maxPrice = sortStationVos[0].rightDiscount;
             if (maxPrice > this.batchDiscount) {
                 // this.batchDiscountError = '工位折扣不得小于' + maxPrice
@@ -963,6 +884,7 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
                 _this.formItem.discountReason=data.discountReason
+                /*
                 _this.getSaleTactics({ communityId: data.communityId }).then(()=>{
                         data.contractTactics = data.contractTactics.map((item, index) => {
                         let obj = {};
@@ -1005,9 +927,10 @@ export default {
                             }
                         }
                     }
-                    _this.getStationAmount()
+                   
                 })
-
+                */
+                _this.getStationAmount()
 
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
@@ -1460,7 +1383,6 @@ export default {
             if (itemValue == 1) {
                 this.minDiscount = this.maxDiscount[label]
             }
-            debugger
             this.formItem.items = items;
             this.dealSaleInfo(false)
         },
@@ -1916,9 +1838,21 @@ export default {
             this.discountErrorStr=this.discountError 
                this.disabled = true;
                this.$Notice.error({
-                   title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                   desc: '您没有此折扣权限，请让高权限的同事协助编辑'
                });
-        }       
+        },
+        checkDiscountRight(){
+           let error=false;
+           error= this.stationList.some(item=>{
+                if (item.discountNum&&item.discountNum<item.rightDiscount) {
+                    return true
+                }
+            })
+            if (error) {
+                this.showDiscountError()
+            }
+
+        }
     }
 }
 </script>

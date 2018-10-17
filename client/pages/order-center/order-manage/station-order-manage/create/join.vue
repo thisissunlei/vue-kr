@@ -18,21 +18,8 @@
             <DetailStyle info="商品价格明细">
                 <AmountInfo/>
             </DetailStyle>
-            <!-- <DetailStyle info="优惠信息"
-                v-show="youhui.length"
-                style="margin-top:40px">
-                <PreferentialInfo/>
-            </DetailStyle> -->
             <div style="padding-left:24px">
                 <Row>
-                    <!-- <Col class="col">
-                    <FormItem label="优惠后服务费总额"
-                        style="width:252px">
-                        <Input v-model="amountNeedPay"
-                            placeholder="优惠后服务费总额"
-                            disabled></Input>
-                    </FormItem>
-                    </Col> -->
                     <Col class="col">
                     <FormItem label="首付款日期"
                         style="width:252px"

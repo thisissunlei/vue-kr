@@ -58,24 +58,6 @@
 					{{basicInfo.firstPayTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 			</DetailStyle>
-			<!-- <DetailStyle info="金额信息">
-				<Table :columns="service" :data="serviceData" />
-				<LabelText label="服务费总计：" style="font-weight:bold;">
-					{{basicInfo.seatRentAmount}} {{capitalService}}
-				</LabelText>
-				<Table :columns="treatment" :data="treatmentData" />
-				<LabelText label="优惠总计：" style="font-weight:bold;">
-					{{basicInfo.tactiscAmount}} {{capitalTreatment}}
-				</LabelText>
-				<div>
-					<LabelText label="服务费总额：" style="color:red;">
-						{{basicInfo.rentAmount}}
-					</LabelText>
-					<LabelText label="履约保证金总额：" style="color:red;">
-						{{basicInfo.depositAmount}}
-					</LabelText>
-				</div>
-			</DetailStyle> -->
       <DetailStyle info="商品价格明细">
           <goodPriceDetail :stationList="stationList" style='margin-bottom:20px'/>  
           <div>
@@ -88,7 +70,7 @@
           </div>
           <div>
 					  <LabelText label="服务费总额：" style="color:red;">
-					  	{{basicInfo.rentAmount}}
+					  	{{basicInfo.seatRentAmount}}
 					  </LabelText>
 					  <LabelText label="履约保证金总额：" style="color:red;">
 					  	{{basicInfo.depositAmount}}

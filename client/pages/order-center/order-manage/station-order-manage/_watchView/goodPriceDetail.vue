@@ -68,10 +68,10 @@ export default {
         },
         {
           title: '标准月费',
-          key: 'price',
+          key: 'originalPrice',
           align: 'center',
           render: function (h, params) {
-            return h('span', {}, utils.thousand(params.row.price))
+            return h('span', {}, utils.thousand(params.row.originalPrice))
           }
         },
         {
@@ -89,10 +89,10 @@ export default {
         },
         {
           title: '服务费小计',
-          key: 'originalAmount',
+          key: 'amount',
           align: 'center',
           render: function (h, params) {
-            return h('span', {}, utils.thousand(params.row.originalAmount))
+            return h('span', {}, utils.thousand(params.row.amount))
           }
         },
       ],

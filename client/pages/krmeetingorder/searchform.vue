@@ -19,7 +19,7 @@
             </FormItem>
             <FormItem label="订单状态:"  class="form-item-status">
                 <Select
-                    v-model="status"
+                    v-model="statusStr"
                     style="width:320px"
                     placeholder="请选择订单状态"
                     clearable
@@ -87,7 +87,7 @@ export default {
    data(){
        return {
            communityList : [],
-           status:[],
+           statusStr:[],
            formItem : {},
            searchFilter:[
                {
@@ -148,7 +148,7 @@ export default {
                 });
                 return;
             }
-            this.formItem.status=[].concat(this.status).join(',');
+            this.formItem.statusStr=[].concat(this.statusStr).join(',');
             this.$emit("submitSearchData",this.formItem);
         },
         dataChanged(){

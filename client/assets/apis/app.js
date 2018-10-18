@@ -25,5 +25,10 @@ export default  {
         url: '/api/krspace-op-web/app/console/talkpoint/cancel-stick',
         method: 'post'
     },
+    //通知、推送新的社区接口
+    'get-app-cmt-community-limit-list': {
+        url: '/api/krspace-finance-web/cmt/community/limit/list',
+        method: 'get'
+    },
 
 }

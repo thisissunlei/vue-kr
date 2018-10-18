@@ -364,7 +364,7 @@ export default {
                 }
             let list = [];
             let _this = this;
-            this.$http.get('get-community-new-list', params).then((res)=>{
+            this.$http.get('get-app-cmt-community-limit-list', params).then((res)=>{
                 list = res.data.cmts;
                 list.map((item)=>{
                     let obj =item;

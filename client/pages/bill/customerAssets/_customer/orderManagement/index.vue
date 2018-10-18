@@ -1,5 +1,5 @@
 <template>
-    <div class="scoped-container">
+    <div class="scoped-container bill-order-manage">
         <div class="order-management">
             <div class="community-selection">
                 <span style="margin-right:5px">社区</span>
@@ -128,24 +128,27 @@ export default {
 
 <style lang="less">
 // .scoped-container/deep/.order-management
-.order-management {
-    text-align: left;
-    padding-left: 20px;
-    width: 1228px;
-    .community-overview {
-        margin: 20px 0;
-    }
-    .community-selection {
-        margin: 20px 0;
-    }
-    .order-info-list {
-        margin: 20px 0;
-    }
-    .set-fee-info-list {
-    }
-    .seat-fee-detail-list-modal {
-        .ivu-modal-footer {
-            display: none;
+.customer-assets-detail .new-tab-content .bill-order-manage{
+    margin:0;
+    .order-management {
+        text-align: left;
+        padding-left: 20px;
+        width: 1228px;
+        .community-overview {
+            margin: 20px 0;
+        }
+        .community-selection {
+            margin: 20px 0;
+        }
+        .order-info-list {
+            margin: 20px 0;
+        }
+        .set-fee-info-list {
+        }
+        .seat-fee-detail-list-modal {
+            .ivu-modal-footer {
+                display: none;
+            }
         }
     }
 }

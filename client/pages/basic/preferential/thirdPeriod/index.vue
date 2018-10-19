@@ -2,92 +2,70 @@
   <div class="create-discount-panel">
     <div class="step-container">
       <Steps :current="currentStep">
-        <Step v-for="(step,index) in steps"
-          :key="index"
-          :title="step.title" />
+        <Step v-for="(step,index) in steps" :key="index" :title="step.title"/>
       </Steps>
     </div>
-
     <div class="from-container">
-
       <!-- 第一步 -->
-      <div class="select-discount-scheme"
-        v-show="currentStep==0">
-        <Form :model="formScheme"
+      <div class="select-discount-scheme" v-show="currentStep==0">
+        <Form
+          :model="formScheme"
           :label-width="100"
           style="padding:0 20px"
           :rules="ruleCustom"
           ref="formContent"
-          class='discount-set-from'>
-          <FormItem label="适用社区"
-            prop="communityId">
+          class="discount-set-from"
+        >
+          <FormItem label="适用社区" prop="communityId">
             <selectCommunities v-model="formScheme.communityId"></selectCommunities>
           </FormItem>
-          <FormItem label="折扣方案"
-            prop="schemeType">
-            <Select v-model="formScheme.schemeType"
-              @on-change='onSchemeChange'>
-              <Option v-for="(option, index) in discountSchemeList"
+          <FormItem label="折扣方案" prop="schemeType">
+            <Select v-model="formScheme.schemeType" @on-change="onSchemeChange">
+              <Option
+                v-for="(option, index) in discountSchemeList"
                 :value="option.value"
-                :key="option.value">{{option.desc}}</Option>
+                :key="option.value"
+              >{{option.desc}}</Option>
             </Select>
           </FormItem>
           <div class="step-btn-container">
-            <Button class="step-btn"
-              @click="onCancel">取消</Button>
-            <Button class="step-btn"
-              type="primary"
-              @click="next">下一步</Button>
+            <Button class="step-btn" @click="onCancel">取消</Button>
+            <Button class="step-btn" type="primary" @click="next">下一步</Button>
           </div>
-
         </Form>
       </div>
-
       <!-- 第二步 -->
-      <div class="select-discount"
-        v-show="currentStep==1">
-        <AddDiscount :addFlag="setp2AddFlag"
+      <div class="select-discount" v-show="currentStep==1">
+        <AddDiscount
+          :addFlag="setp2AddFlag"
           :nextFlat="setp2NextFlag"
           :communityId="formScheme.communityId"
-          :schemeType="formScheme.schemeType" />
+          :schemeType="formScheme.schemeType"
+        />
         <div class="step-btn-container">
-          <Button class="step-btn"
-            @click="previous">上一步</Button>
-          <Button class="step-btn"
-            type="primary"
-            v-if='!isGoodsScheme'
-            @click="onAddSetpTwo">添加</Button>
-          <Button class="step-btn"
-            type="primary"
-            v-if='isGoodsScheme'
-            @click="next">下一步</Button>
+          <Button class="step-btn" @click="previous">上一步</Button>
+          <Button class="step-btn" type="primary" v-if="!isGoodsScheme" @click="onAddSetpTwo">添加</Button>
+          <Button class="step-btn" type="primary" v-if="isGoodsScheme" @click="next">下一步</Button>
         </div>
       </div>
-
       <!-- 第三步 -->
-      <div class="select-goods"
-        v-show="currentStep==2">
+      <div class="select-goods" v-if="currentStep==2">
         <div class="step-btn-container">
-          <Button class="step-btn"
-            @click="previous">上一步</Button>
-          <Button class="step-btn"
-            type="primary"
-            @click="setp3AddFlag=(new Date()).getTime()">添加</Button>
+          <Button class="step-btn" @click="previous">上一步</Button>
+          <Button class="step-btn" type="primary" @click="setp3AddFlag=(new Date()).getTime()">添加</Button>
         </div>
-        <SelectGoods :communityId="formScheme.communityId"
-          :addFlag="setp3AddFlag"/>
+        <SelectGoods :communityId="formScheme.communityId" :addFlag="setp3AddFlag"/>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import dateUtils from 'vue-dateutils';
-import selectCommunities from './SelectCommunities.vue'
-import AddDiscount from './addDiscount.vue'
-import SelectGoods from './selectGoods.vue'
+import { mapGetters } from "vuex";
+import dateUtils from "vue-dateutils";
+import selectCommunities from "./SelectCommunities.vue";
+import AddDiscount from "./addDiscount.vue";
+import SelectGoods from "./selectGoods.vue";
 
 export default {
   components: {
@@ -101,106 +79,100 @@ export default {
       setp2NextFlag: 0,
       setp3AddFlag: 0,
       isGoodsScheme: false,
-      goodsIds: '',
+      goodsIds: "",
       steps: [
         {
-          title: '选择折扣方案',
+          title: "选择折扣方案"
         },
         {
-          title: '添加折扣',
+          title: "添加折扣"
         }
       ],
       discountSchemeList: [
         {
-          value: 'COMMUNITY',
-          desc: '按社区',
+          value: "COMMUNITY",
+          desc: "按社区"
         },
         {
-          value: 'GOODS',
-          desc: '按商品',
-        },
+          value: "GOODS",
+          desc: "按商品"
+        }
       ],
       formScheme: {
-        communityId: '',
-        schemeType: ''
+        communityId: "",
+        schemeType: ""
       },
       ruleCustom: {
         communityId: [
-          { required: true, message: '请选择适用社区', trigger: 'change' }
+          { required: true, message: "请选择适用社区", trigger: "change" }
         ],
         schemeType: [
-          { required: true, message: '请选择折扣方案', trigger: 'change' }
-        ],
+          { required: true, message: "请选择折扣方案", trigger: "change" }
+        ]
       }
-    }
+    };
   },
   computed: {
-    ...mapGetters([
-      'currentStep',
-    ])
+    ...mapGetters(["currentStep"])
   },
   watch: {
     isGoodsScheme(val) {
       if (val) {
-        this.steps.push(
-          {
-            title: '选择商品',
-          })
+        this.steps.push({
+          title: "选择商品"
+        });
       } else {
-        this.steps.pop()
+        this.steps.pop();
       }
     }
   },
   methods: {
     onSchemeChange(val) {
-      this.isGoodsScheme = (val === 'GOODS')
+      this.isGoodsScheme = val === "GOODS";
     },
     onCancel() {
-      this.$store.commit('changeModalState',false)
+      this.$store.commit("changeModalState", false);
     },
     onAddSetpTwo() {
-      this.setp2AddFlag = (new Date()).getTime()
+      this.setp2AddFlag = new Date().getTime();
     },
-    onAddSetpThree() {
-
-    },
+    onAddSetpThree() {},
     previous() {
       if (this.currentStep == 0) {
-        this.$store.commit('changeStep', 0)
+        this.$store.commit("changeStep", 0);
       } else {
-        this.$store.commit('changeStep', this.currentStep - 1)
+        this.$store.commit("changeStep", this.currentStep - 1);
       }
     },
     next() {
       if (this.currentStep === 0) {
-        let v = false
+        let v = false;
         if (!this.formScheme.communityId) {
-          this.$refs.formContent.validateField('communityId')
-          v = true
+          this.$refs.formContent.validateField("communityId");
+          v = true;
         }
         if (!this.formScheme.schemeType) {
-          this.$refs.formContent.validateField('schemeType')
-          v = true
+          this.$refs.formContent.validateField("schemeType");
+          v = true;
         }
         if (v) {
-          return
-        }
-        else {
-          this.$store.commit('changeDiscountSetting', this.formScheme)
-          this.$store.commit('changeStep', this.currentStep + 1)
-          return
+          return;
+        } else {
+          this.$store.commit("changeDiscountSetting", this.formScheme);
+          this.$store.commit("changeStep", this.currentStep + 1);
+          return;
         }
       }
       if (this.currentStep === 1) {
-        this.setp2NextFlag = (new Date()).getTime()
+        this.setp2NextFlag = new Date().getTime();
       }
     },
     onGoodsIdsChange(idsArr) {
-      this.goodsIds = idsArr.join(',')
-      console.log('this.goodsIds', this.goodsIds)
+      this.goodsIds = idsArr.join(",");
+      console.log("this.goodsIds", this.goodsIds);
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="less">

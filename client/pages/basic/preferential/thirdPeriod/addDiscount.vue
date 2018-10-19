@@ -229,7 +229,7 @@ export default {
                     if (pass) {
                         let res = {};
                         let obj = this.formItem.discountList
-                        debugger
+                        // debugger
                         Object.keys(obj).map(item => {
                             let temp = this.roleList.filter(r => {
                                 return r.level == Number(item)
@@ -239,7 +239,7 @@ export default {
                             }
                         })
                         this.formItem.rightDetail = JSON.stringify(res);
-                        debugger
+                        // debugger
                         this.$store.commit('changeDiscountSetting', this.formItem)
                         this.$store.commit('changeStep', 2)
                     }

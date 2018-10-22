@@ -188,6 +188,21 @@ export default {
         url: '/api/krspace-op-web/order-seat/getOrderIdAndType',
         method: 'get'
     },
+    //账户汇总
+    'account-all-summary': {
+        url: '/api/krspace-pay/account-sum/list',
+        method: 'get'
+    },
+    //押金汇总
+    'account-deposit-summary': {
+        url: '/api/krspace-pay/deposit/list',
+        method: 'get'
+    },
+    //消费汇总
+    'account-consume-summary': {
+        url: '/api/krspace-pay/consumption/list',
+        method: 'get'
+    },
     //苏岭结束
       //账户列表-人员获取id
     'get-bill-person-id':{

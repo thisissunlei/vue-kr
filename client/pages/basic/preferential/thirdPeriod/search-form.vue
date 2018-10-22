@@ -236,7 +236,7 @@ export default {
         this.formItem.orderPriceMin &&
         this.formItem.orderPriceMax &&
         Number(this.formItem.orderPriceMin) >
-          Number(this.formItem.orderPriceMax)
+        Number(this.formItem.orderPriceMax)
       ) {
         callback("后者需要大于前者");
       } else {

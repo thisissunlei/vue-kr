@@ -4,11 +4,11 @@
 
 var discountSetting = {
   state: {
-    communityId: "",
-    schemeType: "",
-    formDiscount: {},
-    currentStep:0,
-    openAddModal:false
+    communityId: "",//社区
+    schemeType: "",//折扣方案 [按商品Goods,安社区Community]
+    formDiscount: {},//所设置的优惠信息 {有效期间,不通权限对应的折扣,...}
+    currentStep:0,//当前的步骤
+    openAddModal:false//折扣添加模态窗的打开状态
   },
   mutations: {
     changeDiscountSetting(state, val) {

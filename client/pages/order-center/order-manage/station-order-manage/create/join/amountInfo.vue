@@ -224,6 +224,10 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         let discount = 10;
+                        if (params.row.discountNum&&params.row.discountNum===10) {
+                            params.row.discountNum=''
+                            // disabled=true
+                        }
                         return h('Input', {
                             props: {
                                 min: params.row.rightDiscount,
@@ -239,6 +243,9 @@ export default {
                                     discount = e;
                                 },
                                 'on-blur': (event) => {
+                                    if (discount==='') {
+                                        discount=10
+                                    }
                                     var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
                                     if (discount && !pattern.test(discount)) {
                                         this.$Notice.error({
@@ -516,7 +523,8 @@ export default {
         },
         changeDiscount(index, e, guidePrice) {
             if (!e || e == 10) {
-                return
+                // this.stationList[index].discountNum
+                // return
             }
             this.stationList[index].discountNum = Number(e);
             this.getSaleAmount()

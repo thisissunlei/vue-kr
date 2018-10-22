@@ -435,6 +435,10 @@ export default {
                         if (params.row.discountNum&&params.row.discountNum<params.row.rightDiscount) {
                             disabled=true
                         }
+                        if (params.row.discountNum&&params.row.discountNum===10) {
+                            params.row.discountNum=''
+                            // disabled=true
+                        }
                         return h('Input', {
                             props: {
                                 min: params.row.rightDiscount,
@@ -450,6 +454,9 @@ export default {
                                     discount = e;
                                 },
                                 'on-blur': (event) => {
+                                    if (discount==='') {
+                                        discount=10
+                                    }
                                     var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
                                     if (discount && !pattern.test(discount)) {
                                         this.$Notice.error({
@@ -823,7 +830,7 @@ export default {
         },
         changeDiscount(index, e, guidePrice) {
             if (!e || e == 10) {
-                return
+                // return
             }
             this.stationList[index].discountNum = Number(e);
             this.getSaleAmount()
@@ -1126,10 +1133,8 @@ export default {
             this.$http.post('count-sale', params).then(r => {
                 _this.stationList = r.data.seats;
                 _this.formItem.rentAmount = r.data.totalrent;
-                // let money = this.formItem.stationAmount - r.data.totalrent;
+                _this.formItem.stationAmount= r.data.totalrent;
                 let money = r.data.discountAmount;
-
-                // let money = r.data.originalTotalrent - r.data.totalrent;
                 _this.saleAmount = Math.round(money * 100) / 100;
                 _this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
 

@@ -20,7 +20,7 @@
             <FormItem label="订单状态:"  class="form-item-status">
                 <Select
                     v-model="statusStr"
-                    style="width:320px"
+                    style="width:340px"
                     placeholder="请选择订单状态"
                     clearable
                     multiple
@@ -176,6 +176,6 @@ export default {
         width:310px; 
     }
     .form-item-status{
-        width:400px;
+        width:430px;
     }
 </style>

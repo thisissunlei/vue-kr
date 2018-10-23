@@ -44,7 +44,8 @@ let initData='';
         //背景图
         img=new Image();
         var port = location.port?':'+ location.port:'';
-        img.src= location.protocol +'//'+location.hostname+port+this.data.graphFilePath;
+         //img.src= location.protocol +'//'+location.hostname+port+this.data.graphFilePath;
+        img.src=this.data.graphFilePath;
         console.log(img.src,"ppppppp","===",window.location.host);
         img.setAttribute("crossOrigin",'Anonymous');
         //img.src='http://optest03.krspace.cn'+this.data.graphFilePath;

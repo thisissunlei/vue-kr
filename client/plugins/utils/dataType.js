@@ -1,6 +1,6 @@
-function dataType() {
-    var dom = Object.prototype.toString.call;
-    switch (dom(0)) {
+function dataType(data) {
+    var getType = Object.prototype.toString;
+    switch (getType.call(data)) {
         case '[object String]':
             return 'string';
             break;

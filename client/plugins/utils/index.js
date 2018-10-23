@@ -4,7 +4,7 @@ import dataType from './dataType';
 import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
-
+import dateParse from './dateParse'
 
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
@@ -129,6 +129,17 @@ import tableSort from './tableSort';
         
     
     }
+
+    //文件下载的流式下载 新窗口
+    function downFileBlank(href, filename) {
+      var a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.download = filename;
+      console.log('a--',a,href,filename);
+      a.click();
+    }
+
     //不要修改，修改找毅豪
     function downImg(href, filename) {
         var a = document.createElement('a');
@@ -238,6 +249,7 @@ import tableSort from './tableSort';
         return iDays  
     }
 
+
 export default{
     smalltoBIG,
     clearForm,
@@ -248,6 +260,7 @@ export default{
     arrayCompare,
     thousand,
     downFile,
+    downFileBlank,
     addEvent,
     dataType,
     getDaysInOneMonth,
@@ -260,7 +273,8 @@ export default{
     downImg,
     createElement,
     getStrWidth,
-    timeRange
+    timeRange,
+    dateParse
 }
 
 

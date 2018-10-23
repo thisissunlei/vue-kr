@@ -2,6 +2,8 @@
 
     // var NavItems = getNavs();
     var menuCode = [];
+    var isSidebarListen = false;
+    var isHanderListen = false;
     var navUtils = {
         activeData: [],
         isHome: false,
@@ -29,7 +31,7 @@
         bodyDom:'',
         contentDom:'',
         menuBtnBacks:[],
-        closeRoutrs:[],
+        
     
     }
     //侧栏按钮
@@ -46,6 +48,7 @@
     var accountBoxId =  'j_account_box'+ Math.round(Math.random()*10);
     var exitBtnId = 'j_exit_btn'+ Math.round(Math.random()*10);
     var maskId = 'j_detail_mask'+ Math.round(Math.random()*10);
+    var headerId = 'j_hander'+ Math.round(Math.random()*10);
     //获取url
     function getRouter() {
         var router = location.href.split('?')[0];
@@ -64,10 +67,9 @@
             port = ":" + port;
         }
         if(type && type == 'admin'){
-            if(nowType == 'admin'){
-                return router;
-            }
+           
             alias = '/new/#'
+            return '/new/#'+router;
         }
         if (type && type == "vue") {
             if(nowType == 'vue'){
@@ -76,10 +78,10 @@
             alias = '';
         }
         if(type && type == 'project'){
-            if(nowType == 'project'){
-                return router;
-            }
+           
+            
             alias = '/project/#'
+            return '/project/#'+router;
         }
         if(type && type == "member"){
             alias = '/';
@@ -101,7 +103,7 @@
     function setDefaultHeader(value) {
         setTimeout(function(){
             var j_li = document.getElementsByName(value)[0];
-            console.log(j_li,"kkkkk")
+            // console.log(j_li,"kkkkk")
             if(j_li){
                 j_li.setAttribute("class", "active");
             }else{
@@ -202,6 +204,9 @@
             accountBoxDom.style.display = 'none';
         }
     }
+    function goLocation(){
+        // console.log("--=======")
+    }
     //头部和侧栏渲染
     function renderHanderAndSidebar(){
         var showSidebar = 'block';
@@ -224,7 +229,7 @@
             '<div class="'+menuName+'" id="'+menuId+'"></div>' +
             '<div class="u-header-logo"></div>' +
 
-            '<div class="header-nav" id="j_header">'+renderHander(navUtils.navs)+'</div>' +
+            '<div class="header-nav" id="'+headerId+'">'+renderHander(navUtils.navs)+'</div>' +
 
             '<div class = "j_header_other">' +
 
@@ -255,6 +260,7 @@
         var moreDom = document.getElementById(moreId);
         var navDom = document.getElementById(navId)
         var sidebarDom =  document.getElementById(sidebarId);
+        var handerDom = document.getElementById(headerId);
         if(moreDom){
             moreDom.onclick = moreClick
         }
@@ -269,7 +275,26 @@
         document.getElementById(accountBoxId).onclick = function(){
 
         }
+        if(!isHanderListen && handerDom){
+            // console.log("=======+++")
+            handerDom.onclick = function(e){
+                console.log(e.target.tagName.toUpperCase())
+                if(e.target.tagName.toUpperCase() == 'SPAN'){
+                    var href = event.target.attributes['data-href'].value;
+                    if(href){
+                        if(typeof(Storage)!=="undefined"){
+                            sessionStorage.scrollTop = 0;
+                        }
+                        location.href = href;
+                    }
+                }
+               
+            
+            }
+        }
+       
         
+       
         
         document.getElementById(exitBtnId).onclick = function(){
             var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
@@ -289,8 +314,24 @@
                 xhr.send();
         }
         // sidebarDom.onclick = menuClick;
+        if(typeof(Storage)!=="undefined"){
+            sidebarDom.scrollTop =  sessionStorage.scrollTop;
+           
+        }
+        if(!isSidebarListen && sidebarDom){
+           
+            isSidebarListen = true;
+            sidebarDom.addEventListener('mousewheel',function(e){
+               
+                if(typeof(Storage)!=="undefined"){
+                    sessionStorage.scrollTop = sidebarDom.scrollTop;
+                }
+            },false)
+        }
+        
+       
         if(sidebarDom.style.display=='none'){
-            navUtils.contentDom.style.paddingLeft = '0px'
+            navUtils.contentDom.style.paddingLeft = '0px';
         }else{
             navUtils.contentDom.style.paddingLeft = '180px'
 
@@ -330,10 +371,10 @@
                 if(index>7 && activeStr.indexOf(oldHref)!=-1){
                     otherActive = "bold";
                 }
-                more += '<li  class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+                more += '<li    class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><span data-href="' + href + '">' + item.name + '</span></li>';
                 return;
             }
-            html += '<li name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><a href="' + href + '">' + item.name + '</a></li>';
+            html += '<li   name="'+item.name+'" class=' + (activeStr.indexOf(oldHref)!=-1 ? 'active' : 'default') + '><span data-href="' + href + '">' + item.name + '</span></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {
@@ -379,16 +420,14 @@
                         }
                     }
                     var activeRouter = '';
-                    if(child.name == "即将到期" || child.name == '逾期未付'){
-                        console.log(router,'---------',href)
-                    }
+                   
                     if(router.indexOf('krspace.cn')!=-1){
                         var port = location.port?':'+location.port:'';
                         activeRouter = router.split('krspace.cn'+port)[1];
                     }
-                    if(activeRouter.indexOf('#')!=-1){
-                        activeRouter = activeRouter.split('#')[1];
-                    }
+                    // if(activeRouter.indexOf('#')!=-1){
+                    //     activeRouter = activeRouter.split('#')[1];
+                    // }
                     
 
                     html += '<li class=' + (activeRouter==href ? 'active' : 'default') + '><a href="' + href + '">' + child.name + '</a></li>';
@@ -448,10 +487,38 @@
         // console.log(dom)
         navUtils.bodyDom = dom;
         navUtils.contentDom = contentDom;
-        
-        // console.log("pppppp------",dom)
-        http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
-            var navs = [].concat(response.data);
+
+        if(typeof(Storage)!=="undefined")
+	    {
+            if (sessionStorage.user){
+                navUtils.navs = JSON.parse(sessionStorage.navs);
+                navUtils.user = JSON.parse(sessionStorage.user);
+                routerRefresh();
+                return;
+            }
+           
+        }
+       
+        getNavData();
+    }
+  
+    window.addEventListener('hashchange',routerRefresh);
+    
+    renderHanderAndSidebar();
+    function getNavData(){
+         // console.log("pppppp------",dom)
+         http('GET','/api/krspace-sso-web/sso/sysOwn/getUserMenu',function(response){
+            var navs = [{
+                iconUrl: "icon-card",
+              
+                name: "首页",
+             
+                showFlag: "YES",
+                sideFoldFlag: "YES",
+               
+                topFoldFlag: "YES",
+                url: "/"
+            }].concat(response.data);
             routerRefresh();
             http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
                 

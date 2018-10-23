@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "nuxt": "nuxt",
-    "dev": "cross-env NODE_ENV=development node server/index.js",
+    "dev": "cross-env NODE_ENV=development node --max-old-space-size=4096 server/index.js",
     "dev:test": "cross-env NODE_ENV=test node  server/index.js",
     "dev:test01": "cross-env NODE_ENV=test01 node  --max-old-space-size=4096 server/index.js",
     "dev:test02": "cross-env NODE_ENV=test02 node  --max-old-space-size=4096 server/index.js",
@@ -20,6 +20,8 @@
     "build:test02": "cross-env NODE_ENV=test02  nuxt build",
     "build:test03": "cross-env NODE_ENV=test03  nuxt build",
     "build:test04": "cross-env NODE_ENV=test04  nuxt build",
+    "build:test05": "cross-env NODE_ENV=test05  nuxt build",
+    "build:test06": "cross-env NODE_ENV=test06  nuxt build",
     "build:dev01": "cross-env NODE_ENV=dev01  nuxt build",
     "build:dev02": "cross-env NODE_ENV=dev01  nuxt build"
   },
@@ -56,6 +58,7 @@
     "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
     "source-map-support": "^0.4.15",
-    "validate-commit-msg": "^2.14.0"
+    "validate-commit-msg": "^2.14.0",
+    "vuex": "^3.0.1"
   }
 }

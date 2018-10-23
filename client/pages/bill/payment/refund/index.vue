@@ -102,7 +102,7 @@ import dateUtils from 'vue-dateutils';
         },
         head () {
             return {
-                title: "退款"
+                title: "退款-氪空间后台管理系统"
             }
         },
         data() {
@@ -240,7 +240,7 @@ import dateUtils from 'vue-dateutils';
             onRefundSubmit(){
                 this.formItem.occurDate = dateUtils.dateToStr("YYYY-MM-dd",new Date(this.formItem.occurDate));
                 
-                this.$http.get('payment-refund', this.formItem).then( res => {
+                this.$http.post('payment-refund', this.formItem).then( res => {
                     this.$Notice.success({
                         title:'退款成功'
                     });

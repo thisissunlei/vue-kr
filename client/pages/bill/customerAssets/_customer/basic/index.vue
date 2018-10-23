@@ -3,10 +3,10 @@
 <template>  
     <div class="assets-manage">
         <div class="asset-content">
-            <div class="tab-list">
+            <!-- <div class="tab-list">
                 <span class="tab-span"  v-for="(item, index) in tablist"
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
-            </div>
+            </div> -->
             <div class="tab-content">
                 <!-- <Annex v-if="selectedTab == 'annex'"/> -->
                 <Waiting v-if="selectedTab != 'basic'" style="width: 794px;margin:0"/>

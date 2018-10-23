@@ -150,18 +150,21 @@
                     <Row style="margin-bottom:10px">
                         <Col style='display:inline-block;width:30%'>
                             <div class="title">签约价明细</div>
+                            <span style="color: #ed3f14;font-size: 12px;">{{discountError}}</span>
                         </Col>
                         <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
 
                             <div style="display:inline-block">
-                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale }">{{ types.sale }}折</span>
+                                <!-- <span v-for="types in discount.list" :key="types.sale" :disabled="discountError!=''" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale }">{{ types.sale }}折</span> -->
+                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError==''" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale}">{{ types.sale }}折</Button>
+                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError!=''" class="button-list notactive" v-on:click="selectDiscount(types)">{{ types.sale }}折</Button>
                             </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="discountCon" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
+                            <div style="display:inline-block;vertical-align:top">                            
+                            <Input v-model="discountCon" :disabled="discountError!=''" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>                         
                             <span style="padding:0 15px"> 折</span>
-                            <Button type="primary" @click="setDiscountNum">设置</Button>
+                            <Button type="primary" :disabled="discountError!=''" @click="setDiscountNum">设置</Button> 
                             <span style="padding:0 5px"> </span>
-                            <Button type="ghost" @click="cancleDiscount">取消折扣</Button>
+                            <Button type="ghost" :disabled="discountError!=''" @click="cancleDiscount">取消折扣</Button>
 
                             </div>
 
@@ -230,7 +233,7 @@
 
                     <Button type="ghost" @click="previous">上一步</Button>
                     <span class="between"></span>
-                    <Button type="primary" @click="next('formItemThree')">下一步</Button>
+                    <Button type="primary" :disabled="discountError!=''" @click="next('formItemThree')">下一步</Button>
                     
                 </div>
             </Card>
@@ -421,6 +424,9 @@
                 }
             };
             return {
+                discountInputError:false,
+                discountReceive:-1,
+                discountError:'',
                 originBeginTime:'',
                 discountCon:'',
                 entryPriceList:[],
@@ -825,7 +831,7 @@
 
         head() {
             return {
-                title: '编辑换租订单'
+                title: "编辑换租订单-氪空间后台管理系统"
             }
         },
         components: {
@@ -1033,6 +1039,7 @@
                 
             },
             editCard(value){
+                console.log('editCard 1')
                 this.orderStatus = 'create';
                 this.status = value;
             },
@@ -1299,7 +1306,14 @@
                         tacticsType:discount[0].tacticsType,
                         tacticsId:discount[0].tacticsId
                     }
-                
+                    this.discountReceive=this.discount.minDiscount
+                    let maxDiscount=Math.min.apply(null,discountList)
+                    if (this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&maxDiscount>this.discountReceive) {
+                        this.discountError='您没有此折扣权限，请让高权限的同事协助编辑';
+                        this.$Notice.error({
+                            title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                        });
+                    }
                 }
                 if(!freeMap.length){
                     return
@@ -1434,12 +1448,12 @@
             },
             setDiscountNum(){
                 this.discountNum = this.discountCon;
-                if(!this.discountNum){
+                if(!this.discountNum||(''+this.discountNum).trim().length===0){
                     this.$Notice.error({
                         title:'请先选择折扣'
                     })
                     return
-                }
+                }    
                 let list = this.saleList;
                 list = list.filter(item=>{
                     if(item.tacticsType == this.discount.tacticsType){
@@ -1515,6 +1529,7 @@
             selectDiscount(obj){
                 this.discountType = obj.sale;
                 this.discountCon = obj.sale
+                this.discountInputError=false
             },
             openPlanMap(){
                 if(!this.formItem.leaseEnddate){
@@ -1579,8 +1594,8 @@
             // 获取step3的服务费用明细
             getSeatCombin(){
                 let list = this.selecedStationList.map(item=>{
-                    item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
-                    item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                    item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",utils.dateParse(item.startDate))
+                    item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",utils.dateParse(item.endDate))
                     return item
                 })
 
@@ -1727,34 +1742,49 @@
             },
             checkDiscount(){
                 let value = this.discountCon;
-                if(isNaN(value)){
+                if(isNaN(value)|| (''+value).trim().length===0 ){
                     this.$Notice.error({
                         title:'折扣必须为数字'
                     })
+                    // this.discountCon = this.discount.minDiscount;
+                    this.discountInputError=true
+                    return;
+                }       
+                if(value<this.discount.minDiscount){
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.discount.minDiscount
+                    })
+                    this.discountInputError=true
                     this.discountCon = this.discount.minDiscount;
                     return;
-                }
+                }        
                 var pattern =/^[1-9]+(.[0-9]{1})?$/;
                 if(value && !pattern.test(value)){
                     this.$Notice.error({
                         title:'折扣不得多余小数点后一位'
                     })
-                    return;
-                }
-                if(value<this.discount.minDiscount){
-                    this.$Notice.error({
-                        title:'单价不得小于'+this.discount.minDiscount
-                    })
-                    this.discountCon = this.discount.minDiscount;
+                    this.discountInputError=true
                     return;
                 }
                 if(value>9.9){
                     this.$Notice.error({
-                        title:'单价不得大于9.9'
+                        title:'折扣不得大于9.9'
                     })
+                    this.discountInputError=true
                     this.discountCon = this.discount.minDiscount;
                     return;
                 }
+                if(this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&Number(value)<this.discountReceive){
+                    this.discountError='您没有此折扣权限，请让高权限的同事协助编辑'
+                    this.$Notice.error({
+                        title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                    })
+                    this.discountInputError=true
+                    this.discountCon = this.discount.minDiscount;
+                    return;
+                }
+                this.discountInputError=false
+                this.discountError=''
             },
             getSeatReplaceDetail(){
                 let list = this.selecedStationList.map(item=>{
@@ -1895,6 +1925,7 @@
                         this.salerName = response.data.saleName;
                         this.discountNum = response.data.discount;
                         this.discountCon = response.data.discount;
+                        this.discountReceive=response.data.discount;
                         this.deposit = response.data.deposit;
                         this.saleList = response.data.tacticsVOs || [];
                         this.stationData.submitData = this.selecedStationList;
@@ -2104,6 +2135,11 @@
             .active{
                 background-color: #499df1;
                 color: #fff;
+            }
+            .notactive{
+                background-color:#f3f3f3;
+                color: #ccc;
+                border:1px solid #dddee1;
             }
         .title{
             font-weight: 600;

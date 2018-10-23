@@ -79,6 +79,11 @@ import utils from '~/plugins/utils';
 
 
     export default {
+        head () {
+            return {
+                title: "新建减租订单-氪空间后台管理系统"
+            }
+        },
         data() {
 
            return{
@@ -142,7 +147,7 @@ import utils from '~/plugins/utils';
                         render: (h, params) => {
                             let start = new Date(this.renewForm.startDate).getTime()
                             let begin = new Date(params.row.startDate).getTime()
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(start<begin?begin:start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(start<begin?begin:start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",utils.dateParse(params.row.endDate)))
                         }
                     },
                 ],
@@ -181,11 +186,6 @@ import utils from '~/plugins/utils';
 
 
            }
-        },
-        head() {
-            return {
-                title: '新建减租服务订单管理'
-            }
         },
         components: {
             SectionTitle,

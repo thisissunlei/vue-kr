@@ -128,7 +128,7 @@ export default {
   },
    head () {
         return {
-            title: "编辑Icon"
+            title: "编辑Icon-氪空间后台管理系统"
         }
     },
   data(){

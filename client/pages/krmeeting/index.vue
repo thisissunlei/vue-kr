@@ -21,7 +21,7 @@ export default {
    name:'billList',
     head () {
             return {
-                title: "KM会议"
+                title: 'KM会议-氪空间后台管理系统'
             }
     },
    data(){

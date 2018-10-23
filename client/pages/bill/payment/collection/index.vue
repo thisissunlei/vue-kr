@@ -92,7 +92,7 @@ import dateUtils from 'vue-dateutils';
         },
         head () {
             return {
-                title: "回款"
+                title: "回款-氪空间后台管理系统"
             }
         },
         data() {
@@ -207,7 +207,7 @@ import dateUtils from 'vue-dateutils';
             onCollectionSubmit(){
                 this.formItem.occurDate = dateUtils.dateToStr("YYYY-MM-dd",new Date(this.formItem.occurDate));
                 
-                this.$http.get('payment-add', this.formItem).then( res => {
+                this.$http.post('payment-add', this.formItem).then( res => {
                     this.$Notice.success({
                         title:'回款成功'
                     });

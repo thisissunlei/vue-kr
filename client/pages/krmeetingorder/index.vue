@@ -26,9 +26,9 @@ import dateUtils from 'vue-dateutils';
 export default {
    name:'billList',
     head () {
-            return {
-                title: "KM会议室订单"
-            }
+        return {
+            title: "KM会议室订单-氪空间后台管理系统"
+        }
     },
    data(){
        return {

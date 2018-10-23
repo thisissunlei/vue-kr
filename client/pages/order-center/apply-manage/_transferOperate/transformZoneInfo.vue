@@ -85,6 +85,11 @@ import selectCustomers from '~/components/SelectCustomersFinancial.vue'
 import OperateLog from './operateLog.vue'
 
 export default {
+     head() {
+        return {
+            title: '转社区详情-氪空间后台管理系统'
+        }
+    },
     components: {
         SectionTitle,
         selectCommunities,
@@ -190,27 +195,31 @@ export default {
             let from = {
                 id: params.transferOperate
             };
+            let _this=this
             this.$http.get('get-apply-info-id', from).then((response) => {
-                this.receivedApplyInfo = response.data;
-                this.logList = this.receivedApplyInfo.logList;
-                this.isFinancialSide = this.receivedApplyInfo.financialSide;
-                this.transferStatus = this.receivedApplyInfo.transferStatusName;
-                this.formItem.communityIdIn = this.receivedApplyInfo.detailList[0].communityIdIn;
-                this.formItem.communityIdOut = this.receivedApplyInfo.detailList[0].communityIdOut;
-                this.formItem.customerId = this.receivedApplyInfo.customerId;
-                this.formItem.transferAmount=this.receivedApplyInfo.detailList[0].transferAmount;
+                _this.receivedApplyInfo = response.data;
+                _this.logList = _this.receivedApplyInfo.logList;
+                _this.isFinancialSide = _this.receivedApplyInfo.financialSide;
+                _this.transferStatus = _this.receivedApplyInfo.transferStatusName;
+                _this.formItem=Object.assign({},_this.receivedApplyInfo)
+                _this.formItem.communityIdIn = _this.receivedApplyInfo.detailList[0].communityIdIn;
+                _this.formItem.communityIdOut = _this.receivedApplyInfo.detailList[0].communityIdOut;
+                _this.formItem.customerId = _this.receivedApplyInfo.customerId;
+                _this.formItem.transferAmount=_this.receivedApplyInfo.detailList[0].transferAmount;
+                _this.maxAmount=_this.receivedApplyInfo.detailList[0].transferAmount
                 // this.getMaxAmount().then(() => {
                 //     let { customerId, applyNo, applyMemo, detailList, detailList: [{ communityIdIn, communityIdOut, transferAmount }] } = this.receivedApplyInfo;
                 //     let obj = { customerId, applyNo, applyMemo, communityIdIn, communityIdOut, transferAmount };
                 //     this.formItem = Object.assign({}, this.formItem, obj)
 
 
-                //     this.getCusomerList(obj.customerId).then(
-                //         () => {
-                //             this.communitiesOut = [].concat(this.communities)
-                //             this.communitiesIn = [].concat(this.communities)
-                //         }
-                //     )
+                    _this.getCusomerList(_this.receivedApplyInfo.customerId).then(
+                        () => {
+                            debugger
+                            _this.communitiesOut = [].concat(_this.communities)
+                            _this.communitiesIn = [].concat(_this.communities)
+                        }
+                    )
                 // });
 
             }).then(() => {

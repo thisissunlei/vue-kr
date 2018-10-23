@@ -53,9 +53,9 @@ var layoutScrollHeight=0;
             ToolTip,
             Loading
         },
-        head() {
+        head(){
             return {
-                title: '即将到期'
+                title: '即将到期-氪空间后台管理系统'
             }
         },
         data () {
@@ -211,12 +211,18 @@ var layoutScrollHeight=0;
                                             }
                                         }, [
                                         h('div', [
-                                            h('div',{
+                                            h('a',{
                                                 style:{
                                                     textOverflow:'ellipsis',
                                                     whiteSpace:'nowrap',
                                                     overflow: 'hidden'
-                                                }
+                                                },
+                                                 on: {
+                                                        click: () => {
+                                                           window.open(`/bill/customerAssets/${params.row.customerId}/view#basic`,'_blank')  
+                                                        }
+                                                     },
+                                               // props:{href:`/bill/customerAssets/${params.customerId}/view#basic`},
                                             },params.row.customerName),
                                         ])
                                     ])

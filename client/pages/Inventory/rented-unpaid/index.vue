@@ -55,7 +55,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '已起租未付'
+                title: '已起租未付-氪空间后台管理系统'
             }
         },
         data () {
@@ -107,6 +107,23 @@ var layoutScrollHeight=0;
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
+                        render(h,params){
+                           return  h('div', [
+                                    h('a',{
+                                        style:{
+                                            textOverflow:'ellipsis',
+                                            whiteSpace:'nowrap',
+                                            overflow: 'hidden'
+                                        },
+                                        on: {
+                                                click: () => {
+                                                window.open(`/bill/customerAssets/${params.row.customerId}/view#basic`,'_blank')  
+                                                }
+                                            },
+                                    },params.row.customerName),
+                                  ])
+                        
+                        }
                     },
                     {
                         title: '账单明细',

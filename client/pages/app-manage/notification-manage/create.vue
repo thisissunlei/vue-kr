@@ -228,7 +228,7 @@ export default {
   },
   head () {
         return {
-            title: "新建通知"
+            title: "新建通知-氪空间后台管理系统"
         }
     },
   data(){

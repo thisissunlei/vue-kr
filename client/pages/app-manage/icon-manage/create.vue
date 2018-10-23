@@ -134,7 +134,7 @@ export default {
   },
   head () {
         return {
-            title: "新增Icon"
+            title: "新增Icon-氪空间后台管理系统"
         }
     },
   data(){

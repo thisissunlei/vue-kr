@@ -1051,6 +1051,7 @@
                 }
             },
             changeCustomer(value){
+                debugger
                 this.formItem.customerId = value.value;
                 this.formItem.customerName = value.label;
                 if(value.value){
@@ -1074,6 +1075,7 @@
             },
             //获取客户对应的社区
             getCustomerToCom(){
+                debugger
                 let params = {
                     customerId:this.formItem.customerId
                 }
@@ -1886,11 +1888,9 @@
                     this.formItem.signDate = new Date(response.data.saleDate);
                     this.formItem.salerId = JSON.stringify(response.data.saleId);
                     this.salerName = response.data.saleName;
+                    this.formItem.customerId = response.data.customerId; 
                     let _this = this;
-                    setTimeout(function(){
-                        _this.getCustomerToCom()
-                    },200)
-
+                    debugger
                     // step2数据
                     // 编辑版
                     this.formItem.startDate = response.data.realStartDate;
@@ -1926,6 +1926,7 @@
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;
                         item.endDate = response.data.realEndDate
+                        item.rightDiscount=response.data.rightDiscount
                         return item;
                     })
 
@@ -1971,12 +1972,12 @@
                     this.back  = response.data.feeResultVO.lockDeposit;
 
 
-                    // 待定
-                    overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
-                        item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
-                        item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
-                        return item;
-                    });
+                    // // 待定
+                    // overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
+                    //     item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
+                    //     item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
+                    //     return item;
+                    // });
 
                     
                     this.formItem = Object.assign({},overViewData,this.formItem);
@@ -1992,7 +1993,11 @@
                         if(this.edit){
                            this.getBasicData()
                         }
-					}).catch((error)=>{
+					}).then(()=>{
+                        setTimeout(()=>{
+                        this.getCustomerToCom()
+                    },200)
+                    }).catch((error)=>{
                         let errorData = {};
                         errorData.newStationData = [
                             {

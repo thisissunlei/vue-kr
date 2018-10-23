@@ -20,7 +20,25 @@
                 />
             </FormItem>
             <FormItem label="通知配图" style="width:516px" >
-                <div class="demo-upload-list" v-if="this.imgUrl">
+                <UploadFile 
+                        multiple
+                        :category="category"
+                        withCredentials
+                        :format="['jpg','png','gif']"
+                        :maxSize="300"
+                        :onSuccess="handleSuccess"
+                        :onRemove="handleRemove"
+                        :onExceededSize="imgSize"
+                        :onFormatError="imgSizeFormat"
+                        :imgWidth="148"
+                        :imgHeight="148"
+                        :maxLen="1"
+                        
+                    >
+                      <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div>
+                </UploadFile>
+                <!-- <div class="demo-upload-list" v-if="this.imgUrl">
                     <img :src="this.imgUrl">
                     <div class="demo-upload-list-cover">
                         <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
@@ -41,10 +59,10 @@
                     <div style="width: 148px;height:148px;line-height: 158px;">
                         <Icon type="camera" size="40"></Icon>
                     </div>
-                </Upload>
+                </Upload> -->
             </FormItem>
-            <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
-（上传图片后，即为APP中用户可见效果）</div>
+            <!-- <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div> -->
             <FormItem label="通知详情" style="width:400px" prop="jumpType">
                  <RadioGroup 
                     v-model="formItem.jumpType" 
@@ -183,7 +201,7 @@
                 </IconTip>
             </FormItem>
         </DetailStyle>
-        <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
+        <FormItem  style="margin:0 24px; height:60px;">
              <div class="u-btn-content">
                 <Button  style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
                 <Button type="ghost" @click="onCanlce()" >取消</Button>
@@ -199,12 +217,14 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
   components:{
      SectionTitle,
      DetailStyle,
-     IconTip
+     IconTip,
+     UploadFile
   },
   head () {
         return {
@@ -213,6 +233,7 @@ export default {
     },
   data(){
       return{
+          category:'app/upgrade',
           formItem:{
               title:'',
               content:'',
@@ -229,7 +250,6 @@ export default {
           personNum:0,
           communityList:[],
           communityLoading:false,
-          imgUrl:'',
           countParams:{
               cmtId:'',
               birthMonth:'',
@@ -436,27 +456,26 @@ export default {
         
     },
    handleRemove(){
-      this.formItem.iconUrl="";
-      this.imgUrl="" 
+      this.formItem.imgUrl="";
     },
-     handleSuccess(res,file){
-        if(res.code==1){
-            this.formItem.imgUrl=res.data.imgUrl;
-            this.imgUrl=res.data.imgUrl
-        }
+     handleSuccess(file){
+        this.formItem.imgUrl=file.data.url;
     },
-   
     onCanlce(){
         window.close();
         window.opener.location.reload();
     },
-     handleError(error,file){
-         this.$Notice.error({
-              title:error.message
+   
+     imgSizeFormat(){
+        this.$Notice.error({
+            title:'图片格式不正确'
         });
-     }
-
-
+     },
+     imgSize(){
+        this.$Notice.error({
+            title:'图片大小超出限制'
+        });
+     },
 
 
 
@@ -473,10 +492,6 @@ export default {
     form{
         width:100%;
     }
-    .u-btn-content{
-      width:138px;
-      margin:0 auto;
-  }
     .u-upload-tip{
         width:692px;
         height:40px;
@@ -485,6 +500,11 @@ export default {
         color:#999999;
         margin:-25px 0 10px 14px;
     }
+    .u-btn-content{
+      width:138px;
+      margin:0 auto;
+  }
+    
     .u-community-content{
         width:284px;
         height:114px;
@@ -635,6 +655,7 @@ export default {
   
 
 }
+
 </style>
 
 

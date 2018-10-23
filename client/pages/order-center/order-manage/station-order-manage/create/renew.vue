@@ -135,7 +135,7 @@
             <div class="total-money" v-if="selecedStation.length">
               <div class="left" style="padding-left: 10px;">
                 <span>折扣原因：</span>
-                <Input style="width:400px" :maxlength="200" v-model="renewForm.discountReason">
+                <Input style="width:400px" :maxlength="200" v-model="renewForm.discountReason"/>
               </div>
               <div class="right">
                 <span>服务费总计</span>
@@ -227,7 +227,7 @@
     >
       <div v-if="openPrice">
         <span style="display:inline-block;height:32px;line-height:32px">工位单价：</span>
-        <Input v-model="price" placeholder="工位单价" style="width:150px">
+        <Input v-model="price" placeholder="工位单价" style="width:150px"/>
         <span
           style="display:block;height:32px;line-height:32px;color:red"
           v-if="priceError"
@@ -247,7 +247,7 @@
     >
       <div v-if="openDiscount">
         <span style="display:inline-block;height:32px;line-height:32px">签约折扣:</span>
-        <Input v-model="batchDiscount" placeholder="签约折扣" style="width:150px">
+        <Input v-model="batchDiscount" placeholder="签约折扣" style="width:150px"/>
         <span
           style="display:block;height:32px;line-height:32px;color:red"
           v-if="batchDiscountError"

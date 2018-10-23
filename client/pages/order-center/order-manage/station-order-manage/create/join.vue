@@ -77,7 +77,7 @@
 
 
 <script>
-
+//client/store/join
 import { mapGetters } from 'vuex'
 import SectionTitle from '~/components/SectionTitle.vue'
 import DetailStyle from '~/components/DetailStyle';

@@ -6,7 +6,7 @@
       </Steps>
     </div>
     <div class="from-container">
-      <!-- 第一步 -->
+      <!--start 第一步 选择社区和折扣类型-->
       <div class="select-discount-scheme" v-show="currentStep==0">
         <Form
           :model="formScheme"
@@ -17,7 +17,7 @@
           class="discount-set-from"
         >
           <FormItem label="适用社区" prop="communityId">
-            <selectCommunities v-model="formScheme.communityId"></selectCommunities>
+            <SelectCommunities v-model="formScheme.communityId"></SelectCommunities>
           </FormItem>
           <FormItem label="折扣方案" prop="schemeType">
             <Select v-model="formScheme.schemeType" @on-change="onSchemeChange">
@@ -34,7 +34,9 @@
           </div>
         </Form>
       </div>
-      <!-- 第二步 -->
+      <!--end 第一步 选择社区和折扣类型-->
+
+      <!--start 第二步 设置不同角色的折扣权限-->
       <div class="select-discount" v-show="currentStep==1">
         <AddDiscount
           :addFlag="setp2AddFlag"
@@ -48,7 +50,9 @@
           <Button class="step-btn" type="primary" v-if="isGoodsScheme" @click="next">下一步</Button>
         </div>
       </div>
-      <!-- 第三步 -->
+      <!--end 第二步 设置不同角色的折扣权限-->
+
+      <!--start 第三步 选择折扣适用的商品(工位)-->
       <div class="select-goods" v-if="currentStep==2">
         <div class="step-btn-container">
           <Button class="step-btn" @click="previous">上一步</Button>
@@ -56,20 +60,22 @@
         </div>
         <SelectGoods :communityId="formScheme.communityId" :addFlag="setp3AddFlag"/>
       </div>
+      <!--end 第三步 选择折扣适用的商品(工位)-->
     </div>
   </div>
 </template>
 
 <script>
+//client/store/discountSetting/index.js
 import { mapGetters } from "vuex";
 import dateUtils from "vue-dateutils";
-import selectCommunities from "./SelectCommunities.vue";
+import SelectCommunities from "./SelectCommunities.vue";
 import AddDiscount from "./addDiscount.vue";
 import SelectGoods from "./selectGoods.vue";
 
 export default {
   components: {
-    selectCommunities,
+    SelectCommunities,
     AddDiscount,
     SelectGoods
   },
@@ -78,7 +84,7 @@ export default {
       setp2AddFlag: 0,
       setp2NextFlag: 0,
       setp3AddFlag: 0,
-      isGoodsScheme: false,
+      isGoodsScheme: false,//折扣方案是否是按商品
       goodsIds: "",
       steps: [
         {
@@ -116,6 +122,7 @@ export default {
     ...mapGetters(["currentStep"])
   },
   watch: {
+    //由折扣方案切换步骤
     isGoodsScheme(val) {
       if (val) {
         this.steps.push({
@@ -136,7 +143,8 @@ export default {
     onAddSetpTwo() {
       this.setp2AddFlag = new Date().getTime();
     },
-    onAddSetpThree() {},
+
+    //切换上一步流程
     previous() {
       if (this.currentStep == 0) {
         this.$store.commit("changeStep", 0);
@@ -144,18 +152,20 @@ export default {
         this.$store.commit("changeStep", this.currentStep - 1);
       }
     },
+
+    //切换下一步流程
     next() {
       if (this.currentStep === 0) {
-        let v = false;
+        let valid = false;
         if (!this.formScheme.communityId) {
           this.$refs.formContent.validateField("communityId");
-          v = true;
+          valid = true;
         }
         if (!this.formScheme.schemeType) {
           this.$refs.formContent.validateField("schemeType");
-          v = true;
+          valid = true;
         }
-        if (v) {
+        if (valid) {
           return;
         } else {
           this.$store.commit("changeDiscountSetting", this.formScheme);
@@ -166,10 +176,6 @@ export default {
       if (this.currentStep === 1) {
         this.setp2NextFlag = new Date().getTime();
       }
-    },
-    onGoodsIdsChange(idsArr) {
-      this.goodsIds = idsArr.join(",");
-      console.log("this.goodsIds", this.goodsIds);
     }
   }
 };

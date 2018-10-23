@@ -334,6 +334,7 @@ export default {
         { value: "1", label: "已绑定" },
         { value: "0", label: "未绑定" }
       ],
+      //接口获取
       inventoryList: [
         { value: "AVAILABLE", label: "未招商" },
         { value: "INVITING", label: "招商中" },

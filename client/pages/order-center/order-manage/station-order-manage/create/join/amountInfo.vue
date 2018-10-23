@@ -275,7 +275,7 @@ export default {
                     title: '服务费小计',
                     key: 'amount',
                     align: 'right',
-                    render: function (h, params) {
+                    render(h, params) {
                         return h('span', {}, utils.thousand(params.row.amount))
                     }
                 },
@@ -385,7 +385,7 @@ export default {
             this.openStation = true;
             this.params = params;
         },
-        selectRow: function (selection) {
+        selectRow(selection) {
             // 工位表单的全选
             let selectionList = [];
             selectionList = selection.map((item) => {

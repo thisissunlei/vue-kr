@@ -1,6 +1,7 @@
 <template>
   <div class="g-order">
     <SectionTitle title="社区优惠配置"></SectionTitle>
+    <!--start 搜索 新建  -->
     <div class="u-search">
       <Button type="primary" @click="onCreate" style="display:none">新建社区优惠</Button>
       <span style="padding:0 10px"></span>
@@ -27,7 +28,7 @@
           @on-change="checkAllGroupChange"
         >状态：
           <Checkbox
-            v-for="optionin stateList"
+            v-for="option in stateList"
             :key="option.value"
             :label="option.value"
           >{{option.desc}}</Checkbox>
@@ -37,6 +38,8 @@
         <Button type="primary" @click="onCreate">添加</Button>
       </div>
     </div>
+    <!--end 搜索 新建  -->
+    <!--start 列表  -->
     <div class="u-table">
       <Table border="" :columns="columns" :data="tableData" stripe></Table>
       <div style="margin: 10px 0 ;overflow: hidden">
@@ -52,6 +55,8 @@
         </div>
       </div>
     </div>
+    <!--end 列表  -->
+    <!--start 添加优惠模态框  -->
     <Modal
       v-model="createModal"
       id="create-discount-modal"
@@ -65,6 +70,8 @@
       <Create ref="fromFieldNewPage" v-if="openAddModal"/>
       <div slot="footer"></div>
     </Modal>
+    <!--end 添加优惠模态框  -->
+    <!--start 添加优惠模态框  -->
     <Modal
       v-model="openStop"
       title="确定要停用?"
@@ -79,6 +86,8 @@
         <Button type="ghost" style="margin-left: 8px" @click="cancelStop">取消</Button>
       </div>
     </Modal>
+    <!--end 添加优惠模态框  -->
+    <!--start 查看折扣适用的商品列表模态框  -->
     <Modal
       v-model="openGoods"
       title="查看商品"
@@ -90,16 +99,18 @@
       <Table border="" :columns="goodsColumns" :data="goodsTableData" stripe></Table>
       <div slot="footer"></div>
     </Modal>
+    <!--end 查看折扣适用的商品列表模态框  -->
   </div>
 </template>
 
 
 <script>
+//client/store/discountSetting/index.js
 import { mapGetters } from 'vuex'
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import Create from './thirdPeriod';
+import Create from './discountSetting';
 
 
 export default {

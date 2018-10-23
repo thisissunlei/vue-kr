@@ -24,7 +24,6 @@ import http from '~/plugins/http.js';
 
 export default {
   // props:["onchange","test","value","disabled"],
-  name: 'selectCommunity',
   model: {
     prop: 'value',
     event: 'input'
@@ -71,7 +70,7 @@ export default {
       }
     }
   },
-  mounted: function () {
+  mounted() {
     this.getCusomerList(' ')
   },
   methods: {

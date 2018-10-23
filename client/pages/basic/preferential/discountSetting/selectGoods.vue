@@ -18,13 +18,14 @@
         stripe
         :columns="attractColumns"
         :data="attractData"
-        @on-selection-change="tableChange"
+        @on-selection-change="tableSelectChange"
       ></Table>
     </div>
   </div>
 </template>
 
 <script>
+//client/store/discountSetting/index.js
 import { mapGetters } from "vuex";
 import Loading from "~/components/Loading";
 import dateUtils from "vue-dateutils";
@@ -252,32 +253,6 @@ export default {
         submitData: []
       },
       page: {},
-      roleList: [
-        {
-          id: 1,
-          level: 1,
-          name: "总部管理人员",
-          discount: 7.5
-        },
-        {
-          id: 2,
-          level: 2,
-          name: "区域招商经理",
-          discount: 8
-        },
-        {
-          id: 3,
-          level: 3,
-          name: "招商经理",
-          discount: 8.5
-        },
-        {
-          id: 4,
-          level: 4,
-          name: "招商主管",
-          discount: 9
-        }
-      ]
     };
   },
   computed: {
@@ -344,11 +319,12 @@ export default {
           this.warn = error.message;
         });
     },
-    tableChange(params) {
+    tableSelectChange(params) {
       this.selectGoods = params.map(item => {
         return { seatId: item.id, seatType: item.goodsType };
       });
     },
+    //执行添加折扣
     doAddDiscount(formDiscount) {
       console.log("doAddDiscount", this.formDiscount);
       // debugger
@@ -383,19 +359,7 @@ export default {
         ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.endDate))
         : "";
 
-      // let res = {};
-      // let obj = formDiscount.discountList
-      // Object.keys(obj).map(item => {
-      //     let temp = this.roleList.filter(r => {
-      //         return r.level == Number(item)
-      //     })
-      //     if (temp != null && temp.length > 0) {
-      //         res[temp[0].id] = obj[item]
-      //     }
-      // })
-      // parmas.rightDetail = JSON.stringify(res);
       parmas.goods = JSON.stringify(this.selectGoods);
-      // debugger
       this.$http
         .post("post-add-discount", parmas)
         .then(response => {

@@ -11,7 +11,7 @@
       <FormItem label="折扣类型" prop="discountType">
         <span>折扣</span>
       </FormItem>
-      <FormItem label="优惠期间" class="bill-search" prop="time">
+      <FormItem label="优惠期间" class="form-item-discount-peroid" prop="time">
         <DatePicker
           v-model="formItem.time.startDate"
           type="date"
@@ -26,11 +26,10 @@
           style="width: 140px"
         />
       </FormItem>
-      <FormItem label="折扣配置" v-show="!showRent" class="form-item-discount" prop="discountList">
+      <FormItem label="折扣配置" class="form-item-discount" prop="discountList">
         <SelectDiscount :roleList="roleList" v-model="formItem.discountList"></SelectDiscount>
       </FormItem>
       <FormItem label="备注" class="form-item-remark">
-        <!-- <Input v-model="formItem.remark" /> -->
         <Input
           v-model="formItem.remark"
           :maxlength="100"
@@ -39,18 +38,15 @@
           style="width:100%;"
           placeholder="备注..."
         >
-        <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/100":0+"/100"}}</div>
+          <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/100":0+"/100"}}</div>
+        </Input>
       </FormItem>
-      <!-- <FormItem class="form-item-btn">
-                <Button type="primary" class="btn" @click="handleSubmit(formItem)">确定</Button>
-                <Button class="btn" @click="handleCancle(false)">取消</Button>
-      </FormItem>-->
     </Form>
   </div>
 </template>
 <script>
 import selectCommunities from './SelectCommunities.vue'
-import SelectDiscount from './discountSelect.vue'
+import SelectDiscount from '~/components/discountSelect.vue'
 import dateUtils from 'vue-dateutils';
 
 export default {
@@ -91,7 +87,6 @@ export default {
     };
 
     const validateDiscountList = (rule, value, callback) => {
-
       if (Object.keys(value).length == 0) {
         callback('至少输入一个级别')
       } else if (!checkDiscountExtexnd(value)) {
@@ -102,8 +97,8 @@ export default {
         callback('上级折扣权限不能低于下级')
       }
     };
-    var checkDiscountExtexnd = function (obj) {
 
+    var checkDiscountExtexnd = function (obj) {
       let values = Object.values(obj).map(key => Number(key))
       let arr = values.filter(item => item >= 10 || item <= 0)
       if (arr == null || arr.length > 0) {
@@ -111,8 +106,8 @@ export default {
       }
       return true
     };
-    var checkDiscount = function (obj) {
 
+    var checkDiscount = function (obj) {
       let keys = Object.keys(obj).map(key => Number(key))
       let values = Object.values(obj).map(key => Number(key))
       let maxLevel = Math.max.apply(null, keys)
@@ -135,44 +130,7 @@ export default {
       return true;
     };
     return {
-      showError: false,
-      showRent: false,
-      discountTypeList: [
-        {
-          label: '折扣',
-          value: 1
-        },
-        {
-          label: '免租-后免',
-          value: 2
-        }
-      ],
-      roleList: [
-        {
-          id: 1,
-          level: 1,
-          name: '总部管理人员',
-          discount: 7.5
-        },
-        {
-          id: 2,
-          level: 2,
-          name: '区域招商经理',
-          discount: 8
-        },
-        {
-          id: 3,
-          level: 3,
-          name: '招商经理',
-          discount: 8.5
-        },
-        {
-          id: 4,
-          level: 4,
-          name: '招商主管',
-          discount: 9
-        },
-      ],
+      roleList: [],
       formItem: {
         discountType: "折扣",
         time: {},
@@ -222,7 +180,6 @@ export default {
           if (pass) {
             let res = {};
             let obj = this.formItem.discountList
-            // debugger
             Object.keys(obj).map(item => {
               let temp = this.roleList.filter(r => {
                 return r.level == Number(item)
@@ -232,7 +189,6 @@ export default {
               }
             })
             this.formItem.rightDetail = JSON.stringify(res);
-            // debugger
             this.$store.commit('changeDiscountSetting', this.formItem)
             this.$store.commit('changeStep', 2)
           }
@@ -251,22 +207,7 @@ export default {
     this.getRoleRightList();
   },
   methods: {
-    getDiscountTypeList() {
-      this.$http.get('get-enum-all-data', {
-        enmuKey: 'com.krspace.order.api.enums.discount.DiscountType'
-      }).then((r) => {
-        let data = r.data;
-        let arr = data.filter(item => item.value != 'BEFORE_FREE')
-        if (arr != null && arr.length > 0) {
-          this.discountTypeList = [].concat(arr)
-        }
-        // this.discountTypeList = [].concat({ value: 'ALL', desc: '全部' }, r.data);
-      }).catch((e) => {
-        this.$Notice.error({
-          title: e.message
-        });
-      })
-    },
+    //获取角色列表
     getRoleRightList() {
       this.$http.get('get-discount-rights', '').then((r) => {
         let data = r.data;
@@ -290,6 +231,7 @@ export default {
       })
     },
 
+    //响应提交事件
     handleSubmit(formItem) {
       console.log('formItem', formItem)
       this.$refs['formContent'].validate((valid) => {
@@ -320,6 +262,8 @@ export default {
         }, 300);
       })
     },
+
+    //执行提交
     doSubmit(formItem) {
       let { communityId, schemeType, discountType, time: { startDate, endDate }, remark } = formItem
       let parmas = { communityId, schemeType, discountType, startDate, endDate, remark }
@@ -337,7 +281,6 @@ export default {
         }
       })
       parmas.rightDetail = JSON.stringify(res);
-
       this.$http.post('post-add-discount', parmas).then((response) => {
         this.$Message.success('添加成功');
         this.handleCancle(true);
@@ -365,6 +308,15 @@ export default {
   .discount-set-from {
     position: relative;
     left: -25px;
+    .form-item-discount-peroid {
+      display: inline-block;
+      padding-left: 32px;
+      .u-date-txt {
+        padding: 0 25px;
+        font-size: 14px;
+        color: #666;
+      }
+    }
     .form-item-discount {
       .ivu-form-item-content {
         padding-top: 20px;

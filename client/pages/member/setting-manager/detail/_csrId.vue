@@ -96,7 +96,7 @@
     </Modal>
 	<Modal
 			v-model="isChangeMajor"
-			title="主管理员变更"
+			:title="managetype ==='changeManager'?'主管理员变更':'添加主管理员'"
 			ok-text="确定"
 			cancel-text="取消"
 			width="665"

@@ -12,7 +12,7 @@
               </div>
                <div v-show="status === 2" class="majorContent">
                   <CheckboxGroup v-model="checkGroup" @on-change="checkMajorChange">
-                          <Checkbox v-for="item in AddmajorComList" :key="item.cmtId" :disabled="item.isManager!=2" :label="item.cmtId">{{item.cmtName}}</Checkbox>
+                          <Checkbox v-for="item in AddmajorComList" :key="item.cmtId" :disabled="item.isManager==2" :label="item.cmtId">{{item.cmtName}}</Checkbox>
                   </CheckboxGroup>
               </div>
            <div class="u-part" v-show="status === 3">
@@ -452,8 +452,8 @@
         }
         form.append('customerId', this.$route.params.csrId);
         form.append('certificate', this.file);
-      //  form.append('curMbrId', this.detail.mbrId ||''); // todo 
-         form.append('curMbrId', 533);
+        form.append('curMbrId', this.detail.mbrId ||''); // todo 
+        // form.append('curMbrId', 533);
         var xhrfile = new XMLHttpRequest();
         xhrfile.timeout = 600000;
         let _this = this;

@@ -34,7 +34,8 @@
 								:openSetMajor="openSetMajor"
 								:ifReload="ifReload"
 								:openCheck="openCheck"
-						/>
+								:openMainManager="openMainManager"   
+						/> 
 					</Tab-pane>
 					<Tab-pane :label="`管理员(${count.adminNum || 0})`" name="manager">
 						<ManagerList
@@ -107,6 +108,8 @@
 				:closeMajor="closeMajor"
 				:changeMajor="changeMajor"
 				@formData="getformData"
+				:managetype="managetype"
+				:AddmajorComList="AddmajorComList"
 		/>
 		<div slot="footer">
 		</div>
@@ -156,7 +159,7 @@ export default {
 		EmployeeList,
 		AddManager,
     ChangeMajor,
-    MajorList
+		MajorList
 	}, 
 	head () {
     	return {
@@ -172,6 +175,8 @@ export default {
 			isAddManager:false,
 			basicInfo:{},
 			incomeType:null,
+			AddmajorComList:[],
+			managetype:'',
 			dealDate:"",
             ctime:'',
 			Params:{
@@ -293,6 +298,24 @@ export default {
 		openAddManager(){
 			this.isAddManager=!this.isAddManager;
 		},
+		getMainManager(){
+			let csrId = this.$route.params.csrId;
+			this.$http.get('customer-chiefmanage-cmt-list', {
+				csrId:csrId
+			}).then((res)=>{
+				this.AddmajorComList = res.data.cmtList;
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+		},
+		openMainManager(){
+			this.itemDetail={};
+			this.managetype = 'addManager';
+			this.isChangeMajor=true;
+			this.getMainManager()  
+		},
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
 				csrId:params.csrId
@@ -323,7 +346,8 @@ export default {
         };
         this.$http.get('get-manage-cmt-list', params).then((res)=>{
           this.majorComList=res.data.cmtList && res.data.cmtList.filter(i => (i.isManager === 2)) || [];
-          this.isChangeMajor = true;
+					this.isChangeMajor = true;
+					this.managetype = 'changeManager'
         }).catch((err)=>{
           this.$Notice.error({
             title:err.message

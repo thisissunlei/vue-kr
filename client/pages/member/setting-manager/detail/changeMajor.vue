@@ -2,17 +2,117 @@
   <div class="g-add-manage changeMajor">
     <div class="u-form">
       <Form ref="formItems" :model="formItem" :rules="ruleCustom" label-position="top">
-        <div v-show="status === 1" class="majorContent">
-          <p>正在将主管理员从 {{detail.mbrName}} 变更为其他账号</p>
-          <p>变更需提交盖章的 <span class="linked" @click="downloadCertificate">《主管理员变更授权书》</span></p>
-          <p>新签合同时如有修改，合同生效后也会自动变更。</p>
-          <p class="hasMarginTop">请选择需要变更的社区</p>
-          <div class="u-community-check-list">
-            <CheckboxGroup v-model="checkAllGroup" @on-change="checkGroupChange">
-              <Checkbox v-for="item in majorComList" :key="item.cmtId" :label="item.cmtId">{{item.cmtName}}</Checkbox>
-            </CheckboxGroup>
+        <!-- 新增 -->
+        <div v-if="managetype==='addManager'">
+              <div v-show="status === 1" class="majorContent">
+                  <p>2018年8月以后的客户，主管理员一般可通过新签工位合同的方式自动添加；</p>
+                  <p>2018年8月之前签约的客户也可通过新的续签或增租自动添加主管理员；</p>
+                  <p><span class="redTip">一个客户在一个社区只能有一个主管理员</span>，已有主管理员的不能再添加；</p>
+                  <p>方式添加需提供客户盖章的 <span class="linked" @click="downloadAddCertificate">《主管理员授权书》</span></p>
+              </div>
+               <div v-show="status === 2" class="majorContent">
+                  <CheckboxGroup v-model="checkGroup" @on-change="checkMajorChange">
+                          <Checkbox v-for="item in AddmajorComList" :key="item.cmtId" :disabled="item.isManager!=2" :label="item.cmtId">{{item.cmtName}}</Checkbox>
+                  </CheckboxGroup>
+              </div>
+           <div class="u-part" v-show="status === 3">
+          <div class="u-part-tip">输入需要设为主管理员的账号，可以为非企业员工</div>
+          <div class="u-part-content">
+            <FormItem label="手机号" style="width:252px;display:inline-block;margin-right:30px;" prop="mbrPhone">
+              <Input
+                  v-model="formItem.mbrPhone"
+                  placeholder="请输入手机号"
+                  :maxlength='11'
+              />
+            </FormItem>
+            <Button type="primary" class="u-search-btn" @click="searchInfo">搜索</Button>
+            <div class="u-error-tip" v-show="ifError">该手机号尚未成为氪空间注册用户，继续“添加管理员”后会自动为TA创建账号</div>
+            <div v-show="status === 3 && ifShow">
+              <FormItem label="姓名" class="u-input" prop="mbrName">
+                <Input
+                    v-model="formItem.mbrName"
+                    placeholder="请输入姓名"
+                />
+              </FormItem>
+              <FormItem label="邮箱" class="u-input" prop="mbrEmail">
+                <Input
+                    v-model="formItem.mbrEmail"
+                    placeholder="请输入邮箱"
+                    type="email"
+                />
+              </FormItem>
+              <FormItem label="身份证号" class="u-input">
+                <Input
+                    v-model="formItem.mbrIdCardNo"
+                    placeholder="请输入身份证号"
+                    :maxlength='18'
+                    @on-change="cardChange"
+                    :class="ifCard?'u-card-error-tip':''"
+                />
+              </FormItem>
+              <div class="u-label-text u-input">
+                <div class="u-label">
+                  类型
+                </div>
+                <div class="u-text">
+                  {{companyType}}
+                </div>
+              </div>
+              <div class="u-card-tip" v-show="ifCard">请输入数字</div>
+            </div>
+          </div>
+          <div class="u-part hasPaddingLeft" v-show="ifShow">
+            <div class="u-part-title">授权管理的社区</div>
+            <div class="u-community-check-list noPadding">
+              {{selectedCom}}
+            </div>
           </div>
         </div>
+        <div v-show="status === 4" class="majorContent">
+          <p>请上传客户盖章后的主管理员变更授权书</p>
+          <p style="margin-top:5px" @click="downloadCertificate"><span class="linked">下载授权书模板</span></p>
+
+
+          <div style="display:inline-block;">
+            <input
+                :id="inputId"
+                type="file"
+                style="display:none;"
+                @change="onChange"
+            >
+            <div class="list">
+              <div>
+                <Button type="ghost" icon="ios-plus-outline" @click="upBtnClick">{{uploadText}}</Button>
+                <span style="display:inline-block;margin-left:20px;">{{fileName}}</span>
+              </div>
+            </div>
+          </div>
+          <p>
+            点击确认后新的主管理员将立即生效，旧的主管理员将立即失效，纸质授权书请线下留档。
+          </p>
+        </div>
+
+          <div class="btns" v-show="!(status === 3 && ifShow === false)">
+            <Button type="ghost" @click="lastStep">{{leftText}}</Button>
+            <Button type="primary" style="margin-left: 8px" @click="nextStep">{{rightText}}</Button>
+          </div>
+
+        </div>
+        <!-- 修改 -->
+        <div v-if="managetype==='changeManager'">
+
+            <div v-show="status === 1" class="majorContent">
+              <p>正在将主管理员从 {{detail.mbrName}} 变更为其他账号</p>
+              <p>变更需提交盖章的 <span class="linked" @click="downloadCertificate">《主管理员变更授权书》</span></p>
+              <p>新签合同时如有修改，合同生效后也会自动变更。</p>
+              <p class="hasMarginTop">请选择需要变更的社区</p>
+              <div class="u-community-check-list">
+                <CheckboxGroup v-model="checkAllGroup" @on-change="checkGroupChange">
+                  <Checkbox v-for="item in majorComList" :key="item.cmtId" :label="item.cmtId">{{item.cmtName}}</Checkbox>
+                </CheckboxGroup>
+              </div>
+            </div>
+        
         <div class="u-part" v-show="status === 2">
           <div class="u-part-tip">输入需要设为主管理员的账号，可以为非企业员工</div>
           <div class="u-part-content">
@@ -21,7 +121,6 @@
                   v-model="formItem.mbrPhone"
                   placeholder="请输入手机号"
                   :maxlength='11'
-
               />
             </FormItem>
             <Button type="primary" class="u-search-btn" @click="searchInfo">搜索</Button>
@@ -95,6 +194,7 @@
           <Button type="ghost" @click="lastStep">{{leftText}}</Button>
           <Button type="primary" style="margin-left: 8px" @click="nextStep">{{rightText}}</Button>
         </div>
+     </div>   
       </Form>
     </div>
   </div>
@@ -111,10 +211,11 @@
       detail: Object,
       majorComList: Array,
       closeMajor: Function,
-      changeMajor: Function
+      changeMajor: Function,
+      managetype: String,
+      AddmajorComList:Array,
     },
     data() {
-
       const validatePhone = (rule, value, callback) => {
         var reg = /^\+?[1-9]\d*$/;
         if (!value) {
@@ -130,6 +231,7 @@
         checkAll: false,
         ifCheckError: false,
         checkAllGroup: [],
+        checkGroup:[],
         checkList: "",
         communityList: [],
         ifError: false,
@@ -203,7 +305,11 @@
           delete data.cmtList;
           delete data.mbrType;
           // 注意原有返回字段：社区的影响
-          this.formItem = Object.assign(data, {cmtIds: this.checkAllGroup.join(',')});
+          if(this.managetype === 'addManager'){
+            this.formItem = Object.assign(data, {cmtIds: this.checkGroup.join(',')});
+          }else{
+            this.formItem = Object.assign(data, {cmtIds: this.checkAllGroup.join(',')});
+          }
           this.companyType = res.data.mbrType == 1 ? "在职员工" : '非企业员工';
           this.ifShow = true;
         }).catch((err) => {
@@ -214,6 +320,11 @@
       },
       checkGroupChange(data) {
         let checkList = [].concat(this.checkAllGroup);
+        this.checkList = checkList.join(',');
+        this.formItem.cmtIds = checkList.join(',');
+      },
+      checkMajorChange(data) {
+        let checkList = [].concat(this.checkGroup);
         this.checkList = checkList.join(',');
         this.formItem.cmtIds = checkList.join(',');
       },
@@ -234,7 +345,23 @@
         })
       },
       lastStep() {
-        switch (this.status) {
+        if(this.managetype === 'addManager'){
+         switch (this.status) {
+          case 1:
+            this.closeMajor();
+            break;
+          case 2:
+            this.status = 1;
+            break;
+          case 3:
+            this.status = 2;
+            break;
+          case 4:
+            this.closeMajor();
+            break;
+        }
+        }else{
+          switch (this.status) {
           case 1:
             this.closeMajor();
             break;
@@ -245,15 +372,42 @@
             this.closeMajor();
             break;
         }
+        } 
       },
       nextStep() {
-        switch (this.status) {
+        let _this = this;
+        if(this.managetype === 'addManager'){
+             switch (this.status) {
+          case 1:
+            this.status = 2;
+            break;
+         case 2:
+            this.status = 3;
+            break;
+          case 3:
+            this.$refs.formItems.validate((valid) => {
+              if (valid && _this.formItem.cmtIds) {
+                this.status = 4;
+              } else {
+                let message = '请填写完表单';
+                this.$Notice.error({
+                  title: message
+                });
+              }
+            });
+            break;
+          case 4:
+            this.handleSubmit(this.submitInfo);
+            break;
+        }
+        }else{
+           switch (this.status) {
           case 1:
             this.status = 2;
             break;
           case 2:
             this.$refs.formItems.validate((valid) => {
-              if (valid && this.formItem.cmtIds) {
+              if (valid && _this.formItem.cmtIds) {
                 this.status = 3;
               } else {
                 let message = '请填写完表单';
@@ -267,8 +421,8 @@
             this.handleSubmit(this.submitInfo);
             break;
         }
+        }
       },
-
 
       upBtnClick() {
         let fileDom = document.getElementById(this.inputId);
@@ -298,8 +452,8 @@
         }
         form.append('customerId', this.$route.params.csrId);
         form.append('certificate', this.file);
-        form.append('curMbrId', this.detail.mbrId);
-
+      //  form.append('curMbrId', this.detail.mbrId); // todo 
+         form.append('curMbrId', 533);
         var xhrfile = new XMLHttpRequest();
         xhrfile.timeout = 600000;
         let _this = this;
@@ -343,6 +497,17 @@
             title: err.message
           });
         })
+      },
+      downloadAddCertificate() {
+        this.$http.post('get-station-contract-pdf-url', {
+          id: 135732
+        }).then((res) => {
+          utils.downFileBlank(res.data)
+        }).catch((err) => {
+          this.$Notice.error({
+            title: err.message
+          });
+        })
       }
     },
     updated: function () {
@@ -350,20 +515,48 @@
     },
     computed: {
       leftText() {
-        switch (this.status) {
-          case 1:
-            return '取消';
-            break;
-          case 2:
-            return '上一步';
-            break;
-          case 3:
-            return '取消';
+        if(this.managetype==='addManager'){
+             switch (this.status) {
+            case 1:
+              return '取消';
+              break;
+            case 2:
+              return '上一步';
+              break;
+            case 3:
+              return '上一步';
+            case 4:
+              return '取消';
+          }
+        }else{
+            switch (this.status) {
+            case 1:
+              return '取消';
+              break;
+            case 2:
+              return '上一步';
+              break;
+            case 3:
+              return '取消';
+          }
         }
-
       },
       rightText() {
-        switch (this.status) {
+        if(this.managetype==='addManager'){
+          switch (this.status) {
+          case 1:
+            return '下一步';
+            break;
+          case 2:
+            return '下一步';
+            break;
+          case 3:
+            return '下一步';
+          case 4:
+            return '确定';
+        }
+        }else{
+            switch (this.status) {
           case 1:
             return '下一步';
             break;
@@ -373,14 +566,24 @@
           case 3:
             return '确定';
         }
+        } 
       },
       selectedCom() {
         let joinStr = '';
-        this.majorComList.forEach(i => {
-          if (this.checkAllGroup.indexOf(i.cmtId) !== -1) {
-            joinStr += `，${i.cmtName}`;
-          }
-        });
+        if(this.managetype === 'addManager'){
+          this.AddmajorComList.forEach(i=>{
+            if(this.checkGroup.indexOf(i.cmtId) !== -1){
+              joinStr += `，${i.cmtName}`;
+            }
+          })
+        }else{
+            this.majorComList.forEach(i => {
+            if (this.checkAllGroup.indexOf(i.cmtId) !== -1) {
+              joinStr += `，${i.cmtName}`;
+            }
+          })
+        }
+       
         return joinStr.substring(1);
       }
     }
@@ -392,6 +595,9 @@
     padding-bottom: 10px;
     .u-form {
       box-sizing: border-box;
+      .redTip{
+        color: red;
+      }
       .u-error-tip {
         color: #ed3f14;
         font-size: 14px;

@@ -1915,7 +1915,7 @@
                     this.freeDays = response.data.freeDays;
                     overViewData.firstPayTime = response.data.firstPayTime;
                     this.formItem.firstPayTime = response.data.firstPayTime;
-
+                    this.stationAmount=response.data.seatRentAmount
                     
                     // 明细信息
                     this.serviceDetailsList = response.data.newSeatCombin

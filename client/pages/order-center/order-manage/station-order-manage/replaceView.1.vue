@@ -49,33 +49,21 @@
 		        </a>
                 <span class="card-header"></span>
 
-
-
-                <GoodPriceDetail :stationList="formItem.seats" style='margin-bottom:20px'/>  
-                <div>
-                  <LabelText label="折扣添加人：">
-		        			  	{{formItem.discountCreaterName}}
-		        			  </LabelText>
-		        			  <LabelText label="折扣原因：">
-		        			  	{{formItem.discountReason}}
-		        			  </LabelText>
-                </div>
-
-                <LabelText :inline="inline" label="优惠折扣：" v-if="formItem.discountNum">
+                <LabelText :inline="inline" label="优惠折扣：" v-if="formItem.discount">
                     {{formItem.discount}}折
                 </LabelText>
                 <LabelText :inline="inline" label="折扣添加人：" v-if="discountAdder">
                     {{discountAdder}}
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
-                <!-- <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table> -->
+                <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table>
                 <LabelText :inline="inline" label="免租开始日：" v-if="formItem.freeStartDate" >
                     {{formItem.freeStartDate |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
                 <LabelText :inline="inline" label="免租添加人：" v-if="rentFreeAdder">
                     {{rentFreeAdder}}
                 </LabelText>
-                <!-- <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px" :data="formItem.serviceDetailsList"></Table> -->
+                <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px" :data="formItem.serviceDetailsList"></Table>
                 <LabelText :inline="inline" label="付款周期：">
                     {{formItem.installmentName}}
                 </LabelText>
@@ -151,8 +139,6 @@
     import dateUtils from 'vue-dateutils';
     import Buttons from '~/components/Buttons';
     import utils from '~/plugins/utils';
-    import goodsPriceColumn from "./listData/goodsPriceData";
-    import GoodPriceDetail from "./_watchView/goodPriceDetail"
 
 export default {
 	name:'JoinView',
@@ -175,8 +161,7 @@ export default {
     },
 	components:{
 		SectionTitle,
-        LabelText,
-        GoodPriceDetail
+        LabelText
 	},
 	data(){
 		return {
@@ -230,64 +215,63 @@ export default {
                     }
                 },
             ],
-            newStatonColumns:goodsPriceColumn.call(this),
-            // newStatonColumns:[
-            //     {
-            //         title: '工位编号/房间名称',
-            //         key: 'seatNum',
-            //         align: 'center'
-            //     },
-            //     {
-            //         title: '产品类型',
-            //         key: 'seatType',
-            //         align: 'center',
-            //         render:(h,params)=>{
-            //             let type = '开放工位';
-            //             if(params.row.seatType == 'SPACE'){
-            //                 type = '独立房间';
-            //             }else{
-            //                 type = '开放工位';
-            //             }
-            //             return type;
-            //         }
-            //     },
-            //     {
-            //         title: '指导价',
-            //         key: 'guidePrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.guidePrice)+'(元/月)'
-            //         }
-            //     },
-            //     {
-            //         title: '下单价',
-            //         key: 'originalPrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.originalPrice)+'(元/月)'
-            //         }
-            //     },
-            //     {
-            //         title: '优惠',
-            //         key: 'saleNum',
-            //         align: 'center',
-            //         render:(h,params)=>{
-            //             if(params.row.saleNum && params.row.saleNum != '-'){
-            //                 return params.row.saleNum+'折'
-            //             }else{
-            //                 return '-'
-            //             }
-            //         }
-            //     },
-            //     {
-            //         title: '签约价',
-            //         key: 'signPrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.signPrice)+'(元/月)'
-            //         }
-            //     },
-            // ],
+            newStatonColumns:[
+                {
+                    title: '工位编号/房间名称',
+                    key: 'seatNum',
+                    align: 'center'
+                },
+                {
+                    title: '产品类型',
+                    key: 'seatType',
+                    align: 'center',
+                    render:(h,params)=>{
+                        let type = '开放工位';
+                        if(params.row.seatType == 'SPACE'){
+                            type = '独立房间';
+                        }else{
+                            type = '开放工位';
+                        }
+                        return type;
+                    }
+                },
+                {
+                    title: '指导价',
+                    key: 'guidePrice',
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.guidePrice)+'(元/月)'
+                    }
+                },
+                {
+                    title: '下单价',
+                    key: 'originalPrice',
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.originalPrice)+'(元/月)'
+                    }
+                },
+                {
+                    title: '优惠',
+                    key: 'saleNum',
+                    align: 'center',
+                    render:(h,params)=>{
+                        if(params.row.saleNum && params.row.saleNum != '-'){
+                            return params.row.saleNum+'折'
+                        }else{
+                            return '-'
+                        }
+                    }
+                },
+                {
+                    title: '签约价',
+                    key: 'signPrice',
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.signPrice)+'(元/月)'
+                    }
+                },
+            ],
             newStatonMoneyColumns:[
                 {
                     title: '工位编号/房间名称',
@@ -459,8 +443,7 @@ export default {
     },
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
-        GLOBALHEADERSET('订单合同');
-        console.log('replaceview-seatinfo',this.data)
+		GLOBALHEADERSET('订单合同')
 	},
 
 	methods:{

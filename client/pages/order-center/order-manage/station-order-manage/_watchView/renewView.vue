@@ -70,10 +70,10 @@
           </div>
           <div>
 					  <LabelText label="服务费总额：" style="color:red;">
-					  	{{basicInfo.seatRentAmount}}
+              {{basicInfo.seatRentAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.seatRentAmount| amountInWords}}
 					  </LabelText>
 					  <LabelText label="履约保证金总额：" style="color:red;">
-					  	{{basicInfo.depositAmount}}
+              {{basicInfo.depositAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.depositAmount| amountInWords}}
 					  </LabelText>
 				  </div>
 			</DetailStyle>

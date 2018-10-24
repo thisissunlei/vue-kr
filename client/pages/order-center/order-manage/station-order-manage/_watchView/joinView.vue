@@ -59,7 +59,7 @@
 				</LabelText>
 			</DetailStyle>
       <DetailStyle info="商品价格明细">
-          <goodPriceDetail :stationList="stationList" style='margin-bottom:20px'/>  
+          <GoodPriceDetail :stationList="stationList" style='margin-bottom:20px'/>  
           <div>
             <LabelText label="折扣添加人：" >
 					  	{{basicInfo.discountCreaterName}}
@@ -70,10 +70,10 @@
           </div>
           <div>
 					  <LabelText label="服务费总额：" style="color:red;">
-					  	{{basicInfo.seatRentAmount}}
+					  	{{basicInfo.seatRentAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.seatRentAmount| amountInWords}}
 					  </LabelText>
 					  <LabelText label="履约保证金总额：" style="color:red;">
-					  	{{basicInfo.depositAmount}}
+					  	{{basicInfo.depositAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.depositAmount| amountInWords}}
 					  </LabelText>
 				  </div>
 			</DetailStyle>
@@ -107,7 +107,7 @@ import DetailStyle from "~/components/DetailStyle";
 import LabelText from "~/components/LabelText";
 import utils from "~/plugins/utils";
 import dateUtils from "vue-dateutils";
-import goodPriceDetail from "./goodPriceDetail"
+import GoodPriceDetail from "./goodPriceDetail"
 
 export default {
   name: "JoinView",
@@ -119,7 +119,7 @@ export default {
   components: {
     DetailStyle,
     LabelText,
-    goodPriceDetail
+    GoodPriceDetail
   },
   data() {
     return {

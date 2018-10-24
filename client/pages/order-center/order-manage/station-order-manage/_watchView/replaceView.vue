@@ -1075,7 +1075,6 @@
             },
             //获取客户对应的社区
             getCustomerToCom(){
-                debugger
                 let params = {
                     customerId:this.formItem.customerId
                 }
@@ -1890,7 +1889,7 @@
                     this.salerName = response.data.saleName;
                     this.formItem.customerId = response.data.customerId; 
                     let _this = this;
-                    debugger
+                    
                     // step2数据
                     // 编辑版
                     this.formItem.startDate = response.data.realStartDate;
@@ -1926,7 +1925,6 @@
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;
                         item.endDate = response.data.realEndDate
-                        item.rightDiscount=response.data.rightDiscount
                         return item;
                     })
 
@@ -1944,6 +1942,7 @@
                         }
                     })
                     this.installmentType = response.data.installmentType
+                    debugger
                     // 提交格式的与更换工位信息
                     overViewData.seats = response.data.newSeatInfo.map(item=>{
                         item.originalPrice = item.marketPrice;
@@ -1985,7 +1984,7 @@
                     this.formItem.leaseEnddate = response.data.realEndDate;
                     this.discountCon = response.data.discount;
                     
-                    
+                    debugger
 					this.overViewData = overViewData
 					this.orderStatus = 'view';
                     this.originStationList = this.selecedStationList

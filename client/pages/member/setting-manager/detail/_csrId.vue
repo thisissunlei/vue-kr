@@ -241,7 +241,7 @@ export default {
       checkContent: []
     };
   },
-  mounted: function() {
+  mounted() {
     GLOBALSIDESWITCH("false");
     let { params } = this.$route;
     this.Params.csrId = params.csrId;

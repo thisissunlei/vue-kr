@@ -452,7 +452,7 @@
         }
         form.append('customerId', this.$route.params.csrId);
         form.append('certificate', this.file);
-      //  form.append('curMbrId', this.detail.mbrId); // todo 
+      //  form.append('curMbrId', this.detail.mbrId ||''); // todo 
          form.append('curMbrId', 533);
         var xhrfile = new XMLHttpRequest();
         xhrfile.timeout = 600000;

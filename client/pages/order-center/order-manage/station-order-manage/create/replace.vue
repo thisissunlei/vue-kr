@@ -674,23 +674,41 @@
                       align: 'center',
                       render: (h, params) => {
                         let price = params.row.originalPrice;
-                        return h('div', {
-                          props: {
-                            min: params.row.guidePrice,
-                            value: params.row.originalPrice,
-                          },
-                          style: {
-                            color: 'rgb(43, 133, 228)',
-                            textAlign: 'center',
-                            cursor: 'pointer'
-                          },
-                          on: {
-                            'click': () => {
-                              console.log('删除商品明细行', params.row._index)
-                              this.deleteDtation(params.row._index)
-                            },
-                          }
-                        }, '删除')
+                        return h('div',[
+                            h('div', {
+                                props: {
+                                  min: params.row.guidePrice,
+                                  value: params.row.originalPrice,
+                                },
+                                style: {
+                                  color: 'rgb(43, 133, 228)',
+                                  textAlign: 'center',
+                                  cursor: 'pointer'
+                                },
+                                on: {
+                                  'click': () => {
+                                    console.log('删除商品明细行', params.row._index)
+                                    this.deleteDtation(params.row._index)
+                                  },
+                                }
+                            }, '删除'),
+                            h(Buttons, {
+                                    props: {
+                                        type: 'text',
+                                        label:'明细',
+                                        checkAction:'seat_order_view',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                    },
+                                    on: {
+                                        click: () => {
+                                           this.getServiceDetail(params.row)
+                                        }
+                                    }
+                                })
+                        ])
+                        
+                        
+                      
 
                       }
                     },
@@ -817,7 +835,7 @@
                     deposit:false,
                     selecedStation:false,
                 },
-                status:2,
+                status:0,
                 oldEndTime:new Date(),
                 //优惠信息
                 saleList:[],
@@ -1558,7 +1576,7 @@
                 }
 
 
-                this.watchServiceDetail = new Date()
+                // this.watchServiceDetail = new Date()
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
@@ -1682,6 +1700,7 @@
 
             },
             deleteDtation(index){
+                debugger
                 this.selecedStationList.splice(index,1);
                 if(this.selecedStationList.length){
                     this.getStationAmount();
@@ -1716,34 +1735,49 @@
                 }
                 
             },
-            getServiceDetail(item){
-                var endTime = ''
-                if(item.freeStartDate){
-                    endTime = new Date(item.freeStartDate)
-                    endTime = endTime.setDate(endTime.getDate()-1);
-                    endTime = new Date(endTime).getTime()
-                }else{
-                    endTime = item.endDate;
-                }
+            getServiceDetail(station){
+                // debugger
+                // let item=this.serviceDetailsList.filter(s=>s.name===station.name)[0]
+                // var endTime = ''
+                // if(item.freeStartDate){
+                //     endTime = new Date(item.freeStartDate)
+                //     endTime = endTime.setDate(endTime.getDate()-1);
+                //     endTime = new Date(endTime).getTime()
+                // }else{
+                //     endTime = item.endDate;
+                // }
                 
 
-                let list = item.seatIds.map(value=>{
-                    let obj = {};
-                    obj.seatId = value;
-                    obj.seatType = item.seatType;
-                    return obj;
-                })
-                // let price = item.signPrice.split('元')[0]
-                let price = item.price;
-                // price=price.replace(/\,/g,'')
+                // let list = item.seatIds.map(value=>{
+                //     let obj = {};
+                //     obj.seatId = value;
+                //     obj.seatType = item.seatType;
+                //     return obj;
+                // })
+                // // let price = item.signPrice.split('元')[0]
+                // let price = item.price;
+                // // price=price.replace(/\,/g,'')
+                // let params = {
+                //     codeName:item.name,
+                //     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
+                //     realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(endTime)),
+                //     seats:JSON.stringify(list),
+                //     signPrice:price,
+                //     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                // }
+                let list =[{
+                    seatId:station.seatId,
+                    seatType:station.seatType
+                }] 
                 let params = {
-                    codeName:item.name,
-                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
-                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(endTime)),
+                    codeName:station.name,
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(station.endDate)),
+                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(station.endDate)),
                     seats:JSON.stringify(list),
-                    signPrice:price,
-                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                    signPrice:station.discountedPrice,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(station.startDate))
                 }
+
                 this.$http.post('get-seat-combin-detail', params).then( r => {
                     this.openService = true;
                     this.detailService = r.data

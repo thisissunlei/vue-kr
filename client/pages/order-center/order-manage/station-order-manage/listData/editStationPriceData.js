@@ -1,10 +1,13 @@
+
 /*
-订单详情功能 商品价格明细列表列定义
+新建编辑订单商品价格明细列表列定义
 */
+
 
 import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Buttons from "~/components/Buttons";
+
 export default function() {
   return [
     {

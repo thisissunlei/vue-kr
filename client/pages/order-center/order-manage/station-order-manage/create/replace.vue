@@ -1700,7 +1700,6 @@
 
             },
             deleteDtation(index){
-                debugger
                 this.selecedStationList.splice(index,1);
                 if(this.selecedStationList.length){
                     this.getStationAmount();
@@ -1857,7 +1856,7 @@
 
                 }).catch( e => {
                         this.$Notice.error({
-                            title:e.message
+                            desc:e.message
                         })
 
                 })

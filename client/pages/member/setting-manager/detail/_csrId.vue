@@ -346,14 +346,14 @@ export default {
     },
     tipSubmit() {
       let { params } = this.$route;
-      let Params = {
+      let requestParam = {
         mbrId: this.itemDetail.mbrId,
         cmtIds: this.cmtIds,
         customerId: params.csrId
       };
       var _this = this;
       this.$http
-        .post("edit-customer-manager", Params)
+        .post("edit-customer-manager", requestParam)
         .then(res => {
           this.ifReload = true;
           this.openTip = false;
@@ -372,11 +372,11 @@ export default {
     },
     managerSubmit() {
       let { params } = this.$route;
-      let Params = Object.assign({}, this.formData);
-      Params.customerId = params.csrId;
+      let requestParam = Object.assign({}, this.formData);
+      requestParam.customerId = params.csrId;
       var _this = this;
       this.$http
-        .post("customer-manager-employees", Params)
+        .post("customer-manager-employees", requestParam)
         .then(res => {
           this.ifReload = true;
           this.isAddManager = false;

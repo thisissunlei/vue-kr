@@ -4,6 +4,7 @@
       <Form ref="formItems" :model="formItem" :rules="ruleCustom" label-position="top">
         <!-- 新增 -->
         <div v-if="managetype==='addManager'">
+          <!-- 新增第一步 -->
           <div v-show="status === 1" class="majorContent">
             <p>2018年8月以后的客户，主管理员一般可通过新签工位合同的方式自动添加；</p>
             <p>2018年8月之前签约的客户也可通过新的续签或增租自动添加主管理员；</p>
@@ -12,9 +13,10 @@
             </p>
             <p>
               方式添加需提供客户盖章的
-              <span class="linked" @click="downloadAddCertificate">《主管理员授权书》</span>
+              <span class="linked" @click="downloadCertificate(1)">《主管理员授权书》</span>
             </p>
           </div>
+          <!-- 新增第二步 -->
           <div v-show="status === 2" class="majorContent">
             <p class="hasMarginTop">需要添主管理员的社区：</p>
             <div class="u-community-check-list">
@@ -28,13 +30,15 @@
               </CheckboxGroup>
             </div>
           </div>
+           <!-- 新增第三步 -->
           <div class="u-part" v-show="status === 3">
             <div class="u-part-tip">输入需要设为主管理员的账号，可以为非企业员工</div>
             <div class="u-part-content">
               <FormItem
                 label="手机号"
-                style="width:252px;display:inline-block;margin-right:30px;"
+                style="width:252px;margin-right:30px;"
                 prop="mbrPhone"
+                inline
               >
                 <Input v-model="formItem.mbrPhone" placeholder="请输入手机号" :maxlength="11"/>
               </FormItem>
@@ -68,9 +72,10 @@
               <div class="u-community-check-list noPadding">{{selectedCom}}</div>
             </div>
           </div>
+           <!-- 新增第四步 -->
           <div v-show="status === 4" class="majorContent">
             <p>请上传客户盖章后的主管理员变更授权书</p>
-            <p style="margin-top:5px" @click="downloadAddCertificate">
+            <p style="margin-top:5px" @click="downloadCertificate(1)">
               <span class="linked">下载授权书模板</span>
             </p>
             <div style="display:inline-block;">
@@ -91,11 +96,12 @@
         </div>
         <!-- 修改 -->
         <div v-if="managetype==='changeManager'">
+           <!-- 修改第一步 -->
           <div v-show="status === 1" class="majorContent">
             <p>正在将主管理员从 {{detail.mbrName}} 变更为其他账号</p>
             <p>
               变更需提交盖章的
-              <span class="linked" @click="downloadCertificate">《主管理员变更授权书》</span>
+              <span class="linked" @click="downloadCertificate(2)">《主管理员变更授权书》</span>
             </p>
             <p>新签合同时如有修改，合同生效后也会自动变更。</p>
             <p class="hasMarginTop">请选择需要变更的社区</p>
@@ -109,13 +115,15 @@
               </CheckboxGroup>
             </div>
           </div>
+             <!-- 修改第二步 -->
           <div class="u-part" v-show="status === 2">
             <div class="u-part-tip">输入需要设为主管理员的账号，可以为非企业员工</div>
             <div class="u-part-content">
               <FormItem
                 label="手机号"
-                style="width:252px;display:inline-block;margin-right:30px;"
+                style="width:252px;margin-right:30px;"
                 prop="mbrPhone"
+                inline
               >
                 <Input v-model="formItem.mbrPhone" placeholder="请输入手机号" :maxlength="11"/>
               </FormItem>
@@ -149,9 +157,10 @@
               <div class="u-community-check-list noPadding">{{selectedCom}}</div>
             </div>
           </div>
+          <!-- 修改第三步 -->
           <div v-show="status === 3" class="majorContent">
             <p>请上传客户盖章后的主管理员变更授权书</p>
-            <p style="margin-top:5px" @click="downloadCertificate">
+            <p style="margin-top:5px" @click="downloadCertificate(2)">
               <span class="linked">下载授权书模板</span>
             </p>
             <div style="display:inline-block;">
@@ -499,10 +508,11 @@ export default {
       xhrfile.responseType = "json";
       xhrfile.send(form);
     },
-    downloadCertificate() {
+    downloadCertificate(type) {
+      let id = type == 1 ? 127390:135732;
       this.$http
         .post("get-station-contract-pdf-url", {
-          id: 127390
+          id: id
         })
         .then(res => {
           utils.downFileBlank(res.data);
@@ -513,20 +523,6 @@ export default {
           });
         });
     },
-    downloadAddCertificate() {
-      this.$http
-        .post("get-station-contract-pdf-url", {
-          id: 135732
-        })
-        .then(res => {
-          utils.downFileBlank(res.data);
-        })
-        .catch(err => {
-          this.$Notice.error({
-            title: err.message
-          });
-        });
-    }
   },
   updated: function() {
     this.$emit("formData", this.formItem);

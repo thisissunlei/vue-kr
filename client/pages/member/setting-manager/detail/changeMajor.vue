@@ -199,7 +199,7 @@ export default {
   },
   data() {
     const validatePhone = (rule, value, callback) => {
-      var reg = /^1[34578]\d{9}$/;
+      var reg = /^1\d{10}$/;
       if (!value) {
         callback(new Error("请输入手机号码"));
       } else if (value && !reg.test(value)) {

@@ -868,7 +868,7 @@
                         if(name == 'formItemTwo'){
                             this.getSelectedOldStation()
                             if(this.formItem.oldSeatInfo.length){
-                                this.getSaleList(this.formItem.leaseEnddate)
+                                // this.getSaleList(this.formItem.leaseEnddate)
                             }
                             if(!this.selectedOldStation.length){
                                 this.errorObj.oldStation = true;
@@ -1176,14 +1176,14 @@
                 this.back = '';
                 this.formItem.transferDepositAmount = ''
             },
-            selectPayType:function(value){
+            selectPayType(value){
                 // 选择付款方式
                 this.installmentType = value.value;
                 this.changeThree = new Date()
                 this.installmentName = value.label;
                 this.errorObj.payType = false;
             },
-            selectDeposit:function(value){
+            selectDeposit(value){
 
                 // 选择保证金
                 this.deposit = value
@@ -1192,230 +1192,6 @@
             },
             changeFirstTime(){
 
-            },
-            getSaleList(value){//获取优惠信息
-                let params = {
-                    start:dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(this.formItem.leaseBegindate)),
-                    end:dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(value)),
-                    communityId:this.formItem.communityId
-
-                }
-                this.$http.post('get-free-sale', params, r => {
-                    this.freeMap = {};
-                    this.discount = {
-                        list:[]
-                    };
-                    if(r.data.length){
-                        this.dealSale(r.data)
-                    }
-                    
-                }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-
-                })
-
-                return;
-                
-            },
-            dealSale(list){
-                let discount = []
-                discount = list.filter(item=>{
-                    if(item.discountList){
-                        return true;
-                    }
-                    return false
-                })
-                let freeMap = []
-                freeMap = list.filter(item=>{
-                    if(item.freeMap){
-                        return true;
-                    }
-                    return false
-                })
-                if(discount.length){
-                    let discountList = discount[0].discountList; 
-                    let discountArray = []
-                    for(let i in discountList){
-                        let obj = {};
-                        obj.sale = discountList[i];
-                        discountArray.push(obj)
-
-                    }
-                    //折扣列表
-                    this.discount = {
-                        list:discountArray,
-                        minDiscount:discount[0].minDiscount,
-                        tacticsType:discount[0].tacticsType,
-                        tacticsId:discount[0].tacticsId
-                    }
-                    this.discountReceive=this.discount.minDiscount
-                    let maxDiscount=Math.min.apply(null,discountList)
-                    if (this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&maxDiscount>this.discountReceive) {
-                        this.discountError='您没有此折扣权限，请让高权限的同事协助编辑';
-                        this.$Notice.error({
-                            title: '您没有此折扣权限，请让高权限的同事协助编辑'
-                        });
-                    }
-                }
-                if(!freeMap.length){
-                    return
-                }
-                // 处理免租数据
-                let freeMapList = freeMap[0].freeMap;
-                let freeMapContent = []
-                // let list = []
-                for(let i in freeMapList){
-                    let obj = {}
-                    obj.month = i;
-                    obj.days = Object.keys(freeMapList[i])[0];
-                    obj.date = freeMapList[i][Object.keys(freeMapList[i])[0]]
-                    freeMapContent.push(obj)
-                }
-                //免租列表
-                this.freeMap = {
-                    tacticsType:freeMap[0].tacticsType,
-                    maxDays:freeMap[0].maxFreeDays,
-                    list:freeMapContent,
-                    tacticsId:freeMap[0].tacticsId
-
-                }
-            },
-            selectFree(obj){
-                this.freeType = obj.month;
-                this.freeDays = obj.days;
-
-            },
-            cancleFreeMap(){
-                this.freeStartDate = ''
-                this.freeDays = ''
-                this.setFreeDays(this.formItem.leaseEnddate)
-            },
-            //设置免租天数
-            setfreeMap(){
-                let free = this.freeDays;
-                if(free){
-                   this.checkFreeMap() //1.数字2.小于最大天数 
-                }
-                
-                let params = {
-                    communityId:this.formItem.communityId,
-                    days:this.freeDays,
-                    end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
-                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
-                    tacticsId:this.freeMap.tacticsId,
-                }
-                if(free === 0){
-                    this.freeStartDate = ''
-                    this.setFreeDays(this.formItem.leaseEnddate)
-                    return;
-                }
-                if(!free){
-                    this.$Notice.error({
-                        title:'请填写免租天数'
-                    })
-                    return 
-                }
-               
-                //3.获取免租开始日期
-                
-                this.$http.post('get-free-start-date', params).then( r => {
-                    this.freeStartDate = r.data.freeStartDate;
-                    //4.设置优惠列表（saleList）
-                    this.setFreeDays(r.data.freeStartDate)
-                }).catch( e => {
-                    this.$Notice.error({
-                        title:e.message
-                    })
-
-                })
-                
-            },
-            // 检验免租天数1.数字2.小于最大天数3.是正整数
-            checkFreeMap(){
-                let value = this.freeDays;
-                if(isNaN(value)){
-                    this.$Notice.error({
-                        title:'免租天数必须为数字'
-                    })
-                    this.freeDays = this.freeMap.maxDays;
-                    return false;
-                }
-                var pattern =/^(0|\+?[1-9][0-9]*)$/;
-                if(value && !pattern.test(value)){
-                    this.$Notice.error({
-                        title:'免租天数必须是整数'
-                    })
-                    this.freeDays = this.freeMap.maxDays;
-                    return false;
-                }
-                if(value>this.freeMap.maxDays){
-                    this.$Notice.error({
-                        title:'免租天数不得大于'+this.freeMap.maxDays
-                    })
-                    this.freeDays = this.freeMap.maxDays;
-                    return false;
-                }
-                return true
-            },
-            setFreeDays(start){
-                if(!this.freeDays && this.freeDays!=0 ){
-                    this.$Notice.error({
-                        title:'请先选择免租天数'
-                    })
-                    return
-                }
-                let list = this.saleList;
-                list = list.filter(item=>{
-                    if(item.tacticsType == this.freeMap.tacticsType){
-                        return false;
-                    }
-                    return true;
-                })
-                if(this.freeDays == 0){
-                    this.saleList = list;
-                    this.getSaleAmount(list)
-                    return;
-                }
-                let freeObj = {
-                    discount:'',
-                    tacticsType:this.freeMap.tacticsType,
-                    validEnd:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
-                    validStart:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start)),
-                    tacticsId:this.freeMap.tacticsId
-                }
-                list.push(freeObj);
-                this.saleList = list;
-                //设置折扣后，更新列表
-                this.getSaleAmount(list)
-            },
-            setDiscountNum(){
-                this.discountNum = this.discountCon;
-                if(!this.discountNum||(''+this.discountNum).trim().length===0){
-                    this.$Notice.error({
-                        title:'请先选择折扣'
-                    })
-                    return
-                }    
-                let list = this.saleList;
-                list = list.filter(item=>{
-                    if(item.tacticsType == this.discount.tacticsType){
-                        return false;
-                    }
-                    return true;
-                })
-                let discountObj = {
-                    discount:this.discountNum,
-                    tacticsType:this.discount.tacticsType,
-                    validEnd:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
-                    validStart:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
-                    tacticsId:this.discount.tacticsId
-                }
-                list.push(discountObj);
-                this.saleList = list;
-                //设置折扣后，更新列表
-                this.getSaleAmount(list)
             },
             //设置优惠后，获取签约价明细
             getSaleAmount(list){
@@ -1470,11 +1246,7 @@
 
                 })
             },
-            selectDiscount(obj){
-                this.discountType = obj.sale;
-                this.discountCon = obj.sale
-                this.discountInputError=false
-            },
+
             openPlanMap(){
                 if(!this.formItem.leaseEnddate){
                     this.$Notice.error({
@@ -1503,10 +1275,10 @@
                 this.stationData.submitData = this.selecedStationList || []
                 this.showMap = true;
             },
-            onResultChange:function(val){//组件互通数据的触发事件
+            onResultChange(val){//组件互通数据的触发事件
                 this.stationData = val;
             },
-            cancelStation:function(){//工位弹窗的取消
+            cancelStation(){//工位弹窗的取消
                 this.stationData = {
                     submitData:this.selecedStationList,
                     deleteData:[],
@@ -1514,7 +1286,7 @@
                 this.showMap = false
 
             },
-            submitStation:function(){//工位弹窗的提交
+            submitStation(){//工位弹窗的提交
                 this.showMap = false;
                 this.saleList = []
                 this.discountNum = '';
@@ -1728,52 +1500,6 @@
                         })
 
                 })
-            },
-            checkDiscount(){
-                let value = this.discountCon;
-                if(isNaN(value)|| (''+value).trim().length===0 ){
-                    this.$Notice.error({
-                        title:'折扣必须为数字'
-                    })
-                    // this.discountCon = this.discount.minDiscount;
-                    this.discountInputError=true
-                    return;
-                }       
-                if(value<this.discount.minDiscount){
-                    this.$Notice.error({
-                        title:'折扣不得小于'+this.discount.minDiscount
-                    })
-                    this.discountInputError=true
-                    this.discountCon = this.discount.minDiscount;
-                    return;
-                }        
-                var pattern =/^[1-9]+(.[0-9]{1})?$/;
-                if(value && !pattern.test(value)){
-                    this.$Notice.error({
-                        title:'折扣不得多余小数点后一位'
-                    })
-                    this.discountInputError=true
-                    return;
-                }
-                if(value>9.9){
-                    this.$Notice.error({
-                        title:'折扣不得大于9.9'
-                    })
-                    this.discountInputError=true
-                    this.discountCon = this.discount.minDiscount;
-                    return;
-                }
-                if(this.discountReceive!=-1&&this.discountReceive!=null&&this.discountReceive!=undefined&&Number(value)<this.discountReceive){
-                    this.discountError='您没有此折扣权限，请让高权限的同事协助编辑'
-                    this.$Notice.error({
-                        title: '您没有此折扣权限，请让高权限的同事协助编辑'
-                    })
-                    this.discountInputError=true
-                    this.discountCon = this.discount.minDiscount;
-                    return;
-                }
-                this.discountInputError=false
-                this.discountError=''
             },
             getSeatReplaceDetail(){
                 let list = this.selecedStationList.map(item=>{

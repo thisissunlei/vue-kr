@@ -48,9 +48,7 @@
                 	编辑
 		        </a>
                 <span class="card-header"></span>
-
-
-
+                
                 <GoodPriceDetail :stationList="formItem.seats" style='margin-bottom:20px'/>  
                 <div>
                   <LabelText label="折扣添加人：">
@@ -457,7 +455,7 @@ export default {
             }
         }
     },
-	mounted:function(){
+	mounted(){
 		GLOBALSIDESWITCH('false');
         GLOBALHEADERSET('订单合同');
         console.log('replaceview-seatinfo',this.data)

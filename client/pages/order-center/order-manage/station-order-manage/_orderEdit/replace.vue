@@ -144,6 +144,7 @@
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="deleteSelectedDtation">删除商品</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="entryPrice">批量填写单价</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
+                        <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                     </Row>
 
                     
@@ -206,7 +207,7 @@
                     </Row> -->
 
                     <Row style="margin:10px 0">
-                            <Col sapn="24">
+                            <Col span="24">
                               <Table
                                 border=""
                                 ref="selection"
@@ -471,7 +472,8 @@
                 }
             };
             return {
-                 openDiscount:false,
+                discountErrorStr:'',
+                openDiscount:false,
                 batchDiscount: '',
                 batchDiscountError: '',
                 stationAmount:'',//服务费总计
@@ -621,7 +623,7 @@
                     deposit:false,
                     selecedStation:false,
                 },
-                status:2,
+                status:0,
                 oldEndTime:new Date(),
                 //优惠信息
                 saleList:[],
@@ -1651,15 +1653,34 @@
                         setTimeout(function(){
                             _this.getCustomerToCom()
                         },200)
-                        
-                        
-
+                    }).then(()=>{
+                        this.checkDiscountRight()
                     }).catch((error)=>{
                         console.log(error)
                         this.$Notice.error({
-                            title:error.message
+                            desc:error.message
                         });
                 })
+            },
+            showDiscountError(){
+                this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+                this.discountErrorStr=this.discountError 
+                   this.disabled = true;
+                   this.$Notice.error({
+                       desc: '您没有此折扣权限，请让高权限的同事协助编辑'
+                   });
+            },
+            checkDiscountRight(){
+               let error=false;
+               error= this.selecedStationList.some(item=>{
+                    if (item.discountNum&&item.discountNum<item.rightDiscount) {
+                        return true
+                    }
+                })
+                if (error) {
+                    this.showDiscountError()
+                }
+
             },
             cancleDiscount(){
                 this.discountNum = ''

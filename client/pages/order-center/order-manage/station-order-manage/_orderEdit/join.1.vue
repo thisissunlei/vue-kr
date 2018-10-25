@@ -101,7 +101,7 @@
 
                 </Row>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                    <Col span="24">
                     <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
@@ -169,7 +169,7 @@
                     </Row>
                 </FormItem>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                    <Col span="24">
                     <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>

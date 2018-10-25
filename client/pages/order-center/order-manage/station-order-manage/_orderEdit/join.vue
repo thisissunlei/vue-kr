@@ -93,16 +93,14 @@
             </DetailStyle>
             <DetailStyle info="商品价格明细">
                 <Row style="margin-bottom:10px">
-                    <Col class="col" sapn='24'>
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">批量填写价格</Button>
                     <Button type="primary" style="margin-left:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
-                    </Col>
-
+                    <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                 </Row>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                    <Col span="24">
                         <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                         <div class="total-money" v-if="stationList.length">
                             <div class="left" style="padding-left: 10px;"> <span>折扣原因：</span><Input style="width:400px"
@@ -119,11 +117,6 @@
             </DetailStyle>
             <div style="padding-left:24px">
                 <Row>
-                    <!-- <Col class="col">
-                    <FormItem label="优惠后服务费总额" style="width:252px">
-                        <Input v-model="formItem.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
-                    </FormItem>
-                    </Col> -->
                     <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
                         <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker>
@@ -151,8 +144,7 @@
 
             </div>
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
-                <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
+                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
             </FormItem>
 
         </Form>
@@ -570,7 +562,6 @@ export default {
             originStationList: [],
             orderType: '',
             change: {},
-            showSaleDiv: true,
             openPrice: false,
             openDiscount:false,
             batchDiscount: '',
@@ -601,7 +592,6 @@ export default {
         this.getDetailData();
         this.getFreeDeposit();
         GLOBALSIDESWITCH("false");
-        this.checkDiscountRight()
     },
     watch: {
         getFloor() {
@@ -891,52 +881,7 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
                 _this.formItem.discountReason=data.discountReason
-                /*
-                _this.getSaleTactics({ communityId: data.communityId }).then(()=>{
-                        data.contractTactics = data.contractTactics.map((item, index) => {
-                        let obj = {};
-                        obj.status = 1;
-                        obj.show = true;
-                        obj.validStart = item.freeStart;
-                        obj.startDate = item.freeStart;
-                        obj.validEnd = item.freeEnd;
-                        let i = _this.youhui.filter((items, i) => {
-                            // if (items.name == item.tacticsName) {
-                            if (items.value == item.tacticsType) {
-                                return true
-                            }
-                            return false
-                        })
-                        obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
-                        // 创建者与当前编辑者所拥有的折扣权限不一致 会导致折扣不能回显
-                        // obj.type = item.tacticsType + '/' + index + '/' + item.tacticsName + '/' + item.id;     
-                        obj.index=index;                  
-                        obj.tacticsId = item.tacticsId;
-                        obj.discount = item.discountNum;
-                        obj.tacticsType = JSON.stringify(item.tacticsType);
-                        return obj;
-                    })
 
-                    _this.formItem.items = data.contractTactics;
-                    let discontArr=[].concat(data.contractTactics)
-                   
-                    if (discontArr.length>0) {//订单新建时填写了优惠信息
-                        let type1=discontArr.find(ele=>ele.tacticsType=='1')
-                        _this.disCountReceive=type1.discount
-                        if (type1) {
-                            let obj= _this.youhui.find(y=>y.value=='1')
-                            if (obj) {                                
-                                 if (obj.discount>type1.discount) {
-                                    let index=type1.index;
-                                    _this.showDiscountError();
-                                    _this.discountdisable[index]=true
-                                 }
-                            }
-                        }
-                    }
-                   
-                })
-                */
                 _this.getStationAmount()
 
                 _this.getFloor = +new Date()
@@ -953,6 +898,8 @@ export default {
                 _this.$Notice.error({
                     title: e.message
                 });
+            }).then(()=>{
+                this.checkDiscountRight()
             })
         },
         config () {
@@ -1083,13 +1030,6 @@ export default {
                     zhekou = this.dealzhekou(item.discount || this.discount)
                 }
             });
-            if (saleList.length) {
-                this.showSaleDiv = true
-            } else {
-                this.showSaleDiv = false;
-            }
-            // this.saleAmount = 0;
-            // this.saleAmounts = utils.smalltoBIG(0)
             if (!complete && show) {
                 this.$Notice.error({
                     title: '请填写完整优惠信息'
@@ -1146,7 +1086,7 @@ export default {
                     _this.discountError = e.message;
 
                     _this.$Notice.error({
-                        title: e.message
+                        desc: e.message
                     })
                 }
 
@@ -1504,7 +1444,6 @@ export default {
                 return;
             }
             this.index++;
-            this.showSaleDiv = true;
             this.formItem.items.push({
                 value: '',
                 index: this.index,
@@ -1736,10 +1675,9 @@ export default {
                 communityId: this.formItem.communityId,
                 seats: JSON.stringify(station)
             }
-            let _this = this;
             this.$http.post('get-station-amount', params).then(r => {
                 let money = 0;
-                _this.stationList = r.data.seats.map(item => {
+                this.stationList = r.data.seats.map(item => {
                     let obj = item;
                     //TODO 
                     obj.guidePrice = item.guidePrice || 0;
@@ -1749,21 +1687,15 @@ export default {
                     obj.rightDiscount = item.rightDiscount
                     return obj;
                 });
-                _this.stationData.submitData = _this.stationList;
-                _this.selectedStation = []
-                _this.formItem.rentAmount = r.data.totalrent
-                _this.formItem.stationAmount = r.data.totalrent;
-                _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
-                if (_this.showSaleDiv) {
-                    _this.dealSaleInfo(false)
-                }
-
-
+                this.stationData.submitData = this.stationList;
+                this.selectedStation = []
+                this.formItem.rentAmount = r.data.totalrent
+                this.formItem.stationAmount = r.data.totalrent;
+                this.stationAmount = utils.smalltoBIG(r.data.totalrent)
             }).catch(e => {
-              
-                _this.disabled = false;
-                _this.$Notice.error({
-                    title: e.message
+                this.disabled = false;
+                this.$Notice.error({
+                    desc: e.message
                 })
 
             })

@@ -81,16 +81,14 @@
             <!--苏岭增加客户主管理员结束-->
             <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                     <Button type="primary" style="margin-left:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
-                    </Col>
-
+                    <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                 </Row>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                    <Col span="24">
                     <Table border ref="selection" :columns="columns" :data="selecedStation" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="selecedStation.length">
                         <div class="left" style="padding-left: 10px;"> <span>折扣原因：</span><Input style="width:400px"
@@ -132,7 +130,7 @@
             </div>
 
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
+                <Button type="primary" @click="handleSubmit('renewForm')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
             </FormItem>
         </Form>
         <Modal v-model="openStation" title="选择工位" ok-text="保存" cancel-text="取消" width="600" class-name="vertical-center-modal">
@@ -522,7 +520,6 @@ export default {
             orderSeatId: '',
             corporationName: '',
             change: {},
-            showSaleDiv: true,
             openPrice: false,
             price: '',
             priceError: false,
@@ -881,7 +878,7 @@ export default {
                 _this.$Notice.error({
                     title: e.message
                 });
-            })
+            }).then(()=>this.checkDiscountRight())
         },
         config () {
             this.$Notice.config({
@@ -1253,7 +1250,6 @@ export default {
                 });
                 return
             }
-            this.showSaleDiv = true;
             this.index++;
             this.renewForm.items.push({
                 value: '',
@@ -1473,11 +1469,6 @@ export default {
                     _this.renewForm.rentAmount = Math.round(money * 100) / 100;
                     _this.renewForm.stationAmount = Math.round(money * 100) / 100;
                     _this.stationAmount = utils.smalltoBIG(Math.round(money * 100) / 100)
-                    if (_this.showSaleDiv) {
-                        _this.dealSaleInfo(false)
-                    }
-
-
                 }, e => {
                     _this.$Notice.error({
                         title: e.message
@@ -1612,13 +1603,6 @@ export default {
                     zhekou = this.dealzhekou(item.discount || this.discount)
                 }
             });
-            if (saleList.length) {
-                this.showSaleDiv = true;
-            } else {
-                this.showSaleDiv = false;
-            }
-            // this.saleAmount = 0;
-            // this.saleAmounts = utils.smalltoBIG(0)
             if (!complete && show) {
                 this.$Notice.error({
                     title: '请填写完整优惠信息'
@@ -1734,9 +1718,20 @@ export default {
                this.$Notice.error({
                    title: '您没有此折扣权限，请让高权限的同事协助编辑'
                });
-        }  
+        }  ,
 
+        checkDiscountRight(){
+           let error=false;
+           error= this.stationList.some(item=>{
+                if (item.discountNum&&item.discountNum<item.rightDiscount) {
+                    return true
+                }
+            })
+            if (error) {
+                this.showDiscountError()
+            }
 
+        }
     }
 }
 </script>

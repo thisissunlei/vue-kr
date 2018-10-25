@@ -210,7 +210,7 @@
                         </Col>
                     </Row> -->
                     <Row style="margin:10px 0">
-                            <Col sapn="24">
+                            <Col span="24">
                               <Table
                                 border=""
                                 ref="selection"

@@ -15,7 +15,7 @@
 
         </Row>
         <Row style="margin-bottom:10px">
-            <Col sapn="24">
+            <Col span="24">
             <Table border
                 ref="selection"
                 :columns="columns4"

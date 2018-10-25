@@ -108,7 +108,7 @@
       <!--苏岭增加客户主管理员结束-->
       <DetailStyle info="金额信息">
         <Row style="margin-bottom:10px">
-          <Col class="col" sapn="24">
+          <Col class="col" span="24">
             <Button
               type="primary"
               style="margin-right:20px;font-size:14px"
@@ -124,7 +124,7 @@
           </Col>
         </Row>
         <Row style="margin-bottom:10px">
-          <Col sapn="24">
+          <Col span="24">
             <Table
               border=""
               ref="selection"
@@ -597,7 +597,6 @@ export default {
       saleAmount: 0,
       saleAmounts: utils.smalltoBIG(0),
       change: {},
-      showSaleDiv: true,
       openPrice: false,
       price: '',
       priceError: false,
@@ -1250,7 +1249,6 @@ export default {
     getStationAmount() {
 
       let val = [].concat(this.selecedArr);
-      let _this = this;
       this.config()
       //工位原始结束日期，续租开始日期前一天
       let startDate = '';
@@ -1291,7 +1289,7 @@ export default {
         this.$http.post('get-station-amount', params, r => {
           let money = 0;
           let list = [];
-          _this.selecedStation = r.data.seats.map(item => {
+          this.selecedStation = r.data.seats.map(item => {
             let obj = item;
             money += item.amount;
             //TODO
@@ -1301,19 +1299,14 @@ export default {
             obj.rightDiscount = item.rightDiscount
             return obj;
           })
-          _this.disabled = false;
-          _this.selectedDel = [];
-          _this.renewForm.rentAmount = Math.round(money * 100) / 100;
-          _this.renewForm.stationAmount = Math.round(money * 100) / 100;
-          _this.stationAmount = utils.smalltoBIG(Math.round(money * 100) / 100)
-          if (_this.showSaleDiv) {
-            _this.dealSaleInfo(false)
-          }
-
-
+          this.disabled = false;
+          this.selectedDel = [];
+          this.renewForm.rentAmount = Math.round(money * 100) / 100;
+          this.renewForm.stationAmount = Math.round(money * 100) / 100;
+          this.stationAmount = utils.smalltoBIG(Math.round(money * 100) / 100)
         }, e => {
-          _this.$Notice.error({
-            title: e.message
+          this.$Notice.error({
+            desc: e.message
           });
 
 
@@ -1393,13 +1386,6 @@ export default {
           zhekou = this.dealzhekou(item.discount || this.discount)
         }
       });
-      if (saleList.length) {
-        this.showSaleDiv = true
-      } else {
-        this.showSaleDiv = false
-      }
-      // this.saleAmount = 0;
-      // this.saleAmounts = utils.smalltoBIG(0)
       if (!complete && show) {
         this.$Notice.error({
           title: '请填写完整优惠信息'

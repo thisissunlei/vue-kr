@@ -1,7 +1,7 @@
 <template>
     <div class="amount-info-panel">
         <Row style="margin-bottom:10px">
-            <Col sapn='24'>
+            <Col span='24'>
             <Button type="primary"
                 style="margin-right:20px;font-size:14px"
                 @click="showStation">选择工位</Button>
@@ -18,7 +18,7 @@
 
         </Row>
         <Row style="margin-bottom:10px">
-            <Col sapn="24">
+            <Col span="24">
             <Table border
                 ref="selection"
                 :columns="columns4"
@@ -601,9 +601,6 @@ export default {
                 this.$store.commit('changeRentAmount', r.data.totalrent)
                 this.stationAmount = r.data.totalrent;
                 this.selectedStation = []
-                if (this.showSaleDiv) {
-                    this.dealSaleInfo(false)
-                }
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message

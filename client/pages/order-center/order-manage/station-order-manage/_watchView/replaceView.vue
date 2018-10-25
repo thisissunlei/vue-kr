@@ -144,68 +144,10 @@
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="deleteSelectedDtation">删除商品</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="entryPrice">批量填写单价</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
+                        <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                     </Row>
-
-                    
-                    <!-- 设置折扣 -->
-                    <!-- <Row style="margin-bottom:10px">
-                        <Col style='display:inline-block;width:30%'>
-                            <div class="title">签约价明细</div>
-                             <span style="color: #ed3f14;font-size: 12px;">{{discountError}}</span>
-                        </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError==''" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale}">{{ types.sale }}折</Button>
-                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError!=''" class="button-list notactive" v-on:click="selectDiscount(types)">{{ types.sale }}折</Button>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="discountCon" :disabled="discountError!=''" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
-                            <span style="padding:0 15px"> 折</span>
-                            <Button type="primary" :disabled="discountError!=''" @click="setDiscountNum">设置</Button>
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" :disabled="discountError!=''" @click="cancleDiscount">取消折扣</Button>
-
-                            </div>
-
-
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col>
-                            <Table :columns="signPriceColumns" :data.sync="selecedStationList" @on-selection-change="selectStationEvent"></Table>
-                        </Col>
-                    </Row> -->
-                    <!-- 设置免租 -->
-                    <!-- <Row style="margin-top:30px;margin-bottom:10px;"> 
-                        <Col style='display:inline-block;width:30%'>
-                             <div class="title">服务费明细</div>
-                        </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.maxDays && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'"  @on-blur="checkFreeMap" style="width: 120px;" ></Input>
-                            <span style="padding:0 15px"> 天</span>
-                            <Button type="primary" @click="setfreeMap">设置</Button>
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" @click="cancleFreeMap">取消免租</Button>
-                            </div>
-
-
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                           
-                            <Table :columns="serviceDetailsColumns" :data="serviceDetailsList"></Table>
-                        </Col>
-                    </Row> -->
                     <Row style="margin:10px 0">
-                            <Col sapn="24">
+                            <Col span="24">
                               <Table
                                 border=""
                                 ref="selection"
@@ -472,6 +414,7 @@
                 }
             };
             return {
+                discountErrorStr:'',
                 openDiscount:false,
                 batchDiscount: '',
                 batchDiscountError: '',
@@ -1707,10 +1650,9 @@
                         if(this.edit){
                            this.getBasicData()
                         }
-					}).then(()=>{
-                        setTimeout(()=>{
+					}).then(()=>{                        
                         this.getCustomerToCom()
-                    },200)
+                        this.checkDiscountRight()
                     }).catch((error)=>{
                         let errorData = {};
                         errorData.newStationData = [
@@ -1730,7 +1672,25 @@
 							title:error.message
 						});
 				})
-			},
+            },
+            showDiscountError(){
+                this.discountError = '您没有此折扣权限，请让高权限的同事协助编辑';
+                this.discountErrorStr=this.discountError 
+                   this.disabled = true;
+                 
+            },
+            checkDiscountRight(){
+               let error=false;
+               error= this.selecedStationList.some(item=>{
+                    if (item.discountNum&&item.discountNum<item.rightDiscount) {
+                        return true
+                    }
+                })
+                if (error) {
+                    this.showDiscountError()
+                }
+
+            },
             getBasicData(){
                 this.getOldStation()//获取旧工位的数据
                 // this.getSaleList(this.formItem.endDate)

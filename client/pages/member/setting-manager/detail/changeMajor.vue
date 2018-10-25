@@ -36,9 +36,8 @@
             <div class="u-part-content">
               <FormItem
                 label="手机号"
-                style="width:252px;margin-right:30px;"
+                style="width:252px;display:inline-block;margin-right:30px;"
                 prop="mbrPhone"
-                inline
               >
                 <Input v-model="formItem.mbrPhone" placeholder="请输入手机号" :maxlength="11"/>
               </FormItem>
@@ -121,9 +120,8 @@
             <div class="u-part-content">
               <FormItem
                 label="手机号"
-                style="width:252px;margin-right:30px;"
+                style="width:252px;display:inline-block;margin-right:30px;"
                 prop="mbrPhone"
-                inline
               >
                 <Input v-model="formItem.mbrPhone" placeholder="请输入手机号" :maxlength="11"/>
               </FormItem>
@@ -201,7 +199,7 @@ export default {
   },
   data() {
     const validatePhone = (rule, value, callback) => {
-      var reg = /^\+?[1-9]\d*$/;
+      var reg = /^1[34578]\d{9}$/;
       if (!value) {
         callback(new Error("请输入手机号码"));
       } else if (value && !reg.test(value)) {

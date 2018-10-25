@@ -203,7 +203,7 @@ export default {
       if (!value) {
         callback(new Error("请输入手机号码"));
       } else if (value && !reg.test(value)) {
-        callback(new Error("请输入数字"));
+        callback(new Error("请输入正确手机号码"));
       } else {
         callback();
       }
@@ -405,7 +405,12 @@ export default {
               if (valid && _this.formItem.cmtIds) {
                 this.status = 4;
               } else {
-                let message = "请填写完表单";
+                let message = '';
+                if(!this.checkList){
+                   message = '请选择社区'
+                }else{
+                  message = "请填写完表单";
+                }
                 this.$Notice.error({
                   title: message
                 });

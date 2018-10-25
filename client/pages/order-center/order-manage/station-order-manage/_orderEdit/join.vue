@@ -803,7 +803,7 @@ export default {
             let selectedStation = this.selectedStation;
             if (!selectedStation.length) {
                 this.$Notice.error({
-                    title: '请先选择录入单价的工位'
+                    title: '请先选择录入折扣的工位'
                 })
                 return;
             }

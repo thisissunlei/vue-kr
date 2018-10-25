@@ -1778,14 +1778,9 @@
                     errorStr = '工位折扣不得多于三位小数'
                 }
                 // 选中的工位
-                let selectedStation = this.entryPriceList;
-                stationVos = stationVos.filter(function (item, index) {
-                    if (selectedStation.indexOf(item.seatId) != -1) {
-                        return true;
-                    }
-                    return false;
-                });
-                let sortStationVos = [].concat(stationVos)
+                let selectedStation = this.entryPriceList.map(item=>item.seatId);
+
+                let sortStationVos = [].concat(this.entryPriceList)
                 sortStationVos.sort((s1, s2) => { return s2.rightDiscount - s1.rightDiscount })
                 let maxPrice = sortStationVos[0].rightDiscount;
                 if (maxPrice > this.batchDiscount) {

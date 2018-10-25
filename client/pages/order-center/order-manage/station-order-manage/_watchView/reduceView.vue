@@ -213,7 +213,7 @@ export default {
     };
   },
 
-  mounted: function() {
+  mounted() {
     GLOBALSIDESWITCH("false");
     this.getDetailData();
   },

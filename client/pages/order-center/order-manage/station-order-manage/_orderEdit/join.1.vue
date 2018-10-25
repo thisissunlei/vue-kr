@@ -451,7 +451,7 @@ export default {
                 {
                     title: '小计',
                     key: 'originalAmount',
-                    render: function (h, params) {
+                    render (h, params) {
                         return utils.thousand(params.row.originalAmount)
                     }
                 }
@@ -829,7 +829,7 @@ export default {
                 });
             })
         },
-        config: function () {
+        config () {
             this.$Notice.config({
                 top: 80,
                 duration: 3
@@ -1079,7 +1079,7 @@ export default {
                 _this.dealSaleInfo(true)
             }, 200)
         },
-        handleSubmit: function (name) {
+        handleSubmit (name) {
             let message = '请填写完表单';
             this.$Notice.config({
                 top: 80,
@@ -1124,7 +1124,7 @@ export default {
                 }
             })
         },
-        selectDiscount: function (value) {
+        selectDiscount (value) {
             // checkbox的全选事件
             let items = this.formItem.items;
             items = items.map((item) => {
@@ -1135,7 +1135,7 @@ export default {
             this.selectAll = value;
             this.formItem.items = items;
         },
-        deleteDiscount: function () {
+        deleteDiscount () {
             // 删除选中的优惠信息
             let items = this.formItem.items;
             let select = []
@@ -1194,7 +1194,7 @@ export default {
             return true;
         },
 
-        changeType: function (val) {
+        changeType (val) {
             //优惠类型选择
             if (!val) {
                 return;
@@ -1265,7 +1265,7 @@ export default {
             this.formItem.items = items;
             this.dealSaleInfo(false)
         },
-        changeCommunity: function (value) {
+        changeCommunity (value) {
             // 选择社区
             if (value) {
                 this.formItem.communityId = value;
@@ -1277,7 +1277,7 @@ export default {
             this.validSaleChance();
             this.getFloor = +new Date()
         },
-        clearStation: function () {
+        clearStation () {
             // 清除所选的工位
             if (this.stationList.length) {
                 this.stationData = {
@@ -1298,7 +1298,7 @@ export default {
 
             }
         },
-        changeCustomer: function (value) {
+        changeCustomer (value) {
             // 客户
             if (value) {
                 this.formItem.customerId = value;
@@ -1310,12 +1310,12 @@ export default {
             this.validSaleChance();
             this.clearStation()
         },
-        changeSaler: function (value) {
+        changeSaler (value) {
             // 销售员
             this.formItem.salerId = value;
             this.validSaleChance();
         },
-        changeChance: function (value) {
+        changeChance (value) {
             if (!value || value === 0 || value == -1) {
                 this.formItem.saleChanceId = '';
             } else {
@@ -1374,7 +1374,7 @@ export default {
                 }
             }
         },
-        deleteStation: function () {
+        deleteStation () {
             // 工位表单的删除按钮
             let stationVos = this.stationList;
             let selectedStation = this.selectedStation;
@@ -1389,7 +1389,7 @@ export default {
             this.formItem.items = []
             // this.stationData.submitData = stationVos;
         },
-        showStation: function () {
+        showStation () {
             // 选择工位的按钮
             this.config()
 
@@ -1425,7 +1425,7 @@ export default {
             this.openStation = true;
             this.params = params;
         },
-        selectRow: function (selection) {
+        selectRow (selection) {
             // 工位表单的全选
             let selectionList = [];
             selectionList = selection.map((item) => {
@@ -1451,17 +1451,17 @@ export default {
                 show: true,
             });
         },
-        selectDeposit: function (value) {
+        selectDeposit (value) {
             // 选择保证金
             this.depositAmount = value
             this.errorAmount = false;
         },
-        selectPayType: function (value) {
+        selectPayType (value) {
             // 选择付款方式
             this.installmentType = value;
             this.errorPayType = false;
         },
-        submitStation: function () {//工位弹窗的提交
+        submitStation () {//工位弹窗的提交
 
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
@@ -1478,12 +1478,12 @@ export default {
             this.formItem.saleAmount = 0;
             this.saleAmounts = utils.smalltoBIG(0)
         },
-        onResultChange: function (val) {//组件互通数据的触发事件
+        onResultChange (val) {//组件互通数据的触发事件
             this.stationData = val;
 
 
         },
-        cancelStation: function () {//工位弹窗的取消
+        cancelStation () {//工位弹窗的取消
             this.stationData = {
                 submitData: this.stationList,
                 deleteData: [],
@@ -1492,7 +1492,7 @@ export default {
 
         },
 
-        changeBeginTime: function (val) {//租赁开始时间的触发事件，判断时间大小
+        changeBeginTime (val) {//租赁开始时间的触发事件，判断时间大小
             let error = false;
             this.clearStation()
             if (!val || !this.formItem.endDate) {
@@ -1557,7 +1557,7 @@ export default {
             this.timeError = error;
 
         },
-        changeEndTime: function (val) {//租赁结束时间的触发事件，判断时间大小
+        changeEndTime (val) {//租赁结束时间的触发事件，判断时间大小
             this.clearStation();
             if (!val) {
                 return;
@@ -1594,7 +1594,7 @@ export default {
 
 
         },
-        contractDateRange: function (params) {//获取租赁范围
+        contractDateRange (params) {//获取租赁范围
             let _this = this;
             this.$http.get('contract-date-range', params, r => {
                 _this.formItem.timeRange = r.data;

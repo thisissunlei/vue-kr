@@ -62,7 +62,7 @@ export default {
           title: '商品定价',
           key: 'guidePrice',
           align: 'center',
-          render: function (h, params) {
+          render (h, params) {
             return h('span', {}, utils.thousand(params.row.guidePrice))
           }
         },
@@ -70,7 +70,7 @@ export default {
           title: '标准月费',
           key: 'originalPrice',
           align: 'center',
-          render: function (h, params) {
+          render (h, params) {
             return h('span', {}, utils.thousand(params.row.originalPrice))
           }
         },
@@ -83,7 +83,7 @@ export default {
           title: '签约月费',
           key: 'discountedPrice',
           align: 'center',
-          render: function (h, params) {
+          render (h, params) {
             return h('span', {}, utils.thousand(params.row.discountedPrice))
           }
         },
@@ -91,7 +91,7 @@ export default {
           title: '服务费小计',
           key: 'amount',
           align: 'center',
-          render: function (h, params) {
+          render (h, params) {
             return h('span', {}, utils.thousand(params.row.amount))
           }
         },

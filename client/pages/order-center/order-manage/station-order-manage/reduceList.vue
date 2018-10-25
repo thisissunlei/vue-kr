@@ -564,7 +564,7 @@ export default {
       this.upperData = params;
     },
 
-    onKeyEnter: function(ev) {
+    onKeyEnter(ev) {
       this.submitLowerSearch();
     },
 

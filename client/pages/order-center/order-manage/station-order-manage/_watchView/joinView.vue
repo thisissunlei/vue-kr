@@ -351,7 +351,7 @@ export default {
     };
   },
 
-  mounted: function() {
+  mounted() {
     GLOBALSIDESWITCH("false");
     // GLOBALHEADERSET('订单合同')
     this.getDetailData();

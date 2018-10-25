@@ -468,7 +468,7 @@ export default {
                     title: '服务费小计',
                     key: 'amount',
                     align: 'right',
-                    render: function (h, params) {
+                    render (h, params) {
                         return h('span', {}, utils.thousand(params.row.amount))
                     }
                 },
@@ -555,7 +555,7 @@ export default {
         GLOBALSIDESWITCH("false");
     },
     watch: {
-        getStationFn: function () {
+        getStationFn () {
             if (this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate) {
                 this.getRenewStation()
             }
@@ -883,7 +883,7 @@ export default {
                 });
             })
         },
-        config: function () {
+        config () {
             this.$Notice.config({
                 top: 80,
                 duration: 3
@@ -970,7 +970,7 @@ export default {
             })
 
         },
-        handleSubmit: function (name) {
+        handleSubmit (name) {
             let message = '请填写完整表单';
             this.config()
             let _this = this;
@@ -1030,7 +1030,7 @@ export default {
             })
 
         },
-        changeCustomer: function (value) {
+        changeCustomer (value) {
             if (value) {
                 this.renewForm.customerId = value;
                  this.clearStation()
@@ -1041,7 +1041,7 @@ export default {
             }
             this.validSaleChance();
         },
-        changeCommunity: function (value) {
+        changeCommunity (value) {
             if (value) {
                 this.renewForm.communityId = value;
                 this.getStationFn = +new Date()
@@ -1177,7 +1177,7 @@ export default {
 
             }, 200)
         },
-        changeTime: function (value) {
+        changeTime (value) {
             this.clearStation()
             if (!value) {
                 this.renewForm.endDate = '';
@@ -1193,10 +1193,10 @@ export default {
 
             }, 200)
         },
-        changeSaler: function (value) {
+        changeSaler (value) {
             this.renewForm.salerId = value;
         },
-        showStation: function () {
+        showStation () {
             this.config();
             if (!this.renewForm.communityId) {
                 this.$Notice.error({
@@ -1218,15 +1218,15 @@ export default {
             }
             this.openStation = true;
         },
-        selectDeposit: function (value) {
+        selectDeposit (value) {
             this.depositAmount = value;
 
         },
-        selectPayType: function (value) {
+        selectPayType (value) {
             this.installmentType = value;
             this.errorPayType = false;
         },
-        handleAdd: function () {
+        handleAdd () {
             this.config()
 
             if (!this.renewForm.communityId) {
@@ -1263,7 +1263,7 @@ export default {
                 type: ''
             });
         },
-        deleteDiscount: function () {
+        deleteDiscount () {
             let items = this.renewForm.items;
             let select = []
             select = items.map((item) => {
@@ -1283,7 +1283,7 @@ export default {
             // this.setCheckFalse(items)
 
         },
-        deleteStation: function () {
+        deleteStation () {
             let stationVos = this.selecedStation;
             let delArr = this.selectedDel;
             stationVos = stationVos.filter(function (item, index) {
@@ -1297,14 +1297,14 @@ export default {
             this.getStationAmount()
 
         },
-        selectRow: function (val) {
+        selectRow (val) {
             let selectionList = [];
             selectionList = val.map((item) => {
                 return item.seatId
             })
             this.selectedDel = selectionList;
         },
-        selectDiscount: function (value) {
+        selectDiscount (value) {
             let items = this.renewForm.items;
             items = items.map((item) => {
                 let obj = item;
@@ -1326,7 +1326,7 @@ export default {
 
         },
         //优惠类型选择
-        changeType: function (val) {
+        changeType (val) {
             //优惠类型选择
             if (!val) {
                 return;
@@ -1398,7 +1398,7 @@ export default {
             this.renewForm.items = items;
             this.dealSaleInfo(false)
         },
-        submitStation: function () {
+        submitStation () {
             let val = this.selecedArr || [];
             this.openStation = false
             if (!val.length) {
@@ -1487,7 +1487,7 @@ export default {
                 })
             }
         },
-        cancelStation: function () {
+        cancelStation () {
             this.selecedStation = this.selecedStation.map(item => {
                 let obj = item
                 obj.time = +new Date()
@@ -1495,10 +1495,10 @@ export default {
             })
             this.openStation = false
         },
-        onStationChange: function (val) {
+        onStationChange (val) {
             this.selecedArr = val;
         },
-        getSaleTactics: function (params) {//获取优惠信息
+        getSaleTactics (params) {//获取优惠信息
             let list = [];
             let maxDiscount = {};
             let _this = this;

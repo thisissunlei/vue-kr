@@ -178,7 +178,7 @@ export default {
                 {
                     title: '小计',
                     key: 'originalAmount',
-                    render: function (h, params) {
+                    render (h, params) {
                         return h('span', {}, utils.thousand(params.row.originalAmount))
                     }
                 }
@@ -253,7 +253,7 @@ export default {
             this.openStation = true;
             this.params = params;
         },
-        selectRow: function (selection) {
+        selectRow (selection) {
             // 工位表单的全选
             let selectionList = [];
             selectionList = selection.map((item) => {

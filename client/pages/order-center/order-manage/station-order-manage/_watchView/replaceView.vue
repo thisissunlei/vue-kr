@@ -1318,7 +1318,7 @@
                 });
                 // this.watchServiceDetail = new Date();
                 this.changeThree = new Date()
-                
+                this.getStationAmount();
             },
             // 获取step3的服务费用明细
             getSeatCombin(){

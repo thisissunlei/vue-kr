@@ -140,7 +140,7 @@
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
                         <div class="title">价格明细</div>
-                        <Button type="primary" style="margin-right:20px;font-size:14px" @click="openPlanMap">添加商品</Button>
+                        <Button type="primary" style="margin-right:20px;font-size:14px" @click="openPlanMap">选择商品</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="deleteSelectedDtation">删除商品</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="entryPrice">批量填写单价</Button>
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
@@ -621,7 +621,7 @@
                     deposit:false,
                     selecedStation:false,
                 },
-                status:0,
+                status:2,
                 oldEndTime:new Date(),
                 //优惠信息
                 saleList:[],
@@ -1275,7 +1275,7 @@
                 this.stationData.submitData = this.selecedStationList || []
                 this.showMap = true;
             },
-            onResultChange(val){//组件互通数据的触发事件
+            onResultChange(val){//组件互通数据的触发事件 
                 this.stationData = val;
             },
             cancelStation(){//工位弹窗的取消
@@ -1305,7 +1305,7 @@
                 });
                 // this.watchServiceDetail = new Date();
                 this.changeThree = new Date()
-                
+                this.getStationAmount();
             },
             // 获取step3的服务费用明细
             getSeatCombin(){

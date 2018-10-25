@@ -19,10 +19,11 @@
             </FormItem>
             <FormItem label="订单状态:"  class="form-item-status">
                 <Select
-                    v-model="formItem.status"
-                    style="width:100px"
+                    v-model="statusStr"
+                    style="width:340px"
                     placeholder="请选择订单状态"
                     clearable
+                    multiple
                     >
                     <Option
                         v-for="item in meetingStatusOptions"
@@ -86,6 +87,7 @@ export default {
    data(){
        return {
            communityList : [],
+           statusStr:[],
            formItem : {},
            searchFilter:[
                {
@@ -146,6 +148,7 @@ export default {
                 });
                 return;
             }
+            this.formItem.statusStr=[].concat(this.statusStr).join(',');
             this.$emit("submitSearchData",this.formItem);
         },
         dataChanged(){
@@ -173,6 +176,6 @@ export default {
         width:310px; 
     }
     .form-item-status{
-        width:200px;
+        width:430px;
     }
 </style>

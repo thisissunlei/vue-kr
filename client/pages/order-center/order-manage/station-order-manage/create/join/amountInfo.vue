@@ -161,11 +161,57 @@ export default {
                     title: '商品定价',
                     align: 'right',
                     key: 'guidePrice',
+                    renderHeader:(h,params)=>{
+                        return h("div", [
+                          h(
+                            "Tooltip",
+                            {
+                              props: {
+                                placement: "top"
+                              }
+                            },
+                            [
+                              h("div", [
+                                h("span",'商品定价'),
+                                h('Icon',{
+                                    props:{
+                                        type:'information-circled',
+                                    }
+                                })
+                              ]),
+                              h("div", { slot: "content" }, '与《一房一价表》一致')
+                            ]
+                          )
+                        ]);
+                    }
                 },
                 {
                     title: '标准月费',
                     key: 'guidePrice',
                     align: 'center',
+                    renderHeader:(h,params)=>{
+                        return h("div", [
+                          h(
+                            "Tooltip",
+                            {
+                              props: {
+                                placement: "top"
+                              }
+                            },
+                            [
+                              h("div", [
+                                h("span",'标准月费'),
+                                h('Icon',{
+                                    props:{
+                                        type:'information-circled',
+                                    }
+                                })
+                              ]),
+                              h("div", { slot: "content" }, '不能低于商品定价，会显示在合同上')
+                            ]
+                          )
+                        ]);
+                    },
                     render: (h, params) => {
                         let price = params.row.originalPrice;
                         return h('Input', {
@@ -222,6 +268,32 @@ export default {
                     title: '签约折扣',
                     key: 'discountNum',
                     align: 'center',
+                    renderHeader:(h,params)=>{
+                        return h("div", [
+                          h(
+                            "Tooltip",
+                            {
+                              props: {
+                                placement: "top"
+                              }
+                            },
+                            [
+                              h("div", [
+                                h("span",'签约折扣'),
+                                h('Icon',{
+                                    props:{
+                                        type:'information-circled',
+                                    }
+                                })
+                              ]),
+                              h("div", { slot: "content" },  [
+                                  h('p','不能输入低于折扣权限，不能大于10，'),
+                                  h('p','会显示在合同上')
+                              ])
+                            ]
+                          )
+                        ]);
+                    },
                     render: (h, params) => {
                         let discount = 10;
                         if (params.row.discountNum&&params.row.discountNum===10) {
@@ -270,11 +342,60 @@ export default {
                     title: '签约月费',
                     key: 'discountedPrice',
                     align: 'right',
+                    renderHeader:(h,params)=>{
+                        return h("div", [
+                          h(
+                            "Tooltip",
+                            {
+                              props: {
+                                placement: "top"
+                              }
+                            },
+                            [
+                              h("div", [
+                                h("span",'签约月费'),
+                                h('Icon',{
+                                    props:{
+                                        type:'information-circled',
+                                    }
+                                })
+                              ]),
+                              h("div", { slot: "content" }, '签约月费=标准月费*签约折扣%')
+                            ]
+                          )
+                        ]);
+                    },
                 },
                 {
                     title: '服务费小计',
                     key: 'amount',
                     align: 'right',
+                    renderHeader:(h,params)=>{
+                        return h("div", [
+                          h(
+                            "Tooltip",
+                            {
+                              props: {
+                                placement: "top"
+                              }
+                            },
+                            [
+                              h("div", [
+                                h("span",'服务费小计'),
+                                h('Icon',{
+                                    props:{
+                                        type:'information-circled',
+                                    }
+                                })
+                              ]),
+                              h("div", { slot: "content" }, [
+                                  h('p','服务费小计=签约月费*签约时长'),
+                                  h('p','(签约时长不是整月的部分会换算为零散天)')
+                              ])
+                            ]
+                          )
+                        ]);
+                    },
                     render(h, params) {
                         return h('span', {}, utils.thousand(params.row.amount))
                     }
@@ -644,6 +765,9 @@ export default {
 
 <style lang="less">
 .amount-info-panel {
+  .table-header-icon{
+      position: relative;
+  }
  .total-money {
   .left {
    float: left;

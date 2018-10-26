@@ -1,7 +1,7 @@
 <template>
     <div class="g-door-permmision-owner">
         <SectionTitle :title="title" />
-        <div class="upgrade-list">
+        <div class="upgrade-log-list">
            <LogList/>
         </div>
     </div>
@@ -39,7 +39,7 @@ export default {
    computed: {
 
        title : function(){
-            return "升级记录："+ "已有权限详情（升级类型："+ this.typeName + ";版本编号："+this.versionCode+"）"
+            return "升级记录（升级类型："+ this.typeName + "；版本编号："+this.versionCode+"）"
        }
    },
    methods:{
@@ -50,8 +50,8 @@ export default {
 }
 </script>
 <style lang="less">
-    .upgrade-lis{
-        margin-top:10px;
+    .upgrade-log-list{
+       padding-top:10px;
     }
 </style>
 

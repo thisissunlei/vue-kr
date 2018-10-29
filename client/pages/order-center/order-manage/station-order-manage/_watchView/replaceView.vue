@@ -253,7 +253,7 @@
                 <div class="buttons">
                     <Button type="ghost" @click="previous">上一步</Button>
                     <span class="between"></span>
-                    <Button type="primary" @click="submit('formItemFour')">提交</Button>
+                    <Button type="primary" :disabled="discountError!=''" @click="submit('formItemFour')">提交</Button>
                     
                 </div>
             </Card>
@@ -927,7 +927,7 @@
                 
                 this.orderStatus = 'create';
                 this.status = value;
-                if (value==2&&this.discountError.length>0) {
+                if (this.discountError.length>0) {
                     this.$Notice.error({
                             title: '您没有此折扣权限，请让高权限的同事协助编辑'
                     });

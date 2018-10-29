@@ -211,6 +211,7 @@ export default function(priceDetail = false) {
           {
             props: {
               min: params.row.rightDiscount,
+              max: 10,
               value: params.row.discountNum,
               disabled: disabled
             },
@@ -223,24 +224,43 @@ export default function(priceDetail = false) {
                 discount = e;
               },
               "on-blur": event => {
-                if (discount === "") {
-                  discount = 10;
+                debugger
+                let value=event.target.value
+                if (event.target.value==='') {
+                  value=10
                 }
-                var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
-                if (discount && !pattern.test(discount)) {
+                // if (discount === "") {
+                //   discount = 10;
+                // }
+                var pattern = /[a-zA-Z]/;
+                if (pattern.test(value)||isNaN(value)) {
                   this.$Notice.error({
-                    title: "单价不得多余小数点后三位"
+                    title: "折扣必须填写数字"
                   });
-                  var num2 = Number(discount).toFixed(5);
-                  discount = num2.substring(0, num2.lastIndexOf(".") + 4);
+                  value=10
                 }
-                if (discount < params.row.rightDiscount) {
-                  discount = params.row.rightDiscount;
+                value=Number(value)
+                pattern = /^[0-9]+(.[0-9]{1,3})?$/;
+                if (value && !pattern.test(value)) {
+                  this.$Notice.error({
+                    title: "折扣不得多余小数点后三位"
+                  });
+                  var num2 = Number(value).toFixed(5);
+                  value = num2.substring(0, num2.lastIndexOf(".") + 4);
+                }
+                if (value < params.row.rightDiscount) {
+                  value = params.row.rightDiscount;
                   this.$Notice.error({
                     title: "折扣不得小于" + params.row.rightDiscount
                   });
                 }
-                this.changeDiscount(params.index, discount);
+               if (value >10) {
+                this.$Notice.error({
+                  title: "折扣不得大于" + 10
+                });
+                value=10
+               }
+                this.changeDiscount(params.index, value);
               }
             }
           },

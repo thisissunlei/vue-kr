@@ -253,6 +253,7 @@ export default {
       height: 510px;
     }
     .step-btn-container {
+      text-align: center;
       .step-btn {
         margin: 0 50px;
       }

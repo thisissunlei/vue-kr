@@ -105,8 +105,8 @@ export default function(priceDetail = false) {
       },
       render: (h, params) => {
         let price = params.row.originalPrice;
-        if (price==undefined) {
-          price=params.row.guidePrice
+        if (price == undefined) {
+          price = params.row.guidePrice;
         }
         return h(
           "Input",
@@ -224,22 +224,22 @@ export default function(priceDetail = false) {
                 discount = e;
               },
               "on-blur": event => {
-                debugger
-                let value=event.target.value
-                if (event.target.value==='') {
-                  value=10
+                debugger;
+                let value = event.target.value;
+                if (event.target.value === "") {
+                  value = 10;
                 }
                 // if (discount === "") {
                 //   discount = 10;
                 // }
                 var pattern = /[a-zA-Z]/;
-                if (pattern.test(value)||isNaN(value)) {
+                if (pattern.test(value) || isNaN(value)) {
                   this.$Notice.error({
                     title: "折扣必须填写数字"
                   });
-                  value=10
+                  value = 10;
                 }
-                value=Number(value)
+                value = Number(value);
                 pattern = /^[0-9]+(.[0-9]{1,3})?$/;
                 if (value && !pattern.test(value)) {
                   this.$Notice.error({
@@ -254,12 +254,12 @@ export default function(priceDetail = false) {
                     title: "折扣不得小于" + params.row.rightDiscount
                   });
                 }
-               if (value >10) {
-                this.$Notice.error({
-                  title: "折扣不得大于" + 10
-                });
-                value=10
-               }
+                if (value > 10) {
+                  this.$Notice.error({
+                    title: "折扣不得大于" + 10
+                  });
+                  value = 10;
+                }
                 this.changeDiscount(params.index, value);
               }
             }

@@ -907,13 +907,13 @@
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
                 // step3第二个table数据 
-                let serviceDetailsList =this.serviceDetailsList.map(item=>{
-                    item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
-                    item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
-                    return item;
-                })
+                // let serviceDetailsList =this.serviceDetailsList.map(item=>{
+                //     item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
+                //     item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
+                //     return item;
+                // })
+                // overViewData.serviceDetailsList = serviceDetailsList;
                 this.showSubmit = true;
-                overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
                     if(valid){
                         this.orderStatus = 'view'

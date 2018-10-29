@@ -51,7 +51,17 @@ export default {
         {
           title: '工位类型',
           key: 'seatType',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            let type = params.row.seatType;
+            let typeName = "开放工位";
+            if (type == "SPACE") {
+              typeName = "独立办公室";
+            } else {
+              typeName = "开放工位";
+            }
+            return h('span',typeName);
+          }
         },
         {
           title: '工位数',
@@ -78,6 +88,16 @@ export default {
           title: '签约折扣',
           key: 'discountNum',
           align: 'center',
+          render (h, params) {
+            let str='-'
+            if (params.row.discountNum) {
+              str=params.row.discountNum
+            }
+            if (params.row.discountNum&&params.row.discountNum==10) {
+              str='-'
+            }
+            return h('span',str)
+          }
         },
         {
           title: '签约月费',

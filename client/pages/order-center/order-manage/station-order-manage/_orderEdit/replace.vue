@@ -147,65 +147,6 @@
                         <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                     </Row>
 
-                    
-                    <!-- 设置折扣 -->
-                    <!-- <Row style="margin-bottom:10px">
-                        <Col style='display:inline-block;width:30%'>
-                            <div class="title">签约价明细</div>
-                            <span style="color: #ed3f14;font-size: 12px;">{{discountError}}</span>
-                        </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError==''" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale}">{{ types.sale }}折</Button>
-                                <Button v-for="types in discount.list" :key="types.sale" v-if="discountError!=''" class="button-list notactive" v-on:click="selectDiscount(types)">{{ types.sale }}折</Button>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">                            
-                            <Input v-model="discountCon" :disabled="discountError!=''" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>                         
-                            <span style="padding:0 15px"> 折</span>
-                            <Button type="primary" :disabled="discountError!=''" @click="setDiscountNum">设置</Button> 
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" :disabled="discountError!=''" @click="cancleDiscount">取消折扣</Button>
-
-                            </div>
-
-
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col>
-                            <Table :columns="signPriceColumns" :data.sync="selecedStationList" @on-selection-change="selectStationEvent"></Table>
-                        </Col>
-                    </Row> -->
-                    <!-- 设置免租 -->
-                    <!-- <Row style="margin-top:30px;margin-bottom:10px;"> 
-                        <Col style='display:inline-block;width:30%'>
-                             <div class="title">服务费明细</div>
-                        </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.maxDays && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" @on-blur="checkFreeMap" style="width: 120px;" ></Input>
-                            <span style="padding:0 15px"> 天</span>
-                            <Button type="primary" @click="setfreeMap">设置</Button>
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" @click="cancleFreeMap">取消免租</Button>
-                            </div>
-
-
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                           
-                            <Table :columns="serviceDetailsColumns" :data="serviceDetailsList"></Table>
-                        </Col>
-                    </Row> -->
-
                     <Row style="margin:10px 0">
                             <Col span="24">
                               <Table
@@ -858,7 +799,7 @@
                     this.errorObj.oldStation = false;
                 }
                 
-
+                let _this=this
                 this.$refs[name].validate((valid) => {
 
                     if(valid){
@@ -887,7 +828,6 @@
                             if(!this.deposit){
                                 this.errorObj.deposit = true;
                             }
-
                             if(!this.selecedStationList.length){
                                 this.errorObj.selecedStation = true;
                                 this.$Notice.error({
@@ -896,16 +836,22 @@
                             }else{
                                 this.errorObj.selecedStation = false;
                             }
-                            if(!this.serviceDetailsList.length){
-                                this.errorObj.serviceDetail = true;
-                                this.$Notice.error({
-                                    title:'请核对新工位信息'
-                                })
-                            }else{
-                                this.errorObj.serviceDetail = false;
-                            }
+
+                            // if(!this.serviceDetailsList.length){
+                            //     debugger
+                            //     this.errorObj.serviceDetail = true;
+                            //     this.$Notice.error({
+                            //         title:'请核对新工位信息'
+                            //     })
+                            // }else{
+                            //     debugger
+                            //     this.errorObj.serviceDetail = false;
+                            // }
+
                             this.getSeatReplaceDetail()
                         }
+                        // debugger
+                        // console.log(this.errorObj)
                         let next = true;
                         for(let i in this.errorObj){
                             if(this.errorObj[i]){
@@ -975,7 +921,7 @@
 
                 //     return item;
                 // })
-                overViewData.serviceDetailsList = serviceDetailsList;
+                // overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
                     if(valid){
                         this.orderStatus = 'view'
@@ -1452,7 +1398,7 @@
                     let obj = item;
                     obj.guidePrice = item.guidePrice || item.seatPrice || 0;
 
-                    obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice);
+                    obj.originalPrice =item.originalPrice||0
 
                     obj.seatId = item.id || item.seatId;
                     obj.seatNum = item.name;

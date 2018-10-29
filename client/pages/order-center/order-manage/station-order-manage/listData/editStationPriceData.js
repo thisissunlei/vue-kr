@@ -105,12 +105,15 @@ export default function(priceDetail = false) {
       },
       render: (h, params) => {
         let price = params.row.originalPrice;
+        if (price==undefined) {
+          price=params.row.guidePrice
+        }
         return h(
           "Input",
           {
             props: {
               min: params.row.guidePrice,
-              value: params.row.originalPrice
+              value: price
             },
             on: {
               "on-change": event => {

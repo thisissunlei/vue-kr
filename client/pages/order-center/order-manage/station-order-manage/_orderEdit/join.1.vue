@@ -1653,7 +1653,7 @@ export default {
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || item.seatPrice || 0;
-                obj.originalPrice = (!item.originalPrice && item.originalPrice !== 0 && obj.guidePrice == 0) ? '' : (item.originalPrice || obj.guidePrice || item.price);
+                obj.originalPrice =item.originalPrice||0;
                 obj.seatId = item.id || item.seatId;
                 obj.floor = item.whereFloor || item.floor;
                 obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.formItem.endDate));

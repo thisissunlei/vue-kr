@@ -473,6 +473,11 @@ export default {
             formData.refundRentAmount =this.data.newStationData[0].changeServiceFee;
             formData.rentAmount = this.data.newStationData[0].totalServiceFee
             formData.oldSeatList = JSON.stringify(formData.oldSeatList);
+            formData.seats.map(item=>{
+                if (!item.discountNum) {
+                    item.discountNum=10
+                }
+            })
             formData.seats = JSON.stringify(formData.seats);
             formData.saleList = JSON.stringify(formData.saleList);
             formData.serviceDetailsList = JSON.stringify(formData.serviceDetailsList)

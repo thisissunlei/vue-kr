@@ -729,6 +729,9 @@ export default {
                 if (item.originalPrice < item.guidePrice) {
                     priceError = true
                 }
+                if (!item.discountNum) {
+                    item.discountNum=10
+                }
             })
             if (priceError) {
                 this.$Notice.error({

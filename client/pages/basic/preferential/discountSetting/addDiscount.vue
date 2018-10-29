@@ -310,7 +310,7 @@ export default {
     left: -25px;
     .form-item-discount-peroid {
       display: inline-block;
-      padding-left: 32px;
+      // padding-left: 32px;
       .u-date-txt {
         padding: 0 25px;
         font-size: 14px;

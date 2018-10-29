@@ -1280,7 +1280,7 @@
                 })
 
             },
-            deleteDtation(index){
+            delStationByIndex(index){
                 this.selecedStationList.splice(index,1);
                 if(this.selecedStationList.length){
                     this.getStationAmount();

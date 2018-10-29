@@ -207,7 +207,7 @@ export default function() {
               on: {
                 click: () => {
                   console.log("删除商品明细行", params.row._index);
-                  this.deleteDtation(params.row._index);
+                  this.delStationByIndex(params.row._index);
                 }
               }
             },

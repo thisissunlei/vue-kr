@@ -29,8 +29,8 @@
             </Select>
           </FormItem>
           <div class="step-btn-container">
-            <Button class="step-btn" @click="onCancel">取消</Button>
             <Button class="step-btn" type="primary" @click="next">下一步</Button>
+            <Button class="step-btn" @click="onCancel">取消</Button>
           </div>
         </Form>
       </div>
@@ -45,7 +45,7 @@
           :schemeType="formScheme.schemeType"
         />
         <div class="step-btn-container">
-          <Button class="step-btn" @click="previous">上一步</Button>
+          <Button class="step-btn" type="primary" @click="previous">上一步</Button>
           <Button class="step-btn" type="primary" v-if="!isGoodsScheme" @click="onAddSetpTwo">添加</Button>
           <Button class="step-btn" type="primary" v-if="isGoodsScheme" @click="next">下一步</Button>
         </div>
@@ -55,7 +55,7 @@
       <!--start 第三步 选择折扣适用的商品(工位)-->
       <div class="select-goods" v-if="currentStep==2">
         <div class="step-btn-container">
-          <Button class="step-btn" @click="previous">上一步</Button>
+          <Button class="step-btn" type="primary" @click="previous">上一步</Button>
           <Button class="step-btn" type="primary" @click="setp3AddFlag=(new Date()).getTime()">添加</Button>
         </div>
         <SelectGoods :communityId="formScheme.communityId" :addFlag="setp3AddFlag"/>

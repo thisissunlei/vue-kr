@@ -1,14 +1,12 @@
-
 /*
 新建编辑订单商品价格明细列表列定义
 */
-
 
 import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Buttons from "~/components/Buttons";
 
-export default function() {
+export default function(priceDetail = false) {
   return [
     {
       type: "selection",
@@ -52,12 +50,59 @@ export default function() {
     },
     {
       title: "商品定价",
-      align: "right",
-      key: "guidePrice"
+      align: "center",
+      key: "guidePrice",
+      renderHeader: (h, params) => {
+        return h("div", [
+          h(
+            "Tooltip",
+            {
+              props: {
+                placement: "top"
+              }
+            },
+            [
+              h("div", [
+                h("span", "商品定价"),
+                h("Icon", {
+                  props: {
+                    type: "information-circled"
+                  }
+                })
+              ]),
+              h("div", { slot: "content" }, "与《一房一价表》一致")
+            ]
+          )
+        ]);
+      }
     },
     {
-      title: "标准单价（元/月）",
+      title: "标准月费",
+      align: "center",
       key: "guidePrice",
+      renderHeader: (h, params) => {
+        return h("div", [
+          h(
+            "Tooltip",
+            {
+              props: {
+                placement: "top"
+              }
+            },
+            [
+              h("div", [
+                h("span", "标准月费"),
+                h("Icon", {
+                  props: {
+                    type: "information-circled"
+                  }
+                })
+              ]),
+              h("div", { slot: "content" }, "不能低于商品定价，会显示在合同上")
+            ]
+          )
+        ]);
+      },
       render: (h, params) => {
         let price = params.row.originalPrice;
         return h(
@@ -90,7 +135,6 @@ export default function() {
                     title: "单价不得小于" + params.row.guidePrice
                   });
                 }
-
                 this.changePrice(params.index, price);
               }
             }
@@ -117,6 +161,32 @@ export default function() {
       title: "签约折扣",
       key: "discountNum",
       align: "center",
+      renderHeader: (h, params) => {
+        return h("div", [
+          h(
+            "Tooltip",
+            {
+              props: {
+                placement: "top"
+              }
+            },
+            [
+              h("div", [
+                h("span", "签约折扣"),
+                h("Icon", {
+                  props: {
+                    type: "information-circled"
+                  }
+                })
+              ]),
+              h("div", { slot: "content" }, [
+                h("p", "不能输入低于折扣权限，不能大于10，"),
+                h("p", "会显示在合同上")
+              ])
+            ]
+          )
+        ]);
+      },
       render: (h, params) => {
         let discount = 10;
         let disabled = false;
@@ -178,12 +248,61 @@ export default function() {
     {
       title: "签约月费",
       key: "discountedPrice",
-      align: "right"
+      align: "center",
+      renderHeader: (h, params) => {
+        return h("div", [
+          h(
+            "Tooltip",
+            {
+              props: {
+                placement: "top"
+              }
+            },
+            [
+              h("div", [
+                h("span", "签约月费"),
+                h("Icon", {
+                  props: {
+                    type: "information-circled"
+                  }
+                })
+              ]),
+              h("div", { slot: "content" }, "签约月费=标准月费*签约折扣%")
+            ]
+          )
+        ]);
+      }
     },
     {
       title: "服务费小计",
       key: "amount",
-      align: "right",
+      align: "center",
+      renderHeader: (h, params) => {
+        return h("div", [
+          h(
+            "Tooltip",
+            {
+              props: {
+                placement: "top"
+              }
+            },
+            [
+              h("div", [
+                h("span", "服务费小计"),
+                h("Icon", {
+                  props: {
+                    type: "information-circled"
+                  }
+                })
+              ]),
+              h("div", { slot: "content" }, [
+                h("p", "服务费小计=签约月费*签约时长"),
+                h("p", "(签约时长不是整月的部分会换算为零散天)")
+              ])
+            ]
+          )
+        ]);
+      },
       render(h, params) {
         return h("span", {}, utils.thousand(params.row.amount));
       }
@@ -194,7 +313,7 @@ export default function() {
       align: "center",
       render: (h, params) => {
         let price = params.row.originalPrice;
-        return h("div", [
+        let btns = [
           h(
             "div",
             {
@@ -210,26 +329,31 @@ export default function() {
               on: {
                 click: () => {
                   console.log("删除商品明细行", params.row._index);
-                  this.deleteDtation(params.row._index);
+                  this.delStationByIndex(params.row._index);
                 }
               }
             },
             "删除"
-          ),
-          h(Buttons, {
-            props: {
-              type: "text",
-              label: "明细",
-              checkAction: "seat_order_view",
-              styles: "color:rgb(43, 133, 228);padding: 2px 7px;"
-            },
-            on: {
-              click: () => {
-                this.getServiceDetail(params.row);
+          )
+        ];
+        if (priceDetail) {
+          btns.push(
+            h(Buttons, {
+              props: {
+                type: "text",
+                label: "明细",
+                checkAction: "seat_order_view",
+                styles: "color:rgb(43, 133, 228);padding: 2px 7px;"
+              },
+              on: {
+                click: () => {
+                  this.getServiceDetail(params.row);
+                }
               }
-            }
-          })
-        ]);
+            })
+          );
+        }
+        return h("div", btns);
       }
     }
   ];

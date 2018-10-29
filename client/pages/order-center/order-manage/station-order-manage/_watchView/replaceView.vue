@@ -442,7 +442,7 @@
                     deleteData:[],
                 },
                 selecedStationList:[],
-                signPriceColumns:editStationPriceData.call(this),
+                signPriceColumns:editStationPriceData.call(this,true),
                 serviceDetailsList:[],
                 serviceDetailsColumns:[
                     {
@@ -1292,7 +1292,7 @@
                 })
 
             },
-            deleteDtation(index){
+            delStationByIndex(index){
                 this.selecedStationList.splice(index,1);
                 if(this.selecedStationList.length){
                     this.getStationAmount();

@@ -512,7 +512,7 @@ export default {
       xhrfile.send(form);
     },
     downloadCertificate(type) {
-      let id = type == 1 ? 136561:135732;
+      let id = type == 1 ? 146653:146651;
       this.$http
         .post("get-station-contract-pdf-url", {
           id: id

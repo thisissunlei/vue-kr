@@ -248,6 +248,11 @@ export default  {
         url: '/api/krspace-finance-web/coupon/tag-list',
         method: 'get'
     },
+    //优惠券发放--发放分页
+    'get-kmcoupon-provide-page': {
+        url: '/api/op/kmcoupon/provide/page-list',
+        method: 'get'
+    },
    
 }
   

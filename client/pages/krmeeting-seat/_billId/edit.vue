@@ -614,8 +614,8 @@ export default {
             this.$Notice.success({
                     title:'编辑成功'
                 });
-                    window.close();
-                    window.opener.location.reload();
+                    // window.close();
+                    // window.opener.location.reload();
         }).catch((err)=>{
           this.detailData.devicesStrArray = JSON.parse(this.detailData.devicesStrArray) 
           console.log('===>err',this.detailData)

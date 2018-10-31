@@ -321,7 +321,7 @@ export default {
     },
     tableSelectChange(params) {
       this.selectGoods = params.map(item => {
-        return { seatId: item.id, seatType: item.goodsType };
+        return { seatId: item.id, seatType: item.seatType };
       });
     },
     //执行添加折扣
@@ -334,6 +334,7 @@ export default {
         });
         return;
       }
+
       let {
         communityId,
         schemeType,

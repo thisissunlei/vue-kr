@@ -100,13 +100,22 @@
                                 </Radio>
                             </RadioGroup> 
                     </FormItem>
-                    <FormItem label="社区折扣策略"  style="width:252px;" >
-                        <Input 
-                            v-model="formItem.promotionDesc" 
-                            placeholder="社区折扣策略"
-                            :maxlength="maxLength"
-                        />
-                    </FormItem>
+                    <div> 
+                      <FormItem label="社区折扣策略"  style="width:252px;display:inline-block;margin-right:20px;" >
+                          <Input 
+                              v-model="formItem.promotionDesc" 
+                              placeholder="社区折扣策略"
+                              :maxlength="maxLength"
+                          />
+                      </FormItem>
+                      <FormItem label=""  style="width:250px;display:inline-block;vertical-align:bottom;" >
+                          <Input 
+                              v-model="formItem.promotionAddDesc" 
+                              placeholder="社区折扣策略"
+                              :maxlength="maxLength"
+                          />
+                      </FormItem>
+                     </div>
                     <LabelText label="已上架会议室商品数量：">
                         {{goodsInfo.kmRoomNum}}
                     </LabelText>

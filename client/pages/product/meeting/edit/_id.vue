@@ -248,7 +248,7 @@
                                 />
                         </FormItem>
                         <div>
-                            <FormItem label="是否使用新人优惠策略" class="u-input" style="width:500px" prop="promoFlag">
+                            <FormItem label="是否使用新人优惠策略" class="u-input" style="width:250px" prop="promoFlag">
                                 <RadioGroup v-model="formItem.promoFlag" style="width:250px">
                                     <Radio label="true">
                                         是

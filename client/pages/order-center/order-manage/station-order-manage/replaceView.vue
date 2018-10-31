@@ -229,63 +229,6 @@ export default {
                 },
             ],
             newStatonColumns:goodsPriceColumn.call(this),
-            // newStatonColumns:[
-            //     {
-            //         title: '工位编号/房间名称',
-            //         key: 'seatNum',
-            //         align: 'center'
-            //     },
-            //     {
-            //         title: '产品类型',
-            //         key: 'seatType',
-            //         align: 'center',
-            //         render:(h,params)=>{
-            //             let type = '开放工位';
-            //             if(params.row.seatType == 'SPACE'){
-            //                 type = '独立房间';
-            //             }else{
-            //                 type = '开放工位';
-            //             }
-            //             return type;
-            //         }
-            //     },
-            //     {
-            //         title: '指导价',
-            //         key: 'guidePrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.guidePrice)+'(元/月)'
-            //         }
-            //     },
-            //     {
-            //         title: '下单价',
-            //         key: 'originalPrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.originalPrice)+'(元/月)'
-            //         }
-            //     },
-            //     {
-            //         title: '优惠',
-            //         key: 'saleNum',
-            //         align: 'center',
-            //         render:(h,params)=>{
-            //             if(params.row.saleNum && params.row.saleNum != '-'){
-            //                 return params.row.saleNum+'折'
-            //             }else{
-            //                 return '-'
-            //             }
-            //         }
-            //     },
-            //     {
-            //         title: '签约价',
-            //         key: 'signPrice',
-            //         align: 'center',
-            //         render: (h, params) => {
-            //             return utils.thousand(params.row.signPrice)+'(元/月)'
-            //         }
-            //     },
-            // ],
             newStatonMoneyColumns:[
                 {
                     title: '工位编号/房间名称',

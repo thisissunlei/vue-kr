@@ -156,59 +156,6 @@
                         <Button type="primary" style="margin-right:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
                     </Row>
 
-                    
-                    <!-- 设置折扣 -->
-                    <!-- <Row style="margin-bottom:10px">
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount && discount.list &&discount.list.length && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale }">{{ types.sale }}折</span>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="discountCon" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
-                            <span style="padding:0 15px"> 折</span>
-                            <Button type="primary" @click="setDiscountNum">设置</Button>
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" @click="cancleDiscount">取消折扣</Button>
-
-                            </div>
-
-
-                        </Col>
-                    </Row>
-                    <Row >
-                        <Col>
-                            <Table :columns="signPriceColumns" :data.sync="selecedStationList" @on-selection-change="selectStationEvent"></Table>
-                        </Col>
-                    </Row> -->
-                    <!-- 设置免租 -->
-                    <!-- <Row style="margin-top:30px;margin-bottom:10px;"> 
-                        <Col style='display:inline-block;width:30%'>
-                             <div class="title">服务费明细</div>
-                        </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.maxDays && selecedStationList.length">
-
-                            <div style="display:inline-block">
-                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
-                            </div>
-                            <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" @on-blur="checkFreeMap"  style="width: 120px;" ></Input>
-                            <span style="padding:0 15px"> 天</span>
-                            <Button type="primary" @click="setfreeMap">设置</Button>
-                            <span style="padding:0 5px"> </span>
-                            <Button type="ghost" @click="cancleFreeMap">取消免租</Button>
-                            </div>
-
-
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                           
-                            <Table :columns="serviceDetailsColumns" :data="serviceDetailsList"></Table>
-                        </Col>
-                    </Row> -->
                     <Row style="margin:10px 0">
                             <Col span="24">
                               <Table
@@ -1586,7 +1533,7 @@
             submitDiscount(){
                 let errorStr = ''
                 let stationVos = this.selecedStationList;
-                var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+                var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
                 if (!pattern.test(this.batchDiscount)) {
                     errorStr = '工位折扣不得多于三位小数'
                 }

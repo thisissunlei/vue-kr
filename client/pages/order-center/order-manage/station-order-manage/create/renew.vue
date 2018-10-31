@@ -439,7 +439,7 @@ export default {
         this.getSignUser()
       }
       if (this.renewForm.communityId) {
-        this.getSaleTactics({ communityId: this.renewForm.communityId })
+        // this.getSaleTactics({ communityId: this.renewForm.communityId })
       }
     },
   },
@@ -589,7 +589,7 @@ export default {
     submitDiscount() {
       let errorStr = ''
       let stationVos = this.selecedStation;
-      var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+      var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
       if (!pattern.test(this.batchDiscount)) {
         errorStr = '工位折扣不得多于三位小数'
       }

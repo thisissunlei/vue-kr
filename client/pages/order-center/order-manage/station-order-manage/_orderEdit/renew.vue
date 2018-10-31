@@ -50,10 +50,6 @@
                             
                         ></SelectChance>
                     </FormItem>
-                    <!-- <div v-if='remindinfoNewUser' class="title-container">(
-                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
-                    <div v-if='remindinfo' class="title-container">(如是
-                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div> -->
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
                 </Row>
@@ -366,7 +362,7 @@ export default {
                 this.getRenewStation()
             }
             if (this.renewForm.communityId) {
-                this.getSaleTactics({ communityId: this.renewForm.communityId })
+                // this.getSaleTactics({ communityId: this.renewForm.communityId })
             }
         },
     },
@@ -537,7 +533,7 @@ export default {
         submitDiscount(){
             let errorStr = ''
             let stationVos = this.selecedStation;
-            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
             if (!pattern.test(this.batchDiscount)) {
                 errorStr = '工位折扣不得多于三位小数'
             }

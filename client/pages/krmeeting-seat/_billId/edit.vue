@@ -51,6 +51,26 @@
             </div>
           </FormItem>
         </div>
+         <FormItem label="前台所在楼层"  style="width:250px;"  prop="frontFloor" >
+              <Select
+                  v-model="detailData.frontFloor"
+                  filterable
+                  placeholder="请选择"
+                  clearable
+                  >
+                  <Option v-for="(option, index) in floorList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
+              </Select>
+          </FormItem>
+         <FormItem label="是否使用新人优惠策略" class="u-input" style="width:250px" prop="promoFlag">
+          <RadioGroup v-model="detailData.promoFlag" style="width:250px">
+              <Radio label="true">
+                  是
+              </Radio>
+              <Radio label="false">
+                  否
+              </Radio>
+          </RadioGroup> 
+        </FormItem>
         <FormItem label="上架状态" class="u-input" style="width:250px" prop="published">
           <RadioGroup v-model="detailData.published" style="width:250px">
               <Radio label="true">
@@ -365,7 +385,13 @@ export default {
           ],
           devicesStrArray:[
             { required: true, type: 'array', message: '请选择散座配套', trigger: 'change' },
-          ]
+          ],
+           promoFlag:[
+            { required: true, message: '请选择新人优惠策略', trigger: 'blur' }
+          ],
+           frontFloor:[
+            { required: true, message: '请选择前台所在楼层', trigger: 'blur' }
+          ],
         },
         priceList:[],
         detailData:{
@@ -374,7 +400,8 @@ export default {
           devicesStrArray:[],
         },
         deviceList:[],
-        goods:[]
+        goods:[],
+        floorList:[],
       }
     },
     components:{
@@ -384,15 +411,40 @@ export default {
        UploadFile
     },
     mounted(){
+      let {params}=this.$route;
       this.getSeatDetail()
       this.getDevices()
       GLOBALSIDESWITCH("false");
+      console.log('params',params)
+      this.getFloor(params.billId)
     },
     watch:{
     },
     destroyed(){
     },
     methods:{
+        //楼层
+      getFloor(cmtId){
+            let list = [];
+            let _this = this;
+            this.$http.get('get-krmting-seat-community-floor', {cmtId:cmtId}).then((res)=>{
+                
+                list = res.data.map((item)=>{
+                    let obj ={};
+                    obj.label = item;
+                    obj.value = item;
+                    return obj;
+                });
+
+                _this.floorList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
+      },
       changeBook(){
         let { params } = this.$route;
         let communityId = params.billId;

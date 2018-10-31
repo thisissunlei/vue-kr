@@ -237,6 +237,19 @@
                                     placeholder="请输入" 
                                 />
                         </FormItem>
+                        <div>               
+                            <FormItem label="是否使用新人优惠策略" class="u-input" style="width:250px" prop="promoFlag">
+                                <RadioGroup v-model="formItem.promoFlag" style="width:250px">
+                                    <Radio label="true">
+                                        是
+                                    </Radio>
+                                    <Radio label="false">
+                                        否
+                                    </Radio>
+                                </RadioGroup> 
+                            </FormItem>
+                        </div>
+                       
                     </DetailStyle>
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">
@@ -281,7 +294,8 @@ export default {
                 krmPublish:'',
                 lockBeginTime:'',
                 lockEndTime:'',
-                meetingDevices:''
+                meetingDevices:'',
+                promoFlag:"true"
             },
             form:{
                startHour:'', 

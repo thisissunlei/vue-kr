@@ -2,6 +2,7 @@
   <div class="g-member-manager-list">
     <div class="u-search-box">
       <div class="u-search-list">
+        <Button type="primary" @click="openMainAddManager" style="float:left;">添加主管理员</Button>
         <span class="contentTips">主管理员是经过客户书面授权的管理员（新版合同或变更授权书）。工位合同生效后，管理员将自动成为主管理员，主管理员可自助设置其他管理员。</span>
         <SearchForm
             placeholder="请输入搜索关键词"
@@ -51,7 +52,8 @@
       reload: Function,
       ifReload: Boolean,
       openSetMajor: Function,
-      openCheck: Function
+      openCheck: Function,
+      openMainManager: Function,
     },
     data() {
       return {
@@ -183,6 +185,9 @@
       changePage(page) {
         this.Params.page = page;
         this.getInfo();
+      },
+      openMainAddManager() {
+        this.openMainManager && this.openMainManager()
       },
       getInfo() {
         let {params} = this.$route;

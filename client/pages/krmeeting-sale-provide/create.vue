@@ -72,6 +72,58 @@
 
                             </RadioGroup> 
                     </FormItem>
+                    <div class="u-coupon-contanier">
+                             <FormItem label="优惠券批次" style="width:100%" >
+                                 <Input 
+                                        v-model="batchNo" 
+                                        placeholder="输入优惠券批次"
+                                        style="width:278px"
+                                 />
+                                 <span class="u-add-coupon-btn" @click="addCoupon">添加</span>
+                                 <div class="u-coupon-content" >
+                                     <!-- v-if="couponList.length>0" -->
+                                     <table class="u-table">
+                                         <thead>
+                                             <tr class="u-thead">
+                                                 <th>优惠券ID</th>
+                                                 <th>优惠券名称</th>
+                                                 <th>备注</th>
+                                                 <th>面额(元)</th>
+                                                 <th>数量</th>
+                                                 <th>有效期</th>
+                                                 <th>创建时间</th>
+                                                 <th>创建人</th>
+                                                 <th>发放张数</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody class="u-tabody">
+                                             <tr  
+                                                v-for="(item,index) in couponList"
+                                                :key="index"
+                                              >
+                                                 <td>{{item.id}}</td>
+                                                 <td>{{item.couponName}}</td>
+                                                 <td>{{item.remark}}</td>
+                                                 <td>{{item.amount}}</td>
+                                                 <td>{{item.quantity}}</td>
+                                                 <td>{{`${dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.effectAt)}-${dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.expireAt)}`}}</td>
+                                                 <td>{{dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.ctime)}}</td>
+                                                 <td>{{item.creatorName}}</td>
+                                                 <td></td>
+                                             </tr>
+                                         </tbody>
+                                     </table>
+                                     <div 
+                                        class="u-tag" 
+                                        v-for="(item,index) in couponList"
+                                        :key="index"
+                                      >
+                                         <span class="u-tag-close"></span>
+                                        {{item.name}}
+                                     </div>
+                                 </div>
+                             </FormItem>
+                        </div>
                     
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">
@@ -133,13 +185,31 @@ export default {
             timeError:false,
             amountError:false,
             amountErrorTxt:'',
-            file:null
+            file:null,
+            couponList:[],
+            batchNo:'',
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
     },
     methods:{
+         addCoupon(){
+                if(!this.batchNo){
+                    this.$Notice.error({
+                    title:'优惠券ID不能为空'
+                    });
+                    return;
+                }
+                this.$http.get('get-kmcoupon-detail', {batchNo:this.batchNo}).then((res)=>{
+                   this.couponList.push(res.data)
+                }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                    });
+                });
+        },
+       
         removeFile(){
             this.file=null;
         },
@@ -257,8 +327,6 @@ export default {
 
     .u-custom-style{
         width:500px;
-        height:150px;
-       
     }
     .u-upload-style{
         width:550px;
@@ -271,6 +339,49 @@ export default {
         cursor: pointer;
         padding-left:10px;
     }
+    .u-coupon-contanier{
+        .u-add-coupon-btn{
+            padding-left:10px;
+            color:#499DF1;
+            font-size: 14px;
+            line-height:32px;
+            cursor: pointer;
+        }
+        .u-coupon-content{
+            margin-top: 20px;
+        }
+       
+    }
+
+    .u-table{
+		width:100%;
+		border:1px solid #E1E6EB;
+		border-collapse:collapse;
+		font-size: 14px;
+		td,th{
+			height:40px;
+			border:1px solid #E1E6EB;
+			color: #666666;
+			text-align: center;
+		}
+		.u-thead{
+			background: #F5F6FA;
+			th{
+				color: #333333;
+				font-weight: 400;
+				
+				
+			}
+		}
+		.u-tabody{
+			tr{
+				&:hover{
+					background: #F6F6F6;
+				}
+			}
+		}
+		
+	}
 }
 
 </style>

@@ -174,7 +174,7 @@ export default {
                   width: 180,
                   fixed: 'right',
                   render:(h,params)=>{
-                        if(params.row.producted==1){
+                        if(params.row.provideFlag){
                              return h('div', [
                                 h('Button', {
                                     props: {

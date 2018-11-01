@@ -271,7 +271,7 @@ export default  {
      //优惠券发放--删除发放记录
      'delete-op-kmcoupon-provide': {
         url: '/api/op/kmcoupon/provide/delete',
-        method: 'get'
+        method: 'post'
     },
    
 }

@@ -272,13 +272,13 @@ export default {
             this.getTableData(this.tabParams);
         },
         jumpCreate(){
-             window.open('/krmeeting-sale/create','_blank');
+             window.open('/krmeeting-sale-provide/create','_blank');
         },
         jumpEdit(params){
-             window.open(`/krmeeting-sale/edit/${params.id}`,'_blank');
+             window.open(`/krmeeting-sale-provide/edit/${params.id}`,'_blank');
         },
         jumpView(params){
-             window.open(`/krmeeting-sale/view/${params.id}`,'_blank');
+             window.open(`/krmeeting-sale-provide/view/${params.id}`,'_blank');
         },
         openDeleteSale(value){
             this.openDelete=!this.openDelete;
@@ -290,9 +290,9 @@ export default {
             let params={
                     couponBaseId: this.couponBaseId
                 }
-                this.$http.post('create-coupon-kmcoupon', params).then((res)=>{
+                this.$http.post('delete-op-kmcoupon-provide', params).then((res)=>{
                     this.$Notice.success({
-                        title:'生成优惠券成功'
+                        title:'删除成功'
                     });  
                     this.openDeleteSale();
                     this.getTableData(this.tabParams);

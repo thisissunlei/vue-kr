@@ -253,6 +253,26 @@ export default  {
         url: '/api/op/kmcoupon/provide/page-list',
         method: 'get'
     },
+     //优惠券发放--新建发放
+     'kmcoupon-provide-add': {
+        url: '/api/op/kmcoupon/provide/add',
+        method: 'post'
+    },
+     //优惠券发放--编辑发放
+     'kmcoupon-provide-edit': {
+        url: '/api/op/kmcoupon/provide/edit',
+        method: 'post'
+    },
+     //优惠券发放--发放详情
+     'get-kmcoupon-provide-page': {
+        url: '/api/op/kmcoupon/provide/page-list',
+        method: 'get'
+    },
+     //优惠券发放--删除发放记录
+     'delete-op-kmcoupon-provide': {
+        url: '/api/op/kmcoupon/provide/delete',
+        method: 'get'
+    },
    
 }
   

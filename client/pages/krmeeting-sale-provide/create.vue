@@ -3,20 +3,20 @@
          <SectionTitle title="新建发放"></SectionTitle>
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
-                    <FormItem label="发放说明" class="u-input"  prop="couponName">
+                    <FormItem label="发放说明" class="u-input"  prop="desc">
                         <Input 
-                            v-model="formItem.couponName" 
+                            v-model="formItem.desc" 
                             placeholder="请输入" 
                             style="width:250px"
                             :maxlength="15"
                         />
                      </FormItem>
-                    <FormItem label="发放时间" class="u-input" style="width:1000px" prop="expireType">
-                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
-                                <Radio label="START_END_TIME">
+                    <FormItem label="发放时间" class="u-input" style="width:1000px" prop="timeType">
+                            <RadioGroup v-model="formItem.timeType" style="width:1000px">
+                                <Radio label="0">
                                     <span>即时</span>
                                 </Radio>
-                                <Radio label="START_END_TIME">
+                                <Radio label="1">
                                     <span>定时</span>
                                 </Radio>
                                 <div style="width:550px;display:inline-block;">
@@ -38,34 +38,36 @@
                     </FormItem>
                     <div v-if="timeError" class="u-error">{{errorTip}}</div>
 
-                    <FormItem label="发放时间" class="u-input" style="width:1000px" prop="expireType">
-                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
-                                <Radio label="START_END_TIME">
-                                    <span>全部用户</span>
+                    <FormItem label="发放对象" class="u-input" style="width:1000px;position:relative;" prop="userType">
+                            <RadioGroup v-model="formItem.userType" style="width:1000px">
+                                <Radio label="ALL" >
+                                    <span style="margin-right:20px;">全部用户</span>
                                 </Radio>
-                                <Radio label="START_END_TIME">
-                                    <span>自定义</span>
+                                <Radio label="CUSTOM">
+                                    <span style="margin-right:20px;">自定义</span>
                                 </Radio>
-                                <div style="width:550px;">
+                                <Radio label="UPLOAD">
+                                    上传手机号
+                                </Radio>
+                                <div class="u-custom-style"  v-if="formItem.userType=='CUSTOM'">
                                     <Input 
-                                        v-model="formItem.instructions" 
+                                        v-model="formItem.phones" 
                                         placeholder=""
                                         type="textarea"
                                     />
                                 </div>
-                                <Radio label="VALID_DATE">
-                                    上传手机号
-                                </Radio>
-                                 <div style="width:550px;display:inline-block;">
+                                 <div class="u-upload-style" v-if="formItem.userType=='UPLOAD'">
                                       <Upload
                                         :before-upload="handleUpload"
                                         name="file"
                                         with-credentials
                                         :isPut="true"
-                                        action="/api/op/kmcoupon/provide/add">
-                                        <Button icon="ios-cloud-upload-outline" v-if="!file">上传文件</Button>
+                                        action="/api/op/kmcoupon/provide/add"
+                                        v-if="!file"
+                                        >
+                                        <Button icon="ios-cloud-upload-outline" >上传文件</Button>
                                     </Upload>
-                                   <div v-if="file!=null">{{file.name}}</div>
+                                   <div style="margin-top:3px;" v-if="file!=null">{{file.name}} <span class="u-delete-style" @click="removeFile">删除</span></div>
                                  </div>
 
                             </RadioGroup> 
@@ -95,7 +97,7 @@ export default {
 
         return {
             formItem:{
-                expireType:'START_END_TIME'
+                userType:'CUSTOM',
             },
             form:{},
             startTime:'',  
@@ -103,11 +105,11 @@ export default {
             endtime:'',
             endHour:'',
             ruleCustom:{
-                couponName:[
-                    { required: true, message: '请输入优惠券名称', trigger: 'change' }
+                desc:[
+                    { required: true, message: '请输入发放说明', trigger: 'change' }
                 ],
-                amount:[
-                    {required: true,message: '请选择有效期类型',  trigger: 'change' }
+                timeType:[
+                    {required: true,message: '请选择发放时间',  trigger: 'change' }
                 ],
                 ruleType:[
                     {required: true,  message: '请选择优惠券类型', trigger: 'change' }
@@ -138,9 +140,11 @@ export default {
         GLOBALSIDESWITCH("false");
     },
     methods:{
+        removeFile(){
+            this.file=null;
+        },
         handleUpload(file){
             this.file=file;
-            
             return false;
         },
        getCouponDetail(){
@@ -249,6 +253,23 @@ export default {
         color:#495060;
         font-size: 12px;
 
+    }
+
+    .u-custom-style{
+        width:500px;
+        height:150px;
+       
+    }
+    .u-upload-style{
+        width:550px;
+        position: absolute;
+        left:300px;
+        top:30px;
+    }
+    .u-delete-style{
+        color:#499df1;
+        cursor: pointer;
+        padding-left:10px;
     }
 }
 

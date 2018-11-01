@@ -7,7 +7,7 @@
                  <div class="u-select-list">
                         <span class="u-select-label">发放说明</span>
                         <Input
-                            v-model="formItem.batchNo"
+                            v-model="formItem.desc"
                             placeholder="请输入搜索关键词"
                             style="width: 200px"
                         />

@@ -330,7 +330,7 @@ export default {
         }
      .m-sale-operation{
          padding:20px 20px;
-         height:130px;
+         height:75px;
          .u-select-list{
              display: inline-block;
              margin:0 20px;

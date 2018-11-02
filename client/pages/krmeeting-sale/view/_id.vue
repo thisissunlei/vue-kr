@@ -27,7 +27,7 @@
                     {{detailInfo.usageType}}
                 </LabelText>
                  <LabelText label="使用说明：" style="width:1000px;">
-                    {{detailInfo.instructions}}
+                    {{detailInfo.instructions?detailInfo.instructions:'-'}}
                 </LabelText>
               </DetailStyle>  
          </div>

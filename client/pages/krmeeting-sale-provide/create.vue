@@ -60,14 +60,16 @@
                                       <Upload
                                         :before-upload="handleUpload"
                                         name="file"
+                                        :format="['xls','xlsx']"
                                         with-credentials
                                         :isPut="true"
                                         action="/api/op/kmcoupon/provide/add"
-                                        v-if="!file"
+                                        v-if="!fileName"
+                                        @on-format-error="formatError"
                                         >
                                         <Button icon="ios-cloud-upload-outline" >上传文件</Button>
                                     </Upload>
-                                   <div style="margin-top:3px;" v-if="file!=null">{{file.name}} <span class="u-delete-style" @click="removeFile">删除</span></div>
+                                   <div style="margin-top:3px;" v-if="fileName!=null">{{fileName}} <span class="u-delete-style" @click="removeFile">删除</span></div>
                                  </div>
 
                             </RadioGroup> 
@@ -187,6 +189,7 @@ export default {
             batchNo:'',
             userTypeError:false,
             userTypeTip:'',
+            fileName:null,
 
         }
     },
@@ -194,6 +197,11 @@ export default {
         GLOBALSIDESWITCH("false");
     },
     methods:{
+        formatError(){
+            this.$Notice.error({
+                title:'文件格式不正确'
+            });
+        },
         timeChange(){
             this.startTime="";
             this.startHour="";
@@ -242,9 +250,11 @@ export default {
         },
         removeFile(){
             this.file=null;
+            this.fileName=null;
         },
         handleUpload(file){
             this.file=file;
+            this.fileName=file.name;
             return false;
         },
         handleSubmit(name){

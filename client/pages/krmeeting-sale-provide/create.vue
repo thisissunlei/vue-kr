@@ -3,7 +3,7 @@
          <SectionTitle title="新建发放"></SectionTitle>
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
-                    <FormItem label="发放说明" class="u-input"  prop="desc">
+                    <FormItem label="发放说明" class="u-input"  prop="descr">
                         <Input 
                             v-model="formItem.descr" 
                             placeholder="请输入" 
@@ -202,9 +202,6 @@ export default {
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-        this.couponList=[{
-            descr:'111'
-        }]
     },
     methods:{
         changeTime(format,item){

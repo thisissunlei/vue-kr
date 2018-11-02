@@ -29,6 +29,9 @@
                  <LabelText label="使用说明：" style="width:1000px;">
                     {{detailInfo.instructions?detailInfo.instructions:'-'}}
                 </LabelText>
+                 <LabelText label="备注：">
+                    {{detailInfo.remark}}
+                </LabelText>
               </DetailStyle>  
          </div>
     </div>

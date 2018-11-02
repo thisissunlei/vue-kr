@@ -130,7 +130,14 @@
                             />
                         </FormItem>
                       
-                        
+                         <FormItem label="备注" style="width:552px">
+                            <Input 
+                                v-model="formItem.remark" 
+                                placeholder=""
+                                type="textarea"
+                                :maxlength="60"
+                            />
+                        </FormItem>
                     </DetailStyle>
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">

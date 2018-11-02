@@ -168,9 +168,6 @@ export default {
                     }else if(params.row.expireType=="VALID_DATE"){
                         return `${params.row.effectDay}天`
                     }
-                     
-
-                   
                   }
 
               },

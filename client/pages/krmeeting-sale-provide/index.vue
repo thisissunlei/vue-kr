@@ -345,6 +345,7 @@ export default {
              height:50px;
              margin-top:15px;
              margin-left:20px;
+             margin-bottom:10px;
              .u-select-list{
                  margin-left:0;
              }

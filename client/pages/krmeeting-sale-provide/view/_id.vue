@@ -85,20 +85,9 @@ export default {
                 'UPLOAD':'上传手机号'
             }
 
-
-            this.$http.get('get-kmcoupon-provide-page',{id:params.id}).then((res)=>{
+            this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
-                data.usageType=usageType[data.usageType];
-                data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
-                data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
                 data.user=userType[data.userType];
-               
-                if(data.expireType=="START_END_TIME"){
-                    data.expireType=`起止时间 ${data.effectAt} 至 ${data.expireAt}`;
-                }
-                
-
-               
                 this.detailInfo=data;
               
             }).catch((err)=>{
@@ -122,11 +111,6 @@ export default {
             return time
         }
         
-        
-        
-        
-
-       
     }
     
 }

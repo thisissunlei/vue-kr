@@ -264,8 +264,8 @@ export default  {
         method: 'post'
     },
      //优惠券发放--发放详情
-     'get-kmcoupon-provide-page': {
-        url: '/api/op/kmcoupon/provide/page-list',
+     'get-kmcoupon-provide-detail': {
+        url: '/api/op/kmcoupon/provide/detail',
         method: 'get'
     },
      //优惠券发放--删除发放记录

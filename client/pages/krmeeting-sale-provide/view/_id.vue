@@ -7,10 +7,10 @@
                     {{detailInfo.couponName}}
                 </LabelText>
                  <LabelText label="发放时间：">
-                    {{detailInfo.ptime?detailInfo.ptime:'即时'}}
+                    {{detailInfo.ptime?changeTime('yyyy-MM-dd HH:mm:ss',detailInfo.ptime):'即时'}}
                 </LabelText>
                  <LabelText label="发放对象：">
-                    {{detailInfo.user}} <span v-if="detailInfo.userType=='UPLOAD'">{{detailInfo.fileName}}</span>
+                    {{detailInfo.user}} <a class="u-file" v-if="detailInfo.userType=='UPLOAD'">{{detailInfo.fileName}}</a>
                 </LabelText>
                 <div class="u-phone-list" v-if="detailInfo.userType=='CUSTOM'">
                      <div class="u-small-trigon"></div>
@@ -122,6 +122,11 @@ export default {
         max-width: 1200px;
         box-sizing: border-box;
 	    padding:30px 24px;
+    }
+    .u-file{
+        color:#499df1;
+        padding-left:20px;
+        cursor: pointer;
     }
     .u-table{
 		width:100%;

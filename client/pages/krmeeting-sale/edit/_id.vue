@@ -244,17 +244,21 @@ export default {
                 data.quantity=data.quantity.toString();
                 data.gainLimit=data.gainLimit.toString();
                 data.frAmount=data.frAmount==0?'':data.frAmount.toString();
-                data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
-                data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
-                this.form.startTime =data.effectAt.substr(0,10);
-                this.form.startHour =data.effectAt.substr(11,8);
-                this.form.endtime =data.expireAt.substr(0,10);
-                this.form.endHour =data.expireAt.substr(11,8);
-
-                this.startTime =data.effectAt.substr(0,10);
-                this.startHour =data.effectAt.substr(11,8);
-                this.endtime =data.expireAt.substr(0,10);
-                this.endHour =data.expireAt.substr(11,8);
+                if(data.effectAt){
+                    data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
+                    this.form.startTime =data.effectAt.substr(0,10);
+                    this.form.startHour =data.effectAt.substr(11,8);
+                    this.startTime =data.effectAt.substr(0,10);
+                    this.startHour =data.effectAt.substr(11,8);
+                }
+                if(data.expireAt){
+                    data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
+                    this.form.endtime =data.expireAt.substr(0,10);
+                    this.form.endHour =data.expireAt.substr(11,8);
+                    this.endtime =data.expireAt.substr(0,10);
+                    this.endHour =data.expireAt.substr(11,8);
+                }
+                
 
                 this.formItem=data;
               

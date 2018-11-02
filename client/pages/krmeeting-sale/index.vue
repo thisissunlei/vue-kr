@@ -161,10 +161,16 @@ export default {
                   align:'center',
                   width: 200,
                   render(tag, params){
-                     let startTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.effectAt)) ;
-                     let endTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.expireAt)) ;
+                    if(params.row.expireType=="START_END_TIME"){
+                        let startTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.effectAt)) ;
+                        let endTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.expireAt)) ;
+                        return `${startTime}至${endTime}`;
+                    }else if(params.row.expireType=="VALID_DATE"){
+                        return `${params.row.effectDay}天`
+                    }
+                     
 
-                    return `${startTime}至${endTime}`;
+                   
                   }
 
               },

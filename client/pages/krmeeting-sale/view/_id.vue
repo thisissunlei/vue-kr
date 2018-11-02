@@ -78,6 +78,8 @@ export default {
                 }
                 if(data.expireType=="START_END_TIME"){
                     data.expireType=`起止时间 ${data.effectAt} 至 ${data.expireAt}`;
+                }else if(data.expireType=='VALID_DATE'){
+                    data.expireType=`${data.effectDay}天`
                 }
                 
 

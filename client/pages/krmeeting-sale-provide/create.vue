@@ -12,7 +12,7 @@
                         />
                      </FormItem>
                     <FormItem label="发放时间" class="u-input" style="width:1000px" prop="timeType">
-                            <RadioGroup v-model="formItem.timeType" style="width:1000px">
+                            <RadioGroup v-model="formItem.timeType" @on-change="timeChange" style="width:1000px">
                                 <Radio label="0">
                                     <span>即时</span>
                                 </Radio>
@@ -39,7 +39,7 @@
                     <div v-if="timeError" class="u-error">{{errorTip}}</div>
 
                     <FormItem label="发放对象" class="u-input" style="width:1000px;position:relative;" prop="userType">
-                            <RadioGroup v-model="formItem.userType" style="width:1000px">
+                            <RadioGroup v-model="formItem.userType" @on-change="typeChange" style="width:1000px">
                                 <Radio label="ALL" >
                                     <span style="margin-right:20px;">全部用户</span>
                                 </Radio>
@@ -72,6 +72,7 @@
 
                             </RadioGroup> 
                     </FormItem>
+                    <div v-if="userTypeError" class="u-error">{{userTypeTip}}</div>
                     <div class="u-coupon-contanier">
                              <FormItem label="优惠券批次" style="width:100%" >
                                  <Input 
@@ -80,9 +81,8 @@
                                         style="width:278px"
                                  />
                                  <span class="u-add-coupon-btn" @click="addCoupon">添加</span>
-                                 <div class="u-coupon-content" >
-                                     <!-- v-if="couponList.length>0" -->
-                                     <table class="u-table">
+                                 <div class="u-coupon-content"   >
+                                     <table class="u-table" v-if="couponList.length>0">
                                          <thead>
                                              <tr class="u-thead">
                                                  <th>优惠券ID</th>
@@ -106,18 +106,18 @@
                                                  <td>{{item.remark}}</td>
                                                  <td>{{item.amount}}</td>
                                                  <td>{{item.quantity}}</td>
-                                                 <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.effectAt)}}-{{changeTime('YYYY-MM-DD',item.expireAt)}}</td>
+                                                 <td>{{getTimeType(item)}}</td>
                                                  <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.ctime)}}</td>
                                                  <td>{{item.creatorName}}</td>
                                                  <td>
                                                      <div class="u-number">
-                                                         <span>-</span>
+                                                         <span class="u-sub" @click="sendSubNumber"> -</span>
                                                           <Input 
                                                                 v-model="item.sendQuantity"
                                                                 type="text"
-                                                                style="width:50px;height:20px;display:inline-block;"
+                                                                style="width:40px;height:20px;display:inline-block;text-align:center;"
                                                             />
-                                                          <span>+</span>
+                                                          <span class="u-add"  @click="sendAddNumber"> +</span>
                                                      </div>
                                                  </td>
                                              </tr>
@@ -173,21 +173,8 @@ export default {
                 timeType:[
                     {required: true,message: '请选择发放时间',  trigger: 'change' }
                 ],
-                ruleType:[
-                    {required: true,  message: '请选择优惠券类型', trigger: 'change' }
-                ],
-                quantity:[
-                    {required: true,message: '请选择有效期类型', trigger: 'change' }
-                ],
-
-                expireType:[
-                    { required: true, message: '请选择有效期类型', trigger: 'change' }
-                ],
-                gainLimit:[
-                    {required: true, message: '请选择有效期类型', trigger: 'change' }
-                ],
-                usageType:[
-                    { required: true, message: '请选择使用范围', trigger: 'change' }
+                userType:[
+                    {required: true,  message: '请选择发放对象', trigger: 'change' }
                 ],
                 
             }, 
@@ -198,18 +185,45 @@ export default {
             file:null,
             couponList:[],
             batchNo:'',
+            userTypeError:false,
+            userTypeTip:'',
+
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
     },
     methods:{
-        changeTime(format,item){
-            if(item){
-                return dateUtils.strFormatToDate(format, item)
+        timeChange(){
+            this.startTime="";
+            this.startHour="";
+        },
+        typeChange(){
+            this.formItem.phones="";
+            this.file=null;
+            this.userTypeError=false;
+        },
+        sendSubNumber(){
+
+        },
+        sendAddNumber(){
+
+        },
+        getTimeType(item){
+            if(item.expireType=="START_END_TIME"){
+                let startTime= this.changeTime("YYYY-MM-DD HH:mm:ss",item.effectAt);
+                let endTime=this.changeTime("YYYY-MM-DD HH:mm:ss",item.expireAt);
+                return `${startTime}至${endTime}`;
+            }else if(item.expireType=="VALID_DATE"){
+                return `${item.effectDay}天`
             }
         },
-         addCoupon(){
+        changeTime(format,item){
+            if(item){
+                return dateUtils.dateToStr(format, new Date(item))
+            }
+        },
+        addCoupon(){
                 if(!this.batchNo){
                     this.$Notice.error({
                     title:'优惠券批次不能为空'
@@ -217,6 +231,8 @@ export default {
                     return;
                 }
                 this.$http.get('get-kmcoupon-detail-by-batchNo', {batchNo:this.batchNo}).then((res)=>{
+                   res.data.sendQuantity=1;
+                   this.batchNo=null;
                    this.couponList.push(res.data)
                 }).catch((error)=>{
                 this.$Notice.error({
@@ -224,7 +240,6 @@ export default {
                     });
                 });
         },
-       
         removeFile(){
             this.file=null;
         },
@@ -232,10 +247,6 @@ export default {
             this.file=file;
             return false;
         },
-       getCouponDetail(){
-
-          // get-kmcoupon-detail
-       },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -243,20 +254,50 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               
-                //let endTime=dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss',  this.formItem.expireAt)
-                // this.timeError=true;
-                //             this.errorTip='请选择起止时间';
-                 _this.submitCreate();
-                // this.$refs[name].validate((valid) => {
-                //     if (valid) {
-                //         _this.submitCreate();
-                //     } else {
-                //         _this.$Notice.error({
-                //             title:message
-                //         });
-                //     }
-                // }) 
+                if(this.formItem.timeType=="0"){
+                    this.ptime=""
+                }else if(this.formItem.timeType=="1"){
+                    if(this.startTime && this.startHour){
+                        this.timeError=false;
+                         this.ptime=this.changeTime("YYYY-MM-DD",this.startTime)+''+this.startHour;
+                    }else{
+                        this.timeError=true;
+                        this.errorTip='请选择发放时间';
+                    }  
+                }
+                if(this.formItem.userType=="CUSTOM"){
+
+                    if(this.formItem.phones){
+                        this.userTypeError=false;
+                    }else{
+                        this.userTypeError=true;
+                        this.userTypeTip='请填写发放对象手机号';
+                    }
+
+                }else if(this.formItem.userType=="UPLOAD"){
+
+                    if(this.file){
+                        this.userTypeError=false;
+                    }else{
+                        this.userTypeError=true;
+                        this.userTypeTip='请上传手机号';
+                    }
+
+                }else{
+                     this.userTypeError=false;
+                }
+                
+                           
+                
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        _this.submitCreate();
+                    } else {
+                        _this.$Notice.error({
+                            title:message
+                        });
+                    }
+                }) 
         },
         
         submitCreate(){
@@ -402,13 +443,18 @@ export default {
         span{
             width:20px;
             height:20px;
-            line-height:20px;
             display: inline-block;
             text-align: center;
             border:1px solid #cccccc;
             border-radius: 2px;
             vertical-align: middle;
 
+        }
+        .u-sub{
+            line-height:16px;
+        }
+        .u-add{
+            line-height:18px;
         }
         .ivu-input{
             height:20px;

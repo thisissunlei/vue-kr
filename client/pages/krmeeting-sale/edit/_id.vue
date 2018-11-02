@@ -52,11 +52,11 @@
                        
                         <FormItem label="有效期类型" class="u-input" style="width:1000px" prop="expireType">
                             
-                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
+                            <RadioGroup v-model="formItem.expireType" style="width:800px">
                                 <Radio label="START_END_TIME">
                                     <span>起止时间</span>
                                 </Radio>
-                                <div style="width:550px;display:inline-block;">
+                                <div style="width:550px;display:inline-block;margin-bottom:10px;">
                                      <DatePicker
                                         type="date"
                                         v-model="startTime"
@@ -88,14 +88,14 @@
                                         />
                                 </div>
                                    
-                                <!-- <Radio label="VALID_DATE">
+                                <Radio label="VALID_DATE">
                                    领取后，当天有效，有效天数<Input 
-                                                    v-model="formItem.name" 
+                                                    v-model="formItem.effectDay" 
                                                     placeholder="请输入" 
-                                                    style="width:50px"
+                                                    style="width:60px"
                                                 />
                                             天
-                                </Radio> -->
+                                </Radio>
                             </RadioGroup> 
                         </FormItem>
                          <div v-if="timeError" class="u-error">{{errorTip}}</div>
@@ -275,6 +275,19 @@ export default {
                      this.checkTime();
                 }
                 this.checkAmount();
+                 if(this.formItem.expireType=="VALID_DATE"){
+                    if(this.formItem.effectDay){
+                        let value=this.formItem.effectDay*1
+                        if(Number.isInteger(value) && value>0){
+                            this.errorTip=false;
+                        } else{
+                            this.errorTip=true;
+                            this.errorTip='请输入正整数'
+                        }  
+                    }else{
+                        this.errorTip='请填写有效天数';
+                    }
+                }
                 
                 this.$refs[name].validate((valid) => {
                     if (valid) {

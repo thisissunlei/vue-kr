@@ -215,11 +215,11 @@ export default {
          addCoupon(){
                 if(!this.batchNo){
                     this.$Notice.error({
-                    title:'优惠券ID不能为空'
+                    title:'优惠券批次不能为空'
                     });
                     return;
                 }
-                this.$http.get('get-kmcoupon-detail', {batchNo:this.batchNo}).then((res)=>{
+                this.$http.get('get-kmcoupon-detail-by-batchNo', {batchNo:this.batchNo}).then((res)=>{
                    this.couponList.push(res.data)
                 }).catch((error)=>{
                 this.$Notice.error({

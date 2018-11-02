@@ -273,6 +273,12 @@ export default  {
         url: '/api/op/kmcoupon/provide/delete',
         method: 'post'
     },
+    //优惠券发放--根据批次获取优惠券
+    'get-kmcoupon-detail-by-batchNo': {
+        url: '/api/op/kmcoupon/detail-by-batchNo',
+        method: 'get'
+    },
+    
    
 }
   

@@ -5,7 +5,7 @@
                 <div class="m-detail-content">
                     <FormItem label="发放说明" class="u-input"  prop="desc">
                         <Input 
-                            v-model="formItem.desc" 
+                            v-model="formItem.descr" 
                             placeholder="请输入" 
                             style="width:250px"
                             :maxlength="15"
@@ -106,10 +106,20 @@
                                                  <td>{{item.remark}}</td>
                                                  <td>{{item.amount}}</td>
                                                  <td>{{item.quantity}}</td>
-                                                 <td>{{`${dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.effectAt)}-${dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.expireAt)}`}}</td>
-                                                 <td>{{dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', item.ctime)}}</td>
+                                                 <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.effectAt)}}-{{changeTime('YYYY-MM-DD',item.expireAt)}}</td>
+                                                 <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.ctime)}}</td>
                                                  <td>{{item.creatorName}}</td>
-                                                 <td></td>
+                                                 <td>
+                                                     <div class="u-number">
+                                                         <span>-</span>
+                                                          <Input 
+                                                                v-model="item.sendQuantity"
+                                                                type="text"
+                                                                style="width:50px;height:20px;display:inline-block;"
+                                                            />
+                                                          <span>+</span>
+                                                     </div>
+                                                 </td>
                                              </tr>
                                          </tbody>
                                      </table>
@@ -157,7 +167,7 @@ export default {
             endtime:'',
             endHour:'',
             ruleCustom:{
-                desc:[
+                descr:[
                     { required: true, message: '请输入发放说明', trigger: 'change' }
                 ],
                 timeType:[
@@ -192,8 +202,16 @@ export default {
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
+        this.couponList=[{
+            descr:'111'
+        }]
     },
     methods:{
+        changeTime(format,item){
+            if(item){
+                return dateUtils.strFormatToDate(format, item)
+            }
+        },
          addCoupon(){
                 if(!this.batchNo){
                     this.$Notice.error({
@@ -381,7 +399,24 @@ export default {
 			}
 		}
 		
-	}
+    }
+    
+    .u-number{
+        span{
+            width:20px;
+            height:20px;
+            line-height:20px;
+            display: inline-block;
+            text-align: center;
+            border:1px solid #cccccc;
+            border-radius: 2px;
+            vertical-align: middle;
+
+        }
+        .ivu-input{
+            height:20px;
+        }
+    }
 }
 
 </style>

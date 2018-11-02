@@ -1,34 +1,54 @@
 <template>
     <div class="g-create-meeting">
-         <SectionTitle title="查看优惠券信息"></SectionTitle>
+         <SectionTitle title="查看优惠券发放信息"></SectionTitle>
          <div class="m-detail-content">
              <DetailStyle info="基本信息">
-                 <LabelText label="优惠券名称：">
+                 <LabelText label="发放说明：">
                     {{detailInfo.couponName}}
                 </LabelText>
-                 <LabelText label="优惠券面额：">
-                    {{detailInfo.amount}}元
+                 <LabelText label="发放时间：">
+                    {{detailInfo.ptime?detailInfo.ptime:'即时'}}
                 </LabelText>
-                 <LabelText label="优惠券类型：">
-                    {{detailInfo.ruleType}}
+                 <LabelText label="发放对象：">
+                    {{detailInfo.user}} <span v-if="detailInfo.userType=='UPLOAD'">{{detailInfo.fileName}}</span>
                 </LabelText>
-                <LabelText label="发放数量：">
-                    {{detailInfo.quantity}}份
-                </LabelText>
+                <div class="u-phone-list" v-if="detailInfo.userType=='CUSTOM'">
+                     <div class="u-small-trigon"></div>
+                     {{detailInfo.phones}}
+                </div>
               </DetailStyle>
-              <DetailStyle info="基本规则">
-                  <LabelText label="有效期类型：">
-                    {{detailInfo.expireType}}
-                </LabelText>
-                 <LabelText label="每人限领：">
-                    {{detailInfo.gainLimit}}次
-                </LabelText>
-                 <LabelText label="使用范围：">
-                    {{detailInfo.usageType}}
-                </LabelText>
-                 <LabelText label="使用说明：" style="width:1000px;">
-                    {{detailInfo.instructions}}
-                </LabelText>
+              <DetailStyle info="优惠券信息">
+                  <table class="u-table">
+                    <thead>
+                        <tr class="u-thead">
+                            <th>优惠券ID</th>
+                            <th>优惠券名称</th>
+                            <th>备注</th>
+                            <th>面额(元)</th>
+                            <th>数量</th>
+                            <th>有效期</th>
+                            <th>创建时间</th>
+                            <th>创建人</th>
+                            <th>发放张数</th>
+                        </tr>
+                    </thead>
+                    <tbody class="u-tabody">
+                        <tr  
+                        v-for="(item,index) in couponList"
+                        :key="index"
+                        >
+                            <td>{{item.id}}</td>
+                            <td>{{item.couponName}}</td>
+                            <td>{{item.remark}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{changeTimeType(item)}}</td>
+                            <td>{{changeTime('yyyy-MM-dd HH:mm:ss',item.ctime)}}</td>
+                            <td>{{item.creatorName}}</td>
+                            <td>{{item.sendQuantity}}</td>
+                        </tr>
+                    </tbody>
+                </table>
               </DetailStyle>  
          </div>
     </div>
@@ -59,23 +79,20 @@ export default {
     methods:{
        getDetailInfo(){
             let {params}=this.$route;
-            let usageType={
-                'ANY':'不限',
-                'MEETING':'会议室',
-                'SEAT':'散座'
+            let userType={
+                'ALL':'全部用户',
+                'CUSTOM':'自定义用户',
+                'UPLOAD':'上传手机号'
             }
 
-            this.$http.get('get-kmcoupon-detail',{id:params.id}).then((res)=>{
+
+            this.$http.get('get-kmcoupon-provide-page',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
                 data.usageType=usageType[data.usageType];
                 data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
                 data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
-
-                if(data.ruleType=="NO_THRESHOLD"){
-                    data.ruleType='无门槛金额';
-                }else if(data.ruleType=="FULL_REDUCTION"){
-                     data.ruleType=`满${data.frAmount}元可用`;
-                }
+                data.user=userType[data.userType];
+               
                 if(data.expireType=="START_END_TIME"){
                     data.expireType=`起止时间 ${data.effectAt} 至 ${data.expireAt}`;
                 }
@@ -90,6 +107,20 @@ export default {
                 });
             })
         },
+        changeTime(format,item){
+            if(item){
+                return dateUtils.strFormatToDate(format, item)
+            }
+        },
+        changeTimeType(item){
+            let time;
+            if(item.effectPeriodType=='SPLICE'){
+                time=this.changeTime("YYYY-MM-DD HH:mm:ss",item.effectAt)+'-'+this.changeTime("YYYY-MM-DD",item.expireAt)
+            }else if(item.effectPeriodType=='DAY'){
+                time=`${item.effectDay}天`
+            }
+            return time
+        }
         
         
         
@@ -102,55 +133,58 @@ export default {
 </script> 
 <style lang="less">
 .g-create-meeting{
-    .u-community-check-list{
-        margin-bottom:24px;
-    }
     .m-detail-content{
         width:100%;
         max-width: 1200px;
         box-sizing: border-box;
 	    padding:30px 24px;
     }
-    .u-error{
-        color: #ed3f14;
-        font-size: 12px;
-        margin-top:-20px;
-        margin-bottom:12px;
+    .u-table{
+		width:100%;
+		border:1px solid #E1E6EB;
+		border-collapse:collapse;
+		font-size: 14px;
+		td,th{
+			height:40px;
+			border:1px solid #E1E6EB;
+			color: #666666;
+			text-align: center;
+		}
+		.u-thead{
+			background: #F5F6FA;
+			th{
+				color: #333333;
+				font-weight: 400;
+				
+				
+			}
+		}
+		.u-tabody{
+			tr{
+				&:hover{
+					background: #F6F6F6;
+				}
+			}
+		}
     }
-    .u-input{
-        display: inline-block;
-        width: 252px;
-        max-width: 450px;
-        margin-right:120px;
-        vertical-align:top;
-    }
-   
-    .u-date-txt{
-        font-size: 14px;
-        color: #666666;
-        display: inline-block;
-        width:30px;
-        text-align: center;
-    }
-    
-    .u-upload{
-        width:100%;
-       .ivu-form-item-label{
-           width:100%;
-           text-align: left;
-       } 
-    }
-    .u-unload-label{
-        font-size: 12px;
-        line-height:30px;
-        color:#495060;
-    }
-    .u-unload-tip{
-        line-height:30px;
-        text-indent: 12px;
-        color:#495060;
-        font-size: 12px;
-
+    .u-phone-list{
+        width:500px;
+        min-height:50px;
+        padding-top:20px;
+        padding-left:16px;
+        background:#F6F6F6;
+        margin-bottom:14px;
+        border-radius: 3px;
+        position: relative;
+         .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:100px;
+        }
     }
 }
 

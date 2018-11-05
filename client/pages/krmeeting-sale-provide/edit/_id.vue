@@ -204,6 +204,7 @@ export default {
             let {params}=this.$route;
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
+                this.couponList=res.data.baseInfoList;
                 this.formItem=data;
               
             }).catch((err)=>{

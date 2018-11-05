@@ -114,13 +114,13 @@
                                                  <td>{{item.creatorName}}</td>
                                                  <td>
                                                      <div class="u-number">
-                                                         <span class="u-sub" @click="sendSubNumber(index,item)"> -</span>
+                                                         <span :class="[item.sendQuantity<=0?'':'u-click-color','u-sub']" @click="sendSubNumber(index,item)"> -</span>
                                                           <Input 
                                                                 v-model="item.sendQuantity"
                                                                 type="text"
-                                                                style="width:40px;height:20px;display:inline-block;text-align:center;"
+                                                                class="u-send-quantity"
                                                             />
-                                                          <span class="u-add"  @click="sendAddNumber(index,item)"> +</span>
+                                                          <span :class="[item.sendQuantity>=item.quantity?'':'u-click-color','u-add']"  @click="sendAddNumber(index,item)"> +</span>
                                                      </div>
                                                  </td>
                                              </tr>
@@ -486,6 +486,20 @@ export default {
         }
         .ivu-input{
             height:20px;
+        }
+        .u-click-color{
+            border:1px solid #499df1 !important;
+            color:#499df1  !important;
+        }
+    }
+    
+    .u-send-quantity{
+        width:40px;
+        height:20px;
+        display:inline-block;
+        text-align:center;
+        input{
+            text-align: center;
         }
     }
 }

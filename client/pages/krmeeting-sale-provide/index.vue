@@ -102,7 +102,7 @@ export default {
               },
               {
                   title: '发放说明',
-                  key: 'desc',
+                  key: 'descr',
                   align:'center',
                   fixed: 'left',
                   width: 200,
@@ -112,8 +112,11 @@ export default {
                   key: 'couponNames',
                   align:'center',
                   fixed: 'left',
-                  width: 150,
-
+                  width: 200,
+                  render(tag, params){
+                      let nameList=params.row.couponNames.join(',');
+                      return nameList;
+                  }
               },
                {
                   title: '发放对象',
@@ -136,8 +139,13 @@ export default {
                   align:'center',
                   width: 180,
                   render(tag, params){
-                        let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ptime)) ;
-                        return time;
+                      let time;
+                      if(params.row.timeType=="CRON"){
+                            time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ptime)) ;
+                      }else if(params.row.timeType=="NOW"){
+                            time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)) ;
+                      }
+                      return time;
                   }
               },
               {
@@ -171,7 +179,7 @@ export default {
                   title: '操作',
                   key: 'operation',
                   align:'center',
-                  width: 180,
+                  width: 200,
                   fixed: 'right',
                   render:(h,params)=>{
                         if(params.row.provideFlag){
@@ -326,7 +334,7 @@ export default {
             white-space: normal;
         }
         .ivu-table-fixed-right {
-            width: 150px !important;
+            width: 200px !important;
         }
      .m-sale-operation{
          padding:20px 20px;

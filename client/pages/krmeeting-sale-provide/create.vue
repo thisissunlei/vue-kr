@@ -13,10 +13,10 @@
                      </FormItem>
                     <FormItem label="发放时间" class="u-input" style="width:1000px" prop="timeType">
                             <RadioGroup v-model="formItem.timeType" @on-change="timeChange" style="width:1000px">
-                                <Radio label="0">
+                                <Radio label="NOW">
                                     <span>即时</span>
                                 </Radio>
-                                <Radio label="1">
+                                <Radio label="CRON">
                                     <span>定时</span>
                                 </Radio>
                                 <div style="width:550px;display:inline-block;">
@@ -32,6 +32,7 @@
                                         placeholder="请选择" 
                                         style="width: 96px" 
                                         v-model="startHour"
+                                        @on-change="hourChange"
                                     />
                                 </div>
                             </RadioGroup> 
@@ -113,13 +114,13 @@
                                                  <td>{{item.creatorName}}</td>
                                                  <td>
                                                      <div class="u-number">
-                                                         <span class="u-sub" @click="sendSubNumber"> -</span>
+                                                         <span class="u-sub" @click="sendSubNumber(item.sendQuantity)"> -</span>
                                                           <Input 
                                                                 v-model="item.sendQuantity"
                                                                 type="text"
                                                                 style="width:40px;height:20px;display:inline-block;text-align:center;"
                                                             />
-                                                          <span class="u-add"  @click="sendAddNumber"> +</span>
+                                                          <span class="u-add"  @click="sendAddNumber(item.sendQuantity)"> +</span>
                                                      </div>
                                                  </td>
                                              </tr>
@@ -190,6 +191,7 @@ export default {
             userTypeError:false,
             userTypeTip:'',
             fileName:null,
+            hour:'',
 
         }
     },
@@ -202,6 +204,9 @@ export default {
                 title:'文件格式不正确'
             });
         },
+        hourChange(data){
+            this.hour=`${data}:00`;
+        },
         timeChange(){
             this.startTime="";
             this.startHour="";
@@ -211,11 +216,13 @@ export default {
             this.file=null;
             this.userTypeError=false;
         },
-        sendSubNumber(){
-
+        sendSubNumber(sendQuantity){
+            console.log('item-----Sub',sendQuantity)
+            //this.couponList
         },
-        sendAddNumber(){
-
+        sendAddNumber(sendQuantity){
+            //this.couponList
+             console.log('item-----Add',sendQuantity)
         },
         getTimeType(item){
             if(item.expireType=="START_END_TIME"){
@@ -227,6 +234,7 @@ export default {
             }
         },
         changeTime(format,item){
+             format=format?format:'YYYY-MM-DD HH:mm:ss';
             if(item){
                 return dateUtils.dateToStr(format, new Date(item))
             }
@@ -264,15 +272,17 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-                if(this.formItem.timeType=="0"){
-                    this.ptime=""
-                }else if(this.formItem.timeType=="1"){
-                    if(this.startTime && this.startHour){
+                console.log('this.startHour',this.startHour,this.changeTime("YYYY-MM-DD",this.startTime))
+                if(this.formItem.timeType=="NOW"){
+                    this.formItem.ptime=""
+                }else if(this.formItem.timeType=="CRON"){
+                    if(this.startTime && this.hour){
                         this.timeError=false;
-                         this.ptime=this.changeTime("YYYY-MM-DD",this.startTime)+''+this.startHour;
+                        this.formItem.ptime=this.changeTime("YYYY-MM-DD",this.startTime)+' '+this.hour;
                     }else{
                         this.timeError=true;
                         this.errorTip='请选择发放时间';
+                        this.formItem.ptime=""
                     }  
                 }
                 if(this.formItem.userType=="CUSTOM"){
@@ -296,11 +306,11 @@ export default {
                 }else{
                      this.userTypeError=false;
                 }
-                
-                           
+
+                this.formItem.baseInfos=JSON.stringify(this.couponList); 
                 
                 this.$refs[name].validate((valid) => {
-                    if (valid) {
+                    if (valid && this.formItem.baseInfos) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({

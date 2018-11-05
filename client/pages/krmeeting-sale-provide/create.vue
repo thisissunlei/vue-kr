@@ -114,13 +114,13 @@
                                                  <td>{{item.creatorName}}</td>
                                                  <td>
                                                      <div class="u-number">
-                                                         <span class="u-sub" @click="sendSubNumber(item.sendQuantity)"> -</span>
+                                                         <span class="u-sub" @click="sendSubNumber(index,item)"> -</span>
                                                           <Input 
                                                                 v-model="item.sendQuantity"
                                                                 type="text"
                                                                 style="width:40px;height:20px;display:inline-block;text-align:center;"
                                                             />
-                                                          <span class="u-add"  @click="sendAddNumber(item.sendQuantity)"> +</span>
+                                                          <span class="u-add"  @click="sendAddNumber(index,item)"> +</span>
                                                      </div>
                                                  </td>
                                              </tr>
@@ -216,13 +216,21 @@ export default {
             this.file=null;
             this.userTypeError=false;
         },
-        sendSubNumber(sendQuantity){
-            console.log('item-----Sub',sendQuantity)
-            //this.couponList
+        sendSubNumber(index,item){
+            if(item.sendQuantity<=0){
+                item.sendQuantity==0;
+            }else{
+                item.sendQuantity--
+            }
+            this.couponList[index].sendQuantity=item.sendQuantity;
         },
-        sendAddNumber(sendQuantity){
-            //this.couponList
-             console.log('item-----Add',sendQuantity)
+        sendAddNumber(index,item){
+            if(item.sendQuantity>=item.quantity){
+                item.sendQuantity==item.quantity;
+            }else{
+                item.sendQuantity++
+            }
+            this.couponList[index].sendQuantity=item.sendQuantity;
         },
         getTimeType(item){
             if(item.expireType=="START_END_TIME"){

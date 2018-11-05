@@ -126,7 +126,7 @@ export default {
                   render(tag, params){
                       let type={
                           'ALL':'全部用户',
-                          'CUSTOM':`自定义用户(${params.row.totalCount})`,
+                          'CUSTOM':`自定义用户(${params.row.sendCount})`,
                           'UPLOAD':`上传手机号(${params.row.sendCount})`
                       }
                       return type[params.row.userType];

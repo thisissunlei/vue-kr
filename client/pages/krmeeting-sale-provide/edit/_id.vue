@@ -294,7 +294,6 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-                console.log('this.startHour',this.startHour,this.changeTime("YYYY-MM-DD",this.startTime))
                 if(this.formItem.timeType=="NOW"){
                     this.formItem.ptime=""
                 }else if(this.formItem.timeType=="CRON"){

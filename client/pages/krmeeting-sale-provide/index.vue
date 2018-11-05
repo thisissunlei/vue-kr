@@ -7,7 +7,7 @@
                  <div class="u-select-list">
                         <span class="u-select-label">发放说明</span>
                         <Input
-                            v-model="formItem.desc"
+                            v-model="formItem.descr"
                             placeholder="请输入搜索关键词"
                             style="width: 200px"
                         />
@@ -316,8 +316,8 @@ export default {
             params.page=1;
             params.pageSize=15;
             this.tabParams=Object.assign({},params);
-            this.tabParams.beginTime=this.tabParams.beginTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.beginTime)):'';
-            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.endTime)):'';
+            this.tabParams.beginTime=this.tabParams.beginTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(this.tabParams.beginTime)):'';
+            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(this.tabParams.endTime)):'';
             utils.addParams(this.tabParams);
         },
 

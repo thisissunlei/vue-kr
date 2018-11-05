@@ -1,137 +1,143 @@
 <template>
     <div class="g-create-meeting">
-         <SectionTitle title="编辑优惠券信息"></SectionTitle>
+         <SectionTitle title="编辑发放"></SectionTitle>
          <Form ref="formItems" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
-                    <DetailStyle info="基本信息">
-                               <FormItem label="优惠券名称" class="u-input"  prop="couponName">
-                                    <Input 
-                                        v-model="formItem.couponName" 
-                                        placeholder="请输入" 
-                                        style="width:250px"
-                                        :maxlength="15"
-                                    />
-                                </FormItem>
-                                <FormItem label="优惠券面额" class="u-input" prop="amount">
-                                    <Input 
-                                        v-model="formItem.amount"
-                                        type="text" 
-                                        placeholder="请输入" 
-                                        style="width:250px"
-                                        :maxlength="5"
-                                    />
-                                 </FormItem>
-                                  <FormItem label="优惠券类型" class="u-input" style="width:252px" prop="ruleType">
-                                        <RadioGroup v-model="formItem.ruleType" style="width:262px"  @on-change="ruleTypeChange">
-                                            <Radio label="FULL_REDUCTION" style="marginRight:15px">
-                                                满 <Input 
-                                                    v-model="formItem.frAmount"
-                                                    type="text"
-                                                    style="width:50px"
-                                                    @on-change="checkAmount"
-                                                    :maxlength="5"
-                                                /> 元可用
-                                            </Radio>
-                                            <Radio label="NO_THRESHOLD">
-                                               无门槛金额
-                                            </Radio>
-                                        </RadioGroup> 
-                                </FormItem>
-                                 <FormItem label="发放数量" class="u-input" prop="quantity">
-                                   <Input 
-                                        v-model="formItem.quantity" 
-                                        type="text"
-                                        placeholder="请输入" 
-                                        style="width:220px;marginRight:10px"
-                                        :maxlength="7"
-                                    /> 份
-                                </FormItem>
-                                 <div v-if="amountError" class="u-error">{{amountErrorTxt}}</div>
-                    </DetailStyle>
-                    <DetailStyle info="基本规则">
-                       
-                        <FormItem label="有效期类型" class="u-input" style="width:1000px" prop="expireType">
-                            
-                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
-                                <Radio label="START_END_TIME">
-                                    <span>起止时间</span>
+                    <FormItem label="发放说明" class="u-input"  prop="descr">
+                        <Input 
+                            v-model="formItem.descr" 
+                            placeholder="请输入" 
+                            style="width:250px"
+                            :maxlength="15"
+                        />
+                     </FormItem>
+                    <FormItem label="发放时间" class="u-input" style="width:1000px" prop="timeType">
+                            <RadioGroup v-model="formItem.timeType" @on-change="timeChange" style="width:1000px">
+                                <Radio label="NOW">
+                                    <span>即时</span>
+                                </Radio>
+                                <Radio label="CRON">
+                                    <span>定时</span>
                                 </Radio>
                                 <div style="width:550px;display:inline-block;">
-                                     <DatePicker
+                                    <DatePicker
                                         type="date"
                                         v-model="startTime"
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
-                                         @on-change="startChange"
-                                    />
-                                        <TimePicker 
-                                            format="HH:mm" 
-                                            placeholder="请选择" 
-                                            style="width: 96px" 
-                                            v-model="startHour"
-                                            @on-change="dueStartChange"
-                                        />
-                                        <span class="u-date-txt">至</span>
-                                    <DatePicker
-                                            type="date"
-                                            v-model="endtime"
-                                            placeholder="日期"
-                                            style="width: 150px;margin-right:4px;"
-                                            @on-change="endChange"
+                                       
                                     />
                                     <TimePicker 
-                                            format="HH:mm" 
-                                            placeholder="请选择" 
-                                            style="width: 96px" 
-                                            v-model="endHour"
-                                            @on-change="dueEndChange"
-                                        />
+                                        format="HH:mm" 
+                                        placeholder="请选择" 
+                                        style="width: 96px" 
+                                        v-model="startHour"
+                                        @on-change="hourChange"
+                                    />
                                 </div>
-                                   
-                                <!-- <Radio label="VALID_DATE">
-                                   领取后，当天有效，有效天数<Input 
-                                                    v-model="formItem.name" 
-                                                    placeholder="请输入" 
-                                                    style="width:50px"
-                                                />
-                                            天
-                                </Radio> -->
                             </RadioGroup> 
-                        </FormItem>
-                         <div v-if="timeError" class="u-error">{{errorTip}}</div>
-                        <FormItem label="每人限领" style="width:252px" prop="gainLimit">
-                            <Input 
-                                v-model="formItem.gainLimit"
-                                type="text" 
-                                style="width:50px;marginRight:10px"
-                                :maxlength="2"
-                            />
-                            次
-                        </FormItem>
-                        <FormItem label="使用范围" class="u-input" style="width:250px" prop="usageType">
-                                <RadioGroup v-model="formItem.usageType" style="width:250px">
-                                    <Radio label="ANY">
-                                       不限
-                                    </Radio>
-                                    <Radio label="MEETING">
-                                        会议室
-                                    </Radio>
-                                    <Radio label="SEAT">
-                                        散座
-                                    </Radio>
-                                </RadioGroup> 
-                        </FormItem>
-                        <FormItem label="使用说明" style="width:552px">
-                            <Input 
-                                v-model="formItem.instructions" 
-                                placeholder=""
-                                type="textarea"
-                                :maxlength="100"
-                            />
-                        </FormItem>
-                      
-                        
-                    </DetailStyle>
+                    </FormItem>
+                    <div v-if="timeError" class="u-error">{{errorTip}}</div>
+
+                    <FormItem label="发放对象" class="u-input" style="width:1000px;position:relative;" prop="userType">
+                            <RadioGroup v-model="formItem.userType" @on-change="typeChange" style="width:1000px">
+                                <Radio label="ALL" >
+                                    <span style="margin-right:20px;">全部用户</span>
+                                </Radio>
+                                <Radio label="CUSTOM">
+                                    <span style="margin-right:20px;">自定义</span>
+                                </Radio>
+                                <Radio label="UPLOAD">
+                                    上传手机号
+                                </Radio>
+                                <div class="u-custom-style"  v-if="formItem.userType=='CUSTOM'">
+                                    <Input 
+                                        v-model="formItem.phones" 
+                                        placeholder=""
+                                        type="textarea"
+                                    />
+                                </div>
+                                 <div class="u-upload-style" v-if="formItem.userType=='UPLOAD'">
+                                      <Upload
+                                        :before-upload="handleUpload"
+                                        name="file"
+                                        :format="['xls','xlsx']"
+                                        with-credentials
+                                        :isPut="true"
+                                        action="/api/op/kmcoupon/provide/add"
+                                        v-if="!fileName"
+                                        @on-format-error="formatError"
+                                        >
+                                        <Button icon="ios-cloud-upload-outline" >上传文件</Button>
+                                    </Upload>
+                                   <div style="margin-top:3px;" v-if="fileName!=null">{{fileName}} <span class="u-delete-style" @click="removeFile">删除</span></div>
+                                 </div>
+
+                            </RadioGroup> 
+                    </FormItem>
+                    <div v-if="userTypeError" class="u-error">{{userTypeTip}}</div>
+                    <div class="u-coupon-contanier">
+                             <FormItem label="优惠券批次" style="width:100%" >
+                                 <Input 
+                                        v-model="batchNo" 
+                                        placeholder="输入优惠券批次"
+                                        style="width:278px"
+                                 />
+                                 <span class="u-add-coupon-btn" @click="addCoupon">添加</span>
+                                 <div class="u-coupon-content"   >
+                                     <table class="u-table" v-if="couponList.length>0">
+                                         <thead>
+                                             <tr class="u-thead">
+                                                 <th>优惠券ID</th>
+                                                 <th>优惠券名称</th>
+                                                 <th>备注</th>
+                                                 <th>面额(元)</th>
+                                                 <th>数量</th>
+                                                 <th>有效期</th>
+                                                 <th>创建时间</th>
+                                                 <th>创建人</th>
+                                                 <th>发放张数</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody class="u-tabody">
+                                             <tr  
+                                                v-for="(item,index) in couponList"
+                                                :key="index"
+                                              >
+                                                 <td>{{item.id}}</td>
+                                                 <td>{{item.couponName}}</td>
+                                                 <td>{{item.remark}}</td>
+                                                 <td>{{item.amount}}</td>
+                                                 <td>{{item.quantity}}</td>
+                                                 <td>{{getTimeType(item)}}</td>
+                                                 <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.ctime)}}</td>
+                                                 <td>{{item.creatorName}}</td>
+                                                 <td>
+                                                     <div class="u-number">
+                                                         <span :class="[item.sendQuantity<=0?'':'u-click-color','u-sub']" @click="sendSubNumber(index,item)"> -</span>
+                                                          <Input 
+                                                                v-model="item.sendQuantity"
+                                                                type="text"
+                                                                class="u-send-quantity"
+                                                            />
+                                                          <span :class="[item.sendQuantity>=item.quantity?'':'u-click-color','u-add']"  @click="sendAddNumber(index,item)"> +</span>
+                                                     </div>
+                                                 </td>
+                                             </tr>
+                                         </tbody>
+                                     </table>
+                                     <div 
+                                        class="u-tag" 
+                                        v-for="(item,index) in couponList"
+                                        :key="index"
+                                      >
+                                         <span class="u-tag-close"></span>
+                                        {{item.name}}
+                                     </div>
+                                 </div>
+                             </FormItem>
+                        </div>
+                    
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">
                     <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
@@ -145,6 +151,7 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import UploadFile from  '~/components/UploadFile';
 import dateUtils from 'vue-dateutils';
+
 export default {
     components:{
         SectionTitle,
@@ -152,48 +159,10 @@ export default {
         UploadFile
     },
     data(){
-         const validateaAmount = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入优惠券面额'));
-                } else {
-                    value=value*1;
-                   if (Number.isInteger(value) && value>0) {
-                        callback(); 
-                    }else{
-                        callback(new Error('请输入正整数'));
-                    }
-                   
-                }
-        };
-         const validateaQuantity = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入发放数量'));
-                } else {
-                    value=value*1;
-                   if (Number.isInteger(value) && value>0) {
-                        callback(); 
-                    }else{
-                        callback(new Error('请输入正整数'));
-                    }
-                   
-                }
-        };
-        const validateaGainLimit = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入限领次数'));
-                } else {
-                    value=value*1;
-                   if (Number.isInteger(value) && value>0) {
-                        callback(); 
-                    }else{
-                        callback(new Error('请输入正整数'));
-                    }
-                   
-                }
-        };
+
         return {
             formItem:{
-                expireType:'START_END_TIME'
+                userType:'CUSTOM',
             },
             form:{},
             startTime:'',  
@@ -201,27 +170,14 @@ export default {
             endtime:'',
             endHour:'',
             ruleCustom:{
-                couponName:[
-                    { required: true, message: '请输入优惠券名称', trigger: 'change' }
+                descr:[
+                    { required: true, message: '请输入发放说明', trigger: 'change' }
                 ],
-                amount:[
-                    {required: true, validator:validateaAmount, trigger: 'change' }
+                timeType:[
+                    {required: true,message: '请选择发放时间',  trigger: 'change' }
                 ],
-                ruleType:[
-                    {required: true,  message: '请选择优惠券类型', trigger: 'change' }
-                ],
-                quantity:[
-                    {required: true, validator:validateaQuantity,trigger: 'change' }
-                ],
-
-                expireType:[
-                    { required: true, message: '请选择有效期类型', trigger: 'change' }
-                ],
-                gainLimit:[
-                    {required: true, validator:validateaGainLimit, trigger: 'change' }
-                ],
-                usageType:[
-                    { required: true, message: '请选择使用范围', trigger: 'change' }
+                userType:[
+                    {required: true,  message: '请选择发放对象', trigger: 'change' }
                 ],
                 
             }, 
@@ -229,33 +185,25 @@ export default {
             timeError:false,
             amountError:false,
             amountErrorTxt:'',
+            file:null,
+            couponList:[],
+            batchNo:'',
+            userTypeError:false,
+            userTypeTip:'',
+            fileName:null,
+            hour:'',
+
         }
     },
     mounted:function(){
         GLOBALSIDESWITCH("false");
-        this.getDetailInfo();
+        this.getDetailInfo()
     },
     methods:{
-       getDetailInfo(){
+        getDetailInfo(){
             let {params}=this.$route;
-            this.$http.get('get-kmcoupon-detail',{id:params.id}).then((res)=>{
+            this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
-                data.amount=data.amount.toString();
-                data.quantity=data.quantity.toString();
-                data.gainLimit=data.gainLimit.toString();
-                data.frAmount=data.frAmount==0?'':data.frAmount.toString();
-                data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
-                data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
-                this.form.startTime =data.effectAt.substr(0,10);
-                this.form.startHour =data.effectAt.substr(11,8);
-                this.form.endtime =data.expireAt.substr(0,10);
-                this.form.endHour =data.expireAt.substr(11,8);
-
-                this.startTime =data.effectAt.substr(0,10);
-                this.startHour =data.effectAt.substr(11,8);
-                this.endtime =data.expireAt.substr(0,10);
-                this.endHour =data.expireAt.substr(11,8);
-
                 this.formItem=data;
               
             }).catch((err)=>{
@@ -264,6 +212,80 @@ export default {
                 });
             })
         },
+        formatError(){
+            this.$Notice.error({
+                title:'文件格式不正确'
+            });
+        },
+        hourChange(data){
+            this.hour=`${data}:00`;
+        },
+        timeChange(){
+            this.startTime="";
+            this.startHour="";
+        },
+        typeChange(){
+            this.formItem.phones="";
+            this.file=null;
+            this.userTypeError=false;
+        },
+        sendSubNumber(index,item){
+            if(item.sendQuantity<=0){
+                item.sendQuantity==0;
+            }else{
+                item.sendQuantity--
+            }
+            this.couponList[index].sendQuantity=item.sendQuantity;
+        },
+        sendAddNumber(index,item){
+            if(item.sendQuantity>=item.quantity){
+                item.sendQuantity==item.quantity;
+            }else{
+                item.sendQuantity++
+            }
+            this.couponList[index].sendQuantity=item.sendQuantity;
+        },
+        getTimeType(item){
+            if(item.expireType=="START_END_TIME"){
+                let startTime= this.changeTime("YYYY-MM-DD HH:mm:ss",item.effectAt);
+                let endTime=this.changeTime("YYYY-MM-DD HH:mm:ss",item.expireAt);
+                return `${startTime}至${endTime}`;
+            }else if(item.expireType=="VALID_DATE"){
+                return `${item.effectDay}天`
+            }
+        },
+        changeTime(format,item){
+             format=format?format:'YYYY-MM-DD HH:mm:ss';
+            if(item){
+                return dateUtils.dateToStr(format, new Date(item))
+            }
+        },
+        addCoupon(){
+                if(!this.batchNo){
+                    this.$Notice.error({
+                    title:'优惠券批次不能为空'
+                    });
+                    return;
+                }
+                this.$http.get('get-kmcoupon-detail-by-batchNo', {batchNo:this.batchNo}).then((res)=>{
+                   res.data.sendQuantity=1;
+                   this.batchNo=null;
+                   this.couponList.push(res.data)
+                }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                    });
+                });
+        },
+        removeFile(){
+            this.file=null;
+            this.fileName=null;
+        },
+        handleUpload(file){
+            this.file=file;
+            this.fileName=file.name;
+            return false;
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -271,13 +293,45 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-                if(this.formItem.expireType=="START_END_TIME"){
-                     this.checkTime();
+                console.log('this.startHour',this.startHour,this.changeTime("YYYY-MM-DD",this.startTime))
+                if(this.formItem.timeType=="NOW"){
+                    this.formItem.ptime=""
+                }else if(this.formItem.timeType=="CRON"){
+                    if(this.startTime && this.hour){
+                        this.timeError=false;
+                        this.formItem.ptime=this.changeTime("YYYY-MM-DD",this.startTime)+' '+this.hour;
+                    }else{
+                        this.timeError=true;
+                        this.errorTip='请选择发放时间';
+                        this.formItem.ptime=""
+                    }  
                 }
-                this.checkAmount();
+                if(this.formItem.userType=="CUSTOM"){
+
+                    if(this.formItem.phones){
+                        this.userTypeError=false;
+                    }else{
+                        this.userTypeError=true;
+                        this.userTypeTip='请填写发放对象手机号';
+                    }
+
+                }else if(this.formItem.userType=="UPLOAD"){
+
+                    if(this.file){
+                        this.userTypeError=false;
+                    }else{
+                        this.userTypeError=true;
+                        this.userTypeTip='请上传手机号';
+                    }
+
+                }else{
+                     this.userTypeError=false;
+                }
+
+                this.formItem.baseInfos=JSON.stringify(this.couponList); 
                 
                 this.$refs[name].validate((valid) => {
-                    if (valid) {
+                    if (valid && this.formItem.baseInfos) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -286,71 +340,18 @@ export default {
                     }
                 }) 
         },
-        ruleTypeChange(form){
-            if(form=="NO_THRESHOLD"){
-                this.formItem.frAmount="";
-                this.amountError=false;
-            }else{
-                this.checkAmount();
-            }
-        },
-        checkAmount(){
-           if(this.formItem.ruleType=="FULL_REDUCTION"){
-                if(!this.formItem.frAmount){
-                    this.amountError=true;
-                    this.amountErrorTxt='请填写满减金额'
-                }else{
-                    let value=this.formItem.frAmount*1
-                    if(Number.isInteger(value) && value>0){
-                        this.amountError=false;
-                    } else{
-                        this.amountError=true;
-                        this.amountErrorTxt='请输入正整数'
-                    }  
-                    
-                }
-            }
-           
-        },
-        checkTime(){
-             if(this.form.startTime && this.form.startHour && this.form.endtime && this.form.endHour){
-                    this.formItem.effectAt=`${this.form.startTime} ${this.form.startHour}`;
-                    this.formItem.expireAt=`${this.form.endtime} ${this.form.endHour}`;
-                    let startTime=dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss', this.formItem.effectAt)
-                    let endTime=dateUtils.strFormatToDate('yyyy-MM-dd HH:mm:ss',  this.formItem.expireAt)
-                   
-                   if(startTime>endTime){
-                       this.timeError=true;
-                       this.errorTip='开始时间必须小于结束时间';
-                   }else{
-                        this.timeError=false;
-                       
-                   }
-               }else{
-                    this.timeError=true;
-                    this.errorTip='请选择起止时间';
-               }
-        },
-        startChange(date){
-            this.form.startTime=date;
-            this.checkTime();
-        },
-        endChange(date){
-            this.form.endtime=date;
-            this.checkTime();
-        },
-        dueStartChange(date){
-            this.form.startHour=`${date}:00`;
-            this.checkTime();
-        },
-        dueEndChange(date){
-            this.form.endHour=`${date}:00`;
-            this.checkTime();
-        },
+        
         submitCreate(){
-            this.$http.post('save-or-edit', this.formItem).then((res)=>{
+                var data=new FormData();
+                for(let item in  this.formItem){
+                    data.append(item,this.formItem[item]);
+                }
+                data.append('file',this.file);
+                data.isPut = true;
+
+           this.$http.post('kmcoupon-provide-add', data).then((res)=>{
                 this.$Notice.success({
-                        title:'编辑成功'
+                        title:'新建成功'
                     });
                     setTimeout(function(){
                         window.close();
@@ -419,6 +420,100 @@ export default {
         color:#495060;
         font-size: 12px;
 
+    }
+
+    .u-custom-style{
+        width:500px;
+    }
+    .u-upload-style{
+        width:550px;
+        position: absolute;
+        left:300px;
+        top:30px;
+    }
+    .u-delete-style{
+        color:#499df1;
+        cursor: pointer;
+        padding-left:10px;
+    }
+    .u-coupon-contanier{
+        .u-add-coupon-btn{
+            padding-left:10px;
+            color:#499DF1;
+            font-size: 14px;
+            line-height:32px;
+            cursor: pointer;
+        }
+        .u-coupon-content{
+            margin-top: 20px;
+        }
+       
+    }
+
+    .u-table{
+		width:100%;
+		border:1px solid #E1E6EB;
+		border-collapse:collapse;
+		font-size: 14px;
+		td,th{
+			height:40px;
+			border:1px solid #E1E6EB;
+			color: #666666;
+			text-align: center;
+		}
+		.u-thead{
+			background: #F5F6FA;
+			th{
+				color: #333333;
+				font-weight: 400;
+				
+				
+			}
+		}
+		.u-tabody{
+			tr{
+				&:hover{
+					background: #F6F6F6;
+				}
+			}
+		}
+		
+    }
+    
+    .u-number{
+        span{
+            width:20px;
+            height:20px;
+            display: inline-block;
+            text-align: center;
+            border:1px solid #cccccc;
+            border-radius: 2px;
+            vertical-align: middle;
+
+        }
+        .u-sub{
+            line-height:16px;
+        }
+        .u-add{
+            line-height:18px;
+        }
+        .ivu-input{
+            height:20px;
+        }
+        .u-click-color{
+            border:1px solid #499df1 !important;
+            color:#499df1  !important;
+        }
+    }
+    
+    .u-send-quantity{
+        width:40px;
+        height:20px;
+        display:inline-block;
+        text-align:center;
+        input{
+            text-align: center;
+        }
     }
 }
 

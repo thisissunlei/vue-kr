@@ -202,6 +202,7 @@ export default {
     methods:{
         getDetailInfo(){
             let {params}=this.$route;
+             
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
                 this.couponList=res.data.baseInfoList;
@@ -294,6 +295,8 @@ export default {
                     duration: 3
                 });
                 let _this = this;
+              let {params}=this.$route;
+              this.formItem.id=params.id;
                 if(this.formItem.timeType=="NOW"){
                     this.formItem.ptime=""
                 }else if(this.formItem.timeType=="CRON"){

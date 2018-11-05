@@ -251,7 +251,7 @@ export default {
               },
            ],
            saleList:[],
-           couponBaseId:'',
+           provideId:'',
 
           }
       },
@@ -291,12 +291,12 @@ export default {
         openDeleteSale(value){
             this.openDelete=!this.openDelete;
             if(value){
-                this.couponBaseId=value.id;
+                this.provideId=value.id;
             }
         },
         submitDeleteSale(){
             let params={
-                    couponBaseId: this.couponBaseId
+                    provideId: this.provideId
                 }
                 this.$http.post('delete-op-kmcoupon-provide', params).then((res)=>{
                     this.$Notice.success({

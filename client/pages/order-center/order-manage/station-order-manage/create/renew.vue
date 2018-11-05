@@ -507,7 +507,6 @@ export default {
       }
       // 选中的工位selectedDel
       let selectedStation = this.selectedDel;
-      debugger
       stationVos = stationVos.filter(function (item, index) {
         if (selectedStation.indexOf(item.seatId) != -1) {
           return true;

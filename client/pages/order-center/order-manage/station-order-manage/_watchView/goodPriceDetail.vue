@@ -45,7 +45,7 @@ export default {
                   window.open('/inventory/goods-library/goods-detail?goodsType=' + params.row.seatType + '&id=' +params.row.seatId, '_blank')
                 }
               }
-            }, params.row.seatName)
+            }, params.row.seatName||params.row.name)
           }
         },
         {

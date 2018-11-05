@@ -77,7 +77,7 @@
                     </FormItem>
                     <div v-if="userTypeError" class="u-error">{{userTypeTip}}</div>
                     <div class="u-coupon-contanier">
-                             <FormItem label="优惠券批次" style="width:100%" >
+                             <FormItem label="优惠券批次" class="ivu-form-item-required" style="width:100%" >
                                  <Input 
                                         v-model="batchNo" 
                                         placeholder="输入优惠券批次"
@@ -352,14 +352,14 @@ export default {
                 data.append('file',this.file);
                 data.isPut = true;
 
-           this.$http.post('kmcoupon-provide-add', data).then((res)=>{
+           this.$http.post('kmcoupon-provide-edit', data).then((res)=>{
                 this.$Notice.success({
-                        title:'新建成功'
+                        title:'编辑成功'
                     });
-                    setTimeout(function(){
-                        window.close();
-                        window.opener.location.reload();
-                    },1000) 
+                    // setTimeout(function(){
+                    //     window.close();
+                    //     window.opener.location.reload();
+                    // },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

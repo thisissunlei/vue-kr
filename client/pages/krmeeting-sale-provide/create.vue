@@ -77,7 +77,7 @@
                     </FormItem>
                     <div v-if="userTypeError" class="u-error">{{userTypeTip}}</div>
                     <div class="u-coupon-contanier">
-                             <FormItem label="优惠券批次" style="width:100%" >
+                             <FormItem label="优惠券批次" class="ivu-form-item-required" style="width:100%" >
                                  <Input 
                                         v-model="batchNo" 
                                         placeholder="输入优惠券批次"

@@ -280,7 +280,7 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-                console.log('this.startHour',this.startHour,this.changeTime("YYYY-MM-DD",this.startTime))
+                
                 if(this.formItem.timeType=="NOW"){
                     this.formItem.ptime=""
                 }else if(this.formItem.timeType=="CRON"){
@@ -296,7 +296,27 @@ export default {
                 if(this.formItem.userType=="CUSTOM"){
 
                     if(this.formItem.phones){
-                        this.userTypeError=false;
+                        if(/，/.test(this.formItem.phones)){
+                            this.userTypeError=true;
+                            this.userTypeTip='请使用英文逗号';
+                        }else{
+                                let phone=this.formItem.phones.split(',');
+                                let flag=[];
+                                phone.map((item)=>{
+                                    if(/^1\d{10}$/.test(item)){
+                                        flag.push(1)
+                                    }else{
+                                        flag.push(0)
+                                    }
+                                })
+                                if(flag.indexOf(0)<=-1){
+                                    this.userTypeError=false;
+                                }else{
+                                    this.userTypeError=true;
+                                    this.userTypeTip='请输入手机号格式不正确';
+                                }
+                        }
+                       
                     }else{
                         this.userTypeError=true;
                         this.userTypeTip='请填写发放对象手机号';

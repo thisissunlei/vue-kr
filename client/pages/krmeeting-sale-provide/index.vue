@@ -97,22 +97,18 @@ export default {
                   title: '发放ID',
                   key: 'id',
                   align:'center',
-                  fixed: 'left',
                   width: 80,
               },
               {
                   title: '发放说明',
                   key: 'descr',
                   align:'center',
-                  fixed: 'left',
-                  width: 200,
+                  width: 100,
               },
               {
                   title: '优惠券名称',
                   key: 'couponNames',
                   align:'center',
-                  fixed: 'left',
-                  width: 200,
                   render(tag, params){
                       let nameList=params.row.couponNames.join(',');
                       return nameList;
@@ -122,7 +118,7 @@ export default {
                   title: '发放对象',
                   key: 'userType',
                   align:'center',
-                  width: 200,
+                  width: 100,
                   render(tag, params){
                       let type={
                           'ALL':'全部用户',
@@ -137,7 +133,6 @@ export default {
                   title: '发放时间',
                   key: 'ptime',
                   align:'center',
-                  width: 180,
                   render(tag, params){
                       let time;
                       if(params.row.timeType=="CRON"){
@@ -152,7 +147,7 @@ export default {
                   title: '发放数量(张数)',
                   key: 'totalCount',
                   align:'center',
-                  width: 150,
+                  width: 100,
               },
               {
                   title: '使用率',
@@ -164,7 +159,6 @@ export default {
                   title: '创建时间',
                   key: 'ctime',
                   align:'center',
-                  width: 180,
                   render(tag, params){
                         return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)) ;
                   }
@@ -173,14 +167,13 @@ export default {
                   title: '创建人',
                   key: 'creator',
                   align:'center',
-                  width: 150,
+                  width: 100,
               },
               {
                   title: '操作',
                   key: 'operation',
                   align:'center',
-                  width: 200,
-                  fixed: 'right',
+                  width: 100,
                   render:(h,params)=>{
                         if(params.row.provideFlag){
                              return h('div', [
@@ -326,19 +319,9 @@ export default {
 </script>
 <style lang="less">
 .g-krmeeting-sale{
-        .ivu-table-fixed-right::before,
-        .ivu-table-fixed::before {
-            z-index: 3;
-        }
-        .ivu-tooltip-inner {
-            white-space: normal;
-        }
-        .ivu-table-fixed-right {
-            width: 200px !important;
-        }
      .m-sale-operation{
          padding:20px 20px;
-         height:75px;
+         height:125px;
          .u-select-list{
              display: inline-block;
              margin:0 20px;
@@ -349,10 +332,8 @@ export default {
              white-space:nowrap; 
          }
          .u-search{
-             display: inline-block;
              height:50px;
              margin-top:15px;
-             margin-left:20px;
              margin-bottom:10px;
              .u-select-list{
                  margin-left:0;

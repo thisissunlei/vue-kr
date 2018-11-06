@@ -70,7 +70,7 @@
                                         >
                                         <Button icon="ios-cloud-upload-outline" >上传文件</Button>
                                     </Upload>
-                                   <div style="margin-top:3px;" v-if="fileName!=null">{{fileName}} <span class="u-delete-style" @click="removeFile">删除</span></div>
+                                   <a :class="[upload?'u-native':'u-download']"  :href="upload?'javascript:;':`/api/op/kmcoupon/provide/export?providId=${id}`" :download="fileName" v-if="fileName!=null">{{fileName}} </a><span v-if="fileName!=null" class="u-delete-style" @click="removeFile">删除</span>
                                  </div>
 
                             </RadioGroup> 
@@ -161,9 +161,7 @@ export default {
     data(){
 
         return {
-            formItem:{
-                userType:'CUSTOM',
-            },
+            formItem:{},
             form:{},
             startTime:'',  
             startHour:'',
@@ -192,7 +190,8 @@ export default {
             userTypeTip:'',
             fileName:null,
             hour:'',
-
+            upload:false,
+            id:'',
         }
     },
     mounted:function(){
@@ -202,17 +201,17 @@ export default {
     methods:{
         getDetailInfo(){
             let {params}=this.$route;
-             
+             this.id=params.id
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
                 this.couponList=res.data.baseInfoList;
                 if(res.data.ptime){
                     this.startTime=res.data.ptime;
-                    this.startHour=res.data.ptime
-                    let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(res.data.ptime));
+                    let starttime=this.changeTime("YYYY-MM-DD  HH:mm:ss",res.data.ptime)
+                    this.startHour=starttime.substr(11,5);
                     this.hour=starttime.substr(11,5);
-                   
                 }
+                this.fileName=res.data.fileName;
                 this.formItem=data;
               
             }).catch((err)=>{
@@ -293,6 +292,7 @@ export default {
         handleUpload(file){
             this.file=file;
             this.fileName=file.name;
+            this.upload=true;
             return false;
         },
         handleSubmit(name){
@@ -543,6 +543,16 @@ export default {
         input{
             text-align: center;
         }
+    }
+    .u-native{
+        color: #2e2f30;
+        margin-top:3px;
+    }
+    .u-download{
+        color:#499df1;
+        margin-top:3px;
+        cursor: pointer;;
+        text-decoration: none;
     }
 }
 

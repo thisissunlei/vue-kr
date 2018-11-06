@@ -55,7 +55,7 @@
                     /> 
                 </FormItem>
 
-                <FormItem label="英文名称" prop="lableName">
+                <FormItem label="英文名称" prop="enLableName">
                     <Input 
                             v-model="formItem.enLableName" 
                             placeholder="请输入名称" 
@@ -133,7 +133,7 @@
                     />
                 </FormItem>
 
-                <FormItem label="英文名称" prop="lableName">
+                <FormItem label="英文名称" prop="enLableName">
                     <Input 
                             v-model="editItem.enLableName" 
                             placeholder="请输入名称" 
@@ -361,6 +361,9 @@ export default {
                     lableType: [
                         { required: true, message: '请选择类目'}
                     ],
+                    enLableName:[
+                        { required: true, message: '请填写英文名称'}
+                    ],
 
                     orderNum: [
                         { required: true, message: '请填写排序号'}
@@ -378,6 +381,9 @@ export default {
 
                     lableType: [
                         { required: true, message: '请选择类目'}
+                    ],
+                    enLableName:[
+                        { required: true, message: '请填写英文名称'}
                     ],
 
                     orderNum: [

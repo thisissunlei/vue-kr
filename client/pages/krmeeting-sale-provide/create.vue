@@ -165,6 +165,8 @@ export default {
         return {
             formItem:{
                 userType:'CUSTOM',
+                phones:'',
+                descr:''
             },
             form:{},
             startTime:'',  
@@ -277,6 +279,9 @@ export default {
             this.fileName=file.name;
             return false;
         },
+        trimStr(str){
+             return str.replace(/(^\s*)|(\s*$)/g,"");
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -284,7 +289,8 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-                
+                this.formItem.descr=this.trimStr(this.formItem.descr);
+                this.formItem.phones=this.trimStr(this.formItem.phones);
                 if(this.formItem.timeType=="NOW"){
                     this.formItem.ptime=""
                 }else if(this.formItem.timeType=="CRON"){

@@ -161,7 +161,10 @@ export default {
     data(){
 
         return {
-            formItem:{},
+            formItem:{
+                phones:'',
+                descr:''
+            },
             form:{},
             startTime:'',  
             startHour:'',
@@ -297,6 +300,9 @@ export default {
             this.upload=true;
             return false;
         },
+        trimStr(str){
+             return str.replace(/(^\s*)|(\s*$)/g,"");
+        },
         handleSubmit(name){
              let message = '请填写完表单';
                 this.$Notice.config({
@@ -306,6 +312,8 @@ export default {
                 let _this = this;
               let {params}=this.$route;
               this.formItem.id=params.id;
+              this.formItem.descr=this.trimStr(this.formItem.descr);
+              this.formItem.phones=this.trimStr(this.formItem.phones);
                 if(this.formItem.timeType=="NOW"){
                     this.formItem.ptime=""
                 }else if(this.formItem.timeType=="CRON"){

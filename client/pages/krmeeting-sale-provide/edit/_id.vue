@@ -6,13 +6,13 @@
                     <FormItem label="发放说明" class="u-input"  prop="descr">
                         <Input 
                             v-model="formItem.descr" 
-                            placeholder="请输入" 
+                            placeholder="请填写发放说明" 
                             style="width:250px"
                             :maxlength="15"
                         />
                      </FormItem>
                     <FormItem label="发放时间" class="u-input" style="width:1000px" prop="timeType">
-                            <RadioGroup v-model="formItem.timeType" @on-change="timeChange" style="width:1000px">
+                            <RadioGroup v-model="formItem.timeType" @on-change="timeChange" style="width:1000px;position: relative;">
                                 <Radio label="NOW">
                                     <span>即时</span>
                                 </Radio>
@@ -36,10 +36,8 @@
                                     />
                                 </div>
                             </RadioGroup> 
-                           
+                             <div v-if="timeError" class="u-time-error" >{{errorTip}}</div>
                     </FormItem>
-                     <div v-if="timeError" class="u-error" style="margin-left:300px;">{{errorTip}}</div>
-
                     <FormItem label="发放对象" class="u-input" style="width:1000px;position:relative;" prop="userType">
                             <RadioGroup v-model="formItem.userType" @on-change="typeChange" style="width:1000px">
                                 <Radio label="ALL" >
@@ -415,6 +413,12 @@ export default {
         font-size: 12px;
         margin-top:-20px;
         margin-bottom:12px;
+    }
+    .u-time-error{
+        color: #ed3f14;
+        font-size: 12px;
+        left:0;
+        top:40px;
     }
     .u-input{
         display: inline-block;

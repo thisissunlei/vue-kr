@@ -518,38 +518,43 @@ export default {
         let { params } = this.$route;
         let communityId = params.billId;
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
-          console.log("detail>>",res.data);
+          let data=Object.assign({},res.data)
+        
           var coverImgList = []
-          if(res.data.coverPic && res.data.coverPic!=''){
-            coverImgList.push({'url':res.data.coverPic});
+          if(data.coverPic && data.coverPic!=''){
+            coverImgList.push({'url':data.coverPic});
           }
           let detailImgList=[];
           var devicesStrArray = []
-          if(res.data.pics){
-            res.data.pics.map((item)=>{
+          if(data.pics){
+            data.pics.map((item)=>{
                 let obj={};
                 obj.url=item.picUrl;
                 detailImgList.push(obj)
             })
           }
-          if(res.data.devices){
-            devicesStrArray = res.data.devices.map(item=>{
+          
+          if(data.devices){
+            let devices=[].concat(data.devices) 
+            devicesStrArray =devices.map(item=>{
               return item.name;
             })
           }
           
-          res.data.published=JSON.stringify(res.data.published);
-          res.data.pics=JSON.stringify(res.data.pics);
-          
-          
+          data.published=JSON.stringify(data.published);
+          data.pics=JSON.stringify(data.pics);
+          data.promoFlag=JSON.stringify(data.promoFlag);
+          data.frontFloor=JSON.stringify(data.frontFloor);
           this.detailImgList=detailImgList;
           this.coverImgList = coverImgList;
-          this.detailData = Object.assign({},res.data);
-          this.detailData.goods = res.data.goods || [];
-          this.goods = res.data.goods || []
+         
+          this.detailData = Object.assign(this.detailData,data);
+          //this.detailData.goods =data.goods || [];
+          this.goods =[].concat(data.goods) || []
           this.test = devicesStrArray;
           this.detailData.devicesStrArray = devicesStrArray;
-          console.log('=======>',this.detailData)
+         
+         
         }).catch((err)=>{
           this.$Notice.error({
               title:err.message

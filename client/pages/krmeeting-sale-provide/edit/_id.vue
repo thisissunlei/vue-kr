@@ -209,7 +209,7 @@ export default {
              this.id=params.id
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
-                this.couponList=res.data.baseInfoList;
+                this.couponList=res.data.baseInfoList || [];
                 if(res.data.ptime){
                     this.startTime=res.data.ptime;
                     let starttime=this.changeTime("YYYY-MM-DD  HH:mm:ss",res.data.ptime)

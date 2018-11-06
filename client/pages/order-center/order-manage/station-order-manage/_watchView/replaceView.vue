@@ -1388,7 +1388,10 @@
                 })
                 this.getStationAmount()
             },
-
+            changeDiscount(index,discount){
+                this.selecedStationList[index].discountNum = Number(discount);
+                this.getStationAmount()
+            },
             getStationAmount(list){
                 //判断标准单价是否有值，若无值，则不提交计算总价
                 let originalPrice = false;

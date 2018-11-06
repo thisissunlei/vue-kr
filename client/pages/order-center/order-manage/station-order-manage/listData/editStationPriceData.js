@@ -224,7 +224,6 @@ export default function(priceDetail = false) {
                 discount = e;
               },
               "on-blur": event => {
-                debugger;
                 let value = event.target.value;
                 if (event.target.value === "") {
                   value = 10;

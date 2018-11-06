@@ -912,7 +912,6 @@
                 // })
                 // overViewData.serviceDetailsList = serviceDetailsList;
 
-                debugger
                 this.$refs[name].validate((valid) => {
                     if(valid){
                         this.orderStatus = 'view'
@@ -1392,6 +1391,7 @@
                     this.oldStationData = list;
                     this.newStationData =list;
                     this.formItem.changeServiceFee = response.data.changeServiceFee;
+                    this.formItem.discountCreaterName = response.data.discountCreaterName;
 
                 }).catch( (error) => {
                     this.status = 2;

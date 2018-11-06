@@ -324,7 +324,7 @@ export default {
 
                 }else if(this.formItem.userType=="UPLOAD"){
 
-                    if(this.file){
+                    if(this.fileName){
                         this.userTypeError=false;
                     }else{
                         this.userTypeError=true;

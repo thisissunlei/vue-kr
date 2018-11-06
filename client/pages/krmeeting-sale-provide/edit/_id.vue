@@ -206,6 +206,13 @@ export default {
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
                 this.couponList=res.data.baseInfoList;
+                if(res.data.ptime){
+                    this.startTime=res.data.ptime;
+                    this.startHour=res.data.ptime
+                    let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(res.data.ptime));
+                    this.hour=starttime.substr(11,5);
+                   
+                }
                 this.formItem=data;
               
             }).catch((err)=>{
@@ -375,10 +382,10 @@ export default {
                 this.$Notice.success({
                         title:'编辑成功'
                     });
-                    // setTimeout(function(){
-                    //     window.close();
-                    //     window.opener.location.reload();
-                    // },1000) 
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
             }).catch((err)=>{
                 this.$Notice.error({
                         title:err.message

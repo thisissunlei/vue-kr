@@ -208,8 +208,8 @@ export default {
                 if(res.data.ptime){
                     this.startTime=res.data.ptime;
                     let starttime=this.changeTime("YYYY-MM-DD  HH:mm:ss",res.data.ptime)
-                    this.startHour=starttime.substr(11,5);
-                    this.hour=starttime.substr(11,5);
+                    this.startHour=starttime.substr(11,9);
+                    this.hour=starttime.substr(11,9);
                 }
                 this.fileName=res.data.fileName;
                 this.formItem=data;

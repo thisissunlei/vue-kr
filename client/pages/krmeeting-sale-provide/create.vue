@@ -198,6 +198,7 @@ export default {
             hour:'',
             couponListTip:'',
             couponListError:false,
+            
 
         }
     },
@@ -223,12 +224,13 @@ export default {
             this.userTypeError=false;
         },
         sendSubNumber(index,item){
+            item.sendQuantity--;
             if(item.sendQuantity<=0){
-                item.sendQuantity==0;
+                this.couponList.splice(index, 1);
             }else{
-                item.sendQuantity--
+                this.couponList[index].sendQuantity=item.sendQuantity;
             }
-            this.couponList[index].sendQuantity=item.sendQuantity;
+           
         },
         sendAddNumber(index,item){
             if(item.sendQuantity>=item.quantity){
@@ -260,15 +262,37 @@ export default {
                     });
                     return;
                 }
-                this.$http.get('get-kmcoupon-detail-by-batchNo', {batchNo:this.batchNo}).then((res)=>{
-                   res.data.sendQuantity=1;
-                   this.batchNo=null;
-                   this.couponList.push(res.data)
+                let couponFlag=[];
+                 this.$http.get('get-kmcoupon-detail-by-batchNo', {batchNo:this.batchNo}).then((res)=>{
+                    res.data.sendQuantity=1;
+                    if(this.couponList.length==0){
+                        this.couponList.push(res.data);
+                    }else{
+                        this.couponList.map((item,index)=>{
+                            if(item.id==res.data.id){
+                                couponFlag.push(1)
+                            }else{
+                                 couponFlag.push(0)
+                            }
+                        })
+                        if(couponFlag.indexOf(1)==-1){
+                            this.couponList.push(res.data);
+                        }
+                    }
+                    
+                   
+                    this.batchNo=null;
+                    this.couponListError=false; 
                 }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                    });
+                    this.$Notice.error({
+                        title:error.message
+                        });
                 });
+                 
+               
+        },
+        getCoupon(){
+            
         },
         removeFile(){
             this.file=null;

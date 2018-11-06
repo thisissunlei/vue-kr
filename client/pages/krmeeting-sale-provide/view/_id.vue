@@ -106,9 +106,9 @@ export default {
         },
         changeTimeType(item){
             let time;
-            if(item.effectPeriodType=='SPLICE'){
-                time=this.changeTime("YYYY-MM-DD HH:mm:ss",item.effectAt)+'-'+this.changeTime("YYYY-MM-DD",item.expireAt)
-            }else if(item.effectPeriodType=='DAY'){
+            if(item.expireType=='START_END_TIME'){
+                time=this.changeTime("YYYY-MM-DD HH:mm:ss",item.effectAt)+'至'+this.changeTime("YYYY-MM-DD",item.expireAt)
+            }else if(item.expireType=='VALID_DATE'){
                 time=`${item.effectDay}天`
             }
             return time

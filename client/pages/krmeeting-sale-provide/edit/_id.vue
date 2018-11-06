@@ -36,8 +36,9 @@
                                     />
                                 </div>
                             </RadioGroup> 
+                           
                     </FormItem>
-                    <div v-if="timeError" class="u-error">{{errorTip}}</div>
+                     <div v-if="timeError" class="u-error" style="margin-left:300px;">{{errorTip}}</div>
 
                     <FormItem label="发放对象" class="u-input" style="width:1000px;position:relative;" prop="userType">
                             <RadioGroup v-model="formItem.userType" @on-change="typeChange" style="width:1000px">

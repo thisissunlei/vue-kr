@@ -4,7 +4,7 @@
          <div class="m-detail-content">
              <DetailStyle info="基本信息">
                  <LabelText label="发放说明：">
-                    {{detailInfo.couponName}}
+                    {{detailInfo.descr}}
                 </LabelText>
                  <LabelText label="发放时间：">
                     {{detailInfo.ptime?changeTime('yyyy-MM-dd HH:mm:ss',detailInfo.ptime):'即时'}}
@@ -43,7 +43,7 @@
                             <td>{{item.amount}}</td>
                             <td>{{item.quantity}}</td>
                             <td>{{changeTimeType(item)}}</td>
-                            <td>{{changeTime('yyyy-MM-dd HH:mm:ss',item.ctime)}}</td>
+                            <td>{{changeTime('YYYY-MM-DD HH:mm:ss',item.ctime)}}</td>
                             <td>{{item.creatorName}}</td>
                             <td>{{item.sendQuantity}}</td>
                         </tr>
@@ -69,7 +69,8 @@ export default {
     data(){
         
         return {
-           detailInfo:{}
+           detailInfo:{},
+           couponList:[],
         }
     },
     mounted:function(){
@@ -88,6 +89,7 @@ export default {
             this.$http.get('get-kmcoupon-provide-detail',{id:params.id}).then((res)=>{
                 let data=Object.assign({},res.data);
                 data.user=userType[data.userType];
+                this.couponList=data.baseInfoList || [];
                 this.detailInfo=data;
               
             }).catch((err)=>{
@@ -97,8 +99,9 @@ export default {
             })
         },
         changeTime(format,item){
+             format=format?format:'YYYY-MM-DD HH:mm:ss';
             if(item){
-                return dateUtils.strFormatToDate(format, item)
+                return dateUtils.dateToStr(format, new Date(item))
             }
         },
         changeTimeType(item){

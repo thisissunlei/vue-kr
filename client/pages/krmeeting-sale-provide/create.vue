@@ -137,6 +137,7 @@
                                      </div>
                                  </div>
                              </FormItem>
+                             <div v-if="couponListError" class="u-error">{{couponListTip}}</div>
                         </div>
                     
                 </div>
@@ -193,6 +194,8 @@ export default {
             userTypeTip:'',
             fileName:null,
             hour:'',
+            couponListTip:'',
+            couponListError:false,
 
         }
     },
@@ -335,9 +338,14 @@ export default {
                 }else{
                      this.userTypeError=false;
                 }
-
-                this.formItem.baseInfos=JSON.stringify(this.couponList); 
-                
+                if(this.couponList.length>0){
+                     this.formItem.baseInfos=JSON.stringify(this.couponList);
+                     this.couponListError=false; 
+                }else{
+                    this.couponListError=true;
+                    this.couponListTip="请添加优惠券"
+                }
+               
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.baseInfos) {
                         _this.submitCreate();
@@ -393,6 +401,12 @@ export default {
         font-size: 12px;
         margin-top:-20px;
         margin-bottom:12px;
+    }
+     .u-time-error{
+        color: #ed3f14;
+        font-size: 12px;
+        left:0;
+        top:40px;
     }
     .u-input{
         display: inline-block;

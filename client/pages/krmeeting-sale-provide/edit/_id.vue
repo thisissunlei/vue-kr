@@ -135,6 +135,7 @@
                                      </div>
                                  </div>
                              </FormItem>
+                              <div v-if="couponListError" class="u-error">{{couponListTip}}</div>
                         </div>
                     
                 </div>
@@ -191,6 +192,8 @@ export default {
             hour:'',
             upload:false,
             id:'',
+            couponListTip:'',
+            couponListError:false,
         }
     },
     mounted:function(){
@@ -355,8 +358,15 @@ export default {
                 }else{
                      this.userTypeError=false;
                 }
-
-                this.formItem.baseInfos=JSON.stringify(this.couponList); 
+                 if(this.couponList.length>0){
+                     this.formItem.baseInfos=JSON.stringify(this.couponList);
+                     this.couponListError=false; 
+                }else{
+                    this.couponListError=true;
+                    this.couponListTip="请添加优惠券"
+                }
+               
+                
                 
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.baseInfos) {

@@ -55,6 +55,14 @@
                     /> 
                 </FormItem>
 
+                <FormItem label="英文名称" prop="lableName">
+                    <Input 
+                            v-model="formItem.enLableName" 
+                            placeholder="请输入名称" 
+                            style="width: 250px"
+                    /> 
+                </FormItem>
+
                 <FormItem label="类目" prop="lableType">
                     <SelectFacility :facility="formItem" style="width: 250px" :onchange="changeType"></SelectFacility> 
                 </FormItem>
@@ -123,6 +131,14 @@
                             placeholder="请输入名称" 
                             style="width: 250px"
                     />
+                </FormItem>
+
+                <FormItem label="英文名称" prop="lableName">
+                    <Input 
+                            v-model="editItem.enLableName" 
+                            placeholder="请输入名称" 
+                            style="width: 250px"
+                    /> 
                 </FormItem>
 
                 <FormItem label="类目" prop="lableType">
@@ -268,7 +284,21 @@ export default {
                         title: '名称',
                         key: 'lableName',
                         align:'center',
-                        width:200,
+                        width:180,
+                    },
+                    {
+                        title: '英文名称',
+                        key: 'enLableName',
+                        align:'center',
+                        width:180,
+                        render:(h,params)=>{
+                            let text = params.row.enLableName || '暂无'
+                                return h('div', [
+                                    h('span', {
+                                    }, text),
+                                ]);
+
+                        }
                     },
                     {
                         title: '图片',

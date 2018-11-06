@@ -423,6 +423,7 @@ export default {
                     data.capacity=String(data.capacity);
                     data.appPublish=String(data.appPublish);
                     data.krmPublish=String(data.krmPublish);
+                    data.promoFlag=String(data.promoFlag);
                     data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;

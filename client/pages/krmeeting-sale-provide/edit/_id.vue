@@ -312,7 +312,6 @@ export default {
                 if(this.formItem.userType=="CUSTOM"){
 
                     if(this.formItem.phones){
-                        if(this.formItem.phones){
                         if(/，/.test(this.formItem.phones)){
                             this.userTypeError=true;
                             this.userTypeTip='请使用英文逗号';

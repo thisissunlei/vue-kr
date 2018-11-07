@@ -154,6 +154,10 @@ export default {
                   key: 'usageRate',
                   align:'center',
                   width: 100,
+                  render(tag, params){
+                      let usageRate=params.row.usageRate==0?params.row.usageRate:`${params.row.usageRate}%`;
+                        return  usageRate;
+                  }
               },
               {
                   title: '创建时间',

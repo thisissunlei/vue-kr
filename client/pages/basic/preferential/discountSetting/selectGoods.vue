@@ -1,25 +1,22 @@
 <template>
   <div class="list-and-map-list">
     <div class="search-from-panel">
-      <SearchForm
-        :communityId="communityId"
+      <SearchForm :communityId="communityId"
         @searchClick="searchClick"
         @clearClick="clearClick"
         @initData="initData"
         @getFloor="getFloor"
-        @cityFloor="cityFloor"
-      />
+        @cityFloor="cityFloor" />
     </div>
-    <div class="table-list" :style="{height:(page.height-300)+'px'}">
-      <Table
-        ref="selectionGoodsLibrary"
+    <div class="table-list"
+      :style="{height:(page.height-300)+'px'}">
+      <Table ref="selectionGoodsLibrary"
         border=""
         :loading="loading"
         stripe
         :columns="attractColumns"
         :data="attractData"
-        @on-selection-change="tableSelectChange"
-      ></Table>
+        @on-selection-change="tableSelectChange"></Table>
     </div>
   </div>
 </template>
@@ -45,7 +42,7 @@ export default {
     },
     params: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     stationData: {
       type: Array,
@@ -259,7 +256,9 @@ export default {
     ...mapGetters(["formDiscount"])
   },
   watch: {
-    tabForms: function(val, old) {
+    tabForms(val, old) {
+      this.attractData=[]
+      this.selectGoodIds=[]
       this.getListData(this.tabForms);
       this.floor = this.tabForms.floor;
     },
@@ -268,7 +267,12 @@ export default {
     }
   },
   mounted() {
-    console.log(this.communityId, "kkkkkkk");
+    var dom=document.getElementsByClassName('ivu-modal-wrap')[0];
+    dom.addEventListener("scroll",this.onScrollListener);
+  },
+  destroyed() {
+    var dom = document.getElementsByClassName('ivu-modal-wrap')[0];
+    dom.removeEventListener("scroll", this.onScrollListener);
   },
   methods: {
     initData(formItem, floorList) {
@@ -284,7 +288,7 @@ export default {
         str = str.substring(0, str.length - 1);
         this.floorStr = str;
       }
-      console.log("floorListfloorListfloorListfloorList", floorList);
+      // console.log("floorListfloorListfloorListfloorList", floorList);
     },
     searchClick(values) {
       this.tabForms = Object.assign({}, this.tabForms, values, { page: 1 });
@@ -303,15 +307,22 @@ export default {
       this.loading = true;
       let params = Object.assign({}, tabParams);
       params.communityId = this.communityId;
-      params.floor = params.floor.length > 1 ? " " : params.floor;
+      params.floor =  (params.floor&&params.floor.length > 1) ? " " : params.floor;
       params.cityId = "";
       this.$http
         .get("getGoodsList", params)
         .then(response => {
           this.totalCount = response.data.totalCount;
-          this.attractData = response.data.items;
+          let tableData=this.attractData.concat(response.data.items);
+          // this.attractData = this.attractData.concat(response.data.items);
           this.name = response.data;
           this.loading = false;
+          tableData.map(item=>{
+            if (this.selectGoodIds.includes(item.id)) {
+              item._checked=true
+            }
+          })
+          this.attractData =tableData
         })
         .catch(error => {
           this.openMessage = true;
@@ -319,10 +330,26 @@ export default {
           this.warn = error.message;
         });
     },
+    //滚动监听
+    onScrollListener() {
+      var dom = document.getElementsByClassName('ivu-modal-wrap')[0];
+      var totalPage = Math.ceil(this.totalCount / this.tabForms.pageSize);
+      if (dom.scrollHeight - dom.scrollTop - dom.clientHeight < 10) {
+        if (this.tabForms.page == totalPage) {
+          return;
+        }
+        this.spinLoading = true;
+        this.tabForms.page = Number(this.tabForms.page) + 1;
+        console.log('下拉加载')
+        this.getListData(this.tabForms);
+      }
+    },
     tableSelectChange(params) {
       this.selectGoods = params.map(item => {
+        this.selectGoodIds.push(item.id)
         return { seatId: item.id, seatType: item.seatType };
       });
+      console.log('选择个数',this.selectGoods.length)
     },
     //执行添加折扣
     doAddDiscount(formDiscount) {
@@ -352,7 +379,7 @@ export default {
         endDate,
         remark
       };
-      
+
       parmas.startDate = parmas.startDate
         ? dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(parmas.startDate))
         : "";

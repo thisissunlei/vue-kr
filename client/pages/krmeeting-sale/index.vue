@@ -121,6 +121,17 @@ export default {
                   width: 200,
               },
               {
+                  title: '备注',
+                  key: 'remark',
+                  align:'center',
+                  width: 100,
+                   render(tag, params){
+                    let remark=params.row.remark?params.row.remark:'-';
+                    return remark;
+                  }
+
+              },
+              {
                   title: '优惠券面额',
                   key: 'amount',
                   align:'center',

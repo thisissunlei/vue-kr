@@ -119,7 +119,7 @@
                                                                 type="text"
                                                                 class="u-send-quantity"
                                                             />
-                                                          <span :class="[item.sendQuantity>=item.quantity?'':'u-click-color','u-add']"  @click="sendAddNumber(index,item)"> +</span>
+                                                          <span :class="[item.sendQuantity>=item.remainCount?'':'u-click-color','u-add']"  @click="sendAddNumber(index,item)"> +</span>
                                                      </div>
                                                  </td>
                                              </tr>
@@ -252,8 +252,8 @@ export default {
            
         },
         sendAddNumber(index,item){
-            if(item.sendQuantity>=item.quantity){
-                item.sendQuantity==item.quantity;
+            if(item.sendQuantity>=item.remainCount){
+                item.sendQuantity==item.remainCount;
             }else{
                 item.sendQuantity++
             }

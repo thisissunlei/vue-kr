@@ -140,7 +140,7 @@
                     
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">
-                    <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
+                    <Button type="primary" @click="handleSubmit('formItems')" :disabled="disabled" >提交</Button>
                 </FormItem> 
           </Form>
     </div>
@@ -166,6 +166,7 @@ export default {
                 descr:''
             },
             form:{},
+            disabled:false,
             startTime:'',  
             startHour:'',
             endtime:'',
@@ -395,8 +396,10 @@ export default {
                 
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.baseInfos) {
+                         _this.disabled = true;
                         _this.submitCreate();
                     } else {
+                        _this.disabled = false;
                         _this.$Notice.error({
                             title:message
                         });
@@ -421,6 +424,7 @@ export default {
                         window.opener.location.reload();
                     },1000) 
             }).catch((err)=>{
+                this.disabled = false;
                 this.$Notice.error({
                         title:err.message
                     });

@@ -33,27 +33,8 @@
                             v-show="showChanceSelector" :orderitems='orderitems' 
                             :defaultValue='defaultChanceID'></SelectChance>
                     </FormItem>
-                    <!-- <div v-if='remindinfoNewUser' class="title-container">(
-                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div>
-                    <div v-if='remindinfo' class="title-container">(如是
-                        <span class="title-remind-info">{{chanceRemindStr}}</span>)</div> -->
                     <p v-show="!showChanceSelector" id='chancemsg' v-bind:class="{ OpportunityRequired: OpportunityRequired }">{{opportunityTipStr}}</p>
                     </Col>
-
-                    <!-- <Col class="col">
-                    <FormItem label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
-                        <SelectChance name="formItem.saleChanceId" @onChange="changeChance" :value="saleChanceId" :orderitems='orderitems'></SelectChance>
-                        <!-- <Select
-                          
-                            filterable
-                            :placeholder='placeholder'          
-                            :disabled="disabled"
-                            :value="saleChanceId"
-                        >
-                                <Option v-for="(option, index) in salerOptions" :value="option"  :key="index">{{option}}</Option>
-                        </Select> -->
-                    <!-- </FormItem> -->
-                    <!-- </Col> -->
                 </Row>
             </DetailStyle>
             <!--苏岭增加客户主管理员开始-->
@@ -110,100 +91,32 @@
                 </Row>
 
             </DetailStyle>
-            <DetailStyle info="金额信息">
+            <DetailStyle info="商品价格明细">
                 <Row style="margin-bottom:10px">
-                    <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
                     <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
-                    <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
-                    </Col>
-
+                    <Button type="primary" style="font-size:14px" @click="openPriceButton">批量填写价格</Button>
+                    <Button type="primary" style="margin-left:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
+                    <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                 </Row>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
-                    <div class="total-money" v-if="stationList.length">
-                        <span>服务费总计</span>
-                        <span class="money">{{formItem.stationAmount| thousand}} </span>
-                        <span class="money">{{stationAmount}}</span>
-                    </div>
-                    </Col>
-                </Row>
-
-            </DetailStyle>
-            <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
-                <Row style="margin-bottom:10px">
-                    <Col class="col col-discount-header">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" :disabled="disabled||Boolean(discountErrorStr)" @click="deleteDiscount">删除</Button>
-                    <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
-                    </Col>
-
-                </Row>
-                <Row>
-                    <Col span="3" class="discount-table-head">
-                    <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
-                    </Col>
-                    <Col span="6" class="discount-table-head">
-                    <span> 优惠类型</span>
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>开始时间</span>
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>结束时间</span>
-
-                    </Col>
-                    <Col span="5" class="discount-table-head">
-                    <span>折扣</span>
-
-                    </Col>
-
-                </Row>
-                <FormItem v-for="(item, index) in formItem.items" :key="index" style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
-                    <Row v-show="item.show">
-                        <Col span="3" class="discount-table-content" style="padding:0">
-                        <Checkbox v-model="item.select"></Checkbox>
-                        </Col>
-                        <Col span="6" class="discount-table-content">
-                        <Select v-model="item.type" label-in-value @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+types.id+types.name">{{ types.label }}</Option>
-                        </Select>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        </DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker>
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled></DatePicker>
-                        </Col>
-                        <Col span="5" class="discount-table-content">
-                        <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <!-- <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :class="'discount-input-'+index"></Input> -->
-                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :disabled="discountdisable[index]"></Input>
-                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
-
-                        </Col>
-                    </Row>
-                </FormItem>
-                <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length && showSaleDiv">
-                        <span>优惠金额总计</span>
-                        <span class="money">{{saleAmount | thousand}} </span>
-                        <span class="money">{{saleAmounts}}</span>
-                    </div>
+                    <Col span="24">
+                        <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
+                        <div class="total-money" v-if="stationList.length">
+                            <div class="left" style="padding-left: 10px;"> <span>折扣原因：</span><Input style="width:400px"
+                                :maxlength="200"
+                                v-model="formItem.discountReason"></Input>
+                            </div>
+                        <div class="right"> <span>服务费总计</span>
+                            <span class="money">{{formItem.stationAmount | thousand}} </span>
+                            <span class="money">{{formItem.stationAmount|amountInWords}}</span>
+                        </div>
+                        </div>
                     </Col>
                 </Row>
             </DetailStyle>
             <div style="padding-left:24px">
                 <Row>
-                    <Col class="col">
-                    <FormItem label="优惠后服务费总额" style="width:252px">
-                        <Input v-model="formItem.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
-                    </FormItem>
-                    </Col>
                     <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
                         <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker>
@@ -231,8 +144,7 @@
 
             </div>
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
-                <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
+                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
             </FormItem>
 
         </Form>
@@ -254,6 +166,27 @@
             <div slot="footer">
                 <Button type="primary" @click="submitPrice">确定</Button>
                 <Button @click="cancelPrice">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal v-model="openDiscount"
+            title="批量填写折扣"
+            ok-text="保存"
+            cancel-text="取消"
+            class-name="vertical-center-modal">
+            <div v-if="openDiscount">
+                <span style="display:inline-block;height:32px;line-height:32px"> 签约折扣: </span>
+                <Input v-model="batchDiscount"
+                    placeholder="签约折扣"
+                    style="width:150px"></Input>
+                <span style="display:block;height:32px;line-height:32px;color:red"
+                    v-if="batchDiscountError">{{batchDiscountError}}</span>
+
+            </div>
+            <div slot="footer">
+                <Button type="primary"
+                    @click="submitDiscount">批量填写</Button>
+                <Button @click="openDiscount=false">取消</Button>
             </div>
         </Modal>
 
@@ -294,7 +227,7 @@ import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-
+import editStationPriceData from "../listData/editStationPriceData"
 
 
 
@@ -389,94 +322,8 @@ export default {
                 { label: '6个月', value: '6' },
             ],
             youhui: [],
-            columns4: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: '工位房间编号',
-                    key: 'name'
-                },
-                {
-                    title: '类型',
-                    key: 'seatType',
-                    render: (h, params) => {
-                        let type = params.row.seatType;
-                        let typeName = '开放工位';
-                        if (type == 'SPACE') {
-                            typeName = '独立办公室'
-                        } else {
-                            typeName = "开放工位"
-                        }
-                        return typeName
-                    }
-                },
-                {
-                    title: '工位可容纳人数',
-                    key: 'capacity'
-                },
-                {
-                    title: '定价',
-                    key: 'guidePrice'
-                },
-                {
-                    title: '标准单价（元/月）',
-                    key: 'originalPrice',
-                    render: (h, params) => {
-                        let price = params.row.originalPrice;
-                        return h('Input', {
-                            props: {
-                                min: params.row.guidePrice,
-                                value: params.row.originalPrice,
-                            },
-                            on: {
-                                'on-change': (event) => {
-                                    let e = event.target.value;
-                                    if (isNaN(e)) {
-                                        e = params.row.guidePrice
-                                    }
-                                    price = e;
-                                },
-                                'on-blur': () => {
-                                    var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-                                    if (price && !pattern.test(price)) {
-                                        this.$Notice.error({
-                                            title: '单价不得多余小数点后两位'
-                                        })
-                                        var num2 = Number(price).toFixed(3);
-                                        price = num2.substring(0, num2.lastIndexOf('.') + 3)
-                                    }
-                                    if (price < params.row.guidePrice) {
-                                        price = params.row.guidePrice
-                                        this.$Notice.error({
-                                            title: '单价不得小于' + params.row.guidePrice
-                                        })
-                                    }
-                                    this.changePrice(params.index, price)
-                                }
-                            }
-                        }, '44')
-                    }
-                },
-                {
-                    title: '租赁期限',
-                    key: 'address',
-                    render: (h, params) => {
-                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.startDate)) + '至' + dateUtils.dateToStr("YYYY-MM-DD", new Date(this.formItem.endDate)))
-                    }
-                },
-                {
-                    title: '小计',
-                    key: 'originalAmount',
-                    render: function (h, params) {
-                        return utils.thousand(params.row.originalAmount)
-                    }
-                }
-            ],
-            stationList: [
-            ],
+            columns4: editStationPriceData.call(this),
+            stationList: [],
             floors: [],
             selectedStation: [],
             formItem: {
@@ -526,8 +373,10 @@ export default {
             originStationList: [],
             orderType: '',
             change: {},
-            showSaleDiv: true,
             openPrice: false,
+            openDiscount:false,
+            batchDiscount: '',
+            batchDiscountError: '',
             price: '',
             priceError: false,
         }
@@ -720,6 +569,57 @@ export default {
             }
             this.openPrice = !this.openPrice;
         },
+
+        submitDiscount() {
+            let errorStr = ''
+            let stationVos = this.stationList;
+            var pattern = /^[0-9]+(.[0-9]{1,3})?$/;
+            if (!pattern.test(this.batchDiscount)) {
+                errorStr = '工位折扣不得多于三位小数'
+            }
+            // 选中的工位
+            let selectedStation = this.selectedStation;
+            stationVos = stationVos.filter(function (item, index) {
+                if (selectedStation.indexOf(item.seatId) != -1) {
+                    return true;
+                }
+                return false;
+            });
+            let sortStationVos = [].concat(stationVos)
+            sortStationVos.sort((s1, s2) => { return s2.rightDiscount - s1.rightDiscount })
+            let maxPrice = sortStationVos[0].rightDiscount;
+            if (maxPrice > this.batchDiscount) {
+                // this.batchDiscountError = '工位折扣不得小于' + maxPrice
+                this.batchDiscountError = '部分或全部商品没有此权限'
+            }
+
+            else {
+                this.batchDiscountError = '';
+                this.openDiscount = !this.openDiscount;
+                this.stationList = this.stationList.map((item) => {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        item.discountNum = Number(this.batchDiscount);
+                    }
+                    return item
+                })
+                this.selectedStation = [];
+                this.getSaleAmount() //价格变动后需要重新计算工位费用
+            }
+        },
+
+        //批量录入价格 对于勾选的行
+        openDiscountButton() {
+             let stationVos = this.stationList;
+            //选中的工位
+            let selectedStation = this.selectedStation;
+            if (!selectedStation.length) {
+                this.$Notice.error({
+                    title: '请先选择录入折扣的工位'
+                })
+                return;
+            }
+            this.openDiscount = true
+        },
         cancelPrice() {
             this.openPrice = !this.openPrice;
             this.priceError = false;
@@ -729,7 +629,13 @@ export default {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
         },
-
+        changeDiscount(index, e, guidePrice) {
+            if (!e || e == 10) {
+                // return
+            }
+            this.stationList[index].discountNum = Number(e);
+            this.getSaleAmount()
+        },
         getDetailData() {
             let _this = this;
             let { params } = this.$route;
@@ -785,52 +691,9 @@ export default {
                 _this.formItem.stationAmount = data.seatRentAmount;
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
+                _this.formItem.discountReason=data.discountReason
 
-                _this.getSaleTactics({ communityId: data.communityId }).then(()=>{
-                        data.contractTactics = data.contractTactics.map((item, index) => {
-                        let obj = {};
-                        obj.status = 1;
-                        obj.show = true;
-                        obj.validStart = item.freeStart;
-                        obj.startDate = item.freeStart;
-                        obj.validEnd = item.freeEnd;
-                        let i = _this.youhui.filter((items, i) => {
-                            // if (items.name == item.tacticsName) {
-                            if (items.value == item.tacticsType) {
-                                return true
-                            }
-                            return false
-                        })
-                        obj.type = item.tacticsType + '/' + index + '/' + i[0].name + '/' + i[0].id;
-                        // 创建者与当前编辑者所拥有的折扣权限不一致 会导致折扣不能回显
-                        // obj.type = item.tacticsType + '/' + index + '/' + item.tacticsName + '/' + item.id;     
-                        obj.index=index;                  
-                        obj.tacticsId = item.tacticsId;
-                        obj.discount = item.discountNum;
-                        obj.tacticsType = JSON.stringify(item.tacticsType);
-                        return obj;
-                    })
-
-                    _this.formItem.items = data.contractTactics;
-                    let discontArr=[].concat(data.contractTactics)
-                   
-                    if (discontArr.length>0) {//订单新建时填写了优惠信息
-                        let type1=discontArr.find(ele=>ele.tacticsType=='1')
-                        _this.disCountReceive=type1.discount
-                        if (type1) {
-                            let obj= _this.youhui.find(y=>y.value=='1')
-                            if (obj) {                                
-                                 if (obj.discount>type1.discount) {
-                                    let index=type1.index;
-                                    _this.showDiscountError();
-                                    _this.discountdisable[index]=true
-                                 }
-                            }
-                        }
-                    }
-                    _this.getStationAmount()
-                })
-
+                _this.getStationAmount()
 
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
@@ -846,9 +709,11 @@ export default {
                 _this.$Notice.error({
                     title: e.message
                 });
+            }).then(()=>{
+                this.checkDiscountRight()
             })
         },
-        config: function () {
+        config () {
             this.$Notice.config({
                 top: 80,
                 duration: 3
@@ -863,6 +728,9 @@ export default {
             station.map((item) => {
                 if (item.originalPrice < item.guidePrice) {
                     priceError = true
+                }
+                if (!item.discountNum) {
+                    item.discountNum=10
                 }
             })
             if (priceError) {
@@ -935,6 +803,9 @@ export default {
             //苏岭开始
             formItem.managerId=this.managerId||this.oldManagerId;
             //苏岭结束
+
+            formItem.discountReason=this.formItem.discountReason
+
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
                 // window.close();
@@ -973,13 +844,6 @@ export default {
                     zhekou = this.dealzhekou(item.discount || this.discount)
                 }
             });
-            if (saleList.length) {
-                this.showSaleDiv = true
-            } else {
-                this.showSaleDiv = false;
-            }
-            // this.saleAmount = 0;
-            // this.saleAmounts = utils.smalltoBIG(0)
             if (!complete && show) {
                 this.$Notice.error({
                     title: '请填写完整优惠信息'
@@ -1023,10 +887,8 @@ export default {
             this.$http.post('count-sale', params).then(r => {
                 _this.stationList = r.data.seats;
                 _this.formItem.rentAmount = r.data.totalrent;
-                // let money = this.formItem.stationAmount - r.data.totalrent;
+                _this.formItem.stationAmount= r.data.totalrent;
                 let money = r.data.discountAmount;
-
-                // let money = r.data.originalTotalrent - r.data.totalrent;
                 _this.saleAmount = Math.round(money * 100) / 100;
                 _this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
 
@@ -1038,7 +900,7 @@ export default {
                     _this.discountError = e.message;
 
                     _this.$Notice.error({
-                        title: e.message
+                        desc: e.message
                     })
                 }
 
@@ -1098,7 +960,7 @@ export default {
                 _this.dealSaleInfo(true)
             }, 200)
         },
-        handleSubmit: function (name) {
+        handleSubmit (name) {
             let message = '请填写完表单';
             this.$Notice.config({
                 top: 80,
@@ -1143,7 +1005,7 @@ export default {
                 }
             })
         },
-        selectDiscount: function (value) {
+        selectDiscount (value) {
             // checkbox的全选事件
             let items = this.formItem.items;
             items = items.map((item) => {
@@ -1154,7 +1016,7 @@ export default {
             this.selectAll = value;
             this.formItem.items = items;
         },
-        deleteDiscount: function () {
+        deleteDiscount () {
             // 删除选中的优惠信息
             let items = this.formItem.items;
             let select = []
@@ -1213,82 +1075,11 @@ export default {
             return true;
         },
 
-        changeType: function (val) {
-            //优惠类型选择
-            if (!val) {
-                return;
-            }
-            let label = val.label;
-            let value = val.value;
-            this.config()
-            let itemValue = value.split('/')[0];
-            let itemIndex = value.split('/')[1];
-            let itemName = value.split('/')[2]
-            let itemId = value.split('/')[3]
-            this.formItem.items[itemIndex].tacticsType = itemValue;
-            this.formItem.items[itemIndex].tacticsName = itemName;
-            this.formItem.items[itemIndex].tacticsId = itemId;
-
-            let items = [];
-            items = this.formItem.items.map((item) => {
-                if (item.value == 'qianmian') {
-                    item.validStart = this.formItem.startDate;
-                    item.discount = '';
-                    item.name = label;
-                } else if (item.tacticsType == 3 && item.show) {
-                    item.validStart = item.validStart || ''
-                    item.validEnd = this.formItem.endDate
-                    item.tacticsId = item.tacticsId || itemId
-                    item.discount = '';
-                } else if (item.tacticsType == 1 && item.show) {
-                    item.validStart = this.formItem.startDate
-                    item.tacticsId = item.tacticsId || itemId
-                    item.discount = item.discount || '';
-                    item.validEnd = this.formItem.endDate
-                }
-                return item;
-            })
-            let error = false;
-            let message = '';
-
-            let typeList = items.map(item => {
-                if (item.show) {
-                    return item.tacticsType;
-                } else {
-                    return;
-                }
-            })
-            let qianmian = typeList.join(",").split('qianmian').length - 1;
-            let houmian = typeList.join(",").split('3').length - 1;
-            let zhekou = typeList.join(",").split('1').length - 1;
-            if (qianmian + houmian > 1) {
-                error = true;
-                message = '只能有一个免租期。'
-            }
-            if (zhekou > 1) {
-                error = true;
-                message = '只能有一个折扣。'
-            }
-            if (error) {
-                this.$Notice.error({
-                    title: message
-                });
-                items[itemIndex].show = false;
-                this.formItem.items = items;
-                return;
-            }
-            if (itemValue == 1) {
-                this.minDiscount = this.maxDiscount[label]
-            }
-            debugger
-            this.formItem.items = items;
-            this.dealSaleInfo(false)
-        },
-        changeCommunity: function (value) {
+        changeCommunity (value) {
             // 选择社区
             if (value) {
                 this.formItem.communityId = value;
-                this.getSaleTactics({ communityId: value })
+                // this.getSaleTactics({ communityId: value })
             } else {
                 this.formItem.communityId = '';
             }
@@ -1296,7 +1087,7 @@ export default {
             this.validSaleChance();
             this.getFloor = +new Date()
         },
-        clearStation: function () {
+        clearStation () {
             // 清除所选的工位
             if (this.stationList.length) {
                 this.stationData = {
@@ -1317,7 +1108,7 @@ export default {
 
             }
         },
-        changeCustomer: function (value) {
+        changeCustomer (value) {
             // 客户
             if (value) {
                 this.formItem.customerId = value;
@@ -1329,12 +1120,12 @@ export default {
             this.validSaleChance();
             this.clearStation()
         },
-        changeSaler: function (value) {
+        changeSaler (value) {
             // 销售员
             this.formItem.salerId = value;
             this.validSaleChance();
         },
-        changeChance: function (value) {
+        changeChance (value) {
             if (!value || value === 0 || value == -1) {
                 this.formItem.saleChanceId = '';
             } else {
@@ -1393,7 +1184,7 @@ export default {
                 }
             }
         },
-        deleteStation: function () {
+        deleteStation () {
             // 工位表单的删除按钮
             let stationVos = this.stationList;
             let selectedStation = this.selectedStation;
@@ -1403,12 +1194,17 @@ export default {
                 }
                 return true;
             });
-            // this.stationList = stationVos;
+            this.stationList = stationVos;
             this.getStationAmount(stationVos);
             this.formItem.items = []
-            // this.stationData.submitData = stationVos;
+            this.stationData.submitData = stationVos;
         },
-        showStation: function () {
+        delStationByIndex(index) {
+            this.stationList.splice(index, 1)
+            this.getStationAmount(this.stationList);
+            this.formItem.items = []
+        },
+        showStation () {
             // 选择工位的按钮
             this.config()
 
@@ -1444,7 +1240,7 @@ export default {
             this.openStation = true;
             this.params = params;
         },
-        selectRow: function (selection) {
+        selectRow (selection) {
             // 工位表单的全选
             let selectionList = [];
             selectionList = selection.map((item) => {
@@ -1462,7 +1258,6 @@ export default {
                 return;
             }
             this.index++;
-            this.showSaleDiv = true;
             this.formItem.items.push({
                 value: '',
                 index: this.index,
@@ -1470,17 +1265,17 @@ export default {
                 show: true,
             });
         },
-        selectDeposit: function (value) {
+        selectDeposit (value) {
             // 选择保证金
             this.depositAmount = value
             this.errorAmount = false;
         },
-        selectPayType: function (value) {
+        selectPayType (value) {
             // 选择付款方式
             this.installmentType = value;
             this.errorPayType = false;
         },
-        submitStation: function () {//工位弹窗的提交
+        submitStation () {//工位弹窗的提交
 
             this.stationList = this.stationData.submitData || [];
             this.delStation = this.stationData.deleteData || [];
@@ -1497,12 +1292,12 @@ export default {
             this.formItem.saleAmount = 0;
             this.saleAmounts = utils.smalltoBIG(0)
         },
-        onResultChange: function (val) {//组件互通数据的触发事件
+        onResultChange (val) {//组件互通数据的触发事件
             this.stationData = val;
 
 
         },
-        cancelStation: function () {//工位弹窗的取消
+        cancelStation () {//工位弹窗的取消
             this.stationData = {
                 submitData: this.stationList,
                 deleteData: [],
@@ -1511,7 +1306,7 @@ export default {
 
         },
 
-        changeBeginTime: function (val) {//租赁开始时间的触发事件，判断时间大小
+        changeBeginTime (val) {//租赁开始时间的触发事件，判断时间大小
             let error = false;
             this.clearStation()
             if (!val || !this.formItem.endDate) {
@@ -1576,7 +1371,7 @@ export default {
             this.timeError = error;
 
         },
-        changeEndTime: function (val) {//租赁结束时间的触发事件，判断时间大小
+        changeEndTime (val) {//租赁结束时间的触发事件，判断时间大小
             this.clearStation();
             if (!val) {
                 return;
@@ -1613,7 +1408,7 @@ export default {
 
 
         },
-        contractDateRange: function (params) {//获取租赁范围
+        contractDateRange (params) {//获取租赁范围
             let _this = this;
             this.$http.get('contract-date-range', params, r => {
                 _this.formItem.timeRange = r.data;
@@ -1672,7 +1467,7 @@ export default {
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || item.seatPrice || 0;
-                obj.originalPrice = (!item.originalPrice && item.originalPrice !== 0 && obj.guidePrice == 0) ? '' : (item.originalPrice || obj.guidePrice || item.price);
+                obj.originalPrice =item.originalPrice||0
                 obj.seatId = item.id || item.seatId;
                 obj.floor = item.whereFloor || item.floor;
                 obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.formItem.endDate));
@@ -1685,39 +1480,36 @@ export default {
             if (originalPrice) {
                 return
             }
+            if (station.length===0) {
+                return
+            }
             let params = {
                 leaseEnddate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.formItem.endDate)),
                 leaseBegindate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.formItem.startDate)),
                 communityId: this.formItem.communityId,
                 seats: JSON.stringify(station)
             }
-            let _this = this;
             this.$http.post('get-station-amount', params).then(r => {
                 let money = 0;
-                _this.stationList = r.data.seats.map(item => {
+                this.stationList = r.data.seats.map(item => {
                     let obj = item;
                     //TODO 
                     obj.guidePrice = item.guidePrice || 0;
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.startDate))
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.endDate))
                     obj.belongType = item.seatType
+                    obj.rightDiscount = item.rightDiscount
                     return obj;
                 });
-                _this.stationData.submitData = _this.stationList;
-                _this.selectedStation = []
-                _this.formItem.rentAmount = r.data.totalrent
-                _this.formItem.stationAmount = r.data.totalrent;
-                _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
-                if (_this.showSaleDiv) {
-                    _this.dealSaleInfo(false)
-                }
-
-
+                this.stationData.submitData = this.stationList;
+                this.selectedStation = []
+                this.formItem.rentAmount = r.data.totalrent
+                this.formItem.stationAmount = r.data.totalrent;
+                this.stationAmount = utils.smalltoBIG(r.data.totalrent)
             }).catch(e => {
-              
-                _this.disabled = false;
-                _this.$Notice.error({
-                    title: e.message
+                this.disabled = false;
+                this.$Notice.error({
+                    desc: e.message
                 })
 
             })
@@ -1727,9 +1519,21 @@ export default {
             this.discountErrorStr=this.discountError 
                this.disabled = true;
                this.$Notice.error({
-                   title: '您没有此折扣权限，请让高权限的同事协助编辑'
+                   desc: '您没有此折扣权限，请让高权限的同事协助编辑'
                });
-        }       
+        },
+        checkDiscountRight(){
+           let error=false;
+           error= this.stationList.some(item=>{
+                if (item.discountNum&&item.discountNum<item.rightDiscount) {
+                    return true
+                }
+            })
+            if (error) {
+                this.showDiscountError()
+            }
+
+        }
     }
 }
 </script>

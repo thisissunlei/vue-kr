@@ -28,7 +28,7 @@
                 
                 </Row>
                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
+                    <Col span="24">
                     <Table border ref="selection" :columns="columns" :data="selecedStation" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="selecedStation.length">
                         <span>服务费总计</span>

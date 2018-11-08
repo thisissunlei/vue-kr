@@ -15,24 +15,11 @@
             <DetailStyle info="租赁信息">
                 <RentInfo :formItem='formItem' />
             </DetailStyle>
-            <DetailStyle info="金额信息">
+            <DetailStyle info="商品价格明细">
                 <AmountInfo/>
-            </DetailStyle>
-            <DetailStyle info="优惠信息"
-                v-show="youhui.length"
-                style="margin-top:40px">
-                <PreferentialInfo/>
             </DetailStyle>
             <div style="padding-left:24px">
                 <Row>
-                    <Col class="col">
-                    <FormItem label="优惠后服务费总额"
-                        style="width:252px">
-                        <Input v-model="amountNeedPay"
-                            placeholder="优惠后服务费总额"
-                            disabled></Input>
-                    </FormItem>
-                    </Col>
                     <Col class="col">
                     <FormItem label="首付款日期"
                         style="width:252px"
@@ -90,7 +77,7 @@
 
 
 <script>
-
+//client/store/join
 import { mapGetters } from 'vuex'
 import SectionTitle from '~/components/SectionTitle.vue'
 import DetailStyle from '~/components/DetailStyle';
@@ -101,7 +88,7 @@ import BasicInfo from './join/basicInfo.vue'
 import CustomerManager from './join/customerManager.vue'
 import RentInfo from './join/rentInfo.vue'
 import AmountInfo from './join/amountInfo.vue'
-import PreferentialInfo from './join/preferentialInfo.vue'
+// import PreferentialInfo from './join/preferentialInfo.vue'
 
 export default {
     components: {
@@ -111,7 +98,7 @@ export default {
         CustomerManager,
         RentInfo,
         AmountInfo,
-        PreferentialInfo
+        // PreferentialInfo
     },
     head() {
         return {
@@ -214,7 +201,8 @@ export default {
             'timeRange',
             'sso',
             'managerId',
-            'preferentialError'
+            'preferentialError',
+            'discountReason'
         ])
     },
     watch: {
@@ -299,6 +287,9 @@ export default {
                 if (item.originalPrice < item.guidePrice) {
                     priceError = true
                 }
+                if (!item.discountNum) {
+                    item.discountNum=10
+                }
             })
             if (priceError) {
                 this.$Notice.error({
@@ -350,7 +341,8 @@ export default {
             formItem.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", this.formItem.firstPayTime);
             formItem.deposit = this.depositAmount;
             formItem.rentAmount = this.amountNeedPay;
-            formItem.saleList = JSON.stringify(saleList);
+            // formItem.saleList = JSON.stringify(saleList);
+            this.stationList.map(item=>item.discountNum=item.discountNum||10)
             formItem.seats = JSON.stringify(this.stationList);
 
             formItem.customerId = this.customerId;
@@ -364,7 +356,7 @@ export default {
             formItem.ssoId = this.sso.ssoId;
             formItem.ssoName = this.sso.ssoName;
             formItem.managerId = this.managerId;
-
+            formItem.discountReason=this.discountReason;
             let _this = this;
             this.disabled = true;
             // return

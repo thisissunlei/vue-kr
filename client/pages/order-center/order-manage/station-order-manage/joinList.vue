@@ -341,7 +341,7 @@ export default {
       this.openMessage = data;
     },
 
-    onKeyEnter: function(ev) {
+    onKeyEnter(ev) {
       this.submitLowerSearch();
     },
 

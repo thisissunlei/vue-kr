@@ -4,6 +4,7 @@ import basicInfo from "./join/basicInfo.js";
 import rentInfo from "./join/rentInfo.js";
 import amountInfo from "./join/amountInfo.js";
 import perferentialInfo from './join/perferentialInfo.js'
+import discountSetting from './discountSetting/index.js'
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ const store = () =>
             basicInfo,
             rentInfo,
             amountInfo,
-            perferentialInfo
+            perferentialInfo,
+            discountSetting
         }
     });
 

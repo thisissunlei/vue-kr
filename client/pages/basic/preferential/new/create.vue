@@ -47,7 +47,6 @@
     </div>
 </template>
 <script>
-import CreateSale from './createSale.vue';
 import selectCommunities from './SelectCommunities.vue'
 import RentFree from './rentFree.vue'
 import SelectDiscount from './discountSelect.vue'
@@ -55,7 +54,6 @@ import dateUtils from 'vue-dateutils';
 
 export default {
     components: {
-        CreateSale,
         selectCommunities,
         SelectDiscount,
         RentFree

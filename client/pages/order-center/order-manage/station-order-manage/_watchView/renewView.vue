@@ -58,23 +58,24 @@
 					{{basicInfo.firstPayTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 			</DetailStyle>
-			<DetailStyle info="金额信息">
-				<Table :columns="service" :data="serviceData" />
-				<LabelText label="服务费总计：" style="font-weight:bold;">
-					{{basicInfo.seatRentAmount}} {{capitalService}}
-				</LabelText>
-				<Table :columns="treatment" :data="treatmentData" />
-				<LabelText label="优惠总计：" style="font-weight:bold;">
-					{{basicInfo.tactiscAmount}} {{capitalTreatment}}
-				</LabelText>
-				<div>
-					<LabelText label="服务费总额：" style="color:red;">
-						{{basicInfo.rentAmount}}
-					</LabelText>
-					<LabelText label="履约保证金总额：" style="color:red;">
-						{{basicInfo.depositAmount}}
-					</LabelText>
-				</div>
+		  <DetailStyle info="商品价格明细">
+          <goodPriceDetail :stationList="stationList" style='margin-bottom:20px'/>  
+          <div>
+            <LabelText label="折扣添加人：" >
+					  	{{basicInfo.discountCreaterName}}
+					  </LabelText>
+					  <LabelText label="折扣原因：" >
+					  	{{basicInfo.discountReason}}
+					  </LabelText>
+          </div>
+          <div>
+					  <LabelText label="服务费总额：" style="color:red;">
+              {{basicInfo.seatRentAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.seatRentAmount| amountInWords}}
+					  </LabelText>
+					  <LabelText label="履约保证金总额：" style="color:red;">
+              {{basicInfo.depositAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.depositAmount| amountInWords}}
+					  </LabelText>
+				  </div>
 			</DetailStyle>
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData" />
@@ -106,6 +107,7 @@ import DetailStyle from "~/components/DetailStyle";
 import LabelText from "~/components/LabelText";
 import utils from "~/plugins/utils";
 import dateUtils from "vue-dateutils";
+import goodPriceDetail from "./goodPriceDetail"
 
 export default {
   name: "RenewView",
@@ -116,10 +118,12 @@ export default {
   },
   components: {
     DetailStyle,
-    LabelText
+    LabelText,
+    goodPriceDetail
   },
   data() {
     return {
+      stationList:[],
       nullifyReason: "",
       nullifyRemark: "",
       opportunityStr: "",
@@ -348,7 +352,7 @@ export default {
     };
   },
 
-  mounted: function() {
+  mounted() {
     GLOBALSIDESWITCH("false");
     this.getDetailData();
   },
@@ -410,6 +414,7 @@ export default {
           this.contractData = response.data.orderContractInfo
             ? response.data.orderContractInfo
             : [];
+          this.stationList=response.data.orderSeatDetailVo||[]
         })
         .catch(error => {
           this.$Notice.error({

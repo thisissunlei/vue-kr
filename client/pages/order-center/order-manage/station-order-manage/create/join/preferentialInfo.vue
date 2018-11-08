@@ -91,7 +91,7 @@
             </Row>
         </div>
         <Row style="margin-bottom:10px">
-            <Col sapn="24">
+            <Col span="24">
             <div class="total-money"
                 v-if="formItem.items.length && showSaleDiv">
                 <span>优惠金额总计</span>

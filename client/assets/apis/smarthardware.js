@@ -136,6 +136,11 @@ export default  {
         url: 'api/iot-platform/door-device/actions/generate-qr-code',
         method: 'get'
     },
+    //升级记录
+    'device-upgrade-log':{
+        url: 'api/iot-platform/device-upgrade/log',
+        method: 'get'
+    },
     
     
 

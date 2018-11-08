@@ -1,7 +1,7 @@
 <template>
     <div class="amount-info-panel">
         <Row style="margin-bottom:10px">
-            <Col class="col">
+            <Col span='24'>
             <Button type="primary"
                 style="margin-right:20px;font-size:14px"
                 @click="showStation">选择工位</Button>
@@ -9,13 +9,16 @@
                 style="margin-right:20px;font-size:14px"
                 @click="deleteStation">删除</Button>
             <Button type="primary"
-                style="font-size:14px"
-                @click="openPriceButton">录入单价</Button>
+                style="margin-right:20px;font-size:14px"
+                @click="openPriceButton">批量填写价格</Button>
+            <Button type="primary"
+                style="margin-right:20px;font-size:14px"
+                @click="openDiscountButton">批量填写折扣</Button>
             </Col>
 
         </Row>
         <Row style="margin-bottom:10px">
-            <Col sapn="24">
+            <Col span="24">
             <Table border
                 ref="selection"
                 :columns="columns4"
@@ -23,9 +26,12 @@
                 @on-selection-change="selectRow"></Table>
             <div class="total-money"
                 v-if="stationList.length">
-                <span>服务费总计</span>
-                <span class="money">{{stationAmount | thousand}} </span>
-                <span class="money">{{stationAmount| amountInWords}}</span>
+                <div class="left"> <span>折扣原因：</span><Input style="width:400px"
+                        :maxlength="200"
+                        v-model="discountReason"></Input></div>
+                <div class="right"> <span>服务费总计</span>
+                    <span class="money">{{stationAmount | thousand}} </span>
+                    <span class="money">{{stationAmount| amountInWords}}</span></div>
             </div>
             </Col>
         </Row>
@@ -47,14 +53,14 @@
         </Modal>
 
         <Modal v-model="openPrice"
-            title="填写单价"
+            title="批量填写价格"
             ok-text="保存"
             cancel-text="取消"
             class-name="vertical-center-modal">
             <div v-if="openPrice">
-                <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+                <span style="display:inline-block;height:32px;line-height:32px"> 标准月费： </span>
                 <Input v-model="price"
-                    placeholder="工位单价"
+                    placeholder="标准月费"
                     style="width:150px"></Input>
                 <span style="display:block;height:32px;line-height:32px;color:red"
                     v-if="priceError">{{priceError}}</span>
@@ -62,8 +68,28 @@
             </div>
             <div slot="footer">
                 <Button type="primary"
-                    @click="submitPrice">确定</Button>
+                    @click="submitPrice">批量填写</Button>
                 <Button @click="cancelPrice">取消</Button>
+            </div>
+        </Modal>
+        <Modal v-model="openDiscount"
+            title="批量填写折扣"
+            ok-text="保存"
+            cancel-text="取消"
+            class-name="vertical-center-modal">
+            <div v-if="openDiscount">
+                <span style="display:inline-block;height:32px;line-height:32px"> 签约折扣: </span>
+                <Input v-model="batchDiscount"
+                    placeholder="签约折扣"
+                    style="width:150px"></Input>
+                <span style="display:block;height:32px;line-height:32px;color:red"
+                    v-if="batchDiscountError">{{batchDiscountError}}</span>
+
+            </div>
+            <div slot="footer">
+                <Button type="primary"
+                    @click="submitDiscount">批量填写</Button>
+                <Button @click="openDiscount=false">取消</Button>
             </div>
         </Modal>
     </div>
@@ -75,6 +101,7 @@ import { mapGetters } from 'vuex'
 import ListAndMap from '../../listAndMap';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
+import editStationPriceData from "../../listData/editStationPriceData"
 
 export default {
     components: {
@@ -82,10 +109,15 @@ export default {
     },
     data() {
         return {
+            discountReason: '',//折扣原因
+            seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
             openPrice: false,
+            openDiscount: false,
             price: '',
+            batchDiscount: '',
             priceError: '',
+            batchDiscountError: '',
             stationAmount: '',
             params: '',
             stationList: [],
@@ -95,94 +127,7 @@ export default {
                 deleteData: [],
                 clearAll: false
             },
-            columns4: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: '工位房间编号',
-                    key: 'name'
-                },
-                {
-                    title: '类型',
-                    key: 'seatType',
-                    render: (h, params) => {
-                        let type = params.row.seatType;
-                        let typeName = '开放工位';
-                        if (type == 'SPACE') {
-                            typeName = '独立办公室'
-                        } else {
-                            typeName = "开放工位"
-                        }
-                        return typeName
-                    }
-                },
-                {
-                    title: '工位可容纳人数',
-                    key: 'capacity'
-                },
-                {
-                    title: '定价',
-                    key: 'guidePrice'
-                },
-                {
-                    title: '标准单价（元/月）',
-                    key: 'guidePrice',
-                    render: (h, params) => {
-                        let price = params.row.originalPrice;
-                        return h('Input', {
-                            props: {
-                                min: params.row.guidePrice,
-                                value: params.row.originalPrice,
-                            },
-                            on: {
-                                'on-change': (event) => {
-                                    let e = event.target.value;
-                                    if (isNaN(e)) {
-                                        e = params.row.guidePrice
-                                    }
-                                    price = e;
-                                },
-                                'on-blur': () => {
-                                    var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
-                                    if (price && !pattern.test(price)) {
-                                        this.$Notice.error({
-                                            title: '单价不得多余小数点后两位'
-                                        })
-                                        var num2 = Number(price).toFixed(3);
-                                        price = num2.substring(0, num2.lastIndexOf('.') + 3)
-                                    }
-                                    if (price < params.row.guidePrice) {
-                                        price = params.row.guidePrice
-                                        this.$Notice.error({
-                                            title: '单价不得小于' + params.row.guidePrice
-                                        })
-                                    }
-                                    this.changePrice(params.index, price)
-                                }
-                            }
-                        }, '44')
-
-                    }
-                },
-
-                {
-                    title: '租赁期限',
-                    key: 'address',
-                    render: (h, params) => {
-                        return h('strong', dateUtils.dateToStr("YYYY-MM-DD", new Date(this.startDate)) + '至' + dateUtils.dateToStr("YYYY-MM-DD", new Date(this.endDate)))
-                    }
-                },
-                {
-                    title: '小计',
-                    key: 'originalAmount',
-                    render: function (h, params) {
-                        return h('span', {}, utils.thousand(params.row.originalAmount))
-                    }
-                }
-            ],
+            columns4: editStationPriceData.call(this)
         }
     },
     computed: {
@@ -211,6 +156,13 @@ export default {
         openPrice() {
             this.priceError = ''
             this.price = ''
+        },
+        openDiscount() {
+            this.batchDiscountError = ''
+            this.price = ''
+        },
+        discountReason(val) {
+            this.$store.commit('changeDiscountReson', val)
         }
     },
     methods: {
@@ -253,7 +205,7 @@ export default {
             this.openStation = true;
             this.params = params;
         },
-        selectRow: function (selection) {
+        selectRow(selection) {
             // 工位表单的全选
             let selectionList = [];
             selectionList = selection.map((item) => {
@@ -271,8 +223,15 @@ export default {
                 }
                 return true;
             });
+            this.stationList = stationVos
+            this.$store.commit('changeSeats', this.stationList)
             this.getStationAmount(stationVos);
             this.items = []
+        },
+        delStationByIndex(index) {
+            this.stationList.splice(index, 1)
+            this.$store.commit('changeSeats', this.stationList)
+            this.getStationAmount(this.stationList);
         },
         //批量录入价格 对于勾选的行
         submitPrice() {
@@ -294,7 +253,8 @@ export default {
             sortStationVos.sort((s1, s2) => { return s2.guidePrice - s1.guidePrice })
             let maxPrice = sortStationVos[0].guidePrice;
             if (maxPrice > this.price) {
-                this.priceError = '工位单价不得小于' + maxPrice
+                // this.priceError = '工位单价不得小于' + maxPrice
+                this.priceError = '部分或全部商品标准月费低于定价'
             }
 
             else {
@@ -310,7 +270,9 @@ export default {
                 this.getStationAmount() //价格变动后需要重新计算工位费用
             }
         },
-        //批量录入价格 对于勾选的行
+        cancelPrice() {
+            this.openPrice = !this.openPrice;
+        },
 
         openPriceButton() {
             let stationVos = this.stationList;
@@ -324,12 +286,68 @@ export default {
             }
             this.openPrice = !this.openPrice;
         },
-        cancelPrice() {
-            this.openPrice = !this.openPrice;
+
+        submitDiscount() {
+            let errorStr = ''
+            let stationVos = this.stationList;
+            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            if (!pattern.test(this.batchDiscount)) {
+                errorStr = '工位折扣不得多于三位小数'
+            }
+            // 选中的工位
+            let selectedStation = this.selectedStation;
+            stationVos = stationVos.filter(function (item, index) {
+                if (selectedStation.indexOf(item.seatId) != -1) {
+                    return true;
+                }
+                return false;
+            });
+            let sortStationVos = [].concat(stationVos)
+            sortStationVos.sort((s1, s2) => { return s2.rightDiscount - s1.rightDiscount })
+            let maxPrice = sortStationVos[0].rightDiscount;
+            if (maxPrice > this.batchDiscount) {
+                // this.batchDiscountError = '工位折扣不得小于' + maxPrice
+                this.batchDiscountError = '部分或全部商品没有此权限'
+            }
+
+            else {
+                this.batchDiscountError = '';
+                this.openDiscount = !this.openDiscount;
+                this.stationList = this.stationList.map((item) => {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        item.discountNum = Number(this.batchDiscount);
+                    }
+                    return item
+                })
+                this.selectedStation = [];
+                this.getSaleAmount() //价格变动后需要重新计算工位费用
+            }
         },
+        //批量录入价格 对于勾选的行
+        openDiscountButton() {
+            let stationVos = this.stationList;
+            //选中的工位
+            let selectedStation = this.selectedStation;
+            if (!selectedStation.length) {
+                this.$Notice.error({
+                    title: '请先选择录入单价的工位'
+                })
+                return;
+            }
+            this.openDiscount = true
+        },
+
         changePrice(index, e, guidePrice) {
             this.stationList[index].originalPrice = e;
             this.getStationAmount()
+        },
+        changeDiscount(index, e, guidePrice) {
+            if (!e || e == 10) {
+                // this.stationList[index].discountNum
+                // return
+            }
+            this.stationList[index].discountNum = Number(e);
+            this.getSaleAmount()
         },
         submitStation() {//工位弹窗的提交
             this.stationList = this.stationData.submitData || [];
@@ -355,15 +373,18 @@ export default {
             this.openStation = false
         },
         getStationAmount(list) {
+
             //判断标准单价是否有值，若无值，则不提交计算总价
             let originalPrice = false;
             let val = list || this.stationList;
+            if (this.stationList.length === 0) {
+                return
+            }
             let station = val.map(item => {
                 let obj = item;
                 obj.guidePrice = item.guidePrice || item.seatPrice || 0;
 
-                obj.originalPrice = (!item.originalPrice && item.originalPrice !== 0 && obj.guidePrice == 0) ? '' : (item.originalPrice || obj.guidePrice);
-
+                obj.originalPrice = item.originalPrice||0
                 obj.seatId = item.id || item.seatId;
                 obj.floor = item.whereFloor || item.floor;
                 obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.endDate));
@@ -390,6 +411,7 @@ export default {
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.startDate))
                     obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(item.endDate))
                     obj.belongType = item.seatType;
+                    obj.rightDiscount = item.rightDiscount
                     return obj;
                 });
                 this.stationData.submitData = this.stationList
@@ -398,21 +420,62 @@ export default {
                 this.$store.commit('changeRentAmount', r.data.totalrent)
                 this.stationAmount = r.data.totalrent;
                 this.selectedStation = []
-                if (this.showSaleDiv) {
-                    this.dealSaleInfo(false)
-                }
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
                 })
 
             })
-        }
+        },
+
+        getSaleAmount() {
+            let params = {
+                communityId: this.communityId,
+                leaseEnddate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.endDate)),
+                leaseBegindate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(this.startDate)),
+                seats: JSON.stringify(this.stationList),
+                // saleList: JSON.stringify(list)
+            };
+            this.disabled = false;
+            this.$http.post('count-sale', params, r => {
+                this.stationList = r.data.seats;
+                let money = r.data.discountAmount;
+                this.saleAmount = Math.round(money * 100) / 100;
+                // this.saleAmounts = utils.smalltoBIG(Math.round(money * 100) / 100);
+                this.stationAmount = r.data.totalrent;
+                this.discountErrorStr = ''
+                this.$store.commit('changeSeats', this.stationList)
+                // this.$store.commit('changeRentAmountSale', r.data.totalrent)
+            }, e => {
+                if (this.stationList.length) {
+                    this.disabled = true;
+                    this.discountErrorStr = e.message;
+                    this.$Notice.error({
+                        title: e.message
+                    })
+                }
+            })
+
+        },
     },
 }
 </script>
 
 <style lang="less">
 .amount-info-panel {
+  .table-header-icon{
+      position: relative;
+  }
+ .total-money {
+  .left {
+   float: left;
+   text-align: left;
+   padding-left: 10px;
+   width: 500px;
+  }
+  .right {
+   float: right;
+  }
+ }
 }
 </style>

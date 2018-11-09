@@ -27,7 +27,8 @@ export default {
     },
     //客户基本信息详情
     'get-customer-info-detail': {
-        url: '/api/krspace-op-web/customer-center/info-detail',
+        url: '/zuul/user/customer/detail',
+   //     url: '/api/krspace-op-web/customer-center/info-detail', todo 
         method: 'get'
     },
     //新增客户
@@ -40,11 +41,11 @@ export default {
         url: '/api/krspace-op-web/customer-center/check-company',
         method: 'get'
     },
-    //顶部客户名称、状态
-    'top-customer': {
-        url: '/api/krspace-op-web/customer-center/customer',
-        method: 'get'
-    },
+    //顶部客户名称、状态 todo 
+    // 'top-customer': {
+    //     url: '/api/krspace-op-web/customer-center/customer',
+    //     method: 'get'
+    // },
     
     //客户列表－转移客户
     'customer-list-switch': {

@@ -68,7 +68,7 @@
 
 <script>
     import utils from '~/plugins/utils';
-import FieldBox from '~/components/FieldBox';
+    import FieldBox from '~/components/FieldBox';
     // import EditInput from '~/components/EditInput'
     // import EditSelect from '~/components/EditSelect'
 
@@ -131,8 +131,9 @@ import FieldBox from '~/components/FieldBox';
                 let param = {
                     customerId:params.customer
                  }
-                this.$http.get('get-customer-info-detail', param).then( r => {
-                    this.basicInfo = r.data
+                 // 客户二次修改 
+                this.$ajax.get('get-customer-info-detail', param).then( r => {
+                    this.basicInfo = r
                     console.log('this.basicInfo====>',this.basicInfo)
                 }).catch( e => {
                     console.log('get-only')

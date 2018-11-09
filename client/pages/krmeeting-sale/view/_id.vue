@@ -27,7 +27,10 @@
                     {{detailInfo.usageType}}
                 </LabelText>
                  <LabelText label="使用说明：" style="width:1000px;">
-                    {{detailInfo.instructions}}
+                    {{detailInfo.instructions?detailInfo.instructions:'-'}}
+                </LabelText>
+                 <LabelText label="备注：">
+                    {{detailInfo.remark}}
                 </LabelText>
               </DetailStyle>  
          </div>
@@ -78,6 +81,8 @@ export default {
                 }
                 if(data.expireType=="START_END_TIME"){
                     data.expireType=`起止时间 ${data.effectAt} 至 ${data.expireAt}`;
+                }else if(data.expireType=='VALID_DATE'){
+                    data.expireType=`${data.effectDay}天`
                 }
                 
 

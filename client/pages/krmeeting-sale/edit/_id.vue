@@ -52,11 +52,11 @@
                        
                         <FormItem label="有效期类型" class="u-input" style="width:1000px" prop="expireType">
                             
-                            <RadioGroup v-model="formItem.expireType" style="width:1000px">
+                            <RadioGroup v-model="formItem.expireType" style="width:800px">
                                 <Radio label="START_END_TIME">
                                     <span>起止时间</span>
                                 </Radio>
-                                <div style="width:550px;display:inline-block;">
+                                <div style="width:550px;display:inline-block;margin-bottom:10px;">
                                      <DatePicker
                                         type="date"
                                         v-model="startTime"
@@ -88,14 +88,14 @@
                                         />
                                 </div>
                                    
-                                <!-- <Radio label="VALID_DATE">
+                                <Radio label="VALID_DATE">
                                    领取后，当天有效，有效天数<Input 
-                                                    v-model="formItem.name" 
+                                                    v-model="formItem.effectDay" 
                                                     placeholder="请输入" 
-                                                    style="width:50px"
+                                                    style="width:60px"
                                                 />
                                             天
-                                </Radio> -->
+                                </Radio>
                             </RadioGroup> 
                         </FormItem>
                          <div v-if="timeError" class="u-error">{{errorTip}}</div>
@@ -129,7 +129,14 @@
                                 :maxlength="100"
                             />
                         </FormItem>
-                      
+                        <FormItem label="备注" style="width:552px">
+                            <Input 
+                                v-model="formItem.remark" 
+                                placeholder=""
+                                type="textarea"
+                                :maxlength="60"
+                            />
+                         </FormItem>
                         
                     </DetailStyle>
                 </div>
@@ -244,17 +251,21 @@ export default {
                 data.quantity=data.quantity.toString();
                 data.gainLimit=data.gainLimit.toString();
                 data.frAmount=data.frAmount==0?'':data.frAmount.toString();
-                data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
-                data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
-                this.form.startTime =data.effectAt.substr(0,10);
-                this.form.startHour =data.effectAt.substr(11,8);
-                this.form.endtime =data.expireAt.substr(0,10);
-                this.form.endHour =data.expireAt.substr(11,8);
-
-                this.startTime =data.effectAt.substr(0,10);
-                this.startHour =data.effectAt.substr(11,8);
-                this.endtime =data.expireAt.substr(0,10);
-                this.endHour =data.expireAt.substr(11,8);
+                if(data.effectAt){
+                    data.effectAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.effectAt));
+                    this.form.startTime =data.effectAt.substr(0,10);
+                    this.form.startHour =data.effectAt.substr(11,8);
+                    this.startTime =data.effectAt.substr(0,10);
+                    this.startHour =data.effectAt.substr(11,8);
+                }
+                if(data.expireAt){
+                    data.expireAt=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.expireAt));
+                    this.form.endtime =data.expireAt.substr(0,10);
+                    this.form.endHour =data.expireAt.substr(11,8);
+                    this.endtime =data.expireAt.substr(0,10);
+                    this.endHour =data.expireAt.substr(11,8);
+                }
+                
 
                 this.formItem=data;
               
@@ -275,6 +286,19 @@ export default {
                      this.checkTime();
                 }
                 this.checkAmount();
+                 if(this.formItem.expireType=="VALID_DATE"){
+                    if(this.formItem.effectDay){
+                        let value=this.formItem.effectDay*1
+                        if(Number.isInteger(value) && value>0){
+                            this.errorTip=false;
+                        } else{
+                            this.errorTip=true;
+                            this.errorTip='请输入正整数'
+                        }  
+                    }else{
+                        this.errorTip='请填写有效天数';
+                    }
+                }
                 
                 this.$refs[name].validate((valid) => {
                     if (valid) {

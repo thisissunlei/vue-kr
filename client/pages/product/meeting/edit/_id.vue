@@ -247,6 +247,18 @@
                                     placeholder="请输入" 
                                 />
                         </FormItem>
+                        <div>
+                            <FormItem label="是否使用新人优惠策略" class="u-input" style="width:250px" prop="promoFlag">
+                                <RadioGroup v-model="formItem.promoFlag" style="width:250px">
+                                    <Radio label="true">
+                                        是
+                                    </Radio>
+                                    <Radio label="false">
+                                        否
+                                    </Radio>
+                                </RadioGroup> 
+                            </FormItem>
+                        </div>
                     </DetailStyle>
                 </div>
                   <FormItem  style="padding-left:100px;margin-top:40px;">
@@ -411,6 +423,7 @@ export default {
                     data.capacity=String(data.capacity);
                     data.appPublish=String(data.appPublish);
                     data.krmPublish=String(data.krmPublish);
+                    data.promoFlag=String(data.promoFlag);
                     data.communityId=String(data.communityId);
                     this.startTime=data.lockBeginTime;
                     this.endtime=data.lockEndTime;

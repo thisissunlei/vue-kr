@@ -21,6 +21,16 @@
         </Col>
       </Row>
       <Row style="margin-bottom:35px">
+        <Col class="col" >
+          <div class="item-name required">前台所在楼层</div>  
+          <div class="item-content"> {{detailData.frontFloor}}</div>
+        </Col>
+        <Col class="col">
+          <div class="item-name required">是否使用新人优惠策略</div>  
+          <div class="item-content"> {{detailData.promoFlag?'是':'否'}}</div>
+        </Col>
+        </Row>
+      <Row style="margin-bottom:35px">
         <Col class="col">
           <div class="item-name required">上架状态</div>  
           <div class="item-content"> {{detailData.published?'已上架':'下架'}}</div>

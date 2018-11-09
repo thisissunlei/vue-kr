@@ -18,5 +18,10 @@ export default {
   'get-kr-t-list': {
     url: '/api/op/krseat/ticket/list',
     method: 'get'
+  },
+  // 运营散座楼层
+  'get-krmting-seat-community-floor': {
+    url: '/api/op/krmting/mobile/community/cmt/floor',
+    method: 'get'
   }
 }

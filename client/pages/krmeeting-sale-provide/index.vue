@@ -1,30 +1,19 @@
 <template>
     <div class="g-krmeeting-sale">
-        <SectionTitle title="优惠券"></SectionTitle>
+        <SectionTitle title="优惠券发放"></SectionTitle>
          <div class="m-sale-operation">
              <Button type="primary" @click="jumpCreate">新建</Button>
-              <div class="u-select">
-                    <div class="u-select-list">
-                        <span class="u-select-label">优惠券批次</span>
+             <div class="u-search">
+                 <div class="u-select-list">
+                        <span class="u-select-label">发放说明</span>
                         <Input
-                            v-model="formItem.batchNo"
+                            v-model="formItem.descr"
                             placeholder="请输入搜索关键词"
-                            style="width: 150px"
+                            style="width: 200px"
                         />
                     </div>
-                    <div class="u-select-list">
-                            <span class="u-select-label">优惠券名称</span>
-                            <Input
-                                v-model="formItem.couponName"
-                                placeholder="请输入搜索关键词"
-                                style="width: 150px"
-                            />
-                    </div>
-              </div>
-             <div class="u-search">
-                
                   <div class="u-select-list">
-                        <span class="u-select-label">创建时间</span>
+                        <span class="u-select-label">发放时间</span>
                         <DatePicker 
                                 v-model="formItem.beginTime"
                                 type="date"
@@ -61,18 +50,18 @@
             </div>
          </div> 
           <Modal
-            v-model="openCreate"
+            v-model="openDelete"
             title="提示信息"
             ok-text="确定"
             cancel-text="取消"
             width="490"
         >
             <div class="u-cancel-title">
-                确认要生成优惠券吗，生成后不可编辑？
+                确认删除该发放规则吗？
             </div>
             <div slot="footer">
-                <Button type="primary" @click="submitCreateSale">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="openCreateSale">取消</Button>
+                <Button type="primary" @click="submitDeleteSale">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDeleteSale">取消</Button>
             </div>
         </Modal>
     </div>
@@ -85,7 +74,7 @@ import dateUtils from 'vue-dateutils';
 export default {
      head () {
           return {
-              title: "优惠券-氪空间后台管理系统"
+              title: "优惠券发放-氪空间后台管理系统"
           }
       },
       components:{
@@ -101,96 +90,62 @@ export default {
                   page:1,
                   pageSize:15
               },
-              formItem:{
-                  
-              },
-              openCreate:false,
+              formItem:{},
+              openDelete:false,
               Columns:[
               {
-                  title: '优惠券批次',
-                  key: 'batchNo',
+                  title: '发放ID',
+                  key: 'id',
                   align:'center',
-                  fixed: 'left',
-                  width: 150,
+                  width: 80,
+              },
+              {
+                  title: '发放说明',
+                  key: 'descr',
+                  align:'center',
+                  width: 100,
               },
               {
                   title: '优惠券名称',
-                  key: 'couponName',
+                  key: 'couponNames',
                   align:'center',
-                  fixed: 'left',
-                  width: 200,
-              },
-              {
-                  title: '备注',
-                  key: 'remark',
-                  align:'center',
-                  width: 100,
-                   render(tag, params){
-                    let remark=params.row.remark?params.row.remark:'-';
-                    return remark;
-                  }
-
-              },
-              {
-                  title: '优惠券面额',
-                  key: 'amount',
-                  align:'center',
-                  width: 100,
-
-              },
-              {
-                  title: '优惠券类型',
-                  key: 'ruleType',
-                  align:'center',
-                  width: 150,
                   render(tag, params){
-                      if(params.row.ruleType=="NO_THRESHOLD"){
-                          return '无门槛金额';
-                      }else if(params.row.ruleType=="FULL_REDUCTION"){
-                           return `满${params.row.frAmount}可用`;
-                      }
-                     
-                      
+                      let nameList=params.row.couponNames.join(',');
+                      return nameList;
                   }
               },
-              {
-                  title: '有效期类型',
-                  key: 'expireType',
+               {
+                  title: '发放对象',
+                  key: 'userType',
                   align:'center',
-                  width: 150,
+                  width: 100,
                   render(tag, params){
                       let type={
-                          'START_END_TIME':'起止时间',
-                          'VALID_DATE':'有效天数'
+                          'ALL':'全部用户',
+                          'CUSTOM':`自定义用户(${params.row.sendCount})`,
+                          'UPLOAD':`上传手机号(${params.row.sendCount})`
                       }
-                      return type[params.row.expireType];
+                      return type[params.row.userType];
                   }
+                  
               },
               {
-                  title: '有效期',
-                  key: 'time',
+                  title: '发放时间',
+                  key: 'ptime',
                   align:'center',
-                  width: 200,
                   render(tag, params){
-                    if(params.row.expireType=="START_END_TIME"){
-                        let startTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.effectAt)) ;
-                        let endTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.expireAt)) ;
-                        return `${startTime}至${endTime}`;
-                    }else if(params.row.expireType=="VALID_DATE"){
-                        return `${params.row.effectDay}天`
-                    }
+                      let time;
+                      if(params.row.timeType=="CRON"){
+                            time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ptime)) ;
+                      }else if(params.row.timeType=="NOW"){
+                            time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)) ;
+                      }
+                      return time;
                   }
-
               },
               {
-                  title: '领取量',
-                  key: 'receivingAmount',
-                  align:'center',
-                  width: 100,
-              },
-              {
-                  title: '领取率',
-                  key: 'receivingRate',
+                  title: '发放数量(张数)',
+                  key: 'totalCount',
                   align:'center',
                   width: 100,
               },
@@ -199,45 +154,32 @@ export default {
                   key: 'usageRate',
                   align:'center',
                   width: 100,
-              },
-              {
-                  title: '创建人',
-                  key: 'createName',
-                  align:'center',
-                  width: 150,
+                  render(tag, params){
+                      let usageRate=params.row.usageRate==0?params.row.usageRate:`${params.row.usageRate}%`;
+                        return  usageRate;
+                  }
               },
               {
                   title: '创建时间',
-                  key: 'createTime',
+                  key: 'ctime',
                   align:'center',
-                  width: 180,
                   render(tag, params){
-                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.createTime)) ;
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime)) ;
                   }
               },
               {
-                  title: '修改人',
-                  key: 'updateName',
+                  title: '创建人',
+                  key: 'creator',
                   align:'center',
-                  width: 150,
-              },
-              {
-                  title: '修改时间',
-                  key: 'updateTime',
-                  align:'center',
-                  width: 180,
-                  render(tag, params){
-                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.updateTime)) ;
-                  }
+                  width: 100,
               },
               {
                   title: '操作',
                   key: 'operation',
                   align:'center',
-                  width: 150,
-                  fixed: 'right',
+                  width: 100,
                   render:(h,params)=>{
-                        if(params.row.producted==1){
+                        if(params.row.provideFlag){
                              return h('div', [
                                 h('Button', {
                                     props: {
@@ -252,11 +194,8 @@ export default {
                                             this.jumpView(params.row)
                                         }
                                     }
-                                }, '查看')
-                            ]); 
-                        }else{
-                            return h('div', [
-                                h('Button', {
+                                }, '查看'),
+                                 h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -266,10 +205,13 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpView(params.row)
+                                            this.openDeleteSale(params.row)
                                         }
                                     }
-                                }, '查看'),
+                                }, '删除')
+                            ]); 
+                        }else{
+                            return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -294,10 +236,10 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openCreateSale(params.row)
+                                            this.openDeleteSale(params.row)
                                         }
                                     }
-                                }, '生成优惠券')
+                                }, '删除')
                                 
                             ]); 
                         }                       
@@ -306,7 +248,7 @@ export default {
               },
            ],
            saleList:[],
-           couponBaseId:'',
+           provideId:'',
 
           }
       },
@@ -320,7 +262,7 @@ export default {
       },
       methods:{
         getTableData(params){
-            this.$http.get('get-coupon-base-by-page', params).then((res)=>{
+            this.$http.get('get-kmcoupon-provide-page', params).then((res)=>{
                     this.saleList=res.data.items;
                     this.totalCount=res.data.totalCount;
             }).catch((err)=>{
@@ -335,29 +277,29 @@ export default {
             this.getTableData(this.tabParams);
         },
         jumpCreate(){
-             window.open('/krmeeting-sale/create','_blank');
+             window.open('/krmeeting-sale-provide/create','_blank');
         },
         jumpEdit(params){
-             window.open(`/krmeeting-sale/edit/${params.id}`,'_blank');
+             window.open(`/krmeeting-sale-provide/edit/${params.id}`,'_blank');
         },
         jumpView(params){
-             window.open(`/krmeeting-sale/view/${params.id}`,'_blank');
+             window.open(`/krmeeting-sale-provide/view/${params.id}`,'_blank');
         },
-        openCreateSale(value){
-            this.openCreate=!this.openCreate;
+        openDeleteSale(value){
+            this.openDelete=!this.openDelete;
             if(value){
-                this.couponBaseId=value.id;
+                this.provideId=value.id;
             }
         },
-        submitCreateSale(){
+        submitDeleteSale(){
             let params={
-                    couponBaseId: this.couponBaseId
+                    provideId: this.provideId
                 }
-                this.$http.post('create-coupon-kmcoupon', params).then((res)=>{
+                this.$http.post('delete-op-kmcoupon-provide', params).then((res)=>{
                     this.$Notice.success({
-                        title:'生成优惠券成功'
+                        title:'删除成功'
                     });  
-                    this.openCreateSale();
+                    this.openDeleteSale();
                     this.getTableData(this.tabParams);
                 }).catch((err)=>{
                     this.$Notice.error({
@@ -371,8 +313,8 @@ export default {
             params.page=1;
             params.pageSize=15;
             this.tabParams=Object.assign({},params);
-            this.tabParams.beginTime=this.tabParams.beginTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.beginTime)):'';
-            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.tabParams.endTime)):'';
+            this.tabParams.beginTime=this.tabParams.beginTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(this.tabParams.beginTime)):'';
+            this.tabParams.endTime=this.tabParams.endTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(this.tabParams.endTime)):'';
             utils.addParams(this.tabParams);
         },
 
@@ -381,24 +323,9 @@ export default {
 </script>
 <style lang="less">
 .g-krmeeting-sale{
-        .ivu-table-fixed-right::before,
-        .ivu-table-fixed::before {
-            z-index: 3;
-        }
-        .ivu-tooltip-inner {
-            white-space: normal;
-        }
-        .ivu-table-fixed-right {
-            width: 150px !important;
-        }
      .m-sale-operation{
          padding:20px 20px;
-         height:130px;
-         .u-select{
-            display: inline-block;
-            padding-left:20px;
-            height:40px;
-         }
+         height:125px;
          .u-select-list{
              display: inline-block;
              margin:0 20px;
@@ -411,6 +338,7 @@ export default {
          .u-search{
              height:50px;
              margin-top:15px;
+             margin-bottom:10px;
              .u-select-list{
                  margin-left:0;
              }

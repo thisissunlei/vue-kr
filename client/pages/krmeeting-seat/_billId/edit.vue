@@ -6,7 +6,7 @@
       </div>
       <Form ref="detailData" :model="detailData" :rules="ruleCustom" label-position="top">
         <div class="u-upload">
-             <FormItem label="封面图（1张）" class="u-input" prop="coverPic" style="width:100%">
+             <FormItem label="封面图（1张）"  prop="coverPic" style="width:100%">
                 <div class="content">
                 <UploadFile 
                   v-model="detailData.coverPic"
@@ -29,7 +29,7 @@
             </FormItem>
         </div>
         <div class="u-upload">
-          <FormItem label="配图" class="u-input" prop="pics" style="width:100%">
+          <FormItem label="配图"  prop="pics" style="width:100%">
             <div class="content-list">
               <UploadFile 
                   v-model="detailData.pics"
@@ -51,7 +51,27 @@
             </div>
           </FormItem>
         </div>
-        <FormItem label="上架状态" class="u-input" style="width:250px" prop="published">
+         <FormItem label="前台所在楼层"  style="width:250px;"  prop="frontFloor" >
+              <Select
+                  v-model="detailData.frontFloor"
+                  filterable
+                  placeholder="请选择"
+                  clearable
+                  >
+                  <Option v-for="(option, index) in floorList" :value="`${option.value}`" :key="index">{{option.label}}</Option>
+              </Select>
+          </FormItem>
+         <FormItem label="是否使用新人优惠策略"  style="width:250px" prop="promoFlag">
+          <RadioGroup v-model="detailData.promoFlag" style="width:250px">
+              <Radio label="true">
+                  是
+              </Radio>
+              <Radio label="false">
+                  否
+              </Radio>
+          </RadioGroup>  
+        </FormItem>
+        <FormItem label="上架状态"  style="width:250px" prop="published">
           <RadioGroup v-model="detailData.published" style="width:250px">
               <Radio label="true">
                   已上架
@@ -61,7 +81,7 @@
               </Radio>
           </RadioGroup> 
         </FormItem>
-        <FormItem label="散座配套" class="u-input"  prop="devicesStrArray">
+        <FormItem label="散座配套"   prop="devicesStrArray">
           <CheckboxGroup v-model="test" @on-change="changeCheckbox">
               <Checkbox v-for="item in deviceList" :label="item.name" :key="item.id">
                   <span>{{item.name}}</span>
@@ -158,14 +178,14 @@
                 暂无数据
               </Col>
             </Row>
-            <Row v-if="goods.length" v-for="(item,index) in goods" :key="item.id" class="price-row">
+            <Row v-if="goods.length>0" v-for="(item,index) in goods" :key="index" class="price-row">
                 <Col span="3" class="parice-col">
                   <span class="date">{{item.enableDateStr}}</span>
                 </Col>
                 <Col span="3" class="parice-col">
                    <FormItem style="width:120px" 
                     :prop="'goods.' + index + '.quantity'"
-                    :key="item.id"
+                    :key="index"
                     :rules="{validator: validateNumber, trigger: 'blur'}"
                     >
                       <Input 
@@ -365,7 +385,13 @@ export default {
           ],
           devicesStrArray:[
             { required: true, type: 'array', message: '请选择散座配套', trigger: 'change' },
-          ]
+          ],
+           promoFlag:[
+            { required: true, message: '请选择新人优惠策略', trigger: 'blur' }
+          ],
+           frontFloor:[
+            { required: true, message: '请选择前台所在楼层', trigger: 'blur' }
+          ],
         },
         priceList:[],
         detailData:{
@@ -374,7 +400,8 @@ export default {
           devicesStrArray:[],
         },
         deviceList:[],
-        goods:[]
+        goods:[],
+        floorList:[],
       }
     },
     components:{
@@ -384,15 +411,40 @@ export default {
        UploadFile
     },
     mounted(){
+      let {params}=this.$route;
       this.getSeatDetail()
       this.getDevices()
       GLOBALSIDESWITCH("false");
+      console.log('params',params)
+      this.getFloor(params.billId)
     },
     watch:{
     },
     destroyed(){
     },
     methods:{
+      //楼层
+      getFloor(cmtId){
+            let list = [];
+            let _this = this;
+            this.$http.get('get-krmting-seat-community-floor', {cmtId:cmtId}).then((res)=>{
+                
+                list = res.data.map((item)=>{
+                    let obj ={};
+                    obj.label = item;
+                    obj.value = item;
+                    return obj;
+                });
+
+                _this.floorList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
+      },
       changeBook(){
         let { params } = this.$route;
         let communityId = params.billId;
@@ -421,9 +473,9 @@ export default {
 
 
         changeCheckbox(e){
+          console.log('e----->>>>',e)
             this.detailData.devicesStrArray = this.test;
-            console.log(this.detailData.devicesStrArray);
-            console.log(e);
+           
         },
 
 
@@ -434,7 +486,6 @@ export default {
               imglist.push(item.url)
           })
           let detailImgs=imglist.join(',');
-          console.log('========',this.detailImgList)
           this.detailData.pics=detailImgs;
           this.$refs.detailData.validateField('pics') 
             
@@ -466,7 +517,8 @@ export default {
         let { params } = this.$route;
         let communityId = params.billId;
         this.$http.get('get-kr-meeting-seat-detail', {communityId:communityId}).then((res)=>{
-          console.log("detail>>",res.data);
+          this.detailData=Object.assign({},res.data)
+        
           var coverImgList = []
           if(res.data.coverPic && res.data.coverPic!=''){
             coverImgList.push({'url':res.data.coverPic});
@@ -480,24 +532,26 @@ export default {
                 detailImgList.push(obj)
             })
           }
+          
           if(res.data.devices){
-            devicesStrArray = res.data.devices.map(item=>{
+            let devices=[].concat(res.data.devices) 
+            devicesStrArray =devices.map(item=>{
               return item.name;
             })
           }
-          
-          res.data.published=JSON.stringify(res.data.published);
-          res.data.pics=JSON.stringify(res.data.pics);
-          
-          
+         
           this.detailImgList=detailImgList;
           this.coverImgList = coverImgList;
-          this.detailData = Object.assign({},res.data);
-          this.detailData.goods = res.data.goods || [];
-          this.goods = res.data.goods || []
+        
+          this.detailData.goods =res.data.goods || [];
+          this.goods =res.data.goods || []
           this.test = devicesStrArray;
           this.detailData.devicesStrArray = devicesStrArray;
-          console.log('=======>',this.detailData)
+          this.detailData.pics=JSON.stringify(res.data.pics);
+          this.detailData.frontFloor=JSON.stringify(res.data.frontFloor);
+          this.detailData.published=JSON.stringify(res.data.published);
+          this.detailData.promoFlag=JSON.stringify(res.data.promoFlag);
+         
         }).catch((err)=>{
           this.$Notice.error({
               title:err.message

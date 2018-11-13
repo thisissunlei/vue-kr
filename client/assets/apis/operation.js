@@ -248,6 +248,37 @@ export default  {
         url: '/api/krspace-finance-web/coupon/tag-list',
         method: 'get'
     },
+    //优惠券发放--发放分页
+    'get-kmcoupon-provide-page': {
+        url: '/api/op/kmcoupon/provide/page-list',
+        method: 'get'
+    },
+     //优惠券发放--新建发放
+     'kmcoupon-provide-add': {
+        url: '/api/op/kmcoupon/provide/add',
+        method: 'post'
+    },
+     //优惠券发放--编辑发放
+     'kmcoupon-provide-edit': {
+        url: '/api/op/kmcoupon/provide/edit',
+        method: 'post'
+    },
+     //优惠券发放--发放详情
+     'get-kmcoupon-provide-detail': {
+        url: '/api/op/kmcoupon/provide/detail',
+        method: 'get'
+    },
+     //优惠券发放--删除发放记录
+     'delete-op-kmcoupon-provide': {
+        url: '/api/op/kmcoupon/provide/delete',
+        method: 'post'
+    },
+    //优惠券发放--根据批次获取优惠券
+    'get-kmcoupon-detail-by-batchNo': {
+        url: '/api/op/kmcoupon/detail-by-batchNo',
+        method: 'get'
+    },
+    
    
 }
   

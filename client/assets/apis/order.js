@@ -46,7 +46,7 @@ export default {
     },
     //获取客户 客户名称搜索
     "get-customer": {
-        url: "/zuul/user/customer/find-customers-data-sf",
+        url: "/z/us/customer/find-customers-data-sf",
      //   url: "krspace-finance-web/customer/my-customers?",
         method: "get"
     },

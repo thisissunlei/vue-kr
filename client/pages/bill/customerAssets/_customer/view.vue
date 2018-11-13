@@ -163,9 +163,8 @@
 				 let param = {
 				 	customerId:params.customer
 				 }
-				 // 头部修改  客户二次接口修改 todo 
-				this.$ajax.get('get-customer-info-detail',param).then((res)=>{
-				//	this.customerBasic = res.data; 
+				 // 头部修改  客户二次接口修改  
+				this.$ajax.get('get-customer-info-detail',param).then((res)=>{ 
 						this.customerBasic = res;
                 }).catch((err)=>{
                     this.$Notice.error({

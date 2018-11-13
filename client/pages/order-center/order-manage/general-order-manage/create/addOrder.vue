@@ -10,6 +10,7 @@
                         url="get-customers-order-currency"
                         name="formItem.customerId" 
                         :onchange="onCustomerChange"
+                        types="ajax"
                     />
                     </FormItem>
                 </Col>

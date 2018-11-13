@@ -25,11 +25,15 @@ import http from '~/plugins/http.js';
             url:{
                 type:String,
                 default:'get-customer'
-            }
+            },
+            types:{
+                type:String,
+                default:'http'
+            },
+
         },
     
         data() {
-
             return {
                 customer: '',
                 loading1: false,
@@ -53,7 +57,26 @@ import http from '~/plugins/http.js';
             }
             let list = [];
             let _this = this;
-            http.get(this.url, params, r => {
+            if(this.types==='ajax' && name ){
+                // 使用新的ajax 请求 
+                this.$ajax.get(this.url,params).then((r)=>{
+                 list = r;
+                 list.length && list.map((item) => {
+                    let obj = item;
+                    obj.label = item.company;
+                    obj.value = item.id + '';
+                    return obj;
+                });
+                _this.loading1 = false;
+
+                _this.customerOptions = list;
+                }).catch((err) => {
+                    this.$Notice.error({
+                        title: err.message
+                    });
+                 })
+            }else{
+                http.get(this.url, params, r => {
                 list = r.data.customerList;
                 list.map((item) => {
                     let obj = item;
@@ -68,15 +91,22 @@ import http from '~/plugins/http.js';
                 console.log('error--->', e)
             })
            
-
+            }
         },
         remoteCustomer(query) {
             this.loading1 = true;
             setTimeout(() => {
                 this.getCusomerList(query)
             }, 200);
-        },
-    }
+        }, 
+    },
+     watch:{
+           types(newVal){
+               if(newVal === 'ajax'){
+                   this.getCusomerList()
+               }
+           } 
+        }
 }
 </script>
 

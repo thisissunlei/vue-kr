@@ -1101,7 +1101,7 @@
                     return;
                 }
                 //换租结束时间
-                this.getSaleList(value)
+                // this.getSaleList(value)
                 this.changeThree = new Date()
                 if(this.selecedStationList.length){
                     this.clearFormThree()

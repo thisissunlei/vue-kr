@@ -28,7 +28,6 @@ export default {
     //客户基本信息详情
     'get-customer-info-detail': {
         url: '/z/us/customer/detail',
-   //     url: '/api/krspace-op-web/customer-center/info-detail',  
         method: 'get'
     },
     //新增客户  客户管理删除 

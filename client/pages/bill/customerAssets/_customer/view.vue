@@ -168,7 +168,7 @@
 						this.customerBasic = res;
                 }).catch((err)=>{
                     this.$Notice.error({
-                        title:err.message
+                        title:err.msg
                     });
                 })
 			},

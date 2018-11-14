@@ -21,7 +21,7 @@
                      <Row>  
                         <Col class="col">
                             <FormItem style="width:252px" label="客户名称" class="bill-search-class" prop="customerId">
-                            <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :labelInValue="labelInValue" :value="formItem.customerName"></selectCustomers>
+                            <selectCustomers types="ajax" name="formItem.customerId" :onchange="changeCustomer" :labelInValue="labelInValue" :value="formItem.customerName"></selectCustomers>
                             </FormItem>
                         </Col>
                         

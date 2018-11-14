@@ -115,7 +115,93 @@
                     </Col>
                 </Row>
             </DetailStyle>
+           
             <div style="padding-left:24px">
+                <!-- 感恩节活动 -->
+         <Row>
+             <Col span="18">
+                 <Row style="margin-top:20px;">
+                      <Col span="12">活动优惠码：XX1234YYY</Col>
+                      <Col span="12">添加人：张志宽</Col>
+                 </Row>
+                 <Row style="margin-top:5px;">
+                      <Col span="12">优惠码折扣：6.5折</Col>
+                      <Col span="12">状&nbsp;&nbsp;态：未核销</Col>
+                 </Row>
+                 <Row style="margin-top:20px;">
+                      <p style="margin-top:5px;">注意事项：</p>
+                      <p style="margin-top:5px;">1 只有<span style="color:red;">从砍价渠道来源的新客户</span>允许添加优惠码，其他渠道（如中介等）以及老客户请勿添加</p>
+                      <p style="margin-top:5px;">2 只有<span style="color:red;">部分社区</span>适用优惠码，请勿滥用</p>
+                      <p style="margin-top:5px;">3 添加后，请联系<span style="color:red;">王超群</span>核销此优惠码，核销前优惠码的折扣不会生效</p>
+                      <p style="margin-top:5px;">4 添加优惠码，此订单的其他信息<span style="color:red;">不能编辑</span>，如有修改请先移除</p>
+                 </Row>
+             </Col>  
+             <Col span="6" style="text-align:right;">
+                  <Row style="margin-top:20px;">
+                      <Button type="primary" style="width:100px;" >刷新折扣</Button>
+                  </Row>
+                  <Row style="margin-top:20px;">
+                      <Button type="primary" style="width:100px;" >移除优惠码</Button>
+                  </Row>
+                  <Row style="margin-top:20px;">
+                      <Button type="primary" style="width:100px;" >核销优惠码</Button> 
+                  </Row>
+             </Col>   
+        </Row>
+                 <Row style="margin-bottom:30px;">
+                    <Col span="24">
+                        <Button type="primary" @click="modalDiscountCode = true" >添加活动优惠码-（编辑页面后期删掉）</Button> 
+                    </Col>
+                </Row> 
+                 <!-- 活动优惠码 模态框 -->
+               <Modal v-model="modalDiscountCode"  title="添加活动优惠码" width="550" >
+                    <div style="text-align:center;padding:20px;">
+                            <Form ref="formValidate" label-position="left" :label-width="115" >
+                                <Row>
+                                    <Col style="text-align:left" span="24">
+                                        1 只有 <span style="color:red;">从砍价渠道来源的新客户</span>允许添加优惠码，其他渠道（如中介等）以及老客户请勿添加
+                                    </Col>
+                                </Row>    
+                                <Row>
+                                    <Col style="text-align:left" span="24">
+                                        2 只有<span style="color:red;">部分社区</span>适用优惠码，请勿滥用
+                                    </Col>
+                                </Row> 
+                                <Row>
+                                    <Col style="text-align:left" span="24">
+                                        3 添加后，请联系<span style="color:red;">王超群</span>核销此优惠码，核销前优惠码的折扣不会生效
+                                    </Col>
+                                </Row> 
+                                <Row>
+                                    <Col style="text-align:left" span="24">
+                                        4 添加优惠码，此订单的其他信息<span style="color:red;">不能编辑</span>，直到优惠码被核销或移除
+                                    </Col>
+                                </Row> 
+                                <Row style="margin-top:20px;">
+                                    <Col span="24">
+                                        <FormItem label="活 动 优 惠 码" >
+                                            <Input ></Input>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row >
+                                    <Col span="24">
+                                        <FormItem label="参加活动的手机号" >
+                                            <Input ></Input>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span="24">
+                                        <Button  size="large" style="width:100px;">取消</Button>
+                                        <Button  type="primary" size="large"  style="width:100px;margin-left: 40px;">添加</Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                    </div>
+                    <div slot="footer">
+                    </div>
+                </Modal> 
                 <Row>
                     <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
@@ -130,7 +216,6 @@
                         <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                     </div>
                     <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
-
                     </Col>
                     <Col class="col" style="max-width:560px">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
@@ -245,6 +330,7 @@ export default {
         };
 
         return {
+            modalDiscountCode:false,//优惠码模态框状态 
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],

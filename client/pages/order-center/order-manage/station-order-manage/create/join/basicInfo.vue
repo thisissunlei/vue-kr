@@ -12,7 +12,6 @@
 
             </FormItem>
             </Col>
-
             <Col class="col">
             <FormItem label="所属社区"
                 style="width:252px"

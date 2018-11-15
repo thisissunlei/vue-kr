@@ -2,19 +2,20 @@
     <div class="amount-info-panel">
         <Row style="margin-bottom:10px">
             <Col span='24'>
-                <Button type="primary"
-                    style="margin-right:20px;font-size:14px"
-                    @click="showStation">选择工位</Button>
-                <Button type="ghost"
-                    style="margin-right:20px;font-size:14px"
-                    @click="deleteStation">删除</Button>
-                <Button type="primary"
-                    style="margin-right:20px;font-size:14px"
-                    @click="openPriceButton">批量填写价格</Button>
-                <Button type="primary"
-                    style="margin-right:20px;font-size:14px"
-                    @click="openDiscountButton">批量填写折扣</Button>
+            <Button type="primary"
+                style="margin-right:20px;font-size:14px"
+                @click="showStation">选择工位</Button>
+            <Button type="ghost"
+                style="margin-right:20px;font-size:14px"
+                @click="deleteStation">删除</Button>
+            <Button type="primary"
+                style="margin-right:20px;font-size:14px"
+                @click="openPriceButton">批量填写价格</Button>
+            <Button type="primary"
+                style="margin-right:20px;font-size:14px"
+                @click="openDiscountButton">批量填写折扣</Button>
             </Col>
+
         </Row>
         <Row style="margin-bottom:10px">
             <Col span="24">
@@ -34,15 +35,16 @@
             </div>
             </Col>
         </Row>
-        <Row>
+         <!--感恩开始-->
+           <Row v-show="couponInfo.couponCode">
              <Col span="18">
-                 <Row style="margin-top:20px;">
-                      <Col span="12">活动优惠码：XX1234YYY</Col>
-                      <Col span="12">添加人：张志宽</Col>
+                 <Row  style="margin-top:20px;">
+                      <Col span="12">活动优惠码：{{couponInfo.couponCode}}</Col>
+                      <Col span="12">添加人：{{couponInfo.couponAdder}}</Col>
                  </Row>
                  <Row style="margin-top:5px;">
-                      <Col span="12">优惠码折扣：6.5折</Col>
-                      <Col span="12">状&nbsp;&nbsp;态：未核销</Col>
+                      <Col span="12">优惠码折扣：{{couponInfo.discount}}</Col>
+                      <Col span="12">状&nbsp;&nbsp;态：{{couponInfo.extStatusName}}</Col>
                  </Row>
                  <Row style="margin-top:20px;">
                       <p style="margin-top:5px;">注意事项：</p>
@@ -54,64 +56,22 @@
              </Col>  
              <Col span="6" style="text-align:right;">
                   <Row style="margin-top:20px;">
-                      <Button type="primary" style="width:100px;" >刷新折扣</Button>
+                      <Button @click="orderSeatCouponFlush"  type="primary" style="width:100px;" >刷新折扣</Button>
+                      <Button @click="orderSeatCouponRemove"  type="primary" style="width:100px;" >移除优惠码</Button>
                   </Row>
              </Col>   
         </Row>
-        <Row style="margin-top:30px;margin-bottom:30px;">
+         <Row style="margin-top:30px;margin-bottom:30px;">
             <Col span="24">
-                <Button  @click="modalDiscountCode = true" type="primary">添加活动优惠码</Button> 
+                <Button  v-show="!couponInfo.couponCode" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
             </Col>
         </Row>
-        <!-- 活动优惠码 模态框 -->
-        <Modal v-model="modalDiscountCode"  title="添加活动优惠码" width="550" >
-            <div style="text-align:center;padding:20px;">
-                    <Form ref="formValidate" label-position="left" :label-width="115">
-                        <Row>
-                            <Col style="text-align:left" span="24">
-                                1 只有 <span style="color:red;">从砍价渠道来源的新客户</span>允许添加优惠码，其他渠道（如中介等）以及老客户请勿添加
-                            </Col>
-                        </Row>    
-                         <Row>
-                            <Col style="text-align:left" span="24">
-                                2 只有<span style="color:red;">部分社区</span>适用优惠码，请勿滥用
-                            </Col>
-                        </Row> 
-                         <Row>
-                            <Col style="text-align:left" span="24">
-                                3 添加后，请联系<span style="color:red;">王超群</span>核销此优惠码，核销前优惠码的折扣不会生效
-                            </Col>
-                        </Row> 
-                         <Row>
-                            <Col style="text-align:left" span="24">
-                                4 添加优惠码，此订单的其他信息<span style="color:red;">不能编辑</span>，直到优惠码被核销或移除
-                            </Col>
-                        </Row> 
-                        <Row style="margin-top:20px;">
-                            <Col span="24">
-                                 <FormItem label="活 动 优 惠 码" >
-                                     <Input ></Input>
-                                 </FormItem>
-                            </Col>
-                        </Row>
-                        <Row >
-                            <Col span="24">
-                                 <FormItem label="参加活动的手机号" >
-                                     <Input ></Input>
-                                 </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="24">
-                                <Button  size="large" style="width:100px;">取消</Button>
-                                <Button  type="primary" size="large" style="width:100px;margin-left: 40px;">添加</Button>
-                            </Col>
-                        </Row>
-                    </Form>
-            </div>
-            <div slot="footer">
-            </div>
+         <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="550" >
+                <EddActivity @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
+                <div slot="footer">
+                </div>
         </Modal>
+        <!--感恩结束-->
         <Modal v-model="openStation"
             title="选择工位"
             ok-text="保存"
@@ -178,15 +138,36 @@ import { mapGetters } from 'vuex'
 import ListAndMap from '../../listAndMap';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import editStationPriceData from "../../listData/editStationPriceData"
+import editStationPriceData from "../../listData/editStationPriceData";
+import EddActivity from './addActivity';
 
 export default {
     components: {
-        ListAndMap
+        ListAndMap,
+        EddActivity
     },
     data() {
         return {
-            modalDiscountCode:false,//优惠码模态框 状态
+           modalDiscountCode:false,//优惠码模态框 状态
+           couponInfo:{
+               couponDiscount:"",// 折扣
+               couponAdder:"",// 姓名
+               couponStatus:"",// 是否核销
+               couponCode:"",// 优惠码
+               couponId :"",//
+            },
+            seatCouponParams:{
+                code:'',//   券编码
+                phone:'',// 手机号
+            },
+            seatCouponParamsRules:{
+                code: [
+                        { required: true, message: '优惠码不能为空', trigger: 'blur' }
+                    ],
+                phone:[
+                        { required: true, message: '手机号不能为空', trigger: 'blur' }
+                ]    
+            },
             discountReason: '',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
@@ -244,6 +225,33 @@ export default {
         }
     },
     methods: {
+        //  添加优惠券
+        submitActivity(data){
+            this.couponInfo = data;
+            this.cancelActivity();
+            this.$emit('getId',this.couponInfo);
+        },
+        orderSeatCouponFlush(){
+            this.$http.get('orderSeatCouponFlush', {couponId :this.couponInfo.couponId}).then(r => {
+                    console.log(r);
+                    if (r.code === 1) {
+                        this.couponInfo.couponDiscount = r.data.couponDiscount;
+                    }
+                    this.$Message.success('Success!');
+                }).catch(e => {
+                    this.$Notice.error({
+                        title: e.message
+                    })
+
+            })         
+        },
+        orderSeatCouponRemove(){
+             this.couponInfo={};
+        },
+        cancelActivity(){
+            this.modalDiscountCode = !this.modalDiscountCode;
+        },
+
         showStation() {
             if (!this.communityId) {
                 this.$Notice.error({

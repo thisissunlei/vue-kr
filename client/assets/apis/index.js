@@ -24,6 +24,7 @@ import doorPermmision from './doorPermmision.js';
 import KrmeetingSeat from "./krmeetingSeat.js";
 import discountSetting from './discountSetting'
 import App from "./app.js";
+import thanksgiving from "./thanksgiving.js"
 
 
 export default {
@@ -52,5 +53,6 @@ export default {
   ...doorPermmision,
   ...KrmeetingSeat,
   ...discountSetting,
-  ...App
+  ...App,
+  ...thanksgiving
 }

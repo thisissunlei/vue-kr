@@ -26,6 +26,9 @@
 				<LabelText label="机会：" v-show='opportunityStr'>
 					{{opportunityStr}}
 				</LabelText>
+        <LabelText label="渠道来源：">
+					{{basicInfo.promoCode}}
+				</LabelText>
 				<LabelText label="作废原因：" v-show='nullifyReason'>
 					{{nullifyReason}}
 				</LabelText>
@@ -66,6 +69,22 @@
 					  </LabelText>
 					  <LabelText label="折扣原因：" >
 					  	{{basicInfo.discountReason}}
+					  </LabelText>
+          </div>
+          <div v-show="orderSeatThanksgivingDayVO.couponCode">
+            <LabelText label="活动优惠码：" >
+					  	{{orderSeatThanksgivingDayVO.couponCode}}
+					  </LabelText>
+					  <LabelText label="添加人：" >
+					  	{{orderSeatThanksgivingDayVO.couponAdder}}
+					  </LabelText>
+          </div>
+          <div v-show="orderSeatThanksgivingDayVO.discount">
+            <LabelText label="优惠码折扣：" >
+					  	{{orderSeatThanksgivingDayVO.discount}}
+					  </LabelText>
+					  <LabelText label="状态：" >
+					  	{{orderSeatThanksgivingDayVO.extStatusName}}
 					  </LabelText>
           </div>
           <div>
@@ -123,6 +142,7 @@ export default {
   },
   data() {
     return {
+      orderSeatThanksgivingDayVO:{},
       stationList:[],
       nullifyReason: "",
       nullifyRemark: "",
@@ -423,6 +443,7 @@ export default {
             ? response.data.orderContractInfo
             : [];
           this.stationList=response.data.orderSeatDetailVo||[]
+          this.orderSeatThanksgivingDayVO=response.data.orderSeatThanksgivingDayVO||{}
         })
         .catch(error => {
           this.$Notice.error({

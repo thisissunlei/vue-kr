@@ -16,7 +16,7 @@
                 <RentInfo :formItem='formItem' />
             </DetailStyle>
             <DetailStyle info="商品价格明细">
-                <AmountInfo/>
+                <AmountInfo @getId="getId"/>
             </DetailStyle>
             <div style="padding-left:24px">
                 <Row>
@@ -222,6 +222,9 @@ export default {
     },
 
     methods: {
+        getId(info){
+            this.formItem.couponId=info.couponId;
+        },
         handleSubmit(name) {
             let message = '请填写完表单';
             this.$Notice.config({
@@ -357,6 +360,7 @@ export default {
             formItem.ssoName = this.sso.ssoName;
             formItem.managerId = this.managerId;
             formItem.discountReason=this.discountReason;
+            formItem.couponId=this.formItem.couponId;
             let _this = this;
             this.disabled = true;
             // return

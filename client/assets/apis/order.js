@@ -246,7 +246,7 @@ export default {
     },
     //换租详情获取接口
     "get-replace-detail": {
-        url: "/api/krspace-op-web/order-seat-replace/view",
+        url: "/ben/krspace-op-web/order-seat-replace/view",
         method: "get"
     },
     // 获取服务费明细

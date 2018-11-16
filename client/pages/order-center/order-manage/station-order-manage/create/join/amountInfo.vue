@@ -68,7 +68,7 @@
                 <Button  v-show="!couponInfo.couponCode&&isJoin=='IN'" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
             </Col>
         </Row>
-         <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="550" >
+         <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="600" >
                 <EddCoupon @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
                 <div slot="footer"></div>
         </Modal>

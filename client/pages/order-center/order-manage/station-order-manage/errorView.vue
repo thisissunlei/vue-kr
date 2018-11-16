@@ -13,7 +13,6 @@
                 </LabelText>
                 <LabelText :inline="inline" label="换租原因：" class='reason'>
                 </LabelText>
-
             </Card>
             <span class="space"></span>
             <Card id="step-two">

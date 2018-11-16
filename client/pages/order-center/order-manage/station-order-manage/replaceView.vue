@@ -16,8 +16,11 @@
                 <LabelText  :inline="inline" label="社区名称：">
                     {{formItem.communityName}}
                 </LabelText>
-                <LabelText :inline="inline" label="换租原因：" class='reason'>
+                <LabelText :inline="inline" label="换租原因：">
                     {{formItem.replaceMemo || '无'}}
+                </LabelText>
+                <LabelText :inline="inline" label="渠道来源：" >
+                    {{formItem.promoCode || '无'}}
                 </LabelText>
 
             </Card>

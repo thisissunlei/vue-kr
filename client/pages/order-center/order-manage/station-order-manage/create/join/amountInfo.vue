@@ -35,8 +35,8 @@
             </div>
             </Col>
         </Row>
-         <!--感恩开始-->
-           <Row v-show="couponInfo.couponCode">
+        <!--感恩开始-->
+        <Row v-show="couponInfo.couponCode">
              <Col span="18">
                  <Row  style="margin-top:20px;">
                       <Col span="12">活动优惠码：{{couponInfo.couponCode}}</Col>
@@ -57,19 +57,20 @@
              <Col span="6" style="text-align:right;">
                   <Row style="margin-top:20px;">
                       <Button @click="orderSeatCouponFlush"  type="primary" style="width:100px;" >刷新折扣</Button>
+                  </Row>
+                  <Row style="margin-top:20px;">
                       <Button @click="orderSeatCouponRemove"  type="primary" style="width:100px;" >移除优惠码</Button>
                   </Row>
              </Col>   
-        </Row>
+         </Row>
          <Row style="margin-top:30px;margin-bottom:30px;">
             <Col span="24">
                 <Button  v-show="!couponInfo.couponCode" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
             </Col>
         </Row>
          <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="550" >
-                <EddActivity @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
-                <div slot="footer">
-                </div>
+                <EddCoupon @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
+                <div slot="footer"></div>
         </Modal>
         <!--感恩结束-->
         <Modal v-model="openStation"
@@ -139,20 +140,22 @@ import ListAndMap from '../../listAndMap';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import editStationPriceData from "../../listData/editStationPriceData";
-import EddActivity from './addActivity';
+//添加优惠码
+import EddCoupon from '../../addCoupon';
 
 export default {
     components: {
         ListAndMap,
-        EddActivity
+        EddCoupon
     },
     data() {
         return {
+           //优惠开始
            modalDiscountCode:false,//优惠码模态框 状态
            couponInfo:{
-               couponDiscount:"",// 折扣
+               discount:"",// 折扣
                couponAdder:"",// 姓名
-               couponStatus:"",// 是否核销
+               extStatusName:"",// 是否核销
                couponCode:"",// 优惠码
                couponId :"",//
             },
@@ -160,14 +163,7 @@ export default {
                 code:'',//   券编码
                 phone:'',// 手机号
             },
-            seatCouponParamsRules:{
-                code: [
-                        { required: true, message: '优惠码不能为空', trigger: 'blur' }
-                    ],
-                phone:[
-                        { required: true, message: '手机号不能为空', trigger: 'blur' }
-                ]    
-            },
+            //优惠结束
             discountReason: '',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
@@ -225,15 +221,16 @@ export default {
         }
     },
     methods: {
-        //  添加优惠券
+        /**优惠券开始 */
+        //添加优惠券
         submitActivity(data){
             this.couponInfo = data;
             this.cancelActivity();
-            this.$emit('getId',this.couponInfo);
+            this.$store.commit('getCouponId', this.couponInfo)
         },
+        //刷新优惠折扣
         orderSeatCouponFlush(){
             this.$http.get('orderSeatCouponFlush', {couponId :this.couponInfo.couponId}).then(r => {
-                    console.log(r);
                     if (r.code === 1) {
                         this.couponInfo.couponDiscount = r.data.couponDiscount;
                     }
@@ -245,13 +242,15 @@ export default {
 
             })         
         },
+        //移除
         orderSeatCouponRemove(){
              this.couponInfo={};
         },
+        //添加开关
         cancelActivity(){
             this.modalDiscountCode = !this.modalDiscountCode;
         },
-
+        /**优惠券结束 */
         showStation() {
             if (!this.communityId) {
                 this.$Notice.error({

@@ -1,5 +1,5 @@
  <template>
-  <Form  :model="seatCouponParams" :rules="seatCouponParamsRules" ref="formValidate" label-position="left" :label-width="130">
+  <Form  :model="seatCouponParams" :rules="seatCouponParamsRules" ref="addCouformValidate" label-position="left" :label-width="130" style="padding:20px 20px 0 20px;">
             <Row>
                 <Col style="text-align:left" span="24">
                     1 只有 <span style="color:red;">从砍价渠道来源的新客户</span>允许添加优惠码，其他渠道（如中介等）以及老客户请勿添加
@@ -35,8 +35,8 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="24">
-                    <Button  size="large" style="width:100px;" @cancel="cancel">取消</Button>
+                <Col style="text-align:center;">
+                    <Button  size="large" style="width:100px;" @click="cancel">取消</Button>
                     <Button  @click="postOrderSeatCouponCheck" type="primary" size="large" style="width:100px;margin-left: 40px;">添加</Button>
                 </Col>
             </Row>
@@ -46,7 +46,6 @@
 
 <script>
 export default {
-  name: "HeighSearch",
   props: {
     mask: String,
     keys: String,
@@ -55,35 +54,35 @@ export default {
   data() {
     return {
       seatCouponParams:{
-                code:'',//   券编码
-                phone:'',// 手机号
+            code:'',//   券编码
+            phone:'',// 手机号
         },
         seatCouponParamsRules:{
             code: [
-                    { required: true, message: '优惠码不能为空', trigger: 'blur' }
+                    { required: true, message: '优惠码不能为空', trigger: 'change' }
                 ],
             phone:[
-                    { required: true, message: '手机号不能为空', trigger: 'blur' }
+                    { required: true, message: '手机号不能为空', trigger: 'change' }
             ]    
         }
     };
   },
-  mounted() {
-   
-  },
   methods: {
     //  添加优惠券
     postOrderSeatCouponCheck() {
-        this.$http.post('orderSeatCouponCheck', this.seatCouponParams).then(r => {
-            if (r.code === 1) {
-                this.$emit('submit',r.data);
-            }
-        }).catch(e => {
-            this.$Notice.error({
-                title: e.message
-            })
-
-        })
+      this.$refs['addCouformValidate'].validate((valid) => {
+          if(valid){
+                this.$http.post('orderSeatCouponCheck', this.seatCouponParams).then(r => {
+                    if (r.code === 1) {
+                        this.$emit('submit',r.data);
+                    }
+                }).catch(e => {
+                    this.$Notice.error({
+                        title: e.message
+                    })
+                })
+          }
+      })
     },
     cancel(){
         this.$emit('cancel');
@@ -91,20 +90,3 @@ export default {
   }
 };
 </script>
-
-<style lang='less' scoped>
-.bill-search-class {
-  display: inline-block;
-  width: 50%;
-  padding-left: 32px;
-}
-.bill-search {
-  display: inline-block;
-  padding-left: 32px;
-  .u-date-txt {
-    padding: 0 25px;
-    font-size: 14px;
-    color: #666;
-  }
-}
-</style>  

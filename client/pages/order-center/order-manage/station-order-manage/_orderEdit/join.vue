@@ -6,18 +6,18 @@
                 <Row>
                     <Col class="col">
                     <FormItem label="客户名称" style="width:252px">
-                        <selectCustomers :disabled='customerdisabled'  name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
+                        <selectCustomers :disabled='customerdisabled||couponDisabled'  name="formItem.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem label="所属社区" style="width:252px">
-                        <selectCommunities :disabled='cummunitydisabled'  test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                        <selectCommunities :disabled='cummunitydisabled||couponDisabled'  test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                     </Col>
                     <Col class="col">
                     <FormItem label="销售员" style="width:252px">
-                        <SelectSaler :disabled='salerdisabled' name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <SelectSaler :disabled='salerdisabled||couponDisabled' name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                     </Col>
 
@@ -25,7 +25,7 @@
                     <FormItem v-bind:class="{requiremark:!OpportunityRequired}" label="机会" style="width:252px" prop="salerId" v-show="showSaleChance">
                         <SelectChance 
                             type='edit' 
-                            :disabled='chancedisabled' 
+                            :disabled='chancedisabled||couponDisabled' 
                             name="formItem.salerId" 
                             @onChange="changeChance" 
                             @gotChanceList='handleGotChancelist' 
@@ -40,7 +40,7 @@
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
-                <div class="info-button"><Button type="primary" @click="addEditOpen" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
+                <div class="info-button"><Button type="primary" @click="addEditOpen" :disabled="couponDisabled" class='join-btn'>{{isAddEdit?'变更':'添加'}}</Button></div>
                 <Row style="margin-bottom:30px">                
                     <div v-if="!isAddEdit" style="margin-bottom:20px;color:#ed3f14;">主管理员信息必填，请点击右上角按钮添加</div>
                     <div v-if="isAddEdit">
@@ -62,20 +62,20 @@
                 <Row style="margin-bottom:30px">
                     <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
-                        <DatePicker type="date" placeholder="租赁开始日期" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <DatePicker :disabled="couponDisabled" type="date" placeholder="租赁开始日期" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
 
                     </Col>
                     <Col class="col" v-if="false">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                        <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                        <DatePicker :disabled="couponDisabled" type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                     </Col>
 
                     <Col class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                        <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTimeStatus"></DatePicker>
+                        <DatePicker :disabled="couponDisabled" type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTimeStatus"></DatePicker>
                     </FormItem>
                     </Col>
                     <Col class="col">
@@ -85,7 +85,7 @@
                     </Col>
                     <Col class="col">
                     <FormItem label="签署日期" style="width:252px" prop="signDate">
-                        <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                        <DatePicker :disabled="couponDisabled" type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
@@ -93,10 +93,10 @@
             </DetailStyle>
             <DetailStyle info="商品价格明细">
                 <Row style="margin-bottom:10px">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
-                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
-                    <Button type="primary" style="font-size:14px" @click="openPriceButton">批量填写价格</Button>
-                    <Button type="primary" style="margin-left:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
+                    <Button type="primary" :disabled="couponDisabled" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
+                    <Button type="ghost" :disabled="couponDisabled" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="primary" :disabled="couponDisabled" style="font-size:14px" @click="openPriceButton">批量填写价格</Button>
+                    <Button type="primary" :disabled="couponDisabled" style="margin-left:20px;font-size:14px" @click="openDiscountButton">批量填写折扣</Button>
                     <span style='position: absolute;right: 0;bottom: 7px;color:red'>{{discountErrorStr}}</span>
                 </Row>
                 <Row style="margin-bottom:10px">
@@ -105,6 +105,7 @@
                         <div class="total-money" v-if="stationList.length">
                             <div class="left" style="padding-left: 10px;"> <span>折扣原因：</span><Input style="width:400px"
                                 :maxlength="200"
+                                :disabled="couponDisabled"
                                 v-model="formItem.discountReason"></Input>
                             </div>
                         <div class="right"> <span>服务费总计</span>
@@ -116,7 +117,7 @@
                 </Row>
             </DetailStyle>
              <!--感恩开始-->
-                <Row v-show="orderSeatThanksgivingDayVO.couponCode">
+                <Row v-show="orderSeatThanksgivingDayVO.couponCode" style="padding:0 20px 20px 20px;">
                     <Col span="18">
                         <Row   style="margin-top:20px;">
                             <Col span="12">活动优惠码：{{orderSeatThanksgivingDayVO.couponCode}}</Col>
@@ -136,28 +137,31 @@
                     </Col>  
                     <Col span="6" style="text-align:right;"  v-show="!orderCouponUse">
                         <Row style="margin-top:20px;">
-                            <Button @click="orderSeatCouponFlush"  type="primary" style="width:100px;" >刷新折扣</Button>
-                            <Button @click="orderSeatCouponRemove"  type="primary" style="width:100px;" >移除优惠码</Button>
-                            <Button @click="orderSeatCouponUse"  type="primary" style="width:100px;" >核销优惠码</Button>
+                            <Button @click="orderSeatCouponFlush" :disabled="couponDisabled" type="primary" style="width:100px;" >刷新折扣</Button>
+                        </Row>
+                        <Row style="margin-top:20px;">
+                            <Button @click="orderSeatCouponRemove"  :disabled="!couponDisabled" type="primary" style="width:100px;" >移除优惠码</Button>
+                        </Row>
+                        <Row style="margin-top:20px;">
+                            <Button @click="orderSeatCouponUse" :disabled="!couponDisabled" v-show="couponUsed" type="primary" style="width:100px;" >核销优惠码</Button>
                         </Row>
                     </Col>   
                 </Row>
-                <Row style="margin-top:30px;margin-bottom:30px;" v-show="!orderSeatThanksgivingDayVO.couponCode||!orderCouponUse">
+                <Row style="margin-top:30px;margin-bottom:30px;padding-left:20px;" v-show="!orderSeatThanksgivingDayVO.couponCode&&!orderCouponUse">
                     <Col span="24">
                         <Button  @click="cancelActivity" type="primary">添加活动优惠码</Button> 
                     </Col>
                 </Row>
                 <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="550" >
-                        <EddActivity @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
-                        <div slot="footer">
-                        </div>
+                        <EddCoupon @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
+                        <div slot="footer"></div>
                 </Modal>
               <!--感恩结束-->
             <div style="padding-left:24px">
                 <Row>
                     <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker>
+                        <DatePicker type="date" :disabled="couponDisabled" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
@@ -165,7 +169,7 @@
                     <Col class="col">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                     <div style="display:block;min-width:252px">
-                        <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
+                        <span v-for="types in payList" :style="couponDisabled?'cursor:no-drop':''" :key="types.value" class="button-list"  v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                     </div>
                     <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
@@ -173,7 +177,7 @@
                     <Col class="col" style="max-width:560px">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                     <div style="display:block;min-width:252px">
-                        <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}
+                        <span v-for="types in depositList" :style="couponDisabled?'cursor:no-drop':''" :key="types.value" class="button-list"  v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}
                         </span>
                     </div>
                     <div class="pay-error" v-if="errorAmount">请选择付款方式</div>
@@ -182,7 +186,7 @@
 
             </div>
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
+                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)||couponDisabled">提交</Button>
             </FormItem>
 
         </Form>
@@ -266,7 +270,7 @@ import ListAndMap from '../listAndMap';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
 import editStationPriceData from "../listData/editStationPriceData"
-import EddActivity from './addActivity';
+import EddCoupon from '../addCoupon';
 
 
 
@@ -284,28 +288,21 @@ export default {
         };
 
         return {
+            //优惠开始
+            //权限
+           couponDisabled:false,
+           couponUsed:true,
            orderCouponUse:false,
            orderSeatThanksgivingDayVO:{},
            modalDiscountCode:false,//优惠码模态框 状态
            couponInfo:{
-               couponDiscount:"",// 折扣
+               discount:"",// 折扣
                couponAdder:"",// 姓名
-               couponStatus:"",// 是否核销
+               extStatusName:"",// 是否核销
                couponCode:"",// 优惠码
                couponId :"",//
             },
-            seatCouponParams:{
-                code:'',//   券编码
-                phone:'',// 手机号
-            },
-            seatCouponParamsRules:{
-                code: [
-                        { required: true, message: '优惠码不能为空', trigger: 'blur' }
-                    ],
-                phone:[
-                        { required: true, message: '手机号不能为空', trigger: 'blur' }
-                ]    
-            },
+            //优惠结束
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],
@@ -383,7 +380,7 @@ export default {
                 { label: '6个月', value: '6' },
             ],
             youhui: [],
-            columns4: editStationPriceData.call(this),
+            columns4: editStationPriceData.call(this,this.couponDisabled),
             stationList: [],
             floors: [],
             selectedStation: [],
@@ -458,7 +455,7 @@ export default {
         ListAndMap,
         LabelText,
         AddManager,
-        EddActivity
+        EddCoupon
 
     },
     mounted() {
@@ -498,6 +495,8 @@ export default {
         },
     },
     methods: {
+        /**优惠券开始 */
+        //核销优惠券
         orderSeatCouponUse(){
             let params={
                 orderId:this.$route.params.orderEdit,
@@ -505,6 +504,8 @@ export default {
             }
             this.$http.get('orderSeatCouponUse', params).then(r => {
                     this.orderCouponUse=true;
+                    this.couponDisabled=false;
+                    this.columns4=editStationPriceData.call(this,this.couponDisabled),
                     this.$Message.success('Success!');
             }).catch(e => {
                 this.$Notice.error({
@@ -512,11 +513,12 @@ export default {
                 })
             })
         },
-        //  添加优惠券
+        //添加优惠券
         submitActivity(data){
             this.orderSeatThanksgivingDayVO = data;
             this.cancelActivity();
         },
+        //刷新折扣
         orderSeatCouponFlush(){
             this.$http.get('orderSeatCouponFlush', {couponId :this.orderSeatThanksgivingDayVO.couponId}).then(r => {
                     console.log(r);
@@ -530,6 +532,7 @@ export default {
                 })
             })
         },
+        //移除优惠券
         orderSeatCouponRemove(){
             let params={
                 orderId:this.$route.params.orderEdit,
@@ -537,6 +540,8 @@ export default {
             }
              this.$http.get('orderSeatCouponRemove', params).then(r => {
                 this.orderSeatThanksgivingDayVO={};
+                this.couponDisabled=false;
+                this.columns4=editStationPriceData.call(this,this.couponDisabled),
                 this.$Message.success('Success!');
             }).catch(e => {
                 this.$Notice.error({
@@ -547,7 +552,7 @@ export default {
         cancelActivity(){
             this.modalDiscountCode = !this.modalDiscountCode;
         },
-
+        /**优惠券结束 */
         //苏岭增加客户主管理员开始
         addManagerSubmit(params){
             this.submitManager && this.submitManager(this.managerSubmit);
@@ -816,9 +821,10 @@ export default {
                 this.isManager=(data.communityId&&data.customerId)?true:false;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
-                console.log('datase--',data.orderSeatThanksgivingDayVO);
                 this.orderSeatThanksgivingDayVO=data.orderSeatThanksgivingDayVO||{};
-              
+                this.couponUsed=data.couponUsed;
+                this.couponDisabled=this.orderSeatThanksgivingDayVO.couponCode?true:false;
+                this.columns4=editStationPriceData.call(this,this.couponDisabled);
             }, e => {
                 _this.$Notice.error({
                     title: e.message
@@ -1380,11 +1386,17 @@ export default {
             });
         },
         selectDeposit (value) {
+            if(this.couponDisabled){
+              return ;
+            }
             // 选择保证金
             this.depositAmount = value
             this.errorAmount = false;
         },
         selectPayType (value) {
+            if(this.couponDisabled){
+              return ;
+            }
             // 选择付款方式
             this.installmentType = value;
             this.errorPayType = false;

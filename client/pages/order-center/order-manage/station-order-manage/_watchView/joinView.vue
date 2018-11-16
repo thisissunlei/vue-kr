@@ -71,22 +71,22 @@
 					  	{{basicInfo.discountReason}}
 					  </LabelText>
           </div>
+          <!--感恩开始-->
           <div v-show="orderSeatThanksgivingDayVO.couponCode">
             <LabelText label="活动优惠码：" >
-					  	{{orderSeatThanksgivingDayVO.couponCode}}
-					  </LabelText>
-					  <LabelText label="添加人：" >
-					  	{{orderSeatThanksgivingDayVO.couponAdder}}
-					  </LabelText>
-          </div>
-          <div v-show="orderSeatThanksgivingDayVO.discount">
+              {{orderSeatThanksgivingDayVO.couponCode}}
+            </LabelText>
+            <LabelText label="添加人：" >
+              {{orderSeatThanksgivingDayVO.couponAdder}}
+            </LabelText>
             <LabelText label="优惠码折扣：" >
-					  	{{orderSeatThanksgivingDayVO.discount}}
-					  </LabelText>
-					  <LabelText label="状态：" >
-					  	{{orderSeatThanksgivingDayVO.extStatusName}}
-					  </LabelText>
+              {{orderSeatThanksgivingDayVO.discount}}
+            </LabelText>
+            <LabelText label="状态：" >
+              {{orderSeatThanksgivingDayVO.extStatusName}}
+            </LabelText>
           </div>
+          <!--感恩结束-->
           <div>
 					  <LabelText label="服务费总额：" style="color:red;">
 					  	{{basicInfo.seatRentAmount| thousand}}&nbsp;&nbsp;&nbsp;{{basicInfo.seatRentAmount| amountInWords}}

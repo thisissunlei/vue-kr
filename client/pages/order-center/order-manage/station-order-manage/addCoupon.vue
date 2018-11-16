@@ -53,9 +53,11 @@ export default {
   },
   data() {
     const validatePhone = (rule, value, callback) => {
-        //var reg =  /^1[34578]\d{9}$/;
+        var reg =  /^1[34578]\d{9}$/;
         if(!value){
             callback('手机号必填');
+        }else if (value&&!reg.test(value)) {
+            callback('请输入正确的手机号');
         }else{
             callback();
         }

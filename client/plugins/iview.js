@@ -3,7 +3,7 @@ import iView from 'iview';
 import filters from '~/filters'
 
 import http from '~/plugins/http';
-import ajax from '@/plugins/ajax';
+import ajax from '~/plugins/ajaxs';
 
 import store from '~/store'
 Vue.use(store);

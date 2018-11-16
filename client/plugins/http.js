@@ -1,6 +1,5 @@
 import axios from 'axios'
 import APIS from '@/assets/apis';
-import httpEnvs from './envs';
 import Qs from 'qs';
 
 axios.defaults.timeout = 10000

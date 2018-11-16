@@ -534,11 +534,12 @@ export default {
         },
         //刷新折扣
         orderSeatCouponFlush(){
-            this.$http.get('orderSeatCouponFlush', {couponId :this.orderSeatThanksgivingDayVO.couponId}).then(r => {
-                    console.log(r);
-                    if (r.code === 1) {
-                        this.orderSeatThanksgivingDayVO.discount = r.data.couponDiscount;
-                    }
+            let params={
+                orderId:this.$route.params.orderEdit,
+                couponId :this.orderSeatThanksgivingDayVO.couponId
+            }
+            this.$http.get('orderSeatCouponFlush',params).then(r => {
+                this.orderSeatThanksgivingDayVO.discount = r.data.couponDiscount;
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message

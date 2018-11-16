@@ -52,6 +52,14 @@ export default {
     params: {}
   },
   data() {
+    const validatePhone = (rule, value, callback) => {
+        //var reg =  /^1[34578]\d{9}$/;
+        if(!value){
+            callback('手机号必填');
+        }else{
+            callback();
+        }
+    };
     return {
       seatCouponParams:{
             code:'',//   券编码
@@ -62,7 +70,7 @@ export default {
                     { required: true, message: '优惠码不能为空', trigger: 'change' }
                 ],
             phone:[
-                    { required: true, message: '手机号不能为空', trigger: 'change' }
+                    { validator: validatePhone,required: true,trigger: 'change' }
             ]    
         }
     };
@@ -72,10 +80,12 @@ export default {
     postOrderSeatCouponCheck() {
       this.$refs['addCouformValidate'].validate((valid) => {
           if(valid){
-                this.$http.post('orderSeatCouponCheck', this.seatCouponParams).then(r => {
-                    if (r.code === 1) {
-                        this.$emit('submit',r.data);
-                    }
+                let newParams={
+                    phone:this.seatCouponParams.phone.trim(),
+                    code:this.seatCouponParams.code.trim(),
+                }
+                this.$http.post('orderSeatCouponCheck',newParams).then(r => {
+                   this.$emit('submit',r.data);
                 }).catch(e => {
                     this.$Notice.error({
                         title: e.message

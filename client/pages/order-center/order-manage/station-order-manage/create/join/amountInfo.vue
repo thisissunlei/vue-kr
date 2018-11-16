@@ -65,7 +65,7 @@
          </Row>
          <Row style="margin-top:30px;margin-bottom:30px;">
             <Col span="24">
-                <Button  v-show="!couponInfo.couponCode" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
+                <Button  v-show="!couponInfo.couponCode&&isJoin=='IN'" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
             </Col>
         </Row>
          <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="550" >
@@ -151,6 +151,7 @@ export default {
     data() {
         return {
            //优惠开始
+           isJoin:'IN',
            modalDiscountCode:false,//优惠码模态框 状态
            couponInfo:{
                discount:"",// 折扣
@@ -218,10 +219,40 @@ export default {
         },
         discountReason(val) {
             this.$store.commit('changeDiscountReson', val)
+        },
+        customerId(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
+        },
+        communityId(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
+        },
+        startDate(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
         }
     },
     methods: {
         /**优惠券开始 */
+        isAddOrJoin(){  
+           let params={
+               customerId:this.customerId,
+               communityId:this.communityId,
+               start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00", this.startDate)
+           }
+           this.$http.post('orderSeatCouponIsAdd', params).then(r => {
+                    this.isJoin=r.data.orderType;
+                }).catch(e => {
+                    this.$Notice.error({
+                    title: e.message
+                  })
+
+               })        
+        },
         //添加优惠券
         submitActivity(data){
             this.couponInfo = data;
@@ -232,7 +263,7 @@ export default {
         orderSeatCouponFlush(){
             this.$http.get('orderSeatCouponFlush', {couponId :this.couponInfo.couponId}).then(r => {
                     if (r.code === 1) {
-                        this.couponInfo.couponDiscount = r.data.couponDiscount;
+                        this.couponInfo.discount = r.data.couponDiscount;
                     }
                     this.$Message.success('Success!');
                 }).catch(e => {

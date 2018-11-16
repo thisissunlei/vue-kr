@@ -19,6 +19,16 @@ export default  {
     'orderSeatCouponUse': {
         url: '/ben/op/order-seat/seat-coupon-used',
         method: 'post'
+    },
+    //优惠券再次添加
+    'orderSeatCouponAdd': {
+        url: '/ben/op/order-seat/seat-coupon-add',
+        method: 'post'
+    },
+    //优惠券判断是入还是增
+    'orderSeatCouponIsAdd': {
+        url: '/ben/op/order-seat/order-seat-type',
+        method: 'post'
     }
   }
 

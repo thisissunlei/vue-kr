@@ -80,7 +80,7 @@
               {{orderSeatThanksgivingDayVO.couponAdder}}
             </LabelText>
             <LabelText label="优惠码折扣：" >
-              {{orderSeatThanksgivingDayVO.discount}}
+              {{orderSeatThanksgivingDayVO.discount?orderSeatThanksgivingDayVO.discount+'折':''}}
             </LabelText>
             <LabelText label="状态：" >
               {{orderSeatThanksgivingDayVO.extStatusName}}

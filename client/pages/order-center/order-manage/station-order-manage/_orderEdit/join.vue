@@ -137,13 +137,13 @@
                     </Col>  
                     <Col span="6" style="text-align:right;"  v-show="!orderCouponUse">
                         <Row style="margin-top:20px;">
-                            <Button @click="orderSeatCouponFlush" :disabled="couponDisabled" type="primary" style="width:100px;" >刷新折扣</Button>
+                            <Button @click="orderSeatCouponFlush"  type="primary" style="width:100px;" >刷新折扣</Button>
                         </Row>
                         <Row style="margin-top:20px;">
-                            <Button @click="orderSeatCouponRemove"  :disabled="!couponDisabled" type="primary" style="width:100px;" >移除优惠码</Button>
+                            <Button @click="orderSeatCouponRemove"  type="primary" style="width:100px;" >移除优惠码</Button>
                         </Row>
                         <Row style="margin-top:20px;">
-                            <Button @click="orderSeatCouponUse" :disabled="!couponDisabled" v-show="couponUsed" type="primary" style="width:100px;" >核销优惠码</Button>
+                            <Button @click="orderSeatCouponUse" v-show="couponUsed" type="primary" style="width:100px;" >核销优惠码</Button>
                         </Row>
                     </Col>   
                 </Row>
@@ -186,7 +186,7 @@
 
             </div>
             <FormItem style="padding-left:24px;margin-top:40px">
-                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)||couponDisabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('formItem')" v-if='!discountErrorStr' :disabled="disabled||Boolean(discountErrorStr)">提交</Button>
             </FormItem>
 
         </Form>
@@ -505,8 +505,7 @@ export default {
             this.$http.get('orderSeatCouponUse', params).then(r => {
                     this.orderCouponUse=true;
                     this.couponDisabled=false;
-                    this.columns4=editStationPriceData.call(this,this.couponDisabled),
-                    this.$Message.success('Success!');
+                    this.columns4=editStationPriceData.call(this,this.couponDisabled)
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
@@ -515,8 +514,23 @@ export default {
         },
         //添加优惠券
         submitActivity(data){
-            this.orderSeatThanksgivingDayVO = data;
-            this.cancelActivity();
+            let params={
+                orderId:this.$route.params.orderEdit,
+                couponId :data.couponId
+            }
+            this.$http.post('orderSeatCouponAdd',params).then(r => {
+                this.couponDisabled=true;
+                if(!this.orderSeatThanksgivingDayVO.couponCode){
+                    this.couponUsed=true;
+                }
+                this.orderSeatThanksgivingDayVO =Object.assign({},data);
+                this.columns4=editStationPriceData.call(this,this.couponDisabled)
+                this.cancelActivity();
+            }).catch(e => {
+                this.$Notice.error({
+                    title: e.message
+                })
+            })
         },
         //刷新折扣
         orderSeatCouponFlush(){
@@ -525,7 +539,6 @@ export default {
                     if (r.code === 1) {
                         this.orderSeatThanksgivingDayVO.discount = r.data.couponDiscount;
                     }
-                    this.$Message.success('Success!');
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
@@ -541,8 +554,7 @@ export default {
              this.$http.get('orderSeatCouponRemove', params).then(r => {
                 this.orderSeatThanksgivingDayVO={};
                 this.couponDisabled=false;
-                this.columns4=editStationPriceData.call(this,this.couponDisabled),
-                this.$Message.success('Success!');
+                this.columns4=editStationPriceData.call(this,this.couponDisabled)
             }).catch(e => {
                 this.$Notice.error({
                     title: e.message
@@ -925,6 +937,7 @@ export default {
             //苏岭结束
 
             formItem.discountReason=this.formItem.discountReason;
+            formItem.couponId=this.orderSeatThanksgivingDayVO.couponId;
 
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';

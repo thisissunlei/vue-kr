@@ -56,7 +56,7 @@ export default {
         var reg =  /^1[34578]\d{9}$/;
         if(!value){
             callback('手机号必填');
-        }else if (value&&!reg.test(value)) {
+        }else if (value&&!reg.test(value.trim())) {
             callback('请输入正确的手机号');
         }else{
             callback();

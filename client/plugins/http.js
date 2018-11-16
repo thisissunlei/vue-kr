@@ -16,8 +16,10 @@ axios.interceptors.request.use(config => {
   // console.log(config,"=====")
   if(config.method  == 'post' || config.method  == 'put'){
     if(!config.data.isPut){
-      let data = Qs.stringify(config.data);
-        config.data = data;
+        if( (typeof config.data)==='object') {
+            let data = Qs.stringify(config.data);
+            config.data = data;
+         }
     }else{
       delete config.data.isPut;
     }

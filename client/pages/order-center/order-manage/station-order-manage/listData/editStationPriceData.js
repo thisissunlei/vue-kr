@@ -348,10 +348,13 @@ export default function(isCoupon,priceDetail = false) {
               style: {
                 color: "rgb(43, 133, 228)",
                 textAlign: "center",
-                cursor: "pointer"
+                cursor: isCoupon?'no-drop':"pointer",
               },
               on: {
                 click: () => {
+                  if(isCoupon){
+                    return ;
+                  }
                   console.log("删除商品明细行", params.row._index);
                   this.delStationByIndex(params.row._index);
                 }

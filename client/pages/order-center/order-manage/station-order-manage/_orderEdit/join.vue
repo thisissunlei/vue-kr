@@ -117,7 +117,7 @@
                 </Row>
             </DetailStyle>
              <!--感恩开始-->
-                <Row v-show="orderSeatThanksgivingDayVO.couponCode" style="padding:0 20px 20px 20px;">
+                <Row v-show="orderSeatThanksgivingDayVO.couponCode" style="padding:0 25px 20px 25px;">
                     <Col span="18">
                         <Row   style="margin-top:20px;">
                             <Col span="12">活动优惠码：{{orderSeatThanksgivingDayVO.couponCode}}</Col>

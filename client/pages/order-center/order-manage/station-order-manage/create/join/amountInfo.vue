@@ -261,7 +261,11 @@ export default {
         },
         //刷新优惠折扣
         orderSeatCouponFlush(){
-            this.$http.get('orderSeatCouponFlush', {couponId :this.couponInfo.couponId}).then(r => {
+            let params={
+                orderId:'',
+                couponId :this.couponInfo.couponId
+            }
+            this.$http.get('orderSeatCouponFlush',params).then(r => {
                    this.couponInfo.discount = r.data.couponDiscount;
                 }).catch(e => {
                     this.$Notice.error({

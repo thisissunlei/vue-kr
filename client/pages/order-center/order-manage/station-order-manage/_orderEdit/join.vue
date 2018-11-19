@@ -520,9 +520,6 @@ export default {
             }
             this.$http.post('orderSeatCouponAdd',params).then(r => {
                 this.couponDisabled=true;
-                if(!this.orderSeatThanksgivingDayVO.couponCode){
-                    this.couponUsed=true;
-                }
                 this.orderSeatThanksgivingDayVO =Object.assign({},data);
                 this.columns4=editStationPriceData.call(this,this.couponDisabled)
                 this.cancelActivity();
@@ -836,7 +833,7 @@ export default {
                 //苏岭结束
                 let thanksObj=data.orderSeatThanksgivingDayVO;
                 this.orderSeatThanksgivingDayVO=thanksObj||{};
-                this.couponUsed=data.couponUsed;
+                this.couponUsed=data.couponUsed===true?true:false;
                 if(thanksObj&&thanksObj.couponCode){
                     this.orderCouponUse=thanksObj.extStatusName==='已核销'?true:false;
                     this.couponDisabled=thanksObj.couponCode&&thanksObj.extStatusName!=='已核销'?true:false;

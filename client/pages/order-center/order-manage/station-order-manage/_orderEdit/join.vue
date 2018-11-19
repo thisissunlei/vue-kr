@@ -834,9 +834,13 @@ export default {
                 this.isManager=(data.communityId&&data.customerId)?true:false;
                 this.customerInfo=Object.assign({},data);
                 //苏岭结束
-                this.orderSeatThanksgivingDayVO=data.orderSeatThanksgivingDayVO||{};
+                let thanksObj=data.orderSeatThanksgivingDayVO;
+                this.orderSeatThanksgivingDayVO=thanksObj||{};
                 this.couponUsed=data.couponUsed;
-                this.couponDisabled=this.orderSeatThanksgivingDayVO.couponCode?true:false;
+                if(thanksObj&&thanksObj.couponCode){
+                    this.orderCouponUse=thanksObj.extStatusName==='已核销'?true:false;
+                    this.couponDisabled=thanksObj.couponCode&&thanksObj.extStatusName!=='已核销'?true:false;
+                }
                 this.columns4=editStationPriceData.call(this,this.couponDisabled);
             }, e => {
                 _this.$Notice.error({

@@ -505,6 +505,7 @@ export default {
             this.$http.get('orderSeatCouponUse', params).then(r => {
                     this.orderCouponUse=true;
                     this.couponDisabled=false;
+                    this.orderSeatThanksgivingDayVO.extStatusName='已核销';
                     this.columns4=editStationPriceData.call(this,this.couponDisabled)
             }).catch(e => {
                 this.$Notice.error({

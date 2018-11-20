@@ -35,6 +35,44 @@
             </div>
             </Col>
         </Row>
+        <!--感恩开始-->
+        <Row v-show="couponInfo.couponCode">
+             <Col span="18">
+                 <Row  style="margin-top:20px;">
+                      <Col span="12">活动优惠码：{{couponInfo.couponCode}}</Col>
+                      <Col span="12">添加人：{{couponInfo.couponAdder}}</Col>
+                 </Row>
+                 <Row style="margin-top:5px;">
+                      <Col span="12">优惠码折扣：{{couponInfo.discount}}</Col>
+                      <Col span="12">状&nbsp;&nbsp;态：{{couponInfo.extStatusName}}</Col>
+                 </Row>
+                 <Row style="margin-top:20px;">
+                      <p style="margin-top:5px;">注意事项：</p>
+                      <p style="margin-top:5px;">1 只有<span style="color:red;">从砍价渠道来源的新客户</span>允许添加优惠码，其他渠道（如中介等）以及老客户请勿添加</p>
+                      <p style="margin-top:5px;">2 只有<span style="color:red;">部分社区</span>适用优惠码，请勿滥用</p>
+                      <p style="margin-top:5px;">3 添加后，请联系<span style="color:red;">王超群</span>核销此优惠码，核销前优惠码的折扣不会生效</p>
+                      <p style="margin-top:5px;">4 添加优惠码，此订单的其他信息<span style="color:red;">不能编辑</span>，如有修改请先移除</p>
+                 </Row>
+             </Col>  
+             <Col span="6" style="text-align:right;">
+                  <Row style="margin-top:20px;">
+                      <Button @click="orderSeatCouponFlush"  type="primary" style="width:100px;" >刷新折扣</Button>
+                  </Row>
+                  <Row style="margin-top:20px;">
+                      <Button @click="orderSeatCouponRemove"  type="primary" style="width:100px;" >移除优惠码</Button>
+                  </Row>
+             </Col>   
+         </Row>
+         <Row style="margin-top:30px;margin-bottom:30px;">
+            <Col span="24">
+                <Button  v-show="!couponInfo.couponCode&&isJoin=='IN'" @click="cancelActivity" type="primary">添加活动优惠码</Button> 
+            </Col>
+        </Row>
+         <Modal  title="添加活动优惠码" v-model="modalDiscountCode" :mask-closable="false"  width="600" >
+                <EddCoupon @submit="submitActivity" @cancel="cancelActivity" v-if="modalDiscountCode"/>
+                <div slot="footer"></div>
+        </Modal>
+        <!--感恩结束-->
         <Modal v-model="openStation"
             title="选择工位"
             ok-text="保存"
@@ -101,14 +139,32 @@ import { mapGetters } from 'vuex'
 import ListAndMap from '../../listAndMap';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import editStationPriceData from "../../listData/editStationPriceData"
+import editStationPriceData from "../../listData/editStationPriceData";
+//添加优惠码
+import EddCoupon from '../../addCoupon';
 
 export default {
     components: {
-        ListAndMap
+        ListAndMap,
+        EddCoupon
     },
     data() {
         return {
+           //优惠开始
+           isJoin:'IN',
+           modalDiscountCode:false,//优惠码模态框 状态
+           couponInfo:{
+               discount:"",// 折扣
+               couponAdder:"",// 姓名
+               extStatusName:"",// 是否核销
+               couponCode:"",// 优惠码
+               couponId :"",//
+            },
+            seatCouponParams:{
+                code:'',//   券编码
+                phone:'',// 手机号
+            },
+            //优惠结束
             discountReason: '',//折扣原因
             seatDiscountMap: {},//工位-折扣字典 seatType_seatId:rightDiscount
             openStation: false,
@@ -163,9 +219,70 @@ export default {
         },
         discountReason(val) {
             this.$store.commit('changeDiscountReson', val)
+        },
+        customerId(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
+        },
+        communityId(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
+        },
+        startDate(val){
+            if(this.customerId&&this.communityId&&this.startDate){
+                this.isAddOrJoin();
+            }
         }
     },
     methods: {
+        /**优惠券开始 */
+        isAddOrJoin(){  
+           let params={
+               customerId:this.customerId,
+               communityId:this.communityId,
+               start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00", this.startDate)
+           }
+           this.$http.post('orderSeatCouponIsAdd', params).then(r => {
+                    this.isJoin=r.data.orderType;
+                }).catch(e => {
+                    this.$Notice.error({
+                    title: e.message
+                  })
+
+               })        
+        },
+        //添加优惠券
+        submitActivity(data){
+            this.couponInfo = data;
+            this.cancelActivity();
+            this.$store.commit('getCouponId', this.couponInfo)
+        },
+        //刷新优惠折扣
+        orderSeatCouponFlush(){
+            let params={
+                orderId:'',
+                couponId :this.couponInfo.couponId
+            }
+            this.$http.get('orderSeatCouponFlush',params).then(r => {
+                   this.couponInfo.discount = r.data.couponDiscount;
+                }).catch(e => {
+                    this.$Notice.error({
+                        title: e.message
+                    })
+
+            })         
+        },
+        //移除
+        orderSeatCouponRemove(){
+             this.couponInfo={};
+        },
+        //添加开关
+        cancelActivity(){
+            this.modalDiscountCode = !this.modalDiscountCode;
+        },
+        /**优惠券结束 */
         showStation() {
             if (!this.communityId) {
                 this.$Notice.error({

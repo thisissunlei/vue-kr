@@ -26,6 +26,9 @@
 				<LabelText label="机     会：" v-show='opportunityStr'>
 					{{opportunityStr}}
 				</LabelText>
+        <LabelText label="渠道来源：">
+					{{basicInfo.promoCode}}
+				</LabelText>
 				<LabelText label="作废原因：" v-show='nullifyReason'>
 					{{nullifyReason}}
 				</LabelText>

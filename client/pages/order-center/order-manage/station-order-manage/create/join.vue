@@ -88,7 +88,6 @@ import BasicInfo from './join/basicInfo.vue'
 import CustomerManager from './join/customerManager.vue'
 import RentInfo from './join/rentInfo.vue'
 import AmountInfo from './join/amountInfo.vue'
-// import PreferentialInfo from './join/preferentialInfo.vue'
 
 export default {
     components: {
@@ -97,8 +96,7 @@ export default {
         BasicInfo,
         CustomerManager,
         RentInfo,
-        AmountInfo,
-        // PreferentialInfo
+        AmountInfo
     },
     head() {
         return {
@@ -202,7 +200,8 @@ export default {
             'sso',
             'managerId',
             'preferentialError',
-            'discountReason'
+            'discountReason',
+            'getId'
         ])
     },
     watch: {
@@ -357,6 +356,7 @@ export default {
             formItem.ssoName = this.sso.ssoName;
             formItem.managerId = this.managerId;
             formItem.discountReason=this.discountReason;
+            formItem.couponId=this.getId;
             let _this = this;
             this.disabled = true;
             // return

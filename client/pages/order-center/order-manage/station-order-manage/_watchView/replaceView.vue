@@ -906,6 +906,7 @@
                 overViewData.freeStartDate = this.freeStartDate ;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
+                overViewData.promoCode=this.formItem.promoCode;
                 // step3第二个table数据 
                 // let serviceDetailsList =this.serviceDetailsList.map(item=>{
                 //     item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
@@ -1549,6 +1550,7 @@
                     this.formItem.salerId = JSON.stringify(response.data.saleId);
                     this.salerName = response.data.saleName;
                     this.formItem.customerId = response.data.customerId; 
+                    this.formItem.promoCode=response.data.promoCode;
                     let _this = this;
                     
                     // step2数据

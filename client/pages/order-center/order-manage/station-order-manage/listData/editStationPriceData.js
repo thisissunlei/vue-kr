@@ -346,7 +346,7 @@ export default function(isCoupon,priceDetail = false) {
                 value: params.row.originalPrice
               },
               style: {
-                color: "rgb(43, 133, 228)",
+                color: isCoupon?'#ccc':"rgb(43, 133, 228)",
                 textAlign: "center",
                 cursor: isCoupon?'no-drop':"pointer",
               },

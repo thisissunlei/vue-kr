@@ -269,7 +269,7 @@ import utils from '~/plugins/utils';
 import ListAndMap from '../listAndMap';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-import editStationPriceData from "../listData/editStationPriceData"
+import editStationPriceData from "./editStationPriceData"
 import EddCoupon from '../addCoupon';
 
 

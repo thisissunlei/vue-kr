@@ -6,7 +6,7 @@ import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Buttons from "~/components/Buttons";
 
-export default function(priceDetail = false) {
+export default function(isCoupon,priceDetail = false) {
   return [
     {
       type: "selection",
@@ -113,7 +113,8 @@ export default function(priceDetail = false) {
           {
             props: {
               min: params.row.guidePrice,
-              value: price
+              value: price,
+              disabled: isCoupon
             },
             on: {
               "on-change": event => {
@@ -213,7 +214,7 @@ export default function(priceDetail = false) {
               min: params.row.rightDiscount,
               max: 10,
               value: params.row.discountNum,
-              disabled: disabled
+              disabled: disabled||isCoupon
             },
             on: {
               "on-change": event => {
@@ -344,12 +345,15 @@ export default function(priceDetail = false) {
                 value: params.row.originalPrice
               },
               style: {
-                color: "rgb(43, 133, 228)",
+                color: isCoupon===true?'#ccc':"rgb(43, 133, 228)",
                 textAlign: "center",
-                cursor: "pointer",
+                cursor: isCoupon===true?'no-drop':"pointer",
               },
               on: {
                 click: () => {
+                  if(isCoupon===true){
+                    return ;
+                  }
                   console.log("删除商品明细行", params.row._index);
                   this.delStationByIndex(params.row._index);
                 }
@@ -365,7 +369,8 @@ export default function(priceDetail = false) {
                 type: "text",
                 label: "明细",
                 checkAction: "seat_order_view",
-                styles: "color:rgb(43, 133, 228);padding: 2px 7px;"
+                styles: "color:rgb(43, 133, 228);padding: 2px 7px;",
+                disabled: isCoupon
               },
               on: {
                 click: () => {

@@ -7,7 +7,6 @@ import utils from "~/plugins/utils";
 import Buttons from "~/components/Buttons";
 
 export default function(isCoupon,priceDetail = false) {
-  console.log('id',isCoupon);
   return [
     {
       type: "selection",
@@ -346,13 +345,13 @@ export default function(isCoupon,priceDetail = false) {
                 value: params.row.originalPrice
               },
               style: {
-                color: isCoupon?'#ccc':"rgb(43, 133, 228)",
+                color: isCoupon===true?'#ccc':"rgb(43, 133, 228)",
                 textAlign: "center",
-                cursor: isCoupon?'no-drop':"pointer",
+                cursor: isCoupon===true?'no-drop':"pointer",
               },
               on: {
                 click: () => {
-                  if(isCoupon){
+                  if(isCoupon===true){
                     return ;
                   }
                   console.log("删除商品明细行", params.row._index);

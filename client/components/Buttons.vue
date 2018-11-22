@@ -14,7 +14,7 @@
         ],
         data() {
         	return{
-        	   data:[]
+               data:[]
         	}
         },
         methods:{
@@ -23,7 +23,6 @@
             }
         },
         mounted:function(){
-            
             if(!window.resourcesCode||!window.resourcesCode.length){
                 this.$http.get('getUserData',{forceUpdate:1}).then((response)=>{    
                     this.data = [].concat(response.data.resourcesCode);
@@ -33,6 +32,7 @@
                         title:error.message
                     });
                 })
+
             }else{
                 this.data=[].concat(window.resourcesCode)
             }

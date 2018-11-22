@@ -6,7 +6,8 @@ var amountInfo = {
     state: {
         discountReason:'',
         seats: [],
-        rentAmount: ""//总金额
+        rentAmount: "",//总金额
+        couponId:''
     },
     mutations: {
         changeSeats(state, val) {
@@ -24,6 +25,9 @@ var amountInfo = {
         },
         changeDiscountReson(state, val) {
             state.discountReason=val.trim()
+        },
+        getCouponId(state,val){
+            state.couponId=val.couponId;
         }
     },
     actions: {},
@@ -39,6 +43,9 @@ var amountInfo = {
         },
         discountReason(state){
             return state.discountReason;
+        },
+        getId(state){
+            return state.couponId;
         }
     }
 };

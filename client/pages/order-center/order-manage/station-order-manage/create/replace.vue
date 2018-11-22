@@ -1392,7 +1392,7 @@
                     this.newStationData =list;
                     this.formItem.changeServiceFee = response.data.changeServiceFee;
                     this.formItem.discountCreaterName = response.data.discountCreaterName;
-
+                    
                 }).catch( (error) => {
                     this.status = 2;
                     this.$Notice.error({

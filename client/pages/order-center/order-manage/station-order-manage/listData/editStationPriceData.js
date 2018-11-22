@@ -6,6 +6,9 @@ import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Buttons from "~/components/Buttons";
 
+/*
+* parmas:priceDetail:Boolean[false] 是否显示价格明细列
+*/
 export default function(priceDetail = false) {
   return [
     {
@@ -14,7 +17,7 @@ export default function(priceDetail = false) {
       align: "center"
     },
     {
-      title: "商品",
+      title: "商品11",
       key: "name",
       align: "center",
       render: (h, params) => {

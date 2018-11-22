@@ -17,7 +17,7 @@ export default function(priceDetail = false) {
       align: "center"
     },
     {
-      title: "商品11",
+      title: "商品",
       key: "name",
       align: "center",
       render: (h, params) => {

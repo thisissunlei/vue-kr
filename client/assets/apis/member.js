@@ -27,10 +27,10 @@ export default {
     },
     //客户基本信息详情
     'get-customer-info-detail': {
-        url: '/api/krspace-op-web/customer-center/info-detail',
+        url: '/z/us/customer/detail',
         method: 'get'
     },
-    //新增客户
+    //新增客户  客户管理删除 
     'add-customer': {
         url: '/api/order/csr/customer/actions/add',
         method: 'post'
@@ -40,11 +40,11 @@ export default {
         url: '/api/krspace-op-web/customer-center/check-company',
         method: 'get'
     },
-    //顶部客户名称、状态
-    'top-customer': {
-        url: '/api/krspace-op-web/customer-center/customer',
-        method: 'get'
-    },
+    //顶部客户名称、状态 todo 
+    // 'top-customer': {
+    //     url: '/api/krspace-op-web/customer-center/customer',
+    //     method: 'get'
+    // },
     
     //客户列表－转移客户
     'customer-list-switch': {
@@ -128,7 +128,7 @@ export default {
         url: 'api/order/csr/customer/detail',
         method: 'get'
     },
-    //
+    // 客户管理界面删除 
     'edit-customer':{
         url: 'api/order/csr/customer/actions/update',
         method: 'post' 

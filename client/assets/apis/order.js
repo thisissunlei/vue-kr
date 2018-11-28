@@ -44,9 +44,10 @@ export default {
         url: "krspace-pay/bill/release?",
         method: "get"
     },
-    //获取客户
+    //获取客户 客户名称搜索
     "get-customer": {
-        url: "krspace-finance-web/customer/my-customers?",
+        url: "/z/us/customer/find-customers-data-sf",
+     //   url: "krspace-finance-web/customer/my-customers?",
         method: "get"
     },
     //批量结算
@@ -173,10 +174,10 @@ export default {
         method: "get"
     },
     //获取售货员List组件
-    "get-customer": {
-        url: "/api/krspace-finance-web/customer/my-customers?",
-        method: "get"
-    },
+    // "get-customer": {
+    //     url: "/api/krspace-finance-web/customer/my-customers?",
+    //     method: "get"
+    // },
     "get-cancel-msg": {
         url: "/api/krspace-op-web/order/metting-room/cancel/msg?",
         method: "get"

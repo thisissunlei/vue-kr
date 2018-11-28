@@ -57,6 +57,7 @@
     "nuxt": "1.0.0-rc11",
     "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
+    "qs": "^6.5.2",
     "source-map-support": "^0.4.15",
     "validate-commit-msg": "^2.14.0",
     "vuex": "^3.0.1"

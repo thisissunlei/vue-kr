@@ -7,6 +7,7 @@
                 prop="customerId">
                 <!-- <CustomFormItem title='客户名称'> -->
                 <selectCustomers name="formItem.customerId"
+                    types="ajax"
                     :onchange="changeCustomer" />
                 <!-- </CustomFormItem> -->
 

@@ -6,7 +6,7 @@
         <Row style="margin-bottom:20px">
           <Col class="col">
             <FormItem label="客户名称" style="width:252px" prop="customerId">
-              <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer"></SelectCustomers>
+              <SelectCustomers types="ajax" name="renewForm.customerId" :onchange="changeCustomer"></SelectCustomers>
             </FormItem>
           </Col>
           <Col class="col">

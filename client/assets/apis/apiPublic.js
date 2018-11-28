@@ -23,8 +23,10 @@ export default  {
         url:'/api/op/sys/downFile',
         method:'get'
     },
+    // 修改 二期接口 修改客户名称 
     'get-customers-order-currency':{
-        url:'/api/krspace-op-web/customer/my-customers/order-currency',
+        url:'/z/us/customer/find-customers-data-permission',
+     //   url:'/api/krspace-op-web/customer/my-customers/order-currency',
         method:'get'
     },
     //权限

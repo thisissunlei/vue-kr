@@ -25,7 +25,7 @@ export default  {
     },
     // 修改 二期接口 修改客户名称 
     'get-customers-order-currency':{
-        url:'/z/us/customer/find-customers-data-permission',
+        url:'/z/us/customer/find-customers-data-pe',
      //   url:'/api/krspace-op-web/customer/my-customers/order-currency',
         method:'get'
     },

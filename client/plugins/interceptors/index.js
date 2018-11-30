@@ -4,8 +4,12 @@ import axios from "axios";
 //添加一个请求拦截器，用于设置请求过渡状态
 const requestInterceptor = axios.interceptors.request.use(config => {
   if (config.method == 'post'||config.method == 'put') {
-    let data = Qs.stringify(config.data);
-    config.data = data;
+    if(!config.data.isPut){
+      let data = Qs.stringify(config.data);
+        config.data = data;
+    }else{
+      delete config.data.isPut;
+    }
   }
   return config
 }, error => {

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import APIS from '@/assets/apis';
 import Qs from 'qs';
+import RequestIn from './interceptors';
 
 axios.defaults.timeout = 10000
 // http请求拦截器
@@ -57,7 +58,7 @@ function check401(res) {
 
 export default {
   getJSON: (url, params, success, failure) => new Promise((resolve, reject) => {
-    axios.interceptors.request.eject(aInterceptor);
+    axios.interceptors.request.eject(RequestIn.requestInterceptor);
     axios.get(APIS[url].url, params)
     .then(check401)
     .then(function (data) {
@@ -78,7 +79,7 @@ export default {
   }),
 
   postJSON: (url, params, success, failure) => new Promise((resolve, reject) => {
-    axios.interceptors.request.eject(aInterceptor);
+    axios.interceptors.request.eject(RequestIn.requestInterceptor);
     axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (data) {
@@ -99,7 +100,7 @@ export default {
   }),
 
   putJSON: (url, params, success, failure) => new Promise((resolve, reject) => {
-    axios.interceptors.request.eject(aInterceptor);
+    axios.interceptors.request.eject(RequestIn.requestInterceptor);
     axios.put(APIS[url].url, params)
     .then(check401)
     .then(function (data) {
@@ -120,7 +121,7 @@ export default {
   }),
 
   delJSON: (url, params, success, failure) => new Promise((resolve, reject) => {
-    axios.interceptors.request.eject(aInterceptor);
+    axios.interceptors.request.eject(RequestIn.requestInterceptor);
     axios.delete(APIS[url].url, params)
     .then(check401)
     .then(function (data) {

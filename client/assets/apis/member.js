@@ -30,6 +30,11 @@ export default {
         url: '/z/us/customer/detail',
         method: 'get'
     },
+    // 下拉客户 没权限 
+    'get-customer-noAuth': {
+        url: '/z/us/customer/search-company',
+        method: 'get'
+    },
     //新增客户  客户管理删除 
     'add-customer': {
         url: '/api/order/csr/customer/actions/add',

@@ -1,7 +1,7 @@
 <template>
     <div class="create-new-order">
         <!-- <SectionTitle title="新建入驻服务订单管理"></SectionTitle> -->
-        <SectionTitle title="新建入驻服"></SectionTitle>
+        <SectionTitle title="新建入驻服务"></SectionTitle>
         <Form ref="formItem"
             :model="formItem"
             :rules="ruleCustom"

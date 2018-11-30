@@ -16,7 +16,7 @@ import http from '~/plugins/http.js';
     export default {
         props:{
             onchange :Function,
-            value:String,
+            value:{type:String,default:'请输入'},
             disabled:Boolean,
             labelInValue:{
                 default:false,
@@ -45,7 +45,7 @@ import http from '~/plugins/http.js';
     },
     methods: {
         changeContent: function (customer) {
-            this.onchange(customer)
+           this.onchange(customer)
         },
 
         mounted:function(){

@@ -11,8 +11,8 @@
                     </Form-item>
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
-                        <SelectCustomers  v-if='cshow' name="formItem.customerID" types='ajax' :onchange="handleChangeCustomer" url="get-customer-noAuth"  style="width: 200px" ></SelectCustomers>
-                        <SelectCustomersCopy v-if='!cshow' name="formItem.customerID" url="get-customer-noAuth" types='ajax' @onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomersCopy>
+                        <SelectCustomers   name="formItem.customerID" types='ajax' :onchange="handleChangeCustomer" url="get-customer-noAuth"  style="width: 200px" ></SelectCustomers>
+                        <!-- <SelectCustomersCopy v-if='!cshow' name="formItem.customerID" url="get-customer-noAuth" types='ajax' @onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomersCopy> -->
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
@@ -288,7 +288,7 @@ export default {
             return today;
         },
 
-        handleChangeCustomer(item) {
+        handleChangeCustomer(item) {  
             this.formItem.customerId = item;
         },
         //城市change事件

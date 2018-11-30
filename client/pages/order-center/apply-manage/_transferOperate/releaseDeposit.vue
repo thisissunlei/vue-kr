@@ -45,7 +45,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import SelectCustomers from '~/components/SelectCustomers.vue'
+import selectCustomers from '~/components/SelectCustomers.vue'
 import BlanceInputEdit from './blanceEdit.vue'
 import BlanceInputGroup from './blanceEdit.1.vue'
 import utils from '~/plugins/utils';

@@ -293,12 +293,12 @@ export default {
             })
         },
         getVisitstatus(){
-            this.$http.get('get-visitstatus-list').then((res)=>{
+            this.$ajax.get('get-visitstatus-list').then((res)=>{
                 this.visitStatus = res.data
 
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },

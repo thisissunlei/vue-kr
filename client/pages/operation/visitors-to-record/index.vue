@@ -415,11 +415,11 @@ var layoutScrollHeight=0;
                 if(params.endAppiontTime instanceof Date){
                     params.endAppiontTime =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.endAppiontTime))
                 }
-                this.$http.get('get-csr-clue-list', params).then((res)=>{
-                    this.tableList=res.data.items;
-                    this.dailyIndentify=res.data.items;
-                    this.totalCount=res.data.totalCount;
-                    this.page=res.data.page;
+                this.$ajax.get('get-csr-clue-list', params).then((res)=>{
+                    this.tableList=res.items;
+                    this.dailyIndentify=res.items;
+                    this.totalCount=res.totalCount;
+                    this.page=res.page;
                     this.loading=false;
                     this.spinLoading=false;
                     this.dailyOldData=this.tableList;
@@ -431,7 +431,7 @@ var layoutScrollHeight=0;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn=error.message;
+                    this.warn=error.msg;
                 }) 
             },
             //信息提示框

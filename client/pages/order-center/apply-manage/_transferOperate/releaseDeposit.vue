@@ -5,7 +5,7 @@
             <Row style="margin-bottom:30px">
                 <Col class="col">
                 <FormItem label="客户名称" style="width:252px" prop="customerID">
-                    <selectCustomers name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers types="ajax" url="get-customer-noAuth"  name="formItem.customerID" :onchange="changeCustomer"></selectCustomers>
                 </FormItem>
                 </Col>
                 <Col class="col">
@@ -45,7 +45,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunitiesByCustomer.vue'
-import selectCustomers from '~/components/SelectCustomersFinancial.vue'
+import SelectCustomers from '~/components/SelectCustomers.vue'
 import BlanceInputEdit from './blanceEdit.vue'
 import BlanceInputGroup from './blanceEdit.1.vue'
 import utils from '~/plugins/utils';

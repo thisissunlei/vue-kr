@@ -65,7 +65,7 @@ export default {
         url: "/api/krspace-pay/transfer/delete",
         method: "delete"
     },
-    //获取客户
+    //获取客户 
     "get-customer-financialtransfer": {
         url: "api/krspace-op-web/customer/v/my-customers?",
         method: "get"

@@ -11,8 +11,8 @@
                     </Form-item>
 
                     <Form-item label="客户名称" class='daily-form' prop="customerID">
-                        <SelectCustomers  v-if='cshow' name="formItem.customerID" :onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomers>
-                        <SelectCustomersCopy v-if='!cshow' name="formItem.customerID" @onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomersCopy>
+                        <SelectCustomers  v-if='cshow' name="formItem.customerID" types='ajax' :onchange="handleChangeCustomer" url="get-customer-noAuth"  style="width: 200px" ></SelectCustomers>
+                        <SelectCustomersCopy v-if='!cshow' name="formItem.customerID" url="get-customer-noAuth" types='ajax' @onchange="handleChangeCustomer" style="width: 200px" ></SelectCustomersCopy>
                     </Form-item>
 
                     <Form-item class="daily-form priceForm community-form">
@@ -80,10 +80,11 @@
     </div>
 </template>
 
+
 <script>
 import dateUtils from 'vue-dateutils';
-import SelectCustomers from '~/components/SelectCustomersFinancial.vue'
-import SelectCustomersCopy from './SelectCustomers.vue'
+import SelectCustomers from '~/components/SelectCustomers.vue'
+import SelectCustomersCopy from '~/components/SelectCustomers.vue'
 
 export default {
     name: 'searchform',

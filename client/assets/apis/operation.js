@@ -184,24 +184,28 @@ export default  {
         url: '/api/krspace-finance-web/operation/city-cmt-list',
         method: 'get'
     },
-    // 获取一级来源
+    // 获取一级来源 -- 1
     'get-channleType-list': {
-        url: '/api/order/csr-clue/channleType',
-        method: 'get'
+     //   url: '/api/order/csr-clue/channleType',
+     url: '/z/us/csr-clue/channleType',
+     method: 'get'
     },
-    // 获取二级来源
+    // 获取二级来源--2
     'get-csrsource-list': {
-        url: '/api/order/csr-clue/csrsource',
+    // url: '/api/order/csr-clue/csrsource',  
+        url: '/z/us/csr-clue/csrsource',
         method: 'get'
     },
-    //拜访美剧
+    //拜访美剧 --3
     'get-visitstatus-list': {
-        url: '/api/order/csr-clue/visitstatus',
-        method: 'get'
+     //   url: '/api/order/csr-clue/visitstatus',
+     url: '/z/us/csr-clue/visitstatus',
+     method: 'get'
     },
-    //预约参观列表
+    //预约参观列表 --4
     'get-csr-clue-list': {
-        url: '/api/order/csr-clue/list',
+        url: '/z/us/csr-clue/list',
+     //   url: '/api/order/csr-clue/list',
         method: 'get'
     },
     // 新建预约

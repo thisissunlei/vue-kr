@@ -274,8 +274,8 @@ export default {
         },
         //获取一级来源
         getFirstChannle(){
-            this.$http.get('get-channleType-list').then((res)=>{
-                this.firstList = res.data
+            this.$ajax.get('get-channleType-list').then((res)=>{
+                this.firstList = res
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -284,11 +284,11 @@ export default {
         },
         getSecondChannle(){
             this.$http.get('get-csrsource-list').then((res)=>{
-                this.secondList = res.data
+                this.secondList = res
 
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },

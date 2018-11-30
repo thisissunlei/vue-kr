@@ -239,31 +239,31 @@ export default {
         },
         //获取一级来源
         getFirstChannle(){
-            this.$http.get('get-channleType-list').then((res)=>{
-                this.firstList = res.data
+            this.$ajax.get('get-channleType-list').then((res)=>{
+                this.firstList = res
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },
         getSecondChannle(){
-            this.$http.get('get-csrsource-list').then((res)=>{
-                this.secondList = res.data
+            this.$ajax.get('get-csrsource-list').then((res)=>{
+                this.secondList = res
 
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },
         getVisitstatus(){
-            this.$http.get('get-visitstatus-list').then((res)=>{
-                this.visitStatus = res.data
+            this.$ajax.get('get-visitstatus-list').then((res)=>{
+            this.visitStatus = res
 
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },

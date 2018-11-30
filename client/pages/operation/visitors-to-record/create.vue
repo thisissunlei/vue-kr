@@ -278,12 +278,12 @@ export default {
                 this.firstList = res
             }).catch((error)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:error.msg
                 });
             })
         },
         getSecondChannle(){
-            this.$http.get('get-csrsource-list').then((res)=>{
+            this.$ajax.get('get-csrsource-list').then((res)=>{
                 this.secondList = res
 
             }).catch((error)=>{

@@ -49,7 +49,7 @@ import http from '~/plugins/http.js';
         },
 
         mounted:function(){
-            this.getCusomerList(' ')
+            this.getCusomerList()
         },
         getCusomerList: function (name) {
             let params = {
@@ -99,14 +99,7 @@ import http from '~/plugins/http.js';
                 this.getCusomerList(query)
             }, 200);
         }, 
-    },
-     watch:{
-           types(newVal){
-               if(newVal === 'ajax'){
-                   this.getCusomerList()
-               }
-           } 
-        }
+    }
 }
 </script>
 

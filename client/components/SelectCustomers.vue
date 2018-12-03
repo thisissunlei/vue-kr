@@ -49,15 +49,15 @@ import http from '~/plugins/http.js';
         },
 
         mounted:function(){
-            this.getCusomerList(' ')
+            this.getCusomerList()
         },
         getCusomerList: function (name) {
             let params = {
-                company: name || ''
+                company: name || '北京'
             }
             let list = [];
             let _this = this;
-            if(this.types==='ajax' && name ){
+            if(this.types==='ajax'){
                 // 使用新的ajax 请求 
                 this.$ajax.get(this.url,params).then((r)=>{
                  list = r;
@@ -99,14 +99,7 @@ import http from '~/plugins/http.js';
                 this.getCusomerList(query)
             }, 200);
         }, 
-    },
-     watch:{
-           types(newVal){
-               if(newVal === 'ajax'){
-                   this.getCusomerList()
-               }
-           } 
-        }
+    }
 }
 </script>
 

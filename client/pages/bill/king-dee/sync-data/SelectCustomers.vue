@@ -10,7 +10,7 @@
 <script>
 
 
-import http from '~/plugins/http.js';
+//import http from '~/plugins/http.js';
 
 
     export default {
@@ -57,22 +57,22 @@ import http from '~/plugins/http.js';
             }
             let list = [];
             let _this = this;
-            http.get(this.url, params, r => {
-                list = r.data.customerList;
-                list.map((item) => {
-                    let obj = item;
-                    obj.label = item.company;
-                    obj.value = item.id + '';
-                    return obj;
+            this.$ajax.get(this.url,params).then((r)=>{
+                list = r;
+                list.length && list.map((item) => {
+                let obj = item;
+                obj.label = item.company;
+                obj.value = item.id + '';
+                return obj;
+            });
+            _this.loading1 = false;
+
+            _this.customerOptions = list;
+            }).catch((err) => {
+                this.$Notice.error({
+                    title: err.msg
                 });
-                _this.loading1 = false;
-
-                _this.customerOptions = list;
-            }, e => {
-                console.log('error--->', e)
-            })
-           
-
+             })
         },
         remoteCustomer(query) {
             this.loading1 = true;

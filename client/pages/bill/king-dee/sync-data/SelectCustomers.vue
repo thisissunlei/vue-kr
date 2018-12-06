@@ -41,7 +41,7 @@
             };
         },
     mounted: function () {
-        this.remoteCustomer()
+        this.remoteCustomer(' ')
     },
     methods: {
         changeContent: function (customer) {

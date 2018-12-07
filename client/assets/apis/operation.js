@@ -205,21 +205,24 @@ export default  {
     //预约参观列表 --4
     'get-csr-clue-list': {
         url: '/z/us/csr-clue/list',
-     //   url: '/api/order/csr-clue/list',
+     //   url: '/api/order/api/order/csr-clue/list',
         method: 'get'
     },
     // 新建预约
     'save-csr-clue': {
-        url: '/api/order/csr-clue/save',
+        url: '/z/us/csr-clue/save', 
+      //  url: '/api/order/csr-clue/save',
         method: 'post'
     },
     // 删除预约
     'delete-csr-clue': {
-        url: '/api/order/csr-clue/delete',
+        url: '/z/us/csr-clue/delete',
+      //  url: '/api/order/csr-clue/delete',
         method: 'post'
     },
     'impot-csr-clue': {
-        url: '/api/order/csr-clue/impot',
+        url: '/z/us/csr-clue/impot',
+     //   url: '/api/order/csr-clue/impot',
         method: 'post'
     },
     //会员七天线上化--会员线上化率

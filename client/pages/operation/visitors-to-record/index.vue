@@ -354,7 +354,7 @@ var layoutScrollHeight=0;
                 this.showDelete = false;
             },
             deleteRow(){
-                this.$http.post('delete-csr-clue', {id:this.deleteData.id}).then((res)=>{
+                this.$ajax.post('delete-csr-clue', {id:this.deleteData.id}).then((res)=>{
                     this.showDelete = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});
                     this.endParams=Object.assign({},this.tabForms);
@@ -363,7 +363,7 @@ var layoutScrollHeight=0;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn=error.message;
+                    this.warn=error.msg;
                 })
             },
             edit(row){
@@ -453,7 +453,7 @@ var layoutScrollHeight=0;
             },
             save(params){
                 params.appiontTime = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(params.appiontTime))
-                this.$http.post('save-csr-clue', params).then((res)=>{
+                this.$ajax.post('save-csr-clue', params).then((res)=>{
                     this.openCreate = false
                     this.showEdit = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});
@@ -463,7 +463,7 @@ var layoutScrollHeight=0;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn=error.message;
+                    this.warn=error.msg;
                 }) 
             },
             submitStation(){
@@ -495,7 +495,7 @@ var layoutScrollHeight=0;
                 var data=new FormData();
                 data.append('file',this.file);
                 data.isPut = true;
-                this.$http.post('impot-csr-clue', data).then((res)=>{
+                this.$ajax.post('impot-csr-clue', data).then((res)=>{
                     this.showImport = false;
                     this.tabForms=Object.assign({},{page:1,pageSize:15});
                     this.endParams=Object.assign({},this.tabForms);
@@ -503,7 +503,7 @@ var layoutScrollHeight=0;
                 }).catch((err)=>{
                     this.submitDisabled=false;
                     this.$Notice.error({
-                        title:err.message
+                        title:err.msg
                     });
                 })
             },

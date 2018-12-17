@@ -193,7 +193,7 @@ export default {
                               'ALIWEBPAY':'支付宝网银',
                               'BANKONLINE':'网银',
                               'BANLANCE':'余额支付',
-                              'FUNDS_TRANSFER ':'社区转移',
+                              'FUNDS_TRANSFER':'社区转移',
                               'CUSTOMER_TRANSFER':'客户转移'
                             }
                             return h('span',{},payWay[obj.row.payWay]);

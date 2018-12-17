@@ -132,7 +132,8 @@ export default {
 				'ALIWEBPAY':'支付宝网银',
 				'BANKONLINE':'网银',
 				'BANLANCE':'余额支付',
-				'FUNDS_TRANSFER ':'资金转移'
+				'FUNDS_TRANSFER ':'社区转移',
+				'CUSTOMER_TRANSFER':'客户转移'
 			}
 			
 			this.$http.get('get-payment-detail', from).then((res)=>{

@@ -153,7 +153,7 @@ export default function () {
           if (item == params.row.orderType) {
             let styles = "display:inline-block;";
             let typeName = orderType[item];
-            if (typeName.lastIndexOf("服务订单") == typeName.length - 4) {
+            if (typeName&&typeName.lastIndexOf("服务订单") == typeName.length - 4) {
               typeName = typeName.slice(0, typeName.length - 4);
             }
             if (params.row.orderStatus == "INVALID") {

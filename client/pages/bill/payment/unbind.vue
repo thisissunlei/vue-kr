@@ -194,7 +194,7 @@ export default {
                               'BANKONLINE':'网银',
                               'BANLANCE':'余额支付',
                               'FUNDS_TRANSFER ':'资金转移',
-                              
+                              'CUSTOMER_TRANSFER':'客户转移'
                             }
                             return h('span',{},payWay[obj.row.payWay]);
                             // return payWay[obj.row.payWay]

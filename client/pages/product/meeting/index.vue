@@ -289,8 +289,8 @@ export default {
             let params = {
                     cmtName:name
                 }
-            this.$ajax.get('get-community-new-list', params).then((res)=>{
-              let  list = res;
+            this.$http.get('get-community-new-list', params).then((res)=>{
+              let  list = res.data.cmts;
                 list.map((item)=>{
                     let obj =item;
                     obj.label = item.cmtName;
@@ -301,7 +301,7 @@ export default {
                 callback && callback();
             }).catch((err)=>{
                 this.$Notice.error({
-                    title:err.msg
+                    title:err.message
                 });
             })
             

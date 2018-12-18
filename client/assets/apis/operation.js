@@ -87,8 +87,7 @@ export default  {
     },
     //app管理--推送管理--社区列表
     'get-community-new-list': {
-        url:'/z/ba/cmt/community/new/list',
-      //  url: '/api/krspace-finance-web/cmt/community/new/list',
+        url: '/api/krspace-finance-web/cmt/community/new/list',
         method: 'get'
     },
      //app管理--通知管理--通知列表

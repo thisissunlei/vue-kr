@@ -106,6 +106,12 @@
         </DetailStyle>
       </div>
       <!--苏岭增加客户主管理员结束-->
+      <!-- 补充信息 -->
+      <DetailStyle info="补充信息">
+               <supplement-info 
+                  @intermediaryRoomChange = "intermediaryRoomChange"/>
+        </DetailStyle>
+      <!-- 补充结束 -->
       <DetailStyle info="金额信息">
         <Row style="margin-bottom:10px">
           <Col class="col" span="24">
@@ -290,7 +296,8 @@ import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-import editStationPriceData from "../listData/editStationPriceData"
+import editStationPriceData from "../listData/editStationPriceData";
+import SupplementInfo from "./join/supplementInfo.vue";
 
 export default {
   head() {
@@ -309,6 +316,7 @@ export default {
       }
     };
     return {
+      intermediaryName:'',//居间方名称
       //苏岭
       customerInfo: {},
       isManager: false,
@@ -343,7 +351,8 @@ export default {
         rentAmount: '',
         items: [],
         signDate: new Date(),
-        saleChanceId: ''
+        saleChanceId: '',
+        intermediaryName:'',//居间方名称
       },
       disabled: false,//提交按钮是否禁止
       discountError: false,
@@ -415,6 +424,7 @@ export default {
     }
   },
   components: {
+    SupplementInfo,    
     SectionTitle,
     SelectCommunities,
     DetailStyle,
@@ -444,6 +454,9 @@ export default {
     },
   },
   methods: {
+        intermediaryRoomChange(val){
+            this.intermediaryName = val //居间方名称
+        },
     //苏岭增加客户主管理员开始
     addManagerSubmit(params) {
       this.submitManager && this.submitManager(this.managerSubmit);
@@ -706,11 +719,15 @@ export default {
 
       renewForm.startDate = start;
       renewForm.endDate = end;
+      renewForm.intermediaryName = this.intermediaryName;
+
       let _this = this;
       this.disabled = true;
       renewForm.discountReason = this.renewForm.discountReason
       //苏岭开始
       renewForm.managerId = this.managerId;
+
+      
       //苏岭结束
       this.$http.post('save-renew', renewForm).then(r => {
         window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';

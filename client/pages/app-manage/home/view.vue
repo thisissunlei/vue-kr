@@ -147,12 +147,12 @@ export default {
             this.formItem.endDate=data[1];
         },
         getCommunity(){
-              this.$ajax.get('get-community-new-list','').then((res)=>{
-                this.communityList=res;
+              this.$http.get('get-community-new-list','').then((res)=>{
+                this.communityList=res.data.cmts;
 
                 }).catch((error)=>{
                     this.$Notice.error({
-                        title:error.msg
+                        title:error.message
                     });
                 })
          },

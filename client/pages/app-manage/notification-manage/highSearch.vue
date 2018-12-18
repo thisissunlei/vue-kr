@@ -123,8 +123,8 @@ export default{
                 }
             let list = [];
             let _this = this;
-            this.$ajax.get('get-community-new-list', params).then((res)=>{
-                list = res;
+            this.$http.get('get-community-new-list', params).then((res)=>{
+                list = res.data.cmts;
                 list.map((item)=>{
                     let obj =item;
                     obj.label = item.cmtName;
@@ -134,7 +134,7 @@ export default{
                 _this.communityList = list;
             }).catch((err)=>{
                 this.$Notice.error({
-                    title:err.msg
+                    title:err.message
                 });
             })
             return list;

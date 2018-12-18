@@ -50,6 +50,10 @@
                     <span class='contract-span' v-html="item.content"></span>
                 </Checkbox>
             </CheckboxGroup>
+            <br/>
+            <Input type="textarea" :rows="4" placeholder="中文..." />
+            <br/><br/>
+            <Input type="textarea" :rows="4" placeholder="english..." />
             <div slot="footer">
                 <Button type="primary" @click="submitDescribe" :disabled="describeDisabled">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="showDescribe">取消</Button>

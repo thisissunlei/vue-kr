@@ -27,8 +27,7 @@ export default  {
     },
     //通知、推送新的社区接口
     'get-app-cmt-community-limit-list': {
-        url: '/z/ba/cmt/community/limit/list',
-      //  url: '/api/krspace-finance-web/cmt/community/limit/list',
+        url: '/api/krspace-finance-web/cmt/community/limit/list',
         method: 'get'
     },
 

@@ -30,8 +30,7 @@
                                     filterable
                                     clearable
                                     :label-in-value='labelInValue'
-                                    @on-change="changeCommunity"
-                                >
+                                    @on-change="changeCommunity">
                                     <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                </Select> 
                             </FormItem>
@@ -58,6 +57,13 @@
                                 />
                             </FormItem>
                         </Col>
+                         <!-- 补充信息 -->
+                        <Col class="col">
+                            <FormItem label="居间方" class="bill-search-class"> 
+                                <Input  v-model="formItem.intermediaryName"   style="width: 252px"/>
+                            </FormItem>
+                        </Col>
+                        <!-- 补充信息 -->
                     </Row>
                 </Form>
                 <div class="buttons">
@@ -413,6 +419,7 @@
                 }
             };
             return {
+                intermediaryName:'',// 居间方
                 discountErrorStr:'',
                 openDiscount:false,
                 batchDiscount: '',

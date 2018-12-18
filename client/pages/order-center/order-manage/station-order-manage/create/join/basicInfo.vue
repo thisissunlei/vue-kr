@@ -10,7 +10,6 @@
                     types="ajax"
                     :onchange="changeCustomer" />
                 <!-- </CustomFormItem> -->
-
             </FormItem>
             </Col>
             <Col class="col">

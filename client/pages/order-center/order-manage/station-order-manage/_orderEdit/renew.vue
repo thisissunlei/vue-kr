@@ -54,6 +54,13 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!-- 补充信息 -->
+            <DetailStyle info="补充信息">
+               <supplement-info 
+                :intermediaryName = "renewForm.intermediaryName"
+                @intermediaryRoomChange = "intermediaryRoomChange" />
+            </DetailStyle>
+            <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
@@ -205,8 +212,8 @@ import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-import editStationPriceData from "../listData/editStationPriceData"
-
+import editStationPriceData from "../listData/editStationPriceData";
+import SupplementInfo from "../create/join/supplementInfo.vue";
 
 
 
@@ -222,6 +229,7 @@ export default {
             }
         };
         return {
+            intermediaryName:'',//居间方名称
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],
@@ -349,7 +357,8 @@ export default {
         planMap,
         SelectChance,
         LabelText,
-        AddManager
+        AddManager,
+        SupplementInfo
     },
     mounted() {
         this.getDetailData();
@@ -367,6 +376,9 @@ export default {
         },
     },
     methods: {
+        intermediaryRoomChange(val){
+            this.intermediaryName = val //居间方名称
+        },
         //苏岭增加客户主管理员开始
         addManagerSubmit(params){
             this.submitManager && this.submitManager(this.managerSubmit);
@@ -753,6 +765,7 @@ export default {
             renewForm.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.firstPayTime));
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
+            renewForm.intermediaryName = this.intermediaryName;
             let _this = this;
             this.disabled = true;
             //苏岭开始

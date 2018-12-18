@@ -51,7 +51,7 @@ export default function () {
       minWidth: 100,
       render(tag, params) {
         var communityName = params.row.communityName;
-        if (communityName.lastIndexOf("社区") == communityName.length - 2) {
+        if (communityName && communityName.lastIndexOf("社区") == communityName.length - 2) {
           communityName = communityName.slice(0, communityName.length - 2);
         }
         return <span class="u-txt">{communityName}</span>;

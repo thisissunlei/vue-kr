@@ -37,6 +37,16 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!-- 补充信息 -->
+            <DetailStyle info="补充信息">
+                    <supplement-info  
+                    :intermediaryName = "formItem.intermediaryName"
+                    :formulationCompanyName = "formItem.formulationCompanyName"
+                    @proposedCompanyChange = "proposedCompanyChange"
+                    @intermediaryRoomChange = "intermediaryRoomChange"
+                    :proposedCompanyFlag="true" />
+                </DetailStyle>
+            <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
@@ -271,7 +281,7 @@ import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
 import editStationPriceData from "./editStationPriceData"
 import EddCoupon from '../addCoupon';
-
+import SupplementInfo from "../create/join/supplementInfo.vue";
 
 
 
@@ -288,6 +298,8 @@ export default {
         };
 
         return {
+           formulationCompanyName:'',//拟设立公司名称
+           intermediaryName:'',//居间方名称 
             //优惠开始
             //权限
            couponDisabled:false,
@@ -455,8 +467,8 @@ export default {
         ListAndMap,
         LabelText,
         AddManager,
-        EddCoupon
-
+        EddCoupon,
+        SupplementInfo
     },
     mounted() {
         this.getDetailData();
@@ -495,6 +507,12 @@ export default {
         },
     },
     methods: {
+        proposedCompanyChange(val){
+            this.formulationCompanyName = val //拟设立公司名称
+        },
+        intermediaryRoomChange(val){
+            this.intermediaryName = val //居间方名称
+        },
         /**优惠券开始 */
         //核销优惠券
         orderSeatCouponUse(){
@@ -933,6 +951,11 @@ export default {
 
             formItem.startDate = start;
             formItem.endDate = end;
+
+            // 补充内容   拟设立公司名称   居间方名称
+            formItem.formulationCompanyName = this.formulationCompanyName;
+            formItem.intermediaryName = this.intermediaryName; 
+
             let _this = this;
             this.disabled = true;
             //苏岭开始

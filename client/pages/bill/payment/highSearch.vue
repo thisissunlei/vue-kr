@@ -132,7 +132,11 @@ export default{
                 },
                 {
                     value:'FUNDS_TRANSFER',
-                    label:'资金转移'
+                    label:'社区转移'
+                },
+                {
+                    value:'CUSTOMER_TRANSFER',
+                    label:'客户转移'
                 }
             ],
 

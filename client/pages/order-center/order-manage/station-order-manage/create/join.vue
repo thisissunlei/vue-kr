@@ -383,7 +383,7 @@ export default {
             this.disabled = true;
             // return
             this.$http.post('save-join', formItem).then(r => {
-                window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
+                // window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message

@@ -7,14 +7,14 @@
                     v-if="proposedCompanyFlag"
                     style="width:252px"
                     >
-                    <Input @on-change="changeFormulationCompanyName" v-model="formulationCompanyName"></Input>
+                    <Input @on-change="changeFormulationCompanyName" v-model="proposedCompany"></Input>
                 </FormItem>
             </Col>
             <Col span="12" class="col">
                 <FormItem  label="居间方名称"
                     style="width:252px">
                     
-                    <Input  @on-change="changeIntermediaryName" v-model="intermediaryName"></Input>
+                    <Input  @on-change="changeIntermediaryName" v-model="intermediaryRoom"></Input>
                 </FormItem>
             </Col>
           
@@ -44,7 +44,7 @@ export default {
     data() {
         return {
            proposedCompany:this.formulationCompanyName,
-           intermediaryRoomChange:this.intermediaryName
+           intermediaryRoom:this.intermediaryName
         }
     },
     watch: {
@@ -59,7 +59,7 @@ export default {
             this.$emit("proposedCompanyChange",this.proposedCompany)// 拟设公司
         },
         changeIntermediaryName(){
-            this.$emit("intermediaryRoomChange",this.intermediaryRoomChange)// 居间方
+            this.$emit("intermediaryRoomChange",this.intermediaryRoom)// 居间方
         }
     },
 }

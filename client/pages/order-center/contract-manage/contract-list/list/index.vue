@@ -45,15 +45,17 @@
                 placeholder="写入描述..." 
             /> -->
             <!-- <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
+            otherAgreedChked:{{otherAgreedChked}}
             <CheckboxGroup v-model="otherAgreedChked">
                 <Checkbox v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block'>
                     <span class='contract-span' v-html="item.content"></span>
                 </Checkbox>
             </CheckboxGroup>
             <br/>
-            <Input type="textarea" :rows="4" placeholder="中文..." />
-            <br/><br/>
-            <Input type="textarea" :rows="4" placeholder="english..." />
+            <UEditor  :styleObj='UEStyleObj'  :config="configs"></UEditor>
+            <br/>
+            <UEditor  :styleObj='UEStyleObj'  :config="configs"></UEditor>
+            <br/>
             <div slot="footer">
                 <Button type="primary" @click="submitDescribe" :disabled="describeDisabled">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="showDescribe">取消</Button>
@@ -95,6 +97,8 @@ import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Message from "~/components/Message";
 import Buttons from "~/components/Buttons";
+import UEditor from '~/components/UEditor.vue';
+
 var maxWidth = 170;
 export default {
   head() {
@@ -109,11 +113,129 @@ export default {
     HeightSearch,
     Loading,
     Message,
-    Buttons
+    Buttons,
+    UEditor
   },
 
   data() {
     return {
+      configs: {
+                toolbars: [
+                    [
+                        'fullscreen',//全屏
+                        'source', //源代码
+                        '|',
+                        'undo', //撤销
+                        'redo', //重做
+                        '|',
+
+                        'bold', //加粗
+                        'italic', //斜体
+                        'underline', //下划线
+                        'fontborder', //字符边框
+                        'strikethrough', //删除线
+                        'subscript', //下标
+                        'superscript', //上标
+                        'removeformat', //清除格式
+                        'formatmatch', //格式刷
+                        'autotypeset', //自动排版
+                        'blockquote', //引用
+                        'pasteplain', //纯文本粘贴模式
+                        '|',
+
+                        'forecolor', //字体颜色
+                        'backcolor', //背景色
+                        'insertorderedlist', //有序列表
+                        'insertunorderedlist', //无序列表
+
+                        'selectall', //全选
+                        'cleardoc', //清空文档
+                        '|',
+                        'rowspacingtop', //段前距
+                        'rowspacingbottom', //段后距
+                        'lineheight', //行间距
+                        '|',
+                        'customstyle', //自定义标题
+                        'paragraph', //段落格式
+                        'fontfamily', //字体
+                        'fontsize', //字号
+                        '|',
+                        'directionalityltr', //从左向右输入
+                        'directionalityrtl', //从右向左输入
+                        'indent', //首行缩进
+                        '|',
+
+                        'justifyleft', //居左对齐
+                        'justifyright', //居右对齐
+                        'justifycenter', //居中对齐
+                        'justifyjustify', //两端对齐
+                        '|',
+
+                        'touppercase', //字母大写
+                        'tolowercase', //字母小写
+                        '|',
+
+
+                        'link', //超链接
+                        'unlink', //取消链接
+                        'anchor', //锚点
+                        '|',
+
+
+                        'imagenone', //默认
+                        'imageleft', //左浮动
+                        'imageright', //右浮动
+                        'imagecenter', //居中
+                        '|',
+
+                        //'simpleupload', //单图上传
+                        //'emotion', //表情
+                        // 'map', //Baidu地图
+                        // 'pagebreak', //分页
+                        // 'template', //模板
+                        // 'background', //背景
+                        '|',
+
+                        'horizontal', //分隔线
+                        'date', //日期
+                        'time', //时间
+                        'spechars', //特殊字符
+                        '|',
+
+                        'inserttable', //插入表格
+                        'deletetable', //删除表格
+                        'insertparagraphbeforetable', //"表格前插入行"
+                        'insertrow', //前插入行
+                        'insertcol', //前插入列
+                        'mergeright', //右合并单元格
+                        'mergedown', //下合并单元格
+                        'deleterow', //删除行
+                        'deletecol', //删除列
+                        'splittorows', //拆分成行
+                        'splittocols', //拆分成列
+                        'splittocells', //完全拆分单元格
+                        'deletecaption', //删除表格标题
+                        'inserttitle', //插入标题
+                        'mergecells', //合并多个单元格
+                        'edittable', //表格属性
+                        'edittd', //单元格属性
+                        'charts' // 图表
+
+                    ]
+                ],
+                // autoHeightEnabled: true,
+                autoFloatEnabled: true,
+                elementPathEnabled: false,
+                maximumWords: 40000,
+                initialFrameHeight: 230,
+                enableAutoSave: false,
+                autoFloatEnabled: false
+            },
+      UEStyleObj: {
+                'width': '100%',
+                'height': '300px',
+                'clear': 'both'
+          },
       params: {
         page: 1,
         pageSize: 15
@@ -203,7 +325,7 @@ export default {
           title: "创建人",
           key: "creatorName",
           align: "center",
-          width: 150
+          width: 150,
         },
         {
           title: "服务费",
@@ -963,4 +1085,5 @@ export default {
     display: inline;
   }
 }
+
 </style>

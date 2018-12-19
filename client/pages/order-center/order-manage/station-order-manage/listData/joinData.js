@@ -51,7 +51,9 @@ export default function () {
       minWidth: 100,
       render(tag, params) {
         var communityName = params.row.communityName;
-        if (communityName && communityName.lastIndexOf("社区") == communityName.length - 2) {
+
+        if (communityName&&communityName.lastIndexOf("社区") == communityName.length - 2) {
+
           communityName = communityName.slice(0, communityName.length - 2);
         }
         return <span class="u-txt">{communityName}</span>;
@@ -153,7 +155,7 @@ export default function () {
           if (item == params.row.orderType) {
             let styles = "display:inline-block;";
             let typeName = orderType[item];
-            if (typeName.lastIndexOf("服务订单") == typeName.length - 4) {
+            if (typeName&&typeName.lastIndexOf("服务订单") == typeName.length - 4) {
               typeName = typeName.slice(0, typeName.length - 4);
             }
             if (params.row.orderStatus == "INVALID") {

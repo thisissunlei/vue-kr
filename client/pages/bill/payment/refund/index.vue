@@ -128,6 +128,10 @@ import dateUtils from 'vue-dateutils';
                     {
                         label:'银行转账',
                         value:'BANKTRANSFER'
+                    },
+                    {
+                        label:'客户转移',
+                        value:'CUSTOMER_TRANSFER'
                     }
                 ],
                 ruleCustom:{

@@ -38,9 +38,7 @@
                 </Row>
             </DetailStyle>
             <!-- 补充信息 -->
-            <span>{{formItem.intermediaryName}}</span>
-            <span>{{formItem.formulationCompanyName}}</span>
-            <DetailStyle info="补充信息test">
+            <DetailStyle info="补充信息">
                     <supplement-info  
                     v-if="formItemFlag"
                     :intermediaryName = "formItem.intermediaryName"

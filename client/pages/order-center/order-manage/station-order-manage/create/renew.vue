@@ -726,7 +726,7 @@ export default {
       renewForm.startDate = start;
       renewForm.endDate = end;
       renewForm.intermediaryName = this.intermediaryName;
-
+      renewForm.formulationCompanyName = this.formulationCompanyName;
       let _this = this;
       this.disabled = true;
       renewForm.discountReason = this.renewForm.discountReason

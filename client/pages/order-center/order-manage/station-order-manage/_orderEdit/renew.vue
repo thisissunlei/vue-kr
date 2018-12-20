@@ -56,9 +56,13 @@
             </DetailStyle>
             <!-- 补充信息 -->
             <DetailStyle info="补充信息">
-               <supplement-info 
-                :intermediaryName = "renewForm.intermediaryName"
-                @intermediaryRoomChange = "intermediaryRoomChange" />
+                <supplement-info  
+                    v-if="formItemFlag"
+                    :intermediaryName = "editFrom.intermediaryName"
+                    :formulationCompanyName = "editFrom.formulationCompanyName"
+                    @proposedCompanyChange = "proposedCompanyChange"
+                    @intermediaryRoomChange = "intermediaryRoomChange"
+                    :proposedCompanyFlag="true" />
             </DetailStyle>
             <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
@@ -229,6 +233,12 @@ export default {
             }
         };
         return {
+            editFrom:{
+                formulationCompanyName:'',
+                intermediaryName:''
+            },
+            formItemFlag:false,
+            formulationCompanyName:'',//拟设立公司名称
             intermediaryName:'',//居间方名称
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
@@ -376,6 +386,9 @@ export default {
         },
     },
     methods: {
+        proposedCompanyChange(val){
+            this.formulationCompanyName = val //拟设立公司名称
+        },
         intermediaryRoomChange(val){
             this.intermediaryName = val //居间方名称
         },
@@ -631,7 +644,9 @@ export default {
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
                 _this.renewForm.discountReason=data.discountReason
-
+                _this.editFrom.formulationCompanyName = data.formulationCompanyName
+                _this.editFrom.intermediaryName = data.intermediaryName
+            },
                 /*
                 setTimeout(function () {
 

@@ -781,8 +781,8 @@ export default {
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
             renewForm.intermediaryName = this.intermediaryName;
-            renewForm.formulationCompanyName = this.formulationCompanyName,//拟设立公司名称
-            renewForm.intermediaryName = this.intermediaryName,//居间方名称
+            renewForm.formulationCompanyName = this.formulationCompanyName;//拟设立公司名称
+            renewForm.intermediaryName = this.intermediaryName;//居间方名称
             let _this = this;
             this.disabled = true;
             //苏岭开始

@@ -54,16 +54,16 @@
                     </Col>
                 </Row>
             </DetailStyle>
-            <!-- 补充信息 -->
+             <!-- 补充信息 -->
             <DetailStyle info="补充信息">
-                <supplement-info  
-                    v-if="formItemFlag"
-                    :intermediaryName = "editFrom.intermediaryName"
-                    :formulationCompanyName = "editFrom.formulationCompanyName"
-                    @proposedCompanyChange = "proposedCompanyChange"
-                    @intermediaryRoomChange = "intermediaryRoomChange"
-                    :proposedCompanyFlag="true" />
-            </DetailStyle>
+                    <supplement-info  
+                        v-if="formItemFlag"
+                        :intermediaryName = "editForm.intermediaryName"
+                        :formulationCompanyName = "editForm.formulationCompanyName"
+                        @proposedCompanyChange = "proposedCompanyChange"
+                        @intermediaryRoomChange = "intermediaryRoomChange"
+                        :proposedCompanyFlag="true" />
+                </DetailStyle>
             <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
@@ -233,13 +233,13 @@ export default {
             }
         };
         return {
-            editFrom:{
-                formulationCompanyName:'',
-                intermediaryName:''
-            },
             formItemFlag:false,
+            editForm:{
+               formulationCompanyName:'',//拟设立公司名称
+               intermediaryName:'',//居间方名称 
+            },
             formulationCompanyName:'',//拟设立公司名称
-            intermediaryName:'',//居间方名称
+            intermediaryName:'',//居间方名称 
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],
@@ -533,14 +533,14 @@ export default {
             this.selecedArr[index].originalPrice = e;
             this.getStationAmount()
         },
-        changeDiscount(index, e, guidePrice) {
-                    if (!e || e == 10) {
-                        // return
-                    }
-                    this.selecedStation[index].discountNum = Number(e);
-                    this.selecedArr[index].discountNum = Number(e);
-                    this.getSaleAmount()
-                },
+  changeDiscount(index, e, guidePrice) {
+            if (!e || e == 10) {
+                // return
+            }
+            this.selecedStation[index].discountNum = Number(e);
+            this.selecedArr[index].discountNum = Number(e);
+            this.getSaleAmount()
+        },
         //批量录入价格 对于勾选的行
         openDiscountButton() {
             let stationVos = this.selecedStation;
@@ -644,9 +644,11 @@ export default {
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
                 _this.renewForm.discountReason=data.discountReason
-                _this.editFrom.formulationCompanyName = data.formulationCompanyName
-                _this.editFrom.intermediaryName = data.intermediaryName
-            },
+                
+                _this.ditForm.formulationCompanyName = data.formulationCompanyName,//拟设立公司名称
+                _this.ditForm.intermediaryName = data.intermediaryName,//居间方名称 
+        
+        
                 /*
                 setTimeout(function () {
 
@@ -781,8 +783,10 @@ export default {
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
             renewForm.intermediaryName = this.intermediaryName;
-            renewForm.formulationCompanyName = this.formulationCompanyName;//拟设立公司名称
-            renewForm.intermediaryName = this.intermediaryName;//居间方名称
+
+            renewForm.formulationCompanyName=this.formulationCompanyName
+            renewForm.intermediaryName = this.intermediaryName;
+
             let _this = this;
             this.disabled = true;
             //苏岭开始

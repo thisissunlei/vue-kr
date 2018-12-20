@@ -533,14 +533,14 @@ export default {
             this.selecedArr[index].originalPrice = e;
             this.getStationAmount()
         },
-  changeDiscount(index, e, guidePrice) {
-            if (!e || e == 10) {
-                // return
-            }
-            this.selecedStation[index].discountNum = Number(e);
-            this.selecedArr[index].discountNum = Number(e);
-            this.getSaleAmount()
-        },
+        changeDiscount(index, e, guidePrice) {
+                    if (!e || e == 10) {
+                        // return
+                    }
+                    this.selecedStation[index].discountNum = Number(e);
+                    this.selecedArr[index].discountNum = Number(e);
+                    this.getSaleAmount()
+                },
         //批量录入价格 对于勾选的行
         openDiscountButton() {
             let stationVos = this.selecedStation;
@@ -781,6 +781,8 @@ export default {
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
             renewForm.intermediaryName = this.intermediaryName;
+            renewForm.formulationCompanyName = this.formulationCompanyName,//拟设立公司名称
+            renewForm.intermediaryName = this.intermediaryName,//居间方名称
             let _this = this;
             this.disabled = true;
             //苏岭开始

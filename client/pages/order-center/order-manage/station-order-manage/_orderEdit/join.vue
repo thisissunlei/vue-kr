@@ -40,6 +40,7 @@
             <!-- 补充信息 -->
             <DetailStyle info="补充信息">
                     <supplement-info  
+                    v-if="formItemFlag"
                     :intermediaryName = "formItem.intermediaryName"
                     :formulationCompanyName = "formItem.formulationCompanyName"
                     @proposedCompanyChange = "proposedCompanyChange"
@@ -298,6 +299,7 @@ export default {
         };
 
         return {
+           formItemFlag:false,
            formulationCompanyName:'',//拟设立公司名称
            intermediaryName:'',//居间方名称 
             //优惠开始
@@ -837,8 +839,10 @@ export default {
                 _this.formItem.stationAmount = data.seatRentAmount;
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
-                _this.formItem.discountReason=data.discountReason
-
+                _this.formItem.discountReason=data.discountReason;
+                _this.formItem.intermediaryName = data.intermediaryName;
+                _this.formItem.formulationCompanyName = data.formulationCompanyName;
+                _this.formItemFlag = true;
                 _this.getStationAmount()
 
                 _this.getFloor = +new Date()
@@ -955,7 +959,8 @@ export default {
             // 补充内容   拟设立公司名称   居间方名称
             formItem.formulationCompanyName = this.formulationCompanyName;
             formItem.intermediaryName = this.intermediaryName; 
-
+            formItem.formulationCompanyName = this.formulationCompanyName;//拟设立公司名称
+            formItem.intermediaryName = this.intermediaryName;//居间方名称 
             let _this = this;
             this.disabled = true;
             //苏岭开始
@@ -967,8 +972,8 @@ export default {
 
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
-                // window.close();
-                // window.opener.location.reload();
+                window.close();
+                window.opener.location.reload();
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message

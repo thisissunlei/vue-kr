@@ -22,6 +22,9 @@
                 <LabelText :inline="inline" label="渠道来源：" >
                     {{formItem.promoCode || '无'}}
                 </LabelText>
+                <LabelText :inline="inline" label="居间方名称：" >
+                    {{formItem.intermediaryName || '无'}}
+                </LabelText>
 
             </Card>
             <span class="space"></span>
@@ -99,10 +102,10 @@
 
                 <Table :columns="oldInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <Table :columns="newInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
-                <LabelText  :inline="inline"label="退还服务费：">
+                <LabelText  :inline="inline" label="退还服务费：">
                     ￥{{formItem.changeServiceFee | thousand}}
                 </LabelText>
-                <LabelText  :inline="inline"label="旧服务保证金转新（剩余扣除）">
+                <LabelText  :inline="inline" label="旧服务保证金转新（剩余扣除）">
                     ￥{{formItem.transferDepositAmount | thousand}}
                 </LabelText>
                 <LabelText :inline="inline" label="扣除服务保证金：">

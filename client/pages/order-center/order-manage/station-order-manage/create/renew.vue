@@ -109,7 +109,9 @@
       <!-- 补充信息 -->
       <DetailStyle info="补充信息">
                <supplement-info 
-                  @intermediaryRoomChange = "intermediaryRoomChange"/>
+                  @proposedCompanyChange = "proposedCompanyChange"
+                  @intermediaryRoomChange = "intermediaryRoomChange"
+                  :proposedCompanyFlag="true" />
         </DetailStyle>
       <!-- 补充结束 -->
       <DetailStyle info="金额信息">
@@ -316,6 +318,7 @@ export default {
       }
     };
     return {
+      formulationCompanyName:'',//拟设立公司
       intermediaryName:'',//居间方名称
       //苏岭
       customerInfo: {},
@@ -454,8 +457,11 @@ export default {
     },
   },
   methods: {
-        intermediaryRoomChange(val){
-            this.intermediaryName = val //居间方名称
+     proposedCompanyChange(val){
+          this.formulationCompanyName = val //拟设立公司名称
+        },
+     intermediaryRoomChange(val){
+          this.intermediaryName = val //居间方名称
         },
     //苏岭增加客户主管理员开始
     addManagerSubmit(params) {

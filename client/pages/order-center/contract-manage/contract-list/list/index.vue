@@ -45,16 +45,17 @@
                 placeholder="写入描述..." 
             /> -->
             <!-- <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
-            otherAgreedChked:{{otherAgreedChked}}
-            <CheckboxGroup v-model="otherAgreedChked">
-                <Checkbox v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block'>
-                    <span class='contract-span' v-html="item.content"></span>
-                </Checkbox>
-            </CheckboxGroup>
+            <RadioGroup v-model="editContracts.agreeConfigId" >
+                <Radio v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block' >
+                    <span class='contract-span' >{{item.title}}</span>
+                </Radio>
+            </RadioGroup>
+            <br/><br/>
+            <label>中文</label>
+            <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.content" :styleObj='UEStyleObj'  :config="configs"></UEditor>
             <br/>
-            <UEditor  :styleObj='UEStyleObj'  :config="configs"></UEditor>
-            <br/>
-            <UEditor  :styleObj='UEStyleObj'  :config="configs"></UEditor>
+            <label>En</label>
+            <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.enContent"  :styleObj='UEStyleObj'  :config="configs"></UEditor>
             <br/>
             <div slot="footer">
                 <Button type="primary" @click="submitDescribe" :disabled="describeDisabled">确定</Button>
@@ -119,6 +120,12 @@ export default {
 
   data() {
     return {
+      curRequestId:'',
+      editContracts:{
+           enContent:"",
+           agreeConfigId:3,
+           content:"测试"
+      },
       configs: {
                 toolbars: [
                     [
@@ -240,7 +247,7 @@ export default {
         page: 1,
         pageSize: 15
       },
-      otherAgreedChked: [1],
+      otherAgreedChked: 1,
       otherAgreedList: [], //[{id name content}]
       newWin: "",
       effectDisabled: false,
@@ -632,7 +639,6 @@ export default {
     this.onWindowSize();
     this.tableHeight = document.documentElement.clientHeight - 360;
   },
-
   methods: {
     config: function() {
       this.$Notice.config({
@@ -693,21 +699,38 @@ export default {
       );
     },
 
-    //其他约定页面开关
-    showDescribe() {
+    //其他约定页面开关   
+    showDescribe(index) {
+      console.log("index  xx   "+index);
       this.otherAgreedList = [];
       this.$http.get(
-        "get-other-agree-list",
+        "get-station-contract-agree-config-list",
         {},
         r => {
           this.otherAgreedList = r.data;
-        },
+          this.curRequestId = this.detail[index].requestId;
+                         this.$http.post(
+                                  "post-station-contract-agree-config-show",
+                                  {requestId:this.detail[index].requestId},
+                                  r => {
+                                    this.editContracts = r.data
+                                    console.log("rrrpost  ",r);
+                                  },
+                                  error => {
+                                    this.$Notice.error({
+                                      title: error.message
+                                    });
+                                  }
+                                );
+                },
         error => {
           this.$Notice.error({
             title: error.message
           });
         }
       );
+/// post-station-contract-agree-config-show
+
       this.describeDisabled = false;
       this.openDescribe = !this.openDescribe;
     },
@@ -725,21 +748,25 @@ export default {
         // }
         // else
       }
-      this.otherAgreedChked = [1];
+      this.otherAgreedChked = 1;
       this.columnDetail = detail.row;
-      this.showDescribe();
-      this.getOtherConvention({ requestId: detail.row.requestId });
+      this.showDescribe(detail.index);
+      // this.getOtherConvention({ requestId: detail.row.requestId });
     },
 
     //其他约定提交
     submitDescribe() {
-      var colDetail = Object.assign({}, this.columnDetail);
+      // var colDetail = Object.assign({}, this.columnDetail);
+      // let params = {
+      //   requestId: colDetail.requestId,
+      //   otherAgreeIds: this.otherAgreedChked.join(",")
+      // };
       let params = {
-        requestId: colDetail.requestId,
-        otherAgreeIds: this.otherAgreedChked.join(",")
-      };
+        requestId:this.curRequestId,
+        ...this.editContracts
+      }
       this.$http.post(
-        "post-other-agree-list",
+        "post-krspace-erp-web-wf-station-contract-agree-config-add",
         params,
         response => {
           this.getListData(this.params);
@@ -921,7 +948,7 @@ export default {
         r => {
           this.describeData.otherAgreed = r.data.otherAgreed;
           let arr = [];
-          this.otherAgreedChked = [1];
+          this.otherAgreedChked = 1;
           r.data.otherAgreed.map(item => {
             arr.push(item.id);
           });

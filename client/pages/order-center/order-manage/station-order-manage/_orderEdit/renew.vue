@@ -786,7 +786,7 @@ export default {
 
             renewForm.formulationCompanyName=this.formulationCompanyName
             renewForm.intermediaryName = this.intermediaryName;
-
+            this.formItemFlag = true;
             let _this = this;
             this.disabled = true;
             //苏岭开始

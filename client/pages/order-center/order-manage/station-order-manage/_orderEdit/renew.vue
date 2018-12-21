@@ -645,9 +645,9 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
                 _this.renewForm.discountReason=data.discountReason
                 
-                _this.ditForm.formulationCompanyName = data.formulationCompanyName,//拟设立公司名称
-                _this.ditForm.intermediaryName = data.intermediaryName,//居间方名称 
-        
+                _this.editForm.formulationCompanyName = data.formulationCompanyName,//拟设立公司名称
+                _this.editForm.intermediaryName = data.intermediaryName,//居间方名称 
+                _this.formItemFlag = true;
         
                 /*
                 setTimeout(function () {
@@ -786,7 +786,7 @@ export default {
 
             renewForm.formulationCompanyName=this.formulationCompanyName
             renewForm.intermediaryName = this.intermediaryName;
-            this.formItemFlag = true;
+            
             let _this = this;
             this.disabled = true;
             //苏岭开始

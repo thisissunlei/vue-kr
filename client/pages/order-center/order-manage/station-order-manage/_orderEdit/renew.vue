@@ -232,6 +232,20 @@ export default {
                 callback()
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+                if (value.length > 50) {
+                    callback(new Error('居间方名称不能超过50个字符'));
+                } else {
+                    callback();
+                }
+            };
         return {
             formItemFlag:false,
             editForm:{
@@ -282,7 +296,9 @@ export default {
                 endDate: '',
                 saler: '',
                 rentAmount: '',
-                items: []
+                items: [],
+                formulationCompanyName:'',
+                intermediaryName:''
             },
             saleAmount: 0,
             saleAmounts: 0,
@@ -311,6 +327,12 @@ export default {
                 signDate: [
                     { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
                 ],
+                formulationCompanyName: [
+                    { trigger: 'change', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'change', validator: validateIntermediaryName }
+                        ]
             },
             stationListData: [],
             selecedStation: [],
@@ -387,10 +409,10 @@ export default {
     },
     methods: {
         proposedCompanyChange(val){
-            this.formulationCompanyName = val //拟设立公司名称
+            this.renewForm.formulationCompanyName = val //拟设立公司名称
         },
         intermediaryRoomChange(val){
-            this.intermediaryName = val //居间方名称
+            this.renewForm.intermediaryName = val //居间方名称
         },
         //苏岭增加客户主管理员开始
         addManagerSubmit(params){
@@ -782,10 +804,9 @@ export default {
             renewForm.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.firstPayTime));
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
-            renewForm.intermediaryName = this.intermediaryName;
 
-            renewForm.formulationCompanyName=this.formulationCompanyName
-            renewForm.intermediaryName = this.intermediaryName;
+            renewForm.formulationCompanyName = this.renewForm.formulationCompanyName
+            renewForm.intermediaryName = this.renewForm.intermediaryName;
             
             let _this = this;
             this.disabled = true;

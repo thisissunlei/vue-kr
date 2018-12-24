@@ -46,7 +46,7 @@
             /> -->
             <!-- <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
             <RadioGroup v-model="editContracts.agreeConfigId" >
-                <Radio v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block' >
+                <Radio v-for='item in otherAgreedList' :key="''+item.id" :label="item.id" style='display:block' >
                     <span class='contract-span' >{{item.title}}</span>
                 </Radio>
             </RadioGroup>

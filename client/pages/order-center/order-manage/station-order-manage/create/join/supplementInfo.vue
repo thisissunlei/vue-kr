@@ -6,13 +6,14 @@
                 <FormItem label="拟设立公司"  
                     v-if="proposedCompanyFlag"
                     style="width:252px"
-                    >
+                    prop="formulationCompanyName" >
                     <Input @on-change="changeFormulationCompanyName" v-model="proposedCompany"></Input>
                 </FormItem>
             </Col>
             <Col span="12" class="col">
                 <FormItem  label="居间方名称"
-                    style="width:252px">
+                    style="width:252px"
+                    prop="intermediaryName" >
                     
                     <Input  @on-change="changeIntermediaryName" v-model="intermediaryRoom"></Input>
                 </FormItem>

@@ -317,6 +317,20 @@ export default {
         callback()
       }
     };
+    const validateFormulationCompanyName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+    const validateIntermediaryName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
     return {
       formulationCompanyName:'',//拟设立公司
       intermediaryName:'',//居间方名称
@@ -355,7 +369,8 @@ export default {
         items: [],
         signDate: new Date(),
         saleChanceId: '',
-        intermediaryName:'',//居间方名称
+        formulationCompanyName:'',
+        intermediaryName:''
       },
       disabled: false,//提交按钮是否禁止
       discountError: false,
@@ -382,6 +397,12 @@ export default {
         signDate: [
           { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
         ],
+        formulationCompanyName: [
+                    { trigger: 'change', validator: validateFormulationCompanyName }
+                ],
+        intermediaryName: [
+                    { trigger: 'change', validator: validateIntermediaryName }
+                ]
       },
       stationListData: [],
       selecedStation: [],//table的数据 两个变量存储？？？
@@ -458,10 +479,10 @@ export default {
   },
   methods: {
      proposedCompanyChange(val){
-          this.formulationCompanyName = val //拟设立公司名称
+          this.renewForm.formulationCompanyName = val //拟设立公司名称
         },
      intermediaryRoomChange(val){
-          this.intermediaryName = val //居间方名称
+          this.renewForm.intermediaryName = val //居间方名称
         },
     //苏岭增加客户主管理员开始
     addManagerSubmit(params) {
@@ -725,8 +746,8 @@ export default {
 
       renewForm.startDate = start;
       renewForm.endDate = end;
-      renewForm.intermediaryName = this.intermediaryName;
-      renewForm.formulationCompanyName = this.formulationCompanyName;
+      renewForm.intermediaryName = this.renewForm.intermediaryName;
+      renewForm.formulationCompanyName = this.renewForm.formulationCompanyName;
       let _this = this;
       this.disabled = true;
       renewForm.discountReason = this.renewForm.discountReason

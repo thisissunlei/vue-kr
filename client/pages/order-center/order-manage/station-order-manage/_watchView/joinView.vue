@@ -421,6 +421,8 @@ export default {
       this.$http
         .get("join-bill-detail", from)
         .then(response => {
+          console.log('response.data');
+          console.log(JSON.stringify(response.data));
           this.basicInfo = response.data;
           let pars = {
             customerId: this.basicInfo.customerId,

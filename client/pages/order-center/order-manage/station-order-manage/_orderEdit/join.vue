@@ -40,12 +40,12 @@
             <!-- 补充信息 -->
             <DetailStyle info="补充信息">
                     <supplement-info  
-                    v-if="formItemFlag"
-                    :intermediaryName = "formItem.intermediaryName"
-                    :formulationCompanyName = "formItem.formulationCompanyName"
-                    @proposedCompanyChange = "proposedCompanyChange"
-                    @intermediaryRoomChange = "intermediaryRoomChange"
-                    :proposedCompanyFlag="true" />
+                        v-if="formItemFlag"
+                        :intermediaryName = "intermediaryName"
+                        :formulationCompanyName = "formulationCompanyName"
+                        @proposedCompanyChange = "proposedCompanyChange"
+                        @intermediaryRoomChange = "intermediaryRoomChange"
+                        :proposedCompanyFlag="true" />
                 </DetailStyle>
             <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
@@ -297,6 +297,20 @@ export default {
                 callback()
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
 
         return {
            formItemFlag:false,
@@ -411,7 +425,9 @@ export default {
                 items: [],
                 signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date()),
                 stationAmount: 0,
-                saleChanceId: ''
+                saleChanceId: '',
+                intermediaryName:'',
+                formulationCompanyName:''
             },
 
             errorPayType: false,//付款方式的必填错误信息
@@ -436,7 +452,14 @@ export default {
                 ],
                 signDate: [
                     { required: true, type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                ],
+                formulationCompanyName: [
+                    { trigger: 'change', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'change', validator: validateIntermediaryName }
                 ]
+
             },
             getFloor: +new Date(),
             ssoId: '',
@@ -510,10 +533,10 @@ export default {
     },
     methods: {
         proposedCompanyChange(val){
-            this.formulationCompanyName = val //拟设立公司名称
+            this.formItem.formulationCompanyName = val //拟设立公司名称
         },
         intermediaryRoomChange(val){
-            this.intermediaryName = val //居间方名称
+            this.formItem.intermediaryName = val //居间方名称
         },
         /**优惠券开始 */
         //核销优惠券
@@ -840,8 +863,8 @@ export default {
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
                 _this.formItem.discountReason=data.discountReason;
-                _this.formItem.intermediaryName = data.intermediaryName;
-                _this.formItem.formulationCompanyName = data.formulationCompanyName;
+                _this.intermediaryName = data.intermediaryName;
+                _this.formulationCompanyName = data.formulationCompanyName;
                 _this.formItemFlag = true;
                 _this.getStationAmount()
 
@@ -959,8 +982,8 @@ export default {
             // 补充内容   拟设立公司名称   居间方名称
             formItem.formulationCompanyName = this.formulationCompanyName;
             formItem.intermediaryName = this.intermediaryName; 
-            formItem.formulationCompanyName = this.formulationCompanyName;//拟设立公司名称
-            formItem.intermediaryName = this.intermediaryName;//居间方名称 
+            formItem.formulationCompanyName = this.formItem.formulationCompanyName;//拟设立公司名称
+            formItem.intermediaryName = this.formItem.intermediaryName;//居间方名称 
             let _this = this;
             this.disabled = true;
             //苏岭开始

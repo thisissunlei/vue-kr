@@ -64,7 +64,7 @@
                         </Col>
                         <!-- 补充信息 -->
                         <Col class="col">
-                            <FormItem label="居间方" class="bill-search-class"> 
+                            <FormItem label="居间方" class="bill-search-class" prop="intermediaryName"> 
                                 <Input  v-model="formItem.intermediaryName"   style="width: 252px"/>
                             </FormItem>
                         </Col>
@@ -408,6 +408,13 @@
             }
         },
         data() {
+            const validateIntermediaryName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
             const validateChangeTime = (rule, value, callback) => {
                 var today = new Date()
                 today = today.setDate(today.getDate()+1);
@@ -620,7 +627,10 @@
                     ],
                     replaceMemo:[
                         { required: true, message: '请填写换租原因', trigger: 'blur' }
-                    ]
+                    ],
+                    intermediaryName: [
+                    { trigger: 'change', validator: validateIntermediaryName }
+                        ]
                 },
                 ruleValidateTwo:{
                     leaseBegindate  :[

@@ -123,6 +123,20 @@ export default {
                 callback();
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+            if (value.length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
         return {
             formulationCompanyName:'',//拟设立公司名称
             intermediaryName:'',//居间方名称
@@ -191,6 +205,12 @@ export default {
                 ],
                 signDate: [
                     { required: true, type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                ],
+                formulationCompanyName: [
+                    { trigger: 'change', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'change', validator: validateIntermediaryName }
                 ]
             },
         }
@@ -235,10 +255,10 @@ export default {
     },
     methods: {
         proposedCompanyChange(val){
-            this.formulationCompanyName = val //拟设立公司名称
+            this.formItem.formulationCompanyName = val //拟设立公司名称
         },
         intermediaryRoomChange(val){
-            this.intermediaryName = val //居间方名称
+            this.formItem.intermediaryName = val //居间方名称
         },
         handleSubmit(name) {
             let message = '请填写完表单';
@@ -377,8 +397,8 @@ export default {
             formItem.discountReason=this.discountReason;
             formItem.couponId=this.getId;
             // 补充内容   拟设立公司名称   居间方名称
-            formItem.formulationCompanyName = this.formulationCompanyName;
-            formItem.intermediaryName = this.intermediaryName;
+            formItem.formulationCompanyName = this.formItem.formulationCompanyName;
+            formItem.intermediaryName = this.formItem.intermediaryName;
             let _this = this;
             this.disabled = true;
             // return

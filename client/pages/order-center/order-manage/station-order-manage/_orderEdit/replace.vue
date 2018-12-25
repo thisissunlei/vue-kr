@@ -384,7 +384,7 @@
     export default {
         data() {
             const validateIntermediaryName = (rule, value, callback) => {
-                if (value.length > 50) {
+                if (String(value).length > 50) {
                     callback(new Error('居间方名称不能超过50个字符'));
                 } else {
                     callback();
@@ -612,7 +612,7 @@
                         { required: true, message: '请填写换租原因', trigger: 'blur' }
                     ],
                     intermediaryName: [
-                    { trigger: 'change', validator: validateIntermediaryName }
+                    { trigger: 'blur', validator: validateIntermediaryName }
                         ]
                 },
                 ruleValidateTwo:{

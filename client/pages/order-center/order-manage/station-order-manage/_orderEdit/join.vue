@@ -298,14 +298,14 @@ export default {
             }
         };
         const validateFormulationCompanyName = (rule, value, callback) => {
-            if (value.length > 50) {
+            if (String(value).length > 50) {
                 callback(new Error('拟设立公司名称不能超过50个字符'));
             } else {
                 callback();
             }
         };
         const validateIntermediaryName = (rule, value, callback) => {
-            if (value.length > 50) {
+            if (String(value).length > 50) {
                 callback(new Error('居间方名称不能超过50个字符'));
             } else {
                 callback();
@@ -454,10 +454,10 @@ export default {
                     { required: true, type: 'date', message: '请先选择签署时间', trigger: 'change' }
                 ],
                 formulationCompanyName: [
-                    { trigger: 'change', validator: validateFormulationCompanyName }
+                    { trigger: 'blur', validator: validateFormulationCompanyName }
                 ],
                 intermediaryName: [
-                    { trigger: 'change', validator: validateIntermediaryName }
+                    { trigger: 'blur', validator: validateIntermediaryName }
                 ]
 
             },

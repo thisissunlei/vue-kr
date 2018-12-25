@@ -363,7 +363,7 @@ export default {
           title: "其他约定",
           key: "otherAgreed",
           align: "center",
-          width: 100,
+          width: 140,
           render: (h, params) => {
             if (!params.row.otherAgreed) {
               return "无";
@@ -379,7 +379,7 @@ export default {
               [
                 h("div", {
                   style: {
-                    width: "60px",
+                    width: "100px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap"

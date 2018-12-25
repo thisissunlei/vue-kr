@@ -51,7 +51,7 @@
                 </Radio>
             </RadioGroup>
             <br/><br/>
-            {{editContracts.agreeConfigId}}=={{editContracts.agreeConfigId}}
+           
             <label v-show="editContracts.agreeConfigId === 3 ">中文</label>
             <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.content" :styleObj='UEStyleObj'  :config="configs"></UEditor>
             <br/>

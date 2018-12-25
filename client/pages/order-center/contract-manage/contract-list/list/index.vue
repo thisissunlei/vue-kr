@@ -35,7 +35,7 @@
             </div>
         </Modal>
 
-        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal'>
+        <Modal  v-model="openDescribe" title="其他约定" width="460" class='contract-modal'>
             <!-- <Input 
                 v-model="otherAgreed" 
                 :maxlength="999" 
@@ -51,6 +51,7 @@
                 </Radio>
             </RadioGroup>
             <br/><br/>
+            {{editContracts.agreeConfigId}}=={{editContracts.agreeConfigId}}
             <label v-show="editContracts.agreeConfigId === 3 ">中文</label>
             <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.content" :styleObj='UEStyleObj'  :config="configs"></UEditor>
             <br/>
@@ -234,7 +235,7 @@ export default {
                 autoFloatEnabled: true,
                 elementPathEnabled: false,
                 maximumWords: 40000,
-                initialFrameHeight: 230,
+                initialFrameHeight: 160,
                 enableAutoSave: false,
                 autoFloatEnabled: false
             },
@@ -252,7 +253,7 @@ export default {
       newWin: "",
       effectDisabled: false,
       describeDisabled: false,
-      tableHeight: 200,
+      tableHeight: 180,
       MessageType: "",
       openMessage: false,
       warn: "",

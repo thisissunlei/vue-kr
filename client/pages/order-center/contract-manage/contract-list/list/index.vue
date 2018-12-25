@@ -431,7 +431,7 @@ export default {
           title: "合同创建时间",
           key: "startAndEnd",
           align: "center",
-          width: 150,
+          width: 180,
           render(h, obj) {
             let time = dateUtils.dateToStr(
               "YYYY-MM-DD  HH:mm:SS",

@@ -39,6 +39,7 @@
             </DetailStyle>
             <!-- 补充信息 -->
             <DetailStyle info="补充信息">
+                
                     <supplement-info  
                         v-if="formItemFlag"
                         :intermediaryName = "intermediaryName"
@@ -844,7 +845,7 @@ export default {
 
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-                _this.getSalerChanceList();
+           
                 //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
@@ -865,6 +866,10 @@ export default {
                 _this.formItem.discountReason=data.discountReason;
                 _this.intermediaryName = data.intermediaryName;
                 _this.formulationCompanyName = data.formulationCompanyName;
+                this.formItem.formulationCompanyName = data.intermediaryName;//拟设立公司名称
+                this.formItem.intermediaryName = data.formulationCompanyName;//居间方名称 
+
+
                 _this.formItemFlag = true;
                 _this.getStationAmount()
 
@@ -980,8 +985,7 @@ export default {
             formItem.endDate = end;
 
             // 补充内容   拟设立公司名称   居间方名称
-            formItem.formulationCompanyName = this.formulationCompanyName;
-            formItem.intermediaryName = this.intermediaryName; 
+            
             formItem.formulationCompanyName = this.formItem.formulationCompanyName;//拟设立公司名称
             formItem.intermediaryName = this.formItem.intermediaryName;//居间方名称 
             let _this = this;
@@ -994,9 +998,9 @@ export default {
             formItem.couponId=this.orderSeatThanksgivingDayVO.couponId;
 
             this.$http.post('save-join', formItem).then(r => {
-                window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
-                window.close();
-                window.opener.location.reload();
+                // window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
+                // window.close();
+                // window.opener.location.reload();
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message

@@ -402,8 +402,8 @@ export default {
                 }
             let list = [];
             let _this = this;
-            this.$http.get('get-app-cmt-community-limit-list', params).then((res)=>{
-                list = res.data.cmts;
+            this.$ajax.get('get-app-cmt-community-limit-list', params).then((res)=>{
+                list = res;
                 list.map((item)=>{
                     let obj =item;
                     obj.label = item.cmtName;
@@ -413,7 +413,7 @@ export default {
                 _this.communityList = list;
             }).catch((err)=>{
                 this.$Notice.error({
-                    title:err.message
+                    title:err.msg
                 });
             })
             return list;

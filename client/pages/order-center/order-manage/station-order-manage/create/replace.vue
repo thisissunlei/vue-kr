@@ -64,7 +64,7 @@
                         </Col>
                         <!-- 补充信息 -->
                         <Col class="col">
-                            <FormItem label="居间方" class="bill-search-class" prop="intermediaryName"> 
+                            <FormItem label="居间方名称" class="bill-search-class" prop="intermediaryName"> 
                                 <Input  v-model="formItem.intermediaryName"   style="width: 252px"/>
                             </FormItem>
                         </Col>

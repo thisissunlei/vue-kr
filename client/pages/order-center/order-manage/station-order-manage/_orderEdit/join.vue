@@ -844,7 +844,7 @@ export default {
 
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-
+                _this.getSalerChanceList();
                 //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
@@ -870,7 +870,7 @@ export default {
 
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
-                _this.getSalerChanceList();
+               
                 //苏岭开始
                 this.isAddEdit=data.managerId?true:false;
                 this.oldManagerId=data.managerId;

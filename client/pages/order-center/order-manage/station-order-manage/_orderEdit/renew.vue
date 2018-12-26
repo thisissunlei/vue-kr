@@ -669,6 +669,8 @@ export default {
                 
                 _this.editForm.formulationCompanyName = data.formulationCompanyName,//拟设立公司名称
                 _this.editForm.intermediaryName = data.intermediaryName,//居间方名称 
+                this.renewForm.formulationCompanyName = data.formulationCompanyName
+                this.renewForm.intermediaryName = data.intermediaryName
                 _this.formItemFlag = true;
         
                 /*

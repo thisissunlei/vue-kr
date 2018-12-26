@@ -13,6 +13,14 @@
                 v-show='showManager'>
                 <CustomerManager/>
             </DetailStyle>
+            <!-- 补充信息 -->
+            <DetailStyle info="补充信息">
+               <supplement-info 
+                    @proposedCompanyChange = "proposedCompanyChange"
+                    @intermediaryRoomChange = "intermediaryRoomChange"
+                    :proposedCompanyFlag="true" />
+            </DetailStyle>
+            <!-- 补充信息结束 -->
             <DetailStyle info="租赁信息">
                 <RentInfo :formItem='formItem' />
             </DetailStyle>
@@ -89,7 +97,7 @@ import BasicInfo from './join/basicInfo.vue'
 import CustomerManager from './join/customerManager.vue'
 import RentInfo from './join/rentInfo.vue'
 import AmountInfo from './join/amountInfo.vue'
-
+import SupplementInfo from './join/supplementInfo.vue'
 export default {
     components: {
         SectionTitle,
@@ -97,7 +105,8 @@ export default {
         BasicInfo,
         CustomerManager,
         RentInfo,
-        AmountInfo
+        AmountInfo,
+        SupplementInfo
     },
     head() {
         return {
@@ -114,7 +123,25 @@ export default {
                 callback();
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            console.log('String(value).length');
+            console.log(String(value).length);
+            if (String(value).length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
         return {
+            formulationCompanyName:'',//拟设立公司名称
+            intermediaryName:'',//居间方名称
             showManager: false,
             disabled: false,
             errorAmount: false,
@@ -151,7 +178,9 @@ export default {
                 rentAmount: '',
                 items: [],
                 stationAmount: 0,
-                saleChanceId: ''
+                saleChanceId: '',
+                formulationCompanyName:'',//拟设立公司名称
+                intermediaryName:'',//居间方名称
             },
             errorPayType: false,//付款方式的必填错误信息
             ruleCustom: {
@@ -178,6 +207,12 @@ export default {
                 ],
                 signDate: [
                     { required: true, type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                ],
+                formulationCompanyName: [
+                    { trigger: 'blur', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
                 ]
             },
         }
@@ -220,8 +255,13 @@ export default {
         GLOBALSIDESWITCH("false");
         this.getFreeDeposit();
     },
-
     methods: {
+        proposedCompanyChange(val){
+            this.formItem.formulationCompanyName = val //拟设立公司名称
+        },
+        intermediaryRoomChange(val){
+            this.formItem.intermediaryName = val //居间方名称
+        },
         handleSubmit(name) {
             let message = '请填写完表单';
             this.$Notice.config({
@@ -358,6 +398,9 @@ export default {
             formItem.managerId = this.managerId;
             formItem.discountReason=this.discountReason;
             formItem.couponId=this.getId;
+            // 补充内容   拟设立公司名称   居间方名称
+            formItem.formulationCompanyName = this.formItem.formulationCompanyName;
+            formItem.intermediaryName = this.formItem.intermediaryName;
             let _this = this;
             this.disabled = true;
             // return

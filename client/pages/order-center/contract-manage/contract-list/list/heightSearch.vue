@@ -22,7 +22,7 @@
                         filterable
                         clearable
                     >
-                        <Option v-for="item in communityList" :value="item.code" :key="item.code">{{ item.name }}</Option>
+                        <Option v-for="(item,index) in communityList" :value="item.code" :key="index">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
                 <Form-item label="合同类型" class='bill-search-class'>
@@ -35,7 +35,7 @@
                         <Option 
                             v-for="item in typeList" 
                             :value="item.value" 
-                            :key="item.value"
+                            :key="''+item.value"
                         >
                             {{ item.label }}
                         </Option>
@@ -51,7 +51,7 @@
                         <Option 
                             v-for="item in orderList" 
                             :value="item.value" 
-                            :key="item.value"
+                            :key="''+item.value"
                          >
                             {{ item.label }}
                         </Option>
@@ -67,7 +67,7 @@
                         <Option 
                             v-for="item in archiveList" 
                             :value="item.value" 
-                            :key="item.value"
+                            :key="''+item.value"
                          >
                             {{ item.label }}
                         </Option>

@@ -54,6 +54,17 @@
                     </Col>
                 </Row>
             </DetailStyle>
+             <!-- 补充信息 -->
+            <DetailStyle info="补充信息">
+                    <supplement-info  
+                        v-if="formItemFlag"
+                        :intermediaryName = "editForm.intermediaryName"
+                        :formulationCompanyName = "editForm.formulationCompanyName"
+                        @proposedCompanyChange = "proposedCompanyChange"
+                        @intermediaryRoomChange = "intermediaryRoomChange"
+                        :proposedCompanyFlag="true" />
+                </DetailStyle>
+            <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
@@ -205,8 +216,8 @@ import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-import editStationPriceData from "../listData/editStationPriceData"
-
+import editStationPriceData from "../listData/editStationPriceData";
+import SupplementInfo from "../create/join/supplementInfo.vue";
 
 
 
@@ -221,7 +232,28 @@ export default {
                 callback()
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+                if (String(value).length > 50) {
+                    callback(new Error('居间方名称不能超过50个字符'));
+                } else {
+                    callback();
+                }
+            };
         return {
+            formItemFlag:false,
+            editForm:{
+               formulationCompanyName:'',//拟设立公司名称
+               intermediaryName:'',//居间方名称 
+            },
+            formulationCompanyName:'',//拟设立公司名称
+            intermediaryName:'',//居间方名称 
             discountErrorStr:'',
             discountReceive:-1,//订单本身已有的折扣信息
             discountdisable:[],
@@ -264,7 +296,9 @@ export default {
                 endDate: '',
                 saler: '',
                 rentAmount: '',
-                items: []
+                items: [],
+                formulationCompanyName:'',
+                intermediaryName:''
             },
             saleAmount: 0,
             saleAmounts: 0,
@@ -293,6 +327,12 @@ export default {
                 signDate: [
                     { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
                 ],
+                formulationCompanyName: [
+                    { trigger: 'blur', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
+                        ]
             },
             stationListData: [],
             selecedStation: [],
@@ -349,7 +389,8 @@ export default {
         planMap,
         SelectChance,
         LabelText,
-        AddManager
+        AddManager,
+        SupplementInfo
     },
     mounted() {
         this.getDetailData();
@@ -367,6 +408,12 @@ export default {
         },
     },
     methods: {
+        proposedCompanyChange(val){
+            this.renewForm.formulationCompanyName = val //拟设立公司名称
+        },
+        intermediaryRoomChange(val){
+            this.renewForm.intermediaryName = val //居间方名称
+        },
         //苏岭增加客户主管理员开始
         addManagerSubmit(params){
             this.submitManager && this.submitManager(this.managerSubmit);
@@ -619,7 +666,11 @@ export default {
                 _this.saleAmount = data.tactiscAmount
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
                 _this.renewForm.discountReason=data.discountReason
-
+                
+                _this.editForm.formulationCompanyName = data.formulationCompanyName,//拟设立公司名称
+                _this.editForm.intermediaryName = data.intermediaryName,//居间方名称 
+                _this.formItemFlag = true;
+        
                 /*
                 setTimeout(function () {
 
@@ -753,6 +804,10 @@ export default {
             renewForm.firstPayTime = dateUtils.dateToStr("YYYY-MM-dd 00:00:00", new Date(this.renewForm.firstPayTime));
             renewForm.endDate = end;
             renewForm.discountReason=this.renewForm.discountReason
+
+            renewForm.formulationCompanyName = this.renewForm.formulationCompanyName
+            renewForm.intermediaryName = this.renewForm.intermediaryName;
+            
             let _this = this;
             this.disabled = true;
             //苏岭开始

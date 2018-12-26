@@ -47,6 +47,14 @@
 					{{basicInfo.email}}
 				</LabelText>
 			</DetailStyle>
+      <DetailStyle info="补充信息">
+				<LabelText label="拟设立公司：">
+					{{basicInfo.formulationCompanyName}}
+				</LabelText>
+				<LabelText label="居间方名称：">
+					{{basicInfo.intermediaryName}}
+				</LabelText>
+			</DetailStyle>
 			<DetailStyle info="续租信息">
 				<LabelText label="续租开始日期：">
 					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}

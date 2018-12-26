@@ -35,7 +35,7 @@
             </div>
         </Modal>
 
-        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal'>
+        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal' :styles="otherStyles">
             <!-- <Input 
                 v-model="otherAgreed" 
                 :maxlength="999" 
@@ -45,11 +45,19 @@
                 placeholder="写入描述..." 
             /> -->
             <!-- <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div> -->
-            <CheckboxGroup v-model="otherAgreedChked">
-                <Checkbox v-for='item in otherAgreedList' :key="item.id" :label="item.id" style='display:block'>
-                    <span class='contract-span' v-html="item.content"></span>
-                </Checkbox>
-            </CheckboxGroup>
+            <RadioGroup v-model="editContracts.agreeConfigId" >
+                <Radio v-for='item in otherAgreedList' :key="''+item.id" :label="item.id" style='display:block' >
+                    <span class='contract-span' >{{item.title}}</span>
+                </Radio>
+            </RadioGroup>
+            <br/><br/>
+           
+            <label v-show="editContracts.agreeConfigId === 3 ">中文</label>
+            <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.content" :styleObj='UEStyleObj'  :config="configs"></UEditor>
+            <br/>
+            <label v-show="editContracts.agreeConfigId === 3 ">英文</label>
+            <UEditor v-show="editContracts.agreeConfigId === 3 "  v-model="editContracts.enContent"  :styleObj='UEStyleObj'  :config="configs"></UEditor>
+            <br/>
             <div slot="footer">
                 <Button type="primary" @click="submitDescribe" :disabled="describeDisabled">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="showDescribe">取消</Button>
@@ -91,6 +99,8 @@ import dateUtils from "vue-dateutils";
 import utils from "~/plugins/utils";
 import Message from "~/components/Message";
 import Buttons from "~/components/Buttons";
+import UEditor from '~/components/UEditor.vue';
+
 var maxWidth = 170;
 export default {
   head() {
@@ -105,21 +115,146 @@ export default {
     HeightSearch,
     Loading,
     Message,
-    Buttons
+    Buttons,
+    UEditor
   },
 
   data() {
     return {
+      otherStyles:{},
+      curRequestId:'',
+      editContracts:{
+           enContent:"",
+           agreeConfigId:3,
+           content:"测试"
+      },
+      configs: {
+                toolbars: [
+                    [
+                        'fullscreen',//全屏
+                        'source', //源代码
+                        '|',
+                        'undo', //撤销
+                        'redo', //重做
+                        '|',
+
+                        'bold', //加粗
+                        'italic', //斜体
+                        'underline', //下划线
+                        'fontborder', //字符边框
+                        'strikethrough', //删除线
+                        'subscript', //下标
+                        'superscript', //上标
+                        'removeformat', //清除格式
+                        'formatmatch', //格式刷
+                        'autotypeset', //自动排版
+                        'blockquote', //引用
+                        'pasteplain', //纯文本粘贴模式
+                        '|',
+
+                        'forecolor', //字体颜色
+                        'backcolor', //背景色
+                        'insertorderedlist', //有序列表
+                        'insertunorderedlist', //无序列表
+
+                        'selectall', //全选
+                        'cleardoc', //清空文档
+                        '|',
+                        'rowspacingtop', //段前距
+                        'rowspacingbottom', //段后距
+                        'lineheight', //行间距
+                        '|',
+                        'customstyle', //自定义标题
+                        'paragraph', //段落格式
+                        'fontfamily', //字体
+                        'fontsize', //字号
+                        '|',
+                        'directionalityltr', //从左向右输入
+                        'directionalityrtl', //从右向左输入
+                        'indent', //首行缩进
+                        '|',
+
+                        'justifyleft', //居左对齐
+                        'justifyright', //居右对齐
+                        'justifycenter', //居中对齐
+                        'justifyjustify', //两端对齐
+                        '|',
+
+                        'touppercase', //字母大写
+                        'tolowercase', //字母小写
+                        '|',
+
+
+                        'link', //超链接
+                        'unlink', //取消链接
+                        'anchor', //锚点
+                        '|',
+
+
+                        'imagenone', //默认
+                        'imageleft', //左浮动
+                        'imageright', //右浮动
+                        'imagecenter', //居中
+                        '|',
+
+                        //'simpleupload', //单图上传
+                        //'emotion', //表情
+                        // 'map', //Baidu地图
+                        // 'pagebreak', //分页
+                        // 'template', //模板
+                        // 'background', //背景
+                        '|',
+
+                        'horizontal', //分隔线
+                        'date', //日期
+                        'time', //时间
+                        'spechars', //特殊字符
+                        '|',
+
+                        'inserttable', //插入表格
+                        'deletetable', //删除表格
+                        'insertparagraphbeforetable', //"表格前插入行"
+                        'insertrow', //前插入行
+                        'insertcol', //前插入列
+                        'mergeright', //右合并单元格
+                        'mergedown', //下合并单元格
+                        'deleterow', //删除行
+                        'deletecol', //删除列
+                        'splittorows', //拆分成行
+                        'splittocols', //拆分成列
+                        'splittocells', //完全拆分单元格
+                        'deletecaption', //删除表格标题
+                        'inserttitle', //插入标题
+                        'mergecells', //合并多个单元格
+                        'edittable', //表格属性
+                        'edittd', //单元格属性
+                        'charts' // 图表
+
+                    ]
+                ],
+                // autoHeightEnabled: true,
+                autoFloatEnabled: true,
+                elementPathEnabled: false,
+                maximumWords: 40000,
+                initialFrameHeight: 160,
+                enableAutoSave: false,
+                autoFloatEnabled: false
+            },
+      UEStyleObj: {
+                'width': '100%',
+                'height': '300px',
+                'clear': 'both'
+          },
       params: {
         page: 1,
         pageSize: 15
       },
-      otherAgreedChked: [1],
+      otherAgreedChked: 1,
       otherAgreedList: [], //[{id name content}]
       newWin: "",
       effectDisabled: false,
       describeDisabled: false,
-      tableHeight: 200,
+      tableHeight: 180,
       MessageType: "",
       openMessage: false,
       warn: "",
@@ -199,7 +334,7 @@ export default {
           title: "创建人",
           key: "creatorName",
           align: "center",
-          width: 150
+          width: 150,
         },
         {
           title: "服务费",
@@ -230,7 +365,7 @@ export default {
           title: "其他约定",
           key: "otherAgreed",
           align: "center",
-          width: 100,
+          width: 140,
           render: (h, params) => {
             if (!params.row.otherAgreed) {
               return "无";
@@ -246,7 +381,7 @@ export default {
               [
                 h("div", {
                   style: {
-                    width: "60px",
+                    width: "100px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap"
@@ -298,7 +433,7 @@ export default {
           title: "合同创建时间",
           key: "startAndEnd",
           align: "center",
-          width: 150,
+          width: 180,
           render(h, obj) {
             let time = dateUtils.dateToStr(
               "YYYY-MM-DD  HH:mm:SS",
@@ -506,7 +641,6 @@ export default {
     this.onWindowSize();
     this.tableHeight = document.documentElement.clientHeight - 360;
   },
-
   methods: {
     config: function() {
       this.$Notice.config({
@@ -520,8 +654,18 @@ export default {
     },
 
     onWindowSize: function() {
+      var sizeHeight=document.body.clientHeight;
+      if(sizeHeight<900){
+         this.otherStyles={top: '20px'};
+      }
       window.onresize = function() {
         var width = document.body.clientWidth;
+        var height=document.body.clientHeight;
+        if(height<900){
+          this.otherStyles={top: '20px'};
+        }else{
+          this.otherStyles={};
+        }
         if (width > 1870) {
           this.maxWidth = width - 1700;
         } else {
@@ -567,21 +711,38 @@ export default {
       );
     },
 
-    //其他约定页面开关
-    showDescribe() {
+    //其他约定页面开关   
+    showDescribe(index) {
+      console.log("index  xx   "+index);
       this.otherAgreedList = [];
       this.$http.get(
-        "get-other-agree-list",
+        "get-station-contract-agree-config-list",
         {},
         r => {
           this.otherAgreedList = r.data;
-        },
+          this.curRequestId = this.detail[index].requestId;
+                         this.$http.post(
+                                  "post-station-contract-agree-config-show",
+                                  {requestId:this.detail[index].requestId},
+                                  r => {
+                                    this.editContracts = r.data
+                                    console.log("rrrpost  ",r);
+                                  },
+                                  error => {
+                                    this.$Notice.error({
+                                      title: error.message
+                                    });
+                                  }
+                                );
+                },
         error => {
           this.$Notice.error({
             title: error.message
           });
         }
       );
+/// post-station-contract-agree-config-show
+
       this.describeDisabled = false;
       this.openDescribe = !this.openDescribe;
     },
@@ -599,21 +760,25 @@ export default {
         // }
         // else
       }
-      this.otherAgreedChked = [1];
+      this.otherAgreedChked = 1;
       this.columnDetail = detail.row;
-      this.showDescribe();
-      this.getOtherConvention({ requestId: detail.row.requestId });
+      this.showDescribe(detail.index);
+      // this.getOtherConvention({ requestId: detail.row.requestId });
     },
 
     //其他约定提交
     submitDescribe() {
-      var colDetail = Object.assign({}, this.columnDetail);
+      // var colDetail = Object.assign({}, this.columnDetail);
+      // let params = {
+      //   requestId: colDetail.requestId,
+      //   otherAgreeIds: this.otherAgreedChked.join(",")
+      // };
       let params = {
-        requestId: colDetail.requestId,
-        otherAgreeIds: this.otherAgreedChked.join(",")
-      };
+        requestId:this.curRequestId,
+        ...this.editContracts
+      }
       this.$http.post(
-        "post-other-agree-list",
+        "post-krspace-erp-web-wf-station-contract-agree-config-add",
         params,
         response => {
           this.getListData(this.params);
@@ -795,7 +960,7 @@ export default {
         r => {
           this.describeData.otherAgreed = r.data.otherAgreed;
           let arr = [];
-          this.otherAgreedChked = [1];
+          this.otherAgreedChked = 1;
           r.data.otherAgreed.map(item => {
             arr.push(item.id);
           });
@@ -959,4 +1124,5 @@ export default {
     display: inline;
   }
 }
+
 </style>

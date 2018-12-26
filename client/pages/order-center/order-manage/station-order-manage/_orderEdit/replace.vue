@@ -30,8 +30,7 @@
                                     filterable
                                     clearable
                                     :label-in-value='labelInValue'
-                                    @on-change="changeCommunity"
-                                >
+                                    @on-change="changeCommunity">
                                     <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                </Select> 
                             </FormItem>
@@ -58,6 +57,13 @@
                                 />
                             </FormItem>
                         </Col>
+                         <!-- 补充信息 -->
+                        <Col class="col">
+                            <FormItem label="居间方" class="bill-search-class" prop="intermediaryName" > 
+                                <Input  v-model="formItem.intermediaryName"   style="width: 252px"/>
+                            </FormItem>
+                        </Col>
+                        <!-- 补充信息 -->
                     </Row>
                 </Form>
                 <div class="buttons">
@@ -377,6 +383,13 @@
 
     export default {
         data() {
+            const validateIntermediaryName = (rule, value, callback) => {
+                if (String(value).length > 50) {
+                    callback(new Error('居间方名称不能超过50个字符'));
+                } else {
+                    callback();
+                }
+            };
             const validateChangeTime = (rule, value, callback) => {
                 var today = new Date()
                 today = today.setDate(today.getDate()+1);
@@ -413,6 +426,7 @@
                 }
             };
             return {
+                intermediaryName:'',// 居间方
                 discountErrorStr:'',
                 openDiscount:false,
                 batchDiscount: '',
@@ -575,6 +589,7 @@
                 formItem:{
                     signDate:new Date(),
                     leaseBegindate:'',
+                    intermediaryName:''
                 },
                 getFloor:new Date(),
                 //全选
@@ -595,7 +610,10 @@
                     ],
                     replaceMemo:[
                         { required: true, message: '请填写换租原因', trigger: 'blur' }
-                    ]
+                    ],
+                    intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
+                        ]
                 },
                 ruleValidateTwo:{
                     leaseBegindate  :[

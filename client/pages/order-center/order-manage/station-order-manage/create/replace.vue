@@ -62,11 +62,17 @@
                                 />
                             </FormItem>
                         </Col>
+                        <!-- 补充信息 -->
+                        <Col class="col">
+                            <FormItem label="居间方名称" class="bill-search-class" prop="intermediaryName"> 
+                                <Input  v-model="formItem.intermediaryName"   style="width: 252px"/>
+                            </FormItem>
+                        </Col>
+                        <!-- 补充信息 -->
                     </Row>
                 </Form>
                 <div class="buttons">
                     <Button type="primary" @click="next('formItemOne')">下一步</Button>
-                    
                 </div>
             </Card>
 <!-- end 基本信息 -->
@@ -402,6 +408,13 @@
             }
         },
         data() {
+            const validateIntermediaryName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
             const validateChangeTime = (rule, value, callback) => {
                 var today = new Date()
                 today = today.setDate(today.getDate()+1);
@@ -436,6 +449,7 @@
                 }
             };
             return {
+                intermediaryName:'',// 居间方
                 openDiscount:false,
                 batchDiscount: '',
                 batchDiscountError: '',
@@ -592,6 +606,7 @@
                 formItem:{
                     signDate:new Date(),
                     leaseBegindate:'',
+                    intermediaryName:'',// 居间方
                 },
                 getFloor:new Date(),
                 //全选
@@ -612,7 +627,10 @@
                     ],
                     replaceMemo:[
                         { required: true, message: '请填写换租原因', trigger: 'blur' }
-                    ]
+                    ],
+                    intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
+                        ]
                 },
                 ruleValidateTwo:{
                     leaseBegindate  :[
@@ -903,7 +921,8 @@
                 overViewData.freeStartDate = this.freeStartDate;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
-
+                // 补充信息
+                overViewData.intermediaryName = this.formItem.intermediaryName// 居间方
                 // step3第二个table数据 
                 // let serviceDetailsList =this.serviceDetailsList.map(item=>{
                 //     item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
@@ -998,7 +1017,7 @@
                 //TODO 联调时需修改判断条件
 
                 //出发更新列表中的欲更换信息
-                var today = new Date()
+                var today = new Date();
                 this.selectAllChecked = false;
                 this.selectAllAbled = false;
                 today = today.setDate(today.getDate()+1);

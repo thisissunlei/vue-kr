@@ -37,6 +37,17 @@
                     </Col>
                 </Row>
             </DetailStyle>
+            <!-- 补充信息 -->
+            <DetailStyle info="补充信息">
+                    <supplement-info  
+                        v-if="formItemFlag"
+                        :intermediaryName = "intermediaryName"
+                        :formulationCompanyName = "formulationCompanyName"
+                        @proposedCompanyChange = "proposedCompanyChange"
+                        @intermediaryRoomChange = "intermediaryRoomChange"
+                        :proposedCompanyFlag="true" />
+                </DetailStyle>
+            <!-- 补充结束 -->
             <!--苏岭增加客户主管理员开始-->
             <div class="m-customer-info" v-if="isManager">
               <DetailStyle info="客户主管理员信息">
@@ -271,7 +282,7 @@ import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
 import editStationPriceData from "./editStationPriceData"
 import EddCoupon from '../addCoupon';
-
+import SupplementInfo from "../create/join/supplementInfo.vue";
 
 
 
@@ -286,8 +297,25 @@ export default {
                 callback()
             }
         };
+        const validateFormulationCompanyName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+        const validateIntermediaryName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
 
         return {
+           formItemFlag:false,
+           formulationCompanyName:'',//拟设立公司名称
+           intermediaryName:'',//居间方名称 
             //优惠开始
             //权限
            couponDisabled:false,
@@ -397,7 +425,9 @@ export default {
                 items: [],
                 signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date()),
                 stationAmount: 0,
-                saleChanceId: ''
+                saleChanceId: '',
+                intermediaryName:'',
+                formulationCompanyName:''
             },
 
             errorPayType: false,//付款方式的必填错误信息
@@ -422,7 +452,14 @@ export default {
                 ],
                 signDate: [
                     { required: true, type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                ],
+                formulationCompanyName: [
+                    { trigger: 'blur', validator: validateFormulationCompanyName }
+                ],
+                intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
                 ]
+
             },
             getFloor: +new Date(),
             ssoId: '',
@@ -455,8 +492,8 @@ export default {
         ListAndMap,
         LabelText,
         AddManager,
-        EddCoupon
-
+        EddCoupon,
+        SupplementInfo
     },
     mounted() {
         this.getDetailData();
@@ -495,6 +532,12 @@ export default {
         },
     },
     methods: {
+        proposedCompanyChange(val){
+            this.formItem.formulationCompanyName = val //拟设立公司名称
+        },
+        intermediaryRoomChange(val){
+            this.formItem.intermediaryName = val //居间方名称
+        },
         /**优惠券开始 */
         //核销优惠券
         orderSeatCouponUse(){
@@ -801,7 +844,7 @@ export default {
 
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-
+                _this.getSalerChanceList();
                 //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
@@ -819,13 +862,15 @@ export default {
                 _this.formItem.stationAmount = data.seatRentAmount;
                 _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
                 _this.formItem.rentAmount = data.rentAmount;
-                _this.formItem.discountReason=data.discountReason
-
+                _this.formItem.discountReason=data.discountReason;
+                _this.intermediaryName = data.intermediaryName;
+                _this.formulationCompanyName = data.formulationCompanyName;
+                _this.formItemFlag = true;
                 _this.getStationAmount()
 
                 _this.getFloor = +new Date()
                 // _this.validSaleChance();
-                _this.getSalerChanceList();
+               
                 //苏岭开始
                 this.isAddEdit=data.managerId?true:false;
                 this.oldManagerId=data.managerId;
@@ -933,6 +978,12 @@ export default {
 
             formItem.startDate = start;
             formItem.endDate = end;
+
+            // 补充内容   拟设立公司名称   居间方名称
+            formItem.formulationCompanyName = this.formulationCompanyName;
+            formItem.intermediaryName = this.intermediaryName; 
+            formItem.formulationCompanyName = this.formItem.formulationCompanyName;//拟设立公司名称
+            formItem.intermediaryName = this.formItem.intermediaryName;//居间方名称 
             let _this = this;
             this.disabled = true;
             //苏岭开始
@@ -944,8 +995,8 @@ export default {
 
             this.$http.post('save-join', formItem).then(r => {
                 window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
-                // window.close();
-                // window.opener.location.reload();
+                window.close();
+                window.opener.location.reload();
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message

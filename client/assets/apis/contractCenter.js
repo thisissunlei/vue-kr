@@ -60,5 +60,20 @@ export default {
     'post-other-agree-list': {
         url: '/api/krspace-erp-web/wf/station/contract/other-agree/add',
         method: 'post'
+    },
+    // 其他约定列表
+    'get-station-contract-agree-config-list': {
+        url: '/api/krspace-erp-web/wf/station/contract/agree-config/list',
+        method: 'get'
+    },
+    // 其他约定回显内容
+    'post-station-contract-agree-config-show':{
+        url: 'api/krspace-erp-web/wf/station/contract/agree-config/show',
+        method: 'post'
+    },
+    'post-krspace-erp-web-wf-station-contract-agree-config-add':{
+        url:'api/krspace-erp-web/wf/station/contract/agree-config/add',
+        method:'post'
     }
+
 }

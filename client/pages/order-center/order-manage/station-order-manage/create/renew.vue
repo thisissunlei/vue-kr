@@ -106,6 +106,14 @@
         </DetailStyle>
       </div>
       <!--苏岭增加客户主管理员结束-->
+      <!-- 补充信息 -->
+      <DetailStyle info="补充信息">
+               <supplement-info 
+                  @proposedCompanyChange = "proposedCompanyChange"
+                  @intermediaryRoomChange = "intermediaryRoomChange"
+                  :proposedCompanyFlag="true" />
+        </DetailStyle>
+      <!-- 补充结束 -->
       <DetailStyle info="金额信息">
         <Row style="margin-bottom:10px">
           <Col class="col" span="24">
@@ -290,7 +298,8 @@ import utils from '~/plugins/utils';
 import SelectChance from '~/components/SelectSaleChance.vue';
 import LabelText from '~/components/LabelText';
 import AddManager from '../addAdministrator';
-import editStationPriceData from "../listData/editStationPriceData"
+import editStationPriceData from "../listData/editStationPriceData";
+import SupplementInfo from "./join/supplementInfo.vue";
 
 export default {
   head() {
@@ -308,7 +317,23 @@ export default {
         callback()
       }
     };
+    const validateFormulationCompanyName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('拟设立公司名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
+    const validateIntermediaryName = (rule, value, callback) => {
+            if (String(value).length > 50) {
+                callback(new Error('居间方名称不能超过50个字符'));
+            } else {
+                callback();
+            }
+        };
     return {
+      formulationCompanyName:'',//拟设立公司
+      intermediaryName:'',//居间方名称
       //苏岭
       customerInfo: {},
       isManager: false,
@@ -343,7 +368,9 @@ export default {
         rentAmount: '',
         items: [],
         signDate: new Date(),
-        saleChanceId: ''
+        saleChanceId: '',
+        formulationCompanyName:'',
+        intermediaryName:''
       },
       disabled: false,//提交按钮是否禁止
       discountError: false,
@@ -370,6 +397,12 @@ export default {
         signDate: [
           { required: true, type: 'date', message: '此项不可为空', trigger: 'change' }
         ],
+        formulationCompanyName: [
+                    { trigger: 'blur', validator: validateFormulationCompanyName }
+                ],
+        intermediaryName: [
+                    { trigger: 'blur', validator: validateIntermediaryName }
+                ]
       },
       stationListData: [],
       selecedStation: [],//table的数据 两个变量存储？？？
@@ -415,6 +448,7 @@ export default {
     }
   },
   components: {
+    SupplementInfo,    
     SectionTitle,
     SelectCommunities,
     DetailStyle,
@@ -444,6 +478,12 @@ export default {
     },
   },
   methods: {
+     proposedCompanyChange(val){
+          this.renewForm.formulationCompanyName = val //拟设立公司名称
+        },
+     intermediaryRoomChange(val){
+          this.renewForm.intermediaryName = val //居间方名称
+        },
     //苏岭增加客户主管理员开始
     addManagerSubmit(params) {
       this.submitManager && this.submitManager(this.managerSubmit);
@@ -706,11 +746,15 @@ export default {
 
       renewForm.startDate = start;
       renewForm.endDate = end;
+      renewForm.intermediaryName = this.renewForm.intermediaryName;
+      renewForm.formulationCompanyName = this.renewForm.formulationCompanyName;
       let _this = this;
       this.disabled = true;
       renewForm.discountReason = this.renewForm.discountReason
       //苏岭开始
       renewForm.managerId = this.managerId;
+
+      
       //苏岭结束
       this.$http.post('save-renew', renewForm).then(r => {
         window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/renewView';

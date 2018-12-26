@@ -150,8 +150,7 @@ export default {
     //入驻新建提交
     "save-join": {
         // url: "/ben/api/krspace-op-web/order-seat-add",
-           url: "/api/op/order-seat-add",
-        // url: "/ben/op/order-seat-add",
+        url: "/api/op/order-seat-add",
         method: "post"
     },
     //续驻新建提交

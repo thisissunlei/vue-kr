@@ -845,7 +845,7 @@ export default {
 
                 _this.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
                 _this.formItem.saleChanceId = data.opportunityId ? JSON.stringify(data.opportunityId) : '';
-           
+                _this.getSalerChanceList();
                 //console.log(data.opportunityId,'_this.saleChanceId')
                 _this.defaultChanceID = data.opportunityId;
 
@@ -998,9 +998,9 @@ export default {
             formItem.couponId=this.orderSeatThanksgivingDayVO.couponId;
 
             this.$http.post('save-join', formItem).then(r => {
-                // window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
-                // window.close();
-                // window.opener.location.reload();
+                window.location.href = '/order-center/order-manage/station-order-manage/' + r.data.orderSeatId + '/joinView';
+                window.close();
+                window.opener.location.reload();
             }).catch(e => {
                 _this.$Notice.error({
                     title: e.message

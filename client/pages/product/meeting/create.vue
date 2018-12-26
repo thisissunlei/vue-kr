@@ -523,10 +523,10 @@ export default {
             let params = {
                     cmtName:name
                 }
-            this.$http.get('get-community-new-list', params).then((res)=>{
+            this.$ajax.get('get-community-new-list', params).then((res)=>{
            
                let list= []
-               res.data.cmts.map((item)=>{
+               res.map((item)=>{
                    let obj ={};
                     obj.label = item.cmtName;
                     obj.value = item.cmtId;
@@ -538,7 +538,7 @@ export default {
                 this.communityList = list;
             }).catch((err)=>{
                 this.$Notice.error({
-                    title:err.message
+                    title:err.msg
                 });
             })
             

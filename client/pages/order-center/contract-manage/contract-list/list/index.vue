@@ -35,7 +35,7 @@
             </div>
         </Modal>
 
-        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal' :styles="{top: '20px'}">
+        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal' :styles="otherStyles">
             <!-- <Input 
                 v-model="otherAgreed" 
                 :maxlength="999" 
@@ -121,6 +121,7 @@ export default {
 
   data() {
     return {
+      otherStyles:{},
       curRequestId:'',
       editContracts:{
            enContent:"",
@@ -653,8 +654,18 @@ export default {
     },
 
     onWindowSize: function() {
+      var sizeHeight=document.body.clientHeight;
+      if(sizeHeight<900){
+         this.otherStyles={top: '20px'};
+      }
       window.onresize = function() {
         var width = document.body.clientWidth;
+        var height=document.body.clientHeight;
+        if(height<900){
+          this.otherStyles={top: '20px'};
+        }else{
+          this.otherStyles={};
+        }
         if (width > 1870) {
           this.maxWidth = width - 1700;
         } else {

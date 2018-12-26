@@ -35,7 +35,7 @@
             </div>
         </Modal>
 
-        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal'>
+        <Modal v-model="openDescribe" title="其他约定" width="460" class='contract-modal' :styles="{top: '20px'}">
             <!-- <Input 
                 v-model="otherAgreed" 
                 :maxlength="999" 

@@ -34,8 +34,11 @@ const jsFiles = [
     {src: 'https://web.krspace.cn/kr-op/umeditor/1.0.0/lang/zh-cn/zh-cn.js'},
 ]
 const cssFiles = [
+    {rel:'stylesheet',href:'https://web.krspace.cn/kr-op/iview/2.8.0/styles/iview.css'},
     {rel:'stylesheet',href:'https://web.krspace.cn/kr-op/nav/1.0.0/nav.css'},
-    { rel: 'stylesheet', href: 'https://web.krspace.cn/kr-op/public/css/main.css' }
+    { rel: 'stylesheet', href: 'https://web.krspace.cn/kr-op/public/css/main.css' },
+    { rel: 'stylesheet', href: 'https://web.krspace.cn/kr-op/public/images/favicon.ico' },
+    { rel: 'stylesheet', href: 'https://web.krspace.cn/kr-op/icomoon/1.0.0/style.css'},
     
 ]
 

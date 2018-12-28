@@ -866,8 +866,8 @@ export default {
                 _this.formItem.discountReason=data.discountReason;
                 _this.intermediaryName = data.intermediaryName;
                 _this.formulationCompanyName = data.formulationCompanyName;
-                this.formItem.formulationCompanyName = data.intermediaryName;//拟设立公司名称
-                this.formItem.intermediaryName = data.formulationCompanyName;//居间方名称 
+                this.formItem.formulationCompanyName = data.formulationCompanyName; //拟设立公司名称
+                this.formItem.intermediaryName = data.intermediaryName; //居间方名称 
 
 
                 _this.formItemFlag = true;

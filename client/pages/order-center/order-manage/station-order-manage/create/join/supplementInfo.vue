@@ -3,18 +3,21 @@
         <Row style="margin-bottom:30px">
             <Col span="12" class="col">
             <!-- 加判断  只有入住 有拟设立公司  -->
-                <FormItem label="拟设立公司"  
+                <FormItem    
                     v-if="proposedCompanyFlag"
                     style="width:252px"
                     prop="formulationCompanyName" >
-                    <Input @on-change="changeFormulationCompanyName" v-model="proposedCompany"></Input>
+                    <span slot="label">拟设立公司<Icon type="information-circled"></Icon></span>
+                    <Input @on-change="changeFormulationCompanyName" v-model="proposedCompany">
+                    
+                    </Input>
                 </FormItem>
             </Col>
             <Col span="12" class="col">
                 <FormItem  label="居间方名称"
                     style="width:252px"
                     prop="intermediaryName" >
-                    
+                    <span slot="label">居间方名称<Icon type="information-circled"></Icon></span>
                     <Input  @on-change="changeIntermediaryName" v-model="intermediaryRoom"></Input>
                 </FormItem>
             </Col>

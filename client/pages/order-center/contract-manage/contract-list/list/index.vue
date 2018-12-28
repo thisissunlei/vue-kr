@@ -14,7 +14,7 @@
         </div>
         <Table border ref="selection" :columns="columns" :data="detail" style="margin:20px" />
         <div style="margin: 10px 20px;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
             </div>
